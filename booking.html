@@ -1,20 +1,3 @@
-<form id="bookingForm">
-
-    <input type="text" id="name" placeholder="Full Name" required><br><br>
-    <input type="email" id="email" placeholder="Email" required><br><br>
-
-    <select id="service" required>
-        <option value="">Select Service</option>
-        <option>Visa Processing</option>
-        <option>Education Consulting</option>
-        <option>Travel Consultation</option>
-    </select><br><br>
-
-    <input type="datetime-local" id="date" required><br><br>
-
-    <button class="btn" type="submit">Book Appointment</button>
-</form>
-
 <script>
 document.getElementById("bookingForm").addEventListener("submit", function(e) {
     e.preventDefault();
@@ -29,7 +12,7 @@ document.getElementById("bookingForm").addEventListener("submit", function(e) {
         })
     })
     .then(() => {
-        alert("Booking submitted successfully!");
+        alert("Your appointment has been booked successfully!");
         document.getElementById("bookingForm").reset();
     })
     .catch(() => {

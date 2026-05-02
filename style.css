@@ -123,3 +123,15 @@ nav a:hover {
     background: white;
     color: black;
 }
+<a href="visa.html" class="card">
+    <h3>✈ Visa Processing</h3>
+    <p>We help with travel visa applications and consultation.</p>
+</a>
+<a href="film.html" class="card">
+    <h3>🎬 Film Production</h3>
+    <p>Movie scripting, directing, and production services.</p>
+</a>
+<a href="education.html" class="card">
+    <h3>🎓 Education Consulting</h3>
+    <p>Guidance for students studying abroad.</p>
+</a>

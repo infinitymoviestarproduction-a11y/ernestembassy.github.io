@@ -1,61 +1,33 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>Book Appointment</title>
-<link rel="stylesheet" href="style.css">
-</head>
+<form id="bookingForm">
 
-<body>
+    <input type="text" id="name" placeholder="Full Name" required><br><br>
+    <input type="email" id="email" placeholder="Email" required><br><br>
 
-<nav>
-    <a href="index.html">Home</a>
-</nav>
+    <select id="service" required>
+        <option value="">Select Service</option>
+        <option>Visa Processing</option>
+        <option>Education Consulting</option>
+        <option>Travel Consultation</option>
+    </select><br><br>
 
-<section class="hero">
-    <h1>Visa Appointment Booking</h1>
-    <p>Schedule your consultation with Ernest Embassy Travels</p>
-</section>
+    <input type="datetime-local" id="date" required><br><br>
 
-<section>
-    <h2>Book Your Appointment</h2>
-
-    <form onsubmit="bookAppointment(); return false;">
-
-        <input type="text" id="name" placeholder="Full Name" required><br><br>
-        <input type="email" id="email" placeholder="Email Address" required><br><br>
-
-        <select id="service" required>
-            <option value="">Select Service</option>
-            <option value="Visa Processing">Visa Processing</option>
-            <option value="Education Consulting">Education Consulting</option>
-            <option value="Travel Consultation">Travel Consultation</option>
-        </select><br><br>
-
-        <input type="date" id="date" required><br><br>
-
-        <button class="btn" type="submit">Book Appointment</button>
-    </form>
-</section>
-
+    <button class="btn" type="submit">Book Appointment</button>
+</form>
 <script>
-function bookAppointment() {
-    let name = document.getElementById("name").value;
-    let email = document.getElementById("email").value;
-    let service = document.getElementById("service").value;
-    let date = document.getElementById("date").value;
+document.getElementById("bookingForm").addEventListener("submit", function(e){
+    e.preventDefault();
 
-    let phone = "2348032607809";
+    fetch("YOUR_SCRIPT_URL", {
+        method: "POST",
+        body: JSON.stringify({
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            service: document.getElementById("service").value,
+            date: document.getElementById("date").value
+        })
+    });
 
-    let msg =
-        "📅 APPOINTMENT BOOKING%0A%0A" +
-        "👤 Name: " + name + "%0A" +
-        "📧 Email: " + email + "%0A" +
-        "📌 Service: " + service + "%0A" +
-        "📆 Preferred Date: " + date;
-
-    window.open("https://wa.me/" + phone + "?text=" + msg, "_blank");
-}
+    alert("Booking submitted successfully!");
+});
 </script>
-
-</body>
-</html>

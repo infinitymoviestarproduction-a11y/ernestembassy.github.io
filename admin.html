@@ -3,6 +3,10 @@
 <head>
 <title>Admin Dashboard - Ernest Embassy</title>
 
+<!-- PWA SETTINGS -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#000000">
+
 <style>
 body {
     background: #0d0d0d;
@@ -122,9 +126,8 @@ button {
 
 </div>
 
-<!-- ⚙️ SCRIPT -->
+<!-- ⚙️ SCRIPTS -->
 <script>
-
 // LOGIN
 function login() {
     let pass = document.getElementById("password").value;
@@ -138,7 +141,7 @@ function login() {
     }
 }
 
-// LOAD SHEET DATA
+// LOAD GOOGLE SHEETS DATA
 function loadData() {
 
 const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTb7XL1QJgObgxyHt3uyYixj7X6g0dXBnf8tch66o0nkXMiBpwWfh-X1thFUINmymESK-3sZqAu-0_g/pub?output=csv";
@@ -181,7 +184,7 @@ fetch(sheetURL)
 });
 }
 
-// FILTER FUNCTION
+// FILTER SYSTEM
 function filterTable() {
     let filter = document.getElementById("filterService").value.toLowerCase();
     let rows = document.querySelectorAll("#table tr");
@@ -203,7 +206,13 @@ function filterTable() {
 function updateStatus(select) {
     alert("Status updated to: " + select.value);
 }
+</script>
 
+<!-- 📱 PWA SERVICE WORKER -->
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+}
 </script>
 
 </body>

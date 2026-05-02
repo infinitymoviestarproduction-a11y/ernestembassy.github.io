@@ -135,3 +135,45 @@ nav a:hover {
     <h3>🎓 Education Consulting</h3>
     <p>Guidance for students studying abroad.</p>
 </a>
+/* PREMIUM MEDIA SECTIONS */
+.hero {
+    text-align: center;
+    padding: 60px 20px;
+    background: radial-gradient(circle, #1a1a1a, #000);
+}
+
+section {
+    padding: 30px;
+}
+
+/* MEDIA CARDS */
+.card {
+    margin: 20px 0;
+    padding: 20px;
+    background: #111;
+    border: 1px solid gold;
+    border-radius: 12px;
+}
+
+/* HEADINGS */
+h1, h2, h3 {
+    color: gold;
+}
+
+/* AUDIO & VIDEO */
+audio, video {
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 10px;
+}
+
+/* BUTTON */
+.btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 15px;
+    background: gold;
+    color: black;
+    text-decoration: none;
+    border-radius: 6px;
+}

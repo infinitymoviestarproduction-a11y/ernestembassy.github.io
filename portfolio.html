@@ -1,19 +1,55 @@
-<section>
-    <h2>Our Creative Works</h2>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Creative Media Portfolio</title>
+<link rel="stylesheet" href="style.css">
+</head>
 
-    <h3>🎵 Music</h3>
-    <p>Listen to our latest songs and productions.</p>
-    <audio controls>
-        <source src="music/song1.mp3" type="audio/mpeg">
-    </audio>
+<body>
 
-    <h3>🎬 Films</h3>
-    <p>Watch our movie productions and trailers.</p>
-    <video width="300" controls>
-        <source src="videos/movie1.mp4" type="video/mp4">
-    </video>
+<nav>
+    <a href="index.html">Home</a>
+</nav>
 
-    <h3>📝 Lyrics & Writings</h3>
-    <p>Explore our creative writing and hip-hop lyrics.</p>
-    <a href="docs/lyrics.pdf">Download Lyrics</a>
+<section class="hero">
+    <h1>Creative Media Portfolio</h1>
+    <p>Music • Films • Writing • Education Content</p>
 </section>
+
+<!-- MUSIC SECTION -->
+<section>
+    <h2>🎵 Music Gallery</h2>
+
+    <div class="card">
+        <h3>My Latest Track</h3>
+        <audio controls>
+            <source src="music/song1.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+</section>
+
+<!-- VIDEO SECTION -->
+<section>
+    <h2>🎬 Film Productions</h2>
+
+    <div class="card">
+        <h3>Movie Trailer</h3>
+        <video controls width="100%">
+            <source src="videos/movie1.mp4" type="video/mp4">
+        </video>
+    </div>
+</section>
+
+<!-- DOCUMENT SECTION -->
+<section>
+    <h2>📄 Writings & Lyrics</h2>
+
+    <div class="card">
+        <h3>Lyrics Collection</h3>
+        <p>Download and explore creative works.</p>
+        <a class="btn" href="docs/lyrics.pdf">Download PDF</a>
+    </div>
+</section>
+
+</body>
+</html>

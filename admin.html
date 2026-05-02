@@ -1,31 +1,121 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Admin Dashboard</title>
+<title>Admin Dashboard - Ernest Embassy</title>
 <link rel="stylesheet" href="style.css">
+
+<style>
+body {
+    background: #0d0d0d;
+    color: white;
+    font-family: Arial;
+}
+
+h1 {
+    color: gold;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    padding: 20px;
+}
+
+.card {
+    background: #111;
+    border: 1px solid gold;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+table {
+    width: 95%;
+    margin: auto;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid gold;
+    padding: 10px;
+}
+
+th {
+    color: gold;
+}
+</style>
 </head>
 
 <body>
 
-<h1>Admin Dashboard</h1>
+<h1>Ernest Embassy Admin Dashboard</h1>
 
-<table border="1">
+<div class="dashboard">
+    <div class="card">
+        <h2 id="total">0</h2>
+        <p>Total Bookings</p>
+    </div>
+
+    <div class="card">
+        <h2 id="pending">0</h2>
+        <p>Pending</p>
+    </div>
+
+    <div class="card">
+        <h2 id="today">0</h2>
+        <p>Today</p>
+    </div>
+</div>
+
+<h2 style="text-align:center;color:gold;">All Bookings</h2>
+
+<table id="table">
     <tr>
         <th>Name</th>
         <th>Email</th>
         <th>Service</th>
-        <th>Message</th>
-        <th>Status</th>
-    </tr>
-
-    <tr>
-        <td>Example</td>
-        <td>test@email.com</td>
-        <td>Visa</td>
-        <td>Need visa help</td>
-        <td>Pending</td>
+        <th>Date</th>
     </tr>
 </table>
+
+<!-- ✅ SCRIPT SECTION (THIS IS WHERE YOUR LINK GOES) -->
+<script>
+
+const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTb7XL1QJgObgxyHt3uyYixj7X6g0dXBnf8tch66o0nkXMiBpwWfh-X1thFUINmymESK-3sZqAu-0_g/pub?output=csv";
+
+fetch(sheetURL)
+.then(res => res.text())
+.then(data => {
+
+    let rows = data.split("\n").slice(1);
+
+    document.getElementById("total").innerText = rows.length;
+
+    let table = document.getElementById("table");
+
+    rows.forEach(row => {
+        let cols = row.split(",");
+
+        if(cols.length > 3){
+            let tr = document.createElement("tr");
+
+            tr.innerHTML = `
+                <td>${cols[0]}</td>
+                <td>${cols[1]}</td>
+                <td>${cols[2]}</td>
+                <td>${cols[3]}</td>
+            `;
+
+            table.appendChild(tr);
+        }
+    });
+
+});
+
+</script>
 
 </body>
 </html>

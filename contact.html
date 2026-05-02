@@ -2,29 +2,22 @@
     <h2>Quick Contact Form</h2>
 
     <form onsubmit="sendToWhatsApp(); return false;">
+
         <input type="text" id="name" placeholder="Your Name" required><br><br>
         <input type="email" id="email" placeholder="Your Email" required><br><br>
+
+        <select id="service" required>
+            <option value="">Select Service</option>
+            <option value="Visa Processing">✈ Visa Processing</option>
+            <option value="Film Production">🎬 Film Production</option>
+            <option value="Education Consulting">🎓 Education Consulting</option>
+            <option value="Teaching Services">📚 Teaching Services</option>
+        </select>
+
+        <br><br>
+
         <textarea id="message" placeholder="Your Message" rows="5" required></textarea><br><br>
 
         <button class="btn" type="submit">Send Message</button>
     </form>
 </section>
-
-<script>
-function sendToWhatsApp() {
-    let name = document.getElementById("name").value;
-    let email = document.getElementById("email").value;
-    let message = document.getElementById("message").value;
-
-    let phone = "2348032607809"; // your WhatsApp number
-
-    let url = "https://wa.me/" + phone +
-        "?text=" +
-        "Hello Ernest Embassy,%0A%0A" +
-        "Name: " + name + "%0A" +
-        "Email: " + email + "%0A" +
-        "Message: " + message;
-
-    window.open(url, "_blank");
-}
-</script>

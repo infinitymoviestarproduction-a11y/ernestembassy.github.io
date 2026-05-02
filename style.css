@@ -89,3 +89,37 @@ nav a:hover {
     color: white;
     text-decoration: none;
 }
+/* PREMIUM CARD DESIGN */
+.card {
+    display: block;
+    text-decoration: none;
+    color: white;
+    background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+    border: 1px solid gold;
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.4s ease;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.1);
+}
+
+/* HOVER ANIMATION */
+.card:hover {
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
+}
+
+/* ICON STYLE (if you add icons later) */
+.card h3 {
+    color: gold;
+    margin-bottom: 10px;
+}
+
+/* BUTTON ANIMATION */
+.btn {
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: white;
+    color: black;
+}

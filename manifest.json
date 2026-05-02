@@ -1,7 +1,7 @@
 {
-  "name": "Ernest Embassy Admin",
-  "short_name": "EE Admin",
-  "start_url": "admin.html",
+  "name": "Ernest Embassy CRM",
+  "short_name": "EE CRM",
+  "start_url": "/admin.html",
   "display": "standalone",
   "background_color": "#0d0d0d",
   "theme_color": "#000000",

@@ -21,3 +21,25 @@
         <button class="btn" type="submit">Send Message</button>
     </form>
 </section>
+<script>
+function sendToWhatsApp() {
+    let name = document.getElementById("name").value;
+    let email = document.getElementById("email").value;
+    let service = document.getElementById("service").value;
+    let message = document.getElementById("message").value;
+
+    let phone = "2348032607809";
+
+    let url =
+        "https://wa.me/" + phone +
+        "?text=" +
+        "👋 Hello Ernest Embassy Team%0A%0A" +
+        "👤 Name: " + name + "%0A" +
+        "📧 Email: " + email + "%0A" +
+        "📌 Service Needed: " + service + "%0A%0A" +
+        "💬 Message:%0A" + message + "%0A%0A" +
+        "🙏 Kindly respond as soon as possible.";
+
+    window.open(url, "_blank");
+}
+</script>

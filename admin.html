@@ -2,7 +2,6 @@
 <html>
 <head>
 <title>Admin Dashboard - Ernest Embassy</title>
-<link rel="stylesheet" href="style.css">
 
 <style>
 body {
@@ -41,15 +40,44 @@ table {
 th, td {
     border: 1px solid gold;
     padding: 10px;
+    text-align: center;
 }
 
 th {
     color: gold;
 }
+
+/* LOGIN */
+#loginBox {
+    text-align: center;
+    margin-top: 120px;
+}
+
+input, select, button {
+    padding: 10px;
+    margin-top: 10px;
+}
+
+button {
+    background: gold;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
 </style>
 </head>
 
 <body>
+
+<!-- 🔐 LOGIN -->
+<div id="loginBox">
+    <h2 style="color:gold;">Admin Login</h2>
+    <input type="password" id="password" placeholder="Enter Password"><br>
+    <button onclick="login()">Login</button>
+</div>
+
+<!-- 📊 DASHBOARD -->
+<div id="dashboard" style="display:none;">
 
 <h1>Ernest Embassy Admin Dashboard</h1>
 
@@ -70,6 +98,16 @@ th {
     </div>
 </div>
 
+<!-- 🔍 FILTER -->
+<div style="text-align:center;margin:20px;">
+    <select id="filterService" onchange="filterTable()">
+        <option value="">All Services</option>
+        <option>Visa Processing</option>
+        <option>Education Consulting</option>
+        <option>Travel Consultation</option>
+    </select>
+</div>
+
 <h2 style="text-align:center;color:gold;">All Bookings</h2>
 
 <table id="table">
@@ -78,11 +116,30 @@ th {
         <th>Email</th>
         <th>Service</th>
         <th>Date</th>
+        <th>Status</th>
     </tr>
 </table>
 
-<!-- ✅ SCRIPT SECTION (THIS IS WHERE YOUR LINK GOES) -->
+</div>
+
+<!-- ⚙️ SCRIPT -->
 <script>
+
+// LOGIN
+function login() {
+    let pass = document.getElementById("password").value;
+
+    if(pass === "admin123") {
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+        loadData();
+    } else {
+        alert("Wrong password");
+    }
+}
+
+// LOAD SHEET DATA
+function loadData() {
 
 const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTb7XL1QJgObgxyHt3uyYixj7X6g0dXBnf8tch66o0nkXMiBpwWfh-X1thFUINmymESK-3sZqAu-0_g/pub?output=csv";
 
@@ -100,6 +157,7 @@ fetch(sheetURL)
         let cols = row.split(",");
 
         if(cols.length > 3){
+
             let tr = document.createElement("tr");
 
             tr.innerHTML = `
@@ -107,6 +165,13 @@ fetch(sheetURL)
                 <td>${cols[1]}</td>
                 <td>${cols[2]}</td>
                 <td>${cols[3]}</td>
+                <td>
+                    <select onchange="updateStatus(this)">
+                        <option>Pending</option>
+                        <option>Confirmed</option>
+                        <option>Completed</option>
+                    </select>
+                </td>
             `;
 
             table.appendChild(tr);
@@ -114,6 +179,30 @@ fetch(sheetURL)
     });
 
 });
+}
+
+// FILTER FUNCTION
+function filterTable() {
+    let filter = document.getElementById("filterService").value.toLowerCase();
+    let rows = document.querySelectorAll("#table tr");
+
+    rows.forEach((row, index) => {
+        if(index === 0) return;
+
+        let service = row.cells[2]?.innerText.toLowerCase();
+
+        if(!filter || service.includes(filter)) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+}
+
+// STATUS UPDATE (UI ONLY)
+function updateStatus(select) {
+    alert("Status updated to: " + select.value);
+}
 
 </script>
 

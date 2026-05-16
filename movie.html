@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Studio - Infinity Movie Star Production</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .movie-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+        }
+
+        .info-section {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .info-section h2 {
+            color: #1a1a2e;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffd700;
+            padding-left: 15px;
+        }
+
+        .services-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .services-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .services-list li:before {
+            content: "🎬";
+            color: #ffd700;
+        }
+
+        .form-section {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .form-section h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .movie-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-container">
+        <div class="logo">
+            <span class="logo-icon">🎬</span>
+            <div>
+                <span class="logo-text">Ernest Embassy</span>
+                <span class="logo-sub">Travels & Film Production</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="services.html">Services</a>
+            <a href="visa.html">Visa</a>
+            <a href="movie.html">Movie Studio</a>
+            <a href="teaching.html">Teaching</a>
+            <a href="tutoring.html">Tutoring</a>
+            <a href="education.html">Education</a>
+            <a href="booking.html">Book</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </div>
+</nav>
+
+<div class="hero">
+    <h1>🎬 Infinity Movie Star Production</h1>
+    <p>Professional Film Production & Hands-On Training</p>
+</div>
+
+<div class="container">
+    <div class="movie-layout">
+        <div class="info-section">
+            <h2>Your Film Production Partner</h2>
+            <p>Infinity Movie Star Production delivers high-quality film production services, from storytelling to final production. We specialize in script writing, directing, and producing engaging films that connect with audiences globally.</p>
+            
+            <h3>🎥 Our Services Include:</h3>
+            <ul class="services-list">
+                <li>Movie Script Writing</li>
+                <li>Film Directing</li>
+                <li>Production & Editing</li>
+                <li>Actor Casting & Coordination</li>
+                <li>Hands-On Film Training</li>
+                <li>Music Video Production</li>
+            </ul>
+
+            <div class="success-badge" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: #ffd700; padding: 20px; border-radius: 15px; margin-top: 25px; text-align: center;">
+                <span>✅ CAC Registered</span>
+                <p style="margin-top: 10px;">Since June 21, 2017 | BN2517233</p>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>📝 Film Training Inquiry</h2>
+            <p>Register for training or request production services</p>
+
+            <form name="film-training" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you-film.html">
+                <input type="hidden" name="form-name" value="film-training">
+                <p style="display: none;"><label>Don't fill this: <input name="bot-field"></label></p>
+
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address *</label>
+                    <input type="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number *</label>
+                    <input type="tel" name="phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Interest *</label>
+                    <select name="interest" required>
+                        <option value="">Select an option</option>
+                        <option value="Acting Training">Acting Training</option>
+                        <option value="Directing Training">Directing Training</option>
+                        <option value="Scriptwriting">Scriptwriting</option>
+                        <option value="Editing Training">Editing Training</option>
+                        <option value="Movie Production Service">Movie Production Service</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Your Message / Goals</label>
+                    <textarea name="message" rows="4" placeholder="Tell us about your film project or training goals..."></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">🎬 Submit Inquiry</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div style="text-align: center; padding: 20px;">
+    <div class="cac-badge">
+        ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
+        📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <p><strong>Ernest Embassy Travels & Infinity Movie Star Production</strong></p>
+        <p>📧 ernestembassytravels@gmail.com | infinitymoviestarproduction@gmail.com</p>
+        <p>📞 +2348032607809 | +2349050205053</p>
+        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
+        <p style="margin-top: 20px;">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
+    </div>
+</footer>
+
+<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
+    <span>💬</span>
+    <span>Chat on WhatsApp</span>
+</a>
+
+</body>
+</html>

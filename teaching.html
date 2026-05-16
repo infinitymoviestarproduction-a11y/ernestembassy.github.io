@@ -1,23 +1,478 @@
-<section>
-    <h2>Teaching & Academic Support</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teaching & Academic Support - Damian Anielozie Okafor</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Additional styles specific to teaching page */
+        .teaching-hero {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+        }
 
-    <p>
-        We offer professional teaching services and academic support for
-        students at different educational levels.
-    </p>
+        .teaching-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
 
-    <p>
-        Our teaching approach focuses on clarity, understanding, and helping
-        students achieve academic excellence.
-    </p>
+        .teaching-hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-    <h3>Our Services Include:</h3>
-    <ul>
-        <li>Private Tutoring</li>
-        <li>Exam Preparation</li>
-        <li>Computer Studies Training</li>
-        <li>Academic Mentorship</li>
-    </ul>
+        .teaching-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
 
-    <a class="btn" href="booking.html">Book a Session</a>
-</section>
+        .stat-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .approach-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+
+        .approach-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+
+        .approach-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .approach-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .approach-card h3 {
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+
+        .approach-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .subjects-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .subject-item {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+
+        .subject-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .subject-icon {
+            font-size: 2rem;
+        }
+
+        .subject-info h4 {
+            color: #1a1a2e;
+            margin-bottom: 5px;
+        }
+
+        .subject-info p {
+            color: #666;
+            font-size: 0.85rem;
+            margin: 0;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            margin: 40px 0;
+        }
+
+        .pricing-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .pricing-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .pricing-body {
+            padding: 30px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .pricing-features li {
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .pricing-features li:before {
+            content: "✓";
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .btn-teaching {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-teaching:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .teaching-hero h1 {
+                font-size: 1.8rem;
+            }
+            .subjects-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+    <div class="nav-container">
+        <div class="logo">📚 Ernest Embassy</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="services.html">Services</a>
+            <a href="visa.html">Visa</a>
+            <a href="movie.html">Movie Studio</a>
+            <a href="teaching.html">Teaching</a>
+            <a href="tutoring.html">Tutoring</a>
+            <a href="education.html">Education</a>
+            <a href="booking.html">Book</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO SECTION -->
+<div class="teaching-hero">
+    <h1>📚 Teaching & Academic Support</h1>
+    <p>Professional teaching services and academic support for students at all levels</p>
+</div>
+
+<div class="container">
+    <!-- STATISTICS SECTION -->
+    <div class="teaching-stats">
+        <div class="stat-box">
+            <span class="stat-number">10+</span>
+            <span class="stat-label">Years of Teaching</span>
+        </div>
+        <div class="stat-box">
+            <span class="stat-number">500+</span>
+            <span class="stat-label">Students Taught</span>
+        </div>
+        <div class="stat-box">
+            <span class="stat-number">95%</span>
+            <span class="stat-label">Exam Success Rate</span>
+        </div>
+        <div class="stat-box">
+            <span class="stat-number">24/7</span>
+            <span class="stat-label">Support Available</span>
+        </div>
+    </div>
+
+    <!-- ABOUT TEACHING -->
+    <div class="section-title"><span>About My Teaching Approach</span></div>
+    <div style="background: white; padding: 35px; border-radius: 20px; margin-bottom: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+        <p style="font-size: 1.1rem; line-height: 1.8;">We offer professional teaching services and academic support for students at different educational levels. Our teaching approach focuses on clarity, understanding, and helping students achieve academic excellence.</p>
+        <p style="margin-top: 20px;">With over 10 years of teaching experience, Damian Anielozie Okafor has helped hundreds of students improve their grades, pass exams, and build confidence in their academic abilities.</p>
+    </div>
+
+    <!-- TEACHING APPROACH -->
+    <div class="section-title"><span>My Teaching Approach</span></div>
+    <div class="approach-grid">
+        <div class="approach-card">
+            <div class="approach-icon">🎯</div>
+            <h3>Personalized Learning</h3>
+            <p>Tailored lessons based on each student's unique needs and learning pace.</p>
+        </div>
+        <div class="approach-card">
+            <div class="approach-icon">💡</div>
+            <h3>Clarity & Understanding</h3>
+            <p>Breaking down complex topics into simple, easy-to-understand concepts.</p>
+        </div>
+        <div class="approach-card">
+            <div class="approach-icon">📈</div>
+            <h3>Progress Tracking</h3>
+            <p>Regular assessments and feedback to monitor improvement.</p>
+        </div>
+        <div class="approach-card">
+            <div class="approach-icon">🤝</div>
+            <h3>Supportive Environment</h3>
+            <p>Creating a safe space where students feel comfortable asking questions.</p>
+        </div>
+    </div>
+
+    <!-- SUBJECTS OFFERED -->
+    <div class="section-title"><span>Subjects I Teach</span></div>
+    <div class="subjects-list">
+        <div class="subject-item">
+            <div class="subject-icon">📖</div>
+            <div class="subject-info">
+                <h4>English Language</h4>
+                <p>Grammar, comprehension, essay writing, literature</p>
+            </div>
+        </div>
+        <div class="subject-item">
+            <div class="subject-icon">💻</div>
+            <div class="subject-info">
+                <h4>Computer Studies</h4>
+                <p>Digital literacy, programming basics, IT skills</p>
+            </div>
+        </div>
+        <div class="subject-item">
+            <div class="subject-icon">🌍</div>
+            <div class="subject-info">
+                <h4>Igbo Language</h4>
+                <p>For diaspora students and international learners</p>
+            </div>
+        </div>
+        <div class="subject-item">
+            <div class="subject-icon">⚗️</div>
+            <div class="subject-info">
+                <h4>Science Subjects</h4>
+                <p>Chemistry, Physics, Mathematics (WAEC/NECO/JAMB)</p>
+            </div>
+        </div>
+        <div class="subject-item">
+            <div class="subject-icon">📝</div>
+            <div class="subject-info">
+                <h4>Exam Preparation</h4>
+                <p>WAEC, NECO, JAMB, and other certification exams</p>
+            </div>
+        </div>
+        <div class="subject-item">
+            <div class="subject-icon">👨‍🏫</div>
+            <div class="subject-info">
+                <h4>Adult Literacy</h4>
+                <p>Basic reading and writing for adult learners</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SERVICES INCLUDED -->
+    <div class="section-title"><span>What I Offer</span></div>
+    <div class="approach-grid">
+        <div class="approach-card">
+            <div class="approach-icon">👤</div>
+            <h3>Private Tutoring</h3>
+            <p>One-on-one personalized attention for faster learning.</p>
+        </div>
+        <div class="approach-card">
+            <div class="approach-icon">📝</div>
+            <h3>Exam Preparation</h3>
+            <p>Intensive coaching for WAEC, NECO, JAMB, and more.</p>
+        </div>
+        <div class="approach-card">
+            <div class="approach-icon">🖥️</div>
+            <h3>Computer Training</h3>
+            <p>Digital skills and computer literacy for all ages.</p>
+        </div>
+        <div class="approach-card">
+            <div class="approach-icon">🎓</div>
+            <h3>Academic Mentorship</h3>
+            <p>Guidance on study habits, career paths, and academic success.</p>
+        </div>
+    </div>
+
+    <!-- PRICING / PACKAGES -->
+    <div class="section-title"><span>Session Packages</span></div>
+    <div class="approach-grid">
+        <div class="pricing-card">
+            <div class="pricing-header">
+                <h3>Single Session</h3>
+                <p>Pay as you go</p>
+            </div>
+            <div class="pricing-body">
+                <ul class="pricing-features">
+                    <li>1 hour personalized session</li>
+                    <li>Topic of your choice</li>
+                    <li>Homework assistance</li>
+                    <li>Flexible scheduling</li>
+                </ul>
+                <a href="booking.html" class="btn-teaching">Book a Session →</a>
+            </div>
+        </div>
+        <div class="pricing-card">
+            <div class="pricing-header">
+                <h3>Weekly Package</h3>
+                <p>Best for regular students</p>
+            </div>
+            <div class="pricing-body">
+                <ul class="pricing-features">
+                    <li>2-3 sessions per week</li>
+                    <li>Progress tracking</li>
+                    <li>Homework support</li>
+                    <li>Monthly assessment</li>
+                    <li>Discounted rate</li>
+                </ul>
+                <a href="booking.html" class="btn-teaching">Book Weekly →</a>
+            </div>
+        </div>
+        <div class="pricing-card">
+            <div class="pricing-header">
+                <h3>Exam Prep Bootcamp</h3>
+                <p>Intensive exam preparation</p>
+            </div>
+            <div class="pricing-body">
+                <ul class="pricing-features">
+                    <li>Daily sessions (4-6 weeks)</li>
+                    <li>Mock exams & practice</li>
+                    <li>Past question analysis</li>
+                    <li>Exam strategies & tips</li>
+                    <li>24/7 WhatsApp support</li>
+                </ul>
+                <a href="booking.html" class="btn-teaching">Enroll in Bootcamp →</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- WHY CHOOSE ME -->
+    <div class="section-title"><span>Why Learn With Me?</span></div>
+    <div class="approach-grid">
+        <div class="approach-card">
+            <div class="approach-icon">⭐</div>
+            <h3>Proven Track Record</h3>
+            <p>95% exam success rate with hundreds of satisfied students.</p>
+        </div>
+        <div class="approach-card">
+            <div class="approach-icon">⏰</div>
+            <h3>Flexible Schedule</h3>
+            <p>Morning, afternoon, and evening sessions available.</p>
+        </div>
+        <div class="approach-card">
+            <div class="approach-icon">💬</div>
+            <h3>Ongoing Support</h3>
+            <p>WhatsApp support between sessions for quick questions.</p>
+        </div>
+        <div class="approach-card">
+            <div class="approach-icon">🏆</div>
+            <h3>Results Driven</h3>
+            <p>Focused on helping you achieve your academic goals.</p>
+        </div>
+    </div>
+
+    <!-- TESTIMONIALS -->
+    <div class="section-title"><span>What Students Say</span></div>
+    <div class="testimonials-grid">
+        <div class="testimonial-card">
+            "Damian helped me prepare for my WAEC English exam. I passed with distinction! His teaching method is very clear and patient."
+            <div class="author">— Emmanuel O., Lagos</div>
+        </div>
+        <div class="testimonial-card">
+            "The WhatsApp science prep group was exactly what I needed. I finally understood Chemistry after years of struggling."
+            <div class="author">— Peace A., Abuja</div>
+        </div>
+        <div class="testimonial-card">
+            "My daughter's confidence in math has grown tremendously. She went from failing to scoring B's in just 2 months."
+            <div class="author">— Mrs. Chidi, Enugu</div>
+        </div>
+    </div>
+
+    <!-- CALL TO ACTION -->
+    <div class="cta-section">
+        <h2>Ready to Improve Your Grades?</h2>
+        <p>Book a teaching session with Damian today and start your journey to academic excellence.</p>
+        <a href="booking.html" class="btn" style="background: #ffd700; color: #1a1a2e;">📅 Book a Session →</a>
+    </div>
+</div>
+
+<!-- CAC BADGE -->
+<div style="text-align: center; padding: 20px;">
+    <div class="cac-badge">
+        ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
+        📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <p><strong>Ernest Embassy Travels & Infinity Movie Star Production</strong></p>
+        <p>📧 ernestembassytravels@gmail.com | infinitymoviestarproduction@gmail.com | Danoka33@gmail.com</p>
+        <p>📞 +2348032607809 | +2349050205053</p>
+        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
+        <p style="margin-top: 20px;">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>

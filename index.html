@@ -25,39 +25,40 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            padding: 15px 40px;
         }
 
-        nav h2 {
+        .logo {
             color: #ffd700;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
+            font-weight: bold;
         }
 
-        nav div {
+        .nav-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 25px;
         }
 
-        nav a {
+        .nav-links a {
             color: white;
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
+            padding: 8px 0;
         }
 
-        nav a:hover {
+        .nav-links a:hover {
             color: #ffd700;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
         }
 
         /* Hero Section */
@@ -70,7 +71,7 @@
 
         .hero h1 {
             font-size: 2.5rem;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .hero p {
@@ -84,7 +85,7 @@
             justify-content: center;
             flex-wrap: wrap;
             gap: 15px;
-            margin-top: 30px;
+            margin: 20px 0;
         }
 
         .hero-badge {
@@ -92,6 +93,7 @@
             padding: 8px 20px;
             border-radius: 30px;
             font-size: 0.9rem;
+            display: inline-block;
         }
 
         .btn {
@@ -112,7 +114,12 @@
             transform: translateY(-3px);
         }
 
-        /* Sections */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
         section {
             padding: 60px 20px;
         }
@@ -129,7 +136,7 @@
             padding-bottom: 10px;
         }
 
-        /* Services Grid */
+        /* Service Cards */
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -168,13 +175,11 @@
             color: #666;
         }
 
-        /* Why Choose Me */
         .why-section {
             background: #f0f0f5;
             border-radius: 20px;
         }
 
-        /* Testimonials */
         .testimonials-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -197,7 +202,6 @@
             color: #667eea;
         }
 
-        /* Memberships */
         .memberships-section {
             text-align: center;
             background: white;
@@ -223,7 +227,6 @@
             font-weight: bold;
         }
 
-        /* Social Icons */
         .social-section {
             text-align: center;
             padding: 40px 20px;
@@ -268,7 +271,6 @@
             transform: translateY(-5px);
         }
 
-        /* WhatsApp Float */
         .whatsapp-float {
             position: fixed;
             bottom: 20px;
@@ -290,7 +292,6 @@
             transform: scale(1.05);
         }
 
-        /* Footer */
         footer {
             background: #1a1a2e;
             color: white;
@@ -311,11 +312,10 @@
         }
 
         @media (max-width: 768px) {
-            nav {
+            .nav-container {
                 flex-direction: column;
                 gap: 15px;
                 text-align: center;
-                padding: 15px 20px;
             }
             .hero h1 {
                 font-size: 1.8rem;
@@ -331,16 +331,18 @@
 
 <!-- NAVIGATION -->
 <nav>
-    <h2 style="color:#ffd700;">Ernest Embassy</h2>
-    <div>
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="visa.html">Visa</a>
-        <a href="movie.html">Movie Studio</a>
-        <a href="tutoring.html">Tutoring</a>
-        <a href="education.html">Education</a>
-        <a href="booking.html">Book</a>
-        <a href="contact.html">Contact</a>
+    <div class="nav-container">
+        <div class="logo">✈️ Ernest Embassy</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="visa.html">Visa</a>
+            <a href="movie.html">Movie Studio</a>
+            <a href="tutoring.html">Tutoring</a>
+            <a href="education.html">Education</a>
+            <a href="booking.html">Book</a>
+            <a href="contact.html">Contact</a>
+        </div>
     </div>
 </nav>
 
@@ -358,7 +360,7 @@
         <span class="hero-badge">✅ CAC Registered since 2017</span>
         <span class="hero-badge">📚 Teaching since 2014</span>
     </div>
-    <a href="booking.html" class="btn" style="margin-top: 30px;">Start Your Application →</a>
+    <a href="booking.html" class="btn" style="margin-top: 20px;">📅 Start Your Application →</a>
 </div>
 
 <div class="container">
@@ -389,7 +391,7 @@
         </div>
     </section>
 
-    <!-- WHY CHOOSE ME SECTION -->
+    <!-- WHY CHOOSE ME -->
     <section class="why-section">
         <div class="section-title"><span>Why Choose Me</span></div>
         <div class="services-grid">
@@ -412,7 +414,7 @@
         </div>
     </section>
 
-    <!-- PROFESSIONAL MEMBERSHIPS -->
+    <!-- MEMBERSHIPS -->
     <div class="memberships-section">
         <h3>🎬 Professional Memberships & Affiliations</h3>
         <div class="memberships-grid">
@@ -426,7 +428,7 @@
         </div>
     </div>
 
-    <!-- TESTIMONIALS SECTION -->
+    <!-- TESTIMONIALS -->
     <section>
         <div class="section-title"><span>What Clients Say</span></div>
         <div class="testimonials-grid">
@@ -445,7 +447,7 @@
         </div>
     </section>
 
-    <!-- SOCIAL & STREAMING LINKS -->
+    <!-- SOCIAL LINKS -->
     <div class="social-section">
         <h3>Follow & Connect With Damian</h3>
         <div class="social-icons">
@@ -496,7 +498,7 @@
     </div>
 </footer>
 
-<!-- WHATSAPP FLOATING BUTTON -->
+<!-- WHATSAPP BUTTON -->
 <a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
     <span>💬</span>
     <span>Chat with Damian on WhatsApp</span>

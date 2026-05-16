@@ -14,29 +14,8 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
             color: #333;
-        }
-
-        nav {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            text-align: center;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-            padding: 8px 12px;
-            font-weight: bold;
-        }
-
-        nav a:hover {
-            color: #ffd700;
         }
 
         .container {
@@ -55,10 +34,13 @@
         .form-container h2 {
             text-align: center;
             color: #1a1a2e;
-            margin-bottom: 30px;
-            border-bottom: 3px solid #ffd700;
-            display: inline-block;
-            width: auto;
+            margin-bottom: 10px;
+        }
+
+        .form-container > p {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
         }
 
         .form-group {
@@ -67,7 +49,7 @@
 
         .form-group label {
             display: block;
-            font-weight: bold;
+            font-weight: 600;
             margin-bottom: 8px;
             color: #555;
         }
@@ -77,9 +59,10 @@
         .form-group textarea {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
             font-size: 16px;
+            transition: all 0.3s;
         }
 
         .form-group input:focus,
@@ -87,22 +70,25 @@
         .form-group textarea:focus {
             outline: none;
             border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
         .submit-btn {
-            background: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 14px 30px;
             border: none;
-            border-radius: 8px;
+            border-radius: 50px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
             width: 100%;
+            transition: all 0.3s;
         }
 
         .submit-btn:hover {
-            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
         }
 
         .note {
@@ -112,37 +98,36 @@
             color: #666;
         }
 
-        footer {
-            background: #1a1a2e;
-            color: white;
-            text-align: center;
-            padding: 30px;
-            margin-top: 50px;
-        }
-
-        .cac-badge {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.8rem;
-            color: #888;
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 25px;
+            }
         }
     </style>
 </head>
 <body>
 
-<!-- NAVIGATION -->
+<!-- PROFESSIONAL NAVIGATION WITH MOVIE STUDIO LINK -->
 <nav>
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-        <h2 style="color:#ffd700;">Ernest Embassy</h2>
-        <div style="display: flex; flex-wrap: wrap; gap: 20px;">
-            <a href="index.html">Home</a>
-            <a href="about.html">About</a>
-            <a href="visa.html">Visa</a>
-            <a href="movie.html">Movie Studio</a>
-            <a href="tutoring.html">Tutoring</a>
-            <a href="education.html">Education</a>
-            <a href="booking.html">Book</a>
-            <a href="contact.html">Contact</a>
+    <div class="nav-container">
+        <div class="logo">
+            <span class="logo-icon">✨</span>
+            <div>
+                <span class="logo-text">Ernest Embassy</span>
+                <span class="logo-sub">Travels & Film Production</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="about.html">📖 About</a>
+            <a href="services.html">⚙️ Services</a>
+            <a href="visa.html">✈️ Visa</a>
+            <a href="movie.html">🎬 Movie Studio</a>
+            <a href="teaching.html">📚 Teaching</a>
+            <a href="tutoring.html">💻 Tutoring</a>
+            <a href="education.html">🎓 Education</a>
+            <a href="booking.html">📅 Book</a>
+            <a href="contact.html">📞 Contact</a>
         </div>
     </div>
 </nav>
@@ -150,7 +135,7 @@
 <div class="container">
     <div class="form-container">
         <h2>📅 Book an Appointment</h2>
-        <p style="text-align: center; margin-bottom: 25px;">Fill out the form below and we will contact you within 24 hours.</p>
+        <p>Fill out the form below and we will contact you within 24 hours.</p>
 
         <!-- NETLIFY FORM - NO JAVASCRIPT REQUIRED -->
         <form name="booking-request" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you.html">
@@ -218,15 +203,29 @@
 </div>
 
 <!-- CAC BADGE -->
-<div class="cac-badge">
-    ✅ Infinity Movie Star Production — CAC Registered BN2517233
+<div style="text-align: center; padding: 20px;">
+    <div class="cac-badge">
+        ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
+        📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
+    </div>
 </div>
 
 <!-- FOOTER -->
 <footer>
-    <p>&copy; 2026 Damian Anielozie Okafor - Ernest Embassy Travels & Infinity Movie Star Production</p>
-    <p>📞 +2348032607809 | 📧 ernestembassytravels@gmail.com</p>
+    <div class="container">
+        <p><strong>Ernest Embassy Travels & Infinity Movie Star Production</strong></p>
+        <p>📧 ernestembassytravels@gmail.com | infinitymoviestarproduction@gmail.com | Danoka33@gmail.com</p>
+        <p>📞 +2348032607809 | +2349050205053</p>
+        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
+        <p style="margin-top: 20px;">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
+    </div>
 </footer>
+
+<!-- WHATSAPP BUTTON -->
+<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
+    <span>💬</span>
+    <span>Chat with Damian on WhatsApp</span>
+</a>
 
 </body>
 </html>

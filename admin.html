@@ -19,28 +19,67 @@
 
         /* Navigation */
         nav {
-            background: #1a1a2e;
-            padding: 20px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 1rem 0;
+            border-bottom: 1px solid #ffd700;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            border-bottom: 1px solid gold;
         }
 
-        nav h1 {
-            color: gold;
-            font-size: 1.5rem;
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
         }
 
-        nav a {
+        .logo-icon {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffd700;
+            letter-spacing: 1px;
+        }
+
+        .logo-sub {
+            font-size: 0.65rem;
+            color: rgba(255, 215, 0, 0.8);
+            display: block;
+            margin-top: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-links a {
             color: white;
             text-decoration: none;
-            margin-left: 20px;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 0;
         }
 
-        nav a:hover {
-            color: gold;
+        .nav-links a:hover {
+            color: #ffd700;
         }
 
         .logout-btn {
@@ -50,6 +89,8 @@
             padding: 8px 20px;
             border-radius: 5px;
             cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
         }
 
         .logout-btn:hover {
@@ -68,7 +109,7 @@
 
         .stat-card {
             background: #111;
-            border: 1px solid gold;
+            border: 1px solid #ffd700;
             padding: 25px;
             border-radius: 15px;
             text-align: center;
@@ -76,7 +117,7 @@
 
         .stat-card h2 {
             font-size: 2.5rem;
-            color: gold;
+            color: #ffd700;
         }
 
         .stat-card p {
@@ -121,7 +162,7 @@
 
         th {
             background: #1a1a2e;
-            color: gold;
+            color: #ffd700;
         }
 
         td {
@@ -151,11 +192,11 @@
             padding: 40px;
             border-radius: 15px;
             text-align: center;
-            border: 1px solid gold;
+            border: 1px solid #ffd700;
         }
 
         .login-box h2 {
-            color: gold;
+            color: #ffd700;
             margin-bottom: 20px;
         }
 
@@ -172,7 +213,7 @@
         .login-box button {
             width: 100%;
             padding: 12px;
-            background: gold;
+            background: #ffd700;
             border: none;
             border-radius: 8px;
             font-weight: bold;
@@ -185,16 +226,23 @@
             margin-top: 10px;
         }
 
-        .loading {
-            text-align: center;
-            padding: 50px;
-            color: gold;
-        }
-
         footer {
             text-align: center;
             padding: 30px;
             color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .nav-links {
+                justify-content: center;
+                gap: 15px;
+                margin-bottom: 10px;
+            }
         }
     </style>
 </head>
@@ -210,11 +258,29 @@
 
 <!-- DASHBOARD SECTION -->
 <div id="dashboardSection" style="display: none;">
+    <!-- PROFESSIONAL NAVIGATION -->
     <nav>
-        <h1>🎬 Ernest Embassy Admin</h1>
-        <div>
-            <span style="color: white; margin-right: 20px;">Welcome, Damian</span>
-            <button class="logout-btn" onclick="logout()">Logout</button>
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">✨</span>
+                <div>
+                    <span class="logo-text">Ernest Embassy</span>
+                    <span class="logo-sub">Admin Dashboard</span>
+                </div>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">🏠 Home</a>
+                <a href="about.html">📖 About</a>
+                <a href="services.html">⚙️ Services</a>
+                <a href="visa.html">✈️ Visa</a>
+                <a href="movie.html">🎬 Movie Studio</a>
+                <a href="teaching.html">📚 Teaching</a>
+                <a href="tutoring.html">💻 Tutoring</a>
+                <a href="education.html">🎓 Education</a>
+                <a href="booking.html">📅 Book</a>
+                <a href="contact.html">📞 Contact</a>
+                <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+            </div>
         </div>
     </nav>
 
@@ -238,9 +304,9 @@
     <div class="filters">
         <select id="filterType" onchange="filterSubmissions()">
             <option value="all">All Types</option>
-            <option value="visa">Visa Consultation</option>
-            <option value="film">Film Inquiry</option>
-            <option value="tutoring">Tutoring Request</option>
+            <option value="visa">✈️ Visa Consultation</option>
+            <option value="film">🎬 Film Inquiry</option>
+            <option value="tutoring">📚 Tutoring Request</option>
         </select>
         <input type="text" id="searchInput" placeholder="Search by name or email..." onkeyup="filterSubmissions()">
     </div>
@@ -267,6 +333,7 @@
 
     <footer>
         <p>Ernest Embassy Travels & Infinity Movie Star Production | Admin Dashboard</p>
+        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria | 📞 +2348032607809</p>
     </footer>
 </div>
 
@@ -338,10 +405,9 @@
 
         tbody.innerHTML = filtered.map(sub => {
             let typeLabel = '';
-            let typeIcon = '';
-            if (sub.type === 'visa') { typeLabel = '✈️ Visa'; typeIcon = 'visa'; }
-            else if (sub.type === 'film') { typeLabel = '🎬 Film'; typeIcon = 'film'; }
-            else { typeLabel = '📚 Tutoring'; typeIcon = 'tutoring'; }
+            if (sub.type === 'visa') { typeLabel = '✈️ Visa'; }
+            else if (sub.type === 'film') { typeLabel = '🎬 Film'; }
+            else { typeLabel = '📚 Tutoring'; }
             
             let statusClass = '';
             if (sub.status === 'pending') statusClass = 'status-pending';

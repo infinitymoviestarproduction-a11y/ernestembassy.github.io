@@ -1,6 +1,7 @@
-<section>
+<!-- Visa Services Section - Complete Replacement -->
+<div class="about-content">
     <h2>Visa Processing & Travel Consultancy</h2>
-
+    
     <p>
         At Ernest Embassy Travels, we provide professional visa processing
         services for individuals seeking to travel abroad for study, work,
@@ -13,12 +14,96 @@
     </p>
 
     <h3>Our Services Include:</h3>
-    <ul>
+    <ul style="margin-left: 30px; margin-bottom: 20px;">
         <li>Student Visa Assistance</li>
         <li>Tourist & Visit Visa Processing</li>
         <li>Work Permit Guidance</li>
         <li>Document Preparation & Review</li>
     </ul>
 
-    <a class="btn" href="booking.html">Start Your Application</a>
-</section>
+    <!-- VISA APPLICATION FORM -->
+    <div class="form-container">
+        <h2>Visa Consultation Request</h2>
+        <form name="visa-consultation" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="visa-consultation">
+            <p style="display: none;"><label>Don't fill this out: <input name="bot-field"></label></p>
+            
+            <!-- Field 1: Full Name -->
+            <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" name="fullname" required>
+            </div>
+            
+            <!-- Field 2: Email Address -->
+            <div class="form-group">
+                <label>Email Address *</label>
+                <input type="email" name="email" required>
+            </div>
+            
+            <!-- Field 3: Phone Number -->
+            <div class="form-group">
+                <label>Phone Number *</label>
+                <input type="tel" name="phone" required>
+            </div>
+            
+            <!-- Field 4: Country Applying From -->
+            <div class="form-group">
+                <label>Country You Are Applying From *</label>
+                <select name="country_from" required>
+                    <option value="">Select Country</option>
+                    <option value="Nigeria">Nigeria</option>
+                    <option value="Ghana">Ghana</option>
+                    <option value="Kenya">Kenya</option>
+                    <option value="South Africa">South Africa</option>
+                    <option value="United Kingdom">United Kingdom</option>
+                    <option value="United States">United States</option>
+                    <option value="Canada">Canada</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            
+            <!-- Field 5: Destination Country -->
+            <div class="form-group">
+                <label>Destination Country *</label>
+                <input type="text" name="destination" placeholder="e.g., Canada, UK, USA" required>
+            </div>
+            
+            <!-- Field 6: Visa Type -->
+            <div class="form-group">
+                <label>Visa Type *</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="visa_type" value="Student" required> Student Visa</label>
+                    <label><input type="radio" name="visa_type" value="Tourist"> Tourist Visa</label>
+                    <label><input type="radio" name="visa_type" value="Work"> Work Visa</label>
+                </div>
+            </div>
+            
+            <!-- Field 7: Valid Passport? -->
+            <div class="form-group">
+                <label>Do You Have a Valid Passport? *</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="has_passport" value="Yes" required> Yes</label>
+                    <label><input type="radio" name="has_passport" value="No"> No</label>
+                </div>
+            </div>
+            
+            <!-- Field 8: Previous Visa Refusal? -->
+            <div class="form-group">
+                <label>Previous Visa Refusal? *</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="previous_refusal" value="Yes" required> Yes</label>
+                    <label><input type="radio" name="previous_refusal" value="No"> No</label>
+                </div>
+            </div>
+            
+            <!-- Field 9: Message -->
+            <div class="form-group">
+                <label>Message / Additional Information</label>
+                <textarea name="message" rows="4" placeholder="Tell us more about your travel plans..."></textarea>
+            </div>
+            
+            <!-- Field 10: Submit Button -->
+            <button type="submit" class="submit-btn">Submit Visa Request</button>
+        </form>
+    </div>
+</div>

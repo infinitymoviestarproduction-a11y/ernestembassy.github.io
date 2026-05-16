@@ -1,23 +1,324 @@
-<section>
-    <h2>Education Consulting</h2>
+<!-- EDUCATION CONSULTING SECTION - REPLACEMENT -->
+<section class="education-section">
+    <div class="container">
+        <div class="section-title">
+            <span>🎓 Education Consulting</span>
+        </div>
+        <p class="section-subtitle">Your trusted partner for studying abroad and academic success</p>
 
-    <p>
-        We provide expert guidance for students seeking to study abroad,
-        helping them choose the right programs and institutions.
-    </p>
+        <div class="education-grid">
+            <!-- Left Column: Information -->
+            <div class="education-info">
+                <div class="info-card">
+                    <p class="lead-text">
+                        We provide expert guidance for students seeking to study abroad, helping them choose the right programs and institutions that match their academic background and career goals.
+                    </p>
+                    <p>
+                        Our goal is to simplify the admission and visa process for students and ensure they achieve their academic dreams without unnecessary stress or delays.
+                    </p>
 
-    <p>
-        Our goal is to simplify the admission and visa process for students
-        and ensure they achieve their academic dreams.
-    </p>
+                    <h3>📚 Our Education Services Include:</h3>
+                    <ul class="services-list">
+                        <li>✅ School Selection Guidance (UK, Canada, USA, Europe)</li>
+                        <li>✅ Admission Processing & Application Support</li>
+                        <li>✅ Student Visa Application Assistance</li>
+                        <li>✅ Career Counseling & Course Selection</li>
+                        <li>✅ Scholarship Guidance & Recommendations</li>
+                        <li>✅ Pre-departure Orientation</li>
+                    </ul>
 
-    <h3>Our Services Include:</h3>
-    <ul>
-        <li>School Selection Guidance</li>
-        <li>Admission Processing</li>
-        <li>Student Visa Support</li>
-        <li>Career Counseling</li>
-    </ul>
+                    <div class="success-stats">
+                        <div class="stat">
+                            <span class="stat-number">100+</span>
+                            <span class="stat-label">Students Advised</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">95%</span>
+                            <span class="stat-label">Visa Success Rate</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">10+</span>
+                            <span class="stat-label">Years Experience</span>
+                        </div>
+                    </div>
 
-    <a class="btn" href="booking.html">Start Your Journey</a>
+                    <a class="btn" href="booking.html">📅 Start Your Journey →</a>
+                </div>
+            </div>
+
+            <!-- Right Column: Consultation Form -->
+            <div class="education-form">
+                <div class="form-card">
+                    <h3>📝 Free Consultation Request</h3>
+                    <p>Fill out the form below and we will contact you within 24 hours.</p>
+
+                    <form name="education-consulting" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you-education.html">
+                        <input type="hidden" name="form-name" value="education-consulting">
+                        
+                        <!-- Honeypot for spam -->
+                        <p style="display: none;">
+                            <label>Don't fill this: <input name="bot-field"></label>
+                        </p>
+
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" name="name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email Address *</label>
+                            <input type="email" name="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Phone Number *</label>
+                            <input type="tel" name="phone" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Current Education Level *</label>
+                            <select name="education_level" required>
+                                <option value="">Select</option>
+                                <option value="High School">High School / Secondary</option>
+                                <option value="Bachelor's Degree">Bachelor's Degree</option>
+                                <option value="Master's Degree">Master's Degree</option>
+                                <option value="PhD">PhD / Doctorate</option>
+                                <option value="Professional">Professional Certification</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Country Interested In *</label>
+                            <select name="country" required>
+                                <option value="">Select Country</option>
+                                <option value="Canada">🇨🇦 Canada</option>
+                                <option value="United Kingdom">🇬🇧 United Kingdom</option>
+                                <option value="United States">🇺🇸 United States</option>
+                                <option value="Australia">🇦🇺 Australia</option>
+                                <option value="Germany">🇩🇪 Germany</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Your Message / Questions</label>
+                            <textarea name="message" rows="3" placeholder="Tell us about your study goals..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-primary">📨 Request Consultation</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
+
+<style>
+/* Education Section Styles */
+.education-section {
+    padding: 60px 20px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 15px;
+    color: #1a1a2e;
+}
+
+.section-title span {
+    border-bottom: 3px solid #ffd700;
+    padding-bottom: 10px;
+}
+
+.section-subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 40px;
+    font-size: 1.1rem;
+}
+
+.education-grid {
+    display: grid;
+    grid-template-columns: 1fr 450px;
+    gap: 40px;
+}
+
+/* Left Column - Info */
+.education-info .info-card {
+    background: white;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.lead-text {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #1a1a2e;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.education-info p {
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 25px;
+}
+
+.education-info h3 {
+    color: #1a1a2e;
+    margin: 25px 0 15px;
+    font-size: 1.3rem;
+}
+
+.services-list {
+    list-style: none;
+    padding: 0;
+}
+
+.services-list li {
+    padding: 8px 0;
+    color: #555;
+    border-bottom: 1px solid #eee;
+}
+
+.success-stats {
+    display: flex;
+    justify-content: space-between;
+    margin: 30px 0;
+    padding: 20px 0;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #667eea;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.btn {
+    display: inline-block;
+    background: #667eea;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.btn:hover {
+    background: #5a67d8;
+    transform: translateY(-2px);
+}
+
+/* Right Column - Form */
+.education-form .form-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 100px;
+}
+
+.education-form h3 {
+    color: #1a1a2e;
+    margin-bottom: 10px;
+    font-size: 1.3rem;
+}
+
+.education-form p {
+    color: #666;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #555;
+    font-size: 0.85rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.btn-primary {
+    background: #667eea;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.3s;
+}
+
+.btn-primary:hover {
+    background: #5a67d8;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .education-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .education-form .form-card {
+        position: static;
+    }
+}
+
+@media (max-width: 600px) {
+    .success-stats {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .education-info .info-card {
+        padding: 25px;
+    }
+}
+</style>

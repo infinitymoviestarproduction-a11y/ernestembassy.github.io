@@ -1,23 +1,462 @@
-<section class="cards">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Services - Ernest Embassy Travels & Infinity Movie Star Production</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <a href="visa.html" class="card">
-        <h3>Visa Processing</h3>
-        <p>We help with travel visa applications and consultation.</p>
-    </a>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+        }
 
-    <a href="film.html" class="card">
-        <h3>Film Production</h3>
-        <p>Movie scripting, directing, and production services.</p>
-    </a>
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+        }
 
-    <a href="education.html" class="card">
-        <h3>Education Consulting</h3>
-        <p>Guidance for students studying abroad.</p>
-    </a>
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
 
-    <a href="teaching.html" class="card">
-        <h3>Teaching Services</h3>
-        <p>Professional tutoring and academic support.</p>
-    </a>
+        .logo {
+            color: #ffd700;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
 
-</section>
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 0;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        /* Section Titles */
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #1a1a2e;
+        }
+
+        .section-title span {
+            border-bottom: 3px solid #ffd700;
+            padding-bottom: 10px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 50px;
+            font-size: 1.1rem;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .service-header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .service-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+        }
+
+        .service-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .service-header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .service-body {
+            padding: 30px;
+        }
+
+        .service-body h3 {
+            color: #1a1a2e;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .service-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .service-list li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .service-list li:before {
+            content: "✓";
+            color: #28a745;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .btn-service {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .btn-service:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            text-align: center;
+            padding: 60px 40px;
+            border-radius: 20px;
+            margin-top: 40px;
+        }
+
+        .cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .btn-cta {
+            display: inline-block;
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 14px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-cta:hover {
+            background: #e6c200;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+
+        .cac-badge {
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            .cta-section h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+    <div class="nav-container">
+        <div class="logo">✨ Ernest Embassy</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="services.html">Services</a>
+            <a href="visa.html">Visa</a>
+            <a href="movie.html">Movie Studio</a>
+            <a href="tutoring.html">Tutoring</a>
+            <a href="education.html">Education</a>
+            <a href="booking.html">Book</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO SECTION -->
+<div class="hero">
+    <h1>✨ Our Professional Services</h1>
+    <p>Comprehensive solutions for travel, education, film production, and personal development</p>
+</div>
+
+<div class="container">
+    <div class="section-title"><span>What We Offer</span></div>
+    <div class="section-subtitle">Tailored services to meet your unique needs</div>
+
+    <div class="services-grid">
+        <!-- Service 1: Visa Processing -->
+        <div class="service-card">
+            <div class="service-header">
+                <div class="service-icon">✈️</div>
+                <h2>Visa Processing</h2>
+                <p>Travel & Immigration Solutions</p>
+            </div>
+            <div class="service-body">
+                <h3>Services Include:</h3>
+                <ul class="service-list">
+                    <li>Student Visa Assistance</li>
+                    <li>Tourist & Visit Visa Processing</li>
+                    <li>Work Permit Guidance</li>
+                    <li>Document Preparation & Review</li>
+                    <li>Embassy Interview Coaching</li>
+                    <li>Pre-departure Orientation</li>
+                </ul>
+                <a href="visa.html" class="btn-service">Apply for Visa →</a>
+            </div>
+        </div>
+
+        <!-- Service 2: Film Production -->
+        <div class="service-card">
+            <div class="service-header">
+                <div class="service-icon">🎬</div>
+                <h2>Film Production</h2>
+                <p>Infinity Movie Star Production</p>
+            </div>
+            <div class="service-body">
+                <h3>Services Include:</h3>
+                <ul class="service-list">
+                    <li>Movie Script Writing</li>
+                    <li>Film Directing & Production</li>
+                    <li>Editing & Post-Production</li>
+                    <li>Actor Casting & Coordination</li>
+                    <li>Hands-On Film Training</li>
+                    <li>Music Video Production</li>
+                </ul>
+                <a href="movie.html" class="btn-service">Explore Film →</a>
+            </div>
+        </div>
+
+        <!-- Service 3: Education Consulting -->
+        <div class="service-card">
+            <div class="service-header">
+                <div class="service-icon">📚</div>
+                <h2>Education Consulting</h2>
+                <p>Study Abroad Guidance</p>
+            </div>
+            <div class="service-body">
+                <h3>Services Include:</h3>
+                <ul class="service-list">
+                    <li>School Selection Guidance</li>
+                    <li>Admission Processing</li>
+                    <li>Student Visa Support</li>
+                    <li>Scholarship Guidance</li>
+                    <li>Career Counseling</li>
+                    <li>Pre-departure Orientation</li>
+                </ul>
+                <a href="education.html" class="btn-service">Start Journey →</a>
+            </div>
+        </div>
+
+        <!-- Service 4: Online Tutoring -->
+        <div class="service-card">
+            <div class="service-header">
+                <div class="service-icon">💻</div>
+                <h2>Online Tutoring</h2>
+                <p>Personalized Learning</p>
+            </div>
+            <div class="service-body">
+                <h3>Subjects Include:</h3>
+                <ul class="service-list">
+                    <li>English Language</li>
+                    <li>Digital Technology</li>
+                    <li>Igbo (Diaspora Students)</li>
+                    <li>Science Exam Prep (WAEC/NECO/JAMB)</li>
+                    <li>Adult Literacy</li>
+                    <li>Homework Support</li>
+                </ul>
+                <a href="tutoring.html" class="btn-service">Book a Tutor →</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- WHY CHOOSE US -->
+    <div class="section-title"><span>Why Choose Us</span></div>
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="service-header">
+                <div class="service-icon">👨‍🏫</div>
+                <h2>Direct Access</h2>
+            </div>
+            <div class="service-body">
+                <p>You deal directly with Damian Okafor — no middlemen, no agents. Every client receives personal attention.</p>
+            </div>
+        </div>
+        <div class="service-card">
+            <div class="service-header">
+                <div class="service-icon">✅</div>
+                <h2>CAC Registered</h2>
+            </div>
+            <div class="service-body">
+                <p>Infinity Movie Star Production is fully registered with the CAC since June 21, 2017 (BN2517233).</p>
+            </div>
+        </div>
+        <div class="service-card">
+            <div class="service-header">
+                <div class="service-icon">🎓</div>
+                <h2>10+ Years Experience</h2>
+            </div>
+            <div class="service-body">
+                <p>Teaching and consulting since 2014. Real classroom experience and proven track record.</p>
+            </div>
+        </div>
+        <div class="service-card">
+            <div class="service-header">
+                <div class="service-icon">🌍</div>
+                <h2>Global Reach</h2>
+            </div>
+            <div class="service-body">
+                <p>Serving clients in Nigeria and international diaspora students worldwide.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CALL TO ACTION -->
+    <div class="cta-section">
+        <h2>Ready to Get Started?</h2>
+        <p>Book a consultation with Damian today and take the first step toward your goals.</p>
+        <a href="booking.html" class="btn-cta">📅 Book a Consultation →</a>
+    </div>
+</div>
+
+<!-- CAC BADGE -->
+<div style="text-align: center; padding: 20px;">
+    <div class="cac-badge">
+        ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
+        📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <p><strong>Ernest Embassy Travels & Infinity Movie Star Production</strong></p>
+        <p>📧 ernestembassytravels@gmail.com | infinitymoviestarproduction@gmail.com | Danoka33@gmail.com</p>
+        <p>📞 +2348032607809 | +2349050205053</p>
+        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
+        <p style="margin-top: 20px;">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>

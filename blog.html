@@ -1,9 +1,189 @@
-<section>
-    <h2>Educational Articles</h2>
+<!-- BLOG / ARTICLES SECTION -->
+<section class="blog-section">
+    <div class="container">
+        <div class="section-title">
+            <span>📝 Educational Articles & Visa Tips</span>
+        </div>
+        <p class="section-subtitle">Expert advice on visas, studying abroad, film making, and online tutoring</p>
 
-    <h3>How to Apply for Student Visa</h3>
-    <p>Step-by-step guide for international students...</p>
+        <div class="blog-grid">
+            <!-- Article 1 -->
+            <article class="blog-card">
+                <div class="blog-icon">✈️</div>
+                <h3>How to Apply for a Student Visa</h3>
+                <p class="blog-meta">By Damian Okafor | Updated 2026</p>
+                <p>Step-by-step guide for international students including document preparation, embassy interviews, and common mistakes to avoid.</p>
+                <a href="blog-student-visa.html" class="read-more">Read Full Guide →</a>
+            </article>
 
-    <h3>Benefits of Studying Abroad</h3>
-    <p>Studying abroad exposes students to global opportunities...</p>
+            <!-- Article 2 -->
+            <article class="blog-card">
+                <div class="blog-icon">🌍</div>
+                <h3>Benefits of Studying Abroad</h3>
+                <p class="blog-meta">By Damian Okafor | Updated 2026</p>
+                <p>Studying abroad exposes students to global opportunities, cultural exchange, quality education, and career advantages.</p>
+                <a href="blog-study-abroad.html" class="read-more">Read Full Guide →</a>
+            </article>
+
+            <!-- Article 3 -->
+            <article class="blog-card">
+                <div class="blog-icon">🎬</div>
+                <h3>How to Start a Career in Nollywood</h3>
+                <p class="blog-meta">By Damian Okafor | Updated 2026</p>
+                <p>Practical steps to break into the Nigerian film industry, from training to landing your first role.</p>
+                <a href="blog-nollywood-career.html" class="read-more">Read Full Guide →</a>
+            </article>
+
+            <!-- Article 4 -->
+            <article class="blog-card">
+                <div class="blog-icon">💻</div>
+                <h3>Online Tutoring Tips for Parents</h3>
+                <p class="blog-meta">By Damian Okafor | Updated 2026</p>
+                <p>How to help your child succeed with online learning, especially for WAEC, NECO, and JAMB preparation.</p>
+                <a href="blog-tutoring-tips.html" class="read-more">Read Full Guide →</a>
+            </article>
+
+            <!-- Article 5 -->
+            <article class="blog-card">
+                <div class="blog-icon">🛂</div>
+                <h3>Top 5 Reasons Visas Get Refused</h3>
+                <p class="blog-meta">By Damian Okafor | Updated 2026</p>
+                <p>Learn the most common visa refusal reasons and how to avoid them with proper preparation.</p>
+                <a href="blog-visa-refusal.html" class="read-more">Read Full Guide →</a>
+            </article>
+
+            <!-- Article 6 -->
+            <article class="blog-card">
+                <div class="blog-icon">🎓</div>
+                <h3>Scholarships for Nigerian Students</h3>
+                <p class="blog-meta">By Damian Okafor | Updated 2026</p>
+                <p>List of available scholarships for Nigerian students seeking to study abroad in 2026.</p>
+                <a href="blog-scholarships.html" class="read-more">Read Full Guide →</a>
+            </article>
+        </div>
+
+        <!-- View All Button -->
+        <div class="blog-footer">
+            <a href="blog.html" class="btn btn-primary">View All Articles →</a>
+        </div>
+    </div>
 </section>
+
+<style>
+/* Blog Section Styles */
+.blog-section {
+    padding: 60px 20px;
+    background: #f8f9fa;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 15px;
+    color: #1a1a2e;
+}
+
+.section-title span {
+    border-bottom: 3px solid #ffd700;
+    padding-bottom: 10px;
+}
+
+.section-subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 40px;
+    font-size: 1.1rem;
+}
+
+.blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.blog-card {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.blog-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.blog-icon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.blog-card h3 {
+    color: #1a1a2e;
+    margin-bottom: 8px;
+    font-size: 1.25rem;
+}
+
+.blog-meta {
+    color: #888;
+    font-size: 0.8rem;
+    margin-bottom: 12px;
+    font-style: italic;
+}
+
+.blog-card p {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.read-more {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.read-more:hover {
+    color: #764ba2;
+}
+
+.blog-footer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.btn {
+    display: inline-block;
+    background: #667eea;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.btn:hover {
+    background: #5a67d8;
+    transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .blog-grid {
+        grid-template-columns: 1fr;
+    }
+    .section-title {
+        font-size: 1.5rem;
+    }
+}
+</style>

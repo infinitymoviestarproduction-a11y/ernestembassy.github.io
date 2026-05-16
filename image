@@ -1,1 +1,53 @@
-<img src="images/logo.png">
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .logo-card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 40px 60px;
+            border-radius: 20px;
+            text-align: center;
+            border: 2px solid #ffd700;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .logo-icon {
+            font-size: 4rem;
+        }
+        .logo-text {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffd700;
+            display: block;
+            margin-top: 10px;
+        }
+        .logo-sub {
+            font-size: 0.9rem;
+            color: rgba(255, 215, 0, 0.8);
+            display: block;
+            margin-top: 5px;
+        }
+        .tagline {
+            font-size: 0.8rem;
+            color: #aaa;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-card">
+        <div class="logo-icon">✨🎬✈️</div>
+        <div class="logo-text">ERNEST EMBASSY</div>
+        <div class="logo-sub">Travels & Infinity Movie Star Production</div>
+        <div class="tagline">CAC Registered • Since 2017</div>
+    </div>
+</body>
+</html>

@@ -1,10 +1,169 @@
-<!-- BLOG / ARTICLES SECTION -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Educational Articles & Visa Tips | Ernest Embassy</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Blog Page Specific Styles */
+        .blog-section {
+            padding: 60px 20px;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #1a1a2e;
+        }
+
+        .section-title span {
+            border-bottom: 3px solid #ffd700;
+            padding-bottom: 10px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .blog-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .blog-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .blog-card h3 {
+            color: #1a1a2e;
+            margin-bottom: 8px;
+            font-size: 1.25rem;
+        }
+
+        .blog-meta {
+            color: #888;
+            font-size: 0.8rem;
+            margin-bottom: 12px;
+            font-style: italic;
+        }
+
+        .blog-card p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .read-more {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .read-more:hover {
+            color: #764ba2;
+        }
+
+        .blog-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- PROFESSIONAL NAVIGATION WITH MOVIE STUDIO LINK -->
+<nav>
+    <div class="nav-container">
+        <div class="logo">
+            <span class="logo-icon">✨</span>
+            <div>
+                <span class="logo-text">Ernest Embassy</span>
+                <span class="logo-sub">Travels & Film Production</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="about.html">📖 About</a>
+            <a href="services.html">⚙️ Services</a>
+            <a href="visa.html">✈️ Visa</a>
+            <a href="movie.html">🎬 Movie Studio</a>
+            <a href="teaching.html">📚 Teaching</a>
+            <a href="tutoring.html">💻 Tutoring</a>
+            <a href="education.html">🎓 Education</a>
+            <a href="booking.html">📅 Book</a>
+            <a href="contact.html">📞 Contact</a>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO SECTION -->
+<div class="hero">
+    <h1>📝 Educational Blog</h1>
+    <p>Expert advice on visas, studying abroad, film making, and online tutoring</p>
+</div>
+
+<!-- BLOG ARTICLES SECTION -->
 <section class="blog-section">
     <div class="container">
         <div class="section-title">
-            <span>📝 Educational Articles & Visa Tips</span>
+            <span>Latest Articles & Tips</span>
         </div>
-        <p class="section-subtitle">Expert advice on visas, studying abroad, film making, and online tutoring</p>
+        <p class="section-subtitle">Read, learn, and apply for your success</p>
 
         <div class="blog-grid">
             <!-- Article 1 -->
@@ -62,128 +221,37 @@
             </article>
         </div>
 
-        <!-- View All Button -->
+        <!-- View All Button (disables since already on blog page) -->
         <div class="blog-footer">
-            <a href="blog.html" class="btn btn-primary">View All Articles →</a>
+            <a href="booking.html" class="btn">📅 Book a Consultation →</a>
         </div>
     </div>
 </section>
 
-<style>
-/* Blog Section Styles */
-.blog-section {
-    padding: 60px 20px;
-    background: #f8f9fa;
-}
+<!-- CAC BADGE -->
+<div style="text-align: center; padding: 20px;">
+    <div class="cac-badge">
+        ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
+        📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
+    </div>
+</div>
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <p><strong>Ernest Embassy Travels & Infinity Movie Star Production</strong></p>
+        <p>📧 ernestembassytravels@gmail.com | infinitymoviestarproduction@gmail.com | Danoka33@gmail.com</p>
+        <p>📞 +2348032607809 | +2349050205053</p>
+        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
+        <p style="margin-top: 20px;">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
+    </div>
+</footer>
 
-.section-title {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 15px;
-    color: #1a1a2e;
-}
+<!-- WHATSAPP BUTTON -->
+<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
+    <span>💬</span>
+    <span>Chat with Damian on WhatsApp</span>
+</a>
 
-.section-title span {
-    border-bottom: 3px solid #ffd700;
-    padding-bottom: 10px;
-}
-
-.section-subtitle {
-    text-align: center;
-    color: #666;
-    margin-bottom: 40px;
-    font-size: 1.1rem;
-}
-
-.blog-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 30px;
-    margin-bottom: 40px;
-}
-
-.blog-card {
-    background: white;
-    border-radius: 15px;
-    padding: 25px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.blog-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-}
-
-.blog-icon {
-    font-size: 2.5rem;
-    margin-bottom: 15px;
-}
-
-.blog-card h3 {
-    color: #1a1a2e;
-    margin-bottom: 8px;
-    font-size: 1.25rem;
-}
-
-.blog-meta {
-    color: #888;
-    font-size: 0.8rem;
-    margin-bottom: 12px;
-    font-style: italic;
-}
-
-.blog-card p {
-    color: #555;
-    line-height: 1.6;
-    margin-bottom: 15px;
-}
-
-.read-more {
-    color: #667eea;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s;
-}
-
-.read-more:hover {
-    color: #764ba2;
-}
-
-.blog-footer {
-    text-align: center;
-    margin-top: 20px;
-}
-
-.btn {
-    display: inline-block;
-    background: #667eea;
-    color: white;
-    padding: 12px 30px;
-    border-radius: 30px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: all 0.3s;
-}
-
-.btn:hover {
-    background: #5a67d8;
-    transform: translateY(-2px);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .blog-grid {
-        grid-template-columns: 1fr;
-    }
-    .section-title {
-        font-size: 1.5rem;
-    }
-}
-</style>
+</body>
+</html>

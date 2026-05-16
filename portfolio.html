@@ -1,55 +1,509 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Creative Media Portfolio</title>
-<link rel="stylesheet" href="style.css">
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Media Portfolio - Damian Anielozie Okafor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #0a0a0a;
+        }
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #ffd700;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            color: #ffd700;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Section Titles */
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: white;
+            margin-top: 60px;
+        }
+
+        .section-title span {
+            border-bottom: 3px solid #ffd700;
+            padding-bottom: 10px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #aaa;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        /* Music Grid */
+        .music-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .music-card {
+            background: #111;
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid #333;
+            transition: transform 0.3s;
+        }
+
+        .music-card:hover {
+            transform: translateY(-5px);
+            border-color: #ffd700;
+        }
+
+        .music-card h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+
+        .music-card p {
+            color: #ccc;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        audio {
+            width: 100%;
+            margin: 15px 0;
+        }
+
+        /* Video Grid */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .video-card {
+            background: #111;
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid #333;
+            transition: transform 0.3s;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            border-color: #ffd700;
+        }
+
+        .video-card h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+
+        .video-card p {
+            color: #ccc;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        video {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        /* Writings Grid */
+        .writings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .writing-card {
+            background: #111;
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid #333;
+            transition: transform 0.3s;
+            text-align: center;
+        }
+
+        .writing-card:hover {
+            transform: translateY(-5px);
+            border-color: #ffd700;
+        }
+
+        .writing-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .writing-card h3 {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .writing-card p {
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 10px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #e6c200;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #ffd700;
+            border: 1px solid #ffd700;
+        }
+
+        .btn-outline:hover {
+            background: #ffd700;
+            color: #1a1a2e;
+        }
+
+        /* Artist Bio Section */
+        .artist-bio {
+            background: linear-gradient(135deg, #1a1a2e 0%, #0a0a0a 100%);
+            padding: 50px;
+            border-radius: 20px;
+            margin: 60px 0;
+            text-align: center;
+            border: 1px solid #ffd700;
+        }
+
+        .artist-bio h3 {
+            color: #ffd700;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .artist-bio p {
+            color: #ddd;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            font-style: italic;
+        }
+
+        .artist-signature {
+            margin-top: 20px;
+            color: #ffd700;
+        }
+
+        /* Streaming Links */
+        .streaming-section {
+            background: #111;
+            padding: 40px;
+            border-radius: 20px;
+            margin: 60px 0;
+            text-align: center;
+        }
+
+        .streaming-icons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .streaming-link {
+            display: inline-block;
+            background: #222;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 40px;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: 1px solid #333;
+        }
+
+        .streaming-link:hover {
+            background: #ffd700;
+            color: #1a1a2e;
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        footer {
+            background: #0a0a0a;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+            border-top: 1px solid #333;
+        }
+
+        .cac-badge {
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+            .artist-bio {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
 <body>
 
+<!-- NAVIGATION -->
 <nav>
-    <a href="index.html">Home</a>
+    <div class="nav-container">
+        <div class="logo">🎭 Damian Anielozie Okafor</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="portfolio.html">Portfolio</a>
+            <a href="movie.html">Movie Studio</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </div>
 </nav>
 
-<section class="hero">
-    <h1>Creative Media Portfolio</h1>
-    <p>Music • Films • Writing • Education Content</p>
-</section>
+<!-- HERO SECTION -->
+<div class="hero">
+    <h1>🎨 Creative Media Portfolio</h1>
+    <p>Music • Films • Writings • Educational Content</p>
+</div>
 
-<!-- MUSIC SECTION -->
-<section>
-    <h2>🎵 Music Gallery</h2>
-
-    <div class="card">
-        <h3>My Latest Track</h3>
-        <audio controls>
-            <source src="music/song1.mp3" type="audio/mpeg">
-        </audio>
+<div class="container">
+    <!-- ARTIST BIO SECTION -->
+    <div class="artist-bio">
+        <h3>🎤 The Artist's Statement</h3>
+        <p>"I write from the black world. Pain, prayer, struggle, love. My lyrics are my confession. Hip-hop is my church. Listen and feel. Nma war."</p>
+        <div class="artist-signature">— Damian Anielozie Okafor</div>
     </div>
-</section>
 
-<!-- VIDEO SECTION -->
-<section>
-    <h2>🎬 Film Productions</h2>
+    <!-- MUSIC GALLERY SECTION -->
+    <div class="section-title"><span>🎵 Music Gallery</span></div>
+    <div class="section-subtitle">Listen to my latest tracks and musical works</div>
 
-    <div class="card">
-        <h3>Movie Trailer</h3>
-        <video controls width="100%">
-            <source src="videos/movie1.mp4" type="video/mp4">
-        </video>
+    <div class="music-grid">
+        <div class="music-card">
+            <h3>🎤 Nma War</h3>
+            <p>Latest hip-hop single - A confession from the black world</p>
+            <audio controls>
+                <source src="music/nma-war.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+
+        <div class="music-card">
+            <h3>🎧 Pain & Prayer</h3>
+            <p>Raw emotions, struggle, and redemption</p>
+            <audio controls>
+                <source src="music/pain-and-prayer.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+
+        <div class="music-card">
+            <h3>💔 Love & Loss</h3>
+            <p>A journey through heartbreak and healing</p>
+            <audio controls>
+                <source src="music/love-and-loss.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
     </div>
-</section>
 
-<!-- DOCUMENT SECTION -->
-<section>
-    <h2>📄 Writings & Lyrics</h2>
-
-    <div class="card">
-        <h3>Lyrics Collection</h3>
-        <p>Download and explore creative works.</p>
-        <a class="btn" href="docs/lyrics.pdf">Download PDF</a>
+    <!-- STREAMING PLATFORMS -->
+    <div class="streaming-section">
+        <h3 style="color: #ffd700;">🌊 Stream My Music Online</h3>
+        <p style="color: #ccc; margin-top: 10px;">Available on all major streaming platforms</p>
+        <div class="streaming-icons">
+            <a href="https://on.soundcloud.com/2uhZKraveAXA1zVtJx" target="_blank" class="streaming-link">🎧 SoundCloud</a>
+            <a href="https://audiomack.com/infinitymoviestarproduction579" target="_blank" class="streaming-link">🔊 Audiomack</a>
+            <a href="https://tunami.com/@infinitymoviestarproduction579" target="_blank" class="streaming-link">🌊 Tunami</a>
+            <a href="https://youtube.com/@infinitymoviestarproductio6222" target="_blank" class="streaming-link">▶️ YouTube</a>
+        </div>
     </div>
-</section>
+
+    <!-- FILM PRODUCTIONS SECTION -->
+    <div class="section-title"><span>🎬 Film Productions</span></div>
+    <div class="section-subtitle">Movie trailers, short films, and behind-the-scenes</div>
+
+    <div class="video-grid">
+        <div class="video-card">
+            <h3>🎥 Movie Trailer 1</h3>
+            <p>Coming soon - A powerful story of redemption</p>
+            <video controls poster="https://via.placeholder.com/400x225?text=Movie+Trailer">
+                <source src="videos/trailer1.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <div class="video-card">
+            <h3>🎬 Behind the Scenes</h3>
+            <p>On-set moments from Infinity Movie Star Production</p>
+            <video controls poster="https://via.placeholder.com/400x225?text=BTS">
+                <source src="videos/bts.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <div class="video-card">
+            <h3>📽️ Short Film: "The Journey"</h3>
+            <p>A short story about perseverance and hope</p>
+            <video controls poster="https://via.placeholder.com/400x225?text=Short+Film">
+                <source src="videos/short-film.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <!-- WRITINGS & LYRICS SECTION -->
+    <div class="section-title"><span>📄 Writings & Lyrics</span></div>
+    <div class="section-subtitle">Download my creative works, lyrics, and scripts</div>
+
+    <div class="writings-grid">
+        <div class="writing-card">
+            <div class="writing-icon">📜</div>
+            <h3>Lyrics Collection</h3>
+            <p>Complete lyrics from all released tracks including "Nma War", "Pain & Prayer", and more.</p>
+            <a href="docs/lyrics-collection.pdf" class="btn">Download PDF →</a>
+        </div>
+
+        <div class="writing-card">
+            <div class="writing-icon">🎭</div>
+            <h3>Script Samples</h3>
+            <p>Excerpts from original screenplays and film scripts.</p>
+            <a href="docs/script-samples.pdf" class="btn">Download PDF →</a>
+        </div>
+
+        <div class="writing-card">
+            <div class="writing-icon">📖</div>
+            <h3>Poetry Collection</h3>
+            <p>A collection of poems exploring pain, prayer, and love.</p>
+            <a href="docs/poetry-collection.pdf" class="btn">Download PDF →</a>
+        </div>
+    </div>
+
+    <!-- CALL TO ACTION -->
+    <div style="text-align: center; margin: 60px 0;">
+        <a href="booking.html" class="btn btn-outline" style="padding: 15px 40px; font-size: 1.1rem;">📅 Book a Consultation →</a>
+    </div>
+</div>
+
+<!-- CAC BADGE -->
+<div style="text-align: center; padding: 20px;">
+    <div class="cac-badge">
+        ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <p><strong>Damian Anielozie Okafor</strong> | Creative Artist • Filmmaker • Writer</p>
+        <p>📧 Danoka33@gmail.com | infinitymoviestarproduction@gmail.com</p>
+        <p>📞 +2348032607809 | +2349050205053</p>
+        <p style="margin-top: 20px;">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
+    </div>
+</footer>
 
 </body>
 </html>

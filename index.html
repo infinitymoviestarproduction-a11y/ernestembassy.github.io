@@ -1,46 +1,513 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Ernest Embassy Travels</title>
-<link rel="stylesheet" href="style.css">
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ernest Embassy Travels & Infinity Movie Star Production</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 15px 40px;
+        }
+
+        nav h2 {
+            color: #ffd700;
+            font-size: 1.5rem;
+        }
+
+        nav div {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #ffd700;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+
+        .hero-badges {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .hero-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #e6c200;
+            transform: translateY(-3px);
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+        }
+
+        /* Sections */
+        section {
+            padding: 60px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 40px;
+            color: #1a1a2e;
+        }
+
+        .section-title span {
+            border-bottom: 3px solid #ffd700;
+            padding-bottom: 10px;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+            text-decoration: none;
+            color: #333;
+            display: block;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .service-card h3 {
+            margin-bottom: 15px;
+            color: #1a1a2e;
+        }
+
+        .service-card p {
+            color: #666;
+        }
+
+        /* Why Choose Me */
+        .why-section {
+            background: #f0f0f5;
+            border-radius: 20px;
+        }
+
+        /* Testimonials */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            font-style: italic;
+        }
+
+        .testimonial-card .author {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        /* Memberships */
+        .memberships-section {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .memberships-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .membership-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        /* Social Icons */
+        .social-section {
+            text-align: center;
+            padding: 40px 20px;
+            background: white;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 12px;
+            background: #f8f9fa;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            min-width: 75px;
+        }
+
+        .social-icon span:first-child {
+            font-size: 28px;
+        }
+
+        .social-icon span:last-child {
+            font-size: 11px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 6px;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-5px);
+        }
+
+        /* WhatsApp Float */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 40px;
+        }
+
+        .cac-badge {
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .hero-badges {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
 <body>
 
-<!-- NAV -->
+<!-- NAVIGATION -->
 <nav>
-    <h2 style="color:gold;">Ernest Embassy</h2>
+    <h2 style="color:#ffd700;">Ernest Embassy</h2>
     <div>
         <a href="index.html">Home</a>
         <a href="about.html">About</a>
-        <a href="services.html">Services</a>
-        <a href="movies.html">Movies</a>
-        <a href="booking.html">Book</a>
+        <a href="visa.html">Visa</a>
+        <a href="movie.html">Movie Studio</a>
+        <a href="tutoring.html">Tutoring</a>
+        <a href="contact.html">Contact</a>
     </div>
 </nav>
 
-<!-- HERO -->
+<!-- HERO SECTION -->
 <div class="hero">
-    <h1>Luxury Travel • Film Production • Education Consulting</h1>
-    <p>Ernest Embassy Travels & Infinity Movie Star Production</p>
-
-    <a class="btn" href="booking.html">Start Your Application</a>
+    <h1>Damian Anielozie Okafor</h1>
+    <p>Teacher | Visa Consultant | Film Producer | Online Tutor</p>
+    <div class="hero-badges">
+        <span class="hero-badge">✈️ Visa Processing</span>
+        <span class="hero-badge">🎬 Film Production</span>
+        <span class="hero-badge">📚 Education Consulting</span>
+        <span class="hero-badge">💻 Online Tutoring</span>
+    </div>
+    <div class="hero-badges">
+        <span class="hero-badge">✅ CAC Registered since 2017</span>
+        <span class="hero-badge">📚 Teaching since 2014</span>
+    </div>
+    <a href="booking.html" class="btn" style="margin-top: 30px;">Start Your Application →</a>
 </div>
 
-<!-- SERVICES PREVIEW -->
-<section class="cards">
+<div class="container">
+    <!-- SERVICES SECTION -->
+    <section>
+        <div class="section-title"><span>What I Do</span></div>
+        <div class="services-grid">
+            <a href="visa.html" class="service-card">
+                <div class="service-icon">✈️</div>
+                <h3>Visa Processing</h3>
+                <p>Student, tourist, and work visas. Step-by-step guidance.</p>
+            </a>
+            <a href="movie.html" class="service-card">
+                <div class="service-icon">🎬</div>
+                <h3>Film Production & Training</h3>
+                <p>Movie production + hands-on training. CAC registered since 2017.</p>
+            </a>
+            <a href="visa.html" class="service-card">
+                <div class="service-icon">📚</div>
+                <h3>Educational Consulting</h3>
+                <p>School selection, admissions, and study abroad planning.</p>
+            </a>
+            <a href="tutoring.html" class="service-card">
+                <div class="service-icon">💻</div>
+                <h3>Online Tutoring</h3>
+                <p>English, Digital Tech, Igbo for diaspora, Science exam prep.</p>
+            </a>
+        </div>
+    </section>
 
-    <a href="visa.html" class="card">Visa Processing</a>
+    <!-- WHY CHOOSE ME SECTION -->
+    <section class="why-section">
+        <div class="section-title"><span>Why Choose Me</span></div>
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>👨‍🏫 Direct Access</h3>
+                <p>You deal directly with Damian Okafor. No middlemen.</p>
+            </div>
+            <div class="service-card">
+                <h3>✅ CAC Registered</h3>
+                <p>Infinity Movie Star Production registered June 21, 2017.</p>
+            </div>
+            <div class="service-card">
+                <h3>🎓 10+ Years Experience</h3>
+                <p>Teaching since 2014. Real classroom and online expertise.</p>
+            </div>
+            <div class="service-card">
+                <h3>🌍 Global Reach</h3>
+                <p>Serving Nigerians and international diaspora students.</p>
+            </div>
+        </div>
+    </section>
 
-    <a href="film.html" class="card">Film Production</a>
+    <!-- PROFESSIONAL MEMBERSHIPS -->
+    <div class="memberships-section">
+        <h3>🎬 Professional Memberships & Affiliations</h3>
+        <div class="memberships-grid">
+            <span class="membership-badge">🏆 The ISA</span>
+            <span class="membership-badge">🎥 MovieBytes</span>
+            <span class="membership-badge">🎬 FilmFreeway</span>
+            <span class="membership-badge">⭐ The Black List</span>
+            <span class="membership-badge">📱 PocketMFA</span>
+            <span class="membership-badge">✍️ Emerging Screenwriters</span>
+            <span class="membership-badge">🎬 Gigs</span>
+        </div>
+    </div>
 
-    <a href="education.html" class="card">Education Consulting</a>
+    <!-- TESTIMONIALS SECTION -->
+    <section>
+        <div class="section-title"><span>What Clients Say</span></div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                "Damian helped me get my student visa to Canada after two previous rejections. His attention to detail is unmatched."
+                <div class="author">— Michael O., Lagos</div>
+            </div>
+            <div class="testimonial-card">
+                "The film training at Infinity Movie Star Production changed my life. I went from zero experience to acting in a real production."
+                <div class="author">— Grace E., Enugu</div>
+            </div>
+            <div class="testimonial-card">
+                "My daughter's Igbo improved dramatically after just one month of online tutoring. She now speaks confidently."
+                <div class="author">— Mrs. Ngozi, USA (Diaspora)</div>
+            </div>
+        </div>
+    </section>
 
-</section>
+    <!-- SOCIAL & STREAMING LINKS -->
+    <div class="social-section">
+        <h3>Follow & Connect With Damian</h3>
+        <div class="social-icons">
+            <a href="https://facebook.com/damian.okafor31131" target="_blank" class="social-icon">
+                <span>📘</span><span>Facebook</span>
+            </a>
+            <a href="https://twitter.com/danoka33" target="_blank" class="social-icon">
+                <span>🐦</span><span>Twitter</span>
+            </a>
+            <a href="https://instagram.com/imspenugu" target="_blank" class="social-icon">
+                <span>📷</span><span>Instagram</span>
+            </a>
+            <a href="https://tiktok.com/@damianokafor225" target="_blank" class="social-icon">
+                <span>🎵</span><span>TikTok</span>
+            </a>
+            <a href="https://youtube.com/@infinitymoviestarproductio6222" target="_blank" class="social-icon">
+                <span>▶️</span><span>YouTube</span>
+            </a>
+            <a href="https://on.soundcloud.com/2uhZKraveAXA1zVtJx" target="_blank" class="social-icon">
+                <span>🎧</span><span>SoundCloud</span>
+            </a>
+            <a href="https://audiomack.com/infinitymoviestarproduction579" target="_blank" class="social-icon">
+                <span>🔊</span><span>Audiomack</span>
+            </a>
+            <a href="https://tunami.com/@infinitymoviestarproduction579" target="_blank" class="social-icon">
+                <span>🌊</span><span>Tunami</span>
+            </a>
+        </div>
+    </div>
+</div>
 
-<a class="whatsapp" href="https://wa.me/2348032607809">WhatsApp</a>
+<!-- CAC BADGE -->
+<div style="text-align: center; padding: 20px;">
+    <div class="cac-badge">
+        ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
+        📍 6 Ezinifite Close, New Haven, Enugu, Enugu State, Nigeria
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <p><strong>Ernest Embassy Travels & Infinity Movie Star Production</strong></p>
+        <p>📧 ernestembassytravels@gmail.com | infinitymoviestarproduction@gmail.com | Danoka33@gmail.com</p>
+        <p>📞 +2348032607809 | +2349050205053</p>
+        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
+        <p style="margin-top: 20px;">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- WHATSAPP FLOATING BUTTON -->
+<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
+    <span>💬</span>
+    <span>Chat with Damian on WhatsApp</span>
+</a>
 
 </body>
 </html>
-<a href="portfolio.html">Portfolio</a>
-<a href="blog.html">Articles</a>

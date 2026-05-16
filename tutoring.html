@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Tutoring - Damian Anielozie Okafor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+        }
+        nav {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .logo {
+            color: #ffd700;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        .subject-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+        .subject-card:hover {
+            transform: translateY(-5px);
+        }
+        .subject-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        .subject-card h3 {
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+        .form-container {
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            margin: 40px 0;
+        }
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #1a1a2e;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+        }
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+        footer {
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 40px;
+        }
+        .cac-badge {
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            margin: 20px 0;
+        }
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-container">
+        <div class="logo">📚 Ernest Embassy Tutoring</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="visa.html">Visa</a>
+            <a href="movie.html">Movie Studio</a>
+            <a href="tutoring.html">Tutoring</a>
+            <a href="education.html">Education</a>
+            <a href="booking.html">Book</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </div>
+</nav>
+
+<div class="hero">
+    <h1>📚 Online Tutoring with Damian Okafor</h1>
+    <p>Teaching since 2014 | Experienced Classroom Teacher & Online Tutor</p>
+</div>
+
+<div class="container">
+    <div class="subjects-grid">
+        <div class="subject-card">
+            <div class="subject-icon">📖</div>
+            <h3>English Language</h3>
+            <p>Grammar, comprehension, essay writing, and literature.</p>
+        </div>
+        <div class="subject-card">
+            <div class="subject-icon">💻</div>
+            <h3>Digital Technology</h3>
+            <p>Computer literacy, IT skills, and digital tools.</p>
+        </div>
+        <div class="subject-card">
+            <div class="subject-icon">🌍</div>
+            <h3>Igbo (Diaspora)</h3>
+            <p>Learn Igbo language for international applicants.</p>
+        </div>
+        <div class="subject-card">
+            <div class="subject-icon">⚗️</div>
+            <h3>Science Exam Prep</h3>
+            <p>Chemistry, Physics, Mathematics for WAEC, NECO, JAMB.</p>
+        </div>
+        <div class="subject-card">
+            <div class="subject-icon">📝</div>
+            <h3>Adult Literacy</h3>
+            <p>Basic reading and writing for adult learners.</p>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <h2>📝 Book a Tutoring Session</h2>
+        <form name="tutoring-request" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you-tutoring.html">
+            <input type="hidden" name="form-name" value="tutoring-request">
+            <p style="display: none;"><label>Don't fill this: <input name="bot-field"></label></p>
+            
+            <div class="form-group">
+                <label>Full Name *</label>
+                <input type="text" name="name" required>
+            </div>
+            <div class="form-group">
+                <label>Email Address *</label>
+                <input type="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label>Phone Number *</label>
+                <input type="tel" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label>Subject Needed *</label>
+                <select name="subject" required>
+                    <option value="">Select subject</option>
+                    <option value="English Language">English Language</option>
+                    <option value="Digital Technology">Digital Technology</option>
+                    <option value="Igbo (Diaspora)">Igbo (Diaspora)</option>
+                    <option value="Science Exam Prep">Science Exam Prep</option>
+                    <option value="Adult Literacy">Adult Literacy</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Grade/Level *</label>
+                <input type="text" name="grade" placeholder="e.g., Primary 5, JSS 2, SS 1, Adult">
+            </div>
+            <div class="form-group">
+                <label>Message</label>
+                <textarea name="message" rows="3" placeholder="Tell us about your learning goals..."></textarea>
+            </div>
+            <button type="submit" class="submit-btn">📚 Book Session</button>
+        </form>
+    </div>
+</div>
+
+<div style="text-align: center; padding: 20px;">
+    <div class="cac-badge">
+        ✅ Infinity Movie Star Production — CAC Registered BN2517233
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2026 Damian Anielozie Okafor - Ernest Embassy Travels</p>
+    <p>📞 +2348032607809 | 📧 ernestembassytravels@gmail.com</p>
+</footer>
+
+</body>
+</html>

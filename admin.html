@@ -1,218 +1,368 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Admin Dashboard - Ernest Embassy</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Ernest Embassy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<!-- PWA SETTINGS -->
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#000000">
+        body {
+            background: #0d0d0d;
+            color: white;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
 
-<style>
-body {
-    background: #0d0d0d;
-    color: white;
-    font-family: Arial;
-}
+        /* Navigation */
+        nav {
+            background: #1a1a2e;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            border-bottom: 1px solid gold;
+        }
 
-h1 {
-    color: gold;
-    text-align: center;
-    margin-top: 20px;
-}
+        nav h1 {
+            color: gold;
+            font-size: 1.5rem;
+        }
 
-.dashboard {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    padding: 20px;
-}
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
 
-.card {
-    background: #111;
-    border: 1px solid gold;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-}
+        nav a:hover {
+            color: gold;
+        }
 
-table {
-    width: 95%;
-    margin: auto;
-    border-collapse: collapse;
-}
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
-th, td {
-    border: 1px solid gold;
-    padding: 10px;
-    text-align: center;
-}
+        .logout-btn:hover {
+            background: #c82333;
+        }
 
-th {
-    color: gold;
-}
+        /* Dashboard Stats */
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-/* LOGIN */
-#loginBox {
-    text-align: center;
-    margin-top: 120px;
-}
+        .stat-card {
+            background: #111;
+            border: 1px solid gold;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
 
-input, select, button {
-    padding: 10px;
-    margin-top: 10px;
-}
+        .stat-card h2 {
+            font-size: 2.5rem;
+            color: gold;
+        }
 
-button {
-    background: gold;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-}
-</style>
+        .stat-card p {
+            color: #ccc;
+            margin-top: 10px;
+        }
+
+        /* Filters */
+        .filters {
+            text-align: center;
+            margin: 20px;
+        }
+
+        .filters select, .filters input {
+            padding: 10px 15px;
+            margin: 0 10px;
+            border-radius: 8px;
+            border: none;
+            background: #222;
+            color: white;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #111;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            border: 1px solid #333;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #1a1a2e;
+            color: gold;
+        }
+
+        td {
+            color: #ddd;
+        }
+
+        .status-pending {
+            color: #ffc107;
+            font-weight: bold;
+        }
+
+        .status-confirmed {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .status-completed {
+            color: #17a2b8;
+            font-weight: bold;
+        }
+
+        /* Login Box */
+        .login-box {
+            max-width: 400px;
+            margin: 100px auto;
+            background: #111;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid gold;
+        }
+
+        .login-box h2 {
+            color: gold;
+            margin-bottom: 20px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+            background: #222;
+            color: white;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background: gold;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .error-msg {
+            color: #dc3545;
+            margin-top: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: gold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+    </style>
 </head>
-
 <body>
 
-<!-- 🔐 LOGIN -->
-<div id="loginBox">
-    <h2 style="color:gold;">Admin Login</h2>
-    <input type="password" id="password" placeholder="Enter Password"><br>
+<!-- LOGIN SECTION -->
+<div id="loginSection" class="login-box">
+    <h2>🔐 Admin Login</h2>
+    <input type="password" id="adminPassword" placeholder="Enter Password">
     <button onclick="login()">Login</button>
+    <div id="loginError" class="error-msg"></div>
 </div>
 
-<!-- 📊 DASHBOARD -->
-<div id="dashboard" style="display:none;">
+<!-- DASHBOARD SECTION -->
+<div id="dashboardSection" style="display: none;">
+    <nav>
+        <h1>🎬 Ernest Embassy Admin</h1>
+        <div>
+            <span style="color: white; margin-right: 20px;">Welcome, Damian</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
 
-<h1>Ernest Embassy Admin Dashboard</h1>
-
-<div class="dashboard">
-    <div class="card">
-        <h2 id="total">0</h2>
-        <p>Total Bookings</p>
+    <!-- Statistics Cards -->
+    <div class="dashboard-stats">
+        <div class="stat-card">
+            <h2 id="totalSubmissions">0</h2>
+            <p>Total Submissions</p>
+        </div>
+        <div class="stat-card">
+            <h2 id="pendingCount">0</h2>
+            <p>Pending Review</p>
+        </div>
+        <div class="stat-card">
+            <h2 id="todayCount">0</h2>
+            <p>Submissions Today</p>
+        </div>
     </div>
 
-    <div class="card">
-        <h2 id="pending">0</h2>
-        <p>Pending</p>
+    <!-- Filters -->
+    <div class="filters">
+        <select id="filterType" onchange="filterSubmissions()">
+            <option value="all">All Types</option>
+            <option value="visa">Visa Consultation</option>
+            <option value="film">Film Inquiry</option>
+            <option value="tutoring">Tutoring Request</option>
+        </select>
+        <input type="text" id="searchInput" placeholder="Search by name or email..." onkeyup="filterSubmissions()">
     </div>
 
-    <div class="card">
-        <h2 id="today">0</h2>
-        <p>Today</p>
+    <!-- Submissions Table -->
+    <div class="table-container">
+        <table id="submissionsTable">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Details</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr><td colspan="7" style="text-align: center;">Loading submissions...</td></tr>
+            </tbody>
+        </table>
     </div>
+
+    <footer>
+        <p>Ernest Embassy Travels & Infinity Movie Star Production | Admin Dashboard</p>
+    </footer>
 </div>
 
-<!-- 🔍 FILTER -->
-<div style="text-align:center;margin:20px;">
-    <select id="filterService" onchange="filterTable()">
-        <option value="">All Services</option>
-        <option>Visa Processing</option>
-        <option>Education Consulting</option>
-        <option>Travel Consultation</option>
-    </select>
-</div>
-
-<h2 style="text-align:center;color:gold;">All Bookings</h2>
-
-<table id="table">
-    <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Service</th>
-        <th>Date</th>
-        <th>Status</th>
-    </tr>
-</table>
-
-</div>
-
-<!-- ⚙️ SCRIPTS -->
 <script>
-// LOGIN
-function login() {
-    let pass = document.getElementById("password").value;
+    // Sample data for demonstration
+    // In production, this would fetch from Netlify Forms API or a backend
+    let submissions = [];
 
-    if(pass === "admin123") {
-        document.getElementById("loginBox").style.display = "none";
-        document.getElementById("dashboard").style.display = "block";
-        loadData();
-    } else {
-        alert("Wrong password");
-    }
-}
-
-// LOAD GOOGLE SHEETS DATA
-function loadData() {
-
-const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTb7XL1QJgObgxyHt3uyYixj7X6g0dXBnf8tch66o0nkXMiBpwWfh-X1thFUINmymESK-3sZqAu-0_g/pub?output=csv";
-
-fetch(sheetURL)
-.then(res => res.text())
-.then(data => {
-
-    let rows = data.split("\n").slice(1);
-
-    document.getElementById("total").innerText = rows.length;
-
-    let table = document.getElementById("table");
-
-    rows.forEach(row => {
-        let cols = row.split(",");
-
-        if(cols.length > 3){
-
-            let tr = document.createElement("tr");
-
-            tr.innerHTML = `
-                <td>${cols[0]}</td>
-                <td>${cols[1]}</td>
-                <td>${cols[2]}</td>
-                <td>${cols[3]}</td>
-                <td>
-                    <select onchange="updateStatus(this)">
-                        <option>Pending</option>
-                        <option>Confirmed</option>
-                        <option>Completed</option>
-                    </select>
-                </td>
-            `;
-
-            table.appendChild(tr);
-        }
-    });
-
-});
-}
-
-// FILTER SYSTEM
-function filterTable() {
-    let filter = document.getElementById("filterService").value.toLowerCase();
-    let rows = document.querySelectorAll("#table tr");
-
-    rows.forEach((row, index) => {
-        if(index === 0) return;
-
-        let service = row.cells[2]?.innerText.toLowerCase();
-
-        if(!filter || service.includes(filter)) {
-            row.style.display = "";
+    // Login function
+    function login() {
+        const password = document.getElementById('adminPassword').value;
+        // Change this password to something strong
+        if (password === 'ErnestAdmin2026!') {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('dashboardSection').style.display = 'block';
+            loadSubmissions();
         } else {
-            row.style.display = "none";
+            document.getElementById('loginError').innerText = 'Incorrect password. Access denied.';
         }
-    });
-}
+    }
 
-// STATUS UPDATE (UI ONLY)
-function updateStatus(select) {
-    alert("Status updated to: " + select.value);
-}
-</script>
+    function logout() {
+        document.getElementById('loginSection').style.display = 'block';
+        document.getElementById('dashboardSection').style.display = 'none';
+        document.getElementById('adminPassword').value = '';
+        document.getElementById('loginError').innerText = '';
+    }
 
-<!-- 📱 PWA SERVICE WORKER -->
-<script>
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
-}
+    // Load submissions (sample data - replace with actual data source)
+    function loadSubmissions() {
+        // Sample data structure
+        const sampleData = [
+            { date: '2026-05-15', type: 'visa', name: 'John Okonkwo', email: 'john@example.com', phone: '08012345678', details: 'Student visa to Canada', status: 'pending' },
+            { date: '2026-05-14', type: 'film', name: 'Amara Eze', email: 'amara@example.com', phone: '08023456789', details: 'Acting training interest', status: 'confirmed' },
+            { date: '2026-05-14', type: 'tutoring', name: 'Chidi Nwosu', email: 'chidi@example.com', phone: '08034567890', details: 'English and Digital Tech', status: 'pending' },
+            { date: '2026-05-13', type: 'visa', name: 'Ngozi Obi', email: 'ngozi@example.com', phone: '08045678901', details: 'Tourist visa to UK', status: 'completed' },
+        ];
+
+        submissions = sampleData;
+        updateStats();
+        displaySubmissions();
+    }
+
+    function updateStats() {
+        document.getElementById('totalSubmissions').innerText = submissions.length;
+        const pending = submissions.filter(s => s.status === 'pending').length;
+        document.getElementById('pendingCount').innerText = pending;
+        
+        const today = new Date().toISOString().split('T')[0];
+        const todayCount = submissions.filter(s => s.date === today).length;
+        document.getElementById('todayCount').innerText = todayCount;
+    }
+
+    function displaySubmissions() {
+        const filterType = document.getElementById('filterType').value;
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        
+        const filtered = submissions.filter(sub => {
+            if (filterType !== 'all' && sub.type !== filterType) return false;
+            if (searchTerm && !sub.name.toLowerCase().includes(searchTerm) && !sub.email.toLowerCase().includes(searchTerm)) return false;
+            return true;
+        });
+
+        const tbody = document.getElementById('tableBody');
+        if (filtered.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">No submissions found</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = filtered.map(sub => {
+            let typeLabel = '';
+            let typeIcon = '';
+            if (sub.type === 'visa') { typeLabel = '✈️ Visa'; typeIcon = 'visa'; }
+            else if (sub.type === 'film') { typeLabel = '🎬 Film'; typeIcon = 'film'; }
+            else { typeLabel = '📚 Tutoring'; typeIcon = 'tutoring'; }
+            
+            let statusClass = '';
+            if (sub.status === 'pending') statusClass = 'status-pending';
+            else if (sub.status === 'confirmed') statusClass = 'status-confirmed';
+            else statusClass = 'status-completed';
+            
+            return `<tr>
+                <td>${sub.date}</td>
+                <td>${typeLabel}</td>
+                <td>${sub.name}</td>
+                <td>${sub.email}</td>
+                <td>${sub.phone}</td>
+                <td>${sub.details}</td>
+                <td class="${statusClass}">${sub.status.toUpperCase()}</td>
+            </tr>`;
+        }).join('');
+    }
+
+    function filterSubmissions() {
+        displaySubmissions();
+    }
 </script>
 
 </body>

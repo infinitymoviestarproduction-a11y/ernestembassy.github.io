@@ -1,53 +1,391 @@
-<form action="https://formspree.io/f/YOUR_BOOKING_ENDPOINT" method="POST">
-    <input type="hidden" name="_next" value="https://ernest-embassy.pages.dev/thank-you.html">
-    <input type="text" name="_gotcha" style="display:none">
-    
-    <div class="form-group">
-        <label>Full Name *</label>
-        <input type="text" name="name" required>
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment - Ernest Embassy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <div class="form-group">
-        <label>Email Address *</label>
-        <input type="email" name="email" required>
-    </div>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            color: #333;
+        }
 
-    <div class="form-group">
-        <label>Phone Number *</label>
-        <input type="tel" name="phone" required>
-    </div>
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+        }
 
-    <div class="form-group">
-        <label>Service Needed *</label>
-        <select name="service" required>
-            <option value="">Select a service</option>
-            <option value="Visa Processing">✈️ Visa Processing</option>
-            <option value="Film Training">🎬 Film Training</option>
-            <option value="Movie Production">🎥 Movie Production</option>
-            <option value="Educational Consulting">📚 Educational Consulting</option>
-            <option value="Online Tutoring">💻 Online Tutoring</option>
-        </select>
-    </div>
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
 
-    <div class="form-group">
-        <label>Preferred Date *</label>
-        <input type="date" name="date" required>
-    </div>
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
 
-    <div class="form-group">
-        <label>Preferred Time</label>
-        <select name="time">
-            <option value="">Select time</option>
-            <option value="Morning (9am - 12pm)">Morning (9am - 12pm)</option>
-            <option value="Afternoon (12pm - 3pm)">Afternoon (12pm - 3pm)</option>
-            <option value="Evening (3pm - 6pm)">Evening (3pm - 6pm)</option>
-        </select>
-    </div>
+        .logo-icon {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
 
-    <div class="form-group">
-        <label>Additional Message</label>
-        <textarea name="message" rows="4" placeholder="Tell us more about what you need..."></textarea>
-    </div>
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffd700;
+            letter-spacing: 1px;
+        }
 
-    <button type="submit" class="submit-btn">📨 Book Appointment</button>
-</form>
+        .logo-sub {
+            font-size: 0.65rem;
+            color: rgba(255, 215, 0, 0.8);
+            display: block;
+            margin-top: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 0;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .form-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .form-container h2 {
+            text-align: center;
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+
+        .form-container > p {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 8px;
+        }
+
+        .radio-group label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .form-status {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .form-status.loading {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .form-status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .form-status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        footer {
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+
+        .cac-badge {
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.05);
+            background-color: #20b859;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .nav-links {
+                justify-content: center;
+                gap: 15px;
+            }
+            .form-container {
+                padding: 25px;
+            }
+            .whatsapp-float {
+                padding: 8px 15px;
+                bottom: 15px;
+                right: 15px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-container">
+        <div class="logo">
+            <span class="logo-icon">📅</span>
+            <div>
+                <span class="logo-text">Ernest Embassy</span>
+                <span class="logo-sub">Travels & Film Production</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="about.html">📖 About</a>
+            <a href="services.html">⚙️ Services</a>
+            <a href="visa.html">✈️ Visa</a>
+            <a href="movie.html">🎬 Movie Studio</a>
+            <a href="teaching.html">📚 Teaching</a>
+            <a href="tutoring.html">💻 Tutoring</a>
+            <a href="education.html">🎓 Education</a>
+            <a href="booking.html">📅 Book</a>
+            <a href="contact.html">📞 Contact</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="form-container">
+        <h2>📅 Book an Appointment</h2>
+        <p>Fill out the form below and we will contact you within 24 hours.</p>
+
+        <form id="booking-form">
+            <div class="form-group">
+                <label>First Name *</label>
+                <input type="text" name="fi-sender-firstName" placeholder="Your first name" required>
+            </div>
+            <div class="form-group">
+                <label>Last Name *</label>
+                <input type="text" name="fi-sender-lastName" placeholder="Your last name" required>
+            </div>
+            <div class="form-group">
+                <label>Email Address *</label>
+                <input type="email" name="fi-sender-email" placeholder="you@example.com" required>
+            </div>
+            <div class="form-group">
+                <label>Phone Number *</label>
+                <input type="tel" name="fi-sender-phone" placeholder="+234XXXXXXXXXX" required>
+            </div>
+            <div class="form-group">
+                <label>Service Needed *</label>
+                <select name="fi-select-service" required>
+                    <option value="">Select a service</option>
+                    <option value="Visa Processing">✈️ Visa Processing</option>
+                    <option value="Film Training">🎬 Film Training</option>
+                    <option value="Movie Production">🎥 Movie Production</option>
+                    <option value="Educational Consulting">📚 Educational Consulting</option>
+                    <option value="Online Tutoring">💻 Online Tutoring</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Preferred Date *</label>
+                <input type="date" name="fi-date-appointment" required>
+            </div>
+            <div class="form-group">
+                <label>Preferred Time</label>
+                <select name="fi-select-time">
+                    <option value="">Select time</option>
+                    <option value="Morning (9am - 12pm)">Morning (9am - 12pm)</option>
+                    <option value="Afternoon (12pm - 3pm)">Afternoon (12pm - 3pm)</option>
+                    <option value="Evening (3pm - 6pm)">Evening (3pm - 6pm)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Additional Message</label>
+                <textarea name="fi-text-message" rows="4" placeholder="Tell us more about what you need..."></textarea>
+            </div>
+            <button type="submit" class="submit-btn">📨 Book Appointment</button>
+        </form>
+        <div id="form-status" class="form-status"></div>
+    </div>
+</div>
+
+<div style="text-align: center; padding: 20px;">
+    <div class="cac-badge">
+        ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
+        📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <p><strong>Ernest Embassy Travels & Infinity Movie Star Production</strong></p>
+        <p>📧 ernestembassytravels@gmail.com | infinitymoviestarproduction@gmail.com | Danoka33@gmail.com</p>
+        <p>📞 +2348032607809 | +2349050205053</p>
+        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
+        <p style="margin-top: 20px;">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
+    </div>
+</footer>
+
+<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
+    <span>💬</span>
+    <span>Chat with Damian on WhatsApp</span>
+</a>
+
+<script src="https://forminit.com/sdk/v1/forminit.js"></script>
+<script>
+    const forminit = new Forminit();
+    const bookingForm = document.getElementById('booking-form');
+    const statusDiv = document.getElementById('form-status');
+
+    bookingForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        statusDiv.className = 'form-status loading';
+        statusDiv.innerHTML = '⏳ Submitting your booking...';
+
+        const { data, redirectUrl, error } = await forminit.submit('YOUR_BOOKING_FORM_ID', new FormData(e.target));
+
+        if (error) {
+            statusDiv.className = 'form-status error';
+            statusDiv.innerHTML = `❌ Error: ${error.message}`;
+            return;
+        }
+
+        statusDiv.className = 'form-status success';
+        statusDiv.innerHTML = '✅ Thank you! Your appointment request has been submitted. We will contact you within 24 hours.';
+        bookingForm.reset();
+    });
+</script>
+
+</body>
+</html>

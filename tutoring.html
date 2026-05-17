@@ -70,7 +70,7 @@
         .nav-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 25px;
+            gap: 20px;
         }
 
         .nav-links a {
@@ -79,6 +79,7 @@
             font-weight: 500;
             transition: color 0.3s;
             padding: 8px 0;
+            font-size: 0.9rem;
         }
 
         .nav-links a:hover {
@@ -95,6 +96,10 @@
         .hero h1 {
             font-size: 2.5rem;
             margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
         }
 
         .container {
@@ -145,89 +150,56 @@
             margin-bottom: 10px;
         }
 
-        .form-container {
+        .subject-card p {
+            color: #666;
+        }
+
+        /* Email Section */
+        .email-container {
             background: white;
             padding: 35px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             margin: 40px 0;
+            text-align: center;
         }
 
-        .form-container h2 {
+        .email-container h2 {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             color: #1a1a2e;
         }
 
-        .form-group {
-            margin-bottom: 20px;
+        .email-container p {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
         }
 
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #333;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 15px;
-            font-family: inherit;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .submit-btn {
+        .email-btn {
+            display: inline-block;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 14px;
+            padding: 14px 35px;
             border: none;
             border-radius: 50px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            width: 100%;
+            text-decoration: none;
             transition: all 0.3s;
+            margin: 10px 0;
         }
 
-        .submit-btn:hover {
+        .email-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
         }
 
-        .form-status {
-            margin-top: 20px;
-            padding: 12px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 500;
-        }
-
-        .form-status.loading {
-            background: #e3f2fd;
-            color: #1976d2;
-        }
-
-        .form-status.success {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .form-status.error {
-            background: #f8d7da;
-            color: #721c24;
+        .note-text {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 15px;
         }
 
         .testimonials-grid {
@@ -270,6 +242,7 @@
             text-decoration: none;
             font-weight: bold;
             transition: all 0.3s;
+            margin-top: 20px;
         }
 
         .cta-section .btn:hover {
@@ -324,7 +297,10 @@
             }
             .nav-links {
                 justify-content: center;
-                gap: 15px;
+                gap: 12px;
+            }
+            .nav-links a {
+                font-size: 0.75rem;
             }
             .hero h1 {
                 font-size: 1.8rem;
@@ -340,6 +316,7 @@
 </head>
 <body>
 
+<!-- PROFESSIONAL NAVIGATION WITH PORTFOLIO & ADMIN -->
 <nav>
     <div class="nav-container">
         <div class="logo">
@@ -355,11 +332,13 @@
             <a href="services.html">⚙️ Services</a>
             <a href="visa.html">✈️ Visa</a>
             <a href="movie.html">🎬 Movie Studio</a>
+            <a href="portfolio.html">🎨 Portfolio</a>
             <a href="teaching.html">📚 Teaching</a>
             <a href="tutoring.html">💻 Tutoring</a>
             <a href="education.html">🎓 Education</a>
             <a href="booking.html">📅 Book</a>
             <a href="contact.html">📞 Contact</a>
+            <a href="admin.html">🔒 Admin</a>
         </div>
     </div>
 </nav>
@@ -398,47 +377,20 @@
         </div>
     </div>
 
-    <div class="form-container">
+    <!-- EMAIL BUTTON SECTION (No Form) -->
+    <div class="email-container">
         <h2>📝 Book a Tutoring Session</h2>
-        <form id="tutoring-form">
-            <div class="form-group">
-                <label>First Name *</label>
-                <input type="text" name="fi-sender-firstName" placeholder="Your first name" required>
-            </div>
-            <div class="form-group">
-                <label>Last Name *</label>
-                <input type="text" name="fi-sender-lastName" placeholder="Your last name" required>
-            </div>
-            <div class="form-group">
-                <label>Email Address *</label>
-                <input type="email" name="fi-sender-email" placeholder="you@example.com" required>
-            </div>
-            <div class="form-group">
-                <label>Phone Number *</label>
-                <input type="tel" name="fi-sender-phone" placeholder="+234XXXXXXXXXX" required>
-            </div>
-            <div class="form-group">
-                <label>Subject Needed *</label>
-                <select name="fi-select-subject" required>
-                    <option value="">Select subject</option>
-                    <option value="English Language">English Language</option>
-                    <option value="Digital Technology">Digital Technology</option>
-                    <option value="Igbo (Diaspora)">Igbo (Diaspora)</option>
-                    <option value="Science Exam Prep">Science Exam Prep</option>
-                    <option value="Adult Literacy">Adult Literacy</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Grade/Level *</label>
-                <input type="text" name="fi-text-grade" placeholder="e.g., Primary 5, JSS 2, SS 1, Adult" required>
-            </div>
-            <div class="form-group">
-                <label>Message</label>
-                <textarea name="fi-text-message" rows="3" placeholder="Tell us about your learning goals..."></textarea>
-            </div>
-            <button type="submit" class="submit-btn">📚 Book Session</button>
-        </form>
-        <div id="form-status" class="form-status"></div>
+        <p>Click the button below to send us an email about tutoring.</p>
+        
+        <a href="mailto:Danoka33@gmail.com?subject=Tutoring%20Request&body=Hello%20Damian,%0A%0AI%20would%20like%20to%20book%20a%20tutoring%20session.%0A%0AMy%20Name:%20__________%0AMy%20Phone:%20__________%0AMy%20Child's%20Grade/Level:%20__________%0ASubject%20Needed:%20__________%0A%0AMessage:%0A__________" 
+           class="email-btn">
+            📚 Send Tutoring Request via Email
+        </a>
+        
+        <p class="note-text">
+            🔒 Your email client will open. Fill in your details and send.<br>
+            We will respond within 24 hours.
+        </p>
     </div>
 
     <div class="testimonials-grid">
@@ -484,31 +436,6 @@
     <span>💬</span>
     <span>Chat with Damian on WhatsApp</span>
 </a>
-
-<script src="https://forminit.com/sdk/v1/forminit.js"></script>
-<script>
-    const forminit = new Forminit();
-    const tutoringForm = document.getElementById('tutoring-form');
-    const statusDiv = document.getElementById('form-status');
-
-    tutoringForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        statusDiv.className = 'form-status loading';
-        statusDiv.innerHTML = '⏳ Submitting your request...';
-
-        const { data, redirectUrl, error } = await forminit.submit('YOUR_TUTORING_FORM_ID', new FormData(e.target));
-
-        if (error) {
-            statusDiv.className = 'form-status error';
-            statusDiv.innerHTML = `❌ Error: ${error.message}`;
-            return;
-        }
-
-        statusDiv.className = 'form-status success';
-        statusDiv.innerHTML = '✅ Thank you! Your tutoring request has been submitted. Damian will contact you within 24 hours.';
-        tutoringForm.reset();
-    });
-</script>
 
 </body>
 </html>

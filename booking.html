@@ -69,7 +69,7 @@
         .nav-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 25px;
+            gap: 20px;
         }
 
         .nav-links a {
@@ -78,6 +78,7 @@
             font-weight: 500;
             transition: color 0.3s;
             padding: 8px 0;
+            font-size: 0.9rem;
         }
 
         .nav-links a:hover {
@@ -90,109 +91,77 @@
             padding: 0 20px;
         }
 
-        .form-container {
+        .booking-container {
             background: white;
             padding: 40px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
         }
 
-        .form-container h2 {
-            text-align: center;
+        .booking-container h2 {
             color: #1a1a2e;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 2rem;
         }
 
-        .form-container > p {
-            text-align: center;
+        .booking-container > p {
             color: #666;
             margin-bottom: 25px;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #555;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .radio-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 8px;
-        }
-
-        .radio-group label {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: normal;
-            cursor: pointer;
-        }
-
-        .submit-btn {
+        .email-btn {
+            display: inline-block;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 14px 30px;
+            padding: 14px 35px;
             border: none;
             border-radius: 50px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            width: 100%;
+            text-decoration: none;
             transition: all 0.3s;
+            margin: 10px 0;
         }
 
-        .submit-btn:hover {
+        .email-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
         }
 
-        .form-status {
-            margin-top: 20px;
-            padding: 12px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: 500;
+        .note-text {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 15px;
         }
 
-        .form-status.loading {
-            background: #e3f2fd;
-            color: #1976d2;
+        .info-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            text-align: left;
+            border-left: 4px solid #ffd700;
         }
 
-        .form-status.success {
-            background: #d4edda;
-            color: #155724;
+        .info-box h3 {
+            color: #1a1a2e;
+            margin-bottom: 10px;
         }
 
-        .form-status.error {
-            background: #f8d7da;
-            color: #721c24;
+        .info-box p {
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .info-box ul {
+            margin-left: 20px;
+            color: #555;
+        }
+
+        .info-box li {
+            margin: 8px 0;
         }
 
         footer {
@@ -209,9 +178,9 @@
             padding: 10px 20px;
             border-radius: 30px;
             display: inline-block;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin: 20px auto;
         }
 
         .whatsapp-float {
@@ -244,9 +213,12 @@
             }
             .nav-links {
                 justify-content: center;
-                gap: 15px;
+                gap: 12px;
             }
-            .form-container {
+            .nav-links a {
+                font-size: 0.75rem;
+            }
+            .booking-container {
                 padding: 25px;
             }
             .whatsapp-float {
@@ -260,6 +232,7 @@
 </head>
 <body>
 
+<!-- PROFESSIONAL NAVIGATION WITH PORTFOLIO & ADMIN -->
 <nav>
     <div class="nav-container">
         <div class="logo">
@@ -275,71 +248,46 @@
             <a href="services.html">⚙️ Services</a>
             <a href="visa.html">✈️ Visa</a>
             <a href="movie.html">🎬 Movie Studio</a>
+            <a href="portfolio.html">🎨 Portfolio</a>
             <a href="teaching.html">📚 Teaching</a>
             <a href="tutoring.html">💻 Tutoring</a>
             <a href="education.html">🎓 Education</a>
             <a href="booking.html">📅 Book</a>
             <a href="contact.html">📞 Contact</a>
+            <a href="admin.html">🔒 Admin</a>
         </div>
     </div>
 </nav>
 
 <div class="container">
-    <div class="form-container">
+    <div class="booking-container">
         <h2>📅 Book an Appointment</h2>
-        <p>Fill out the form below and we will contact you within 24 hours.</p>
+        <p>Click the button below to send us an email to schedule an appointment.</p>
+        
+        <a href="mailto:ernestembassytravels@gmail.com?subject=Appointment%20Booking%20Request&body=Hello%20Damian,%0A%0AI%20would%20like%20to%20book%20an%20appointment.%0A%0AMy%20Name:%20__________%0AMy%20Phone:%20__________%0AService%20Needed:%20(Visa/Film/Tutoring/Consulting)%0APreferred%20Date:%20__________%0APreferred%20Time:%20(Morning/Afternoon/Evening)%0A%0AAdditional%20Message:%0A__________" 
+           class="email-btn">
+            📅 Send Booking Request via Email
+        </a>
+        
+        <p class="note-text">
+            🔒 Your email client will open. Fill in your details and send.<br>
+            We will respond within 24 hours.
+        </p>
 
-        <form id="booking-form">
-            <div class="form-group">
-                <label>First Name *</label>
-                <input type="text" name="fi-sender-firstName" placeholder="Your first name" required>
-            </div>
-            <div class="form-group">
-                <label>Last Name *</label>
-                <input type="text" name="fi-sender-lastName" placeholder="Your last name" required>
-            </div>
-            <div class="form-group">
-                <label>Email Address *</label>
-                <input type="email" name="fi-sender-email" placeholder="you@example.com" required>
-            </div>
-            <div class="form-group">
-                <label>Phone Number *</label>
-                <input type="tel" name="fi-sender-phone" placeholder="+234XXXXXXXXXX" required>
-            </div>
-            <div class="form-group">
-                <label>Service Needed *</label>
-                <select name="fi-select-service" required>
-                    <option value="">Select a service</option>
-                    <option value="Visa Processing">✈️ Visa Processing</option>
-                    <option value="Film Training">🎬 Film Training</option>
-                    <option value="Movie Production">🎥 Movie Production</option>
-                    <option value="Educational Consulting">📚 Educational Consulting</option>
-                    <option value="Online Tutoring">💻 Online Tutoring</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Preferred Date *</label>
-                <input type="date" name="fi-date-appointment" required>
-            </div>
-            <div class="form-group">
-                <label>Preferred Time</label>
-                <select name="fi-select-time">
-                    <option value="">Select time</option>
-                    <option value="Morning (9am - 12pm)">Morning (9am - 12pm)</option>
-                    <option value="Afternoon (12pm - 3pm)">Afternoon (12pm - 3pm)</option>
-                    <option value="Evening (3pm - 6pm)">Evening (3pm - 6pm)</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Additional Message</label>
-                <textarea name="fi-text-message" rows="4" placeholder="Tell us more about what you need..."></textarea>
-            </div>
-            <button type="submit" class="submit-btn">📨 Book Appointment</button>
-        </form>
-        <div id="form-status" class="form-status"></div>
+        <div class="info-box">
+            <h3>📋 What to Include in Your Email</h3>
+            <p>To help us serve you better, please include:</p>
+            <ul>
+                <li>Your full name and phone number</li>
+                <li>The service you need (Visa, Film, Tutoring, or Consulting)</li>
+                <li>Your preferred date and time</li>
+                <li>Any specific questions or requirements</li>
+            </ul>
+        </div>
     </div>
 </div>
 
+<!-- CAC BADGE -->
 <div style="text-align: center; padding: 20px;">
     <div class="cac-badge">
         ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
@@ -347,6 +295,7 @@
     </div>
 </div>
 
+<!-- FOOTER -->
 <footer>
     <div class="container">
         <p><strong>Ernest Embassy Travels & Infinity Movie Star Production</strong></p>
@@ -357,35 +306,11 @@
     </div>
 </footer>
 
+<!-- WHATSAPP BUTTON -->
 <a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
     <span>💬</span>
     <span>Chat with Damian on WhatsApp</span>
 </a>
-
-<script src="https://forminit.com/sdk/v1/forminit.js"></script>
-<script>
-    const forminit = new Forminit();
-    const bookingForm = document.getElementById('booking-form');
-    const statusDiv = document.getElementById('form-status');
-
-    bookingForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        statusDiv.className = 'form-status loading';
-        statusDiv.innerHTML = '⏳ Submitting your booking...';
-
-        const { data, redirectUrl, error } = await forminit.submit('YOUR_BOOKING_FORM_ID', new FormData(e.target));
-
-        if (error) {
-            statusDiv.className = 'form-status error';
-            statusDiv.innerHTML = `❌ Error: ${error.message}`;
-            return;
-        }
-
-        statusDiv.className = 'form-status success';
-        statusDiv.innerHTML = '✅ Thank you! Your appointment request has been submitted. We will contact you within 24 hours.';
-        bookingForm.reset();
-    });
-</script>
 
 </body>
 </html>

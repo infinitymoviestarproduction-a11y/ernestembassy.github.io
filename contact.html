@@ -1,33 +1,530 @@
-<form action="https://formspree.io/f/YOUR_CONTACT_ENDPOINT" method="POST">
-    <input type="hidden" name="_next" value="https://ernest-embassy.pages.dev/thank-you.html">
-    <input type="text" name="_gotcha" style="display:none">
-    
-    <div class="form-group">
-        <label>Your Name *</label>
-        <input type="text" name="name" required>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Ernest Embassy Travels & Infinity Movie Star Production</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+        }
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffd700;
+            letter-spacing: 1px;
+        }
+
+        .logo-sub {
+            font-size: 0.65rem;
+            color: rgba(255, 215, 0, 0.8);
+            display: block;
+            margin-top: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 0;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #1a1a2e;
+        }
+
+        .section-title span {
+            border-bottom: 3px solid #ffd700;
+            padding-bottom: 10px;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .contact-form-container {
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .form-status {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .form-status.loading {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .form-status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .form-status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .whatsapp-card {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            padding: 35px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .whatsapp-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+        }
+
+        .whatsapp-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .whatsapp-card p {
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .btn-whatsapp {
+            display: inline-block;
+            background: white;
+            color: #25D366;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+
+        .btn-whatsapp:hover {
+            transform: scale(1.05);
+        }
+
+        .contact-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .info-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .info-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .info-card h3 {
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+
+        .info-card p {
+            color: #666;
+        }
+
+        .info-card a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 40px 0;
+        }
+
+        .social-icon {
+            display: inline-block;
+            background: white;
+            padding: 12px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .social-icon:hover {
+            transform: translateY(-5px);
+        }
+
+        footer {
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+
+        .cac-badge {
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.05);
+            background-color: #20b859;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .nav-links {
+                justify-content: center;
+                gap: 15px;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            .whatsapp-float {
+                padding: 8px 15px;
+                bottom: 15px;
+                right: 15px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-container">
+        <div class="logo">
+            <span class="logo-icon">📞</span>
+            <div>
+                <span class="logo-text">Ernest Embassy</span>
+                <span class="logo-sub">Travels & Film Production</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="about.html">📖 About</a>
+            <a href="services.html">⚙️ Services</a>
+            <a href="visa.html">✈️ Visa</a>
+            <a href="movie.html">🎬 Movie Studio</a>
+            <a href="teaching.html">📚 Teaching</a>
+            <a href="tutoring.html">💻 Tutoring</a>
+            <a href="education.html">🎓 Education</a>
+            <a href="booking.html">📅 Book</a>
+            <a href="contact.html">📞 Contact</a>
+        </div>
+    </div>
+</nav>
+
+<div class="hero">
+    <h1>📞 Contact Us</h1>
+    <p>Get in touch with Damian for any inquiries or support</p>
+</div>
+
+<div class="container">
+    <div class="contact-grid">
+        <div class="contact-form-container">
+            <form id="contact-form">
+                <div class="form-group">
+                    <label>Your Name *</label>
+                    <input type="text" name="fi-sender-firstName" placeholder="Your first name" required>
+                </div>
+                <div class="form-group">
+                    <label>Your Email *</label>
+                    <input type="email" name="fi-sender-email" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Service Needed *</label>
+                    <select name="fi-select-service" required>
+                        <option value="">Select Service</option>
+                        <option value="Visa Processing">✈️ Visa Processing</option>
+                        <option value="Film Production">🎬 Film Production</option>
+                        <option value="Film Training">🎭 Film Training</option>
+                        <option value="Educational Consulting">🎓 Educational Consulting</option>
+                        <option value="Online Tutoring">💻 Online Tutoring</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Your Message *</label>
+                    <textarea name="fi-text-message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn-primary">📧 Send Message</button>
+            </form>
+            <div id="form-status" class="form-status"></div>
+        </div>
+
+        <div class="whatsapp-card">
+            <div class="whatsapp-icon">💬</div>
+            <h3>Prefer WhatsApp?</h3>
+            <p>Chat with Damian directly on WhatsApp for faster response.</p>
+            <a href="https://wa.me/2348032607809?text=👋 Hello Damian! I'm interested in your services. Please get back to me." class="btn-whatsapp" target="_blank">
+                📱 Chat on WhatsApp
+            </a>
+            <p class="small-note" style="margin-top: 15px; font-size: 0.75rem;">Typical response time: Within 1-2 hours</p>
+        </div>
     </div>
 
-    <div class="form-group">
-        <label>Your Email *</label>
-        <input type="email" name="email" required>
+    <div class="contact-info-grid">
+        <div class="info-card">
+            <div class="info-icon">📧</div>
+            <h3>Email Us</h3>
+            <p><a href="mailto:ernestembassytravels@gmail.com">ernestembassytravels@gmail.com</a></p>
+            <p><a href="mailto:infinitymoviestarproduction@gmail.com">infinitymoviestarproduction@gmail.com</a></p>
+            <p><a href="mailto:Danoka33@gmail.com">Danoka33@gmail.com</a></p>
+        </div>
+        <div class="info-card">
+            <div class="info-icon">📞</div>
+            <h3>Call Us</h3>
+            <p><a href="tel:+2348032607809">+234 803 260 7809</a></p>
+            <p><a href="tel:+2349050205053">+234 905 020 5053</a></p>
+        </div>
+        <div class="info-card">
+            <div class="info-icon">📍</div>
+            <h3>Visit Us</h3>
+            <p>6 Ezinifite Close, New Haven,<br>Enugu, Enugu State, Nigeria</p>
+        </div>
     </div>
 
-    <div class="form-group">
-        <label>Service Needed *</label>
-        <select name="service" required>
-            <option value="">Select Service</option>
-            <option value="Visa Processing">✈️ Visa Processing</option>
-            <option value="Film Production">🎬 Film Production</option>
-            <option value="Film Training">🎭 Film Training</option>
-            <option value="Educational Consulting">🎓 Educational Consulting</option>
-            <option value="Online Tutoring">💻 Online Tutoring</option>
-        </select>
+    <div class="social-icons">
+        <a href="https://facebook.com/damian.okafor31131" target="_blank" class="social-icon">📘 Facebook</a>
+        <a href="https://twitter.com/danoka33" target="_blank" class="social-icon">🐦 Twitter</a>
+        <a href="https://instagram.com/imspenugu" target="_blank" class="social-icon">📷 Instagram</a>
+        <a href="https://tiktok.com/@damianokafor225" target="_blank" class="social-icon">🎵 TikTok</a>
+        <a href="https://youtube.com/@infinitymoviestarproductio6222" target="_blank" class="social-icon">▶️ YouTube</a>
     </div>
+</div>
 
-    <div class="form-group">
-        <label>Your Message *</label>
-        <textarea name="message" rows="5" required></textarea>
+<div style="text-align: center; padding: 20px;">
+    <div class="cac-badge">
+        ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
+        📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
     </div>
+</div>
 
-    <button type="submit" class="btn btn-primary">📧 Send Message</button>
-</form>
+<footer>
+    <div class="container">
+        <p><strong>Ernest Embassy Travels & Infinity Movie Star Production</strong></p>
+        <p>📧 ernestembassytravels@gmail.com | infinitymoviestarproduction@gmail.com | Danoka33@gmail.com</p>
+        <p>📞 +2348032607809 | +2349050205053</p>
+        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
+        <p style="margin-top: 20px;">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
+    </div>
+</footer>
+
+<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
+    <span>💬</span>
+    <span>Chat with Damian on WhatsApp</span>
+</a>
+
+<script src="https://forminit.com/sdk/v1/forminit.js"></script>
+<script>
+    const forminit = new Forminit();
+    const contactForm = document.getElementById('contact-form');
+    const statusDiv = document.getElementById('form-status');
+
+    contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        statusDiv.className = 'form-status loading';
+        statusDiv.innerHTML = '⏳ Sending your message...';
+
+        const { data, redirectUrl, error } = await forminit.submit('YOUR_CONTACT_FORM_ID', new FormData(e.target));
+
+        if (error) {
+            statusDiv.className = 'form-status error';
+            statusDiv.innerHTML = `❌ Error: ${error.message}`;
+            return;
+        }
+
+        statusDiv.className = 'form-status success';
+        statusDiv.innerHTML = '✅ Thank you! Your message has been sent. Damian will contact you within 24 hours.';
+        contactForm.reset();
+    });
+</script>
+
+</body>
+</html>

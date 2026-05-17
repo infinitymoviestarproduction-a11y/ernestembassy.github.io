@@ -165,6 +165,7 @@
         audio {
             width: 100%;
             margin: 15px 0;
+            border-radius: 8px;
         }
 
         /* Video Grid */
@@ -202,44 +203,6 @@
         video {
             width: 100%;
             border-radius: 10px;
-        }
-
-        /* Image Grid */
-        .image-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
-        }
-
-        .image-card {
-            background: #111;
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid #333;
-            transition: transform 0.3s;
-            text-align: center;
-        }
-
-        .image-card:hover {
-            transform: translateY(-5px);
-            border-color: #ffd700;
-        }
-
-        .image-card img {
-            width: 100%;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
-
-        .image-card h3 {
-            color: #ffd700;
-            margin-bottom: 10px;
-        }
-
-        .image-card p {
-            color: #ccc;
-            font-size: 0.85rem;
         }
 
         /* Writings Grid */
@@ -425,10 +388,10 @@
             .hero h1 {
                 font-size: 1.8rem;
             }
-            .video-grid {
+            .music-grid {
                 grid-template-columns: 1fr;
             }
-            .image-grid {
+            .video-grid {
                 grid-template-columns: 1fr;
             }
             .artist-bio {
@@ -475,7 +438,7 @@
 <!-- HERO SECTION -->
 <div class="hero">
     <h1>🎨 Creative Media Portfolio</h1>
-    <p>Music • Films • Images • Writings</p>
+    <p>Music • Films • Writings • Creative Works</p>
 </div>
 
 <div class="container">
@@ -487,53 +450,62 @@
     </div>
 
     <!-- ============================================ -->
-    <!-- MUSIC GALLERY SECTION                        -->
+    <!-- MUSIC GALLERY SECTION - 5 TRACKS             -->
     <!-- ============================================ -->
     <div class="section-title"><span>🎵 Music Gallery</span></div>
     <div class="section-subtitle">Listen to my latest tracks and musical works</div>
 
     <div class="music-grid">
-        <!-- SONG 1 - Replace "your-song-1.mp3" with your actual filename -->
+        <!-- SONG 1: Ekene Maria, Hail Mary -->
         <div class="music-card">
-            <h3>🎤 Track Title 1</h3>
-            <p>Description of your first track</p>
-            <audio controls>
-                <source src="music/your-song-1.mp3" type="audio/mpeg">
+            <h3>🎤 Ekene Maria, Hail Mary</h3>
+            <p>A soulful tribute of gratitude and reverence</p>
+            <audio controls preload="metadata">
+                <source src="music/Ekene Maria, Hail Mary.mp3" type="audio/mpeg">
                 Your browser does not support the audio element.
             </audio>
         </div>
 
-        <!-- SONG 2 - Replace "your-song-2.mp3" with your actual filename -->
+        <!-- SONG 2: Let me Be -->
         <div class="music-card">
-            <h3>🎧 Track Title 2</h3>
-            <p>Description of your second track</p>
-            <audio controls>
-                <source src="music/your-song-2.mp3" type="audio/mpeg">
+            <h3>🎧 Let Me Be</h3>
+            <p>An expression of personal freedom and authenticity</p>
+            <audio controls preload="metadata">
+                <source src="music/Let me Be.mp3" type="audio/mpeg">
                 Your browser does not support the audio element.
             </audio>
         </div>
 
-        <!-- SONG 3 - Replace "your-song-3.mp3" with your actual filename -->
+        <!-- SONG 3: Regretful Sigh -->
         <div class="music-card">
-            <h3>💔 Track Title 3</h3>
-            <p>Description of your third track</p>
-            <audio controls>
-                <source src="music/your-song-3.mp3" type="audio/mpeg">
+            <h3>💔 Regretful Sigh</h3>
+            <p>A deep reflection on past choices and emotional journey</p>
+            <audio controls preload="metadata">
+                <source src="music/Regretful Sigh.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+
+        <!-- SONG 4: Round D Corner -->
+        <div class="music-card">
+            <h3>🔄 Round D Corner</h3>
+            <p>Anticipation of what lies ahead and new beginnings</p>
+            <audio controls preload="metadata">
+                <source src="music/Round D Corner.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+
+        <!-- SONG 5: Rules -->
+        <div class="music-card">
+            <h3>📜 Rules</h3>
+            <p>Breaking boundaries and challenging societal norms</p>
+            <audio controls preload="metadata">
+                <source src="music/Rules.mp3" type="audio/mpeg">
                 Your browser does not support the audio element.
             </audio>
         </div>
     </div>
-
-    <!-- HOW TO ADD MORE SONGS - COPY THIS BLOCK -->
-    <!--
-    <div class="music-card">
-        <h3>🎤 New Song Title</h3>
-        <p>Song description here</p>
-        <audio controls>
-            <source src="music/your-new-song.mp3" type="audio/mpeg">
-        </audio>
-    </div>
-    -->
 
     <!-- STREAMING PLATFORMS -->
     <div class="streaming-section">
@@ -548,133 +520,51 @@
     </div>
 
     <!-- ============================================ -->
-    <!-- VIDEO GALLERY SECTION                        -->
-    /*============================================ */
+    <!-- VIDEO GALLERY SECTION - THRILLER VIDEO      -->
+    <!-- ============================================ -->
     <div class="section-title"><span>🎬 Film Productions</span></div>
     <div class="section-subtitle">Movie trailers, short films, and behind-the-scenes</div>
 
     <div class="video-grid">
-        <!-- VIDEO 1 - Replace "movie1.mp4" with your actual video filename -->
+        <!-- Official Card Video Thriller -->
         <div class="video-card">
-            <h3>🎥 Movie Trailer 1</h3>
-            <p>Description of your first video</p>
-            <video controls width="100%">
-                <source src="videos/movie1.mp4" type="video/mp4">
-                <p>Video not loading. File path: videos/movie1.mp4</p>
-            </video>
-        </div>
-
-        <!-- VIDEO 2 - Replace "movie2.mp4" with your actual video filename -->
-        <div class="video-card">
-            <h3>🎬 Behind the Scenes</h3>
-            <p>Description of your second video</p>
-            <video controls width="100%">
-                <source src="videos/movie2.mp4" type="video/mp4">
-                <p>Video not loading. File path: videos/movie2.mp4</p>
-            </video>
-        </div>
-
-        <!-- VIDEO 3 - Replace "movie3.mp4" with your actual video filename -->
-        <div class="video-card">
-            <h3>📽️ Short Film</h3>
-            <p>Description of your third video</p>
-            <video controls width="100%">
-                <source src="videos/movie3.mp4" type="video/mp4">
-                <p>Video not loading. File path: videos/movie3.mp4</p>
+            <h3>🎬 Official Card Video Thriller</h3>
+            <p>An edge-of-your-seat thriller production | Watch in full HD</p>
+            <video controls width="100%" poster="">
+                <source src="videos/official-card-video-thriller.mp4" type="video/mp4">
+                <p>Video not loading. File path: videos/official-card-video-thriller.mp4</p>
             </video>
         </div>
     </div>
-
-    <!-- HOW TO ADD MORE VIDEOS - COPY THIS BLOCK -->
-    <!--
-    <div class="video-card">
-        <h3>🎬 New Video Title</h3>
-        <p>Video description here</p>
-        <video controls width="100%">
-            <source src="videos/your-new-video.mp4" type="video/mp4">
-        </video>
-    </div>
-    -->
 
     <!-- ============================================ -->
-    <!-- IMAGE GALLERY SECTION                        -->
-    /*============================================ */
-    <div class="section-title"><span>📷 Photo Gallery</span></div>
-    <div class="section-subtitle">Behind the scenes, movie stills, and creative shots</div>
-
-    <div class="image-grid">
-        <!-- IMAGE 1 - Replace "image1.jpg" with your actual image filename -->
-        <div class="image-card">
-            <img src="images/image1.jpg" alt="Image description 1">
-            <h3>Image Title 1</h3>
-            <p>Description of your first image</p>
-        </div>
-
-        <!-- IMAGE 2 - Replace "image2.jpg" with your actual image filename -->
-        <div class="image-card">
-            <img src="images/image2.jpg" alt="Image description 2">
-            <h3>Image Title 2</h3>
-            <p>Description of your second image</p>
-        </div>
-
-        <!-- IMAGE 3 - Replace "image3.jpg" with your actual image filename -->
-        <div class="image-card">
-            <img src="images/image3.jpg" alt="Image description 3">
-            <h3>Image Title 3</h3>
-            <p>Description of your third image</p>
-        </div>
-    </div>
-
-    <!-- HOW TO ADD MORE IMAGES - COPY THIS BLOCK -->
-    <!--
-    <div class="image-card">
-        <img src="images/your-new-image.jpg" alt="Image description">
-        <h3>New Image Title</h3>
-        <p>Image description here</p>
-    </div>
-    -->
-
-    /* ============================================ */
-    /* WRITINGS & LYRICS SECTION                    */
-    /* ============================================ */
+    <!-- WRITINGS & LYRICS SECTION                   -->
+    <!-- ============================================ -->
     <div class="section-title"><span>📄 Writings & Lyrics</span></div>
     <div class="section-subtitle">Download my creative works, lyrics, and scripts</div>
 
     <div class="writings-grid">
-        <!-- DOCUMENT 1 - Replace "document1.pdf" with your actual PDF filename -->
         <div class="writing-card">
             <div class="writing-icon">📜</div>
             <h3>Lyrics Collection</h3>
-            <p>Complete lyrics from all released tracks</p>
-            <a href="docs/document1.pdf" class="btn">Download PDF →</a>
+            <p>Complete lyrics from all released tracks including Ekene Maria, Let Me Be, Regretful Sigh, and more.</p>
+            <a href="docs/lyrics-collection.pdf" class="btn">Download PDF →</a>
         </div>
 
-        <!-- DOCUMENT 2 - Replace "document2.pdf" with your actual PDF filename -->
         <div class="writing-card">
             <div class="writing-icon">🎭</div>
             <h3>Script Samples</h3>
-            <p>Excerpts from original screenplays</p>
-            <a href="docs/document2.pdf" class="btn">Download PDF →</a>
+            <p>Excerpts from original screenplays and film scripts.</p>
+            <a href="docs/script-samples.pdf" class="btn">Download PDF →</a>
         </div>
 
-        <!-- DOCUMENT 3 - Replace "document3.pdf" with your actual PDF filename -->
         <div class="writing-card">
             <div class="writing-icon">📖</div>
             <h3>Poetry Collection</h3>
-            <p>A collection of poems exploring pain, prayer, and love</p>
-            <a href="docs/document3.pdf" class="btn">Download PDF →</a>
+            <p>A collection of poems exploring pain, prayer, and love.</p>
+            <a href="docs/poetry-collection.pdf" class="btn">Download PDF →</a>
         </div>
     </div>
-
-    <!-- HOW TO ADD MORE DOCUMENTS - COPY THIS BLOCK -->
-    <!--
-    <div class="writing-card">
-        <div class="writing-icon">📄</div>
-        <h3>New Document Title</h3>
-        <p>Document description here</p>
-        <a href="docs/your-new-document.pdf" class="btn">Download PDF →</a>
-    </div>
-    -->
 
     <!-- CALL TO ACTION -->
     <div style="text-align: center; margin: 60px 0;">

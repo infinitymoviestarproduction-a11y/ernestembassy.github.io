@@ -15,7 +15,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
-            background-color: #0a0a0a;
+            background: #0a0a0a;
         }
 
         /* Navigation */
@@ -70,7 +70,7 @@
         .nav-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 25px;
+            gap: 20px;
         }
 
         .nav-links a {
@@ -79,13 +79,13 @@
             font-weight: 500;
             transition: color 0.3s;
             padding: 8px 0;
+            font-size: 0.9rem;
         }
 
         .nav-links a:hover {
             color: #ffd700;
         }
 
-        /* Hero Section */
         .hero {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -107,10 +107,9 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 40px 20px;
         }
 
-        /* Section Titles */
         .section-title {
             text-align: center;
             font-size: 2rem;
@@ -269,7 +268,6 @@
             color: #1a1a2e;
         }
 
-        /* Artist Bio Section */
         .artist-bio {
             background: linear-gradient(135deg, #1a1a2e 0%, #0a0a0a 100%);
             padding: 50px;
@@ -298,7 +296,6 @@
             color: #ffd700;
         }
 
-        /* Streaming Links */
         .streaming-section {
             background: #111;
             padding: 40px;
@@ -332,7 +329,33 @@
             transform: translateY(-3px);
         }
 
-        /* Footer */
+        .upload-instructions {
+            background: #1a1a2e;
+            border: 1px solid #ffd700;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .upload-instructions h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+
+        .upload-instructions p {
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+
+        .upload-instructions code {
+            background: #333;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            color: #ffd700;
+        }
+
         footer {
             background: #0a0a0a;
             color: white;
@@ -353,7 +376,6 @@
             margin-bottom: 20px;
         }
 
-        /* WhatsApp Float */
         .whatsapp-float {
             position: fixed;
             bottom: 20px;
@@ -376,7 +398,6 @@
             background-color: #20b859;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .nav-container {
                 flex-direction: column;
@@ -385,7 +406,10 @@
             }
             .nav-links {
                 justify-content: center;
-                gap: 15px;
+                gap: 12px;
+            }
+            .nav-links a {
+                font-size: 0.75rem;
             }
             .hero h1 {
                 font-size: 1.8rem;
@@ -407,7 +431,7 @@
 </head>
 <body>
 
-<!-- PROFESSIONAL NAVIGATION WITH MOVIE STUDIO LINK -->
+<!-- PROFESSIONAL NAVIGATION -->
 <nav>
     <div class="nav-container">
         <div class="logo">
@@ -423,11 +447,13 @@
             <a href="services.html">⚙️ Services</a>
             <a href="visa.html">✈️ Visa</a>
             <a href="movie.html">🎬 Movie Studio</a>
+            <a href="portfolio.html">🎨 Portfolio</a>
             <a href="teaching.html">📚 Teaching</a>
             <a href="tutoring.html">💻 Tutoring</a>
             <a href="education.html">🎓 Education</a>
             <a href="booking.html">📅 Book</a>
             <a href="contact.html">📞 Contact</a>
+            <a href="admin.html">🔒 Admin</a>
         </div>
     </div>
 </nav>
@@ -439,6 +465,15 @@
 </div>
 
 <div class="container">
+    <!-- INSTRUCTIONS FOR UPLOADING MEDIA -->
+    <div class="upload-instructions">
+        <h3>📤 HOW TO ADD YOUR MEDIA TO THIS PAGE</h3>
+        <p>1. <strong>For Music/Songs:</strong> Upload your MP3 files to the <code>/music/</code> folder in GitHub</p>
+        <p>2. <strong>For Videos:</strong> Upload your MP4 files to the <code>/videos/</code> folder in GitHub</p>
+        <p>3. <strong>For Documents (Lyrics/Scripts):</strong> Upload your PDF files to the <code>/docs/</code> folder in GitHub</p>
+        <p>4. <strong>Then copy the HTML block below and paste it in the corresponding section</strong></p>
+    </div>
+
     <!-- ARTIST BIO SECTION -->
     <div class="artist-bio">
         <h3>🎤 The Artist's Statement</h3>
@@ -451,6 +486,7 @@
     <div class="section-subtitle">Listen to my latest tracks and musical works</div>
 
     <div class="music-grid">
+        <!-- SONG 1 - Replace with your actual song -->
         <div class="music-card">
             <h3>🎤 Nma War</h3>
             <p>Latest hip-hop single - A confession from the black world</p>
@@ -460,6 +496,7 @@
             </audio>
         </div>
 
+        <!-- SONG 2 - Replace with your actual song -->
         <div class="music-card">
             <h3>🎧 Pain & Prayer</h3>
             <p>Raw emotions, struggle, and redemption</p>
@@ -469,6 +506,7 @@
             </audio>
         </div>
 
+        <!-- SONG 3 - Replace with your actual song -->
         <div class="music-card">
             <h3>💔 Love & Loss</h3>
             <p>A journey through heartbreak and healing</p>
@@ -477,6 +515,19 @@
                 Your browser does not support the audio element.
             </audio>
         </div>
+
+        <!-- ========================================== -->
+        <!-- TO ADD MORE SONGS, COPY THIS BLOCK:        -->
+        <!-- ========================================== -->
+        <!--
+        <div class="music-card">
+            <h3>🎤 Your Song Title</h3>
+            <p>Your song description here</p>
+            <audio controls>
+                <source src="music/your-song-file.mp3" type="audio/mpeg">
+            </audio>
+        </div>
+        -->
     </div>
 
     <!-- STREAMING PLATFORMS -->
@@ -496,32 +547,48 @@
     <div class="section-subtitle">Movie trailers, short films, and behind-the-scenes</div>
 
     <div class="video-grid">
+        <!-- VIDEO 1 - Replace with your actual video -->
         <div class="video-card">
             <h3>🎥 Movie Trailer 1</h3>
             <p>Coming soon - A powerful story of redemption</p>
-            <video controls poster="https://via.placeholder.com/400x225?text=Movie+Trailer">
+            <video controls>
                 <source src="videos/trailer1.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
         </div>
 
+        <!-- VIDEO 2 - Replace with your actual video -->
         <div class="video-card">
             <h3>🎬 Behind the Scenes</h3>
             <p>On-set moments from Infinity Movie Star Production</p>
-            <video controls poster="https://via.placeholder.com/400x225?text=BTS">
+            <video controls>
                 <source src="videos/bts.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
         </div>
 
+        <!-- VIDEO 3 - Replace with your actual video -->
         <div class="video-card">
             <h3>📽️ Short Film: "The Journey"</h3>
             <p>A short story about perseverance and hope</p>
-            <video controls poster="https://via.placeholder.com/400x225?text=Short+Film">
+            <video controls>
                 <source src="videos/short-film.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
         </div>
+
+        <!-- ========================================== -->
+        <!-- TO ADD MORE VIDEOS, COPY THIS BLOCK:       -->
+        <!-- ========================================== -->
+        <!--
+        <div class="video-card">
+            <h3>🎬 Your Video Title</h3>
+            <p>Your video description here</p>
+            <video controls>
+                <source src="videos/your-video-file.mp4" type="video/mp4">
+            </video>
+        </div>
+        -->
     </div>
 
     <!-- WRITINGS & LYRICS SECTION -->
@@ -529,6 +596,7 @@
     <div class="section-subtitle">Download my creative works, lyrics, and scripts</div>
 
     <div class="writings-grid">
+        <!-- DOCUMENT 1 - Replace with your actual PDF -->
         <div class="writing-card">
             <div class="writing-icon">📜</div>
             <h3>Lyrics Collection</h3>
@@ -536,6 +604,7 @@
             <a href="docs/lyrics-collection.pdf" class="btn">Download PDF →</a>
         </div>
 
+        <!-- DOCUMENT 2 - Replace with your actual PDF -->
         <div class="writing-card">
             <div class="writing-icon">🎭</div>
             <h3>Script Samples</h3>
@@ -543,12 +612,25 @@
             <a href="docs/script-samples.pdf" class="btn">Download PDF →</a>
         </div>
 
+        <!-- DOCUMENT 3 - Replace with your actual PDF -->
         <div class="writing-card">
             <div class="writing-icon">📖</div>
             <h3>Poetry Collection</h3>
             <p>A collection of poems exploring pain, prayer, and love.</p>
             <a href="docs/poetry-collection.pdf" class="btn">Download PDF →</a>
         </div>
+
+        <!-- ========================================== -->
+        <!-- TO ADD MORE DOCUMENTS, COPY THIS BLOCK:    -->
+        <!-- ========================================== -->
+        <!--
+        <div class="writing-card">
+            <div class="writing-icon">📄</div>
+            <h3>Document Title</h3>
+            <p>Document description here</p>
+            <a href="docs/your-file.pdf" class="btn">Download PDF →</a>
+        </div>
+        -->
     </div>
 
     <!-- CALL TO ACTION -->
@@ -576,7 +658,7 @@
     </div>
 </footer>
 
-<!-- WHATSAPP FLOATING BUTTON -->
+<!-- WHATSAPP BUTTON -->
 <a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
     <span>💬</span>
     <span>Chat with Damian on WhatsApp</span>

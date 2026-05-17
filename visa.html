@@ -1,71 +1,125 @@
-<form action="https://formspree.io/f/xlgvrodp" method="POST">
-    <input type="hidden" name="_next" value="https://ernest-embassy.pages.dev/thank-you.html">
-    <input type="text" name="_gotcha" style="display:none">
+<!-- VISA CONSULTATION FORM - Forminit Integration -->
+<div class="form-section">
+    <h2>📝 Visa Consultation Request</h2>
+    <p>Fill out the form below and we will contact you within 24 hours</p>
+
+    <form id="visa-form">
+        <!-- Sender Block (Submitter's Contact Info) -->
+        <div class="form-group">
+            <label>First Name *</label>
+            <input type="text" name="fi-sender-firstName" placeholder="Your first name" required>
+        </div>
+
+        <div class="form-group">
+            <label>Last Name *</label>
+            <input type="text" name="fi-sender-lastName" placeholder="Your last name" required>
+        </div>
+
+        <div class="form-group">
+            <label>Email Address *</label>
+            <input type="email" name="fi-sender-email" placeholder="you@example.com" required>
+        </div>
+
+        <div class="form-group">
+            <label>Phone Number *</label>
+            <input type="tel" name="fi-sender-phone" placeholder="+234XXXXXXXXXX" required>
+        </div>
+
+        <!-- Field Blocks -->
+        <div class="form-group">
+            <label>Country You Are Applying From *</label>
+            <select name="fi-select-country_from" required>
+                <option value="">Select Country</option>
+                <option value="Nigeria">🇳🇬 Nigeria</option>
+                <option value="Ghana">🇬🇭 Ghana</option>
+                <option value="Kenya">🇰🇪 Kenya</option>
+                <option value="South Africa">🇿🇦 South Africa</option>
+                <option value="United Kingdom">🇬🇧 United Kingdom</option>
+                <option value="United States">🇺🇸 United States</option>
+                <option value="Canada">🇨🇦 Canada</option>
+                <option value="Other">🌍 Other</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Destination Country *</label>
+            <input type="text" name="fi-text-destination" placeholder="e.g., Canada, UK, USA" required>
+        </div>
+
+        <div class="form-group">
+            <label>Visa Type *</label>
+            <div class="radio-group">
+                <label><input type="radio" name="fi-radio-visa_type" value="Student" required> Student Visa</label>
+                <label><input type="radio" name="fi-radio-visa_type" value="Tourist"> Tourist Visa</label>
+                <label><input type="radio" name="fi-radio-visa_type" value="Work"> Work Visa</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Do You Have a Valid Passport? *</label>
+            <div class="radio-group">
+                <label><input type="radio" name="fi-radio-has_passport" value="Yes" required> Yes</label>
+                <label><input type="radio" name="fi-radio-has_passport" value="No"> No</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Previous Visa Refusal? *</label>
+            <div class="radio-group">
+                <label><input type="radio" name="fi-radio-previous_refusal" value="Yes" required> Yes</label>
+                <label><input type="radio" name="fi-radio-previous_refusal" value="No"> No</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Message / Additional Information</label>
+            <textarea name="fi-text-message" rows="4" placeholder="Tell us more about your travel plans..."></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">📨 Submit Visa Request</button>
+    </form>
     
-    <div class="form-group">
-        <label>Full Name *</label>
-        <input type="text" name="fullname" required>
-    </div>
+    <div id="form-status" style="margin-top: 20px; text-align: center;"></div>
+</div>
 
-    <div class="form-group">
-        <label>Email Address *</label>
-        <input type="email" name="email" required>
-    </div>
+<!-- Forminit SDK -->
+<script src="https://forminit.com/sdk/v1/forminit.js"></script>
 
-    <div class="form-group">
-        <label>Phone Number *</label>
-        <input type="tel" name="phone" required>
-    </div>
-
-    <div class="form-group">
-        <label>Country You Are Applying From *</label>
-        <select name="country_from" required>
-            <option value="">Select Country</option>
-            <option value="Nigeria">🇳🇬 Nigeria</option>
-            <option value="Ghana">🇬🇭 Ghana</option>
-            <option value="Kenya">🇰🇪 Kenya</option>
-            <option value="South Africa">🇿🇦 South Africa</option>
-            <option value="United Kingdom">🇬🇧 United Kingdom</option>
-            <option value="United States">🇺🇸 United States</option>
-            <option value="Canada">🇨🇦 Canada</option>
-            <option value="Other">🌍 Other</option>
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label>Destination Country *</label>
-        <input type="text" name="destination" placeholder="e.g., Canada, UK, USA" required>
-    </div>
-
-    <div class="form-group">
-        <label>Visa Type *</label>
-        <div class="radio-group">
-            <label><input type="radio" name="visa_type" value="Student" required> Student Visa</label>
-            <label><input type="radio" name="visa_type" value="Tourist"> Tourist Visa</label>
-            <label><input type="radio" name="visa_type" value="Work"> Work Visa</label>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label>Do You Have a Valid Passport? *</label>
-        <div class="radio-group">
-            <label><input type="radio" name="has_passport" value="Yes" required> Yes</label>
-            <label><input type="radio" name="has_passport" value="No"> No</label>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label>Previous Visa Refusal? *</label>
-        <div class="radio-group">
-            <label><input type="radio" name="previous_refusal" value="Yes" required> Yes</label>
-            <label><input type="radio" name="previous_refusal" value="No"> No</label>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label>Message / Additional Information</label>
-        <textarea name="message" rows="4" placeholder="Tell us more about your travel plans..."></textarea>
-    </div>
-
-    <button type="submit" class="submit-btn">📨 Submit Visa Request</button>
-</form>
+<script>
+    // Initialize Forminit
+    const forminit = new Forminit();
+    
+    // Get the form element
+    const visaForm = document.getElementById('visa-form');
+    
+    // Add submit event listener
+    visaForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Get status div
+        const statusDiv = document.getElementById('form-status');
+        
+        // Show loading message
+        statusDiv.innerHTML = '<span style="color: #667eea;">Submitting your request...</span>';
+        
+        // Submit the form using FormData
+        const { data, redirectUrl, error } = await forminit.submit('xxtvr3x4kkn', new FormData(e.target));
+        
+        // Handle error
+        if (error) {
+            statusDiv.innerHTML = `<span style="color: #dc3545;">❌ Error: ${error.message}</span>`;
+            return;
+        }
+        
+        // Show success message
+        statusDiv.innerHTML = '<span style="color: #28a745;">✅ Thank you! Your visa consultation request has been submitted. We will contact you within 24 hours.</span>';
+        
+        // Reset the form
+        visaForm.reset();
+        
+        // Optional: Redirect to thank you page after 3 seconds
+        // setTimeout(() => {
+        //     window.location.href = 'https://ernestembassy.github.io.pages.dev/thank-you.html';
+        // }, 3000);
+    });
+</script>

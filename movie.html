@@ -1,38 +1,464 @@
-<form action="https://formspree.io/f/YOUR_FILM_ENDPOINT" method="POST">
-    <input type="hidden" name="_next" value="https://ernest-embassy.pages.dev/thank-you.html">
-    <input type="text" name="_gotcha" style="display:none">
-    
-    <div class="form-group">
-        <label>Full Name *</label>
-        <input type="text" name="name" required>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Studio - Infinity Movie Star Production</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+        }
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffd700;
+            letter-spacing: 1px;
+        }
+
+        .logo-sub {
+            font-size: 0.65rem;
+            color: rgba(255, 215, 0, 0.8);
+            display: block;
+            margin-top: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 0;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Movie Layout */
+        .movie-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+        }
+
+        /* Info Section */
+        .info-section {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .info-section h2 {
+            color: #1a1a2e;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffd700;
+            padding-left: 15px;
+        }
+
+        .info-section h3 {
+            color: #1a1a2e;
+            font-size: 1.3rem;
+            margin: 25px 0 15px;
+        }
+
+        .info-section p {
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .services-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .services-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .services-list li:before {
+            content: "🎬";
+            color: #ffd700;
+        }
+
+        .cac-badge-inline {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ffd700;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        /* Email Section */
+        .email-section {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .email-section h2 {
+            color: #1a1a2e;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .email-section p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .email-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 35px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+            margin: 10px 0;
+        }
+
+        .email-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .note-text {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 15px;
+        }
+
+        /* Testimonials */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            font-style: italic;
+        }
+
+        .testimonial-card .author {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #667eea;
+            font-style: normal;
+        }
+
+        /* CTA */
+        .cta-section {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+            border-radius: 20px;
+            margin: 60px 0;
+        }
+
+        .cta-section .btn {
+            display: inline-block;
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .cta-section .btn:hover {
+            background: #e6c200;
+            transform: translateY(-2px);
+        }
+
+        footer {
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 40px;
+        }
+
+        .cac-badge {
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            margin: 20px 0;
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.05);
+            background-color: #20b859;
+        }
+
+        @media (max-width: 900px) {
+            .movie-layout {
+                grid-template-columns: 1fr;
+            }
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .nav-links {
+                justify-content: center;
+                gap: 12px;
+            }
+            .nav-links a {
+                font-size: 0.75rem;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .whatsapp-float {
+                padding: 8px 15px;
+                bottom: 15px;
+                right: 15px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- PROFESSIONAL NAVIGATION WITH PORTFOLIO & ADMIN -->
+<nav>
+    <div class="nav-container">
+        <div class="logo">
+            <span class="logo-icon">🎬</span>
+            <div>
+                <span class="logo-text">Ernest Embassy</span>
+                <span class="logo-sub">Travels & Film Production</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="about.html">📖 About</a>
+            <a href="services.html">⚙️ Services</a>
+            <a href="visa.html">✈️ Visa</a>
+            <a href="movie.html">🎬 Movie Studio</a>
+            <a href="portfolio.html">🎨 Portfolio</a>
+            <a href="teaching.html">📚 Teaching</a>
+            <a href="tutoring.html">💻 Tutoring</a>
+            <a href="education.html">🎓 Education</a>
+            <a href="booking.html">📅 Book</a>
+            <a href="contact.html">📞 Contact</a>
+            <a href="admin.html">🔒 Admin</a>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO SECTION -->
+<div class="hero">
+    <h1>🎬 Infinity Movie Star Production</h1>
+    <p>Professional Film Production & Hands-On Training</p>
+</div>
+
+<div class="container">
+    <div class="movie-layout">
+        <!-- LEFT COLUMN: INFORMATION -->
+        <div class="info-section">
+            <h2>Your Film Production Partner</h2>
+            <p>Infinity Movie Star Production delivers high-quality film production services, from storytelling to final production. We specialize in script writing, directing, and producing engaging films that connect with audiences globally.</p>
+            
+            <h3>🎥 Our Services Include:</h3>
+            <ul class="services-list">
+                <li>Movie Script Writing</li>
+                <li>Film Directing</li>
+                <li>Production & Editing</li>
+                <li>Actor Casting & Coordination</li>
+                <li>Hands-On Film Training</li>
+                <li>Music Video Production</li>
+            </ul>
+
+            <div class="cac-badge-inline">
+                <span>✅ CAC Registered</span>
+                <p style="margin-top: 10px;">Since June 21, 2017 | BN2517233</p>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: EMAIL BUTTON (No Form) -->
+        <div class="email-section">
+            <h2>📝 Film Training & Production Inquiry</h2>
+            <p>Click the button below to send us an email about film training or production services.</p>
+            
+            <a href="mailto:infinitymoviestarproduction@gmail.com?subject=Film%20Training%20%26%20Production%20Inquiry&body=Hello%20Damian,%0A%0AI%20am%20interested%20in%20film%20training%20or%20production%20services.%0A%0AMy%20Name:%20__________%0AMy%20Phone:%20__________%0AMy%20Interest:%20(Acting/Directing/Editing/Production/Scriptwriting)%0A%0AMessage:%0A__________" 
+               class="email-btn">
+                🎬 Send Film Inquiry via Email
+            </a>
+            
+            <p class="note-text">
+                🔒 Your email client will open. Fill in your details and send.<br>
+                We will respond within 48 hours.
+            </p>
+        </div>
     </div>
 
-    <div class="form-group">
-        <label>Email Address *</label>
-        <input type="email" name="email" required>
+    <!-- TESTIMONIALS -->
+    <div class="testimonials-grid">
+        <div class="testimonial-card">
+            "The film training at Infinity Movie Star Production changed my life. I went from zero experience to acting in a real production within 3 months."
+            <div class="author">— Grace E., Enugu</div>
+        </div>
+        <div class="testimonial-card">
+            "Damian is not just a trainer but a mentor. The hands-on experience I gained on set was invaluable. I'm now working as a freelance editor."
+            <div class="author">— Peter O., Lagos</div>
+        </div>
+        <div class="testimonial-card">
+            "Professional, creative, and dedicated. Our music video was delivered on time and exceeded expectations. Highly recommend Infinity Movie Star Production."
+            <div class="author">— Chioma A., Abuja</div>
+        </div>
     </div>
 
-    <div class="form-group">
-        <label>Phone Number *</label>
-        <input type="tel" name="phone" required>
+    <!-- CALL TO ACTION -->
+    <div class="cta-section">
+        <h2>Ready to Start Your Film Journey?</h2>
+        <p>Whether you want to produce a movie, join our training program, or collaborate on a project — we're here to help.</p>
+        <a href="booking.html" class="btn">📅 Book a Consultation →</a>
     </div>
+</div>
 
-    <div class="form-group">
-        <label>Interest *</label>
-        <select name="interest" required>
-            <option value="">Select an option</option>
-            <option value="Acting Training">Acting Training</option>
-            <option value="Directing Training">Directing Training</option>
-            <option value="Scriptwriting">Scriptwriting</option>
-            <option value="Editing Training">Editing Training</option>
-            <option value="Movie Production Service">Movie Production Service</option>
-        </select>
+<!-- CAC BADGE -->
+<div style="text-align: center; padding: 20px;">
+    <div class="cac-badge">
+        ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
+        📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
     </div>
+</div>
 
-    <div class="form-group">
-        <label>Your Message / Goals</label>
-        <textarea name="message" rows="4" placeholder="Tell us about your film project or training goals..."></textarea>
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <p><strong>Ernest Embassy Travels & Infinity Movie Star Production</strong></p>
+        <p>📧 ernestembassytravels@gmail.com | infinitymoviestarproduction@gmail.com | Danoka33@gmail.com</p>
+        <p>📞 +2348032607809 | +2349050205053</p>
+        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
+        <p style="margin-top: 20px;">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
     </div>
+</footer>
 
-    <button type="submit" class="submit-btn">🎬 Submit Inquiry</button>
-</form>
+<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
+    <span>💬</span>
+    <span>Chat with Damian on WhatsApp</span>
+</a>
+
+</body>
+</html>

@@ -204,6 +204,44 @@
             border-radius: 10px;
         }
 
+        /* Image Grid */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .image-card {
+            background: #111;
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid #333;
+            transition: transform 0.3s;
+            text-align: center;
+        }
+
+        .image-card:hover {
+            transform: translateY(-5px);
+            border-color: #ffd700;
+        }
+
+        .image-card img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .image-card h3 {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .image-card p {
+            color: #ccc;
+            font-size: 0.85rem;
+        }
+
         /* Writings Grid */
         .writings-grid {
             display: grid;
@@ -329,33 +367,6 @@
             transform: translateY(-3px);
         }
 
-        .upload-instructions {
-            background: #1a1a2e;
-            border: 1px solid #ffd700;
-            border-radius: 15px;
-            padding: 30px;
-            margin: 40px 0;
-            text-align: center;
-        }
-
-        .upload-instructions h3 {
-            color: #ffd700;
-            margin-bottom: 15px;
-        }
-
-        .upload-instructions p {
-            color: #ccc;
-            margin-bottom: 10px;
-        }
-
-        .upload-instructions code {
-            background: #333;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-family: monospace;
-            color: #ffd700;
-        }
-
         footer {
             background: #0a0a0a;
             color: white;
@@ -417,6 +428,9 @@
             .video-grid {
                 grid-template-columns: 1fr;
             }
+            .image-grid {
+                grid-template-columns: 1fr;
+            }
             .artist-bio {
                 padding: 30px;
             }
@@ -461,19 +475,10 @@
 <!-- HERO SECTION -->
 <div class="hero">
     <h1>🎨 Creative Media Portfolio</h1>
-    <p>Music • Films • Writings • Educational Content</p>
+    <p>Music • Films • Images • Writings</p>
 </div>
 
 <div class="container">
-    <!-- INSTRUCTIONS FOR UPLOADING MEDIA -->
-    <div class="upload-instructions">
-        <h3>📤 HOW TO ADD YOUR MEDIA TO THIS PAGE</h3>
-        <p>1. <strong>For Music/Songs:</strong> Upload your MP3 files to the <code>/music/</code> folder in GitHub</p>
-        <p>2. <strong>For Videos:</strong> Upload your MP4 files to the <code>/videos/</code> folder in GitHub</p>
-        <p>3. <strong>For Documents (Lyrics/Scripts):</strong> Upload your PDF files to the <code>/docs/</code> folder in GitHub</p>
-        <p>4. <strong>Then copy the HTML block below and paste it in the corresponding section</strong></p>
-    </div>
-
     <!-- ARTIST BIO SECTION -->
     <div class="artist-bio">
         <h3>🎤 The Artist's Statement</h3>
@@ -481,54 +486,54 @@
         <div class="artist-signature">— Damian Anielozie Okafor</div>
     </div>
 
-    <!-- MUSIC GALLERY SECTION -->
+    <!-- ============================================ -->
+    <!-- MUSIC GALLERY SECTION                        -->
+    <!-- ============================================ -->
     <div class="section-title"><span>🎵 Music Gallery</span></div>
     <div class="section-subtitle">Listen to my latest tracks and musical works</div>
 
     <div class="music-grid">
-        <!-- SONG 1 - Replace with your actual song -->
+        <!-- SONG 1 - Replace "your-song-1.mp3" with your actual filename -->
         <div class="music-card">
-            <h3>🎤 Nma War</h3>
-            <p>Latest hip-hop single - A confession from the black world</p>
+            <h3>🎤 Track Title 1</h3>
+            <p>Description of your first track</p>
             <audio controls>
-                <source src="music/nma-war.mp3" type="audio/mpeg">
+                <source src="music/your-song-1.mp3" type="audio/mpeg">
                 Your browser does not support the audio element.
             </audio>
         </div>
 
-        <!-- SONG 2 - Replace with your actual song -->
+        <!-- SONG 2 - Replace "your-song-2.mp3" with your actual filename -->
         <div class="music-card">
-            <h3>🎧 Pain & Prayer</h3>
-            <p>Raw emotions, struggle, and redemption</p>
+            <h3>🎧 Track Title 2</h3>
+            <p>Description of your second track</p>
             <audio controls>
-                <source src="music/pain-and-prayer.mp3" type="audio/mpeg">
+                <source src="music/your-song-2.mp3" type="audio/mpeg">
                 Your browser does not support the audio element.
             </audio>
         </div>
 
-        <!-- SONG 3 - Replace with your actual song -->
+        <!-- SONG 3 - Replace "your-song-3.mp3" with your actual filename -->
         <div class="music-card">
-            <h3>💔 Love & Loss</h3>
-            <p>A journey through heartbreak and healing</p>
+            <h3>💔 Track Title 3</h3>
+            <p>Description of your third track</p>
             <audio controls>
-                <source src="music/love-and-loss.mp3" type="audio/mpeg">
+                <source src="music/your-song-3.mp3" type="audio/mpeg">
                 Your browser does not support the audio element.
             </audio>
         </div>
-
-        <!-- ========================================== -->
-        <!-- TO ADD MORE SONGS, COPY THIS BLOCK:        -->
-        <!-- ========================================== -->
-        <!--
-        <div class="music-card">
-            <h3>🎤 Your Song Title</h3>
-            <p>Your song description here</p>
-            <audio controls>
-                <source src="music/your-song-file.mp3" type="audio/mpeg">
-            </audio>
-        </div>
-        -->
     </div>
+
+    <!-- HOW TO ADD MORE SONGS - COPY THIS BLOCK -->
+    <!--
+    <div class="music-card">
+        <h3>🎤 New Song Title</h3>
+        <p>Song description here</p>
+        <audio controls>
+            <source src="music/your-new-song.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+    -->
 
     <!-- STREAMING PLATFORMS -->
     <div class="streaming-section">
@@ -542,96 +547,134 @@
         </div>
     </div>
 
-    <!-- FILM PRODUCTIONS SECTION -->
+    <!-- ============================================ -->
+    <!-- VIDEO GALLERY SECTION                        -->
+    /*============================================ */
     <div class="section-title"><span>🎬 Film Productions</span></div>
     <div class="section-subtitle">Movie trailers, short films, and behind-the-scenes</div>
 
     <div class="video-grid">
-        <!-- VIDEO 1 - Replace with your actual video -->
+        <!-- VIDEO 1 - Replace "movie1.mp4" with your actual video filename -->
         <div class="video-card">
             <h3>🎥 Movie Trailer 1</h3>
-            <p>Coming soon - A powerful story of redemption</p>
-            <video controls>
-                <source src="videos/trailer1.mp4" type="video/mp4">
-                Your browser does not support the video tag.
+            <p>Description of your first video</p>
+            <video controls width="100%">
+                <source src="videos/movie1.mp4" type="video/mp4">
+                <p>Video not loading. File path: videos/movie1.mp4</p>
             </video>
         </div>
 
-        <!-- VIDEO 2 - Replace with your actual video -->
+        <!-- VIDEO 2 - Replace "movie2.mp4" with your actual video filename -->
         <div class="video-card">
             <h3>🎬 Behind the Scenes</h3>
-            <p>On-set moments from Infinity Movie Star Production</p>
-            <video controls>
-                <source src="videos/bts.mp4" type="video/mp4">
-                Your browser does not support the video tag.
+            <p>Description of your second video</p>
+            <video controls width="100%">
+                <source src="videos/movie2.mp4" type="video/mp4">
+                <p>Video not loading. File path: videos/movie2.mp4</p>
             </video>
         </div>
 
-        <!-- VIDEO 3 - Replace with your actual video -->
+        <!-- VIDEO 3 - Replace "movie3.mp4" with your actual video filename -->
         <div class="video-card">
-            <h3>📽️ Short Film: "The Journey"</h3>
-            <p>A short story about perseverance and hope</p>
-            <video controls>
-                <source src="videos/short-film.mp4" type="video/mp4">
-                Your browser does not support the video tag.
+            <h3>📽️ Short Film</h3>
+            <p>Description of your third video</p>
+            <video controls width="100%">
+                <source src="videos/movie3.mp4" type="video/mp4">
+                <p>Video not loading. File path: videos/movie3.mp4</p>
             </video>
         </div>
-
-        <!-- ========================================== -->
-        <!-- TO ADD MORE VIDEOS, COPY THIS BLOCK:       -->
-        <!-- ========================================== -->
-        <!--
-        <div class="video-card">
-            <h3>🎬 Your Video Title</h3>
-            <p>Your video description here</p>
-            <video controls>
-                <source src="videos/your-video-file.mp4" type="video/mp4">
-            </video>
-        </div>
-        -->
     </div>
 
-    <!-- WRITINGS & LYRICS SECTION -->
+    <!-- HOW TO ADD MORE VIDEOS - COPY THIS BLOCK -->
+    <!--
+    <div class="video-card">
+        <h3>🎬 New Video Title</h3>
+        <p>Video description here</p>
+        <video controls width="100%">
+            <source src="videos/your-new-video.mp4" type="video/mp4">
+        </video>
+    </div>
+    -->
+
+    <!-- ============================================ -->
+    <!-- IMAGE GALLERY SECTION                        -->
+    /*============================================ */
+    <div class="section-title"><span>📷 Photo Gallery</span></div>
+    <div class="section-subtitle">Behind the scenes, movie stills, and creative shots</div>
+
+    <div class="image-grid">
+        <!-- IMAGE 1 - Replace "image1.jpg" with your actual image filename -->
+        <div class="image-card">
+            <img src="images/image1.jpg" alt="Image description 1">
+            <h3>Image Title 1</h3>
+            <p>Description of your first image</p>
+        </div>
+
+        <!-- IMAGE 2 - Replace "image2.jpg" with your actual image filename -->
+        <div class="image-card">
+            <img src="images/image2.jpg" alt="Image description 2">
+            <h3>Image Title 2</h3>
+            <p>Description of your second image</p>
+        </div>
+
+        <!-- IMAGE 3 - Replace "image3.jpg" with your actual image filename -->
+        <div class="image-card">
+            <img src="images/image3.jpg" alt="Image description 3">
+            <h3>Image Title 3</h3>
+            <p>Description of your third image</p>
+        </div>
+    </div>
+
+    <!-- HOW TO ADD MORE IMAGES - COPY THIS BLOCK -->
+    <!--
+    <div class="image-card">
+        <img src="images/your-new-image.jpg" alt="Image description">
+        <h3>New Image Title</h3>
+        <p>Image description here</p>
+    </div>
+    -->
+
+    /* ============================================ */
+    /* WRITINGS & LYRICS SECTION                    */
+    /* ============================================ */
     <div class="section-title"><span>📄 Writings & Lyrics</span></div>
     <div class="section-subtitle">Download my creative works, lyrics, and scripts</div>
 
     <div class="writings-grid">
-        <!-- DOCUMENT 1 - Replace with your actual PDF -->
+        <!-- DOCUMENT 1 - Replace "document1.pdf" with your actual PDF filename -->
         <div class="writing-card">
             <div class="writing-icon">📜</div>
             <h3>Lyrics Collection</h3>
-            <p>Complete lyrics from all released tracks including "Nma War", "Pain & Prayer", and more.</p>
-            <a href="docs/lyrics-collection.pdf" class="btn">Download PDF →</a>
+            <p>Complete lyrics from all released tracks</p>
+            <a href="docs/document1.pdf" class="btn">Download PDF →</a>
         </div>
 
-        <!-- DOCUMENT 2 - Replace with your actual PDF -->
+        <!-- DOCUMENT 2 - Replace "document2.pdf" with your actual PDF filename -->
         <div class="writing-card">
             <div class="writing-icon">🎭</div>
             <h3>Script Samples</h3>
-            <p>Excerpts from original screenplays and film scripts.</p>
-            <a href="docs/script-samples.pdf" class="btn">Download PDF →</a>
+            <p>Excerpts from original screenplays</p>
+            <a href="docs/document2.pdf" class="btn">Download PDF →</a>
         </div>
 
-        <!-- DOCUMENT 3 - Replace with your actual PDF -->
+        <!-- DOCUMENT 3 - Replace "document3.pdf" with your actual PDF filename -->
         <div class="writing-card">
             <div class="writing-icon">📖</div>
             <h3>Poetry Collection</h3>
-            <p>A collection of poems exploring pain, prayer, and love.</p>
-            <a href="docs/poetry-collection.pdf" class="btn">Download PDF →</a>
+            <p>A collection of poems exploring pain, prayer, and love</p>
+            <a href="docs/document3.pdf" class="btn">Download PDF →</a>
         </div>
-
-        <!-- ========================================== -->
-        <!-- TO ADD MORE DOCUMENTS, COPY THIS BLOCK:    -->
-        <!-- ========================================== -->
-        <!--
-        <div class="writing-card">
-            <div class="writing-icon">📄</div>
-            <h3>Document Title</h3>
-            <p>Document description here</p>
-            <a href="docs/your-file.pdf" class="btn">Download PDF →</a>
-        </div>
-        -->
     </div>
+
+    <!-- HOW TO ADD MORE DOCUMENTS - COPY THIS BLOCK -->
+    <!--
+    <div class="writing-card">
+        <div class="writing-icon">📄</div>
+        <h3>New Document Title</h3>
+        <p>Document description here</p>
+        <a href="docs/your-new-document.pdf" class="btn">Download PDF →</a>
+    </div>
+    -->
 
     <!-- CALL TO ACTION -->
     <div style="text-align: center; margin: 60px 0;">

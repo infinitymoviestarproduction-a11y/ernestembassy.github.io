@@ -4,27 +4,118 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teaching & Academic Support - Damian Anielozie Okafor</title>
-    <link rel="stylesheet" href="style.css">
     <style>
-        /* Additional styles specific to teaching page */
-        .teaching-hero {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+        }
+
+        /* Navigation */
+        nav {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffd700;
+            letter-spacing: 1px;
+        }
+
+        .logo-sub {
+            font-size: 0.65rem;
+            color: rgba(255, 215, 0, 0.8);
+            display: block;
+            margin-top: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 0;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             text-align: center;
-            padding: 80px 20px;
+            padding: 60px 20px;
         }
 
-        .teaching-hero h1 {
+        .hero h1 {
             font-size: 2.5rem;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
-        .teaching-hero p {
-            font-size: 1.2rem;
-            max-width: 800px;
+        .container {
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 40px 20px;
         }
 
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #1a1a2e;
+        }
+
+        .section-title span {
+            border-bottom: 3px solid #ffd700;
+            padding-bottom: 10px;
+        }
+
+        /* Teaching Stats */
         .teaching-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -57,6 +148,7 @@
             font-size: 0.9rem;
         }
 
+        /* Approach Grid */
         .approach-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -88,11 +180,7 @@
             margin-bottom: 10px;
         }
 
-        .approach-card p {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
+        /* Subjects List */
         .subjects-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -128,7 +216,14 @@
         .subject-info p {
             color: #666;
             font-size: 0.85rem;
-            margin: 0;
+        }
+
+        /* Pricing Cards */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
         }
 
         .pricing-card {
@@ -136,7 +231,11 @@
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            margin: 40px 0;
+            transition: transform 0.3s;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
         }
 
         .pricing-header {
@@ -174,41 +273,23 @@
             font-weight: bold;
         }
 
-        .btn-teaching {
+        .btn {
             display: inline-block;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 14px 35px;
-            border-radius: 50px;
+            padding: 12px 25px;
+            border-radius: 40px;
             text-decoration: none;
             font-weight: bold;
             transition: all 0.3s;
-            margin-top: 10px;
         }
 
-        .btn-teaching:hover {
+        .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 30px;
-            color: #1a1a2e;
-        }
-
-        .section-title span {
-            border-bottom: 3px solid #ffd700;
-            padding-bottom: 10px;
-        }
-
+        /* Testimonials */
         .testimonials-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -228,8 +309,10 @@
             margin-top: 15px;
             font-weight: bold;
             color: #667eea;
+            font-style: normal;
         }
 
+        /* CTA Section */
         .cta-section {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: white;
@@ -243,20 +326,100 @@
             margin-bottom: 20px;
         }
 
-        .btn {
-            display: inline-block;
+        .cta-section .btn {
             background: #ffd700;
             color: #1a1a2e;
-            padding: 12px 30px;
-            border-radius: 30px;
-            text-decoration: none;
+            margin-top: 20px;
+        }
+
+        .cta-section .btn:hover {
+            background: #e6c200;
+        }
+
+        /* Form Container */
+        .form-container {
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            margin: 40px 0;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #1a1a2e;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
             font-weight: bold;
+            cursor: pointer;
+            width: 100%;
             transition: all 0.3s;
         }
 
-        .btn:hover {
-            background: #e6c200;
+        .submit-btn:hover {
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .form-status {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .form-status.loading {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .form-status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .form-status.error {
+            background: #f8d7da;
+            color: #721c24;
         }
 
         footer {
@@ -264,7 +427,7 @@
             color: white;
             text-align: center;
             padding: 40px 20px;
-            margin-top: 60px;
+            margin-top: 40px;
         }
 
         .cac-badge {
@@ -273,9 +436,7 @@
             padding: 10px 20px;
             border-radius: 30px;
             display: inline-block;
-            font-size: 0.9rem;
-            font-weight: bold;
-            margin-bottom: 20px;
+            margin: 20px 0;
         }
 
         .whatsapp-float {
@@ -301,11 +462,17 @@
         }
 
         @media (max-width: 768px) {
-            .teaching-hero h1 {
-                font-size: 1.8rem;
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
             }
-            .subjects-list {
-                grid-template-columns: 1fr;
+            .nav-links {
+                justify-content: center;
+                gap: 15px;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
             }
             .whatsapp-float {
                 padding: 8px 15px;
@@ -318,7 +485,6 @@
 </head>
 <body>
 
-<!-- PROFESSIONAL NAVIGATION WITH MOVIE STUDIO LINK -->
 <nav>
     <div class="nav-container">
         <div class="logo">
@@ -343,8 +509,7 @@
     </div>
 </nav>
 
-<!-- HERO SECTION -->
-<div class="teaching-hero">
+<div class="hero">
     <h1>📚 Teaching & Academic Support</h1>
     <p>Professional teaching services and academic support for students at all levels</p>
 </div>
@@ -476,7 +641,7 @@
 
     <!-- PRICING / PACKAGES -->
     <div class="section-title"><span>Session Packages</span></div>
-    <div class="approach-grid">
+    <div class="pricing-grid">
         <div class="pricing-card">
             <div class="pricing-header">
                 <h3>Single Session</h3>
@@ -489,7 +654,7 @@
                     <li>Homework assistance</li>
                     <li>Flexible scheduling</li>
                 </ul>
-                <a href="booking.html" class="btn-teaching">Book a Session →</a>
+                <a href="booking.html" class="btn">Book a Session →</a>
             </div>
         </div>
         <div class="pricing-card">
@@ -505,7 +670,7 @@
                     <li>Monthly assessment</li>
                     <li>Discounted rate</li>
                 </ul>
-                <a href="booking.html" class="btn-teaching">Book Weekly →</a>
+                <a href="booking.html" class="btn">Book Weekly →</a>
             </div>
         </div>
         <div class="pricing-card">
@@ -521,9 +686,54 @@
                     <li>Exam strategies & tips</li>
                     <li>24/7 WhatsApp support</li>
                 </ul>
-                <a href="booking.html" class="btn-teaching">Enroll in Bootcamp →</a>
+                <a href="booking.html" class="btn">Enroll in Bootcamp →</a>
             </div>
         </div>
+    </div>
+
+    <!-- TEACHING INQUIRY FORM -->
+    <div class="form-container">
+        <h2>📝 Teaching Inquiry Form</h2>
+        <form id="teaching-form">
+            <div class="form-group">
+                <label>First Name *</label>
+                <input type="text" name="fi-sender-firstName" placeholder="Your first name" required>
+            </div>
+            <div class="form-group">
+                <label>Last Name *</label>
+                <input type="text" name="fi-sender-lastName" placeholder="Your last name" required>
+            </div>
+            <div class="form-group">
+                <label>Email Address *</label>
+                <input type="email" name="fi-sender-email" placeholder="you@example.com" required>
+            </div>
+            <div class="form-group">
+                <label>Phone Number *</label>
+                <input type="tel" name="fi-sender-phone" placeholder="+234XXXXXXXXXX" required>
+            </div>
+            <div class="form-group">
+                <label>Subject Interested In *</label>
+                <select name="fi-select-subject" required>
+                    <option value="">Select subject</option>
+                    <option value="English Language">English Language</option>
+                    <option value="Computer Studies">Computer Studies</option>
+                    <option value="Igbo Language">Igbo Language</option>
+                    <option value="Science Subjects">Science Subjects</option>
+                    <option value="Exam Preparation">Exam Preparation</option>
+                    <option value="Adult Literacy">Adult Literacy</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Grade/Level *</label>
+                <input type="text" name="fi-text-grade" placeholder="e.g., Primary 5, JSS 2, SS 1, Adult" required>
+            </div>
+            <div class="form-group">
+                <label>Message / Questions</label>
+                <textarea name="fi-text-message" rows="4" placeholder="Tell me about your learning goals..."></textarea>
+            </div>
+            <button type="submit" class="submit-btn">📚 Submit Inquiry</button>
+        </form>
+        <div id="form-status" class="form-status"></div>
     </div>
 
     <!-- WHY CHOOSE ME -->
@@ -572,11 +782,10 @@
     <div class="cta-section">
         <h2>Ready to Improve Your Grades?</h2>
         <p>Book a teaching session with Damian today and start your journey to academic excellence.</p>
-        <a href="booking.html" class="btn" style="background: #ffd700; color: #1a1a2e;">📅 Book a Session →</a>
+        <a href="booking.html" class="btn">📅 Book a Session →</a>
     </div>
 </div>
 
-<!-- CAC BADGE -->
 <div style="text-align: center; padding: 20px;">
     <div class="cac-badge">
         ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
@@ -584,7 +793,6 @@
     </div>
 </div>
 
-<!-- FOOTER -->
 <footer>
     <div class="container">
         <p><strong>Ernest Embassy Travels & Infinity Movie Star Production</strong></p>
@@ -595,11 +803,35 @@
     </div>
 </footer>
 
-<!-- WHATSAPP FLOATING BUTTON -->
 <a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
     <span>💬</span>
     <span>Chat with Damian on WhatsApp</span>
 </a>
+
+<script src="https://forminit.com/sdk/v1/forminit.js"></script>
+<script>
+    const forminit = new Forminit();
+    const teachingForm = document.getElementById('teaching-form');
+    const statusDiv = document.getElementById('form-status');
+
+    teachingForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        statusDiv.className = 'form-status loading';
+        statusDiv.innerHTML = '⏳ Submitting your inquiry...';
+
+        const { data, redirectUrl, error } = await forminit.submit('YOUR_TEACHING_FORM_ID', new FormData(e.target));
+
+        if (error) {
+            statusDiv.className = 'form-status error';
+            statusDiv.innerHTML = `❌ Error: ${error.message}`;
+            return;
+        }
+
+        statusDiv.className = 'form-status success';
+        statusDiv.innerHTML = '✅ Thank you! Your teaching inquiry has been submitted. Damian will contact you within 24 hours.';
+        teachingForm.reset();
+    });
+</script>
 
 </body>
 </html>

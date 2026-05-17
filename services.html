@@ -70,7 +70,7 @@
         .nav-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 25px;
+            gap: 20px;
         }
 
         .nav-links a {
@@ -79,6 +79,7 @@
             font-weight: 500;
             transition: color 0.3s;
             padding: 8px 0;
+            font-size: 0.9rem;
         }
 
         .nav-links a:hover {
@@ -258,6 +259,52 @@
             transform: translateY(-2px);
         }
 
+        /* Email Section for Contact */
+        .email-section {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .email-section h2 {
+            color: #1a1a2e;
+            margin-bottom: 15px;
+        }
+
+        .email-section p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .email-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 35px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+            margin: 10px 0;
+        }
+
+        .email-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .note-text {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 15px;
+        }
+
         /* Footer */
         footer {
             background: #1a1a2e;
@@ -278,7 +325,6 @@
             margin-bottom: 20px;
         }
 
-        /* WhatsApp Float */
         .whatsapp-float {
             position: fixed;
             bottom: 20px;
@@ -310,7 +356,10 @@
             }
             .nav-links {
                 justify-content: center;
-                gap: 15px;
+                gap: 12px;
+            }
+            .nav-links a {
+                font-size: 0.75rem;
             }
             .hero h1 {
                 font-size: 1.8rem;
@@ -335,7 +384,7 @@
 </head>
 <body>
 
-<!-- PROFESSIONAL NAVIGATION WITH MOVIE STUDIO LINK -->
+<!-- PROFESSIONAL NAVIGATION WITH PORTFOLIO & ADMIN -->
 <nav>
     <div class="nav-container">
         <div class="logo">
@@ -351,11 +400,13 @@
             <a href="services.html">⚙️ Services</a>
             <a href="visa.html">✈️ Visa</a>
             <a href="movie.html">🎬 Movie Studio</a>
+            <a href="portfolio.html">🎨 Portfolio</a>
             <a href="teaching.html">📚 Teaching</a>
             <a href="tutoring.html">💻 Tutoring</a>
             <a href="education.html">🎓 Education</a>
             <a href="booking.html">📅 Book</a>
             <a href="contact.html">📞 Contact</a>
+            <a href="admin.html">🔒 Admin</a>
         </div>
     </div>
 </nav>
@@ -497,6 +548,22 @@
         </div>
     </div>
 
+    <!-- EMAIL CONTACT SECTION -->
+    <div class="email-section">
+        <h2>📧 Get in Touch</h2>
+        <p>Have questions about our services? Send us an email and we will respond within 24 hours.</p>
+        
+        <a href="mailto:ernestembassytravels@gmail.com?subject=Inquiry%20about%20Your%20Services&body=Hello%20Damian,%0A%0AI%20am%20interested%20in%20your%20services.%0A%0AMy%20Name:%20__________%0AMy%20Phone:%20__________%0AService%20Interested%20In:%20(Visa/Film/Education/Tutoring)%0A%0AMessage:%0A__________" 
+           class="email-btn">
+            📧 Send Us an Email
+        </a>
+        
+        <p class="note-text">
+            🔒 Your email client will open. Fill in your details and send.<br>
+            We will respond within 24 hours.
+        </p>
+    </div>
+
     <!-- CALL TO ACTION -->
     <div class="cta-section">
         <h2>Ready to Get Started?</h2>
@@ -524,7 +591,7 @@
     </div>
 </footer>
 
-<!-- WHATSAPP FLOATING BUTTON -->
+<!-- WHATSAPP BUTTON -->
 <a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
     <span>💬</span>
     <span>Chat with Damian on WhatsApp</span>

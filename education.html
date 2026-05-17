@@ -15,7 +15,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
-            background-color: #f8f9fa;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
         }
 
         /* Navigation */
@@ -25,6 +25,7 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
         }
 
         .nav-container {
@@ -69,7 +70,7 @@
         .nav-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 25px;
+            gap: 20px;
         }
 
         .nav-links a {
@@ -78,6 +79,7 @@
             font-weight: 500;
             transition: color 0.3s;
             padding: 8px 0;
+            font-size: 0.9rem;
         }
 
         .nav-links a:hover {
@@ -106,7 +108,7 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 40px 20px;
         }
 
         /* Section Titles */
@@ -173,6 +175,14 @@
             padding: 8px 0;
             color: #555;
             border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .services-list li:before {
+            content: "✅";
+            color: #28a745;
         }
 
         .success-stats {
@@ -200,89 +210,50 @@
             color: #888;
         }
 
-        .btn {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .btn:hover {
-            background: #5a67d8;
-            transform: translateY(-2px);
-        }
-
-        /* Form Card */
-        .form-card {
+        /* Email Section */
+        .email-section {
             background: white;
-            padding: 30px;
             border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            position: sticky;
-            top: 100px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
         }
 
-        .form-card h3 {
+        .email-section h2 {
             color: #1a1a2e;
-            margin-bottom: 10px;
-            font-size: 1.3rem;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
         }
 
-        .form-card p {
+        .email-section p {
             color: #666;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
+            margin-bottom: 25px;
         }
 
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 6px;
-            color: #555;
-            font-size: 0.85rem;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-            font-family: inherit;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .btn-primary {
-            background: #667eea;
+        .email-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 12px;
+            padding: 14px 35px;
             border: none;
-            border-radius: 8px;
-            font-size: 15px;
+            border-radius: 50px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            width: 100%;
-            transition: background 0.3s;
+            text-decoration: none;
+            transition: all 0.3s;
+            margin: 10px 0;
         }
 
-        .btn-primary:hover {
-            background: #5a67d8;
+        .email-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .note-text {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 15px;
         }
 
         /* Why Choose Us */
@@ -343,6 +314,7 @@
             margin-top: 15px;
             font-weight: bold;
             color: #667eea;
+            font-style: normal;
         }
 
         /* FAQ */
@@ -394,16 +366,21 @@
         }
 
         .cta-section .btn {
+            display: inline-block;
             background: #ffd700;
             color: #1a1a2e;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
             margin-top: 20px;
         }
 
         .cta-section .btn:hover {
             background: #e6c200;
+            transform: translateY(-2px);
         }
 
-        /* Footer */
         footer {
             background: #1a1a2e;
             color: white;
@@ -418,18 +395,36 @@
             padding: 10px 20px;
             border-radius: 30px;
             display: inline-block;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: bold;
             margin-bottom: 20px;
         }
 
-        /* Responsive */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.05);
+            background-color: #20b859;
+        }
+
         @media (max-width: 900px) {
             .education-grid {
                 grid-template-columns: 1fr;
-            }
-            .form-card {
-                position: static;
             }
             .nav-container {
                 flex-direction: column;
@@ -438,30 +433,34 @@
             }
             .nav-links {
                 justify-content: center;
+                gap: 12px;
+            }
+            .nav-links a {
+                font-size: 0.75rem;
             }
             .hero h1 {
                 font-size: 1.8rem;
             }
-        }
-
-        @media (max-width: 600px) {
             .success-stats {
                 flex-direction: column;
                 gap: 15px;
             }
-            .info-card {
-                padding: 25px;
+            .whatsapp-float {
+                padding: 8px 15px;
+                bottom: 15px;
+                right: 15px;
+                font-size: 12px;
             }
         }
     </style>
 </head>
 <body>
 
-<!-- PROFESSIONAL NAVIGATION WITH MOVIE STUDIO LINK -->
+<!-- PROFESSIONAL NAVIGATION WITH PORTFOLIO & ADMIN -->
 <nav>
     <div class="nav-container">
         <div class="logo">
-            <span class="logo-icon">✨</span>
+            <span class="logo-icon">🎓</span>
             <div>
                 <span class="logo-text">Ernest Embassy</span>
                 <span class="logo-sub">Travels & Film Production</span>
@@ -473,11 +472,13 @@
             <a href="services.html">⚙️ Services</a>
             <a href="visa.html">✈️ Visa</a>
             <a href="movie.html">🎬 Movie Studio</a>
+            <a href="portfolio.html">🎨 Portfolio</a>
             <a href="teaching.html">📚 Teaching</a>
             <a href="tutoring.html">💻 Tutoring</a>
             <a href="education.html">🎓 Education</a>
             <a href="booking.html">📅 Book</a>
             <a href="contact.html">📞 Contact</a>
+            <a href="admin.html">🔒 Admin</a>
         </div>
     </div>
 </nav>
@@ -502,14 +503,14 @@
 
             <h3>📚 Our Education Services Include:</h3>
             <ul class="services-list">
-                <li>✅ School Selection Guidance (UK, Canada, USA, Europe, Australia)</li>
-                <li>✅ Admission Processing & Application Support</li>
-                <li>✅ Student Visa Application Assistance</li>
-                <li>✅ Career Counseling & Course Selection</li>
-                <li>✅ Scholarship Guidance & Recommendations</li>
-                <li>✅ Pre-departure Orientation & Travel Advice</li>
-                <li>✅ Document Preparation & Review</li>
-                <li>✅ Interview Coaching for Embassy</li>
+                <li>School Selection Guidance (UK, Canada, USA, Europe, Australia)</li>
+                <li>Admission Processing & Application Support</li>
+                <li>Student Visa Application Assistance</li>
+                <li>Career Counseling & Course Selection</li>
+                <li>Scholarship Guidance & Recommendations</li>
+                <li>Pre-departure Orientation & Travel Advice</li>
+                <li>Document Preparation & Review</li>
+                <li>Interview Coaching for Embassy</li>
             </ul>
 
             <div class="success-stats">
@@ -528,65 +529,20 @@
             </div>
         </div>
 
-        <!-- Right Column: Consultation Form -->
-        <div class="form-card">
-            <h3>📝 Free Consultation Request</h3>
-            <p>Fill out the form below and Damian will contact you within 24 hours.</p>
-
-            <form name="education-consulting" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you-education.html">
-                <input type="hidden" name="form-name" value="education-consulting">
-                
-                <p style="display: none;">
-                    <label>Don't fill this: <input name="bot-field"></label>
-                </p>
-
-                <div class="form-group">
-                    <label>Full Name *</label>
-                    <input type="text" name="name" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Email Address *</label>
-                    <input type="email" name="email" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Phone Number *</label>
-                    <input type="tel" name="phone" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Current Education Level *</label>
-                    <select name="education_level" required>
-                        <option value="">Select</option>
-                        <option value="High School">High School / Secondary</option>
-                        <option value="Bachelor's Degree">Bachelor's Degree</option>
-                        <option value="Master's Degree">Master's Degree</option>
-                        <option value="PhD">PhD / Doctorate</option>
-                        <option value="Professional">Professional Certification</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Country Interested In *</label>
-                    <select name="country" required>
-                        <option value="">Select Country</option>
-                        <option value="Canada">🇨🇦 Canada</option>
-                        <option value="United Kingdom">🇬🇧 United Kingdom</option>
-                        <option value="United States">🇺🇸 United States</option>
-                        <option value="Australia">🇦🇺 Australia</option>
-                        <option value="Germany">🇩🇪 Germany</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Your Message / Questions</label>
-                    <textarea name="message" rows="3" placeholder="Tell us about your study goals, preferred course, or any questions..."></textarea>
-                </div>
-
-                <button type="submit" class="btn-primary">📨 Request Consultation</button>
-            </form>
+        <!-- Right Column: Email Button (No Form) -->
+        <div class="email-section">
+            <h2>📝 Free Consultation Request</h2>
+            <p>Click the button below to send us an email about your study abroad plans.</p>
+            
+            <a href="mailto:ernestembassytravels@gmail.com?subject=Education%20Consultation%20Request&body=Hello%20Damian,%0A%0AI%20would%20like%20to%20inquire%20about%20studying%20abroad.%0A%0AMy%20Name:%20__________%0AMy%20Phone:%20__________%0ACurrent%20Education%20Level:%20(High%20School/Bachelor's/Master's/PhD)%0ACountry%20Interested%20In:%20__________%0A%0AMessage:%0A__________" 
+               class="email-btn">
+                📨 Request Consultation via Email
+            </a>
+            
+            <p class="note-text">
+                🔒 Your email client will open. Fill in your details and send.<br>
+                We will respond within 24 hours.
+            </p>
         </div>
     </div>
 
@@ -640,23 +596,23 @@
     <div>
         <div class="section-title"><span>Frequently Asked Questions</span></div>
         <div class="faq-grid">
-            <div class="faq-item">
+            <div class="faq-item" onclick="this.classList.toggle('active')">
                 <div class="faq-question">❓ How long does the study visa process take? <span>▼</span></div>
                 <div class="faq-answer">Typically 4-12 weeks depending on the country and embassy. We will give you a realistic timeline during your consultation.</div>
             </div>
-            <div class="faq-item">
+            <div class="faq-item" onclick="this.classList.toggle('active')">
                 <div class="faq-question">❓ Do you guarantee visa approval? <span>▼</span></div>
                 <div class="faq-answer">No consultant can guarantee visa approval. However, we maximize your chances through thorough document preparation and interview coaching. Our success rate is 95%.</div>
             </div>
-            <div class="faq-item">
+            <div class="faq-item" onclick="this.classList.toggle('active')">
                 <div class="faq-question">❓ What countries do you help with? <span>▼</span></div>
                 <div class="faq-answer">We specialize in Canada, United Kingdom, United States, Australia, Germany, and other European countries.</div>
             </div>
-            <div class="faq-item">
+            <div class="faq-item" onclick="this.classList.toggle('active')">
                 <div class="faq-question">❓ Do you help with scholarships? <span>▼</span></div>
                 <div class="faq-answer">Yes, we provide guidance on available scholarships and help you prepare strong applications.</div>
             </div>
-            <div class="faq-item">
+            <div class="faq-item" onclick="this.classList.toggle('active')">
                 <div class="faq-question">❓ What are your fees? <span>▼</span></div>
                 <div class="faq-answer">Our fees are affordable and depend on the services you need. Contact us for a free consultation and quote.</div>
             </div>
@@ -690,8 +646,8 @@
     </div>
 </footer>
 
-<!-- WhatsApp Floating Button -->
-<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank" style="position: fixed; bottom: 20px; right: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 12px 20px; text-decoration: none; display: flex; align-items: center; gap: 10px; z-index: 1000; font-weight: bold;">
+<!-- WHATSAPP BUTTON -->
+<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
     <span>💬</span>
     <span>Chat with Damian on WhatsApp</span>
 </a>

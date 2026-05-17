@@ -4,10 +4,371 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ernest Embassy Travels & Infinity Movie Star Production</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+        }
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffd700;
+            letter-spacing: 1px;
+        }
+
+        .logo-sub {
+            font-size: 0.65rem;
+            color: rgba(255, 215, 0, 0.8);
+            display: block;
+            margin-top: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 0;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+
+        .hero-badges {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .hero-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #e6c200;
+            transform: translateY(-3px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 60px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 40px;
+            color: #1a1a2e;
+        }
+
+        .section-title span {
+            border-bottom: 3px solid #ffd700;
+            padding-bottom: 10px;
+        }
+
+        /* Service Cards */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: transform 0.3s;
+            text-decoration: none;
+            color: #333;
+            display: block;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .service-card h3 {
+            margin-bottom: 15px;
+            color: #1a1a2e;
+        }
+
+        .service-card p {
+            color: #666;
+        }
+
+        .why-section {
+            background: #f0f0f5;
+            border-radius: 20px;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            font-style: italic;
+        }
+
+        .testimonial-card .author {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #667eea;
+            font-style: normal;
+        }
+
+        .memberships-section {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin: 40px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .memberships-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .membership-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .social-section {
+            text-align: center;
+            padding: 40px 20px;
+            background: white;
+            border-radius: 20px;
+            margin: 40px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icon {
+            display: inline-block;
+            background: #f8f9fa;
+            padding: 12px 18px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            color: #333;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        footer {
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+
+        .cac-badge {
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin: 20px auto;
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.05);
+            background-color: #20b859;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .nav-links {
+                justify-content: center;
+                gap: 12px;
+            }
+            .nav-links a {
+                font-size: 0.75rem;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .hero-badges {
+                flex-direction: column;
+                align-items: center;
+            }
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+            .social-icons {
+                flex-direction: column;
+                align-items: center;
+            }
+            .whatsapp-float {
+                padding: 8px 15px;
+                bottom: 15px;
+                right: 15px;
+                font-size: 12px;
+            }
+        }
+    </style>
 </head>
 <body>
 
+<!-- PROFESSIONAL NAVIGATION WITH PORTFOLIO & ADMIN -->
 <nav>
     <div class="nav-container">
         <div class="logo">
@@ -23,15 +384,18 @@
             <a href="services.html">⚙️ Services</a>
             <a href="visa.html">✈️ Visa</a>
             <a href="movie.html">🎬 Movie Studio</a>
+            <a href="portfolio.html">🎨 Portfolio</a>
             <a href="teaching.html">📚 Teaching</a>
             <a href="tutoring.html">💻 Tutoring</a>
             <a href="education.html">🎓 Education</a>
             <a href="booking.html">📅 Book</a>
             <a href="contact.html">📞 Contact</a>
+            <a href="admin.html">🔒 Admin</a>
         </div>
     </div>
 </nav>
 
+<!-- HERO SECTION -->
 <div class="hero">
     <h1>Damian Anielozie Okafor</h1>
     <p>Teacher | Visa Consultant | Film Producer | Online Tutor</p>
@@ -49,6 +413,7 @@
 </div>
 
 <div class="container">
+    <!-- SERVICES SECTION -->
     <section>
         <div class="section-title"><span>What I Do</span></div>
         <div class="services-grid">
@@ -75,6 +440,7 @@
         </div>
     </section>
 
+    <!-- WHY CHOOSE ME -->
     <section class="why-section">
         <div class="section-title"><span>Why Choose Me</span></div>
         <div class="services-grid">
@@ -97,6 +463,7 @@
         </div>
     </section>
 
+    <!-- PROFESSIONAL MEMBERSHIPS -->
     <div class="memberships-section">
         <h3>🎬 Professional Memberships & Affiliations</h3>
         <div class="memberships-grid">
@@ -110,6 +477,7 @@
         </div>
     </div>
 
+    <!-- TESTIMONIALS -->
     <section>
         <div class="section-title"><span>What Clients Say</span></div>
         <div class="testimonials-grid">
@@ -128,8 +496,9 @@
         </div>
     </section>
 
+    <!-- SOCIAL & STREAMING LINKS -->
     <div class="social-section">
-        <h3>Follow & Connect With Damian</h3>
+        <h3>🌐 Follow & Connect With Damian</h3>
         <div class="social-icons">
             <a href="https://facebook.com/damian.okafor31131" target="_blank" class="social-icon">📘 Facebook</a>
             <a href="https://twitter.com/danoka33" target="_blank" class="social-icon">🐦 Twitter</a>
@@ -143,13 +512,15 @@
     </div>
 </div>
 
+<!-- CAC BADGE -->
 <div style="text-align: center; padding: 20px;">
     <div class="cac-badge">
         ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
-        📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
+        📍 6 Ezinifite Close, New Haven, Enugu, Enugu State, Nigeria
     </div>
 </div>
 
+<!-- FOOTER -->
 <footer>
     <div class="container">
         <p><strong>Ernest Embassy Travels & Infinity Movie Star Production</strong></p>
@@ -160,6 +531,7 @@
     </div>
 </footer>
 
+<!-- WHATSAPP BUTTON -->
 <a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
     <span>💬</span>
     <span>Chat with Damian on WhatsApp</span>

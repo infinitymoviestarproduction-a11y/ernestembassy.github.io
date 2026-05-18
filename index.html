@@ -158,6 +158,13 @@
             padding-bottom: 10px;
         }
 
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
         /* Service Cards */
         .services-grid {
             display: grid;
@@ -250,6 +257,71 @@
             border-radius: 30px;
             font-size: 0.85rem;
             font-weight: bold;
+        }
+
+        /* Social Feed Grid */
+        .social-feed-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .youtube-feed, .instagram-feed {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .feed-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .feed-icon {
+            font-size: 1.8rem;
+        }
+
+        .feed-header h3 {
+            color: #1a1a2e;
+            flex: 1;
+            font-size: 1.1rem;
+        }
+
+        .feed-link {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.85rem;
+            transition: transform 0.3s;
+        }
+
+        .feed-link:hover {
+            transform: translateY(-2px);
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
         }
 
         .social-section {
@@ -353,6 +425,9 @@
             .testimonials-grid {
                 grid-template-columns: 1fr;
             }
+            .social-feed-grid {
+                grid-template-columns: 1fr;
+            }
             .social-icons {
                 flex-direction: column;
                 align-items: center;
@@ -368,7 +443,7 @@
 </head>
 <body>
 
-<!-- PROFESSIONAL NAVIGATION WITH PORTFOLIO & ADMIN -->
+<!-- PROFESSIONAL NAVIGATION -->
 <nav>
     <div class="nav-container">
         <div class="logo">
@@ -391,6 +466,8 @@
             <a href="booking.html">📅 Book</a>
             <a href="contact.html">📞 Contact</a>
             <a href="admin.html">🔒 Admin</a>
+            <a href="login.html">🔐 Client Login</a>
+            <a href="testimonials.html">⭐ Testimonials</a>
         </div>
     </div>
 </nav>
@@ -474,6 +551,48 @@
             <span class="membership-badge">📱 PocketMFA</span>
             <span class="membership-badge">✍️ Emerging Screenwriters</span>
             <span class="membership-badge">🎬 Gigs</span>
+        </div>
+    </div>
+
+    <!-- SOCIAL MEDIA FEED SECTION -->
+    <div class="section-title"><span>📱 Latest from Social Media</span></div>
+    <div class="section-subtitle">Follow me on YouTube and Instagram for behind-the-scenes content</div>
+
+    <div class="social-feed-grid">
+        <!-- YouTube Video Feed -->
+        <div class="youtube-feed">
+            <div class="feed-header">
+                <div class="feed-icon">▶️</div>
+                <h3>YouTube - Infinity Movie Star Production</h3>
+                <a href="https://youtube.com/@infinitymoviestarproductio6222" target="_blank" class="feed-link">Subscribe →</a>
+            </div>
+            <div class="video-wrapper">
+                <iframe 
+                    src="https://www.youtube.com/embed?listType=user_uploads&list=infinitymoviestarproductio6222" 
+                    title="YouTube video player" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    referrerpolicy="strict-origin-when-cross-origin" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+
+        <!-- Instagram Feed -->
+        <div class="instagram-feed">
+            <div class="feed-header">
+                <div class="feed-icon">📷</div>
+                <h3>Instagram - @imspenugu</h3>
+                <a href="https://instagram.com/imspenugu" target="_blank" class="feed-link">Follow →</a>
+            </div>
+            <div class="instagram-embed">
+                <p style="text-align: center; color: #666; margin-top: 20px;">
+                    📱 <a href="https://instagram.com/imspenugu" target="_blank" style="color: #e4405f; text-decoration: none;">View on Instagram →</a>
+                </p>
+                <p style="text-align: center; color: #999; font-size: 0.85rem; margin-top: 10px;">
+                    Follow @imspenugu for behind-the-scenes content, movie updates, and creative shots.
+                </p>
+            </div>
         </div>
     </div>
 

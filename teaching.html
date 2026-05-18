@@ -86,16 +86,23 @@
             color: #ffd700;
         }
 
+        /* Hero Section */
         .hero {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             text-align: center;
-            padding: 60px 20px;
+            padding: 80px 20px;
         }
 
         .hero h1 {
             font-size: 2.5rem;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .container {
@@ -369,10 +376,6 @@
             margin: 60px 0;
         }
 
-        .cta-section h2 {
-            margin-bottom: 20px;
-        }
-
         .cta-section .btn {
             background: #ffd700;
             color: #1a1a2e;
@@ -431,12 +434,22 @@
             .nav-links {
                 justify-content: center;
                 gap: 12px;
+                flex-wrap: wrap;
             }
             .nav-links a {
-                font-size: 0.75rem;
+                font-size: 0.7rem;
             }
             .hero h1 {
                 font-size: 1.8rem;
+            }
+            .teaching-stats {
+                grid-template-columns: 1fr;
+            }
+            .subjects-list {
+                grid-template-columns: 1fr;
+            }
+            .pricing-grid {
+                grid-template-columns: 1fr;
             }
             .whatsapp-float {
                 padding: 8px 15px;
@@ -449,7 +462,7 @@
 </head>
 <body>
 
-<!-- PROFESSIONAL NAVIGATION WITH PORTFOLIO & ADMIN -->
+<!-- PROFESSIONAL NAVIGATION WITH ALL LINKS -->
 <nav>
     <div class="nav-container">
         <div class="logo">
@@ -472,6 +485,8 @@
             <a href="booking.html">📅 Book</a>
             <a href="contact.html">📞 Contact</a>
             <a href="admin.html">🔒 Admin</a>
+            <a href="login.html">🔐 Client Login</a>
+            <a href="testimonials.html">⭐ Testimonials</a>
         </div>
     </div>
 </nav>
@@ -658,7 +673,7 @@
         </div>
     </div>
 
-    <!-- EMAIL BUTTON SECTION (No Form) -->
+    <!-- EMAIL BUTTON SECTION -->
     <div class="email-container">
         <h2>📝 Teaching Inquiry Form</h2>
         <p>Click the button below to send us an email about teaching services.</p>

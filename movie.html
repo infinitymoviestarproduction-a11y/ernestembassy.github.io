@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Studio - Infinity Movie Star Production</title>
+    <title>Infinity Movie Star Production - Film Studio & Training</title>
     <style>
         * {
             margin: 0;
@@ -88,15 +88,20 @@
 
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #0a0a0a 100%);
             color: white;
             text-align: center;
             padding: 80px 20px;
+            position: relative;
         }
 
         .hero h1 {
             font-size: 2.5rem;
             margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: #ffd700;
         }
 
         .hero p {
@@ -105,73 +110,184 @@
             margin: 0 auto;
         }
 
+        .hero-subtitle {
+            font-size: 1rem;
+            margin-top: 20px;
+            color: #ccc;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 40px 20px;
         }
 
-        /* Movie Layout */
-        .movie-layout {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
+        /* Section Titles */
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #1a1a2e;
+            margin-top: 60px;
+        }
+
+        .section-title span {
+            border-bottom: 3px solid #ffd700;
+            padding-bottom: 10px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        /* Mission Statement */
+        .mission-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 50px;
+            border-radius: 20px;
             margin: 40px 0;
         }
 
-        /* Info Section */
-        .info-section {
+        .mission-box h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .mission-box p {
+            font-size: 1.3rem;
+            font-style: italic;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .service-card {
             background: white;
             border-radius: 20px;
-            padding: 35px;
+            overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
         }
 
-        .info-section h2 {
-            color: #1a1a2e;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            border-left: 4px solid #ffd700;
-            padding-left: 15px;
+        .service-card:hover {
+            transform: translateY(-5px);
         }
 
-        .info-section h3 {
-            color: #1a1a2e;
+        .service-header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .service-header h2 {
             font-size: 1.3rem;
-            margin: 25px 0 15px;
         }
 
-        .info-section p {
+        .service-body {
+            padding: 25px;
+        }
+
+        .service-body p {
             color: #555;
-            line-height: 1.7;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
-        .services-list {
+        .service-list {
             list-style: none;
-            margin: 20px 0;
+            margin: 15px 0;
         }
 
-        .services-list li {
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
+        .service-list li {
+            padding: 8px 0;
             display: flex;
             align-items: center;
             gap: 10px;
+            border-bottom: 1px solid #eee;
         }
 
-        .services-list li:before {
+        .service-list li:before {
             content: "🎬";
             color: #ffd700;
         }
 
-        .cac-badge-inline {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #ffd700;
-            padding: 20px;
+        /* Screenplays Section */
+        .screenplays-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .screenplay-card {
+            background: white;
             border-radius: 15px;
+            padding: 20px;
             text-align: center;
-            margin-top: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            border-left: 4px solid #ffd700;
+        }
+
+        .screenplay-card:hover {
+            transform: translateX(5px);
+        }
+
+        .screenplay-card h4 {
+            color: #1a1a2e;
+            margin-bottom: 5px;
+        }
+
+        .screenplay-card p {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        /* Partnerships */
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .partner-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+        }
+
+        .partner-card h3 {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .partner-card h4 {
+            color: #1a1a2e;
+            margin-bottom: 15px;
+        }
+
+        .partner-card p {
+            color: #555;
+            font-size: 0.9rem;
         }
 
         /* Email Section */
@@ -181,17 +297,7 @@
             padding: 35px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             text-align: center;
-        }
-
-        .email-section h2 {
-            color: #1a1a2e;
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-        }
-
-        .email-section p {
-            color: #666;
-            margin-bottom: 25px;
+            margin: 40px 0;
         }
 
         .email-btn {
@@ -203,7 +309,6 @@
             border-radius: 50px;
             font-size: 16px;
             font-weight: bold;
-            cursor: pointer;
             text-decoration: none;
             transition: all 0.3s;
             margin: 10px 0;
@@ -220,62 +325,12 @@
             margin-top: 15px;
         }
 
-        /* Testimonials */
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
-        }
-
-        .testimonial-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            font-style: italic;
-        }
-
-        .testimonial-card .author {
-            margin-top: 15px;
-            font-weight: bold;
-            color: #667eea;
-            font-style: normal;
-        }
-
-        /* CTA */
-        .cta-section {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: white;
-            text-align: center;
-            padding: 60px 20px;
-            border-radius: 20px;
-            margin: 60px 0;
-        }
-
-        .cta-section .btn {
-            display: inline-block;
-            background: #ffd700;
-            color: #1a1a2e;
-            padding: 12px 30px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-            margin-top: 20px;
-        }
-
-        .cta-section .btn:hover {
-            background: #e6c200;
-            transform: translateY(-2px);
-        }
-
         footer {
             background: #1a1a2e;
             color: white;
             text-align: center;
             padding: 40px 20px;
-            margin-top: 40px;
+            margin-top: 60px;
         }
 
         .cac-badge {
@@ -284,7 +339,9 @@
             padding: 10px 20px;
             border-radius: 30px;
             display: inline-block;
-            margin: 20px 0;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 20px;
         }
 
         .whatsapp-float {
@@ -309,10 +366,7 @@
             background-color: #20b859;
         }
 
-        @media (max-width: 900px) {
-            .movie-layout {
-                grid-template-columns: 1fr;
-            }
+        @media (max-width: 768px) {
             .nav-container {
                 flex-direction: column;
                 gap: 15px;
@@ -328,6 +382,9 @@
             .hero h1 {
                 font-size: 1.8rem;
             }
+            .mission-box p {
+                font-size: 1rem;
+            }
             .whatsapp-float {
                 padding: 8px 15px;
                 bottom: 15px;
@@ -339,7 +396,7 @@
 </head>
 <body>
 
-<!-- PROFESSIONAL NAVIGATION WITH PORTFOLIO & ADMIN -->
+<!-- PROFESSIONAL NAVIGATION -->
 <nav>
     <div class="nav-container">
         <div class="logo">
@@ -368,93 +425,294 @@
 
 <!-- HERO SECTION -->
 <div class="hero">
-    <h1>🎬 Infinity Movie Star Production</h1>
-    <p>Professional Film Production & Hands-On Training</p>
+    <h1>🎬 <span>Infinity Movie Star Production</span></h1>
+    <p>Professional Film Production, International Collaboration & Hands-On Training</p>
+    <div class="hero-subtitle">Infinity Movie Star – Where Every Story Begins With You.</div>
 </div>
 
 <div class="container">
-    <div class="movie-layout">
-        <!-- LEFT COLUMN: INFORMATION -->
-        <div class="info-section">
-            <h2>Your Film Production Partner</h2>
-            <p>Infinity Movie Star Production delivers high-quality film production services, from storytelling to final production. We specialize in script writing, directing, and producing engaging films that connect with audiences globally.</p>
-            
-            <h3>🎥 Our Services Include:</h3>
-            <ul class="services-list">
-                <li>Movie Script Writing</li>
-                <li>Film Directing</li>
-                <li>Production & Editing</li>
-                <li>Actor Casting & Coordination</li>
-                <li>Hands-On Film Training</li>
-                <li>Music Video Production</li>
-            </ul>
+    <!-- INTRODUCTION -->
+    <div class="mission-box">
+        <h2>Our Mission</h2>
+        <p>"Creating stories that live beyond the screen."</p>
+    </div>
 
-            <div class="cac-badge-inline">
-                <span>✅ CAC Registered</span>
-                <p style="margin-top: 10px;">Since June 21, 2017 | BN2517233</p>
+    <div style="background: white; padding: 35px; border-radius: 20px; margin-bottom: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+        <p style="font-size: 1.1rem; line-height: 1.8;">Infinity Movie Star Production is a full-service film production company founded by <strong>Damian Anielozie Okafor</strong>, a Nigerian screenwriter, director, producer, and film trainer. We create compelling stories that inspire, entertain, and address real social issues while building global partnerships across Africa, Europe, and the United States.</p>
+        <p style="margin-top: 20px;">Through strategic collaborations with <strong>Never Matewere</strong> of Zomba Film Production and <strong>Emmanuel Fragrance Francisque</strong> of Ashanti Media Logistics, we provide international production support, talent sourcing, logistics, and training for projects intended for global audiences.</p>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- PROFESSIONAL SERVICES SECTION               -->
+    /* ============================================ */
+    <div class="section-title"><span>🎥 Our Professional Services</span></div>
+    <div class="section-subtitle">Comprehensive film solutions from script to screen</div>
+
+    <div class="services-grid">
+        <!-- Service 1: Movie Script Writing -->
+        <div class="service-card">
+            <div class="service-header">
+                <div class="service-icon">📜</div>
+                <h2>Movie Script Writing</h2>
+            </div>
+            <div class="service-body">
+                <p>At the heart of every great film is a powerful story. Infinity Movie Star Production specializes in developing original, emotionally engaging, and commercially viable screenplays across multiple genres.</p>
+                <ul class="service-list">
+                    <li>Original screenplay development</li>
+                    <li>Script doctoring and rewrites</li>
+                    <li>Dialogue polishing</li>
+                    <li>Pitch decks and synopsis creation</li>
+                    <li>Treatment and logline development</li>
+                </ul>
             </div>
         </div>
 
-        <!-- RIGHT COLUMN: EMAIL BUTTON (No Form) -->
-        <div class="email-section">
-            <h2>📝 Film Training & Production Inquiry</h2>
-            <p>Click the button below to send us an email about film training or production services.</p>
-            
-            <a href="mailto:infinitymoviestarproduction@gmail.com?subject=Film%20Training%20%26%20Production%20Inquiry&body=Hello%20Damian,%0A%0AI%20am%20interested%20in%20film%20training%20or%20production%20services.%0A%0AMy%20Name:%20__________%0AMy%20Phone:%20__________%0AMy%20Interest:%20(Acting/Directing/Editing/Production/Scriptwriting)%0A%0AMessage:%0A__________" 
-               class="email-btn">
-                🎬 Send Film Inquiry via Email
-            </a>
-            
-            <p class="note-text">
-                🔒 Your email client will open. Fill in your details and send.<br>
-                We will respond within 48 hours.
-            </p>
+        <!-- Service 2: Film Directing -->
+        <div class="service-card">
+            <div class="service-header">
+                <div class="service-icon">🎬</div>
+                <h2>Film Directing</h2>
+            </div>
+            <div class="service-body">
+                <p>Vision transforms words into unforgettable cinematic experiences. Damian Anielozie Okafor leads productions with strong focus on storytelling, actor performance, and emotional authenticity.</p>
+                <ul class="service-list">
+                    <li>Shot planning and storyboarding</li>
+                    <li>Actor coaching and rehearsals</li>
+                    <li>Scene blocking</li>
+                    <li>Cinemographic storytelling</li>
+                    <li>On-set leadership</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Service 3: Production & Editing -->
+        <div class="service-card">
+            <div class="service-header">
+                <div class="service-icon">✂️</div>
+                <h2>Production & Editing</h2>
+            </div>
+            <div class="service-body">
+                <p>From concept to final delivery, we manage every stage of production with precision and creativity.</p>
+                <ul class="service-list">
+                    <li>Feature film production</li>
+                    <li>Short films and documentaries</li>
+                    <li>Commercials and branded content</li>
+                    <li>AI-assisted concept trailers</li>
+                    <li>Color correction & sound design</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Service 4: Actor Casting & Coordination -->
+        <div class="service-card">
+            <div class="service-header">
+                <div class="service-icon">⭐</div>
+                <h2>Actor Casting & Coordination</h2>
+            </div>
+            <div class="service-body">
+                <p>Great stories deserve the right faces and performances. We source and coordinate professional actors, extras, and crew from multiple countries.</p>
+                <ul class="service-list">
+                    <li>Auditions and screen tests</li>
+                    <li>Character matching</li>
+                    <li>Talent negotiation</li>
+                    <li>Travel coordination</li>
+                    <li>On-set scheduling</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Service 5: Hands-On Film Training -->
+        <div class="service-card">
+            <div class="service-header">
+                <div class="service-icon">🎓</div>
+                <h2>Hands-On Film Training</h2>
+            </div>
+            <div class="service-body">
+                <p>We believe in empowering the next generation of filmmakers through practical, real-world experience.</p>
+                <ul class="service-list">
+                    <li>Screenwriting</li>
+                    <li>Directing & Acting for film</li>
+                    <li>Camera operation</li>
+                    <li>Editing & Production management</li>
+                    <li>Sound recording</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Service 6: Music Video Production -->
+        <div class="service-card">
+            <div class="service-header">
+                <div class="service-icon">🎵</div>
+                <h2>Music Video Production</h2>
+            </div>
+            <div class="service-body">
+                <p>Music deserves visuals that amplify its emotion and message. We create cinematic music videos that help artists build stronger brands.</p>
+                <ul class="service-list">
+                    <li>Creative concept development</li>
+                    <li>Story-based music videos</li>
+                    <li>Performance shoots</li>
+                    <li>Editing and visual effects</li>
+                    <li>Lyric videos & promotional teasers</li>
+                </ul>
+            </div>
         </div>
     </div>
 
-    <!-- TESTIMONIALS -->
-    <div class="testimonials-grid">
-        <div class="testimonial-card">
-            "The film training at Infinity Movie Star Production changed my life. I went from zero experience to acting in a real production within 3 months."
-            <div class="author">— Grace E., Enugu</div>
+    <!-- ============================================ -->
+    <!-- FEATURED ORIGINAL SCREENPLAYS               -->
+    /* ============================================ */
+    <div class="section-title"><span>📖 Featured Original Screenplays</span></div>
+    <div class="section-subtitle">With a growing catalog of completed feature screenplays—including political thrillers, crime dramas, inspirational stories, social commentaries, and culturally rich narratives—Infinity Movie Star Production develops stories designed for local impact and international audiences.</div>
+
+    <div class="screenplays-grid">
+        <div class="screenplay-card">
+            <h4>Official Card</h4>
+            <p>Political conspiracy thriller</p>
         </div>
-        <div class="testimonial-card">
-            "Damian is not just a trainer but a mentor. The hands-on experience I gained on set was invaluable. I'm now working as a freelance editor."
-            <div class="author">— Peter O., Lagos</div>
+        <div class="screenplay-card">
+            <h4>Round Table</h4>
+            <p>Anti-corruption political thriller</p>
         </div>
-        <div class="testimonial-card">
-            "Professional, creative, and dedicated. Our music video was delivered on time and exceeded expectations. Highly recommend Infinity Movie Star Production."
-            <div class="author">— Chioma A., Abuja</div>
+        <div class="screenplay-card">
+            <h4>Thuglord</h4>
+            <p>Crime, redemption, and justice drama</p>
+        </div>
+        <div class="screenplay-card">
+            <h4>Alex: Friend of Sorrow</h4>
+            <p>Emotional family drama</p>
+        </div>
+        <div class="screenplay-card">
+            <h4>Jerry</h4>
+            <p>Inspirational drama</p>
+        </div>
+        <div class="screenplay-card">
+            <h4>SOHK</h4>
+            <p>Suspense thriller</p>
+        </div>
+        <div class="screenplay-card">
+            <h4>Playground</h4>
+            <p>Youth-centered drama</p>
+        </div>
+        <div class="screenplay-card">
+            <h4>Land of Edomita</h4>
+            <p>Epic adventure and cultural drama</p>
+        </div>
+        <div class="screenplay-card">
+            <h4>Heaven's Gate</h4>
+            <p>Spiritual and inspirational drama</p>
+        </div>
+        <div class="screenplay-card">
+            <h4>Twins Blood</h4>
+            <p>Mystery and family thriller</p>
+        </div>
+        <div class="screenplay-card">
+            <h4>Girls Go Wild</h4>
+            <p>Contemporary social drama</p>
+        </div>
+        <div class="screenplay-card">
+            <h4>Rupert</h4>
+            <p>Inspirational drama</p>
         </div>
     </div>
 
-    <!-- CALL TO ACTION -->
-    <div class="cta-section">
-        <h2>Ready to Start Your Film Journey?</h2>
-        <p>Whether you want to produce a movie, join our training program, or collaborate on a project — we're here to help.</p>
-        <a href="booking.html" class="btn">📅 Book a Consultation →</a>
-    </div>
-</div>
+    <!-- ============================================ -->
+    <!-- INTERNATIONAL PARTNERSHIPS                  -->
+    /* ============================================ */
+    <div class="section-title"><span>🤝 International Partnerships</span></div>
+    <div class="section-subtitle">Strengthening our ability to execute projects across continents</div>
 
-<!-- CAC BADGE -->
-<div style="text-align: center; padding: 20px;">
-    <div class="cac-badge">
-        ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
-        📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
+    <div class="partners-grid">
+        <div class="partner-card">
+            <h3>🇲🇼 Zomba Film Production</h3>
+            <h4>Never Matewere</h4>
+            <p>Local production, talent coordination, and film training in Malawi. Expanding training opportunities across Africa.</p>
+        </div>
+        <div class="partner-card">
+            <h3>🌍 Ashanti Media Logistics</h3>
+            <h4>Emmanuel Fragrance Francisque</h4>
+            <p>International production support, media logistics, and global creative collaboration.</p>
+        </div>
+    </div>
+
+    <!-- TALENT NETWORK -->
+    <div class="partners-grid" style="margin-top: 0;">
+        <div class="partner-card">
+            <h3>🌍 International Talent Network</h3>
+            <p>We work with actors and creatives from:</p>
+            <p style="margin-top: 10px;"><strong>Nigeria • Malawi • Zimbabwe • Rwanda • South Africa • United Kingdom • United States</strong></p>
+        </div>
+    </div>
+
+    <!-- ============================================ */
+    /* WHY PARTNER WITH US                            */
+    /* ============================================ */
+    <div class="section-title"><span>🌟 Why Partner With Us?</span></div>
+    <div class="partners-grid">
+        <div class="partner-card">
+            <h3>📜 Original Scripts</h3>
+            <p>Production-ready, compelling screenplays</p>
+        </div>
+        <div class="partner-card">
+            <h3>🎬 Experienced Leadership</h3>
+            <p>Expert writing and directing since 2014</p>
+        </div>
+        <div class="partner-card">
+            <h3>🌍 Global Partnerships</h3>
+            <p>International production network</p>
+        </div>
+        <div class="partner-card">
+            <h3>⭐ Diverse Casting</h3>
+            <p>Access to international talent</p>
+        </div>
+        <div class="partner-card">
+            <h3>🎓 Practical Training</h3>
+            <p>Hands-on film education</p>
+        </div>
+        <div class="partner-card">
+            <h3>🌍 Global Distribution</h3>
+            <p>Festival and international market potential</p>
+        </div>
+    </div>
+
+    <!-- CAC BADGE -->
+    <div style="text-align: center; margin: 40px 0;">
+        <div class="cac-badge">
+            ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
+            📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- CONTACT / INQUIRY SECTION                    -->
+    /* ============================================ */
+    <div class="email-section">
+        <h2>📝 Film Production & Training Inquiry</h2>
+        <p>Click the button below to send us an email about film training, production services, or collaboration opportunities.</p>
+        
+        <a href="mailto:infinitymoviestarproduction@gmail.com?subject=Film%20Production%20%26%20Training%20Inquiry&body=Hello%20Damian,%0A%0AI%20am%20interested%20in%20film%20production%20or%20training%20services.%0A%0AMy%20Name:%20__________%0AMy%20Phone:%20__________%0AMy%20Interest:%20(Acting/Directing/Editing/Production/Scriptwriting/Collaboration)%0A%0AMessage:%0A__________" 
+           class="email-btn">
+            🎬 Send Film Inquiry via Email
+        </a>
+        
+        <p class="note-text">
+            🔒 Your email client will open. Fill in your details and send.<br>
+            We will respond within 48 hours.
+        </p>
     </div>
 </div>
 
 <!-- FOOTER -->
 <footer>
     <div class="container">
-        <p><strong>Ernest Embassy Travels & Infinity Movie Star Production</strong></p>
-        <p>📧 ernestembassytravels@gmail.com | infinitymoviestarproduction@gmail.com | Danoka33@gmail.com</p>
+        <p><strong>Infinity Movie Star Production & Ernest Embassy Travels</strong></p>
+        <p>📧 infinitymoviestarproduction@gmail.com | ernestembassytravels@gmail.com | Danoka33@gmail.com</p>
         <p>📞 +2348032607809 | +2349050205053</p>
         <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
         <p style="margin-top: 20px;">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
     </div>
 </footer>
 
+<!-- WHATSAPP BUTTON -->
 <a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
     <span>💬</span>
     <span>Chat with Damian on WhatsApp</span>

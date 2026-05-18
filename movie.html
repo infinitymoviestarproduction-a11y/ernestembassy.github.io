@@ -143,7 +143,7 @@
             font-size: 1.1rem;
         }
 
-        /* Mission Statement */
+        /* Mission Box */
         .mission-box {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -226,7 +226,7 @@
             color: #ffd700;
         }
 
-        /* Screenplays Section */
+        /* Screenplays Grid */
         .screenplays-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -375,15 +375,25 @@
             .nav-links {
                 justify-content: center;
                 gap: 12px;
+                flex-wrap: wrap;
             }
             .nav-links a {
-                font-size: 0.75rem;
+                font-size: 0.7rem;
             }
             .hero h1 {
                 font-size: 1.8rem;
             }
             .mission-box p {
                 font-size: 1rem;
+            }
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            .screenplays-grid {
+                grid-template-columns: 1fr;
+            }
+            .partners-grid {
+                grid-template-columns: 1fr;
             }
             .whatsapp-float {
                 padding: 8px 15px;
@@ -396,7 +406,7 @@
 </head>
 <body>
 
-<!-- PROFESSIONAL NAVIGATION -->
+<!-- PROFESSIONAL NAVIGATION WITH ALL LINKS -->
 <nav>
     <div class="nav-container">
         <div class="logo">
@@ -419,6 +429,8 @@
             <a href="booking.html">📅 Book</a>
             <a href="contact.html">📞 Contact</a>
             <a href="admin.html">🔒 Admin</a>
+            <a href="login.html">🔐 Client Login</a>
+            <a href="testimonials.html">⭐ Testimonials</a>
         </div>
     </div>
 </nav>
@@ -442,21 +454,18 @@
         <p style="margin-top: 20px;">Through strategic collaborations with <strong>Never Matewere</strong> of Zomba Film Production and <strong>Emmanuel Fragrance Francisque</strong> of Ashanti Media Logistics, we provide international production support, talent sourcing, logistics, and training for projects intended for global audiences.</p>
     </div>
 
-    <!-- ============================================ -->
-    <!-- PROFESSIONAL SERVICES SECTION               -->
-    /* ============================================ */
+    <!-- PROFESSIONAL SERVICES SECTION -->
     <div class="section-title"><span>🎥 Our Professional Services</span></div>
     <div class="section-subtitle">Comprehensive film solutions from script to screen</div>
 
     <div class="services-grid">
-        <!-- Service 1: Movie Script Writing -->
         <div class="service-card">
             <div class="service-header">
                 <div class="service-icon">📜</div>
                 <h2>Movie Script Writing</h2>
             </div>
             <div class="service-body">
-                <p>At the heart of every great film is a powerful story. Infinity Movie Star Production specializes in developing original, emotionally engaging, and commercially viable screenplays across multiple genres.</p>
+                <p>At the heart of every great film is a powerful story.</p>
                 <ul class="service-list">
                     <li>Original screenplay development</li>
                     <li>Script doctoring and rewrites</li>
@@ -467,14 +476,13 @@
             </div>
         </div>
 
-        <!-- Service 2: Film Directing -->
         <div class="service-card">
             <div class="service-header">
                 <div class="service-icon">🎬</div>
                 <h2>Film Directing</h2>
             </div>
             <div class="service-body">
-                <p>Vision transforms words into unforgettable cinematic experiences. Damian Anielozie Okafor leads productions with strong focus on storytelling, actor performance, and emotional authenticity.</p>
+                <p>Vision transforms words into unforgettable cinematic experiences.</p>
                 <ul class="service-list">
                     <li>Shot planning and storyboarding</li>
                     <li>Actor coaching and rehearsals</li>
@@ -485,14 +493,13 @@
             </div>
         </div>
 
-        <!-- Service 3: Production & Editing -->
         <div class="service-card">
             <div class="service-header">
                 <div class="service-icon">✂️</div>
                 <h2>Production & Editing</h2>
             </div>
             <div class="service-body">
-                <p>From concept to final delivery, we manage every stage of production with precision and creativity.</p>
+                <p>From concept to final delivery, we manage every stage of production.</p>
                 <ul class="service-list">
                     <li>Feature film production</li>
                     <li>Short films and documentaries</li>
@@ -503,14 +510,13 @@
             </div>
         </div>
 
-        <!-- Service 4: Actor Casting & Coordination -->
         <div class="service-card">
             <div class="service-header">
                 <div class="service-icon">⭐</div>
                 <h2>Actor Casting & Coordination</h2>
             </div>
             <div class="service-body">
-                <p>Great stories deserve the right faces and performances. We source and coordinate professional actors, extras, and crew from multiple countries.</p>
+                <p>Great stories deserve the right faces and performances.</p>
                 <ul class="service-list">
                     <li>Auditions and screen tests</li>
                     <li>Character matching</li>
@@ -521,14 +527,13 @@
             </div>
         </div>
 
-        <!-- Service 5: Hands-On Film Training -->
         <div class="service-card">
             <div class="service-header">
                 <div class="service-icon">🎓</div>
                 <h2>Hands-On Film Training</h2>
             </div>
             <div class="service-body">
-                <p>We believe in empowering the next generation of filmmakers through practical, real-world experience.</p>
+                <p>Empowering the next generation of filmmakers through practical experience.</p>
                 <ul class="service-list">
                     <li>Screenwriting</li>
                     <li>Directing & Acting for film</li>
@@ -539,14 +544,13 @@
             </div>
         </div>
 
-        <!-- Service 6: Music Video Production -->
         <div class="service-card">
             <div class="service-header">
                 <div class="service-icon">🎵</div>
                 <h2>Music Video Production</h2>
             </div>
             <div class="service-body">
-                <p>Music deserves visuals that amplify its emotion and message. We create cinematic music videos that help artists build stronger brands.</p>
+                <p>Music deserves visuals that amplify its emotion and message.</p>
                 <ul class="service-list">
                     <li>Creative concept development</li>
                     <li>Story-based music videos</li>
@@ -558,9 +562,7 @@
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- FEATURED ORIGINAL SCREENPLAYS               -->
-    /* ============================================ */
+    <!-- FEATURED ORIGINAL SCREENPLAYS -->
     <div class="section-title"><span>📖 Featured Original Screenplays</span></div>
     <div class="section-subtitle">With a growing catalog of completed feature screenplays—including political thrillers, crime dramas, inspirational stories, social commentaries, and culturally rich narratives—Infinity Movie Star Production develops stories designed for local impact and international audiences.</div>
 
@@ -615,9 +617,7 @@
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- INTERNATIONAL PARTNERSHIPS                  -->
-    /* ============================================ */
+    <!-- INTERNATIONAL PARTNERSHIPS -->
     <div class="section-title"><span>🤝 International Partnerships</span></div>
     <div class="section-subtitle">Strengthening our ability to execute projects across continents</div>
 
@@ -643,9 +643,7 @@
         </div>
     </div>
 
-    <!-- ============================================ */
-    /* WHY PARTNER WITH US                            */
-    /* ============================================ */
+    <!-- WHY PARTNER WITH US -->
     <div class="section-title"><span>🌟 Why Partner With Us?</span></div>
     <div class="partners-grid">
         <div class="partner-card">
@@ -669,7 +667,7 @@
             <p>Hands-on film education</p>
         </div>
         <div class="partner-card">
-            <h3>🌍 Global Distribution</h3>
+            <h3>🌐 Global Distribution</h3>
             <p>Festival and international market potential</p>
         </div>
     </div>
@@ -682,9 +680,7 @@
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- CONTACT / INQUIRY SECTION                    -->
-    /* ============================================ */
+    <!-- CONTACT / INQUIRY SECTION -->
     <div class="email-section">
         <h2>📝 Film Production & Training Inquiry</h2>
         <p>Click the button below to send us an email about film training, production services, or collaboration opportunities.</p>

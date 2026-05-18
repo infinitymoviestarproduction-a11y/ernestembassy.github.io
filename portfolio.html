@@ -205,6 +205,44 @@
             border-radius: 10px;
         }
 
+        /* Image Grid */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .image-card {
+            background: #111;
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid #333;
+            transition: transform 0.3s;
+            text-align: center;
+        }
+
+        .image-card:hover {
+            transform: translateY(-5px);
+            border-color: #ffd700;
+        }
+
+        .image-card img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .image-card h3 {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .image-card p {
+            color: #ccc;
+            font-size: 0.85rem;
+        }
+
         /* Writings Grid */
         .writings-grid {
             display: grid;
@@ -330,6 +368,36 @@
             transform: translateY(-3px);
         }
 
+        /* Upload Instructions */
+        .upload-instructions {
+            background: #1a1a2e;
+            border: 1px solid #ffd700;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .upload-instructions h3 {
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+
+        .upload-instructions p {
+            color: #ccc;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .upload-instructions code {
+            background: #333;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-family: monospace;
+            color: #ffd700;
+            font-size: 0.85rem;
+        }
+
         footer {
             background: #0a0a0a;
             color: white;
@@ -394,6 +462,9 @@
             .video-grid {
                 grid-template-columns: 1fr;
             }
+            .image-grid {
+                grid-template-columns: 1fr;
+            }
             .artist-bio {
                 padding: 30px;
             }
@@ -438,10 +509,20 @@
 <!-- HERO SECTION -->
 <div class="hero">
     <h1>🎨 Creative Media Portfolio</h1>
-    <p>Music • Films • Writings • Creative Works</p>
+    <p>Music • Films • Images • Writings</p>
 </div>
 
 <div class="container">
+    <!-- UPLOAD INSTRUCTIONS -->
+    <div class="upload-instructions">
+        <h3>📤 HOW TO ADD YOUR MEDIA</h3>
+        <p>📁 <strong>Music:</strong> Upload MP3, WAV, or FLAC files to <code>/music/</code> folder</p>
+        <p>🎬 <strong>Videos:</strong> Upload MP4, WebM, or OGG files to <code>/videos/</code> folder</p>
+        <p>📷 <strong>Images:</strong> Upload JPG or PNG files to <code>/images/</code> folder</p>
+        <p>📄 <strong>Documents:</strong> Upload PDF files to <code>/docs/</code> folder</p>
+        <p>⚠️ <strong>Note:</strong> Filenames are case-sensitive. Update the HTML after uploading.</p>
+    </div>
+
     <!-- ARTIST BIO SECTION -->
     <div class="artist-bio">
         <h3>🎤 The Artist's Statement</h3>
@@ -450,7 +531,7 @@
     </div>
 
     <!-- ============================================ -->
-    <!-- MUSIC GALLERY SECTION - 5 TRACKS             -->
+    <!-- MUSIC GALLERY SECTION - Multi-format Support -->
     <!-- ============================================ -->
     <div class="section-title"><span>🎵 Music Gallery</span></div>
     <div class="section-subtitle">Listen to my latest tracks and musical works</div>
@@ -462,6 +543,8 @@
             <p>A soulful tribute of gratitude and reverence</p>
             <audio controls preload="metadata">
                 <source src="music/Ekene Maria, Hail Mary.mp3" type="audio/mpeg">
+                <source src="music/Ekene Maria, Hail Mary.wav" type="audio/wav">
+                <source src="music/Ekene Maria, Hail Mary.flac" type="audio/flac">
                 Your browser does not support the audio element.
             </audio>
         </div>
@@ -472,6 +555,8 @@
             <p>An expression of personal freedom and authenticity</p>
             <audio controls preload="metadata">
                 <source src="music/Let me Be.mp3" type="audio/mpeg">
+                <source src="music/Let me Be.wav" type="audio/wav">
+                <source src="music/Let me Be.flac" type="audio/flac">
                 Your browser does not support the audio element.
             </audio>
         </div>
@@ -482,6 +567,8 @@
             <p>A deep reflection on past choices and emotional journey</p>
             <audio controls preload="metadata">
                 <source src="music/Regretful Sigh.mp3" type="audio/mpeg">
+                <source src="music/Regretful Sigh.wav" type="audio/wav">
+                <source src="music/Regretful Sigh.flac" type="audio/flac">
                 Your browser does not support the audio element.
             </audio>
         </div>
@@ -492,6 +579,8 @@
             <p>Anticipation of what lies ahead and new beginnings</p>
             <audio controls preload="metadata">
                 <source src="music/Round D Corner.mp3" type="audio/mpeg">
+                <source src="music/Round D Corner.wav" type="audio/wav">
+                <source src="music/Round D Corner.flac" type="audio/flac">
                 Your browser does not support the audio element.
             </audio>
         </div>
@@ -502,6 +591,8 @@
             <p>Breaking boundaries and challenging societal norms</p>
             <audio controls preload="metadata">
                 <source src="music/Rules.mp3" type="audio/mpeg">
+                <source src="music/Rules.wav" type="audio/wav">
+                <source src="music/Rules.flac" type="audio/flac">
                 Your browser does not support the audio element.
             </audio>
         </div>
@@ -520,8 +611,8 @@
     </div>
 
     <!-- ============================================ -->
-    <!-- VIDEO GALLERY SECTION - THRILLER VIDEO      -->
-    <!-- ============================================ -->
+    <!-- VIDEO GALLERY SECTION - Multi-format Support -->
+    /* ============================================ */
     <div class="section-title"><span>🎬 Film Productions</span></div>
     <div class="section-subtitle">Movie trailers, short films, and behind-the-scenes</div>
 
@@ -532,14 +623,58 @@
             <p>An edge-of-your-seat thriller production | Watch in full HD</p>
             <video controls width="100%" poster="">
                 <source src="videos/official-card-video-thriller.mp4" type="video/mp4">
+                <source src="videos/official-card-video-thriller.webm" type="video/webm">
+                <source src="videos/official-card-video-thriller.ogg" type="video/ogg">
                 <p>Video not loading. File path: videos/official-card-video-thriller.mp4</p>
             </video>
         </div>
+
+        <!-- Add more videos here using the template below -->
+        <!--
+        <div class="video-card">
+            <h3>🎥 Your Video Title</h3>
+            <p>Your video description here</p>
+            <video controls width="100%">
+                <source src="videos/your-video.mp4" type="video/mp4">
+                <source src="videos/your-video.webm" type="video/webm">
+                <source src="videos/your-video.ogg" type="video/ogg">
+            </video>
+        </div>
+        -->
     </div>
 
-    <!-- ============================================ -->
-    <!-- WRITINGS & LYRICS SECTION                   -->
-    <!-- ============================================ -->
+    /* ============================================ */
+    /* IMAGE GALLERY SECTION                         */
+    /* ============================================ */
+    <div class="section-title"><span>📷 Photo Gallery</span></div>
+    <div class="section-subtitle">Behind the scenes, movie stills, and creative shots</div>
+
+    <div class="image-grid">
+        <!-- Image 1 - Replace with your actual image -->
+        <div class="image-card">
+            <img src="images/image1.jpg" alt="Behind the scenes photo">
+            <h3>Behind the Scenes</h3>
+            <p>On-set moments from Infinity Movie Star Production</p>
+        </div>
+
+        <!-- Image 2 - Replace with your actual image -->
+        <div class="image-card">
+            <img src="images/image2.jpg" alt="Movie still photo">
+            <h3>Movie Stills</h3>
+            <p>Captured moments from Official Card production</p>
+        </div>
+
+        <!-- Image 3 - Replace with your actual image -->
+        <div class="image-card">
+            <img src="images/image3.jpg" alt="Creative shoot photo">
+            <h3>Creative Shots</h3>
+            <p>Artistic photography and promotional images</p>
+        </div>
+    </div>
+
+    <!-- ============================================ */
+    /* WRITINGS & LYRICS SECTION                      */
+    /* ============================================ */
     <div class="section-title"><span>📄 Writings & Lyrics</span></div>
     <div class="section-subtitle">Download my creative works, lyrics, and scripts</div>
 
@@ -554,7 +689,7 @@
         <div class="writing-card">
             <div class="writing-icon">🎭</div>
             <h3>Script Samples</h3>
-            <p>Excerpts from original screenplays and film scripts.</p>
+            <p>Excerpts from original screenplays including Official Card and Round Table.</p>
             <a href="docs/script-samples.pdf" class="btn">Download PDF →</a>
         </div>
 

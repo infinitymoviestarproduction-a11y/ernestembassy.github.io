@@ -10,6 +10,7 @@
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
@@ -21,26 +22,101 @@
             align-items: center;
             justify-content: center;
         }
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 1px solid #ffd700;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffd700;
+            letter-spacing: 1px;
+        }
+
+        .logo-sub {
+            font-size: 0.65rem;
+            color: rgba(255, 215, 0, 0.8);
+            display: block;
+            margin-top: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 0;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
         .container {
             max-width: 500px;
-            margin: 0 auto;
+            margin: 80px auto 0;
             background: rgba(0,0,0,0.3);
             padding: 50px;
             border-radius: 20px;
         }
+
         .emoji {
             font-size: 4rem;
             margin-bottom: 20px;
         }
+
         h1 {
             font-size: 2rem;
             margin-bottom: 20px;
         }
+
         p {
             font-size: 1.1rem;
             margin-bottom: 15px;
             line-height: 1.6;
         }
+
         .retry-btn {
             display: inline-block;
             background: #ffd700;
@@ -51,20 +127,77 @@
             font-weight: bold;
             margin-top: 20px;
             transition: all 0.3s;
+            cursor: pointer;
+            border: none;
         }
+
         .retry-btn:hover {
             background: #e6c200;
             transform: translateY(-2px);
         }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .nav-links {
+                justify-content: center;
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+            .nav-links a {
+                font-size: 0.7rem;
+            }
+            .container {
+                margin-top: 120px;
+                padding: 30px;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="emoji">📡</div>
-        <h1>You're Offline</h1>
-        <p>Please check your internet connection and try again.</p>
-        <p>Once connected, refresh the page to access all features.</p>
-        <button onclick="location.reload()" class="retry-btn">🔄 Retry Connection</button>
+
+<!-- PROFESSIONAL NAVIGATION WITH ALL LINKS -->
+<nav>
+    <div class="nav-container">
+        <div class="logo">
+            <span class="logo-icon">📡</span>
+            <div>
+                <span class="logo-text">Ernest Embassy</span>
+                <span class="logo-sub">Travels & Film Production</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="about.html">📖 About</a>
+            <a href="services.html">⚙️ Services</a>
+            <a href="visa.html">✈️ Visa</a>
+            <a href="movie.html">🎬 Movie Studio</a>
+            <a href="portfolio.html">🎨 Portfolio</a>
+            <a href="teaching.html">📚 Teaching</a>
+            <a href="tutoring.html">💻 Tutoring</a>
+            <a href="education.html">🎓 Education</a>
+            <a href="booking.html">📅 Book</a>
+            <a href="contact.html">📞 Contact</a>
+            <a href="admin.html">🔒 Admin</a>
+            <a href="login.html">🔐 Client Login</a>
+            <a href="testimonials.html">⭐ Testimonials</a>
+        </div>
     </div>
+</nav>
+
+<div class="container">
+    <div class="emoji">📡</div>
+    <h1>You're Offline</h1>
+    <p>Please check your internet connection and try again.</p>
+    <p>Once connected, refresh the page to access all features.</p>
+    <button onclick="location.reload()" class="retry-btn">🔄 Retry Connection</button>
+</div>
+
 </body>
 </html>

@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - Ernest Embassy Travels & Infinity Movie Star Production</title>
-    <link rel="stylesheet" href="style.css">
     <style>
         * {
             margin: 0;
@@ -16,15 +15,17 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
-            background-color: #f8f9fa;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
         }
 
+        /* Navigation */
         nav {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             padding: 1rem 0;
             position: sticky;
             top: 0;
             z-index: 1000;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
         }
 
         .nav-container {
@@ -69,7 +70,7 @@
         .nav-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 25px;
+            gap: 20px;
         }
 
         .nav-links a {
@@ -78,23 +79,19 @@
             font-weight: 500;
             transition: color 0.3s;
             padding: 8px 0;
+            font-size: 0.9rem;
         }
 
         .nav-links a:hover {
             color: #ffd700;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
+        /* Hero Section */
         .hero {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             text-align: center;
-            padding: 60px 20px;
+            padding: 80px 20px;
         }
 
         .hero h1 {
@@ -102,19 +99,33 @@
             margin-bottom: 20px;
         }
 
-        section {
-            padding: 50px 20px;
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Section Titles */
         .section-title {
+            text-align: center;
             font-size: 2rem;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
             color: #1a1a2e;
+            margin-top: 60px;
+        }
+
+        .section-title span {
             border-bottom: 3px solid #ffd700;
-            display: inline-block;
             padding-bottom: 10px;
         }
 
+        /* About Content */
         .about-content {
             max-width: 1000px;
             margin: 0 auto;
@@ -124,14 +135,38 @@
             box-shadow: 0 5px 20px rgba(0,0,0,0.05);
         }
 
-        .about-content h3 {
-            margin: 25px 0 15px;
-            color: #667eea;
+        .about-content h2 {
+            color: #1a1a2e;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.6rem;
         }
 
-        .about-content h2 {
-            margin-top: 30px;
-            color: #1a1a2e;
+        .about-content h3 {
+            color: #667eea;
+            margin: 20px 0 10px;
+        }
+
+        .about-content p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .motto-box {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ffd700;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .motto-box p {
+            font-size: 1.3rem;
+            font-style: italic;
+            margin-bottom: 0;
+            color: #ffd700;
         }
 
         .cac-badge {
@@ -143,12 +178,52 @@
             text-align: center;
         }
 
+        .signature {
+            font-family: 'Segoe UI', cursive;
+            font-size: 1.2rem;
+            color: #667eea;
+            margin-top: 20px;
+        }
+
         footer {
             background: #1a1a2e;
             color: white;
             text-align: center;
-            padding: 30px 20px;
-            margin-top: 40px;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+
+        .cac-badge-footer {
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.05);
+            background-color: #20b859;
         }
 
         @media (max-width: 768px) {
@@ -159,13 +234,25 @@
             }
             .nav-links {
                 justify-content: center;
-                gap: 15px;
+                gap: 12px;
+            }
+            .nav-links a {
+                font-size: 0.75rem;
             }
             .hero h1 {
                 font-size: 1.8rem;
             }
             .about-content {
                 padding: 25px;
+            }
+            .motto-box p {
+                font-size: 1rem;
+            }
+            .whatsapp-float {
+                padding: 8px 15px;
+                bottom: 15px;
+                right: 15px;
+                font-size: 12px;
             }
         }
     </style>
@@ -188,15 +275,18 @@
             <a href="services.html">⚙️ Services</a>
             <a href="visa.html">✈️ Visa</a>
             <a href="movie.html">🎬 Movie Studio</a>
+            <a href="portfolio.html">🎨 Portfolio</a>
             <a href="teaching.html">📚 Teaching</a>
             <a href="tutoring.html">💻 Tutoring</a>
             <a href="education.html">🎓 Education</a>
             <a href="booking.html">📅 Book</a>
             <a href="contact.html">📞 Contact</a>
+            <a href="admin.html">🔒 Admin</a>
         </div>
     </div>
 </nav>
 
+<!-- HERO SECTION -->
 <div class="hero">
     <h1>About Ernest Embassy Travels & Infinity Movie Star Production</h1>
     <p>Global Travel • Film Production • Education Consulting • Online Tutoring</p>
@@ -204,19 +294,73 @@
 
 <div class="container">
     <div class="about-content">
+        <!-- COMPANY OVERVIEW -->
         <h2>Who We Are</h2>
         <p>Ernest Embassy Travels and Infinity Movie Star Production operate as one vision led by one person — <strong>Damian Anielozie Okafor</strong>, a teacher, visa consultant, film producer, and online tutor.</p>
         <p>We are not a large agency with anonymous staff. We are a hands-on service provider where you deal directly with the founder.</p>
 
+        <!-- MOTTO -->
+        <div class="motto-box">
+            <p>🎬 "Creating stories that live beyond the screen."</p>
+        </div>
+
+        <!-- FULL BIOGRAPHY -->
+        <h2>Full Biography of Damian Anielozie Okafor</h2>
+        <p><strong>Founder & CEO, Infinity Movie Star Production</strong><br>
+        <strong>Founder, Ernest Embassy Travels</strong></p>
+
+        <p>Infinity Movie Star Production founder and Chief Executive Officer, Damian Anielozie Okafor, is a Nigerian filmmaker, scriptwriter, entrepreneur, educator, and travel consultant with a passion for transforming ideas into impactful stories and life-changing opportunities.</p>
+
+        <p>Born into the family of Late Luke Nkwoemeka Okafor Odowa and Mrs. Okwuchukwu Roseline Okafor Odowa, Damian is the sixth child in his family. From an early age, he demonstrated a deep interest in creativity, leadership, education, and entrepreneurship.</p>
+
+        <p>Damian earned his Nigeria Certificate in Education (NCE) from Enugu State College of Education (Technical) and became a registered member of the Teachers Registration Council of Nigeria. He began his teaching career in 2007 and later worked in several sectors including education, logistics, manufacturing, private security, and hospitality. These experiences shaped his broad understanding of people, business, and storytelling.</p>
+
+        <p>In 2013, he founded Infinity Movie Star Production with the vision of producing compelling films that entertain, educate, and inspire audiences around the world. The company was formally registered in 2017 and has grown into a platform for film production, script development, talent discovery, and practical training for aspiring actors and filmmakers.</p>
+
+        <p>Damian is the writer of ambitious film projects such as <strong>Official Card</strong> and <strong>Round Table</strong>, alongside other titles including Playground, Land of Edomita, Heaven's Gate, Twins Blood, and Girls Go Wild. His storytelling often explores themes of justice, corruption, faith, family, and redemption.</p>
+
+        <p>Beyond filmmaking, Damian is also the founder of <strong>Ernest Embassy Travels</strong>, a travel consultancy that helps students, professionals, and families secure visas and pursue opportunities abroad for study, tourism, and employment.</p>
+
+        <p>A former football and volleyball enthusiast, Damian brings discipline, teamwork, and perseverance to every project. His personal motto, <strong>"Creating stories that live beyond the screen,"</strong> reflects his commitment to producing meaningful content and building ventures that positively impact lives.</p>
+
+        <p>Today, Damian continues to expand his creative and business endeavors, seeking collaborations with investors, artists, and production partners across Nigeria, Zimbabwe, Malawi, and beyond.</p>
+
+        <!-- DIRECTOR'S STATEMENT / CEO MESSAGE -->
+        <h2>🎬 Director's Statement / CEO Message</h2>
+        <h3>A Message from Damian Anielozie Okafor</h3>
+
+        <p>Welcome to Infinity Movie Star Production.</p>
+
+        <p>Storytelling has always been more than entertainment to me—it is a powerful tool for inspiring change, preserving culture, and connecting people across the world. Through film, we can challenge injustice, celebrate humanity, and leave a lasting legacy.</p>
+
+        <p>When I founded Infinity Movie Star Production, my goal was to build a platform where creativity meets purpose. We are dedicated to producing films that resonate deeply with audiences while creating opportunities for emerging actors, writers, and filmmakers to develop their talents.</p>
+
+        <p>Every script we write and every project we undertake is driven by a desire to tell stories that matter. Whether it is Official Card, Round Table, or future productions, our commitment remains the same: to create stories that live beyond the screen.</p>
+
+        <p>I also believe in helping people pursue global opportunities through Ernest Embassy Travels, where we guide clients through study, travel, and work visa processes with integrity and professionalism.</p>
+
+        <p>Thank you for visiting our website and for believing in our vision. We welcome collaborations with sponsors, actors, distributors, and creative partners who share our passion for meaningful storytelling and international impact.</p>
+
+        <p>Together, we can create something extraordinary.</p>
+
+        <div class="signature">
+            <p><strong>Damian Anielozie Okafor</strong><br>
+            Founder & CEO, Infinity Movie Star Production<br>
+            Founder, Ernest Embassy Travels</p>
+        </div>
+
+        <!-- OUR STORY (continued) -->
         <h2>Our Story</h2>
-        <p>Everything started in the classroom in <strong>2014</strong>. As a teacher, Damian saw how many students and families struggled with study abroad applications and visa processes. That led to the birth of Ernest Embassy Travels.</p>
+        <p>Everything started in the classroom in <strong>2007</strong>. As a teacher, Damian saw how many students and families struggled with study abroad applications and visa processes. That led to the birth of Ernest Embassy Travels.</p>
         <p>At the same time, Damian's passion for storytelling and movies grew into <strong>Infinity Movie Star Production</strong>, registered with the CAC on <strong>June 21, 2017 (Certificate No: BN2517233)</strong>, dedicated to producing quality films and training aspiring filmmakers.</p>
 
+        <!-- CAC REGISTRATION -->
         <div class="cac-badge">
             ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
             📍 6 Ezinifite Close, New Haven, Enugu, Enugu State, Nigeria
         </div>
 
+        <!-- OUR DIVISIONS -->
         <h2>Our Divisions</h2>
 
         <h3>✈ Ernest Embassy Travels</h3>
@@ -231,6 +375,7 @@
         <h3>💻 Online Tutoring</h3>
         <p>Damian personally teaches English Language, Digital Technology, Igbo for diaspora students, and coordinates science exam preparation (Chemistry, Physics, Mathematics for WAEC, NECO, JAMB) via WhatsApp platform. Adult literacy also available.</p>
 
+        <!-- PROFESSIONAL MEMBERSHIPS -->
         <h2>Professional Memberships & Affiliations</h2>
         <p>Damian and Infinity Movie Star Production are recognized across multiple international platforms:</p>
         <ul style="margin-left: 30px; margin-top: 15px;">
@@ -243,24 +388,43 @@
             <li>Gigs</li>
         </ul>
 
+        <!-- MISSION & VALUES -->
         <h2>Our Mission</h2>
         <p>To connect people to global opportunities through travel, education, and creative entertainment services — while providing honest, direct access to the founder.</p>
 
         <h2>Our Values</h2>
         <ul style="margin-left: 30px;">
             <li><strong>Honesty</strong> – We never promise what we cannot deliver</li>
-            <li><strong>Expertise</strong> – Every service is backed by real experience since 2014</li>
+            <li><strong>Expertise</strong> – Every service is backed by real experience since 2007</li>
             <li><strong>Personal attention</strong> – You work directly with Damian, no middlemen</li>
         </ul>
     </div>
 </div>
 
+<!-- CAC BADGE FOOTER -->
+<div style="text-align: center; padding: 20px;">
+    <div class="cac-badge-footer">
+        ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
+        📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
+    </div>
+</div>
+
+<!-- FOOTER -->
 <footer>
     <div class="container">
-        <p>&copy; 2026 Damian Anielozie Okafor - Ernest Embassy Travels & Infinity Movie Star Production</p>
-        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria | 📞 +2348032607809 | 📧 ernestembassytravels@gmail.com</p>
+        <p><strong>Ernest Embassy Travels & Infinity Movie Star Production</strong></p>
+        <p>📧 ernestembassytravels@gmail.com | infinitymoviestarproduction@gmail.com | Danoka33@gmail.com</p>
+        <p>📞 +2348032607809 | +2349050205053</p>
+        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
+        <p style="margin-top: 20px;">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
     </div>
 </footer>
+
+<!-- WHATSAPP BUTTON -->
+<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
+    <span>💬</span>
+    <span>Chat with Damian on WhatsApp</span>
+</a>
 
 </body>
 </html>

@@ -270,6 +270,26 @@
             text-decoration: underline;
         }
 
+        /* Map Section */
+        .map-section {
+            margin: 60px 0;
+        }
+
+        .map-container {
+            background: white;
+            border-radius: 20px;
+            padding: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .map-container iframe {
+            border-radius: 15px;
+            width: 100%;
+            height: 350px;
+            border: 0;
+        }
+
         /* Social Media Section */
         .social-section {
             text-align: center;
@@ -372,6 +392,9 @@
                 flex-direction: column;
                 align-items: center;
             }
+            .map-container iframe {
+                height: 250px;
+            }
             .whatsapp-float {
                 padding: 8px 15px;
                 bottom: 15px;
@@ -383,7 +406,7 @@
 </head>
 <body>
 
-<!-- PROFESSIONAL NAVIGATION WITH PORTFOLIO & ADMIN -->
+<!-- PROFESSIONAL NAVIGATION -->
 <nav>
     <div class="nav-container">
         <div class="logo">
@@ -444,6 +467,25 @@
             </a>
             <p class="small-note">Typical response time: Within 1-2 hours</p>
         </div>
+    </div>
+
+    <!-- GOOGLE MAP SECTION -->
+    <div class="map-section">
+        <div class="section-title"><span>📍 Our Location</span></div>
+        <div class="map-container">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3965.6789!2d7.4989!3d6.4463!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1044a3b5d2b5e5b5%3A0x5b5e5b5e5b5e5b5e!2sNew%20Haven%2C%20Enugu!5e0!3m2!1sen!2sng!4v1700000000000!5m2!1sen!2sng" 
+                width="100%" 
+                height="350" 
+                style="border:0; border-radius: 15px;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+        <p style="text-align: center; margin-top: 10px; color: #666;">
+            📍 6 Ezinifite Close, New Haven, Enugu, Enugu State, Nigeria
+        </p>
     </div>
 
     <!-- Contact Information Grid -->

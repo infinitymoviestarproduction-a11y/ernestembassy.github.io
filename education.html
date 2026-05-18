@@ -132,196 +132,252 @@
             font-size: 1.1rem;
         }
 
-        /* Intro Box */
-        .intro-box {
-            background: white;
-            border-radius: 20px;
-            padding: 35px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            margin-bottom: 40px;
-            text-align: center;
-        }
-
-        .intro-box p {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #555;
-        }
-
-        /* Services Grid */
-        .services-grid {
+        /* Education Grid */
+        .education-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
+            grid-template-columns: 1fr 450px;
+            gap: 40px;
+            margin: 60px 0;
         }
 
-        .service-card {
+        .info-card {
             background: white;
+            padding: 35px;
             border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            transition: transform 0.3s;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
         }
 
-        .service-card:hover {
-            transform: translateY(-5px);
+        .lead-text {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #1a1a2e;
+            margin-bottom: 20px;
+            line-height: 1.6;
         }
 
-        .service-header {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: white;
-            padding: 20px 25px;
+        .info-card p {
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 25px;
         }
 
-        .service-icon {
-            font-size: 2rem;
-            margin-bottom: 5px;
-        }
-
-        .service-header h2 {
+        .info-card h3 {
+            color: #1a1a2e;
+            margin: 25px 0 15px;
             font-size: 1.3rem;
         }
 
-        .service-body {
-            padding: 25px;
-        }
-
-        .service-body p {
-            color: #666;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .service-list {
+        .services-list {
             list-style: none;
-            margin: 10px 0;
+            padding: 0;
         }
 
-        .service-list li {
-            padding: 6px 0;
+        .services-list li {
+            padding: 8px 0;
+            color: #555;
+            border-bottom: 1px solid #eee;
             display: flex;
             align-items: center;
             gap: 10px;
-            border-bottom: 1px solid #eee;
-            font-size: 0.9rem;
-            color: #555;
         }
 
-        .service-list li:before {
-            content: "✓";
+        .services-list li:before {
+            content: "✅";
             color: #28a745;
-            font-weight: bold;
         }
 
-        /* Track Record */
-        .track-record {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border-radius: 20px;
-            padding: 40px;
+        .success-stats {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            padding: 20px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .stat {
             text-align: center;
         }
 
-        .record-item h2 {
-            font-size: 2.5rem;
-            color: #ffd700;
+        .stat-number {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #667eea;
         }
 
-        .record-item p {
+        .stat-label {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        /* Email Section */
+        .email-section {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .email-section h2 {
+            color: #1a1a2e;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .email-section p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .email-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            font-size: 0.9rem;
-            margin-top: 10px;
+            padding: 14px 35px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+            margin: 10px 0;
+        }
+
+        .email-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .note-text {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 15px;
         }
 
         /* Why Choose Us */
+        .why-section {
+            background: #f0f0f5;
+            border-radius: 20px;
+            padding: 50px 20px;
+            margin: 60px 0;
+        }
+
         .why-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 40px 0;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .why-card {
             background: white;
+            padding: 30px;
             border-radius: 15px;
-            padding: 25px;
             text-align: center;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
-        }
-
-        .why-card:hover {
-            transform: translateY(-5px);
         }
 
         .why-icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
         }
 
         .why-card h3 {
-            color: #1a1a2e;
             margin-bottom: 10px;
+            color: #1a1a2e;
         }
 
         .why-card p {
             color: #666;
-            font-size: 0.9rem;
         }
 
-        /* Documents List */
-        .documents-list {
+        /* Testimonials */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            font-style: italic;
+        }
+
+        .testimonial-card .author {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #667eea;
+            font-style: normal;
+        }
+
+        /* FAQ */
+        .faq-grid {
+            max-width: 800px;
+            margin: 40px auto;
+        }
+
+        .faq-item {
+            background: white;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 18px 20px;
+            background: #f0f0f0;
+            font-weight: bold;
+            cursor: pointer;
             display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin: 20px 0;
-            justify-content: center;
+            justify-content: space-between;
         }
 
-        .doc-badge {
-            background: #f0f0f5;
-            padding: 8px 16px;
-            border-radius: 30px;
-            font-size: 0.85rem;
-            color: #1a1a2e;
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s;
         }
 
-        /* CTA Section */
+        .faq-item.active .faq-answer {
+            padding: 20px;
+            max-height: 500px;
+        }
+
+        /* CTA */
         .cta-section {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: white;
             text-align: center;
-            padding: 60px 40px;
+            padding: 60px 20px;
             border-radius: 20px;
             margin: 60px 0;
         }
 
         .cta-section h2 {
-            font-size: 2rem;
             margin-bottom: 20px;
         }
 
-        .cta-section p {
-            margin-bottom: 30px;
-            font-size: 1.1rem;
-        }
-
-        .email-btn {
+        .cta-section .btn {
             display: inline-block;
             background: #ffd700;
             color: #1a1a2e;
-            padding: 14px 35px;
-            border-radius: 50px;
+            padding: 12px 30px;
+            border-radius: 30px;
             text-decoration: none;
             font-weight: bold;
-            transition: all 0.3s;
+            margin-top: 20px;
         }
 
-        .email-btn:hover {
+        .cta-section .btn:hover {
             background: #e6c200;
             transform: translateY(-2px);
         }
@@ -367,7 +423,10 @@
             background-color: #20b859;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
+            .education-grid {
+                grid-template-columns: 1fr;
+            }
             .nav-container {
                 flex-direction: column;
                 gap: 15px;
@@ -376,18 +435,17 @@
             .nav-links {
                 justify-content: center;
                 gap: 12px;
+                flex-wrap: wrap;
             }
             .nav-links a {
-                font-size: 0.75rem;
+                font-size: 0.7rem;
             }
             .hero h1 {
                 font-size: 1.8rem;
             }
-            .track-record {
+            .success-stats {
                 flex-direction: column;
-            }
-            .cta-section h2 {
-                font-size: 1.5rem;
+                gap: 15px;
             }
             .whatsapp-float {
                 padding: 8px 15px;
@@ -400,7 +458,7 @@
 </head>
 <body>
 
-<!-- PROFESSIONAL NAVIGATION -->
+<!-- PROFESSIONAL NAVIGATION WITH ALL LINKS -->
 <nav>
     <div class="nav-container">
         <div class="logo">
@@ -423,6 +481,8 @@
             <a href="booking.html">📅 Book</a>
             <a href="contact.html">📞 Contact</a>
             <a href="admin.html">🔒 Admin</a>
+            <a href="login.html">🔐 Client Login</a>
+            <a href="testimonials.html">⭐ Testimonials</a>
         </div>
     </div>
 </nav>
@@ -430,228 +490,144 @@
 <!-- HERO SECTION -->
 <div class="hero">
     <h1>🎓 Education Consulting</h1>
-    <p>Your Trusted Partner for Studying Abroad and Academic Success</p>
+    <p>Your trusted partner for studying abroad and academic success</p>
 </div>
 
 <div class="container">
-    <!-- INTRODUCTION -->
-    <div class="intro-box">
-        <p>We provide expert education consulting services for students who wish to study abroad. Our team helps you choose the right country, institution, and course that align with your academic qualifications, personal interests, and long-term career goals.</p>
-        <p style="margin-top: 20px;">Our mission is to simplify the admission and visa process so you can focus on achieving your educational dreams without unnecessary stress or delays. With more than 10 years of teaching and student advisory experience, we understand what universities and embassies expect from successful applicants.</p>
-    </div>
+    <!-- MAIN EDUCATION CONSULTING SECTION -->
+    <div class="education-grid">
+        <!-- Left Column: Information -->
+        <div class="info-card">
+            <p class="lead-text">
+                We provide expert guidance for students seeking to study abroad, helping them choose the right programs and institutions that match their academic background and career goals.
+            </p>
+            <p>
+                Our goal is to simplify the admission and visa process for students and ensure they achieve their academic dreams without unnecessary stress or delays. With over 10 years of teaching experience and successful student placements, we understand exactly what schools and embassies are looking for.
+            </p>
 
-    <!-- ============================================ -->
-    <!-- EDUCATION SERVICES GRID                      -->
-    <!-- ============================================ -->
-    <div class="section-title"><span>📚 Our Education Services</span></div>
-    <div class="section-subtitle">Comprehensive support from application to arrival</div>
+            <h3>📚 Our Education Services Include:</h3>
+            <ul class="services-list">
+                <li>School Selection Guidance (UK, Canada, USA, Europe, Australia)</li>
+                <li>Admission Processing & Application Support</li>
+                <li>Student Visa Application Assistance</li>
+                <li>Career Counseling & Course Selection</li>
+                <li>Scholarship Guidance & Recommendations</li>
+                <li>Pre-departure Orientation & Travel Advice</li>
+                <li>Document Preparation & Review</li>
+                <li>Interview Coaching for Embassy</li>
+            </ul>
 
-    <div class="services-grid">
-        <!-- Service 1: School Selection Guidance -->
-        <div class="service-card">
-            <div class="service-header">
-                <div class="service-icon">🌍</div>
-                <h2>School Selection Guidance</h2>
-            </div>
-            <div class="service-body">
-                <p>We help students identify the most suitable universities, colleges, and programs in countries such as United Kingdom, Canada, United States, Australia, and institutions across Europe.</p>
-                <ul class="service-list">
-                    <li>Recommend schools that match your grades and budget</li>
-                    <li>Compare tuition fees and living costs</li>
-                    <li>Identify schools with high acceptance rates</li>
-                    <li>Suggest programs aligned with your career goals</li>
-                    <li>Advise on study destinations and opportunities</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Service 2: Admission Processing -->
-        <div class="service-card">
-            <div class="service-header">
-                <div class="service-icon">📝</div>
-                <h2>Admission Processing & Application Support</h2>
-            </div>
-            <div class="service-body">
-                <p>We manage the entire application process to improve your chances of receiving admission offers.</p>
-                <ul class="service-list">
-                    <li>Complete university applications</li>
-                    <li>Prepare and upload documents</li>
-                    <li>Draft Statements of Purpose (SOPs)</li>
-                    <li>Prepare CVs and résumés</li>
-                    <li>Follow up with admissions offices</li>
-                    <li>Track application progress</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Service 3: Student Visa Assistance -->
-        <div class="service-card">
-            <div class="service-header">
-                <div class="service-icon">✈️</div>
-                <h2>Student Visa Application Assistance</h2>
-            </div>
-            <div class="service-body">
-                <p>We provide step-by-step guidance to help students secure their study visas.</p>
-                <ul class="service-list">
-                    <li>Assess visa eligibility</li>
-                    <li>Complete visa application forms</li>
-                    <li>Prepare supporting documents</li>
-                    <li>Review proof of funds</li>
-                    <li>Book biometrics and embassy appointments</li>
-                    <li>Prepare for interviews</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Service 4: Career Counseling -->
-        <div class="service-card">
-            <div class="service-header">
-                <div class="service-icon">🎯</div>
-                <h2>Career Counseling & Course Selection</h2>
-            </div>
-            <div class="service-body">
-                <p>We help students choose academic programs that lead to meaningful career opportunities.</p>
-                <ul class="service-list">
-                    <li>Assess your strengths and interests</li>
-                    <li>Recommend suitable courses</li>
-                    <li>Explain job prospects</li>
-                    <li>Align your education with long-term goals</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Service 5: Scholarship Guidance -->
-        <div class="service-card">
-            <div class="service-header">
-                <div class="service-icon">💰</div>
-                <h2>Scholarship Guidance & Recommendations</h2>
-            </div>
-            <div class="service-body">
-                <p>We help students discover scholarships and funding opportunities.</p>
-                <ul class="service-list">
-                    <li>Identify merit- and need-based scholarships</li>
-                    <li>Advise on scholarship applications</li>
-                    <li>Review scholarship essays and supporting documents</li>
-                    <li>Recommend affordable schools with funding opportunities</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Service 6: Pre-departure Orientation -->
-        <div class="service-card">
-            <div class="service-header">
-                <div class="service-icon">🛫</div>
-                <h2>Pre-departure Orientation & Travel Advice</h2>
-            </div>
-            <div class="service-body">
-                <p>We prepare students for a smooth transition to their destination country.</p>
-                <ul class="service-list">
-                    <li>Explain airport and immigration procedures</li>
-                    <li>Provide accommodation guidance</li>
-                    <li>Share banking and transportation tips</li>
-                    <li>Offer cultural and safety advice</li>
-                    <li>Provide packing and document checklists</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Service 7: Document Preparation -->
-        <div class="service-card">
-            <div class="service-header">
-                <div class="service-icon">📄</div>
-                <h2>Document Preparation & Review</h2>
-            </div>
-            <div class="service-body">
-                <p>We professionally prepare and review all required documents.</p>
-                <p><strong>Documents Covered:</strong></p>
-                <div class="documents-list">
-                    <span class="doc-badge">Academic transcripts</span>
-                    <span class="doc-badge">International passport</span>
-                    <span class="doc-badge">Bank statements</span>
-                    <span class="doc-badge">Sponsor letters</span>
-                    <span class="doc-badge">SOPs</span>
-                    <span class="doc-badge">Recommendation letters</span>
-                    <span class="doc-badge">CVs and résumés</span>
+            <div class="success-stats">
+                <div class="stat">
+                    <span class="stat-number">100+</span>
+                    <span class="stat-label">Students Advised</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">95%</span>
+                    <span class="stat-label">Visa Success Rate</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">10+</span>
+                    <span class="stat-label">Years Experience</span>
                 </div>
             </div>
         </div>
 
-        <!-- Service 8: Interview Coaching -->
-        <div class="service-card">
-            <div class="service-header">
-                <div class="service-icon">🎤</div>
-                <h2>Interview Coaching for Embassy</h2>
+        <!-- Right Column: Email Button -->
+        <div class="email-section">
+            <h2>📝 Free Consultation Request</h2>
+            <p>Click the button below to send us an email about your study abroad plans.</p>
+            
+            <a href="mailto:ernestembassytravels@gmail.com?subject=Education%20Consultation%20Request&body=Hello%20Damian,%0A%0AI%20would%20like%20to%20inquire%20about%20studying%20abroad.%0A%0AMy%20Name:%20__________%0AMy%20Phone:%20__________%0ACurrent%20Education%20Level:%20(High%20School/Bachelor's/Master's/PhD)%0ACountry%20Interested%20In:%20__________%0A%0AMessage:%0A__________" 
+               class="email-btn">
+                📨 Request Consultation via Email
+            </a>
+            
+            <p class="note-text">
+                🔒 Your email client will open. Fill in your details and send.<br>
+                We will respond within 24 hours.
+            </p>
+        </div>
+    </div>
+
+    <!-- WHY CHOOSE US SECTION -->
+    <div class="why-section">
+        <div class="section-title"><span>Why Choose Us</span></div>
+        <div class="why-grid">
+            <div class="why-card">
+                <div class="why-icon">👨‍🏫</div>
+                <h3>Direct Access</h3>
+                <p>You deal directly with Damian Okafor — a teacher with 10+ years experience. No middlemen.</p>
             </div>
-            <div class="service-body">
-                <p>We conduct mock interview sessions to help students answer confidently and accurately.</p>
-                <ul class="service-list">
-                    <li>Practice common interview questions</li>
-                    <li>Improve communication skills</li>
-                    <li>Build confidence</li>
-                    <li>Ensure clear and consistent answers</li>
-                </ul>
+            <div class="why-card">
+                <div class="why-icon">✅</div>
+                <h3>Proven Track Record</h3>
+                <p>95% visa success rate and over 100 students successfully placed abroad.</p>
+            </div>
+            <div class="why-card">
+                <div class="why-icon">🌍</div>
+                <h3>Global Network</h3>
+                <p>Partnerships with institutions in Canada, UK, USA, Australia, and Europe.</p>
+            </div>
+            <div class="why-card">
+                <div class="why-icon">📚</div>
+                <h3>End-to-End Support</h3>
+                <p>From school selection to pre-departure orientation — we guide you every step.</p>
             </div>
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- TRACK RECORD                                -->
-    <!-- ============================================ -->
-    <div class="section-title"><span>📊 Our Track Record</span></div>
-    <div class="track-record">
-        <div class="record-item">
-            <h2>100+</h2>
-            <p>Students Advised</p>
-        </div>
-        <div class="record-item">
-            <h2>95%</h2>
-            <p>Visa Success Rate</p>
-        </div>
-        <div class="record-item">
-            <h2>10+</h2>
-            <p>Years Experience</p>
-        </div>
-    </div>
-
-    <!-- ============================================ -->
-    <!-- WHY CHOOSE US                               -->
-    <!-- ============================================ -->
-    <div class="section-title"><span>🌟 Why Choose Our Education Consulting Services?</span></div>
-    <div class="why-grid">
-        <div class="why-card">
-            <div class="why-icon">👤</div>
-            <h3>Personalized Support</h3>
-            <p>One-on-one guidance tailored to your needs</p>
-        </div>
-        <div class="why-card">
-            <div class="why-icon">💯</div>
-            <h3>Honest Guidance</h3>
-            <p>Professional and transparent advice</p>
-        </div>
-        <div class="why-card">
-            <div class="why-icon">📋</div>
-            <h3>Careful Document Prep</h3>
-            <p>Meticulous attention to every detail</p>
-        </div>
-        <div class="why-card">
-            <div class="why-icon">💰</div>
-            <h3>Affordable Packages</h3>
-            <p>Competitive consulting fees</p>
-        </div>
-        <div class="why-card">
-            <div class="why-icon">🔄</div>
-            <h3>End-to-End Support</h3>
-            <p>From admission to departure</p>
+    <!-- TESTIMONIALS SECTION -->
+    <div>
+        <div class="section-title"><span>Success Stories</span></div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                "Damian helped me get my student visa to Canada after two previous rejections elsewhere. His attention to detail is unmatched. I am now studying Computer Science at University of Toronto."
+                <div class="author">— Michael O., Lagos → Canada</div>
+            </div>
+            <div class="testimonial-card">
+                "The guidance I received for my UK student visa was exceptional. Every document was reviewed carefully. I got my visa approval in just 3 weeks!"
+                <div class="author">— Sarah A., Abuja → UK</div>
+            </div>
+            <div class="testimonial-card">
+                "Not only did Damian help me with my admission, but he also guided me on scholarship opportunities. I received a partial scholarship to study in Australia."
+                <div class="author">— John E., Enugu → Australia</div>
+            </div>
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- CALL TO ACTION                              -->
-    <!-- ============================================ -->
+    <!-- FAQ SECTION -->
+    <div>
+        <div class="section-title"><span>Frequently Asked Questions</span></div>
+        <div class="faq-grid">
+            <div class="faq-item" onclick="this.classList.toggle('active')">
+                <div class="faq-question">❓ How long does the study visa process take? <span>▼</span></div>
+                <div class="faq-answer">Typically 4-12 weeks depending on the country and embassy. We will give you a realistic timeline during your consultation.</div>
+            </div>
+            <div class="faq-item" onclick="this.classList.toggle('active')">
+                <div class="faq-question">❓ Do you guarantee visa approval? <span>▼</span></div>
+                <div class="faq-answer">No consultant can guarantee visa approval. However, we maximize your chances through thorough document preparation and interview coaching. Our success rate is 95%.</div>
+            </div>
+            <div class="faq-item" onclick="this.classList.toggle('active')">
+                <div class="faq-question">❓ What countries do you help with? <span>▼</span></div>
+                <div class="faq-answer">We specialize in Canada, United Kingdom, United States, Australia, Germany, and other European countries.</div>
+            </div>
+            <div class="faq-item" onclick="this.classList.toggle('active')">
+                <div class="faq-question">❓ Do you help with scholarships? <span>▼</span></div>
+                <div class="faq-answer">Yes, we provide guidance on available scholarships and help you prepare strong applications.</div>
+            </div>
+            <div class="faq-item" onclick="this.classList.toggle('active')">
+                <div class="faq-question">❓ What are your fees? <span>▼</span></div>
+                <div class="faq-answer">Our fees are affordable and depend on the services you need. Contact us for a free consultation and quote.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CALL TO ACTION SECTION -->
     <div class="cta-section">
-        <h2>📞 Start Your Study Abroad Journey Today</h2>
-        <p>Let us help you gain admission and secure your student visa with confidence.</p>
-        <a href="mailto:ernestembassytravels@gmail.com?subject=Education%20Consulting%20Request&body=Hello%20Damian,%0A%0AI%20am%20interested%20in%20studying%20abroad.%0A%0AMy%20Name:%20__________%0AMy%20Phone:%20__________%0ACurrent%20Education%20Level:%20__________%0ACountry%20Interested%20In:%20__________%0A%0AMessage:%0A__________" class="email-btn">📧 Request a Free Consultation →</a>
+        <h2>Ready to Start Your Study Abroad Journey?</h2>
+        <p>Book a consultation with Damian today and take the first step toward your international education.</p>
+        <a href="booking.html" class="btn">📅 Book a Consultation →</a>
     </div>
 </div>
 
@@ -659,7 +635,7 @@
 <div style="text-align: center; padding: 20px;">
     <div class="cac-badge">
         ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
-        📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
+        📍 6 Ezinifite Close, New Haven, Enugu, Enugu State, Nigeria
     </div>
 </div>
 
@@ -679,6 +655,17 @@
     <span>💬</span>
     <span>Chat with Damian on WhatsApp</span>
 </a>
+
+<!-- FAQ Toggle Script -->
+<script>
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        question.addEventListener('click', function() {
+            item.classList.toggle('active');
+        });
+    });
+</script>
 
 </body>
 </html>

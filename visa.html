@@ -132,119 +132,100 @@
             font-size: 1.1rem;
         }
 
-        /* Intro Box */
-        .intro-box {
+        /* Visa Layout */
+        .visa-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 60px 0;
+        }
+
+        /* Info Section */
+        .info-section {
             background: white;
             border-radius: 20px;
             padding: 35px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            margin-bottom: 40px;
-            text-align: center;
-        }
-
-        .intro-box p {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #555;
-        }
-
-        /* Services Grid */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
-        }
-
-        .service-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            transition: transform 0.3s;
         }
 
-        .service-card:hover {
-            transform: translateY(-5px);
+        .info-section h2 {
+            color: #1a1a2e;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffd700;
+            padding-left: 15px;
         }
 
-        .service-header {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: white;
-            padding: 20px 25px;
-        }
-
-        .service-icon {
-            font-size: 2rem;
-            margin-bottom: 5px;
-        }
-
-        .service-header h2 {
+        .info-section h3 {
+            color: #1a1a2e;
             font-size: 1.3rem;
+            margin: 25px 0 15px;
         }
 
-        .service-header p {
-            font-size: 0.85rem;
-            opacity: 0.9;
-            margin-top: 5px;
+        .info-section p {
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 20px;
         }
 
-        .service-body {
-            padding: 25px;
-        }
-
-        .service-body p {
-            color: #666;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .service-list {
+        .services-list {
             list-style: none;
-            margin: 10px 0;
+            margin: 20px 0;
         }
 
-        .service-list li {
-            padding: 6px 0;
+        .services-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
             display: flex;
             align-items: center;
             gap: 10px;
-            border-bottom: 1px solid #eee;
-            font-size: 0.9rem;
-            color: #555;
         }
 
-        .service-list li:before {
-            content: "✓";
+        .services-list li:before {
+            content: "✅";
             color: #28a745;
-            font-weight: bold;
         }
 
-        .ideal-for {
-            background: #f8f9fa;
-            padding: 12px;
-            border-radius: 10px;
-            margin-top: 15px;
-        }
-
-        .ideal-for p {
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #1a1a2e;
-        }
-
-        /* Benefits Box */
-        .benefits-box {
-            background: white;
-            border-radius: 15px;
+        .success-badge {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ffd700;
             padding: 20px;
-            margin: 15px 0;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 25px;
         }
 
-        .benefits-box p {
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #1a1a2e;
+        .success-badge span {
+            font-size: 2rem;
+            display: block;
+        }
+
+        .success-badge p {
+            margin-top: 10px;
+            color: #ffd700;
+        }
+
+        /* Track Record */
+        .track-record {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .record-item h2 {
+            font-size: 2.5rem;
+            color: #ffd700;
+        }
+
+        .record-item p {
+            color: white;
+            font-size: 0.9rem;
+            margin-top: 10px;
         }
 
         /* Why Choose Us */
@@ -283,63 +264,50 @@
             font-size: 0.85rem;
         }
 
-        /* Track Record */
-        .track-record {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        /* Email Section */
+        .email-section {
+            background: white;
             border-radius: 20px;
-            padding: 40px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             text-align: center;
         }
 
-        .record-item h2 {
-            font-size: 2.5rem;
-            color: #ffd700;
+        .email-section h2 {
+            color: #1a1a2e;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
         }
 
-        .record-item p {
-            color: white;
-            font-size: 0.9rem;
-            margin-top: 10px;
-        }
-
-        /* CTA Section */
-        .cta-section {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: white;
-            text-align: center;
-            padding: 60px 40px;
-            border-radius: 20px;
-            margin: 60px 0;
-        }
-
-        .cta-section h2 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-        }
-
-        .cta-section p {
-            margin-bottom: 30px;
-            font-size: 1.1rem;
+        .email-section p {
+            color: #666;
+            margin-bottom: 25px;
         }
 
         .email-btn {
             display: inline-block;
-            background: #ffd700;
-            color: #1a1a2e;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             padding: 14px 35px;
+            border: none;
             border-radius: 50px;
-            text-decoration: none;
+            font-size: 16px;
             font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
             transition: all 0.3s;
+            margin: 10px 0;
         }
 
         .email-btn:hover {
-            background: #e6c200;
             transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .note-text {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 15px;
         }
 
         footer {
@@ -383,7 +351,10 @@
             background-color: #20b859;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
+            .visa-layout {
+                grid-template-columns: 1fr;
+            }
             .nav-container {
                 flex-direction: column;
                 gap: 15px;
@@ -392,18 +363,16 @@
             .nav-links {
                 justify-content: center;
                 gap: 12px;
+                flex-wrap: wrap;
             }
             .nav-links a {
-                font-size: 0.75rem;
+                font-size: 0.7rem;
             }
             .hero h1 {
                 font-size: 1.8rem;
             }
             .track-record {
                 flex-direction: column;
-            }
-            .cta-section h2 {
-                font-size: 1.5rem;
             }
             .whatsapp-float {
                 padding: 8px 15px;
@@ -416,7 +385,7 @@
 </head>
 <body>
 
-<!-- PROFESSIONAL NAVIGATION -->
+<!-- PROFESSIONAL NAVIGATION WITH ALL LINKS -->
 <nav>
     <div class="nav-container">
         <div class="logo">
@@ -439,6 +408,8 @@
             <a href="booking.html">📅 Book</a>
             <a href="contact.html">📞 Contact</a>
             <a href="admin.html">🔒 Admin</a>
+            <a href="login.html">🔐 Client Login</a>
+            <a href="testimonials.html">⭐ Testimonials</a>
         </div>
     </div>
 </nav>
@@ -451,172 +422,135 @@
 
 <div class="container">
     <!-- INTRODUCTION -->
-    <div class="intro-box">
-        <p>We provide expert guidance to help students, tourists, workers, and families prepare strong visa applications and travel confidently.</p>
+    <div class="info-section" style="margin-bottom: 0;">
+        <p style="font-size: 1.1rem; line-height: 1.8;">We provide expert guidance to help students, tourists, workers, and families prepare strong visa applications and travel confidently.</p>
     </div>
 
-    <!-- ============================================ -->
-    <!-- VISA SERVICES GRID                           -->
-    <!-- ============================================ -->
-    <div class="section-title"><span>🛂 Our Visa Services</span></div>
-    <div class="section-subtitle">Comprehensive support for all your travel and immigration needs</div>
-
-    <div class="services-grid">
-        <!-- Service 1: Student Visa Assistance -->
-        <div class="service-card">
-            <div class="service-header">
-                <div class="service-icon">🎓</div>
-                <h2>Student Visa Assistance</h2>
-                <p>Comprehensive support for individuals who wish to study abroad</p>
-            </div>
-            <div class="service-body">
-                <ul class="service-list">
-                    <li>Advice on choosing the right country, school, and course</li>
-                    <li>Assistance with admission applications to colleges and universities</li>
-                    <li>Guidance on preparing required documents</li>
-                    <li>Help with tuition payment procedures</li>
-                    <li>Visa application form completion</li>
-                    <li>Statement of purpose and study plan review</li>
-                    <li>Financial document preparation guidance</li>
-                    <li>Embassy appointment scheduling</li>
-                    <li>Interview preparation</li>
-                    <li>Pre-departure counseling</li>
-                </ul>
-                <div class="ideal-for">
-                    <p>📌 Ideal For:</p>
-                    <p>Undergraduate and postgraduate students | Language school applicants | Scholarship recipients | Exchange program participants</p>
-                </div>
+    <!-- VISA SERVICES GRID -->
+    <div class="visa-layout">
+        <!-- Left Column: Student Visa -->
+        <div class="info-section">
+            <h2>🎓 Student Visa Assistance</h2>
+            <p>Comprehensive support for individuals who wish to study abroad</p>
+            <ul class="services-list">
+                <li>Advice on choosing the right country, school, and course</li>
+                <li>Assistance with admission applications to colleges and universities</li>
+                <li>Guidance on preparing required documents</li>
+                <li>Help with tuition payment procedures</li>
+                <li>Visa application form completion</li>
+                <li>Statement of purpose and study plan review</li>
+                <li>Financial document preparation guidance</li>
+                <li>Embassy appointment scheduling</li>
+                <li>Interview preparation</li>
+                <li>Pre-departure counseling</li>
+            </ul>
+            <div class="ideal-for" style="background: #f8f9fa; padding: 12px; border-radius: 10px; margin-top: 15px;">
+                <p style="font-weight: bold; color: #1a1a2e;">📌 Ideal For:</p>
+                <p>Undergraduate and postgraduate students | Language school applicants | Scholarship recipients | Exchange program participants</p>
             </div>
         </div>
 
-        <!-- Service 2: Tourist & Visit Visa Processing -->
-        <div class="service-card">
-            <div class="service-header">
-                <div class="service-icon">🌍</div>
-                <h2>Tourist & Visit Visa Processing</h2>
-                <p>Support for holidays, family visits, business meetings, and events</p>
-            </div>
-            <div class="service-body">
-                <ul class="service-list">
-                    <li>Assessment of travel purpose and visa eligibility</li>
-                    <li>Completion of visa application forms</li>
-                    <li>Travel itinerary guidance</li>
-                    <li>Hotel reservation and flight itinerary assistance</li>
-                    <li>Invitation letter review</li>
-                    <li>Financial document guidance</li>
-                    <li>Travel insurance advice</li>
-                    <li>Appointment booking</li>
-                    <li>Submission guidance</li>
-                </ul>
-                <div class="ideal-for">
-                    <p>📌 Ideal For:</p>
-                    <p>Vacation travelers | Family and friend visits | Business visitors | Event attendees</p>
-                </div>
+        <!-- Right Column: Tourist Visa -->
+        <div class="info-section">
+            <h2>🌍 Tourist & Visit Visa Processing</h2>
+            <p>Support for holidays, family visits, business meetings, and events</p>
+            <ul class="services-list">
+                <li>Assessment of travel purpose and visa eligibility</li>
+                <li>Completion of visa application forms</li>
+                <li>Travel itinerary guidance</li>
+                <li>Hotel reservation and flight itinerary assistance</li>
+                <li>Invitation letter review</li>
+                <li>Financial document guidance</li>
+                <li>Travel insurance advice</li>
+                <li>Appointment booking</li>
+                <li>Submission guidance</li>
+            </ul>
+            <div class="ideal-for" style="background: #f8f9fa; padding: 12px; border-radius: 10px; margin-top: 15px;">
+                <p style="font-weight: bold; color: #1a1a2e;">📌 Ideal For:</p>
+                <p>Vacation travelers | Family and friend visits | Business visitors | Event attendees</p>
             </div>
         </div>
 
-        <!-- Service 3: Work Permit Guidance -->
-        <div class="service-card">
-            <div class="service-header">
-                <div class="service-icon">💼</div>
-                <h2>Work Permit Guidance</h2>
-                <p>Professional advice for employment opportunities abroad</p>
-            </div>
-            <div class="service-body">
-                <ul class="service-list">
-                    <li>Information on countries with work opportunities</li>
-                    <li>Guidance on job offer requirements</li>
-                    <li>Employer sponsorship advice</li>
-                    <li>Work permit and visa application support</li>
-                    <li>Resume/CV review</li>
-                    <li>Cover letter assistance</li>
-                    <li>Document preparation guidance</li>
-                    <li>Relocation advice</li>
-                </ul>
-                <div class="ideal-for">
-                    <p>📌 Ideal For:</p>
-                    <p>Skilled workers | Healthcare professionals | Engineers and technicians | Hospitality workers | Seasonal workers</p>
-                </div>
+        <!-- Left Column: Work Permit -->
+        <div class="info-section">
+            <h2>💼 Work Permit Guidance</h2>
+            <p>Professional advice for employment opportunities abroad</p>
+            <ul class="services-list">
+                <li>Information on countries with work opportunities</li>
+                <li>Guidance on job offer requirements</li>
+                <li>Employer sponsorship advice</li>
+                <li>Work permit and visa application support</li>
+                <li>Resume/CV review</li>
+                <li>Cover letter assistance</li>
+                <li>Document preparation guidance</li>
+                <li>Relocation advice</li>
+            </ul>
+            <div class="ideal-for" style="background: #f8f9fa; padding: 12px; border-radius: 10px; margin-top: 15px;">
+                <p style="font-weight: bold; color: #1a1a2e;">📌 Ideal For:</p>
+                <p>Skilled workers | Healthcare professionals | Engineers and technicians | Hospitality workers | Seasonal workers</p>
             </div>
         </div>
 
-        <!-- Service 4: Document Preparation & Review -->
-        <div class="service-card">
-            <div class="service-header">
-                <div class="service-icon">📄</div>
-                <h2>Document Preparation & Review</h2>
-                <p>Detailed review and organization of all required documents</p>
-            </div>
-            <div class="service-body">
-                <ul class="service-list">
-                    <li>Passport and identity document checks</li>
-                    <li>Bank statement review</li>
-                    <li>Employment letter verification</li>
-                    <li>Proof of accommodation review</li>
-                    <li>Invitation letter checks</li>
-                    <li>Birth and marriage certificate guidance</li>
-                    <li>Translation and notarization advice</li>
-                    <li>Final application checklist</li>
-                </ul>
-                <div class="benefits-box">
-                    <p>✅ Benefits:</p>
-                    <p>Reduces errors and omissions | Improves application quality | Increases confidence before submission</p>
-                </div>
+        <!-- Right Column: Document Preparation -->
+        <div class="info-section">
+            <h2>📄 Document Preparation & Review</h2>
+            <p>Detailed review and organization of all required documents</p>
+            <ul class="services-list">
+                <li>Passport and identity document checks</li>
+                <li>Bank statement review</li>
+                <li>Employment letter verification</li>
+                <li>Proof of accommodation review</li>
+                <li>Invitation letter checks</li>
+                <li>Birth and marriage certificate guidance</li>
+                <li>Translation and notarization advice</li>
+                <li>Final application checklist</li>
+            </ul>
+            <div class="benefits-box" style="background: #f8f9fa; padding: 12px; border-radius: 10px; margin-top: 15px;">
+                <p style="font-weight: bold; color: #1a1a2e;">✅ Benefits:</p>
+                <p>Reduces errors and omissions | Improves application quality | Increases confidence before submission</p>
             </div>
         </div>
 
-        <!-- Service 5: Embassy Interview Coaching -->
-        <div class="service-card">
-            <div class="service-header">
-                <div class="service-icon">🎤</div>
-                <h2>Embassy Interview Coaching</h2>
-                <p>Personalized training to help you answer visa interview questions confidently</p>
-            </div>
-            <div class="service-body">
-                <ul class="service-list">
-                    <li>Common interview questions and best practices</li>
-                    <li>Mock interview sessions</li>
-                    <li>Confidence-building techniques</li>
-                    <li>Guidance on presenting your study, travel, or work plans clearly</li>
-                    <li>Tips on appropriate dressing and behavior</li>
-                    <li>Review of your supporting documents</li>
-                </ul>
-                <div class="ideal-for">
-                    <p>📌 Typical Questions Covered:</p>
-                    <p>Why do you want to travel? | Who is sponsoring your trip? | What are your future plans? | Why this country and not another?</p>
-                </div>
+        <!-- Left Column: Interview Coaching -->
+        <div class="info-section">
+            <h2>🎤 Embassy Interview Coaching</h2>
+            <p>Personalized training to help you answer visa interview questions confidently</p>
+            <ul class="services-list">
+                <li>Common interview questions and best practices</li>
+                <li>Mock interview sessions</li>
+                <li>Confidence-building techniques</li>
+                <li>Guidance on presenting your study, travel, or work plans clearly</li>
+                <li>Tips on appropriate dressing and behavior</li>
+                <li>Review of your supporting documents</li>
+            </ul>
+            <div class="ideal-for" style="background: #f8f9fa; padding: 12px; border-radius: 10px; margin-top: 15px;">
+                <p style="font-weight: bold; color: #1a1a2e;">📌 Typical Questions Covered:</p>
+                <p>Why do you want to travel? | Who is sponsoring your trip? | What are your future plans? | Why this country and not another?</p>
             </div>
         </div>
 
-        <!-- Service 6: Pre-Departure Orientation -->
-        <div class="service-card">
-            <div class="service-header">
-                <div class="service-icon">🧳</div>
-                <h2>Pre-Departure Orientation</h2>
-                <p>Essential preparation to help you settle smoothly in your destination country</p>
-            </div>
-            <div class="service-body">
-                <ul class="service-list">
-                    <li>Travel checklist and packing advice</li>
-                    <li>Airport and immigration procedures</li>
-                    <li>Accommodation planning</li>
-                    <li>Currency and budgeting tips</li>
-                    <li>Local laws and cultural guidance</li>
-                    <li>Transportation information</li>
-                    <li>Safety and emergency contacts</li>
-                    <li>Student or worker integration tips</li>
-                </ul>
-                <div class="benefits-box">
-                    <p>✅ Benefits:</p>
-                    <p>Reduces anxiety | Prevents costly mistakes | Helps you adapt quickly</p>
-                </div>
+        <!-- Right Column: Pre-Departure -->
+        <div class="info-section">
+            <h2>🧳 Pre-Departure Orientation</h2>
+            <p>Essential preparation to help you settle smoothly in your destination country</p>
+            <ul class="services-list">
+                <li>Travel checklist and packing advice</li>
+                <li>Airport and immigration procedures</li>
+                <li>Accommodation planning</li>
+                <li>Currency and budgeting tips</li>
+                <li>Local laws and cultural guidance</li>
+                <li>Transportation information</li>
+                <li>Safety and emergency contacts</li>
+                <li>Student or worker integration tips</li>
+            </ul>
+            <div class="benefits-box" style="background: #f8f9fa; padding: 12px; border-radius: 10px; margin-top: 15px;">
+                <p style="font-weight: bold; color: #1a1a2e;">✅ Benefits:</p>
+                <p>Reduces anxiety | Prevents costly mistakes | Helps you adapt quickly</p>
             </div>
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- TRACK RECORD                                 -->
-    <!-- ============================================ -->
+    <!-- TRACK RECORD -->
     <div class="track-record">
         <div class="record-item">
             <h2>100+</h2>
@@ -632,9 +566,7 @@
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- WHY CHOOSE US                                -->
-    <!-- ============================================ -->
+    <!-- WHY CHOOSE US -->
     <div class="section-title"><span>🌟 Why Choose Ernest Embassy Travels?</span></div>
     <div class="why-grid">
         <div class="why-card">
@@ -664,13 +596,20 @@
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- CALL TO ACTION                               -->
-    <!-- ============================================ -->
-    <div class="cta-section">
+    <!-- CALL TO ACTION -->
+    <div class="email-section">
         <h2>📞 Ready to Start Your Journey?</h2>
         <p>Whether you are planning to study, work, visit loved ones, or explore new destinations, we are here to guide you every step of the way.</p>
-        <a href="mailto:ernestembassytravels@gmail.com?subject=Visa%20Consultation%20Request&body=Hello%20Damian,%0A%0AI%20would%20like%20to%20inquire%20about%20visa%20processing.%0A%0AMy%20Name:%20__________%0AMy%20Phone:%20__________%0AType%20of%20Visa%20Needed:%20(Student/Tourist/Work)%0ADestination%20Country:%20__________%0A%0AMessage:%0A__________" class="email-btn">📧 Request a Consultation →</a>
+        
+        <a href="mailto:ernestembassytravels@gmail.com?subject=Visa%20Consultation%20Request&body=Hello%20Damian,%0A%0AI%20would%20like%20to%20inquire%20about%20visa%20processing.%0A%0AMy%20Name:%20__________%0AMy%20Phone:%20__________%0AType%20of%20Visa%20Needed:%20(Student/Tourist/Work)%0ADestination%20Country:%20__________%0A%0AMessage:%0A__________" 
+           class="email-btn">
+            📧 Request a Consultation via Email
+        </a>
+        
+        <p class="note-text">
+            🔒 Your email client will open. Fill in your details and send.<br>
+            We will respond within 24 hours.
+        </p>
     </div>
 </div>
 

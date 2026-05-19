@@ -10,19 +10,16 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             background: #0d0d0d;
             color: white;
             font-family: 'Segoe UI', Arial, sans-serif;
         }
-
         nav {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             padding: 1rem 0;
             border-bottom: 1px solid #ffd700;
         }
-
         .nav-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -32,14 +29,12 @@
             align-items: center;
             flex-wrap: wrap;
         }
-
         .logo {
             display: flex;
             align-items: center;
             gap: 12px;
             text-decoration: none;
         }
-
         .logo-icon {
             font-size: 2rem;
             background: linear-gradient(135deg, #ffd700, #ffaa00);
@@ -47,28 +42,24 @@
             background-clip: text;
             color: transparent;
         }
-
         .logo-text {
             font-size: 1.3rem;
             font-weight: bold;
             color: #ffd700;
             letter-spacing: 1px;
         }
-
         .logo-sub {
             font-size: 0.65rem;
             color: rgba(255, 215, 0, 0.8);
             display: block;
             margin-top: 2px;
         }
-
         .nav-links {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
             align-items: center;
         }
-
         .nav-links a {
             color: white;
             text-decoration: none;
@@ -77,11 +68,9 @@
             padding: 8px 0;
             font-size: 0.9rem;
         }
-
         .nav-links a:hover {
             color: #ffd700;
         }
-
         .logout-btn {
             background: #dc3545;
             color: white;
@@ -91,7 +80,6 @@
             cursor: pointer;
             font-weight: bold;
         }
-
         .dashboard-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -100,7 +88,6 @@
             max-width: 1200px;
             margin: 0 auto;
         }
-
         .stat-card {
             background: #111;
             border: 1px solid #ffd700;
@@ -108,22 +95,18 @@
             border-radius: 15px;
             text-align: center;
         }
-
         .stat-card h2 {
             font-size: 2.5rem;
             color: #ffd700;
         }
-
         .stat-card p {
             color: #ccc;
             margin-top: 10px;
         }
-
         .filters {
             text-align: center;
             margin: 20px;
         }
-
         .filters select, .filters input {
             padding: 10px 15px;
             margin: 0 10px;
@@ -132,12 +115,10 @@
             background: #222;
             color: white;
         }
-
         .table-container {
             overflow-x: auto;
             padding: 20px;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
@@ -145,26 +126,21 @@
             border-radius: 10px;
             overflow: hidden;
         }
-
         th, td {
             border: 1px solid #333;
             padding: 12px;
             text-align: left;
         }
-
         th {
             background: #1a1a2e;
             color: #ffd700;
         }
-
         td {
             color: #ddd;
         }
-
         .status-pending { color: #ffc107; font-weight: bold; }
         .status-approved { color: #28a745; font-weight: bold; }
         .status-rejected { color: #dc3545; font-weight: bold; }
-
         .action-btn {
             background: #ffd700;
             color: #1a1a2e;
@@ -175,12 +151,10 @@
             margin-right: 5px;
             font-weight: bold;
         }
-
         .action-btn.delete {
             background: #dc3545;
             color: white;
         }
-
         .login-box {
             max-width: 400px;
             margin: 100px auto;
@@ -190,12 +164,10 @@
             text-align: center;
             border: 1px solid #ffd700;
         }
-
         .login-box h2 {
             color: #ffd700;
             margin-bottom: 20px;
         }
-
         .login-box input {
             width: 100%;
             padding: 12px;
@@ -205,7 +177,6 @@
             background: #222;
             color: white;
         }
-
         .login-box button {
             width: 100%;
             padding: 12px;
@@ -216,18 +187,15 @@
             cursor: pointer;
             margin-top: 10px;
         }
-
         .error-msg {
             color: #dc3545;
             margin-top: 10px;
         }
-
         footer {
             text-align: center;
             padding: 30px;
             color: #666;
         }
-
         @media (max-width: 768px) {
             .nav-container {
                 flex-direction: column;
@@ -241,12 +209,6 @@
             }
             .dashboard-stats {
                 grid-template-columns: 1fr;
-            }
-            .filters {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-                align-items: center;
             }
         }
     </style>
@@ -342,8 +304,8 @@
 </div>
 
 <script>
-    // Sheet.best API Endpoint
-    const API_URL = 'https://api.sheetbest.com/sheets/219cc9ae-e9c1-4d5a-9174-cd62d34df23d';
+    // UPDATED API ENDPOINT - NEW URL
+    const API_URL = 'https://api.sheetbest.com/sheets/ff7539c2-2439-4582-8621-4763758afb36';
     
     let allSubmissions = [];
 
@@ -367,12 +329,14 @@
 
     async function loadSubmissions() {
         const tableBody = document.getElementById('tableBody');
-        tableBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Loading...<\/td><\/tr>';
+        tableBody.innerHTML = '<td><td colspan="8" style="text-align: center;">Loading...<\/td><\/tr>';
         
         try {
             const response = await fetch(API_URL);
             const data = await response.json();
+            
             allSubmissions = data.filter(row => row.id && row.id !== 'id');
+            
             displaySubmissions();
             updateStats();
         } catch (error) {
@@ -402,13 +366,10 @@
             if (sub.type === 'visa') typeIcon = '✈️';
             else if (sub.type === 'film') typeIcon = '🎬';
             else if (sub.type === 'tutoring') typeIcon = '📚';
-            else if (sub.type === 'testimonial') typeIcon = '⭐';
+            else typeIcon = '📝';
             
-            let statusClass = '';
             let statusText = sub.status || 'pending';
-            if (statusText === 'pending') statusClass = 'status-pending';
-            else if (statusText === 'approved') statusClass = 'status-approved';
-            else if (statusText === 'rejected') statusClass = 'status-rejected';
+            let statusClass = statusText === 'pending' ? 'status-pending' : (statusText === 'approved' ? 'status-approved' : 'status-rejected');
             
             return `<tr>
                 <td>${sub.date || 'N/A'}<\/td>
@@ -429,50 +390,24 @@
 
     async function updateStatus(id, newStatus) {
         try {
-            // Use PUT method to update the entire row
-            // First, get the current row data
-            const getResponse = await fetch(`${API_URL}/id/${id}`);
-            const rowData = await getResponse.json();
-            
-            if (rowData && rowData.length > 0) {
-                const row = rowData[0];
-                row.status = newStatus;
-                
-                // Send the updated row back
-                const updateResponse = await fetch(`${API_URL}/id/${id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(row)
-                });
-                
-                if (updateResponse.ok) {
-                    await loadSubmissions();
-                    alert(`Status updated to ${newStatus}`);
-                } else {
-                    alert('Update failed. Please try again.');
-                }
-            }
+            await fetch(`${API_URL}/id/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: newStatus })
+            });
+            await loadSubmissions();
         } catch (error) {
-            console.error('Update failed:', error);
-            alert('Error: ' + error.message);
+            alert('Error updating status: ' + error.message);
         }
     }
 
     async function deleteSubmission(id) {
         if (confirm('Are you sure you want to delete this submission?')) {
             try {
-                const response = await fetch(`${API_URL}/id/${id}`, { 
-                    method: 'DELETE' 
-                });
-                
-                if (response.ok) {
-                    await loadSubmissions();
-                    alert('Submission deleted successfully');
-                } else {
-                    alert('Delete failed. Please try again.');
-                }
+                await fetch(`${API_URL}/id/${id}`, { method: 'DELETE' });
+                await loadSubmissions();
             } catch (error) {
-                alert('Error: ' + error.message);
+                alert('Error deleting: ' + error.message);
             }
         }
     }

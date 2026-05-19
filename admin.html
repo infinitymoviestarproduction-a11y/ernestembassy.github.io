@@ -17,7 +17,6 @@
             font-family: 'Segoe UI', Arial, sans-serif;
         }
 
-        /* Navigation */
         nav {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             padding: 1rem 0;
@@ -91,14 +90,8 @@
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
-            transition: background 0.3s;
         }
 
-        .logout-btn:hover {
-            background: #c82333;
-        }
-
-        /* Dashboard Stats */
         .dashboard-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -126,7 +119,6 @@
             margin-top: 10px;
         }
 
-        /* Filters */
         .filters {
             text-align: center;
             margin: 20px;
@@ -141,7 +133,6 @@
             color: white;
         }
 
-        /* Table */
         .table-container {
             overflow-x: auto;
             padding: 20px;
@@ -170,22 +161,26 @@
             color: #ddd;
         }
 
-        .status-pending {
-            color: #ffc107;
+        .status-pending { color: #ffc107; font-weight: bold; }
+        .status-approved { color: #28a745; font-weight: bold; }
+        .status-rejected { color: #dc3545; font-weight: bold; }
+
+        .action-btn {
+            background: #ffd700;
+            color: #1a1a2e;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 5px;
             font-weight: bold;
         }
 
-        .status-confirmed {
-            color: #28a745;
-            font-weight: bold;
+        .action-btn.delete {
+            background: #dc3545;
+            color: white;
         }
 
-        .status-completed {
-            color: #17a2b8;
-            font-weight: bold;
-        }
-
-        /* Login Box */
         .login-box {
             max-width: 400px;
             margin: 100px auto;
@@ -244,9 +239,6 @@
                 gap: 12px;
                 flex-wrap: wrap;
             }
-            .nav-links a {
-                font-size: 0.7rem;
-            }
             .dashboard-stats {
                 grid-template-columns: 1fr;
             }
@@ -255,10 +247,6 @@
                 flex-direction: column;
                 gap: 10px;
                 align-items: center;
-            }
-            .filters select, .filters input {
-                width: 90%;
-                margin: 5px 0;
             }
         }
     </style>
@@ -275,7 +263,6 @@
 
 <!-- DASHBOARD SECTION -->
 <div id="dashboardSection" style="display: none;">
-    <!-- PROFESSIONAL NAVIGATION WITH ALL LINKS -->
     <nav>
         <div class="nav-container">
             <div class="logo">
@@ -297,15 +284,11 @@
                 <a href="education.html">🎓 Education</a>
                 <a href="booking.html">📅 Book</a>
                 <a href="contact.html">📞 Contact</a>
-                <a href="admin.html">🔒 Admin</a>
-                <a href="login.html">🔐 Client Login</a>
-                <a href="testimonials.html">⭐ Testimonials</a>
                 <button class="logout-btn" onclick="logout()">🚪 Logout</button>
             </div>
         </div>
     </nav>
 
-    <!-- Statistics Cards -->
     <div class="dashboard-stats">
         <div class="stat-card">
             <h2 id="totalSubmissions">0</h2>
@@ -321,18 +304,17 @@
         </div>
     </div>
 
-    <!-- Filters -->
     <div class="filters">
-        <select id="filterType" onchange="filterSubmissions()">
+        <select id="filterType" onchange="loadSubmissions()">
             <option value="all">All Types</option>
             <option value="visa">✈️ Visa Consultation</option>
             <option value="film">🎬 Film Inquiry</option>
             <option value="tutoring">📚 Tutoring Request</option>
+            <option value="testimonial">⭐ Testimonial</option>
         </select>
-        <input type="text" id="searchInput" placeholder="Search by name or email..." onkeyup="filterSubmissions()">
+        <input type="text" id="searchInput" placeholder="Search by name or email..." onkeyup="filterTable()">
     </div>
 
-    <!-- Submissions Table -->
     <div class="table-container">
         <table id="submissionsTable">
             <thead>
@@ -344,10 +326,11 @@
                     <th>Phone</th>
                     <th>Details</th>
                     <th>Status</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody id="tableBody">
-                <tr><td colspan="7" style="text-align: center;">Loading submissions...<\/td><\/tr>
+                <tr><td colspan="8" style="text-align: center;">Loading submissions...<\/td><\/tr>
             </tbody>
          <\/table>
     </div>
@@ -359,10 +342,12 @@
 </div>
 
 <script>
-    // Sample data for demonstration
-    let submissions = [];
+    // Sheet.best API Endpoint
+    const API_URL = 'https://api.sheetbest.com/sheets/219cc9ae-e9c1-4d5a-9174-cd62d34df23d';
+    
+    let allSubmissions = [];
 
-    // Login function - Password is: admin123
+    // Simple login (password protected)
     function login() {
         const password = document.getElementById('adminPassword').value;
         if (password === 'admin123') {
@@ -381,67 +366,108 @@
         document.getElementById('loginError').innerText = '';
     }
 
-    function loadSubmissions() {
-        const sampleData = [
-            { date: '2026-05-15', type: 'visa', name: 'John Okonkwo', email: 'john@example.com', phone: '08012345678', details: 'Student visa to Canada', status: 'pending' },
-            { date: '2026-05-14', type: 'film', name: 'Amara Eze', email: 'amara@example.com', phone: '08023456789', details: 'Acting training interest', status: 'confirmed' },
-            { date: '2026-05-14', type: 'tutoring', name: 'Chidi Nwosu', email: 'chidi@example.com', phone: '08034567890', details: 'English and Digital Tech', status: 'pending' },
-            { date: '2026-05-13', type: 'visa', name: 'Ngozi Obi', email: 'ngozi@example.com', phone: '08045678901', details: 'Tourist visa to UK', status: 'completed' },
-        ];
-        submissions = sampleData;
-        updateStats();
-        displaySubmissions();
-    }
-
-    function updateStats() {
-        document.getElementById('totalSubmissions').innerText = submissions.length;
-        const pending = submissions.filter(s => s.status === 'pending').length;
-        document.getElementById('pendingCount').innerText = pending;
-        const today = new Date().toISOString().split('T')[0];
-        const todayCount = submissions.filter(s => s.date === today).length;
-        document.getElementById('todayCount').innerText = todayCount;
+    // Load submissions from Sheet.best
+    async function loadSubmissions() {
+        const tableBody = document.getElementById('tableBody');
+        tableBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Loading...<\/td><\/tr>';
+        
+        try {
+            const response = await fetch(API_URL);
+            const data = await response.json();
+            
+            // Filter out empty rows and header row
+            allSubmissions = data.filter(row => row.id && row.id !== 'id');
+            
+            displaySubmissions();
+            updateStats();
+        } catch (error) {
+            console.error('Error loading submissions:', error);
+            tableBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Error loading data. Make sure your Google Sheet is shared properly.<\/td><\/tr>';
+        }
     }
 
     function displaySubmissions() {
         const filterType = document.getElementById('filterType').value;
         const searchTerm = document.getElementById('searchInput').value.toLowerCase();
         
-        const filtered = submissions.filter(sub => {
+        const filtered = allSubmissions.filter(sub => {
             if (filterType !== 'all' && sub.type !== filterType) return false;
-            if (searchTerm && !sub.name.toLowerCase().includes(searchTerm) && !sub.email.toLowerCase().includes(searchTerm)) return false;
+            if (searchTerm && !sub.name?.toLowerCase().includes(searchTerm) && !sub.email?.toLowerCase().includes(searchTerm)) return false;
             return true;
         });
 
-        const tbody = document.getElementById('tableBody');
+        const tableBody = document.getElementById('tableBody');
         if (filtered.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">No submissions found<\/td><\/tr>';
+            tableBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">No submissions found<\/td><\/tr>';
             return;
         }
 
-        tbody.innerHTML = filtered.map(sub => {
-            let typeLabel = '';
-            if (sub.type === 'visa') typeLabel = '✈️ Visa';
-            else if (sub.type === 'film') typeLabel = '🎬 Film';
-            else typeLabel = '📚 Tutoring';
+        tableBody.innerHTML = filtered.map(sub => {
+            let typeIcon = '';
+            if (sub.type === 'visa') typeIcon = '✈️';
+            else if (sub.type === 'film') typeIcon = '🎬';
+            else if (sub.type === 'tutoring') typeIcon = '📚';
+            else if (sub.type === 'testimonial') typeIcon = '⭐';
+            else typeIcon = '📝';
             
             let statusClass = '';
             if (sub.status === 'pending') statusClass = 'status-pending';
-            else if (sub.status === 'confirmed') statusClass = 'status-confirmed';
-            else statusClass = 'status-completed';
+            else if (sub.status === 'approved') statusClass = 'status-approved';
+            else if (sub.status === 'rejected') statusClass = 'status-rejected';
+            else statusClass = 'status-pending';
             
             return `<tr>
-                <td>${sub.date}<\/td>
-                <td>${typeLabel}<\/td>
-                <td>${sub.name}<\/td>
-                <td>${sub.email}<\/td>
-                <td>${sub.phone}<\/td>
-                <td>${sub.details}<\/td>
-                <td class="${statusClass}">${sub.status.toUpperCase()}<\/td>
+                <td>${sub.date || 'N/A'}<\/td>
+                <td>${typeIcon} ${sub.type || 'general'}<\/td>
+                <td>${sub.name || 'N/A'}<\/td>
+                <td>${sub.email || 'N/A'}<\/td>
+                <td>${sub.phone || 'N/A'}<\/td>
+                <td>${sub.details || sub.message || 'N/A'}<\/td>
+                <td class="${statusClass}">${(sub.status || 'pending').toUpperCase()}<\/td>
+                <td>
+                    <button class="action-btn" onclick="updateStatus('${sub.id}', 'approved')">✓ Approve</button>
+                    <button class="action-btn" onclick="updateStatus('${sub.id}', 'rejected')">✗ Reject</button>
+                    <button class="action-btn delete" onclick="deleteSubmission('${sub.id}')">🗑 Delete</button>
+                <\/td>
             <\/tr>`;
         }).join('');
     }
 
-    function filterSubmissions() {
+    async function updateStatus(id, newStatus) {
+        try {
+            await fetch(`${API_URL}/id/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: newStatus })
+            });
+            loadSubmissions();
+        } catch (error) {
+            alert('Error updating status: ' + error.message);
+        }
+    }
+
+    async function deleteSubmission(id) {
+        if (confirm('Are you sure you want to delete this submission?')) {
+            try {
+                await fetch(`${API_URL}/id/${id}`, { method: 'DELETE' });
+                loadSubmissions();
+            } catch (error) {
+                alert('Error deleting: ' + error.message);
+            }
+        }
+    }
+
+    function updateStats() {
+        document.getElementById('totalSubmissions').innerText = allSubmissions.length;
+        const pending = allSubmissions.filter(s => s.status === 'pending').length;
+        document.getElementById('pendingCount').innerText = pending;
+        
+        const today = new Date().toISOString().split('T')[0];
+        const todayCount = allSubmissions.filter(s => s.date === today).length;
+        document.getElementById('todayCount').innerText = todayCount;
+    }
+
+    function filterTable() {
         displaySubmissions();
     }
 </script>

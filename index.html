@@ -120,6 +120,21 @@
             font-size: 0.9rem;
         }
 
+        .combined-logo {
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .combined-logo img {
+            height: 80px;
+            width: auto;
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 50px;
+            backdrop-filter: blur(5px);
+        }
+
         .btn {
             display: inline-block;
             background: #ffd700;
@@ -419,6 +434,9 @@
                 flex-direction: column;
                 align-items: center;
             }
+            .combined-logo img {
+                height: 50px;
+            }
             .services-grid {
                 grid-template-columns: 1fr;
             }
@@ -476,6 +494,12 @@
 <div class="hero">
     <h1>Damian Anielozie Okafor</h1>
     <p>Teacher | Visa Consultant | Film Producer | Online Tutor</p>
+    
+    <!-- COMBINATION LOGO ADDED HERE -->
+    <div class="combined-logo">
+        <img src="images/combination%20logo.jpg" alt="Ernest Embassy & Infinity Movie Star Production Combined Logo">
+    </div>
+    
     <div class="hero-badges">
         <span class="hero-badge">✈️ Visa Processing</span>
         <span class="hero-badge">🎬 Film Production</span>

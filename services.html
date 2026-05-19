@@ -16,30 +16,6 @@
             line-height: 1.6;
             color: #333;
             background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
-            position: relative;
-        }
-
-        /* WATERMARK BACKGROUND - INFINITY LOGO */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('images/infinity%20logo.jpg');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: 300px;
-            opacity: 0.08;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* Ensure all content appears above watermark */
-        nav, .hero, .container, footer, .whatsapp-float {
-            position: relative;
-            z-index: 1;
         }
 
         /* Navigation */
@@ -110,17 +86,26 @@
             color: #ffd700;
         }
 
-        /* Hero Section */
+        /* Hero Section with Background Image */
         .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('images/infinity%20logo.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: #1a1a2e;
             color: white;
             text-align: center;
-            padding: 80px 20px;
+            padding: 100px 20px;
+            position: relative;
         }
 
         .hero h1 {
             font-size: 2.5rem;
             margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: #ffd700;
         }
 
         .hero p {
@@ -385,6 +370,9 @@
             .nav-links a {
                 font-size: 0.7rem;
             }
+            .hero {
+                padding: 60px 20px;
+            }
             .hero h1 {
                 font-size: 1.8rem;
             }
@@ -437,7 +425,7 @@
     </div>
 </nav>
 
-<!-- HERO SECTION -->
+<!-- HERO SECTION WITH INFINITY LOGO BACKGROUND -->
 <div class="hero">
     <h1>✨ Our Professional Services</h1>
     <p>Comprehensive solutions for travel, education, film production, and personal development</p>

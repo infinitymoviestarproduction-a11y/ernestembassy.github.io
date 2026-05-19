@@ -86,23 +86,30 @@
             color: #ffd700;
         }
 
-        /* Hero Section */
+        /* Hero Section with Background Image */
         .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url('images/combination%20logo.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: #0a0a2e;
             color: white;
             text-align: center;
-            padding: 80px 20px;
+            padding: 100px 20px;
+            position: relative;
         }
 
         .hero h1 {
             font-size: 2.5rem;
             margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
         .hero p {
             font-size: 1.2rem;
             max-width: 800px;
             margin: 0 auto 30px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
 
         .hero-badges {
@@ -114,25 +121,12 @@
         }
 
         .hero-badge {
-            background: rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.6);
             padding: 8px 20px;
             border-radius: 30px;
             font-size: 0.9rem;
-        }
-
-        .combined-logo {
-            margin: 20px auto;
-            display: flex;
-            justify-content: center;
-        }
-
-        .combined-logo img {
-            height: 80px;
-            width: auto;
-            background: rgba(255,255,255,0.1);
-            padding: 10px 20px;
-            border-radius: 50px;
             backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,215,0,0.3);
         }
 
         .btn {
@@ -144,6 +138,7 @@
             text-decoration: none;
             font-weight: bold;
             transition: all 0.3s;
+            margin-top: 20px;
         }
 
         .btn:hover {
@@ -427,15 +422,16 @@
             .nav-links a {
                 font-size: 0.75rem;
             }
+            .hero {
+                padding: 60px 20px;
+                background-size: 60% auto;
+            }
             .hero h1 {
                 font-size: 1.8rem;
             }
             .hero-badges {
                 flex-direction: column;
                 align-items: center;
-            }
-            .combined-logo img {
-                height: 50px;
             }
             .services-grid {
                 grid-template-columns: 1fr;
@@ -490,15 +486,10 @@
     </div>
 </nav>
 
-<!-- HERO SECTION -->
+<!-- HERO SECTION WITH COMBINATION LOGO BACKGROUND -->
 <div class="hero">
     <h1>Damian Anielozie Okafor</h1>
     <p>Teacher | Visa Consultant | Film Producer | Online Tutor</p>
-    
-    <!-- COMBINATION LOGO ADDED HERE -->
-    <div class="combined-logo">
-        <img src="images/combination%20logo.jpg" alt="Ernest Embassy & Infinity Movie Star Production Combined Logo">
-    </div>
     
     <div class="hero-badges">
         <span class="hero-badge">✈️ Visa Processing</span>

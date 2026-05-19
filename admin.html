@@ -347,7 +347,6 @@
     
     let allSubmissions = [];
 
-    // Simple login (password protected)
     function login() {
         const password = document.getElementById('adminPassword').value;
         if (password === 'admin123') {
@@ -366,7 +365,6 @@
         document.getElementById('loginError').innerText = '';
     }
 
-    // Load submissions from Sheet.best
     async function loadSubmissions() {
         const tableBody = document.getElementById('tableBody');
         tableBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Loading...<\/td><\/tr>';
@@ -374,15 +372,12 @@
         try {
             const response = await fetch(API_URL);
             const data = await response.json();
-            
-            // Filter out rows without id or with null status
             allSubmissions = data.filter(row => row.id && row.id !== 'id');
-            
             displaySubmissions();
             updateStats();
         } catch (error) {
-            console.error('Error loading submissions:', error);
-            tableBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Error loading data. Make sure your Google Sheet is shared properly.<\/td><\/tr>';
+            console.error('Error:', error);
+            tableBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Error loading data<\/td><\/tr>';
         }
     }
 
@@ -408,7 +403,6 @@
             else if (sub.type === 'film') typeIcon = '🎬';
             else if (sub.type === 'tutoring') typeIcon = '📚';
             else if (sub.type === 'testimonial') typeIcon = '⭐';
-            else typeIcon = '📝';
             
             let statusClass = '';
             let statusText = sub.status || 'pending';
@@ -434,29 +428,33 @@
     }
 
     async function updateStatus(id, newStatus) {
-        console.log('Updating status:', id, 'to', newStatus);
-        
         try {
-            // Use PATCH method to update only the status field
-            const response = await fetch(`${API_URL}/id/${id}`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status: newStatus })
-            });
+            // Use PUT method to update the entire row
+            // First, get the current row data
+            const getResponse = await fetch(`${API_URL}/id/${id}`);
+            const rowData = await getResponse.json();
             
-            console.log('Response status:', response.status);
-            
-            if (response.ok) {
-                console.log('Status updated successfully');
-                await loadSubmissions(); // Reload the table
-            } else {
-                const errorText = await response.text();
-                console.error('Update failed:', errorText);
-                alert('Update failed. Check console for details.');
+            if (rowData && rowData.length > 0) {
+                const row = rowData[0];
+                row.status = newStatus;
+                
+                // Send the updated row back
+                const updateResponse = await fetch(`${API_URL}/id/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(row)
+                });
+                
+                if (updateResponse.ok) {
+                    await loadSubmissions();
+                    alert(`Status updated to ${newStatus}`);
+                } else {
+                    alert('Update failed. Please try again.');
+                }
             }
         } catch (error) {
-            console.error('Error updating status:', error);
-            alert('Error updating status: ' + error.message);
+            console.error('Update failed:', error);
+            alert('Error: ' + error.message);
         }
     }
 
@@ -469,12 +467,12 @@
                 
                 if (response.ok) {
                     await loadSubmissions();
+                    alert('Submission deleted successfully');
                 } else {
                     alert('Delete failed. Please try again.');
                 }
             } catch (error) {
-                console.error('Error deleting:', error);
-                alert('Error deleting: ' + error.message);
+                alert('Error: ' + error.message);
             }
         }
     }

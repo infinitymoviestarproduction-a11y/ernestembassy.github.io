@@ -160,13 +160,54 @@
             padding-left: 15px;
         }
 
-        .service-card ul {
+        .service-card ul, .service-card p {
             margin-left: 20px;
             color: #555;
         }
 
         .service-card li {
-            margin: 10px 0;
+            margin: 8px 0;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .tech-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tech-card img {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 10px;
+        }
+
+        .tech-card .tech-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .tech-card h4 {
+            color: #1a1a2e;
+            margin-bottom: 5px;
+        }
+
+        .tech-card p {
+            font-size: 0.85rem;
+            color: #666;
         }
 
         .features-grid {
@@ -184,6 +225,38 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             font-weight: bold;
             color: #667eea;
+        }
+
+        .workflow-steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .step {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            flex: 1;
+            min-width: 180px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: -40px auto 15px;
+            font-weight: bold;
         }
 
         .pricing-card {
@@ -303,6 +376,9 @@
             .hero h1 {
                 font-size: 1.8rem;
             }
+            .workflow-steps {
+                flex-direction: column;
+            }
             .whatsapp-float {
                 padding: 8px 15px;
                 bottom: 15px;
@@ -342,7 +418,104 @@
 </div>
 
 <div class="container">
-    <p style="text-align: center; font-size: 1.1rem; max-width: 900px; margin: 0 auto;">We create modern, mobile-friendly, fast-loading websites tailored to your business goals. Whether you need a simple company website, an online store, a school portal, or a custom web application, we deliver professional solutions that help you attract customers and grow your brand.</p>
+    <p style="text-align: center; font-size: 1.1rem; max-width: 900px; margin: 0 auto;">We develop websites using professional GitHub-based workflows and deploy them on Cloudflare Pages for fast, secure, and reliable performance. This approach enables us to build everything from business websites and online stores to custom web applications with enterprise-level hosting and security.</p>
+
+    <!-- ============================================ -->
+    <!-- TECHNOLOGIES & PLATFORMS WE USE              -->
+    <!-- ============================================ -->
+    <div class="section-title"><span>☁️ Our Modern Development Stack</span></div>
+    <div class="section-subtitle">We build and deploy websites using industry-standard technologies and cloud platforms</div>
+
+    <div class="tech-grid">
+        <div class="tech-card">
+            <div class="tech-icon">🐙</div>
+            <h4>GitHub</h4>
+            <p>Source code management and version control</p>
+        </div>
+        <div class="tech-card">
+            <div class="tech-icon">☁️</div>
+            <h4>Cloudflare Pages</h4>
+            <p>High-speed global hosting</p>
+        </div>
+        <div class="tech-card">
+            <div class="tech-icon">🔒</div>
+            <h4>Cloudflare DNS & Security</h4>
+            <p>DNS management, SSL certificates, security</p>
+        </div>
+        <div class="tech-card">
+            <div class="tech-icon">📝</div>
+            <h4>WordPress</h4>
+            <p>Content management system</p>
+        </div>
+        <div class="tech-card">
+            <div class="tech-icon">🛒</div>
+            <h4>WooCommerce</h4>
+            <p>E-commerce solution</p>
+        </div>
+        <div class="tech-card">
+            <div class="tech-icon">🛍️</div>
+            <h4>Shopify</h4>
+            <p>Enterprise e-commerce platform</p>
+        </div>
+        <div class="tech-card">
+            <div class="tech-icon">⚛️</div>
+            <h4>React / Next.js</h4>
+            <p>Modern web applications</p>
+        </div>
+        <div class="tech-card">
+            <div class="tech-icon">🌐</div>
+            <h4>HTML/CSS/JavaScript</h4>
+            <p>Custom development</p>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- WHY CLOUDFLARE PAGES                         -->
+    <!-- ============================================ -->
+    <div class="section-title"><span>🚀 Why We Use Cloudflare Pages</span></div>
+    <div class="section-subtitle">Cloudflare Pages offers enterprise-grade infrastructure that helps your website perform exceptionally well</div>
+
+    <div class="features-grid">
+        <div class="feature-badge">🌍 Global CDN</div>
+        <div class="feature-badge">🔒 Free SSL certificates</div>
+        <div class="feature-badge">🔄 Auto-deploy from GitHub</div>
+        <div class="feature-badge">⚡ Fast loading speeds</div>
+        <div class="feature-badge">🛡️ DDoS protection</div>
+        <div class="feature-badge">📈 Reliable uptime</div>
+        <div class="feature-badge">⏪ Easy rollback</div>
+        <div class="feature-badge">🔐 Enterprise security</div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- DEPLOYMENT WORKFLOW                          -->
+    <!-- ============================================ -->
+    <div class="section-title"><span>🌍 Deployment Workflow</span></div>
+    <div class="workflow-steps">
+        <div class="step">
+            <div class="step-number">1</div>
+            <p>Website is designed and developed</p>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <p>Source code managed on GitHub</p>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <p>Site deployed to Cloudflare Pages</p>
+        </div>
+        <div class="step">
+            <div class="step-number">4</div>
+            <p>Domain connected via Cloudflare</p>
+        </div>
+        <div class="step">
+            <div class="step-number">5</div>
+            <p>SSL and security auto-configured</p>
+        </div>
+        <div class="step">
+            <div class="step-number">6</div>
+            <p>Future updates published seamlessly</p>
+        </div>
+    </div>
 
     <!-- ============================================ -->
     <!-- TYPES OF WEBSITES WE CREATE                   -->
@@ -354,12 +527,12 @@
             <div class="service-icon">🏢</div>
             <h3>Business & Corporate Websites</h3>
             <p>Professional websites designed to showcase your company, products, and services.</p>
-            <p style="margin-top: 10px;"><strong>Ideal For:</strong> Small and medium businesses, consulting firms, construction companies, logistics companies, manufacturing firms</p>
+            <p style="margin-top: 10px;"><strong>Ideal For:</strong> Small and medium businesses, consulting firms, construction, logistics, manufacturing</p>
         </div>
 
         <div class="service-card">
             <div class="service-icon">🛒</div>
-            <h3>E-Commerce Websites (Online Stores)</h3>
+            <h3>E-Commerce Websites</h3>
             <p>Sell products and receive payments online securely.</p>
             <p style="margin-top: 10px;"><strong>Platforms:</strong> Shopify, WooCommerce</p>
             <p><strong>Ideal For:</strong> Fashion stores, cosmetic brands, electronics, pharmacies, supermarkets, wholesale</p>
@@ -565,6 +738,8 @@
         <div class="feature-badge">✅ Secure websites</div>
         <div class="feature-badge">✅ Ongoing support</div>
         <div class="feature-badge">✅ Training included</div>
+        <div class="feature-badge">✅ Modern tech stack (GitHub + Cloudflare)</div>
+        <div class="feature-badge">✅ Enterprise-grade hosting</div>
     </div>
 
     <!-- ============================================ -->

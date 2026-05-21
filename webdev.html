@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce Website Development - Ernest Embassy Digital Solutions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+        }
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffd700;
+            letter-spacing: 1px;
+        }
+
+        .logo-sub {
+            font-size: 0.65rem;
+            color: rgba(255, 215, 0, 0.8);
+            display: block;
+            margin-top: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 0;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #1a1a2e;
+            margin-top: 60px;
+        }
+
+        .section-title span {
+            border-bottom: 3px solid #ffd700;
+            padding-bottom: 10px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        .comparison-table {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            margin: 40px 0;
+        }
+
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ffd700;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .service-card h3 {
+            color: #1a1a2e;
+            margin-bottom: 15px;
+        }
+
+        .service-card ul {
+            margin-left: 20px;
+            color: #555;
+        }
+
+        .service-card li {
+            margin: 10px 0;
+        }
+
+        .price-tag {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .email-section {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .email-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 35px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s;
+            margin: 10px 0;
+        }
+
+        .email-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .note-text {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 15px;
+        }
+
+        footer {
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+
+        .cac-badge {
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.05);
+            background-color: #20b859;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .nav-links {
+                justify-content: center;
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            .comparison-table {
+                overflow-x: auto;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- PROFESSIONAL NAVIGATION -->
+<nav>
+    <div class="nav-container">
+        <div class="logo">
+            <span class="logo-icon">💻</span>
+            <div>
+                <span class="logo-text">Ernest Embassy</span>
+                <span class="logo-sub">Digital Solutions</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="about.html">📖 About</a>
+            <a href="services.html">⚙️ Services</a>
+            <a href="visa.html">✈️ Visa</a>
+            <a href="movie.html">🎬 Movie Studio</a>
+            <a href="portfolio.html">🎨 Portfolio</a>
+            <a href="webdev.html">💻 Web Dev</a>
+            <a href="contact.html">📞 Contact</a>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO SECTION -->
+<div class="hero">
+    <h1>💻 E-commerce Website Development</h1>
+    <p>Fast, secure, and mobile-optimized online stores designed to convert visitors into loyal customers</p>
+</div>
+
+<div class="container">
+    <!-- INTRODUCTION -->
+    <div class="section-title"><span>📊 Professional E-commerce Solutions</span></div>
+    <div class="section-subtitle">We build world-class online stores that reflect the quality and trust associated with your brand</div>
+
+    <!-- TWO OPTIONS -->
+    <div class="services-grid">
+        <!-- Option 1: Shopify -->
+        <div class="service-card">
+            <div class="service-icon">🛍️</div>
+            <h3>Shopify - Global Enterprise Standard</h3>
+            <div class="price-tag">₦900,000</div>
+            <ul>
+                <li>Premium homepage design</li>
+                <li>Product categories and collections</li>
+                <li>Shopping cart and checkout</li>
+                <li>Secure payment integration (Flutterwave)</li>
+                <li>Email newsletter signup</li>
+                <li>Back-in-stock email notifications</li>
+                <li>Inventory management</li>
+                <li>Discount and coupon system</li>
+                <li>Search and filtering</li>
+                <li>Mobile-responsive design</li>
+                <li>Domain name registration</li>
+                <li>Hosting setup</li>
+                <li>SSL security certificate</li>
+                <li>Basic SEO setup</li>
+                <li>Social media integration</li>
+                <li>Staff training after launch</li>
+            </ul>
+            <p><strong>✅ 30 products uploaded free</strong></p>
+            <p style="margin-top: 10px; font-size: 0.9rem; color: #666;">Platform subscription paid by client monthly or annually</p>
+        </div>
+
+        <!-- Option 2: WordPress + WooCommerce -->
+        <div class="service-card">
+            <div class="service-icon">🌐</div>
+            <h3>WordPress + WooCommerce</h3>
+            <div class="price-tag">₦600,000</div>
+            <ul>
+                <li>Custom website design</li>
+                <li>Product categories and collections</li>
+                <li>Shopping cart and checkout</li>
+                <li>Secure payment integration (Flutterwave)</li>
+                <li>Email newsletter signup</li>
+                <li>Back-in-stock notifications</li>
+                <li>Inventory management</li>
+                <li>Mobile-responsive design</li>
+                <li>Domain name registration</li>
+                <li>Hosting setup</li>
+                <li>SSL security certificate</li>
+                <li>Basic SEO setup</li>
+                <li>Social media integration</li>
+                <li>Staff training after launch</li>
+            </ul>
+            <p><strong>✅ 30 products uploaded free</strong></p>
+            <p style="margin-top: 10px; font-size: 0.9rem; color: #666;">Domain and hosting renewed annually by client</p>
+        </div>
+    </div>
+
+    <!-- COMPARISON TABLE -->
+    <div class="section-title"><span>📋 Comparison at a Glance</span></div>
+    <div class="comparison-table">
+        <table>
+            <thead>
+                <tr><th>Feature</th><th>Shopify</th><th>WordPress + WooCommerce</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Development Cost</td><td>₦900,000</td><td>₦600,000</td></tr>
+                <tr><td>Subscription Type</td><td>Monthly or Yearly</td><td>Yearly Renewal Only</td></tr>
+                <tr><td>Hosting Included</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+                <tr><td>SSL Included</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+                <tr><td>Security</td><td>Fully Managed</td><td>Professionally Managed</td></tr>
+                <tr><td>Ease of Use</td><td>Very Easy</td><td>Easy After Training</td></tr>
+                <tr><td>Ownership</td><td>Platform-Based</td><td>Full Ownership</td></tr>
+                <tr><td>Scalability</td><td>Enterprise Ready</td><td>Highly Scalable</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- MAINTENANCE -->
+    <div class="section-title"><span>🛠️ Annual Website Maintenance</span></div>
+    <div class="services-grid">
+        <div class="service-card">
+            <h3>₦70,000 per year (Optional but Recommended)</h3>
+            <ul>
+                <li>Software and plugin updates</li>
+                <li>Security monitoring</li>
+                <li>Routine backups</li>
+                <li>Performance optimization</li>
+                <li>Minor technical support</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="section-title"><span>⏱️ Project Timeline</span></div>
+    <div class="services-grid">
+        <div class="service-card">
+            <h3>3 to 5 Weeks Estimated Completion</h3>
+            <p>Depending on how quickly product information and branding materials are provided.</p>
+        </div>
+    </div>
+
+    <!-- PAYMENT TERMS -->
+    <div class="section-title"><span>💰 Payment Terms</span></div>
+    <div class="services-grid">
+        <div class="service-card">
+            <ul>
+                <li><strong>70% deposit</strong> to commence development</li>
+                <li><strong>30% balance</strong> before final launch</li>
+                <li>Third-party subscriptions paid directly by client</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- CONTACT / INQUIRY SECTION -->
+    <div class="email-section">
+        <h2>📞 Ready to Launch Your Online Store?</h2>
+        <p>Contact us today to discuss your e-commerce project and get a custom quote.</p>
+        
+        <a href="mailto:ernestembassytravels@gmail.com?subject=E-commerce%20Website%20Development%20Inquiry&body=Hello%20Damian,%0A%0AI%20am%20interested%20in%20building%20an%20e-commerce%20website.%0A%0AMy%20Name:%20__________%0AMy%20Phone:%20__________%0ABusiness%20Name:%20__________%0AProduct%20Category:%20__________%0AEstimated%20Number%20of%20Products:%20__________%0A%0AMessage:%0A__________" 
+           class="email-btn">
+            📧 Request a Consultation
+        </a>
+        
+        <p class="note-text">
+            🔒 Your email client will open. Fill in your details and send.<br>
+            We will respond within 24 hours.
+        </p>
+    </div>
+</div>
+
+<!-- CAC BADGE -->
+<div style="text-align: center; padding: 20px;">
+    <div class="cac-badge">
+        ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
+        📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <p><strong>Ernest Embassy Digital Solutions</strong> | Website Development & E-commerce Experts</p>
+        <p>📧 ernestembassytravels@gmail.com | infinitymoviestarproduction@gmail.com</p>
+        <p>📞 +2348032607809 | +2349050205053</p>
+        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
+        <p style="margin-top: 20px;">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- WHATSAPP BUTTON -->
+<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
+    <span>💬</span>
+    <span>Chat with Damian on WhatsApp</span>
+</a>
+
+</body>
+</html>

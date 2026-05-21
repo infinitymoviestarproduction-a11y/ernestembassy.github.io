@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submit Testimonial - Ernest Embassy Travels</title>
+    <title>Submit Testimonial - Ernest Embassy Digital Solutions</title>
     <style>
         * {
             margin: 0;
@@ -17,9 +17,14 @@
             min-height: 100vh;
         }
 
+        /* Navigation */
         nav {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
         }
 
         .nav-container {
@@ -64,7 +69,7 @@
         .nav-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 15px;
         }
 
         .nav-links a {
@@ -73,7 +78,7 @@
             font-weight: 500;
             transition: color 0.3s;
             padding: 8px 0;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         .nav-links a:hover {
@@ -201,6 +206,39 @@
             margin-top: 60px;
         }
 
+        .cac-badge {
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.05);
+            background-color: #20b859;
+        }
+
         @media (max-width: 768px) {
             .nav-container {
                 flex-direction: column;
@@ -209,32 +247,58 @@
             }
             .nav-links {
                 justify-content: center;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+            .nav-links a {
+                font-size: 0.7rem;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
             }
             .testimonial-form {
                 padding: 25px;
             }
-            .hero h1 {
-                font-size: 1.8rem;
+            .star {
+                font-size: 1.5rem;
+            }
+            .whatsapp-float {
+                padding: 8px 15px;
+                bottom: 15px;
+                right: 15px;
+                font-size: 12px;
             }
         }
     </style>
 </head>
 <body>
 
+<!-- PROFESSIONAL NAVIGATION WITH ALL LINKS -->
 <nav>
     <div class="nav-container">
         <div class="logo">
             <span class="logo-icon">⭐</span>
             <div>
                 <span class="logo-text">Ernest Embassy</span>
-                <span class="logo-sub">Client Testimonials</span>
+                <span class="logo-sub">Digital Solutions</span>
             </div>
         </div>
         <div class="nav-links">
             <a href="index.html">🏠 Home</a>
             <a href="about.html">📖 About</a>
             <a href="services.html">⚙️ Services</a>
+            <a href="webdev.html">💻 Web Dev</a>
+            <a href="visa.html">✈️ Visa</a>
+            <a href="movie.html">🎬 Movie Studio</a>
+            <a href="portfolio.html">🎨 Portfolio</a>
+            <a href="teaching.html">📚 Teaching</a>
+            <a href="tutoring.html">💻 Tutoring</a>
+            <a href="education.html">🎓 Education</a>
+            <a href="booking.html">📅 Book</a>
             <a href="contact.html">📞 Contact</a>
+            <a href="admin.html">🔒 Admin</a>
+            <a href="login.html">🔐 Client Login</a>
+            <a href="testimonials.html">⭐ Testimonials</a>
         </div>
     </div>
 </nav>
@@ -247,7 +311,7 @@
 <div class="container">
     <div class="testimonial-form">
         <h2>Submit Your Testimonial</h2>
-        <p>We value your feedback. Tell us about your experience with Ernest Embassy Travels.</p>
+        <p>We value your feedback. Tell us about your experience with Ernest Embassy Digital Solutions.</p>
 
         <form id="testimonialForm">
             <!-- Rating Stars -->
@@ -274,11 +338,13 @@
                 <label>Service Used *</label>
                 <select id="service" required>
                     <option value="">Select a service</option>
+                    <option value="Web Development">💻 Web Development</option>
                     <option value="Visa Processing">✈️ Visa Processing</option>
                     <option value="Film Production">🎬 Film Production</option>
                     <option value="Film Training">🎭 Film Training</option>
                     <option value="Educational Consulting">🎓 Educational Consulting</option>
                     <option value="Online Tutoring">💻 Online Tutoring</option>
+                    <option value="Teaching Services">📚 Teaching Services</option>
                 </select>
             </div>
 
@@ -296,9 +362,30 @@
     </div>
 </div>
 
+<!-- CAC BADGE -->
+<div style="text-align: center; padding: 20px;">
+    <div class="cac-badge">
+        ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
+        📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
+    </div>
+</div>
+
+<!-- FOOTER -->
 <footer>
-    <p>&copy; 2026 Ernest Embassy Travels - Share Your Experience</p>
+    <div class="container">
+        <p><strong>Ernest Embassy Digital Solutions</strong> | Share Your Experience</p>
+        <p>📧 ernestembassytravels@gmail.com | infinitymoviestarproduction@gmail.com | Danoka33@gmail.com</p>
+        <p>📞 +2348032607809 | +2349050205053</p>
+        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
+        <p style="margin-top: 20px;">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
+    </div>
 </footer>
+
+<!-- WHATSAPP BUTTON -->
+<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
+    <span>💬</span>
+    <span>Chat with Damian on WhatsApp</span>
+</a>
 
 <script>
     // Star rating functionality

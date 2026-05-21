@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Offline - Ernest Embassy</title>
+    <title>Offline - Ernest Embassy Digital Solutions</title>
     <style>
         * {
             margin: 0;
@@ -21,6 +21,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
         }
 
         /* Navigation */
@@ -77,7 +78,7 @@
         .nav-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 15px;
         }
 
         .nav-links a {
@@ -86,7 +87,7 @@
             font-weight: 500;
             transition: color 0.3s;
             padding: 8px 0;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         .nav-links a:hover {
@@ -136,6 +137,15 @@
             transform: translateY(-2px);
         }
 
+        footer {
+            background: #0a0a0a;
+            color: #888;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            width: 100%;
+        }
+
         @media (max-width: 768px) {
             .nav-container {
                 flex-direction: column;
@@ -144,7 +154,7 @@
             }
             .nav-links {
                 justify-content: center;
-                gap: 12px;
+                gap: 10px;
                 flex-wrap: wrap;
             }
             .nav-links a {
@@ -156,6 +166,9 @@
             }
             h1 {
                 font-size: 1.5rem;
+            }
+            .emoji {
+                font-size: 3rem;
             }
         }
     </style>
@@ -169,13 +182,14 @@
             <span class="logo-icon">📡</span>
             <div>
                 <span class="logo-text">Ernest Embassy</span>
-                <span class="logo-sub">Travels & Film Production</span>
+                <span class="logo-sub">Digital Solutions</span>
             </div>
         </div>
         <div class="nav-links">
             <a href="index.html">🏠 Home</a>
             <a href="about.html">📖 About</a>
             <a href="services.html">⚙️ Services</a>
+            <a href="webdev.html">💻 Web Dev</a>
             <a href="visa.html">✈️ Visa</a>
             <a href="movie.html">🎬 Movie Studio</a>
             <a href="portfolio.html">🎨 Portfolio</a>
@@ -198,6 +212,10 @@
     <p>Once connected, refresh the page to access all features.</p>
     <button onclick="location.reload()" class="retry-btn">🔄 Retry Connection</button>
 </div>
+
+<footer>
+    <p>Ernest Embassy Digital Solutions | Offline Page</p>
+</footer>
 
 </body>
 </html>

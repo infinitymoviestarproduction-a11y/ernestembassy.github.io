@@ -3,23 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Ernest Embassy</title>
+    <title>Admin Dashboard - Ernest Embassy Digital Solutions</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             background: #0d0d0d;
             color: white;
             font-family: 'Segoe UI', Arial, sans-serif;
         }
+
+        /* Navigation */
         nav {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             padding: 1rem 0;
             border-bottom: 1px solid #ffd700;
         }
+
         .nav-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -29,12 +33,14 @@
             align-items: center;
             flex-wrap: wrap;
         }
+
         .logo {
             display: flex;
             align-items: center;
             gap: 12px;
             text-decoration: none;
         }
+
         .logo-icon {
             font-size: 2rem;
             background: linear-gradient(135deg, #ffd700, #ffaa00);
@@ -42,35 +48,41 @@
             background-clip: text;
             color: transparent;
         }
+
         .logo-text {
             font-size: 1.3rem;
             font-weight: bold;
             color: #ffd700;
             letter-spacing: 1px;
         }
+
         .logo-sub {
             font-size: 0.65rem;
             color: rgba(255, 215, 0, 0.8);
             display: block;
             margin-top: 2px;
         }
+
         .nav-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
+            gap: 15px;
             align-items: center;
         }
+
         .nav-links a {
             color: white;
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
             padding: 8px 0;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
+
         .nav-links a:hover {
             color: #ffd700;
         }
+
         .logout-btn {
             background: #dc3545;
             color: white;
@@ -79,7 +91,14 @@
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
+            transition: background 0.3s;
         }
+
+        .logout-btn:hover {
+            background: #c82333;
+        }
+
+        /* Dashboard Stats */
         .dashboard-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -88,6 +107,7 @@
             max-width: 1200px;
             margin: 0 auto;
         }
+
         .stat-card {
             background: #111;
             border: 1px solid #ffd700;
@@ -95,18 +115,23 @@
             border-radius: 15px;
             text-align: center;
         }
+
         .stat-card h2 {
             font-size: 2.5rem;
             color: #ffd700;
         }
+
         .stat-card p {
             color: #ccc;
             margin-top: 10px;
         }
+
+        /* Filters */
         .filters {
             text-align: center;
             margin: 20px;
         }
+
         .filters select, .filters input {
             padding: 10px 15px;
             margin: 0 10px;
@@ -115,10 +140,13 @@
             background: #222;
             color: white;
         }
+
+        /* Table */
         .table-container {
             overflow-x: auto;
             padding: 20px;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -126,35 +154,38 @@
             border-radius: 10px;
             overflow: hidden;
         }
+
         th, td {
             border: 1px solid #333;
             padding: 12px;
             text-align: left;
         }
+
         th {
             background: #1a1a2e;
             color: #ffd700;
         }
+
         td {
             color: #ddd;
         }
-        .status-pending { color: #ffc107; font-weight: bold; }
-        .status-approved { color: #28a745; font-weight: bold; }
-        .status-rejected { color: #dc3545; font-weight: bold; }
-        .action-btn {
-            background: #ffd700;
-            color: #1a1a2e;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 5px;
+
+        .status-pending {
+            color: #ffc107;
             font-weight: bold;
         }
-        .action-btn.delete {
-            background: #dc3545;
-            color: white;
+
+        .status-confirmed {
+            color: #28a745;
+            font-weight: bold;
         }
+
+        .status-completed {
+            color: #17a2b8;
+            font-weight: bold;
+        }
+
+        /* Login Box */
         .login-box {
             max-width: 400px;
             margin: 100px auto;
@@ -164,10 +195,12 @@
             text-align: center;
             border: 1px solid #ffd700;
         }
+
         .login-box h2 {
             color: #ffd700;
             margin-bottom: 20px;
         }
+
         .login-box input {
             width: 100%;
             padding: 12px;
@@ -177,6 +210,7 @@
             background: #222;
             color: white;
         }
+
         .login-box button {
             width: 100%;
             padding: 12px;
@@ -187,15 +221,18 @@
             cursor: pointer;
             margin-top: 10px;
         }
+
         .error-msg {
             color: #dc3545;
             margin-top: 10px;
         }
+
         footer {
             text-align: center;
             padding: 30px;
             color: #666;
         }
+
         @media (max-width: 768px) {
             .nav-container {
                 flex-direction: column;
@@ -204,11 +241,24 @@
             }
             .nav-links {
                 justify-content: center;
-                gap: 12px;
+                gap: 10px;
                 flex-wrap: wrap;
+            }
+            .nav-links a {
+                font-size: 0.7rem;
             }
             .dashboard-stats {
                 grid-template-columns: 1fr;
+            }
+            .filters {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                align-items: center;
+            }
+            .filters select, .filters input {
+                width: 90%;
+                margin: 5px 0;
             }
         }
     </style>
@@ -225,6 +275,7 @@
 
 <!-- DASHBOARD SECTION -->
 <div id="dashboardSection" style="display: none;">
+    <!-- PROFESSIONAL NAVIGATION WITH ALL LINKS -->
     <nav>
         <div class="nav-container">
             <div class="logo">
@@ -238,6 +289,7 @@
                 <a href="index.html">🏠 Home</a>
                 <a href="about.html">📖 About</a>
                 <a href="services.html">⚙️ Services</a>
+                <a href="webdev.html">💻 Web Dev</a>
                 <a href="visa.html">✈️ Visa</a>
                 <a href="movie.html">🎬 Movie Studio</a>
                 <a href="portfolio.html">🎨 Portfolio</a>
@@ -246,11 +298,15 @@
                 <a href="education.html">🎓 Education</a>
                 <a href="booking.html">📅 Book</a>
                 <a href="contact.html">📞 Contact</a>
+                <a href="admin.html">🔒 Admin</a>
+                <a href="login.html">🔐 Client Login</a>
+                <a href="testimonials.html">⭐ Testimonials</a>
                 <button class="logout-btn" onclick="logout()">🚪 Logout</button>
             </div>
         </div>
     </nav>
 
+    <!-- Statistics Cards -->
     <div class="dashboard-stats">
         <div class="stat-card">
             <h2 id="totalSubmissions">0</h2>
@@ -266,17 +322,19 @@
         </div>
     </div>
 
+    <!-- Filters -->
     <div class="filters">
-        <select id="filterType" onchange="loadSubmissions()">
+        <select id="filterType" onchange="filterSubmissions()">
             <option value="all">All Types</option>
             <option value="visa">✈️ Visa Consultation</option>
             <option value="film">🎬 Film Inquiry</option>
             <option value="tutoring">📚 Tutoring Request</option>
-            <option value="testimonial">⭐ Testimonial</option>
+            <option value="webdev">💻 Web Development</option>
         </select>
-        <input type="text" id="searchInput" placeholder="Search by name or email..." onkeyup="filterTable()">
+        <input type="text" id="searchInput" placeholder="Search by name or email..." onkeyup="filterSubmissions()">
     </div>
 
+    <!-- Submissions Table -->
     <div class="table-container">
         <table id="submissionsTable">
             <thead>
@@ -298,17 +356,18 @@
     </div>
 
     <footer>
-        <p>Ernest Embassy Travels & Infinity Movie Star Production | Admin Dashboard</p>
+        <p>Ernest Embassy Digital Solutions | Admin Dashboard</p>
         <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria | 📞 +2348032607809<\/p>
     </footer>
 </div>
 
 <script>
-    // UPDATED API ENDPOINT - NEW URL
+    // Sheet.best API Endpoint
     const API_URL = 'https://api.sheetbest.com/sheets/ff7539c2-2439-4582-8621-4763758afb36';
     
     let allSubmissions = [];
 
+    // Simple login (password protected)
     function login() {
         const password = document.getElementById('adminPassword').value;
         if (password === 'admin123') {
@@ -327,9 +386,10 @@
         document.getElementById('loginError').innerText = '';
     }
 
+    // Load submissions from Sheet.best
     async function loadSubmissions() {
         const tableBody = document.getElementById('tableBody');
-        tableBody.innerHTML = '<td><td colspan="8" style="text-align: center;">Loading...<\/td><\/tr>';
+        tableBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Loading...<\/td><\/tr>';
         
         try {
             const response = await fetch(API_URL);
@@ -340,8 +400,8 @@
             displaySubmissions();
             updateStats();
         } catch (error) {
-            console.error('Error:', error);
-            tableBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Error loading data<\/td><\/tr>';
+            console.error('Error loading submissions:', error);
+            tableBody.innerHTML = '<table><td colspan="8" style="text-align: center;">Error loading data.<\/td><\/tr>';
         }
     }
 
@@ -366,10 +426,11 @@
             if (sub.type === 'visa') typeIcon = '✈️';
             else if (sub.type === 'film') typeIcon = '🎬';
             else if (sub.type === 'tutoring') typeIcon = '📚';
+            else if (sub.type === 'webdev') typeIcon = '💻';
             else typeIcon = '📝';
             
             let statusText = sub.status || 'pending';
-            let statusClass = statusText === 'pending' ? 'status-pending' : (statusText === 'approved' ? 'status-approved' : 'status-rejected');
+            let statusClass = statusText === 'pending' ? 'status-pending' : (statusText === 'approved' ? 'status-confirmed' : 'status-completed');
             
             return `<tr>
                 <td>${sub.date || 'N/A'}<\/td>
@@ -422,7 +483,7 @@
         document.getElementById('todayCount').innerText = todayCount;
     }
 
-    function filterTable() {
+    function filterSubmissions() {
         displaySubmissions();
     }
 </script>

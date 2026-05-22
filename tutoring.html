@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Tutoring - Damian Okafor & Team</title>
+    <title>Online Tutoring - Damian Okafor & Team | Register & Dashboard</title>
     <style>
         * {
             margin: 0;
@@ -91,7 +91,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             text-align: center;
-            padding: 80px 20px;
+            padding: 60px 20px;
         }
 
         .hero h1 {
@@ -130,7 +130,277 @@
             font-size: 1.1rem;
         }
 
-        /* Subjects Grid */
+        /* REGISTRATION & DASHBOARD MODAL STYLES */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 700px;
+            margin: 50px auto;
+            border-radius: 20px;
+            padding: 0;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .close-modal:hover {
+            transform: scale(1.1);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        /* Dashboard Panel Styles */
+        .dashboard-panel {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: 40px 0;
+            overflow: hidden;
+        }
+
+        .dashboard-header-nav {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 15px 25px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .dash-tab {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            padding: 10px 25px;
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .dash-tab:hover {
+            background: rgba(255,215,0,0.3);
+        }
+
+        .dash-tab.active {
+            background: #ffd700;
+            color: #1a1a2e;
+        }
+
+        .dashboard-content {
+            padding: 30px;
+            min-height: 400px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #ffd700;
+            color: #1a1a2e;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .success-msg {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .error-msg {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        /* Student List Styles */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%);
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .student-item {
+            background: #f8f9fa;
+            padding: 12px 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .student-info {
+            flex: 1;
+        }
+
+        .student-name {
+            font-weight: bold;
+            color: #1a1a2e;
+        }
+
+        .student-email {
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        .student-subject {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+
+        .session-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border-left: 4px solid #ffd700;
+        }
+
+        .progress-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 30px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Subjects Grid (original) */
         .subjects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -203,13 +473,6 @@
             margin-top: 15px;
         }
 
-        .ideal-for p {
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #1a1a2e;
-        }
-
-        /* Approach Grid */
         .approach-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -223,29 +486,8 @@
             padding: 25px;
             text-align: center;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
         }
 
-        .approach-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .approach-icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-        .approach-card h3 {
-            color: #1a1a2e;
-            margin-bottom: 10px;
-        }
-
-        .approach-card p {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        /* Why Choose Us */
         .why-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -261,22 +503,6 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
-        .why-icon {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-        }
-
-        .why-card h4 {
-            color: #1a1a2e;
-            margin-bottom: 5px;
-        }
-
-        .why-card p {
-            color: #666;
-            font-size: 0.85rem;
-        }
-
-        /* Audience Badges */
         .audience-grid {
             display: flex;
             flex-wrap: wrap;
@@ -293,7 +519,6 @@
             font-weight: bold;
         }
 
-        /* Email Section */
         .email-container {
             background: white;
             padding: 35px;
@@ -303,31 +528,16 @@
             text-align: center;
         }
 
-        .email-container h2 {
-            text-align: center;
-            margin-bottom: 15px;
-            color: #1a1a2e;
-        }
-
-        .email-container p {
-            text-align: center;
-            color: #666;
-            margin-bottom: 25px;
-        }
-
         .email-btn {
             display: inline-block;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 14px 35px;
-            border: none;
             border-radius: 50px;
             font-size: 16px;
             font-weight: bold;
-            cursor: pointer;
             text-decoration: none;
             transition: all 0.3s;
-            margin: 10px 0;
         }
 
         .email-btn:hover {
@@ -335,13 +545,6 @@
             box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
         }
 
-        .note-text {
-            font-size: 0.85rem;
-            color: #888;
-            margin-top: 15px;
-        }
-
-        /* CTA Section */
         .cta-section {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: white;
@@ -349,10 +552,6 @@
             padding: 60px 20px;
             border-radius: 20px;
             margin: 60px 0;
-        }
-
-        .cta-section h2 {
-            margin-bottom: 20px;
         }
 
         .cta-section .btn {
@@ -364,11 +563,6 @@
             text-decoration: none;
             font-weight: bold;
             margin-top: 20px;
-        }
-
-        .cta-section .btn:hover {
-            background: #e6c200;
-            transform: translateY(-2px);
         }
 
         footer {
@@ -404,56 +598,26 @@
             gap: 10px;
             z-index: 1000;
             font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .whatsapp-float:hover {
-            transform: scale(1.05);
-            background-color: #20b859;
         }
 
         @media (max-width: 768px) {
             .nav-container {
                 flex-direction: column;
                 gap: 15px;
-                text-align: center;
-            }
-            .nav-links {
-                justify-content: center;
-                gap: 10px;
-                flex-wrap: wrap;
-            }
-            .nav-links a {
-                font-size: 0.7rem;
             }
             .hero h1 {
                 font-size: 1.8rem;
             }
-            .subjects-grid {
-                grid-template-columns: 1fr;
-            }
-            .approach-grid {
-                grid-template-columns: 1fr;
-            }
-            .why-grid {
-                grid-template-columns: 1fr;
-            }
-            .audience-grid {
-                flex-direction: column;
-                align-items: center;
-            }
-            .whatsapp-float {
-                padding: 8px 15px;
-                bottom: 15px;
-                right: 15px;
-                font-size: 12px;
+            .modal-content {
+                margin: 20px;
+                width: auto;
             }
         }
     </style>
 </head>
 <body>
 
-<!-- PROFESSIONAL NAVIGATION WITH ALL LINKS -->
+<!-- Navigation with Register and Dashboard links -->
 <nav>
     <div class="nav-container">
         <div class="logo">
@@ -479,23 +643,41 @@
             <a href="admin.html">🔒 Admin</a>
             <a href="login.html">🔐 Client Login</a>
             <a href="testimonials.html">⭐ Testimonials</a>
+            <!-- NEW REGISTER & DASHBOARD LINKS -->
+            <a href="#" id="registerNavLink">📝 Register</a>
+            <a href="#" id="dashboardNavLink">👤 Dashboard</a>
         </div>
     </div>
 </nav>
 
-<!-- HERO SECTION -->
+<!-- Hero Section -->
 <div class="hero">
     <h1>📚 Online Tutoring with Damian Okafor</h1>
     <p>Teaching Since 2014 | Experienced Classroom Teacher & Online Tutor</p>
 </div>
 
 <div class="container">
-    <!-- SUBJECTS GRID -->
+    
+    <!-- DASHBOARD SECTION (initially hidden, appears when Dashboard is clicked) -->
+    <div id="dashboardSection" style="display: none;">
+        <div class="dashboard-panel">
+            <div class="dashboard-header-nav">
+                <button class="dash-tab active" data-tab="overview">📊 Overview</button>
+                <button class="dash-tab" data-tab="students">👥 Student Roster</button>
+                <button class="dash-tab" data-tab="sessions">📅 Sessions</button>
+                <button class="dash-tab" data-tab="analytics">📈 Analytics</button>
+            </div>
+            <div class="dashboard-content" id="dashboardContent">
+                <div style="text-align: center;">Loading dashboard...</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Subjects Grid (Original Content) -->
     <div class="section-title"><span>📖 Subjects & Programs</span></div>
     <div class="section-subtitle">Comprehensive tutoring for all levels and needs</div>
 
     <div class="subjects-grid">
-        <!-- Subject 1: English Language -->
         <div class="subject-card">
             <div class="subject-header">
                 <div class="subject-icon">📖</div>
@@ -514,12 +696,11 @@
                 </ul>
                 <div class="ideal-for">
                     <p>📌 Ideal For:</p>
-                    <p>Primary and secondary school students | Adults improving communication skills | International exam candidates</p>
+                    <p>Primary and secondary school students | Adults improving communication skills</p>
                 </div>
             </div>
         </div>
 
-        <!-- Subject 2: Digital Technology -->
         <div class="subject-card">
             <div class="subject-header">
                 <div class="subject-icon">💻</div>
@@ -539,12 +720,11 @@
                 </ul>
                 <div class="ideal-for">
                     <p>📌 Ideal For:</p>
-                    <p>Beginners with no computer experience | Students preparing for Computer Studies exams | Professionals upgrading their digital skills</p>
+                    <p>Beginners with no computer experience | Students preparing for Computer Studies exams</p>
                 </div>
             </div>
         </div>
 
-        <!-- Subject 3: Igbo (Diaspora) -->
         <div class="subject-card">
             <div class="subject-header">
                 <div class="subject-icon">🌍</div>
@@ -562,12 +742,11 @@
                 </ul>
                 <div class="ideal-for">
                     <p>📌 Ideal For:</p>
-                    <p>Children of Nigerian families abroad | Adults reconnecting with their heritage | Foreigners interested in learning Igbo</p>
+                    <p>Children of Nigerian families abroad | Adults reconnecting with their heritage</p>
                 </div>
             </div>
         </div>
 
-        <!-- Subject 4: Science Exam Preparation -->
         <div class="subject-card">
             <div class="subject-header">
                 <div class="subject-icon">⚗️</div>
@@ -583,14 +762,9 @@
                     <li>Cambridge IGCSE</li>
                     <li>SAT Subject Preparation</li>
                 </ul>
-                <div class="ideal-for">
-                    <p>📌 What We Offer:</p>
-                    <p>Detailed explanations | Past question practice | Mock examinations | Problem-solving strategies | Personalized study plans</p>
-                </div>
             </div>
         </div>
 
-        <!-- Subject 5: Adult Literacy -->
         <div class="subject-card">
             <div class="subject-header">
                 <div class="subject-icon">📝</div>
@@ -606,18 +780,12 @@
                     <li>Form filling and everyday literacy</li>
                     <li>Digital literacy basics</li>
                 </ul>
-                <div class="ideal-for">
-                    <p>📌 Ideal For:</p>
-                    <p>Adults returning to education | Workers seeking better opportunities | Parents supporting their children's education</p>
-                </div>
             </div>
         </div>
     </div>
 
-    <!-- TEACHING APPROACH -->
+    <!-- Teaching Approach -->
     <div class="section-title"><span>👨‍🏫 Our Teaching Approach</span></div>
-    <div class="section-subtitle">Student-centered learning focused on understanding, confidence-building, and measurable results</div>
-
     <div class="approach-grid">
         <div class="approach-card">
             <div class="approach-icon">👤</div>
@@ -639,19 +807,9 @@
             <h3>Interactive Lessons</h3>
             <p>Engaging and practical teaching methods</p>
         </div>
-        <div class="approach-card">
-            <div class="approach-icon">📊</div>
-            <h3>Progress Tracking</h3>
-            <p>Regular assessments and feedback</p>
-        </div>
-        <div class="approach-card">
-            <div class="approach-icon">📝</div>
-            <h3>Homework & Assignments</h3>
-            <p>Reinforcing learning outside sessions</p>
-        </div>
     </div>
 
-    <!-- WHY CHOOSE US -->
+    <!-- Why Choose Us -->
     <div class="section-title"><span>🌟 Why Learn with Damian Okafor & Team?</span></div>
     <div class="why-grid">
         <div class="why-card">
@@ -665,11 +823,6 @@
             <p>Passionate and experienced teachers</p>
         </div>
         <div class="why-card">
-            <div class="why-icon">📋</div>
-            <h4>Personalized Plans</h4>
-            <p>Tailored to each student's needs</p>
-        </div>
-        <div class="why-card">
             <div class="why-icon">💰</div>
             <h4>Affordable Rates</h4>
             <p>Quality education at fair prices</p>
@@ -679,14 +832,9 @@
             <h4>Online & In-Person</h4>
             <p>Flexible learning options</p>
         </div>
-        <div class="why-card">
-            <div class="why-icon">🏆</div>
-            <h4>Proven Success</h4>
-            <p>Track record of academic improvement</p>
-        </div>
     </div>
 
-    <!-- WHO WE SERVE -->
+    <!-- Who We Serve -->
     <div class="section-title"><span>🎯 Who We Serve</span></div>
     <div class="audience-grid">
         <span class="audience-badge">Primary school pupils</span>
@@ -697,23 +845,16 @@
         <span class="audience-badge">International learners</span>
     </div>
 
-    <!-- EMAIL BUTTON SECTION -->
+    <!-- Email Section -->
     <div class="email-container">
         <h2>📝 Book a Tutoring Session</h2>
         <p>Click the button below to send us an email about tutoring services.</p>
-        
-        <a href="mailto:Danoka33@gmail.com?subject=Tutoring%20Request&body=Hello%20Damian,%0A%0AI%20am%20interested%20in%20tutoring%20services.%0A%0AMy%20Name:%20__________%0AMy%20Phone:%20__________%0AStudent's%20Grade/Level:%20__________%0ASubject%20Needed:%20__________%0A%0AMessage:%0A__________" 
-           class="email-btn">
+        <a href="mailto:Danoka33@gmail.com?subject=Tutoring%20Request" class="email-btn">
             📚 Request a Tutor via Email
         </a>
-        
-        <p class="note-text">
-            🔒 Your email client will open. Fill in your details and send.<br>
-            We will respond within 24 hours.
-        </p>
     </div>
 
-    <!-- CALL TO ACTION -->
+    <!-- CTA -->
     <div class="cta-section">
         <h2>Ready to Improve Your Grades?</h2>
         <p>Book a tutoring session with Damian today and start your learning journey.</p>
@@ -721,7 +862,44 @@
     </div>
 </div>
 
-<!-- CAC BADGE -->
+<!-- REGISTRATION MODAL -->
+<div id="registerModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>📝 Student Registration</h2>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="registrationForm">
+                <div class="form-group">
+                    <label>👤 Full Name *</label>
+                    <input type="text" id="fullName" placeholder="Enter student's full name" required>
+                </div>
+                <div class="form-group">
+                    <label>📧 Email Address *</label>
+                    <input type="email" id="emailAddress" placeholder="student@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label>📚 Subject *</label>
+                    <select id="subjectSelect">
+                        <option value="English Language">📖 English Language</option>
+                        <option value="Digital Technology">💻 Digital Technology</option>
+                        <option value="Igbo (Diaspora)">🌍 Igbo (Diaspora)</option>
+                        <option value="Science Exam Preparation">⚗️ Science Exam Preparation</option>
+                        <option value="Adult Literacy">📝 Adult Literacy</option>
+                        <option value="Mathematics">📐 Mathematics</option>
+                        <option value="Physics">⚛️ Physics</option>
+                        <option value="Chemistry">🧪 Chemistry</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">✅ Register Student</button>
+                <div id="registerFeedback"></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- CAC Badge -->
 <div style="text-align: center; padding: 20px;">
     <div class="cac-badge">
         ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
@@ -729,7 +907,7 @@
     </div>
 </div>
 
-<!-- FOOTER -->
+<!-- Footer -->
 <footer>
     <div class="container">
         <p><strong>Ernest Embassy Digital Solutions</strong> | Online Tutoring Services</p>
@@ -740,11 +918,198 @@
     </div>
 </footer>
 
-<!-- WHATSAPP BUTTON -->
+<!-- WhatsApp Button -->
 <a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
     <span>💬</span>
-    <span>Chat with Damian on WhatsApp</span>
+    <span>Chat with Damian</span>
 </a>
+
+<script>
+    // Student Management System
+    let students = [];
+
+    // Load from localStorage
+    function loadStudents() {
+        const stored = localStorage.getItem('tutoring_students');
+        if (stored) {
+            students = JSON.parse(stored);
+        }
+        if (students.length === 0) {
+            students = [
+                { id: Date.now() + 1, name: "Chinonso Okonkwo", email: "chinonso@example.com", subject: "English Language", date: new Date().toLocaleDateString() },
+                { id: Date.now() + 2, name: "Amara Nwachukwu", email: "amara@example.com", subject: "Digital Technology", date: new Date().toLocaleDateString() }
+            ];
+            saveStudents();
+        }
+    }
+
+    function saveStudents() {
+        localStorage.setItem('tutoring_students', JSON.stringify(students));
+    }
+
+    function addStudent(name, email, subject) {
+        if (students.some(s => s.email.toLowerCase() === email.toLowerCase())) {
+            return { success: false, message: "Student with this email already exists!" };
+        }
+        students.push({
+            id: Date.now(),
+            name: name,
+            email: email,
+            subject: subject,
+            date: new Date().toLocaleDateString()
+        });
+        saveStudents();
+        return { success: true, message: "Student registered successfully!" };
+    }
+
+    function deleteStudent(id) {
+        students = students.filter(s => s.id !== id);
+        saveStudents();
+        renderDashboard();
+    }
+
+    // Dashboard rendering
+    let currentTab = 'overview';
+
+    function renderDashboard() {
+        const container = document.getElementById('dashboardContent');
+        if (!container) return;
+
+        if (currentTab === 'overview') {
+            const total = students.length;
+            const subjects = [...new Set(students.map(s => s.subject))];
+            container.innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-number">${total}</div><div>Total Students</div></div>
+                    <div class="stat-card"><div class="stat-number">${subjects.length}</div><div>Subjects Covered</div></div>
+                    <div class="stat-card"><div class="stat-number">${students.filter(s => new Date(s.date).getMonth() === new Date().getMonth()).length}</div><div>This Month</div></div>
+                </div>
+                <h3>📌 Recent Registrations</h3>
+                ${students.slice(-3).reverse().map(s => `
+                    <div class="student-item">
+                        <div><strong>${s.name}</strong><br><small>${s.subject}</small></div>
+                        <div><small>${s.date}</small></div>
+                    </div>
+                `).join('') || '<div class="empty-state">No students yet. Click Register to add.</div>'}
+            `;
+        } 
+        else if (currentTab === 'students') {
+            container.innerHTML = `
+                <h3>👥 Student Roster (${students.length})</h3>
+                ${students.map(s => `
+                    <div class="student-item">
+                        <div class="student-info">
+                            <div class="student-name">${s.name}</div>
+                            <div class="student-email">${s.email}</div>
+                            <span class="student-subject">${s.subject}</span>
+                        </div>
+                        <button class="delete-btn" onclick="deleteStudent(${s.id})">🗑 Delete</button>
+                    </div>
+                `).join('') || '<div class="empty-state">No students registered yet.</div>'}
+            `;
+        }
+        else if (currentTab === 'sessions') {
+            container.innerHTML = `
+                <h3>📅 Upcoming Tutoring Sessions</h3>
+                <div class="session-card"><strong>📖 English Language</strong><br>Mon & Wed · 4:00 PM · Online</div>
+                <div class="session-card"><strong>💻 Digital Technology</strong><br>Tue & Thu · 5:30 PM · In-person</div>
+                <div class="session-card"><strong>🌍 Igbo (Diaspora)</strong><br>Saturday · 10:00 AM · Zoom</div>
+                <div class="session-card"><strong>⚗️ Science Exam Prep</strong><br>Fri · 3:00 PM · Group Session</div>
+                <div style="margin-top:20px; padding:15px; background:#f0f4f8; border-radius:12px;">
+                    <strong>📌 Note:</strong> Sessions are customized based on student availability. Contact us to schedule.
+                </div>
+            `;
+        }
+        else if (currentTab === 'analytics') {
+            const subjectCount = {};
+            students.forEach(s => { subjectCount[s.subject] = (subjectCount[s.subject] || 0) + 1; });
+            const topSubject = Object.entries(subjectCount).sort((a,b) => b[1] - a[1])[0];
+            container.innerHTML = `
+                <h3>📈 Enrollment Analytics</h3>
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-number">${students.length}</div><div>Total Enrollment</div></div>
+                    <div class="stat-card"><div class="stat-number">${topSubject ? topSubject[1] : 0}</div><div>Top Subject: ${topSubject ? topSubject[0] : 'N/A'}</div></div>
+                </div>
+                <h4>Subject Distribution</h4>
+                ${Object.entries(subjectCount).map(([subject, count]) => `
+                    <div><strong>${subject}</strong>: ${count} student${count > 1 ? 's' : ''}</div>
+                    <div class="progress-bar" style="width:${(count/students.length)*100}%; margin:5px 0 15px 0;">${Math.round((count/students.length)*100)}%</div>
+                `).join('') || '<div class="empty-state">No data yet. Register students to see analytics.</div>'}
+            `;
+        }
+    }
+
+    // Modal handling
+    const modal = document.getElementById('registerModal');
+    const registerLink = document.getElementById('registerNavLink');
+    const dashboardLink = document.getElementById('dashboardNavLink');
+    const dashboardSection = document.getElementById('dashboardSection');
+    const closeBtn = document.querySelector('.close-modal');
+
+    registerLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    });
+
+    dashboardLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (dashboardSection.style.display === 'none') {
+            dashboardSection.style.display = 'block';
+            renderDashboard();
+            // Scroll to dashboard
+            dashboardSection.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            dashboardSection.style.display = 'none';
+        }
+    });
+
+    function closeModal() {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+    // Registration form submit
+    document.getElementById('registrationForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('fullName').value;
+        const email = document.getElementById('emailAddress').value;
+        const subject = document.getElementById('subjectSelect').value;
+        
+        const result = addStudent(name, email, subject);
+        const feedback = document.getElementById('registerFeedback');
+        
+        if (result.success) {
+            feedback.innerHTML = `<div class="success-msg">✅ ${result.message}</div>`;
+            document.getElementById('registrationForm').reset();
+            setTimeout(() => {
+                closeModal();
+                feedback.innerHTML = '';
+            }, 1500);
+            if (dashboardSection.style.display === 'block') renderDashboard();
+        } else {
+            feedback.innerHTML = `<div class="error-msg">❌ ${result.message}</div>`;
+        }
+    });
+
+    // Dashboard tabs
+    document.querySelectorAll('.dash-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            currentTab = tab.getAttribute('data-tab');
+            renderDashboard();
+        });
+    });
+
+    // Initialize
+    loadStudents();
+</script>
 
 </body>
 </html>

@@ -85,83 +85,107 @@
             color: #ffd700;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 0 20px;
-        }
-
-        .booking-container {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        .booking-container h2 {
-            color: #1a1a2e;
-            margin-bottom: 15px;
-            font-size: 2rem;
-        }
-
-        .booking-container > p {
-            color: #666;
-            margin-bottom: 25px;
-        }
-
-        .email-btn {
-            display: inline-block;
+        .hero {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 14px 35px;
-            border: none;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s;
-            margin: 10px 0;
+            text-align: center;
+            padding: 60px 20px;
         }
 
-        .email-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
         }
 
-        .note-text {
-            font-size: 0.85rem;
-            color: #888;
-            margin-top: 15px;
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        .info-box {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 30px;
-            text-align: left;
-            border-left: 4px solid #ffd700;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
         }
 
-        .info-box h3 {
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 30px;
             color: #1a1a2e;
-            margin-bottom: 10px;
         }
 
-        .info-box p {
-            color: #555;
-            margin-bottom: 8px;
+        .section-title span {
+            border-bottom: 3px solid #ffd700;
+            padding-bottom: 10px;
         }
 
-        .info-box ul {
-            margin-left: 20px;
-            color: #555;
+        .booking-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
         }
 
-        .info-box li {
-            margin: 8px 0;
+        .booking-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .booking-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .booking-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ffd700;
+        }
+
+        .booking-icon {
+            font-size: 2.5rem;
+        }
+
+        .booking-header h3 {
+            color: #1a1a2e;
+            font-size: 1.3rem;
+        }
+
+        .booking-duration {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-left: 10px;
+        }
+
+        .booking-description {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .cal-embed-container {
+            min-height: 500px;
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .cal-embed-container iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: 15px;
         }
 
         footer {
@@ -180,7 +204,7 @@
             display: inline-block;
             font-size: 0.85rem;
             font-weight: bold;
-            margin: 20px auto;
+            margin-bottom: 20px;
         }
 
         .whatsapp-float {
@@ -216,24 +240,20 @@
                 gap: 10px;
                 flex-wrap: wrap;
             }
-            .nav-links a {
-                font-size: 0.7rem;
+            .hero h1 {
+                font-size: 1.8rem;
             }
-            .booking-container {
-                padding: 25px;
+            .booking-grid {
+                grid-template-columns: 1fr;
             }
-            .whatsapp-float {
-                padding: 8px 15px;
-                bottom: 15px;
-                right: 15px;
-                font-size: 12px;
+            .cal-embed-container iframe {
+                height: 550px;
             }
         }
     </style>
 </head>
 <body>
 
-<!-- PROFESSIONAL NAVIGATION WITH ALL LINKS -->
 <nav>
     <div class="nav-container">
         <div class="logo">
@@ -263,31 +283,97 @@
     </div>
 </nav>
 
-<div class="container">
-    <div class="booking-container">
-        <h2>📅 Book an Appointment</h2>
-        <p>Click the button below to send us an email to schedule an appointment.</p>
-        
-        <a href="mailto:ernestembassytravels@gmail.com?subject=Appointment%20Booking%20Request&body=Hello%20Damian,%0A%0AI%20would%20like%20to%20book%20an%20appointment.%0A%0AMy%20Name:%20__________%0AMy%20Phone:%20__________%0AService%20Needed:%20(Visa/Film/Web%20Dev/Tutoring/Consulting)%0APreferred%20Date:%20__________%0APreferred%20Time:%20(Morning/Afternoon/Evening)%0A%0AAdditional%20Message:%0A__________" 
-           class="email-btn">
-            📅 Send Booking Request via Email
-        </a>
-        
-        <p class="note-text">
-            🔒 Your email client will open. Fill in your details and send.<br>
-            We will respond within 24 hours.
-        </p>
+<div class="hero">
+    <h1>📅 Schedule an Appointment</h1>
+    <p>Book a consultation or training session with Damian Okafor</p>
+</div>
 
-        <div class="info-box">
-            <h3>📋 What to Include in Your Email</h3>
-            <p>To help us serve you better, please include:</p>
-            <ul>
-                <li>Your full name and phone number</li>
-                <li>The service you need (Visa, Film, Web Development, Tutoring, or Consulting)</li>
-                <li>Your preferred date and time</li>
-                <li>Any specific questions or requirements</li>
-            </ul>
+<div class="container">
+    <div class="booking-grid">
+        
+        <!-- Education Consulting -->
+        <div class="booking-card">
+            <div class="booking-header">
+                <div class="booking-icon">🎓</div>
+                <h3>Education Consulting <span class="booking-duration">30 min</span></h3>
+            </div>
+            <div class="booking-description">
+                Study abroad guidance, school selection, scholarship advice, and admission support.
+            </div>
+            <div id="cal-education" class="cal-embed-container"></div>
         </div>
+
+        <!-- Visa Consultation -->
+        <div class="booking-card">
+            <div class="booking-header">
+                <div class="booking-icon">✈️</div>
+                <h3>Visa Consultation <span class="booking-duration">30 min</span></h3>
+            </div>
+            <div class="booking-description">
+                Discuss study abroad plans, visa requirements, document preparation, and interview coaching.
+            </div>
+            <div id="cal-visa" class="cal-embed-container"></div>
+        </div>
+
+        <!-- Web Development Consultation -->
+        <div class="booking-card">
+            <div class="booking-header">
+                <div class="booking-icon">💻</div>
+                <h3>Web Development Consultation <span class="booking-duration">45 min</span></h3>
+            </div>
+            <div class="booking-description">
+                Discuss your website project, e-commerce store, school portal, or custom web application.
+            </div>
+            <div id="cal-webdev" class="cal-embed-container"></div>
+        </div>
+
+        <!-- Film Training Session -->
+        <div class="booking-card">
+            <div class="booking-header">
+                <div class="booking-icon">🎬</div>
+                <h3>Film Training Session <span class="booking-duration">60 min</span></h3>
+            </div>
+            <div class="booking-description">
+                Acting coaching, directing training, scriptwriting, or production consultation.
+            </div>
+            <div id="cal-film" class="cal-embed-container"></div>
+        </div>
+
+        <!-- Tutoring Session -->
+        <div class="booking-card">
+            <div class="booking-header">
+                <div class="booking-icon">📚</div>
+                <h3>Tutoring Session <span class="booking-duration">60 min</span></h3>
+            </div>
+            <div class="booking-description">
+                English, Digital Technology, Igbo for diaspora, or Science exam preparation.
+            </div>
+            <div id="cal-tutoring" class="cal-embed-container"></div>
+        </div>
+
+        <!-- Free Discovery Call -->
+        <div class="booking-card">
+            <div class="booking-header">
+                <div class="booking-icon">☎️</div>
+                <h3>Free Discovery Call <span class="booking-duration">15 min</span></h3>
+            </div>
+            <div class="booking-description">
+                Quick chat to understand your needs and how we can help you.
+            </div>
+            <div id="cal-discovery" class="cal-embed-container"></div>
+        </div>
+    </div>
+
+    <div class="info-box" style="background: #f8f9fa; border-left: 4px solid #ffd700; padding: 20px; border-radius: 10px; margin-top: 40px;">
+        <h3>📋 How It Works</h3>
+        <ol style="margin-left: 20px; margin-top: 10px;">
+            <li>Select the service you need from above</li>
+            <li>Choose a date and time from the calendar</li>
+            <li>Enter your contact details</li>
+            <li>You will receive a confirmation email with meeting link</li>
+            <li>Join the video call at the scheduled time</li>
+        </ol>
+        <p style="margin-top: 15px;"><strong>Note:</strong> All sessions are conducted via Google Meet or Zoom. A meeting link will be sent after booking.</p>
     </div>
 </div>
 
@@ -315,6 +401,86 @@
     <span>💬</span>
     <span>Chat with Damian on WhatsApp</span>
 </a>
+
+<!-- Cal.com Embed Scripts -->
+<script type="text/javascript">
+    (function (C, A, L) { 
+        let p = function (a, ar) { a.q.push(ar); }; 
+        let d = C.document; 
+        C.Cal = C.Cal || function () { 
+            let cal = C.Cal; 
+            let ar = arguments; 
+            if (!cal.loaded) { 
+                cal.ns = {}; 
+                cal.q = cal.q || []; 
+                d.head.appendChild(d.createElement("script")).src = A; 
+                cal.loaded = true; 
+            } 
+            if (ar[0] === L) { 
+                const api = function () { p(api, arguments); }; 
+                const namespace = ar[1]; 
+                api.q = api.q || [];
+                if(typeof namespace === "string"){
+                    cal.ns[namespace] = cal.ns[namespace] || api;
+                    p(cal.ns[namespace], ar);
+                    p(cal, ["initNamespace", namespace]);
+                } else p(cal, ar); 
+                return;
+            } 
+            p(cal, ar); 
+        }; 
+    })(window, "https://app.cal.com/embed/embed.js", "init");
+
+    // Initialize Cal.com
+    Cal("init", "education-consulting", {origin:"https://app.cal.com"});
+    Cal("init", "visa-consultation", {origin:"https://app.cal.com"});
+    Cal("init", "web-development", {origin:"https://app.cal.com"});
+    Cal("init", "film-training", {origin:"https://app.cal.com"});
+    Cal("init", "tutoring-session", {origin:"https://app.cal.com"});
+    Cal("init", "discovery-call", {origin:"https://app.cal.com"});
+
+    // Education Consulting
+    Cal.ns["education-consulting"]("inline", {
+        elementOrSelector: "#cal-education",
+        config: {"layout":"month_view"},
+        calLink: "ernestembassy/education-consulting",
+    });
+
+    // Visa Consultation
+    Cal.ns["visa-consultation"]("inline", {
+        elementOrSelector: "#cal-visa",
+        config: {"layout":"month_view"},
+        calLink: "ernestembassy/visa-consultation",
+    });
+
+    // Web Development
+    Cal.ns["web-development"]("inline", {
+        elementOrSelector: "#cal-webdev",
+        config: {"layout":"month_view"},
+        calLink: "ernestembassy/web-development",
+    });
+
+    // Film Training
+    Cal.ns["film-training"]("inline", {
+        elementOrSelector: "#cal-film",
+        config: {"layout":"month_view"},
+        calLink: "ernestembassy/film-training",
+    });
+
+    // Tutoring Session
+    Cal.ns["tutoring-session"]("inline", {
+        elementOrSelector: "#cal-tutoring",
+        config: {"layout":"month_view"},
+        calLink: "ernestembassy/tutoring-session",
+    });
+
+    // Discovery Call
+    Cal.ns["discovery-call"]("inline", {
+        elementOrSelector: "#cal-discovery",
+        config: {"layout":"month_view"},
+        calLink: "ernestembassy/discovery-call",
+    });
+</script>
 
 </body>
 </html>

@@ -281,14 +281,14 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
 <script>
-    // Your Firebase configuration - REPLACE WITH YOUR ACTUAL CONFIG
+    // YOUR FIREBASE CONFIGURATION - REPLACED
     const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-        appId: "YOUR_APP_ID"
+        apiKey: "AIzaSyD6xpH_zLnoJP2PTSMHg80R94_Vd-fUZSA",
+        authDomain: "ernest-embassy-travel-website.firebaseapp.com",
+        projectId: "ernest-embassy-travel-website",
+        storageBucket: "ernest-embassy-travel-website.firebasestorage.app",
+        messagingSenderId: "831442789419",
+        appId: "1:831442789419:web:1845791aafb7ac9d31366e"
     };
 
     // Initialize Firebase
@@ -316,7 +316,6 @@
             const userCredential = await auth.signInWithEmailAndPassword(email, password);
             const user = userCredential.user;
             
-            // Check if email is verified
             if (!user.emailVerified) {
                 errorDiv.innerText = 'Please verify your email before logging in. Check your inbox.';
                 errorDiv.style.display = 'block';
@@ -324,7 +323,6 @@
                 return;
             }
             
-            // Redirect to dashboard
             window.location.href = 'dashboard.html';
             
         } catch (error) {

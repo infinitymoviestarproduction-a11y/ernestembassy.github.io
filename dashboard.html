@@ -17,6 +17,7 @@
             color: #333;
         }
 
+        /* Navigation */
         nav {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             padding: 1rem 0;
@@ -68,7 +69,8 @@
         .nav-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 12px;
+            align-items: center;
         }
 
         .nav-links a {
@@ -77,11 +79,26 @@
             font-weight: 500;
             transition: color 0.3s;
             padding: 8px 0;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         .nav-links a:hover {
             color: #ffd700;
+        }
+
+        .btn-logout {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: #c82333;
         }
 
         .container {
@@ -116,6 +133,11 @@
             border-radius: 15px;
             text-align: center;
             box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
         }
 
         .stat-number {
@@ -188,18 +210,19 @@
             color: #721c24;
         }
 
-        .btn-logout {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
+        .empty-state {
+            padding: 40px;
+            text-align: center;
+            color: #666;
         }
 
-        .btn-logout:hover {
-            background: #c82333;
+        .empty-state a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .empty-state a:hover {
+            text-decoration: underline;
         }
 
         footer {
@@ -210,6 +233,28 @@
             margin-top: 60px;
         }
 
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.05);
+            background-color: #20b859;
+        }
+
         @media (max-width: 768px) {
             .nav-container {
                 flex-direction: column;
@@ -218,18 +263,34 @@
             }
             .nav-links {
                 justify-content: center;
-                gap: 10px;
+                gap: 8px;
                 flex-wrap: wrap;
+            }
+            .nav-links a {
+                font-size: 0.65rem;
+            }
+            .welcome-card h1 {
+                font-size: 1.4rem;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
             .appointment-item {
                 flex-direction: column;
                 text-align: center;
+            }
+            .whatsapp-float {
+                padding: 8px 15px;
+                bottom: 15px;
+                right: 15px;
+                font-size: 12px;
             }
         }
     </style>
 </head>
 <body>
 
+<!-- PROFESSIONAL NAVIGATION WITH ALL LINKS -->
 <nav>
     <div class="nav-container">
         <div class="logo">
@@ -252,7 +313,11 @@
             <a href="education.html">🎓 Education</a>
             <a href="booking.html">📅 Book</a>
             <a href="contact.html">📞 Contact</a>
+            <a href="register.html">📝 Register</a>
+            <a href="login.html">🔐 Login</a>
             <a href="dashboard.html">👤 Dashboard</a>
+            <a href="admin.html">🔒 Admin</a>
+            <a href="testimonials.html">⭐ Testimonials</a>
             <button class="btn-logout" onclick="logout()">🚪 Logout</button>
         </div>
     </div>
@@ -261,14 +326,22 @@
 <div class="container">
     <div id="dashboardContent">
         <!-- Content loaded dynamically -->
+        <div style="text-align: center; padding: 50px;">Loading your dashboard...</div>
     </div>
 </div>
 
 <footer>
     <div class="container">
         <p>&copy; 2026 Ernest Embassy Digital Solutions. All rights reserved.</p>
+        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
     </div>
 </footer>
+
+<!-- WHATSAPP BUTTON -->
+<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
+    <span>💬</span>
+    <span>Chat with Damian on WhatsApp</span>
+</a>
 
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -276,7 +349,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
 <script>
-    // YOUR FIREBASE CONFIGURATION - REPLACED
+    // YOUR FIREBASE CONFIGURATION
     const firebaseConfig = {
         apiKey: "AIzaSyD6xpH_zLnoJP2PTSMHg80R94_Vd-fUZSA",
         authDomain: "ernest-embassy-travel-website.firebaseapp.com",
@@ -302,6 +375,19 @@
         
         currentUser = user;
         
+        // Check email verification
+        if (!user.emailVerified) {
+            document.getElementById('dashboardContent').innerHTML = `
+                <div class="welcome-card" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
+                    <h1>Email Not Verified</h1>
+                    <p>Please check your email inbox and verify your email address before accessing your dashboard.</p>
+                    <button onclick="resendVerification()" style="background: white; color: #dc3545; border: none; padding: 10px 20px; border-radius: 8px; margin-top: 15px; cursor: pointer; font-weight: bold;">Resend Verification Email</button>
+                </div>
+            `;
+            return;
+        }
+        
+        // Get user data from Firestore
         const userDoc = await db.collection('users').doc(user.uid).get();
         const userData = userDoc.data();
         
@@ -334,8 +420,82 @@
             
             <h2 class="section-title">📅 My Appointments</h2>
             <div class="appointments-list" id="appointmentsList">
-                <div style="padding: 40px; text-align: center; color: #666;">Loading your appointments...</div>
+                <div class="empty-state">Loading your appointments...</div>
             </div>
         `;
         
-        loadApp
+        loadAppointments();
+    }
+    
+    async function loadAppointments() {
+        // This is sample data. In production, you would fetch from your booking system (Cal.com API)
+        // For now, showing sample appointments
+        const sampleAppointments = [
+            {
+                id: 1,
+                service: 'Visa Consultation',
+                date: '2026-05-25',
+                time: '10:00 AM',
+                status: 'upcoming',
+                meetingLink: 'https://meet.google.com/visa-ernest'
+            },
+            {
+                id: 2,
+                service: 'Web Development Consultation',
+                date: '2026-05-20',
+                time: '2:00 PM',
+                status: 'completed',
+                meetingLink: 'https://meet.google.com/webdev-ernest'
+            },
+            {
+                id: 3,
+                service: 'Education Consulting',
+                date: '2026-05-28',
+                time: '11:00 AM',
+                status: 'upcoming',
+                meetingLink: 'https://meet.google.com/edu-ernest'
+            }
+        ];
+        
+        const upcomingCount = sampleAppointments.filter(a => a.status === 'upcoming').length;
+        const completedCount = sampleAppointments.filter(a => a.status === 'completed').length;
+        
+        document.getElementById('upcomingCount').innerText = upcomingCount;
+        document.getElementById('completedCount').innerText = completedCount;
+        document.getElementById('totalCount').innerText = sampleAppointments.length;
+        
+        const appointmentsList = document.getElementById('appointmentsList');
+        
+        if (sampleAppointments.length === 0) {
+            appointmentsList.innerHTML = '<div class="empty-state">No appointments yet. <a href="booking.html">Book your first appointment</a></div>';
+            return;
+        }
+        
+        appointmentsList.innerHTML = sampleAppointments.map(app => `
+            <div class="appointment-item">
+                <div class="appointment-info">
+                    <h4>${app.service}</h4>
+                    <p>📅 ${app.date} | ⏰ ${app.time}</p>
+                    ${app.status === 'upcoming' && app.meetingLink ? `<p>🔗 <a href="${app.meetingLink}" target="_blank">Join Meeting</a></p>` : ''}
+                </div>
+                <span class="appointment-status status-${app.status}">${app.status.toUpperCase()}</span>
+            </div>
+        `).join('');
+    }
+
+    function resendVerification() {
+        if (currentUser) {
+            currentUser.sendEmailVerification();
+            alert('Verification email sent! Please check your inbox.');
+        }
+    }
+
+    function logout() {
+        auth.signOut().then(() => {
+            window.location.href = 'login.html';
+        });
+    }
+</script>
+
+</body>
+</html>

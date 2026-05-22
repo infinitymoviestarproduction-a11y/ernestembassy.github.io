@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client Login - Ernest Embassy Digital Solutions</title>
+    <title>Login - Ernest Embassy Digital Solutions</title>
     <style>
         * {
             margin: 0;
@@ -17,7 +17,6 @@
             min-height: 100vh;
         }
 
-        /* Navigation */
         nav {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             padding: 1rem 0;
@@ -96,22 +95,22 @@
             border-radius: 20px;
             padding: 40px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-align: center;
         }
 
         .login-card h1 {
             color: #1a1a2e;
+            text-align: center;
             margin-bottom: 10px;
         }
 
         .login-card p {
             color: #666;
+            text-align: center;
             margin-bottom: 30px;
         }
 
         .form-group {
             margin-bottom: 20px;
-            text-align: left;
         }
 
         .form-group label {
@@ -135,7 +134,7 @@
             border-color: #667eea;
         }
 
-        .login-btn {
+        .btn-login {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 14px;
@@ -148,20 +147,46 @@
             transition: all 0.3s;
         }
 
-        .login-btn:hover {
+        .btn-login:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
 
-        .info-text {
+        .register-link {
+            text-align: center;
             margin-top: 20px;
-            font-size: 0.85rem;
-            color: #888;
+            font-size: 0.9rem;
+            color: #666;
         }
 
-        .info-text a {
+        .register-link a {
             color: #667eea;
             text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+
+        .forgot-password a {
+            color: #888;
+            font-size: 0.8rem;
+            text-decoration: none;
+        }
+
+        .error-msg {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
         }
 
         footer {
@@ -170,39 +195,6 @@
             text-align: center;
             padding: 30px;
             margin-top: 60px;
-        }
-
-        .cac-badge-footer {
-            background: #ffd700;
-            color: #1a1a2e;
-            padding: 10px 20px;
-            border-radius: 30px;
-            display: inline-block;
-            font-size: 0.85rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .whatsapp-float {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #25D366;
-            color: white;
-            border-radius: 50px;
-            padding: 12px 20px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 1000;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .whatsapp-float:hover {
-            transform: scale(1.05);
-            background-color: #20b859;
         }
 
         @media (max-width: 768px) {
@@ -216,31 +208,21 @@
                 gap: 10px;
                 flex-wrap: wrap;
             }
-            .nav-links a {
-                font-size: 0.7rem;
-            }
             .login-card {
                 padding: 25px;
-            }
-            .whatsapp-float {
-                padding: 8px 15px;
-                bottom: 15px;
-                right: 15px;
-                font-size: 12px;
             }
         }
     </style>
 </head>
 <body>
 
-<!-- PROFESSIONAL NAVIGATION WITH ALL LINKS -->
 <nav>
     <div class="nav-container">
         <div class="logo">
             <span class="logo-icon">🔐</span>
             <div>
                 <span class="logo-text">Ernest Embassy</span>
-                <span class="logo-sub">Client Portal</span>
+                <span class="logo-sub">Digital Solutions</span>
             </div>
         </div>
         <div class="nav-links">
@@ -256,60 +238,101 @@
             <a href="education.html">🎓 Education</a>
             <a href="booking.html">📅 Book</a>
             <a href="contact.html">📞 Contact</a>
-            <a href="admin.html">🔒 Admin</a>
-            <a href="login.html">🔐 Client Login</a>
-            <a href="testimonials.html">⭐ Testimonials</a>
         </div>
     </div>
 </nav>
 
 <div class="container">
     <div class="login-card">
-        <h1>🔐 Client Login Portal</h1>
-        <p>Track your visa application status</p>
+        <h1>Welcome Back</h1>
+        <p>Sign in to access your dashboard and appointments</p>
 
-        <form id="loginForm" action="track-status.html" method="GET">
-            <div class="form-group">
-                <label>Application ID / Reference Number</label>
-                <input type="text" id="appId" placeholder="e.g., EE2026001" required>
-            </div>
+        <div id="errorMsg" class="error-msg"></div>
+
+        <form id="loginForm">
             <div class="form-group">
                 <label>Email Address</label>
-                <input type="email" id="email" placeholder="your@email.com" required>
+                <input type="email" id="email" placeholder="Enter your email" required>
             </div>
-            <button type="submit" class="login-btn">🔍 Track Application</button>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+            </div>
+            <div class="forgot-password">
+                <a href="forgot-password.html">Forgot password?</a>
+            </div>
+            <button type="submit" class="btn-login">Sign In</button>
         </form>
-        <div class="info-text">
-            <p>Don't have an application ID? <a href="booking.html">Contact us</a> to start your application.</p>
-            <p style="margin-top: 10px;">Need help? <a href="contact.html">Contact Support</a></p>
+
+        <div class="register-link">
+            Don't have an account? <a href="register.html">Create one here</a>
         </div>
     </div>
 </div>
 
-<!-- CAC BADGE FOOTER -->
-<div style="text-align: center; padding: 20px;">
-    <div class="cac-badge-footer">
-        ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
-        📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
-    </div>
-</div>
-
-<!-- FOOTER -->
 <footer>
     <div class="container">
-        <p><strong>Ernest Embassy Digital Solutions</strong> | Client Portal</p>
-        <p>📧 ernestembassytravels@gmail.com | infinitymoviestarproduction@gmail.com | Danoka33@gmail.com</p>
-        <p>📞 +2348032607809 | +2349050205053</p>
-        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
-        <p style="margin-top: 20px;">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
+        <p>&copy; 2026 Ernest Embassy Digital Solutions. All rights reserved.</p>
     </div>
 </footer>
 
-<!-- WHATSAPP BUTTON -->
-<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
-    <span>💬</span>
-    <span>Chat with Damian on WhatsApp</span>
-</a>
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+<script>
+    // Your Firebase configuration - REPLACE WITH YOUR ACTUAL CONFIG
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Check if user is already logged in
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            window.location.href = 'dashboard.html';
+        }
+    });
+
+    // Login form submission
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const errorDiv = document.getElementById('errorMsg');
+        
+        errorDiv.style.display = 'none';
+        
+        try {
+            const userCredential = await auth.signInWithEmailAndPassword(email, password);
+            const user = userCredential.user;
+            
+            // Check if email is verified
+            if (!user.emailVerified) {
+                errorDiv.innerText = 'Please verify your email before logging in. Check your inbox.';
+                errorDiv.style.display = 'block';
+                await auth.signOut();
+                return;
+            }
+            
+            // Redirect to dashboard
+            window.location.href = 'dashboard.html';
+            
+        } catch (error) {
+            errorDiv.innerText = error.message;
+            errorDiv.style.display = 'block';
+        }
+    });
+</script>
 
 </body>
 </html>

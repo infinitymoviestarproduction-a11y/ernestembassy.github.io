@@ -69,7 +69,7 @@
         .nav-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 12px;
         }
 
         .nav-links a {
@@ -78,7 +78,7 @@
             font-weight: 500;
             transition: color 0.3s;
             padding: 8px 0;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         .nav-links a:hover {
@@ -226,14 +226,26 @@
             }
             .nav-links {
                 justify-content: center;
-                gap: 10px;
+                gap: 8px;
                 flex-wrap: wrap;
+            }
+            .nav-links a {
+                font-size: 0.65rem;
             }
             .hero h1 {
                 font-size: 1.8rem;
             }
             .booking-grid {
                 grid-template-columns: 1fr;
+            }
+            .cal-embed-container {
+                min-height: 450px;
+            }
+            .whatsapp-float {
+                padding: 8px 15px;
+                bottom: 15px;
+                right: 15px;
+                font-size: 12px;
             }
         }
     </style>
@@ -262,8 +274,10 @@
             <a href="education.html">🎓 Education</a>
             <a href="booking.html">📅 Book</a>
             <a href="contact.html">📞 Contact</a>
+            <a href="register.html">📝 Register</a>
+            <a href="login.html">🔐 Login</a>
+            <a href="dashboard.html">👤 Dashboard</a>
             <a href="admin.html">🔒 Admin</a>
-            <a href="login.html">🔐 Client Login</a>
             <a href="testimonials.html">⭐ Testimonials</a>
         </div>
     </div>
@@ -356,10 +370,10 @@
             <li>Select the service you need from above</li>
             <li>Choose a date and time from the calendar</li>
             <li>Enter your contact details</li>
-            <li>You will receive a confirmation email with meeting link</li>
-            <li>Join the video call at the scheduled time</li>
+            <li>You will receive a confirmation email with a Google Meet link</li>
+            <li>Click the link at your scheduled time to join the video call</li>
         </ol>
-        <p style="margin-top: 15px;"><strong>Note:</strong> All sessions are conducted via Google Meet or Zoom. A meeting link will be sent after booking.</p>
+        <p style="margin-top: 15px;"><strong>Note:</strong> All sessions are conducted via Google Meet. The meeting link is automatically generated and sent after booking.</p>
     </div>
 </div>
 
@@ -417,7 +431,6 @@
         }; 
     })(window, "https://app.cal.com/embed/embed.js", "init");
 
-    // Initialize all namespaces
     Cal("init", "education-consulting", {origin:"https://app.cal.com"});
     Cal("init", "tutoring-session", {origin:"https://app.cal.com"});
     Cal("init", "website-development-consultation", {origin:"https://app.cal.com"});
@@ -425,42 +438,36 @@
     Cal("init", "free-discovery-call", {origin:"https://app.cal.com"});
     Cal("init", "film-training-session", {origin:"https://app.cal.com"});
 
-    // Education Consulting
     Cal.ns["education-consulting"]("inline", {
         elementOrSelector: "#cal-education",
         config: {"layout":"month_view"},
         calLink: "ernestembassy/education-consulting",
     });
 
-    // Tutoring Session
     Cal.ns["tutoring-session"]("inline", {
         elementOrSelector: "#cal-tutoring",
         config: {"layout":"month_view"},
         calLink: "ernestembassy/tutoring-session",
     });
 
-    // Website Development Consultation
     Cal.ns["website-development-consultation"]("inline", {
         elementOrSelector: "#cal-webdev",
         config: {"layout":"month_view"},
         calLink: "ernestembassy/website-development-consultation",
     });
 
-    // Visa Consultation
     Cal.ns["visa-consultation"]("inline", {
         elementOrSelector: "#cal-visa",
         config: {"layout":"month_view"},
         calLink: "ernestembassy/visa-consultation",
     });
 
-    // Free Discovery Call
     Cal.ns["free-discovery-call"]("inline", {
         elementOrSelector: "#cal-discovery",
         config: {"layout":"month_view"},
         calLink: "ernestembassy/free-discovery-call",
     });
 
-    // Film Training Session
     Cal.ns["film-training-session"]("inline", {
         elementOrSelector: "#cal-film",
         config: {"layout":"month_view"},

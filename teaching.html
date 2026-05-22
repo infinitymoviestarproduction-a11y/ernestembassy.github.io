@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teaching & Academic Support - Damian Anielozie Okafor</title>
+    <title>FAQ - Frequently Asked Questions | Ernest Embassy Digital Solutions</title>
     <style>
         * {
             margin: 0;
@@ -91,7 +91,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             text-align: center;
-            padding: 80px 20px;
+            padding: 60px 20px;
         }
 
         .hero h1 {
@@ -114,7 +114,7 @@
         .section-title {
             text-align: center;
             font-size: 2rem;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
             color: #1a1a2e;
         }
 
@@ -123,267 +123,119 @@
             padding-bottom: 10px;
         }
 
-        /* Teaching Stats */
-        .teaching-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
-        }
-
-        .stat-box {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
+        .section-subtitle {
             text-align: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            transition: transform 0.3s;
-        }
-
-        .stat-box:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #667eea;
-            display: block;
-        }
-
-        .stat-label {
             color: #666;
-            font-size: 0.9rem;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
         }
 
-        /* Approach Grid */
-        .approach-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin: 50px 0;
+        /* FAQ Category Styles */
+        .faq-category {
+            margin-bottom: 50px;
         }
 
-        .approach-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: all 0.3s;
-        }
-
-        .approach-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-
-        .approach-icon {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-        }
-
-        .approach-card h3 {
+        .category-title {
+            font-size: 1.8rem;
             color: #1a1a2e;
-            margin-bottom: 10px;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ffd700;
+            display: inline-block;
         }
 
-        /* Subjects List */
-        .subjects-list {
+        .faq-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
             gap: 20px;
             margin: 30px 0;
         }
 
-        .subject-item {
+        .faq-item {
             background: white;
+            border-radius: 15px;
             padding: 20px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             transition: all 0.3s;
+            cursor: pointer;
         }
 
-        .subject-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        .faq-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
 
-        .subject-icon {
-            font-size: 2rem;
-        }
-
-        .subject-info h4 {
+        .faq-question {
+            font-size: 1.1rem;
+            font-weight: bold;
             color: #1a1a2e;
-            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-right: 10px;
         }
 
-        .subject-info p {
-            color: #666;
-            font-size: 0.85rem;
-        }
-
-        /* Pricing Cards */
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
-        }
-
-        .pricing-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        .faq-question .icon {
+            font-size: 1.2rem;
+            color: #667eea;
             transition: transform 0.3s;
         }
 
-        .pricing-card:hover {
-            transform: translateY(-5px);
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            color: #555;
+            line-height: 1.6;
+            margin-top: 0;
         }
 
-        .pricing-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .pricing-header h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-
-        .pricing-body {
-            padding: 30px;
-        }
-
-        .pricing-features {
-            list-style: none;
-            margin-bottom: 25px;
-        }
-
-        .pricing-features li {
-            padding: 10px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .pricing-features li:before {
-            content: "✓";
-            color: #28a745;
-            font-weight: bold;
-        }
-
-        .btn {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 12px 25px;
-            border-radius: 40px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        /* Email Section */
-        .email-container {
-            background: white;
-            padding: 35px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            margin: 40px 0;
-            text-align: center;
-        }
-
-        .email-container h2 {
-            text-align: center;
-            margin-bottom: 15px;
-            color: #1a1a2e;
-        }
-
-        .email-container p {
-            text-align: center;
-            color: #666;
-            margin-bottom: 25px;
-        }
-
-        .email-btn {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 14px 35px;
-            border: none;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s;
-            margin: 10px 0;
-        }
-
-        .email-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .note-text {
-            font-size: 0.85rem;
-            color: #888;
+        .faq-item.active .faq-answer {
+            max-height: 500px;
             margin-top: 15px;
         }
 
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
+        .faq-item.active .icon {
+            transform: rotate(180deg);
         }
 
-        .testimonial-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            font-style: italic;
+        .faq-answer ul {
+            margin-left: 20px;
+            margin-top: 10px;
         }
 
-        .testimonial-card .author {
-            margin-top: 15px;
-            font-weight: bold;
-            color: #667eea;
-            font-style: normal;
+        .faq-answer li {
+            margin: 5px 0;
         }
 
+        /* CTA Section */
         .cta-section {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: white;
             text-align: center;
-            padding: 60px 20px;
+            padding: 50px 20px;
             border-radius: 20px;
             margin: 60px 0;
         }
 
+        .cta-section h2 {
+            margin-bottom: 20px;
+        }
+
         .cta-section .btn {
+            display: inline-block;
             background: #ffd700;
             color: #1a1a2e;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
             margin-top: 20px;
+            transition: transform 0.3s;
         }
 
         .cta-section .btn:hover {
-            background: #e6c200;
+            transform: translateY(-2px);
         }
 
         footer {
@@ -391,7 +243,7 @@
             color: white;
             text-align: center;
             padding: 40px 20px;
-            margin-top: 40px;
+            margin-top: 60px;
         }
 
         .cac-badge {
@@ -400,7 +252,9 @@
             padding: 10px 20px;
             border-radius: 30px;
             display: inline-block;
-            margin: 20px 0;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 20px;
         }
 
         .whatsapp-float {
@@ -439,17 +293,11 @@
             .nav-links a {
                 font-size: 0.65rem;
             }
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
             .hero h1 {
                 font-size: 1.8rem;
-            }
-            .teaching-stats {
-                grid-template-columns: 1fr;
-            }
-            .subjects-list {
-                grid-template-columns: 1fr;
-            }
-            .pricing-grid {
-                grid-template-columns: 1fr;
             }
             .whatsapp-float {
                 padding: 8px 15px;
@@ -462,11 +310,11 @@
 </head>
 <body>
 
-<!-- PROFESSIONAL NAVIGATION WITH ALL LINKS -->
+<!-- PROFESSIONAL NAVIGATION WITH ALL LINKS (MATCHES TEACHING.HTML) -->
 <nav>
     <div class="nav-container">
         <div class="logo">
-            <span class="logo-icon">📚</span>
+            <span class="logo-icon">❓</span>
             <div>
                 <span class="logo-text">Ernest Embassy</span>
                 <span class="logo-sub">Digital Solutions</span>
@@ -485,248 +333,409 @@
             <a href="education.html">🎓 Education</a>
             <a href="booking.html">📅 Book</a>
             <a href="contact.html">📞 Contact</a>
+            <a href="faq.html">❓ FAQ</a>
+            <a href="testimonials.html">⭐ Testimonials</a>
             <a href="register.html">📝 Register</a>
             <a href="login.html">🔐 Login</a>
             <a href="dashboard.html">👤 Dashboard</a>
             <a href="admin.html">🔒 Admin</a>
-            <a href="testimonials.html">⭐ Testimonials</a>
         </div>
     </div>
 </nav>
 
+<!-- Hero Section -->
 <div class="hero">
-    <h1>📚 Teaching & Academic Support</h1>
-    <p>Professional teaching services and academic support for students at all levels</p>
+    <h1>❓ Frequently Asked Questions</h1>
+    <p>Find answers to common questions about our visa, education, tutoring, teaching, and web development services</p>
 </div>
 
 <div class="container">
-    <!-- STATISTICS SECTION -->
-    <div class="teaching-stats">
-        <div class="stat-box">
-            <span class="stat-number">10+</span>
-            <span class="stat-label">Years of Teaching</span>
-        </div>
-        <div class="stat-box">
-            <span class="stat-number">500+</span>
-            <span class="stat-label">Students Taught</span>
-        </div>
-        <div class="stat-box">
-            <span class="stat-number">95%</span>
-            <span class="stat-label">Exam Success Rate</span>
-        </div>
-        <div class="stat-box">
-            <span class="stat-number">24/7</span>
-            <span class="stat-label">Support Available</span>
-        </div>
-    </div>
+    <!-- VISA & TRAVEL SERVICES FAQ -->
+    <div class="faq-category">
+        <h2 class="category-title">✈️ Visa & Travel Services FAQ</h2>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ How long does the study visa process take?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    The processing time depends on the destination country, embassy workload, and how quickly all required documents are submitted. Some applications may take a few weeks, while others can take several months. We guide applicants through every stage to help ensure proper and timely submission.
+                </div>
+            </div>
 
-    <!-- ABOUT TEACHING -->
-    <div class="section-title"><span>About My Teaching Approach</span></div>
-    <div style="background: white; padding: 35px; border-radius: 20px; margin-bottom: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
-        <p style="font-size: 1.1rem; line-height: 1.8;">We offer professional teaching services and academic support for students at different educational levels. Our teaching approach focuses on clarity, understanding, and helping students achieve academic excellence.</p>
-        <p style="margin-top: 20px;">With over 10 years of teaching experience, Damian Anielozie Okafor has helped hundreds of students improve their grades, pass exams, and build confidence in their academic abilities.</p>
-    </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ Do you guarantee visa approval?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    No legitimate agency can guarantee visa approval because all decisions are made solely by the embassy or immigration authorities. However, we provide professional guidance, document review, interview coaching, and application support to help strengthen your application.
+                </div>
+            </div>
 
-    <!-- TEACHING APPROACH -->
-    <div class="section-title"><span>My Teaching Approach</span></div>
-    <div class="approach-grid">
-        <div class="approach-card">
-            <div class="approach-icon">🎯</div>
-            <h3>Personalized Learning</h3>
-            <p>Tailored lessons based on each student's unique needs and learning pace.</p>
-        </div>
-        <div class="approach-card">
-            <div class="approach-icon">💡</div>
-            <h3>Clarity & Understanding</h3>
-            <p>Breaking down complex topics into simple, easy-to-understand concepts.</p>
-        </div>
-        <div class="approach-card">
-            <div class="approach-icon">📈</div>
-            <h3>Progress Tracking</h3>
-            <p>Regular assessments and feedback to monitor improvement.</p>
-        </div>
-        <div class="approach-card">
-            <div class="approach-icon">🤝</div>
-            <h3>Supportive Environment</h3>
-            <p>Creating a safe space where students feel comfortable asking questions.</p>
-        </div>
-    </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ What countries do you help with?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    We assist clients with study, tourist, visit, and work-related applications for several countries across Europe, North America, Asia, and other regions depending on eligibility and program availability.
+                </div>
+            </div>
 
-    <!-- SUBJECTS OFFERED -->
-    <div class="section-title"><span>Subjects I Teach</span></div>
-    <div class="subjects-list">
-        <div class="subject-item">
-            <div class="subject-icon">📖</div>
-            <div class="subject-info">
-                <h4>English Language</h4>
-                <p>Grammar, comprehension, essay writing, literature</p>
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ Do you help with scholarships?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Yes. We assist students with scholarship searches, application guidance, admission processing support, statement reviews, and educational counseling where applicable.
+                </div>
             </div>
-        </div>
-        <div class="subject-item">
-            <div class="subject-icon">💻</div>
-            <div class="subject-info">
-                <h4>Computer Studies</h4>
-                <p>Digital literacy, programming basics, IT skills</p>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ What documents are required for visa applications?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Required documents depend on the visa category and destination country. Common documents may include:
+                    <ul>
+                        <li>International passport</li>
+                        <li>Passport photographs</li>
+                        <li>Bank statements</li>
+                        <li>Admission or invitation letters</li>
+                        <li>Employment documents</li>
+                        <li>Proof of accommodation</li>
+                        <li>Travel itinerary</li>
+                    </ul>
+                    We provide a personalized checklist based on your application type.
+                </div>
             </div>
-        </div>
-        <div class="subject-item">
-            <div class="subject-icon">🌍</div>
-            <div class="subject-info">
-                <h4>Igbo Language</h4>
-                <p>For diaspora students and international learners</p>
-            </div>
-        </div>
-        <div class="subject-item">
-            <div class="subject-icon">⚗️</div>
-            <div class="subject-info">
-                <h4>Science Subjects</h4>
-                <p>Chemistry, Physics, Mathematics (WAEC/NECO/JAMB)</p>
-            </div>
-        </div>
-        <div class="subject-item">
-            <div class="subject-icon">📝</div>
-            <div class="subject-info">
-                <h4>Exam Preparation</h4>
-                <p>WAEC, NECO, JAMB, and other certification exams</p>
-            </div>
-        </div>
-        <div class="subject-item">
-            <div class="subject-icon">👨‍🏫</div>
-            <div class="subject-info">
-                <h4>Adult Literacy</h4>
-                <p>Basic reading and writing for adult learners</p>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ Do you offer embassy interview coaching?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Yes. We provide interview preparation sessions, mock interviews, and guidance on how to answer common embassy questions confidently and professionally.
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- SERVICES INCLUDED -->
-    <div class="section-title"><span>What I Offer</span></div>
-    <div class="approach-grid">
-        <div class="approach-card">
-            <div class="approach-icon">👤</div>
-            <h3>Private Tutoring</h3>
-            <p>One-on-one personalized attention for faster learning.</p>
-        </div>
-        <div class="approach-card">
-            <div class="approach-icon">📝</div>
-            <h3>Exam Preparation</h3>
-            <p>Intensive coaching for WAEC, NECO, JAMB, and more.</p>
-        </div>
-        <div class="approach-card">
-            <div class="approach-icon">🖥️</div>
-            <h3>Computer Training</h3>
-            <p>Digital skills and computer literacy for all ages.</p>
-        </div>
-        <div class="approach-card">
-            <div class="approach-icon">🎓</div>
-            <h3>Academic Mentorship</h3>
-            <p>Guidance on study habits, career paths, and academic success.</p>
-        </div>
-    </div>
+    <!-- EDUCATIONAL CONSULTING FAQ -->
+    <div class="faq-category">
+        <h2 class="category-title">🎓 Educational Consulting FAQ</h2>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ What educational services do you provide?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    We provide educational consulting services including:
+                    <ul>
+                        <li>School admission guidance</li>
+                        <li>Scholarship assistance</li>
+                        <li>Study abroad counseling</li>
+                        <li>Student visa support</li>
+                        <li>Academic mentoring</li>
+                        <li>Career guidance</li>
+                    </ul>
+                </div>
+            </div>
 
-    <!-- PRICING / PACKAGES -->
-    <div class="section-title"><span>Session Packages</span></div>
-    <div class="pricing-grid">
-        <div class="pricing-card">
-            <div class="pricing-header">
-                <h3>Single Session</h3>
-                <p>Pay as you go</p>
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ Do you help with school selection?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Yes. We help students identify the right schools, colleges, or universities that match their academic background, career goals, and budget. We consider factors like location, tuition fees, program quality, and scholarship availability.
+                </div>
             </div>
-            <div class="pricing-body">
-                <ul class="pricing-features">
-                    <li>1 hour personalized session</li>
-                    <li>Topic of your choice</li>
-                    <li>Homework assistance</li>
-                    <li>Flexible scheduling</li>
-                </ul>
-                <a href="booking.html" class="btn">Book a Session →</a>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ Do you assist with admission applications?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Yes. We provide guidance on preparing and submitting admission applications to schools, colleges, and universities. This includes reviewing personal statements, recommendation letters, and supporting documents.
+                </div>
             </div>
-        </div>
-        <div class="pricing-card">
-            <div class="pricing-header">
-                <h3>Weekly Package</h3>
-                <p>Best for regular students</p>
-            </div>
-            <div class="pricing-body">
-                <ul class="pricing-features">
-                    <li>2-3 sessions per week</li>
-                    <li>Progress tracking</li>
-                    <li>Homework support</li>
-                    <li>Monthly assessment</li>
-                    <li>Discounted rate</li>
-                </ul>
-                <a href="booking.html" class="btn">Book Weekly →</a>
-            </div>
-        </div>
-        <div class="pricing-card">
-            <div class="pricing-header">
-                <h3>Exam Prep Bootcamp</h3>
-                <p>Intensive exam preparation</p>
-            </div>
-            <div class="pricing-body">
-                <ul class="pricing-features">
-                    <li>Daily sessions (4-6 weeks)</li>
-                    <li>Mock exams & practice</li>
-                    <li>Past question analysis</li>
-                    <li>Exam strategies & tips</li>
-                    <li>24/7 WhatsApp support</li>
-                </ul>
-                <a href="booking.html" class="btn">Enroll in Bootcamp →</a>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ Can you help with study abroad planning?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Yes. We provide comprehensive study abroad planning including destination selection, program research, cost estimation, scholarship guidance, visa support, and pre-departure orientation to help students transition smoothly.
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- EMAIL BUTTON SECTION -->
-    <div class="email-container">
-        <h2>📝 Teaching Inquiry Form</h2>
-        <p>Click the button below to send us an email about teaching services.</p>
-        
-        <a href="mailto:Danoka33@gmail.com?subject=Teaching%20Inquiry&body=Hello%20Damian,%0A%0AI%20would%20like%20to%20inquire%20about%20teaching%20services.%0A%0AMy%20Name:%20__________%0AMy%20Phone:%20__________%0AStudent's%20Grade/Level:%20__________%0ASubject%20Needed:%20__________%0A%0AMessage:%0A__________" 
-           class="email-btn">
-            📚 Send Teaching Inquiry via Email
-        </a>
-        
-        <p class="note-text">
-            🔒 Your email client will open. Fill in your details and send.<br>
-            We will respond within 24 hours.
-        </p>
+    <!-- TEACHING & TUTORING FAQ -->
+    <div class="faq-category">
+        <h2 class="category-title">📚 Teaching & Tutoring FAQ</h2>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ Do you offer teaching and tutoring services?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Yes. We offer professional teaching and tutoring services for students in various subjects, including computer studies, English language, Igbo language, science subjects, exam preparation, and practical digital skills training.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ What subjects or skills do you teach?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Our teaching and tutoring services may include:
+                    <ul>
+                        <li>English Language (Grammar, comprehension, literature)</li>
+                        <li>Computer Studies & Digital Literacy</li>
+                        <li>Igbo Language (For diaspora students)</li>
+                        <li>Science Subjects (Chemistry, Physics, Mathematics)</li>
+                        <li>Exam Preparation (WAEC, NECO, JAMB, IGCSE)</li>
+                        <li>Adult Literacy Programs</li>
+                        <li>Website development basics</li>
+                        <li>Academic coaching & mentorship</li>
+                    </ul>
+                    Programs may vary depending on student level and availability.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ Do you provide online learning or remote coaching?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Yes. Depending on the program or service, we offer online tutoring, virtual consultations, and remote coaching sessions for students and clients. This allows flexibility for students anywhere in the world.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ Do you prepare students for exams?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Yes. We provide examination preparation support for WAEC, NECO, JAMB, IGCSE, and other standardized tests. Our focus includes subject review, past question practice, study strategies, and confidence building. Our exam success rate is 95%.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ Do you teach adults and working professionals?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Yes. We offer adult literacy programs, professional development training, digital skills coaching, and career advancement support for adults who want to upgrade their knowledge or transition into new careers.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ What is your teaching approach?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Our teaching approach focuses on:
+                    <ul>
+                        <li>Personalized learning tailored to each student's needs</li>
+                        <li>Clarity and understanding of complex topics</li>
+                        <li>Regular progress tracking and assessments</li>
+                        <li>Supportive environment where questions are encouraged</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- TESTIMONIALS -->
-    <div class="section-title"><span>What Students Say</span></div>
-    <div class="testimonials-grid">
-        <div class="testimonial-card">
-            "Damian helped me prepare for my WAEC English exam. I passed with distinction! His teaching method is very clear and patient."
-            <div class="author">— Emmanuel O., Lagos</div>
-        </div>
-        <div class="testimonial-card">
-            "The WhatsApp science prep group was exactly what I needed. I finally understood Chemistry after years of struggling."
-            <div class="author">— Peace A., Abuja</div>
-        </div>
-        <div class="testimonial-card">
-            "My daughter's confidence in math has grown tremendously. She went from failing to scoring B's in just 2 months."
-            <div class="author">— Mrs. Chidi, Enugu</div>
+    <!-- WEB DEVELOPMENT FAQ -->
+    <div class="faq-category">
+        <h2 class="category-title">💻 Website Development FAQ</h2>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ What are your fees for web development?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Our fees vary depending on the service, project size, destination country, or training requirements. We provide transparent pricing and detailed quotations before commencing any project or consultation. E-commerce websites start at ₦600,000 (WordPress) or ₦900,000 (Shopify).
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ What types of websites do you create?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    We develop:
+                    <ul>
+                        <li>Business websites</li>
+                        <li>E-commerce websites</li>
+                        <li>School portals</li>
+                        <li>Portfolio websites</li>
+                        <li>Blogs and news websites</li>
+                        <li>Church websites</li>
+                        <li>Hotel and booking websites</li>
+                        <li>Real estate websites</li>
+                        <li>Custom web applications</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ Do you build online stores and e-commerce websites?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Yes. We develop professional e-commerce websites with secure payment systems, shopping carts, inventory management, mobile responsiveness, and customer-friendly interfaces using Shopify or WooCommerce.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ Which technologies and platforms do you use?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    We work with modern technologies and platforms including:
+                    <ul>
+                        <li>GitHub</li>
+                        <li>Cloudflare</li>
+                        <li>WordPress</li>
+                        <li>WooCommerce</li>
+                        <li>Shopify</li>
+                        <li>HTML, CSS, JavaScript</li>
+                        <li>React and Next.js</li>
+                    </ul>
+                    This allows us to create fast, secure, and scalable websites tailored to client needs.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ Do you provide website maintenance and management?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Yes. We offer ongoing website maintenance services including updates, backups, security monitoring, product uploads, technical support, and performance optimization. Annual maintenance starts at ₦70,000/year.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ Will my website work on mobile devices?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Yes. All our websites are designed to be mobile-responsive and optimized for smartphones, tablets, laptops, and desktop devices.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ Do you provide training after website completion?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Yes. After launching your website, we provide guidance and training on how to manage content, upload products, update pages, and handle basic website operations.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ Can you redesign existing websites?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Yes. We can redesign outdated or poorly performing websites to improve appearance, speed, functionality, security, and user experience.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ How long does it take to build a website?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Project timelines depend on the size and complexity of the website. Standard business websites may take 1-3 weeks, while larger e-commerce or custom projects may take several weeks or more.
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- CALL TO ACTION -->
+    <!-- GETTING STARTED FAQ -->
+    <div class="faq-category">
+        <h2 class="category-title">🚀 Getting Started</h2>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ How do I get started?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Simply contact us through our website, email, phone number, or booking form. We will discuss your goals, recommend suitable solutions, and guide you through the next steps professionally.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ Can I pay online for your services?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Yes. We accept secure online payments, bank transfers, and other approved payment methods for selected services and project deposits.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ Do you offer free consultations?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Yes. We offer free initial consultations to discuss your needs, answer your questions, and provide recommendations for the best solutions. Contact us to schedule your consultation.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
     <div class="cta-section">
-        <h2>Ready to Improve Your Grades?</h2>
-        <p>Book a teaching session with Damian today and start your journey to academic excellence.</p>
-        <a href="booking.html" class="btn">📅 Book a Session →</a>
+        <h2>Still Have Questions?</h2>
+        <p>Contact us directly and we'll be happy to help you with any additional inquiries.</p>
+        <a href="contact.html" class="btn">📞 Contact Us Today</a>
     </div>
 </div>
 
+<!-- CAC Badge -->
 <div style="text-align: center; padding: 20px;">
     <div class="cac-badge">
         ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
-        📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
+        📍 6 Ezinifite Close, New Haven, Enugu, Enugu State, Nigeria
     </div>
 </div>
 
+<!-- Footer -->
 <footer>
     <div class="container">
-        <p><strong>Ernest Embassy Digital Solutions</strong> | Teaching & Academic Support</p>
+        <p><strong>Ernest Embassy Digital Solutions</strong> | Travel • Film • Education • Web Development</p>
         <p>📧 ernestembassytravels@gmail.com | infinitymoviestarproduction@gmail.com | Danoka33@gmail.com</p>
         <p>📞 +2348032607809 | +2349050205053</p>
         <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
@@ -734,10 +743,21 @@
     </div>
 </footer>
 
+<!-- WhatsApp Button -->
 <a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
     <span>💬</span>
     <span>Chat with Damian on WhatsApp</span>
 </a>
+
+<script>
+    // FAQ Accordion Functionality
+    document.querySelectorAll('.faq-item').forEach(item => {
+        const question = item.querySelector('.faq-question');
+        question.addEventListener('click', () => {
+            item.classList.toggle('active');
+        });
+    });
+</script>
 
 </body>
 </html>

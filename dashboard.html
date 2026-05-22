@@ -276,14 +276,14 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
 <script>
-    // Your Firebase configuration - REPLACE WITH YOUR ACTUAL CONFIG
+    // YOUR FIREBASE CONFIGURATION - REPLACED
     const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-        appId: "YOUR_APP_ID"
+        apiKey: "AIzaSyD6xpH_zLnoJP2PTSMHg80R94_Vd-fUZSA",
+        authDomain: "ernest-embassy-travel-website.firebaseapp.com",
+        projectId: "ernest-embassy-travel-website",
+        storageBucket: "ernest-embassy-travel-website.firebasestorage.app",
+        messagingSenderId: "831442789419",
+        appId: "1:831442789419:web:1845791aafb7ac9d31366e"
     };
 
     // Initialize Firebase
@@ -302,7 +302,6 @@
         
         currentUser = user;
         
-        // Get user data from Firestore
         const userDoc = await db.collection('users').doc(user.uid).get();
         const userData = userDoc.data();
         
@@ -339,63 +338,4 @@
             </div>
         `;
         
-        loadAppointments();
-    }
-    
-    async function loadAppointments() {
-        // This is sample data. In production, you would fetch from your booking system
-        // For now, showing sample appointments
-        const sampleAppointments = [
-            {
-                id: 1,
-                service: 'Visa Consultation',
-                date: '2026-05-25',
-                time: '10:00 AM',
-                status: 'upcoming',
-                meetingLink: 'https://meet.google.com/visa-ernest'
-            },
-            {
-                id: 2,
-                service: 'Web Development Consultation',
-                date: '2026-05-20',
-                time: '2:00 PM',
-                status: 'completed',
-                meetingLink: 'https://meet.google.com/webdev-ernest'
-            }
-        ];
-        
-        const upcomingCount = sampleAppointments.filter(a => a.status === 'upcoming').length;
-        const completedCount = sampleAppointments.filter(a => a.status === 'completed').length;
-        
-        document.getElementById('upcomingCount').innerText = upcomingCount;
-        document.getElementById('completedCount').innerText = completedCount;
-        document.getElementById('totalCount').innerText = sampleAppointments.length;
-        
-        const appointmentsList = document.getElementById('appointmentsList');
-        
-        if (sampleAppointments.length === 0) {
-            appointmentsList.innerHTML = '<div style="padding: 40px; text-align: center; color: #666;">No appointments yet. <a href="booking.html">Book your first appointment</a></div>';
-            return;
-        }
-        
-        appointmentsList.innerHTML = sampleAppointments.map(app => `
-            <div class="appointment-item">
-                <div class="appointment-info">
-                    <h4>${app.service}</h4>
-                    <p>📅 ${app.date} | ⏰ ${app.time}</p>
-                    ${app.meetingLink ? `<p>🔗 <a href="${app.meetingLink}" target="_blank">Join Meeting</a></p>` : ''}
-                </div>
-                <span class="appointment-status status-${app.status}">${app.status.toUpperCase()}</span>
-            </div>
-        `).join('');
-    }
-
-    function logout() {
-        auth.signOut().then(() => {
-            window.location.href = 'login.html';
-        });
-    }
-</script>
-
-</body>
-</html>
+        loadApp

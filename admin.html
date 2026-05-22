@@ -66,7 +66,7 @@
         .nav-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 12px;
             align-items: center;
         }
 
@@ -76,7 +76,7 @@
             font-weight: 500;
             transition: color 0.3s;
             padding: 8px 0;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         .nav-links a:hover {
@@ -241,11 +241,11 @@
             }
             .nav-links {
                 justify-content: center;
-                gap: 10px;
+                gap: 8px;
                 flex-wrap: wrap;
             }
             .nav-links a {
-                font-size: 0.7rem;
+                font-size: 0.65rem;
             }
             .dashboard-stats {
                 grid-template-columns: 1fr;
@@ -298,8 +298,10 @@
                 <a href="education.html">🎓 Education</a>
                 <a href="booking.html">📅 Book</a>
                 <a href="contact.html">📞 Contact</a>
+                <a href="register.html">📝 Register</a>
+                <a href="login.html">🔐 Login</a>
+                <a href="dashboard.html">👤 Dashboard</a>
                 <a href="admin.html">🔒 Admin</a>
-                <a href="login.html">🔐 Client Login</a>
                 <a href="testimonials.html">⭐ Testimonials</a>
                 <button class="logout-btn" onclick="logout()">🚪 Logout</button>
             </div>
@@ -401,7 +403,7 @@
             updateStats();
         } catch (error) {
             console.error('Error loading submissions:', error);
-            tableBody.innerHTML = '<table><td colspan="8" style="text-align: center;">Error loading data.<\/td><\/tr>';
+            tableBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Error loading data.<\/td><\/tr>';
         }
     }
 
@@ -430,7 +432,7 @@
             else typeIcon = '📝';
             
             let statusText = sub.status || 'pending';
-            let statusClass = statusText === 'pending' ? 'status-pending' : (statusText === 'approved' ? 'status-confirmed' : 'status-completed');
+            let statusClass = statusText === 'pending' ? 'status-pending' : (statusText === 'confirmed' ? 'status-confirmed' : 'status-completed');
             
             return `<tr>
                 <td>${sub.date || 'N/A'}<\/td>

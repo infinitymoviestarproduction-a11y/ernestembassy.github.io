@@ -70,10 +70,11 @@ nav {
 
 <body>
 
-<!-- 🔐 LMS ACCESS CONTROL -->
+<!-- 🔐 LMS ACCESS CONTROL (STANDARDIZED) -->
 <script>
 const user = JSON.parse(localStorage.getItem("currentUser"));
 
+// ✅ SAFE LOGIN CHECK (STANDARD LMS RULE)
 if (!user) {
     window.location.href = "login.html";
 }
@@ -125,10 +126,18 @@ if (!user) {
 </div>
 
 <script>
-const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+/* =========================
+   STANDARD LMS SESSION READ
+   ========================= */
+const currentUser = JSON.parse(localStorage.getItem("currentUser")) || null;
 
-document.getElementById("userName").innerText = currentUser?.name || "Student";
+// display user safely
+document.getElementById("userName").innerText =
+    currentUser?.name || "Student";
 
+/* =========================
+   LOGOUT (FULL CLEANUP)
+   ========================= */
 function logout(){
     localStorage.removeItem("currentUser");
     localStorage.removeItem("userLoggedIn");

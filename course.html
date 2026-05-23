@@ -12,6 +12,7 @@ body {
     background: #f4f6f9;
 }
 
+/* HEADER */
 header {
     background: #1a1a2e;
     color: white;
@@ -19,12 +20,13 @@ header {
     text-align: center;
 }
 
+/* LAYOUT */
 .container {
     display: flex;
     height: 100vh;
 }
 
-/* Sidebar */
+/* SIDEBAR */
 .sidebar {
     width: 25%;
     background: white;
@@ -45,7 +47,7 @@ header {
     background: #ddd;
 }
 
-/* Content */
+/* CONTENT */
 .content {
     flex: 1;
     padding: 30px;
@@ -72,8 +74,18 @@ button {
 
 <body>
 
+<!-- 🔐 LMS AUTH CHECK (IMPORTANT) -->
+<script>
+const user = JSON.parse(localStorage.getItem("currentUser"));
+
+if (!user) {
+    window.location.href = "login.html";
+}
+</script>
+
 <header>
     <h1>🎓 LMS Course Player</h1>
+    <p>Welcome, <span id="userName"></span></p>
 </header>
 
 <div class="container">
@@ -97,7 +109,14 @@ button {
 </div>
 
 <script>
-// SAMPLE COURSE DATA (you will later load from JSON)
+// =========================
+// USER SESSION DISPLAY
+// =========================
+document.getElementById("userName").innerText = user.name || "Student";
+
+// =========================
+// COURSE DATA (STATIC FOR NOW)
+// =========================
 const course = {
     title: "Digital Technology SS1",
     lessons: [
@@ -118,7 +137,9 @@ const course = {
 
 let currentIndex = 0;
 
-// Load lessons list
+// =========================
+// LOAD LESSON LIST
+// =========================
 function loadLessons() {
     const list = document.getElementById("lessonList");
     list.innerHTML = "";
@@ -132,14 +153,21 @@ function loadLessons() {
     });
 }
 
-// Open lesson
+// =========================
+// OPEN LESSON
+// =========================
 function openLesson(index) {
     currentIndex = index;
     document.getElementById("lessonTitle").innerText = course.lessons[index].title;
     document.getElementById("lessonContent").innerText = course.lessons[index].content;
+
+    // future upgrade hook (progress tracking)
+    localStorage.setItem("lastLesson", index);
 }
 
-// Next lesson
+// =========================
+// NEXT LESSON
+// =========================
 function nextLesson() {
     if (currentIndex < course.lessons.length - 1) {
         currentIndex++;
@@ -150,6 +178,7 @@ function nextLesson() {
 }
 
 loadLessons();
+openLesson(0);
 </script>
 
 </body>

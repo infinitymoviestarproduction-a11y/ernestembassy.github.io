@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Classroom - Ernest Embassy Digital Solutions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+        }
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffd700;
+            letter-spacing: 1px;
+        }
+
+        .logo-sub {
+            font-size: 0.65rem;
+            color: rgba(255, 215, 0, 0.8);
+            display: block;
+            margin-top: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 0;
+            font-size: 0.8rem;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 30px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #1a1a2e;
+        }
+
+        .section-title span {
+            border-bottom: 3px solid #ffd700;
+            padding-bottom: 10px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        /* Subdomain Info Box */
+        .subdomain-box {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin: 40px 0;
+            color: white;
+        }
+
+        .subdomain-url {
+            font-size: 2rem;
+            font-weight: bold;
+            background: #ffd700;
+            color: #1a1a2e;
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 50px;
+            margin: 20px 0;
+            letter-spacing: 1px;
+        }
+
+        .subdomain-url small {
+            font-size: 0.8rem;
+            font-weight: normal;
+        }
+
+        .copy-btn {
+            background: #ffd700;
+            color: #1a1a2e;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: transform 0.2s;
+        }
+
+        .copy-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Classroom Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            color: #1a1a2e;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: #666;
+        }
+
+        /* Platforms Grid */
+        .platforms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .platform-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .platform-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .platform-card h4 {
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+
+        .platform-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Setup Steps */
+        .steps-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .step {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: -40px auto 15px;
+            font-weight: bold;
+        }
+
+        /* Access Section */
+        .access-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            margin: 60px 0;
+            color: white;
+        }
+
+        .access-section h2 {
+            margin-bottom: 20px;
+        }
+
+        .access-btn {
+            display: inline-block;
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            transition: transform 0.3s;
+        }
+
+        .access-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Class Schedule */
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .schedule-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 4px solid #ffd700;
+        }
+
+        .schedule-day {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+
+        .schedule-subject {
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        /* Email Section */
+        .email-section {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .email-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 35px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .email-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        footer {
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+
+        .cac-badge {
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.05);
+            background-color: #20b859;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .nav-links {
+                justify-content: center;
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .subdomain-url {
+                font-size: 1.2rem;
+                word-break: break-all;
+            }
+            .steps-container {
+                flex-direction: column;
+            }
+            .whatsapp-float {
+                padding: 8px 15px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+    <div class="nav-container">
+        <div class="logo">
+            <span class="logo-icon">🎓</span>
+            <div>
+                <span class="logo-text">Ernest Embassy</span>
+                <span class="logo-sub">Digital Solutions</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="about.html">📖 About</a>
+            <a href="services.html">⚙️ Services</a>
+            <a href="webdev.html">💻 Web Dev</a>
+            <a href="visa.html">✈️ Visa</a>
+            <a href="movie.html">🎬 Movie Studio</a>
+            <a href="portfolio.html">🎨 Portfolio</a>
+            <a href="teaching.html">📚 Teaching</a>
+            <a href="tutoring.html">💻 Tutoring</a>
+            <a href="education.html">🎓 Education</a>
+            <a href="class.html">🎓 Class</a>
+            <a href="booking.html">📅 Book</a>
+            <a href="contact.html">📞 Contact</a>
+            <a href="faq.html">❓ FAQ</a>
+            <a href="testimonials.html">⭐ Testimonials</a>
+            <a href="register.html">📝 Register</a>
+            <a href="login.html">🔐 Login</a>
+            <a href="dashboard.html">👤 Dashboard</a>
+            <a href="admin.html">🔒 Admin</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<div class="hero">
+    <h1>🎓 Online Classroom</h1>
+    <p>Learn from anywhere in the world with our virtual learning platform</p>
+    <div class="hero-badge">✨ Free Access for Registered Students ✨</div>
+</div>
+
+<div class="container">
+    <!-- Subdomain Information -->
+    <div class="subdomain-box">
+        <h2>🌐 Your Online Classroom Portal</h2>
+        <p>Access all your courses, live sessions, and learning materials at:</p>
+        <div class="subdomain-url" id="subdomainUrl">
+            class.ernestembassydigitalsolutions.com
+        </div>
+        <button class="copy-btn" onclick="copySubdomain()">📋 Copy Address</button>
+        <p style="margin-top: 20px; font-size: 0.9rem; opacity: 0.8;">✅ Free for all registered students | 24/7 Access</p>
+    </div>
+
+    <!-- Classroom Features -->
+    <div class="section-title"><span>📚 Classroom Features</span></div>
+    <div class="section-subtitle">Everything you need for effective online learning</div>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">💻</div>
+            <h3>Live Virtual Classes</h3>
+            <p>Real-time interactive sessions with screen sharing, chat, and Q&A.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📹</div>
+            <h3>Recorded Lessons</h3>
+            <p>Access recorded sessions anytime for revision and catch-up.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📝</div>
+            <h3>Assignments & Quizzes</h3>
+            <p>Submit homework and take automated quizzes with instant feedback.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">💬</div>
+            <h3>Discussion Forums</h3>
+            <p>Ask questions and interact with teachers and fellow students.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Progress Tracking</h3>
+            <p>Monitor your learning progress and performance.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📱</div>
+            <h3>Mobile Friendly</h3>
+            <p>Learn on any device - phone, tablet, or computer.</p>
+        </div>
+    </div>
+
+    <!-- Learning Platforms -->
+    <div class="section-title"><span>🛠️ Integrated Platforms</span></div>
+    <div class="section-subtitle">We use the best tools for seamless learning</div>
+
+    <div class="platforms-grid">
+        <div class="platform-card">
+            <div class="platform-icon">📹</div>
+            <h4>Zoom</h4>
+            <p>Live video classes and meetings</p>
+            <a href="https://zoom.us" target="_blank" class="platform-link">Learn More →</a>
+        </div>
+        <div class="platform-card">
+            <div class="platform-icon">💬</div>
+            <h4>WhatsApp Groups</h4>
+            <p>Quick updates and support</p>
+        </div>
+        <div class="platform-card">
+            <div class="platform-icon">📧</div>
+            <h4>Email</h4>
+            <p>Assignment submission and formal communication</p>
+        </div>
+        <div class="platform-card">
+            <div class="platform-icon">☁️</div>
+            <h4>Google Drive</h4>
+            <p>Access learning materials anytime</p>
+        </div>
+    </div>
+
+    <!-- Class Schedule -->
+    <div class="section-title"><span>📅 Weekly Class Schedule</span></div>
+    <div class="section-subtitle">Regular sessions for different subjects and levels</div>
+
+    <div class="schedule-grid">
+        <div class="schedule-card">
+            <div class="schedule-day">📖 Monday</div>
+            <div class="schedule-subject">English Language</div>
+            <p>4:00 PM - 5:30 PM</p>
+            <p>Online via Zoom</p>
+        </div>
+        <div class="schedule-card">
+            <div class="schedule-day">💻 Tuesday</div>
+            <div class="schedule-subject">Digital Technology</div>
+            <p>5:00 PM - 6:30 PM</p>
+            <p>Online via Zoom</p>
+        </div>
+        <div class="schedule-card">
+            <div class="schedule-day">🌍 Wednesday</div>
+            <div class="schedule-subject">Igbo (Diaspora)</div>
+            <p>3:00 PM - 4:30 PM</p>
+            <p>Online via Zoom</p>
+        </div>
+        <div class="schedule-card">
+            <div class="schedule-day">⚗️ Thursday</div>
+            <div class="schedule-subject">Science Exam Prep</div>
+            <p>5:00 PM - 6:30 PM</p>
+            <p>Online via Zoom</p>
+        </div>
+        <div class="schedule-card">
+            <div class="schedule-day">📝 Friday</div>
+            <div class="schedule-subject">Adult Literacy</div>
+            <p>6:00 PM - 7:30 PM</p>
+            <p>Online via Zoom</p>
+        </div>
+        <div class="schedule-card">
+            <div class="schedule-day">🎯 Saturday</div>
+            <div class="schedule-subject">Q&A / Review Sessions</div>
+            <p>10:00 AM - 12:00 PM</p>
+            <p>Group Discussion</p>
+        </div>
+    </div>
+
+    <!-- How to Access -->
+    <div class="section-title"><span>🚀 How to Access the Classroom</span></div>
+    <div class="steps-container">
+        <div class="step">
+            <div class="step-number">1</div>
+            <p><strong>Register</strong> as a student</p>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <p><strong>Receive</strong> your login credentials</p>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <p><strong>Visit</strong> class.ernestembassydigitalsolutions.com</p>
+        </div>
+        <div class="step">
+            <div class="step-number">4</div>
+            <p><strong>Join</strong> your scheduled classes</p>
+        </div>
+    </div>
+
+    <!-- Quick Access Section -->
+    <div class="access-section">
+        <h2>🎯 Ready to Start Learning?</h2>
+        <p>Click below to access your online classroom dashboard</p>
+        <a href="dashboard.html" class="access-btn">🚪 Enter Classroom →</a>
+        <p style="margin-top: 20px; font-size: 0.9rem; opacity: 0.8;">New student? <a href="register.html" style="color: #ffd700;">Register here</a> for free access</p>
+    </div>
+
+    <!-- Support Section -->
+    <div class="email-section">
+        <h2>📧 Need Help Accessing the Classroom?</h2>
+        <p>Having trouble with login or accessing your classes? Contact our support team.</p>
+        <a href="mailto:ernestembassytravels@gmail.com?subject=Classroom%20Access%20Support&body=Hello%20Damian,%0A%0AI%20need%20assistance%20with%20accessing%20the%20online%20classroom.%0A%0AMy%20Name:%20__________%0AMy%20Email:%20__________%0AIssue%20Description:%0A__________" 
+           class="email-btn">
+            📧 Request Classroom Support
+        </a>
+        <p style="margin-top: 15px; font-size: 0.85rem; color: #888;">Response within 24 hours</p>
+    </div>
+</div>
+
+<!-- CAC Badge -->
+<div style="text-align: center; padding: 20px;">
+    <div class="cac-badge">
+        ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
+        📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <p><strong>Ernest Embassy Digital Solutions</strong> | Online Classroom • Tutoring • Education</p>
+        <p>📧 ernestembassytravels@gmail.com | infinitymoviestarproduction@gmail.com | Danoka33@gmail.com</p>
+        <p>📞 +2348032607809 | +2349050205053</p>
+        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
+        <p style="margin-top: 20px;">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- WhatsApp Button -->
+<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
+    <span>💬</span>
+    <span>Chat with Damian on WhatsApp</span>
+</a>
+
+<script>
+    function copySubdomain() {
+        const url = "class.ernestembassydigitalsolutions.com";
+        navigator.clipboard.writeText(url);
+        alert("✅ Subdomain copied: " + url);
+    }
+</script>
+
+</body>
+</html>

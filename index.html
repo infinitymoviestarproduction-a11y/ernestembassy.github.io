@@ -215,102 +215,6 @@
             color: #666;
         }
 
-        /* Educational Resources Section - NEW */
-        .resources-section {
-            background: linear-gradient(135deg, #f0f4f8 0%, #e8edf5 100%);
-            border-radius: 30px;
-            padding: 50px;
-            margin: 40px 0;
-        }
-
-        .resources-stats {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            flex-wrap: wrap;
-            margin: 30px 0;
-        }
-
-        .resources-stat {
-            text-align: center;
-            background: white;
-            padding: 20px 30px;
-            border-radius: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-
-        .resources-stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .resources-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin: 40px 0;
-        }
-
-        .resource-card {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            text-align: center;
-            text-decoration: none;
-            color: #333;
-            transition: transform 0.3s;
-            display: block;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-
-        .resource-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-        }
-
-        .resource-icon {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-        }
-
-        .resource-card h4 {
-            color: #1a1a2e;
-            margin-bottom: 10px;
-        }
-
-        .resource-levels {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 15px;
-        }
-
-        .level-tag {
-            background: #f0f0f5;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            color: #667eea;
-        }
-
-        .resource-btn {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 12px 30px;
-            border-radius: 40px;
-            text-decoration: none;
-            font-weight: bold;
-            margin-top: 20px;
-            transition: transform 0.3s;
-        }
-
-        .resource-btn:hover {
-            transform: translateY(-2px);
-        }
-
         .why-section {
             background: #f0f0f5;
             border-radius: 20px;
@@ -365,6 +269,7 @@
             font-weight: bold;
         }
 
+        /* Social Feed Grid */
         .social-feed-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -405,6 +310,11 @@
             text-decoration: none;
             font-weight: bold;
             font-size: 0.85rem;
+            transition: transform 0.3s;
+        }
+
+        .feed-link:hover {
+            transform: translateY(-2px);
         }
 
         .video-wrapper {
@@ -527,12 +437,15 @@
             .services-grid {
                 grid-template-columns: 1fr;
             }
-            .resources-stats {
-                flex-direction: column;
-                align-items: center;
+            .testimonials-grid {
+                grid-template-columns: 1fr;
             }
             .social-feed-grid {
                 grid-template-columns: 1fr;
+            }
+            .social-icons {
+                flex-direction: column;
+                align-items: center;
             }
             .whatsapp-float {
                 padding: 8px 15px;
@@ -545,7 +458,7 @@
 </head>
 <body>
 
-<!-- PROFESSIONAL NAVIGATION WITH ALL LINKS + FAQ -->
+<!-- PROFESSIONAL NAVIGATION WITH ALL LINKS -->
 <nav>
     <div class="nav-container">
         <div class="logo">
@@ -566,8 +479,6 @@
             <a href="teaching.html">📚 Teaching</a>
             <a href="tutoring.html">💻 Tutoring</a>
             <a href="education.html">🎓 Education</a>
-            <a href="senior-secondary-resources/index.html">📚 Learning Center</a>
-            <a href="class.html">🎓 Class</a>
             <a href="booking.html">📅 Book</a>
             <a href="contact.html">📞 Contact</a>
             <a href="faq.html">❓ FAQ</a>
@@ -633,82 +544,6 @@
         </div>
     </section>
 
-    <!-- NEW: EDUCATIONAL RESOURCES SECTION -->
-    <div class="resources-section">
-        <div class="section-title"><span>📚 Free Educational Resources</span></div>
-        <div class="section-subtitle">Practice questions for SS1 - SS3, WAEC & JAMB | 900+ Questions Coming Soon!</div>
-
-        <div class="resources-stats">
-            <div class="resources-stat">
-                <div class="resources-stat-number">4</div>
-                <div>Subjects</div>
-            </div>
-            <div class="resources-stat">
-                <div class="resources-stat-number">12</div>
-                <div>Levels</div>
-            </div>
-            <div class="resources-stat">
-                <div class="resources-stat-number">50+</div>
-                <div>Topics</div>
-            </div>
-            <div class="resources-stat">
-                <div class="resources-stat-number">900+</div>
-                <div>Questions (Coming)</div>
-            </div>
-        </div>
-
-        <div class="resources-grid">
-            <a href="senior-secondary-resources/mathematics/index.html" class="resource-card">
-                <div class="resource-icon">📐</div>
-                <h4>Mathematics</h4>
-                <p>Algebra, Trigonometry, Calculus, Statistics</p>
-                <div class="resource-levels">
-                    <span class="level-tag">SS1</span>
-                    <span class="level-tag">SS2</span>
-                    <span class="level-tag">SS3</span>
-                    <span class="level-tag">WAEC/JAMB</span>
-                </div>
-            </a>
-            <a href="senior-secondary-resources/english-language/index.html" class="resource-card">
-                <div class="resource-icon">📖</div>
-                <h4>English Language</h4>
-                <p>Grammar, Comprehension, Essay Writing, Oral English</p>
-                <div class="resource-levels">
-                    <span class="level-tag">SS1</span>
-                    <span class="level-tag">SS2</span>
-                    <span class="level-tag">SS3</span>
-                    <span class="level-tag">WAEC/JAMB</span>
-                </div>
-            </a>
-            <a href="senior-secondary-resources/digital-technology/index.html" class="resource-card">
-                <div class="resource-icon">💻</div>
-                <h4>Digital Technology</h4>
-                <p>Computer Fundamentals, Programming, Networking</p>
-                <div class="resource-levels">
-                    <span class="level-tag">SS1</span>
-                    <span class="level-tag">SS2</span>
-                    <span class="level-tag">SS3</span>
-                    <span class="level-tag">WAEC/JAMB</span>
-                </div>
-            </a>
-            <a href="senior-secondary-resources/igbo-language/index.html" class="resource-card">
-                <div class="resource-icon">🌍</div>
-                <h4>Igbo Language</h4>
-                <p>Alphabet, Grammar, Literature, Culture (Diaspora Focus)</p>
-                <div class="resource-levels">
-                    <span class="level-tag">SS1</span>
-                    <span class="level-tag">SS2</span>
-                    <span class="level-tag">SS3</span>
-                    <span class="level-tag">WAEC/JAMB</span>
-                </div>
-            </a>
-        </div>
-
-        <div style="text-align: center;">
-            <a href="senior-secondary-resources/index.html" class="resource-btn">📚 Access All Resources →</a>
-        </div>
-    </div>
-
     <!-- WHY CHOOSE ME -->
     <section class="why-section">
         <div class="section-title"><span>Why Choose Me</span></div>
@@ -755,6 +590,7 @@
     <div class="section-subtitle">Follow me on YouTube and Instagram for behind-the-scenes content</div>
 
     <div class="social-feed-grid">
+        <!-- YouTube Video Feed -->
         <div class="youtube-feed">
             <div class="feed-header">
                 <div class="feed-icon">▶️</div>
@@ -773,6 +609,7 @@
             </div>
         </div>
 
+        <!-- Instagram Feed -->
         <div class="instagram-feed">
             <div class="feed-header">
                 <div class="feed-icon">📷</div>

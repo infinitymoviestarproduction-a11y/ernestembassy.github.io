@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Course Player - LMS</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f4f6f9;
+}
+
+header {
+    background: #1a1a2e;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 25%;
+    background: white;
+    padding: 20px;
+    overflow-y: auto;
+    border-right: 1px solid #ddd;
+}
+
+.lesson {
+    padding: 12px;
+    margin-bottom: 10px;
+    background: #f0f0f0;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.lesson:hover {
+    background: #ddd;
+}
+
+/* Content */
+.content {
+    flex: 1;
+    padding: 30px;
+}
+
+.lesson-box {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🎓 LMS Course Player</h1>
+</header>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <h3>Lessons</h3>
+        <div id="lessonList"></div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+        <div class="lesson-box">
+            <h2 id="lessonTitle">Welcome</h2>
+            <p id="lessonContent">Select a lesson to begin learning.</p>
+
+            <button onclick="nextLesson()">Next Lesson</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// SAMPLE COURSE DATA (you will later load from JSON)
+const course = {
+    title: "Digital Technology SS1",
+    lessons: [
+        {
+            title: "Introduction to Computer",
+            content: "A computer is an electronic device that processes data into information."
+        },
+        {
+            title: "Input Devices",
+            content: "Input devices are used to enter data into a computer (Keyboard, Mouse)."
+        },
+        {
+            title: "Output Devices",
+            content: "Output devices display results (Monitor, Printer)."
+        }
+    ]
+};
+
+let currentIndex = 0;
+
+// Load lessons list
+function loadLessons() {
+    const list = document.getElementById("lessonList");
+    list.innerHTML = "";
+
+    course.lessons.forEach((lesson, index) => {
+        list.innerHTML += `
+            <div class="lesson" onclick="openLesson(${index})">
+                ${index + 1}. ${lesson.title}
+            </div>
+        `;
+    });
+}
+
+// Open lesson
+function openLesson(index) {
+    currentIndex = index;
+    document.getElementById("lessonTitle").innerText = course.lessons[index].title;
+    document.getElementById("lessonContent").innerText = course.lessons[index].content;
+}
+
+// Next lesson
+function nextLesson() {
+    if (currentIndex < course.lessons.length - 1) {
+        currentIndex++;
+        openLesson(currentIndex);
+    } else {
+        alert("🎉 You have completed this course!");
+    }
+}
+
+loadLessons();
+</script>
+
+</body>
+</html>

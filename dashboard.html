@@ -1,501 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Dashboard - Ernest Embassy Digital Solutions</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LMS Dashboard - Ernest Embassy</title>
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
-            color: #333;
-        }
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI;}
 
-        /* Navigation */
-        nav {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
-        }
+body{
+    background:#f5f7fa;
+}
 
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+nav{
+    background:#1a1a2e;
+    color:white;
+    padding:15px;
+}
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-        }
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:20px;
+}
 
-        .logo-icon {
-            font-size: 2rem;
-            background: linear-gradient(135deg, #ffd700, #ffaa00);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
+.hero{
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    color:white;
+    padding:40px;
+    border-radius:15px;
+    margin:20px 0;
+}
 
-        .logo-text {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #ffd700;
-            letter-spacing: 1px;
-        }
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:15px;
+    margin-top:20px;
+}
 
-        .logo-sub {
-            font-size: 0.65rem;
-            color: rgba(255, 215, 0, 0.8);
-            display: block;
-            margin-top: 2px;
-        }
+.card{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+    transition:0.3s;
+}
 
-        .nav-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            align-items: center;
-        }
+.card:hover{
+    transform:translateY(-5px);
+}
 
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-            padding: 8px 0;
-            font-size: 0.8rem;
-        }
+.card a{
+    display:inline-block;
+    margin-top:10px;
+    text-decoration:none;
+    background:#667eea;
+    color:white;
+    padding:10px;
+    border-radius:8px;
+}
 
-        .nav-links a:hover {
-            color: #ffd700;
-        }
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:15px;
+    margin-top:20px;
+}
 
-        .btn-logout {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
+.stat{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    text-align:center;
+}
 
-        .btn-logout:hover {
-            background: #c82333;
-        }
+.stat h2{
+    color:#667eea;
+}
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        .welcome-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px;
-            border-radius: 20px;
-            margin-bottom: 30px;
-        }
-
-        .welcome-card h1 {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            transition: transform 0.3s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .stat-label {
-            color: #666;
-            margin-top: 5px;
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            color: #1a1a2e;
-        }
-
-        .appointments-list {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        }
-
-        .appointment-item {
-            padding: 20px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .appointment-item:last-child {
-            border-bottom: none;
-        }
-
-        .appointment-info h4 {
-            color: #1a1a2e;
-            margin-bottom: 5px;
-        }
-
-        .appointment-info p {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .appointment-status {
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
-        .status-upcoming {
-            background: #e3f2fd;
-            color: #1976d2;
-        }
-
-        .status-completed {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .status-cancelled {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .empty-state {
-            padding: 40px;
-            text-align: center;
-            color: #666;
-        }
-
-        .empty-state a {
-            color: #667eea;
-            text-decoration: none;
-        }
-
-        .empty-state a:hover {
-            text-decoration: underline;
-        }
-
-        footer {
-            background: #1a1a2e;
-            color: white;
-            text-align: center;
-            padding: 30px;
-            margin-top: 60px;
-        }
-
-        .whatsapp-float {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #25D366;
-            color: white;
-            border-radius: 50px;
-            padding: 12px 20px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 1000;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .whatsapp-float:hover {
-            transform: scale(1.05);
-            background-color: #20b859;
-        }
-
-        @media (max-width: 768px) {
-            .nav-container {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            .nav-links {
-                justify-content: center;
-                gap: 8px;
-                flex-wrap: wrap;
-            }
-            .nav-links a {
-                font-size: 0.65rem;
-            }
-            .welcome-card h1 {
-                font-size: 1.4rem;
-            }
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            .appointment-item {
-                flex-direction: column;
-                text-align: center;
-            }
-            .whatsapp-float {
-                padding: 8px 15px;
-                bottom: 15px;
-                right: 15px;
-                font-size: 12px;
-            }
-        }
-    </style>
+.logout{
+    background:red;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    border-radius:8px;
+    cursor:pointer;
+    float:right;
+}
+</style>
 </head>
+
 <body>
 
-<!-- PROFESSIONAL NAVIGATION WITH ALL LINKS -->
+<!-- 🔐 LOGIN PROTECTION -->
+<script>
+if(!localStorage.getItem("currentUser")){
+    window.location.href="login.html";
+}
+</script>
+
 <nav>
-    <div class="nav-container">
-        <div class="logo">
-            <span class="logo-icon">👤</span>
-            <div>
-                <span class="logo-text">Ernest Embassy</span>
-                <span class="logo-sub">Digital Solutions</span>
-            </div>
-        </div>
-        <div class="nav-links">
-            <a href="index.html">🏠 Home</a>
-            <a href="about.html">📖 About</a>
-            <a href="services.html">⚙️ Services</a>
-            <a href="webdev.html">💻 Web Dev</a>
-            <a href="visa.html">✈️ Visa</a>
-            <a href="movie.html">🎬 Movie Studio</a>
-            <a href="portfolio.html">🎨 Portfolio</a>
-            <a href="teaching.html">📚 Teaching</a>
-            <a href="tutoring.html">💻 Tutoring</a>
-            <a href="education.html">🎓 Education</a>
-            <a href="class.html">🎓 Class</a>
-            <a href="booking.html">📅 Book</a>
-            <a href="contact.html">📞 Contact</a>
-            <a href="register.html">📝 Register</a>
-            <a href="login.html">🔐 Login</a>
-            <a href="dashboard.html">👤 Dashboard</a>
-            <a href="admin.html">🔒 Admin</a>
-            <a href="testimonials.html">⭐ Testimonials</a>
-            <button class="btn-logout" onclick="logout()">🚪 Logout</button>
-        </div>
-    </div>
+    LMS Dashboard - Ernest Embassy Digital Solutions
+    <button class="logout" onclick="logout()">Logout</button>
 </nav>
 
 <div class="container">
-    <div id="dashboardContent">
-        <!-- Content loaded dynamically -->
-        <div style="text-align: center; padding: 50px;">Loading your dashboard...</div>
+
+<div class="hero">
+    <h1>Welcome, <span id="userName"></span> 👋</h1>
+    <p>Your learning dashboard (Question Bank + Courses + Progress)</p>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+    <div class="stat">
+        <h2 id="qCount">200+</h2>
+        <p>Available Questions</p>
+    </div>
+
+    <div class="stat">
+        <h2>4</h2>
+        <p>Subjects</p>
+    </div>
+
+    <div class="stat">
+        <h2>SS1–SS3</h2>
+        <p>Levels</p>
     </div>
 </div>
 
-<footer>
-    <div class="container">
-        <p>&copy; 2026 Ernest Embassy Digital Solutions. All rights reserved.</p>
-        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
+<!-- COURSES SECTION -->
+<h2 style="margin-top:30px;">📚 Your Courses</h2>
+
+<div class="grid">
+
+    <div class="card">
+        <h3>💻 Digital Technology</h3>
+        <p>Computer basics, ICT, programming fundamentals</p>
+        <a href="senior-secondary-resources/digital-technology-ss1.md">Start Learning</a>
     </div>
-</footer>
 
-<!-- WHATSAPP BUTTON -->
-<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
-    <span>💬</span>
-    <span>Chat with Damian on WhatsApp</span>
-</a>
+    <div class="card">
+        <h3>📐 Mathematics</h3>
+        <p>Algebra, geometry, equations, WAEC practice</p>
+        <a href="senior-secondary-resources/mathematics-ss1.md">Start Learning</a>
+    </div>
 
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <div class="card">
+        <h3>📖 English Language</h3>
+        <p>Grammar, comprehension, essay writing</p>
+        <a href="senior-secondary-resources/english-ss1.md">Start Learning</a>
+    </div>
+
+    <div class="card">
+        <h3>🌍 Igbo Language</h3>
+        <p>Vocabulary, grammar, translation practice</p>
+        <a href="senior-secondary-resources/igbo-ss1.md">Start Learning</a>
+    </div>
+
+</div>
+
+<!-- FUTURE LMS SECTION -->
+<h2 style="margin-top:40px;">🚀 Coming Soon</h2>
+
+<div class="grid">
+
+    <div class="card">
+        <h3>📝 Mock Exams</h3>
+        <p>WAEC / JAMB simulation tests</p>
+    </div>
+
+    <div class="card">
+        <h3>📊 Progress Tracking</h3>
+        <p>See your performance growth</p>
+    </div>
+
+    <div class="card">
+        <h3>📄 PDF Notes</h3>
+        <p>Download revision materials</p>
+    </div>
+
+</div>
+
+</div>
 
 <script>
-    // YOUR FIREBASE CONFIGURATION
-    const firebaseConfig = {
-        apiKey: "AIzaSyD6xpH_zLnoJP2PTSMHg80R94_Vd-fUZSA",
-        authDomain: "ernest-embassy-travel-website.firebaseapp.com",
-        projectId: "ernest-embassy-travel-website",
-        storageBucket: "ernest-embassy-travel-website.firebasestorage.app",
-        messagingSenderId: "831442789419",
-        appId: "1:831442789419:web:1845791aafb7ac9d31366e"
-    };
+// user session
+let user = JSON.parse(localStorage.getItem("currentUser"));
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+document.getElementById("userName").innerText = user?.name || "Student";
 
-    let currentUser = null;
-
-    // Check authentication state
-    auth.onAuthStateChanged(async (user) => {
-        if (!user) {
-            window.location.href = 'login.html';
-            return;
-        }
-        
-        currentUser = user;
-        
-        // Check email verification
-        if (!user.emailVerified) {
-            document.getElementById('dashboardContent').innerHTML = `
-                <div class="welcome-card" style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);">
-                    <h1>Email Not Verified</h1>
-                    <p>Please check your email inbox and verify your email address before accessing your dashboard.</p>
-                    <button onclick="resendVerification()" style="background: white; color: #dc3545; border: none; padding: 10px 20px; border-radius: 8px; margin-top: 15px; cursor: pointer; font-weight: bold;">Resend Verification Email</button>
-                </div>
-            `;
-            return;
-        }
-        
-        // Get user data from Firestore
-        const userDoc = await db.collection('users').doc(user.uid).get();
-        const userData = userDoc.data();
-        
-        displayDashboard(user, userData);
-    });
-
-    function displayDashboard(user, userData) {
-        const dashboardDiv = document.getElementById('dashboardContent');
-        
-        dashboardDiv.innerHTML = `
-            <div class="welcome-card">
-                <h1>Welcome back, ${userData?.fullName || user.displayName || 'Valued Client'}!</h1>
-                <p>Manage your appointments and account settings from here.</p>
-            </div>
-            
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-number" id="upcomingCount">0</div>
-                    <div class="stat-label">Upcoming Appointments</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="completedCount">0</div>
-                    <div class="stat-label">Completed Sessions</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="totalCount">0</div>
-                    <div class="stat-label">Total Appointments</div>
-                </div>
-            </div>
-            
-            <h2 class="section-title">📅 My Appointments</h2>
-            <div class="appointments-list" id="appointmentsList">
-                <div class="empty-state">Loading your appointments...</div>
-            </div>
-        `;
-        
-        loadAppointments();
-    }
-    
-    async function loadAppointments() {
-        // This is sample data. In production, you would fetch from your booking system (Cal.com API)
-        // For now, showing sample appointments
-        const sampleAppointments = [
-            {
-                id: 1,
-                service: 'Visa Consultation',
-                date: '2026-05-25',
-                time: '10:00 AM',
-                status: 'upcoming',
-                meetingLink: 'https://meet.google.com/visa-ernest'
-            },
-            {
-                id: 2,
-                service: 'Web Development Consultation',
-                date: '2026-05-20',
-                time: '2:00 PM',
-                status: 'completed',
-                meetingLink: 'https://meet.google.com/webdev-ernest'
-            },
-            {
-                id: 3,
-                service: 'Education Consulting',
-                date: '2026-05-28',
-                time: '11:00 AM',
-                status: 'upcoming',
-                meetingLink: 'https://meet.google.com/edu-ernest'
-            }
-        ];
-        
-        const upcomingCount = sampleAppointments.filter(a => a.status === 'upcoming').length;
-        const completedCount = sampleAppointments.filter(a => a.status === 'completed').length;
-        
-        document.getElementById('upcomingCount').innerText = upcomingCount;
-        document.getElementById('completedCount').innerText = completedCount;
-        document.getElementById('totalCount').innerText = sampleAppointments.length;
-        
-        const appointmentsList = document.getElementById('appointmentsList');
-        
-        if (sampleAppointments.length === 0) {
-            appointmentsList.innerHTML = '<div class="empty-state">No appointments yet. <a href="booking.html">Book your first appointment</a></div>';
-            return;
-        }
-        
-        appointmentsList.innerHTML = sampleAppointments.map(app => `
-            <div class="appointment-item">
-                <div class="appointment-info">
-                    <h4>${app.service}</h4>
-                    <p>📅 ${app.date} | ⏰ ${app.time}</p>
-                    ${app.status === 'upcoming' && app.meetingLink ? `<p>🔗 <a href="${app.meetingLink}" target="_blank">Join Meeting</a></p>` : ''}
-                </div>
-                <span class="appointment-status status-${app.status}">${app.status.toUpperCase()}</span>
-            </div>
-        `).join('');
-    }
-
-    function resendVerification() {
-        if (currentUser) {
-            currentUser.sendEmailVerification();
-            alert('Verification email sent! Please check your inbox.');
-        }
-    }
-
-    function logout() {
-        auth.signOut().then(() => {
-            window.location.href = 'login.html';
-        });
-    }
+function logout(){
+    localStorage.removeItem("currentUser");
+    window.location.href="login.html";
+}
 </script>
 
 </body>

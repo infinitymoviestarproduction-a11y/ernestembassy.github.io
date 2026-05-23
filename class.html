@@ -109,7 +109,6 @@
             padding: 40px 20px;
         }
 
-        /* Login/Register Tabs */
         .auth-tabs {
             display: flex;
             justify-content: center;
@@ -167,11 +166,6 @@
             font-size: 1rem;
         }
 
-        .form-group input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
         .btn-primary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -184,7 +178,6 @@
             width: 100%;
         }
 
-        /* Dashboard Section */
         .dashboard-section {
             display: none;
         }
@@ -245,27 +238,6 @@
             margin-bottom: 15px;
         }
 
-        .resource-card h3 {
-            color: #1a1a2e;
-            margin-bottom: 10px;
-        }
-
-        .lock-icon {
-            margin-left: 5px;
-            font-size: 0.8rem;
-        }
-
-        .upgrade-btn {
-            background: #ffc107;
-            color: #1a1a2e;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-
         .logout-btn {
             background: #dc3545;
             color: white;
@@ -283,56 +255,12 @@
             padding: 40px 20px;
             margin-top: 60px;
         }
-
-        .cac-badge {
-            background: #ffd700;
-            color: #1a1a2e;
-            padding: 10px 20px;
-            border-radius: 30px;
-            display: inline-block;
-            font-size: 0.85rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .whatsapp-float {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #25D366;
-            color: white;
-            border-radius: 50px;
-            padding: 12px 20px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 1000;
-            font-weight: bold;
-        }
-
-        @media (max-width: 768px) {
-            .nav-container {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            .nav-links {
-                justify-content: center;
-                gap: 8px;
-                flex-wrap: wrap;
-            }
-            .hero h1 {
-                font-size: 1.8rem;
-            }
-            .resources-grid {
-                grid-template-columns: 1fr;
-            }
-        }
     </style>
 </head>
+
 <body>
 
+<!-- NAVIGATION -->
 <nav>
     <div class="nav-container">
         <div class="logo">
@@ -342,327 +270,135 @@
                 <span class="logo-sub">Digital Solutions</span>
             </div>
         </div>
-        <div class="nav-links">
-            <a href="index.html">🏠 Home</a>
-            <a href="about.html">📖 About</a>
-            <a href="services.html">⚙️ Services</a>
-            <a href="webdev.html">💻 Web Dev</a>
-            <a href="visa.html">✈️ Visa</a>
-            <a href="movie.html">🎬 Movie Studio</a>
-            <a href="portfolio.html">🎨 Portfolio</a>
-            <a href="teaching.html">📚 Teaching</a>
-            <a href="tutoring.html">💻 Tutoring</a>
-            <a href="education.html">🎓 Education</a>
-            <a href="class.html">🎓 Class</a>
-            <a href="booking.html">📅 Book</a>
-            <a href="contact.html">📞 Contact</a>
-            <a href="faq.html">❓ FAQ</a>
-            <a href="testimonials.html">⭐ Testimonials</a>
-            <a href="register.html">📝 Register</a>
-            <a href="login.html">🔐 Login</a>
-            <a href="dashboard.html">👤 Dashboard</a>
-            <a href="admin.html">🔒 Admin</a>
-        </div>
     </div>
 </nav>
 
+<!-- HERO -->
 <div class="hero">
     <h1>🎓 Online Classroom</h1>
     <p>Access free educational resources, practice questions, and premium learning materials</p>
 </div>
 
 <div class="container">
-    <!-- Login/Register Section -->
+
+    <!-- AUTH SECTION -->
     <div id="authSection">
         <div class="auth-tabs">
             <button class="tab-btn active" onclick="showTab('login')">🔐 Login</button>
             <button class="tab-btn" onclick="showTab('register')">📝 Register</button>
         </div>
 
-        <!-- Login Form -->
+        <!-- LOGIN -->
         <div id="loginForm" class="auth-form active">
             <form onsubmit="loginUser(event)">
                 <div class="form-group">
-                    <label>📧 Email Address</label>
-                    <input type="email" id="loginEmail" required placeholder="student@example.com">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" required>
                 </div>
                 <div class="form-group">
-                    <label>🔒 Password</label>
-                    <input type="password" id="loginPassword" required placeholder="Enter your password">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" required>
                 </div>
-                <button type="submit" class="btn-primary">🔐 Login to Classroom</button>
-                <p style="text-align: center; margin-top: 15px; font-size: 0.85rem;">
-                    Don't have an account? <a href="#" onclick="showTab('register'); return false;">Register here</a>
-                </p>
+                <button class="btn-primary">Login</button>
             </form>
         </div>
 
-        <!-- Register Form -->
+        <!-- REGISTER -->
         <div id="registerForm" class="auth-form">
             <form onsubmit="registerUser(event)">
                 <div class="form-group">
-                    <label>👤 Full Name</label>
-                    <input type="text" id="regName" required placeholder="Enter your full name">
+                    <label>Full Name</label>
+                    <input type="text" id="regName" required>
                 </div>
                 <div class="form-group">
-                    <label>📧 Email Address</label>
-                    <input type="email" id="regEmail" required placeholder="student@example.com">
+                    <label>Email</label>
+                    <input type="email" id="regEmail" required>
                 </div>
                 <div class="form-group">
-                    <label>🔒 Password</label>
-                    <input type="password" id="regPassword" required placeholder="Create a password">
+                    <label>Password</label>
+                    <input type="password" id="regPassword" required>
                 </div>
-                <div class="form-group">
-                    <label>📚 Grade Level</label>
-                    <select id="regLevel">
-                        <option value="SS1">SS1</option>
-                        <option value="SS2">SS2</option>
-                        <option value="SS3">SS3</option>
-                        <option value="WAEC/JAMB">WAEC/JAMB Candidate</option>
-                        <option value="Adult Learner">Adult Learner</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn-primary">📝 Register Free Account</button>
-                <p style="text-align: center; margin-top: 15px; font-size: 0.85rem;">
-                    Already have an account? <a href="#" onclick="showTab('login'); return false;">Login here</a>
-                </p>
+                <button class="btn-primary">Register</button>
             </form>
         </div>
     </div>
 
-    <!-- Dashboard Section (shown after login) -->
+    <!-- DASHBOARD -->
     <div id="dashboardSection" class="dashboard-section">
+
         <div class="welcome-banner">
-            <h2>Welcome, <span id="userName">Student</span>! 👋</h2>
-            <p>Your learning journey continues here. Access free resources or upgrade for premium content.</p>
-            <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+            <h2>Welcome <span id="userName"></span></h2>
+            <button class="logout-btn" onclick="logout()">Logout</button>
         </div>
 
-        <!-- Free Resources -->
-        <div class="section-title"><span>📚 Free Resources (Access Now)</span></div>
         <div class="resources-grid">
+
             <div class="resource-card">
-                <span class="resource-badge badge-free">FREE</span>
-                <div class="resource-icon">📐</div>
-                <h3>Mathematics Practice</h3>
-                <p>Algebra, Trigonometry, Calculus - 50+ free questions with solutions</p>
-                <a href="senior-secondary-resources/mathematics/index.html" class="btn-primary" style="display: inline-block; text-decoration: none; text-align: center;">Start Learning →</a>
-            </div>
-            <div class="resource-card">
-                <span class="resource-badge badge-free">FREE</span>
-                <div class="resource-icon">📖</div>
-                <h3>English Language</h3>
-                <p>Grammar, Comprehension, Essay Writing - 40+ free exercises</p>
-                <a href="senior-secondary-resources/english-language/index.html" class="btn-primary" style="display: inline-block; text-decoration: none; text-align: center;">Start Learning →</a>
-            </div>
-            <div class="resource-card">
-                <span class="resource-badge badge-free">FREE</span>
-                <div class="resource-icon">💻</div>
                 <h3>Digital Technology</h3>
-                <p>Computer Fundamentals, Programming Basics - 30+ free lessons</p>
-                <a href="senior-secondary-resources/digital-technology/index.html" class="btn-primary" style="display: inline-block; text-decoration: none; text-align: center;">Start Learning →</a>
+                <a href="senior-secondary-resources/digital-technology/index.html">Start</a>
             </div>
-            <div class="resource-card">
-                <span class="resource-badge badge-free">FREE</span>
-                <div class="resource-icon">🌍</div>
-                <h3>Igbo Language</h3>
-                <p>Alphabet, Greetings, Basic Grammar - 25+ free lessons</p>
-                <a href="senior-secondary-resources/igbo-language/index.html" class="btn-primary" style="display: inline-block; text-decoration: none; text-align: center;">Start Learning →</a>
-            </div>
-        </div>
 
-        <!-- Premium Resources -->
-        <div class="section-title"><span>⭐ Premium Resources (Upgrade to Access)</span></div>
-        <div class="resources-grid">
             <div class="resource-card">
-                <span class="resource-badge badge-premium">PREMIUM 🔒</span>
-                <div class="resource-icon">📄</div>
-                <h3>Downloadable PDFs</h3>
-                <p>Printable question banks, revision notes, and study guides</p>
-                <button class="upgrade-btn" onclick="showUpgradeModal()">Upgrade to Access →</button>
+                <h3>Mathematics</h3>
+                <a href="senior-secondary-resources/mathematics/index.html">Start</a>
             </div>
-            <div class="resource-card">
-                <span class="resource-badge badge-premium">PREMIUM 🔒</span>
-                <div class="resource-icon">📹</div>
-                <h3>Video Tutorials</h3>
-                <p>Step-by-step video explanations for difficult topics</p>
-                <button class="upgrade-btn" onclick="showUpgradeModal()">Upgrade to Access →</button>
-            </div>
-            <div class="resource-card">
-                <span class="resource-badge badge-premium">PREMIUM 🔒</span>
-                <div class="resource-icon">📝</div>
-                <h3>Mock Exams</h3>
-                <p>Full WAEC/JAMB practice exams with timers</p>
-                <button class="upgrade-btn" onclick="showUpgradeModal()">Upgrade to Access →</button>
-            </div>
-            <div class="resource-card">
-                <span class="resource-badge badge-premium">PREMIUM 🔒</span>
-                <div class="resource-icon">👨‍🏫</div>
-                <h3>Live Tutoring Sessions</h3>
-                <p>One-on-one coaching with Damian</p>
-                <button class="upgrade-btn" onclick="showUpgradeModal()">Upgrade to Access →</button>
-            </div>
-        </div>
 
-        <!-- Your Progress -->
-        <div class="section-title"><span>📊 Your Progress</span></div>
-        <div class="resources-grid">
             <div class="resource-card">
-                <div class="resource-icon">✅</div>
-                <h3>Questions Completed</h3>
-                <p style="font-size: 2rem; font-weight: bold; color: #667eea;" id="progressCount">0</p>
-                <p>Keep going! Complete more questions to unlock achievements.</p>
+                <h3>English</h3>
+                <a href="senior-secondary-resources/english-language/index.html">Start</a>
             </div>
+
+            <div class="resource-card">
+                <h3>Igbo</h3>
+                <a href="senior-secondary-resources/igbo-language/index.html">Start</a>
+            </div>
+
         </div>
     </div>
+
 </div>
 
-<div style="text-align: center; padding: 20px;">
-    <div class="cac-badge">
-        ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
-        📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
-    </div>
-</div>
-
-<footer>
-    <div class="container">
-        <p><strong>Ernest Embassy Digital Solutions</strong> | Online Classroom • Tutoring • Education</p>
-        <p>📧 ernestembassytravels@gmail.com | infinitymoviestarproduction@gmail.com | Danoka33@gmail.com</p>
-        <p>📞 +2348032607809 | +2349050205053</p>
-        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
-        <p style="margin-top: 20px;">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
-    </div>
-</footer>
-
-<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
-    <span>💬</span>
-    <span>Chat with Damian on WhatsApp</span>
-</a>
+<!-- 🔐 LOGIN PROTECTION ADDED HERE -->
+<script>
+if (localStorage.getItem('currentUser') === null) {
+    window.location.href = "login.html";
+}
+</script>
 
 <script>
-    // User management
-    let currentUser = null;
+let currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
-    // Load from localStorage
-    function loadUsers() {
-        const users = localStorage.getItem('classroom_users');
-        if (!users) {
-            localStorage.setItem('classroom_users', JSON.stringify([]));
-        }
-    }
+function showTab(tab){
+    document.getElementById('loginForm').classList.toggle('active', tab==='login');
+    document.getElementById('registerForm').classList.toggle('active', tab==='register');
+}
 
-    function showTab(tab) {
-        const loginForm = document.getElementById('loginForm');
-        const registerForm = document.getElementById('registerForm');
-        const tabs = document.querySelectorAll('.tab-btn');
+function registerUser(e){
+    e.preventDefault();
+    const user = {
+        name: regName.value,
+        email: regEmail.value,
+        password: regPassword.value
+    };
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    location.reload();
+}
 
-        if (tab === 'login') {
-            loginForm.classList.add('active');
-            registerForm.classList.remove('active');
-            tabs[0].classList.add('active');
-            tabs[1].classList.remove('active');
-        } else {
-            registerForm.classList.add('active');
-            loginForm.classList.remove('active');
-            tabs[1].classList.add('active');
-            tabs[0].classList.remove('active');
-        }
-    }
+function loginUser(e){
+    e.preventDefault();
+    localStorage.setItem('currentUser', JSON.stringify({
+        name: loginEmail.value,
+        email: loginEmail.value
+    }));
+    location.reload();
+}
 
-    function registerUser(event) {
-        event.preventDefault();
-        const name = document.getElementById('regName').value;
-        const email = document.getElementById('regEmail').value;
-        const password = document.getElementById('regPassword').value;
-        const level = document.getElementById('regLevel').value;
+function logout(){
+    localStorage.removeItem('currentUser');
+    location.reload();
+}
 
-        const users = JSON.parse(localStorage.getItem('classroom_users') || '[]');
-        
-        if (users.find(u => u.email === email)) {
-            alert('❌ Email already registered! Please login.');
-            return;
-        }
-
-        const newUser = {
-            id: Date.now(),
-            name: name,
-            email: email,
-            password: password,
-            level: level,
-            progress: 0,
-            joined: new Date().toLocaleDateString()
-        };
-
-        users.push(newUser);
-        localStorage.setItem('classroom_users', JSON.stringify(users));
-        
-        // Auto login after registration
-        currentUser = newUser;
-        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        
-        alert('✅ Registration successful! Welcome to the classroom.');
-        showDashboard();
-    }
-
-    function loginUser(event) {
-        event.preventDefault();
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
-
-        const users = JSON.parse(localStorage.getItem('classroom_users') || '[]');
-        const user = users.find(u => u.email === email && u.password === password);
-
-        if (user) {
-            currentUser = user;
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            alert('✅ Login successful! Welcome back, ' + user.name);
-            showDashboard();
-        } else {
-            alert('❌ Invalid email or password. Please try again or register.');
-        }
-    }
-
-    function showDashboard() {
-        document.getElementById('authSection').style.display = 'none';
-        document.getElementById('dashboardSection').classList.add('active');
-        document.getElementById('userName').textContent = currentUser.name;
-        
-        // Load progress
-        const progress = localStorage.getItem('user_progress_' + currentUser.id);
-        if (progress) {
-            document.getElementById('progressCount').textContent = progress;
-        }
-    }
-
-    function logout() {
-        currentUser = null;
-        localStorage.removeItem('currentUser');
-        document.getElementById('authSection').style.display = 'block';
-        document.getElementById('dashboardSection').classList.remove('active');
-        document.getElementById('loginEmail').value = '';
-        document.getElementById('loginPassword').value = '';
-        showTab('login');
-        alert('👋 You have been logged out.');
-    }
-
-    function showUpgradeModal() {
-        alert('⭐ Premium Access\n\nContact Damian to upgrade your account:\n📞 +2348032607809\n📧 ernestembassytravels@gmail.com\n\nPremium features:\n• Downloadable PDFs\n• Video tutorials\n• Mock exams\n• Live tutoring sessions');
-    }
-
-    // Check if user is already logged in
-    function checkSession() {
-        const savedUser = localStorage.getItem('currentUser');
-        if (savedUser) {
-            currentUser = JSON.parse(savedUser);
-            showDashboard();
-        } else {
-            document.getElementById('authSection').style.display = 'block';
-        }
-    }
-
-    // Initialize
-    loadUsers();
-    checkSession();
+document.getElementById('userName').innerText = currentUser?.name || '';
 </script>
 
 </body>

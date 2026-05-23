@@ -124,24 +124,28 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
 /* =========================
-   GLOBAL LMS SESSION FORMAT
+   LMS SESSION FORMAT (STANDARD)
    ========================= */
 function createSessionUser(user) {
     return {
         uid: user.uid,
         email: user.email,
         name: user.displayName || user.email.split("@")[0],
-        loginTime: new Date().toISOString()
+        loginTime: new Date().toISOString(),
+        role: "student"
     };
 }
 
 /* =========================
-   AUTO LOGIN CHECK
+   AUTO SESSION RESTORE
    ========================= */
 auth.onAuthStateChanged((user) => {
     if (user) {
         const sessionUser = createSessionUser(user);
+
         localStorage.setItem("currentUser", JSON.stringify(sessionUser));
+
+        // 🚀 ALWAYS GO TO DASHBOARD
         window.location.href = "dashboard.html";
     }
 });
@@ -169,15 +173,16 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
             return;
         }
 
-        // 🔐 IMPORTANT LMS SESSION (USED BY CLASS.HTML + COURSE.HTML)
+        // 🔐 CREATE LMS SESSION
         const sessionUser = createSessionUser(user);
 
+        // REQUIRED FOR ALL LMS PAGES (course.html, class.html, dashboard.html)
         localStorage.setItem("currentUser", JSON.stringify(sessionUser));
 
-        // OPTIONAL FLAG (used by some of your pages)
+        // optional tracking flag
         localStorage.setItem("userLoggedIn", "true");
 
-        // 🚀 REDIRECT
+        // 🚀 REDIRECT TO DASHBOARD (Udemy-style entry point)
         window.location.href = "dashboard.html";
 
     } catch (error) {

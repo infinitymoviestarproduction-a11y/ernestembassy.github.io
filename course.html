@@ -12,7 +12,6 @@ body {
     background: #f4f6f9;
 }
 
-/* HEADER */
 header {
     background: #1a1a2e;
     color: white;
@@ -20,13 +19,22 @@ header {
     text-align: center;
 }
 
-/* LAYOUT */
+/* TOP USER BAR (Udemy-style) */
+.user-bar {
+    background: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
 .container {
     display: flex;
     height: 100vh;
 }
 
-/* SIDEBAR */
+/* Sidebar */
 .sidebar {
     width: 25%;
     background: white;
@@ -47,7 +55,12 @@ header {
     background: #ddd;
 }
 
-/* CONTENT */
+.lesson.active {
+    background: #667eea;
+    color: white;
+}
+
+/* Content */
 .content {
     flex: 1;
     padding: 30px;
@@ -69,24 +82,38 @@ button {
     border-radius: 8px;
     cursor: pointer;
 }
+
+.logout {
+    background: crimson;
+    margin-left: 10px;
+}
 </style>
 </head>
 
 <body>
 
-<!-- 🔐 LMS AUTH CHECK (IMPORTANT) -->
+<!-- 🔐 LOGIN PROTECTION (REQUIRED) -->
 <script>
 const user = JSON.parse(localStorage.getItem("currentUser"));
-
 if (!user) {
     window.location.href = "login.html";
 }
 </script>
 
+<!-- HEADER -->
 <header>
     <h1>🎓 LMS Course Player</h1>
-    <p>Welcome, <span id="userName"></span></p>
 </header>
+
+<!-- USER BAR (Udemy style) -->
+<div class="user-bar">
+    <div>
+        Logged in as: <b id="userName"></b>
+    </div>
+    <div>
+        <button class="logout" onclick="logout()">Logout</button>
+    </div>
+</div>
 
 <div class="container">
 
@@ -109,14 +136,9 @@ if (!user) {
 </div>
 
 <script>
-// =========================
-// USER SESSION DISPLAY
-// =========================
 document.getElementById("userName").innerText = user.name || "Student";
 
-// =========================
-// COURSE DATA (STATIC FOR NOW)
-// =========================
+// COURSE DATA (later upgrade to JSON / Firestore)
 const course = {
     title: "Digital Technology SS1",
     lessons: [
@@ -126,20 +148,17 @@ const course = {
         },
         {
             title: "Input Devices",
-            content: "Input devices are used to enter data into a computer (Keyboard, Mouse)."
+            content: "Input devices include keyboard, mouse, scanner."
         },
         {
             title: "Output Devices",
-            content: "Output devices display results (Monitor, Printer)."
+            content: "Output devices include monitor, printer, speakers."
         }
     ]
 };
 
 let currentIndex = 0;
 
-// =========================
-// LOAD LESSON LIST
-// =========================
 function loadLessons() {
     const list = document.getElementById("lessonList");
     list.innerHTML = "";
@@ -153,28 +172,34 @@ function loadLessons() {
     });
 }
 
-// =========================
-// OPEN LESSON
-// =========================
 function openLesson(index) {
     currentIndex = index;
+
     document.getElementById("lessonTitle").innerText = course.lessons[index].title;
     document.getElementById("lessonContent").innerText = course.lessons[index].content;
 
-    // future upgrade hook (progress tracking)
-    localStorage.setItem("lastLesson", index);
+    highlightLesson(index);
 }
 
-// =========================
-// NEXT LESSON
-// =========================
+function highlightLesson(index){
+    const items = document.querySelectorAll(".lesson");
+    items.forEach((el, i) => {
+        el.classList.toggle("active", i === index);
+    });
+}
+
 function nextLesson() {
     if (currentIndex < course.lessons.length - 1) {
         currentIndex++;
         openLesson(currentIndex);
     } else {
-        alert("🎉 You have completed this course!");
+        alert("🎉 Course Completed!");
     }
+}
+
+function logout(){
+    localStorage.removeItem("currentUser");
+    window.location.href = "login.html";
 }
 
 loadLessons();

@@ -161,11 +161,6 @@
             letter-spacing: 1px;
         }
 
-        .subdomain-url small {
-            font-size: 0.8rem;
-            font-weight: normal;
-        }
-
         .copy-btn {
             background: #ffd700;
             color: #1a1a2e;
@@ -181,6 +176,94 @@
 
         .copy-btn:hover {
             transform: scale(1.05);
+        }
+
+        /* Next Steps Section - NEW */
+        .next-steps {
+            background: #f0f4f8;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .next-steps h3 {
+            color: #1a1a2e;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            transition: transform 0.2s;
+        }
+
+        .step-item:hover {
+            transform: translateX(5px);
+        }
+
+        .step-num {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .step-text {
+            flex: 1;
+        }
+
+        .step-text strong {
+            color: #1a1a2e;
+        }
+
+        .step-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .step-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Alert Message */
+        .alert-message {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .alert-message.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Classroom Features Grid */
@@ -218,7 +301,6 @@
             color: #666;
         }
 
-        /* Platforms Grid */
         .platforms-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -250,15 +332,31 @@
             margin-bottom: 10px;
         }
 
-        .platform-link {
-            display: inline-block;
-            margin-top: 15px;
-            color: #667eea;
-            text-decoration: none;
-            font-weight: bold;
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
         }
 
-        /* Setup Steps */
+        .schedule-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 4px solid #ffd700;
+        }
+
+        .schedule-day {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+
+        .schedule-subject {
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
         .steps-container {
             display: flex;
             flex-wrap: wrap;
@@ -291,7 +389,6 @@
             font-weight: bold;
         }
 
-        /* Access Section */
         .access-section {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 20px;
@@ -299,10 +396,6 @@
             text-align: center;
             margin: 60px 0;
             color: white;
-        }
-
-        .access-section h2 {
-            margin-bottom: 20px;
         }
 
         .access-btn {
@@ -322,33 +415,6 @@
             transform: translateY(-3px);
         }
 
-        /* Class Schedule */
-        .schedule-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin: 40px 0;
-        }
-
-        .schedule-card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            border-left: 4px solid #ffd700;
-        }
-
-        .schedule-day {
-            font-weight: bold;
-            color: #667eea;
-            font-size: 1.1rem;
-        }
-
-        .schedule-subject {
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        /* Email Section */
         .email-section {
             background: white;
             border-radius: 20px;
@@ -434,8 +500,8 @@
                 font-size: 1.2rem;
                 word-break: break-all;
             }
-            .steps-container {
-                flex-direction: column;
+            .step-item {
+                flex-wrap: wrap;
             }
             .whatsapp-float {
                 padding: 8px 15px;
@@ -496,7 +562,56 @@
             class.ernestembassydigitalsolutions.com
         </div>
         <button class="copy-btn" onclick="copySubdomain()">📋 Copy Address</button>
+        
+        <!-- Alert Message that appears after copying -->
+        <div id="copyAlert" class="alert-message">
+            ✅ Copied! Now follow the steps below to access your classroom 👇
+        </div>
+        
         <p style="margin-top: 20px; font-size: 0.9rem; opacity: 0.8;">✅ Free for all registered students | 24/7 Access</p>
+    </div>
+
+    <!-- NEXT STEPS - What to do after copying -->
+    <div class="next-steps">
+        <h3>📌 What to do next:</h3>
+        <div class="step-list">
+            <div class="step-item">
+                <div class="step-num">1</div>
+                <div class="step-text">
+                    <strong>Open your web browser</strong> (Chrome, Firefox, Safari, or Edge)
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">2</div>
+                <div class="step-text">
+                    <strong>Paste the link</strong> in the address bar: <code>class.ernestembassydigitalsolutions.com</code>
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">3</div>
+                <div class="step-text">
+                    <strong>Press Enter</strong> to go to the classroom portal
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">4</div>
+                <div class="step-text">
+                    <strong>Login with your credentials</strong> (provided after registration)
+                </div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">5</div>
+                <div class="step-text">
+                    <strong>Join your scheduled class</strong> from the dashboard
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Action Buttons -->
+    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin: 20px 0;">
+        <a href="register.html" class="email-btn" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">📝 Register Now</a>
+        <a href="login.html" class="email-btn" style="background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);">🔐 Login to Classroom</a>
     </div>
 
     <!-- Classroom Features -->
@@ -533,34 +648,6 @@
             <div class="feature-icon">📱</div>
             <h3>Mobile Friendly</h3>
             <p>Learn on any device - phone, tablet, or computer.</p>
-        </div>
-    </div>
-
-    <!-- Learning Platforms -->
-    <div class="section-title"><span>🛠️ Integrated Platforms</span></div>
-    <div class="section-subtitle">We use the best tools for seamless learning</div>
-
-    <div class="platforms-grid">
-        <div class="platform-card">
-            <div class="platform-icon">📹</div>
-            <h4>Zoom</h4>
-            <p>Live video classes and meetings</p>
-            <a href="https://zoom.us" target="_blank" class="platform-link">Learn More →</a>
-        </div>
-        <div class="platform-card">
-            <div class="platform-icon">💬</div>
-            <h4>WhatsApp Groups</h4>
-            <p>Quick updates and support</p>
-        </div>
-        <div class="platform-card">
-            <div class="platform-icon">📧</div>
-            <h4>Email</h4>
-            <p>Assignment submission and formal communication</p>
-        </div>
-        <div class="platform-card">
-            <div class="platform-icon">☁️</div>
-            <h4>Google Drive</h4>
-            <p>Access learning materials anytime</p>
         </div>
     </div>
 
@@ -604,27 +691,6 @@
             <div class="schedule-subject">Q&A / Review Sessions</div>
             <p>10:00 AM - 12:00 PM</p>
             <p>Group Discussion</p>
-        </div>
-    </div>
-
-    <!-- How to Access -->
-    <div class="section-title"><span>🚀 How to Access the Classroom</span></div>
-    <div class="steps-container">
-        <div class="step">
-            <div class="step-number">1</div>
-            <p><strong>Register</strong> as a student</p>
-        </div>
-        <div class="step">
-            <div class="step-number">2</div>
-            <p><strong>Receive</strong> your login credentials</p>
-        </div>
-        <div class="step">
-            <div class="step-number">3</div>
-            <p><strong>Visit</strong> class.ernestembassydigitalsolutions.com</p>
-        </div>
-        <div class="step">
-            <div class="step-number">4</div>
-            <p><strong>Join</strong> your scheduled classes</p>
         </div>
     </div>
 
@@ -676,8 +742,19 @@
 <script>
     function copySubdomain() {
         const url = "class.ernestembassydigitalsolutions.com";
-        navigator.clipboard.writeText(url);
-        alert("✅ Subdomain copied: " + url);
+        navigator.clipboard.writeText(url).then(() => {
+            // Show success alert
+            const alert = document.getElementById('copyAlert');
+            alert.classList.add('show');
+            
+            // Scroll to alert
+            alert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Hide after 5 seconds
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 5000);
+        });
     }
 </script>
 

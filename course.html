@@ -3,98 +3,210 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Course Player - LMS</title>
+<title>Course Player - Ernest Embassy LMS</title>
 
 <style>
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    background: #f4f6f9;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
 }
 
-header {
-    background: #1a1a2e;
-    color: white;
-    padding: 20px;
-    text-align: center;
+body{
+    background:#f4f6f9;
+    color:#333;
 }
 
-/* TOP USER BAR (Udemy-style) */
-.user-bar {
-    background: #fff;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid #ddd;
-    font-size: 14px;
+/* HEADER */
+header{
+    background:#1a1a2e;
+    color:white;
+    padding:20px;
+    text-align:center;
 }
 
-.container {
-    display: flex;
-    height: 100vh;
+/* USER BAR */
+.user-bar{
+    background:white;
+    padding:15px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #ddd;
+    flex-wrap:wrap;
+    gap:10px;
 }
 
-/* Sidebar */
-.sidebar {
-    width: 25%;
-    background: white;
-    padding: 20px;
-    overflow-y: auto;
-    border-right: 1px solid #ddd;
+.user-info{
+    font-size:14px;
 }
 
-.lesson {
-    padding: 12px;
-    margin-bottom: 10px;
-    background: #f0f0f0;
-    cursor: pointer;
-    border-radius: 8px;
+.progress-box{
+    font-size:14px;
+    font-weight:bold;
+    color:#667eea;
 }
 
-.lesson:hover {
-    background: #ddd;
+.container{
+    display:flex;
+    height:calc(100vh - 120px);
 }
 
-.lesson.active {
-    background: #667eea;
-    color: white;
+/* SIDEBAR */
+.sidebar{
+    width:30%;
+    background:white;
+    padding:20px;
+    overflow-y:auto;
+    border-right:1px solid #ddd;
 }
 
-/* Content */
-.content {
-    flex: 1;
-    padding: 30px;
+.sidebar h3{
+    margin-bottom:20px;
 }
 
-.lesson-box {
-    background: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+.lesson{
+    padding:15px;
+    margin-bottom:12px;
+    background:#f0f0f0;
+    cursor:pointer;
+    border-radius:10px;
+    transition:0.3s;
 }
 
-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background: #667eea;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
+.lesson:hover{
+    background:#ddd;
 }
 
-.logout {
-    background: crimson;
-    margin-left: 10px;
+.lesson.active{
+    background:#667eea;
+    color:white;
+}
+
+/* CONTENT */
+.content{
+    flex:1;
+    padding:30px;
+    overflow-y:auto;
+}
+
+.lesson-box{
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+}
+
+.lesson-box h2{
+    margin-bottom:20px;
+    color:#1a1a2e;
+}
+
+.lesson-box p{
+    line-height:1.8;
+    margin-bottom:20px;
+}
+
+/* BUTTONS */
+.btn-group{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:20px;
+}
+
+button{
+    padding:12px 20px;
+    background:#667eea;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#5a67d8;
+}
+
+.logout{
+    background:crimson;
+}
+
+.logout:hover{
+    background:#b3002d;
+}
+
+.complete-btn{
+    background:#28a745;
+}
+
+.complete-btn:hover{
+    background:#218838;
+}
+
+/* PROGRESS BAR */
+.progress-container{
+    width:100%;
+    height:12px;
+    background:#ddd;
+    border-radius:10px;
+    overflow:hidden;
+    margin-top:15px;
+}
+
+.progress-bar{
+    height:100%;
+    width:0%;
+    background:#28a745;
+    transition:0.4s;
+}
+
+/* CERTIFICATE */
+.certificate-box{
+    margin-top:30px;
+    background:#fff3cd;
+    padding:20px;
+    border-radius:12px;
+    border:1px solid #ffeeba;
+    display:none;
+}
+
+.certificate-box h3{
+    margin-bottom:10px;
+    color:#856404;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+
+    .container{
+        flex-direction:column;
+        height:auto;
+    }
+
+    .sidebar{
+        width:100%;
+        border-right:none;
+        border-bottom:1px solid #ddd;
+    }
+
+    .content{
+        width:100%;
+    }
+
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🔐 LOGIN PROTECTION (REQUIRED) -->
+<!-- 🔐 LMS LOGIN PROTECTION -->
 <script>
 const user = JSON.parse(localStorage.getItem("currentUser"));
+
 if (!user) {
     window.location.href = "login.html";
 }
@@ -102,108 +214,445 @@ if (!user) {
 
 <!-- HEADER -->
 <header>
-    <h1>🎓 LMS Course Player</h1>
+    <h1>🎓 Ernest Embassy LMS Course Player</h1>
 </header>
 
-<!-- USER BAR (Udemy style) -->
+<!-- USER BAR -->
 <div class="user-bar">
-    <div>
-        Logged in as: <b id="userName"></b>
+
+    <div class="user-info">
+        Logged in as:
+        <b id="userName"></b>
     </div>
-    <div>
-        <button class="logout" onclick="logout()">Logout</button>
+
+    <div class="progress-box">
+        Progress:
+        <span id="progressText">0%</span>
     </div>
+
+    <button class="logout" onclick="logout()">
+        Logout
+    </button>
+
 </div>
 
 <div class="container">
 
     <!-- SIDEBAR -->
     <div class="sidebar">
-        <h3>Lessons</h3>
+
+        <h3 id="courseTitle">
+            Course Lessons
+        </h3>
+
         <div id="lessonList"></div>
+
     </div>
 
     <!-- CONTENT -->
     <div class="content">
-        <div class="lesson-box">
-            <h2 id="lessonTitle">Welcome</h2>
-            <p id="lessonContent">Select a lesson to begin learning.</p>
 
-            <button onclick="nextLesson()">Next Lesson</button>
+        <div class="lesson-box">
+
+            <h2 id="lessonTitle">
+                Welcome
+            </h2>
+
+            <p id="lessonContent">
+                Select a lesson to begin learning.
+            </p>
+
+            <!-- PROGRESS -->
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+            <!-- BUTTONS -->
+            <div class="btn-group">
+
+                <button onclick="previousLesson()">
+                    ⬅ Previous
+                </button>
+
+                <button onclick="nextLesson()">
+                    Next ➡
+                </button>
+
+                <button class="complete-btn" onclick="markCompleted()">
+                    ✔ Mark Completed
+                </button>
+
+            </div>
+
+            <!-- CERTIFICATE -->
+            <div class="certificate-box" id="certificateBox">
+
+                <h3>
+                    🏆 Congratulations!
+                </h3>
+
+                <p>
+                    You completed this course successfully.
+                </p>
+
+                <button onclick="downloadCertificate()">
+                    📄 Download Certificate
+                </button>
+
+            </div>
+
         </div>
+
     </div>
 
 </div>
 
 <script>
-document.getElementById("userName").innerText = user.name || "Student";
 
-// COURSE DATA (later upgrade to JSON / Firestore)
-const course = {
-    title: "Digital Technology SS1",
-    lessons: [
-        {
-            title: "Introduction to Computer",
-            content: "A computer is an electronic device that processes data into information."
-        },
-        {
-            title: "Input Devices",
-            content: "Input devices include keyboard, mouse, scanner."
-        },
-        {
-            title: "Output Devices",
-            content: "Output devices include monitor, printer, speakers."
-        }
-    ]
+/* =========================
+   USER INFO
+========================= */
+
+document.getElementById("userName").innerText =
+    user.name || "Student";
+
+/* =========================
+   SUBJECT DETECTION
+========================= */
+
+const params = new URLSearchParams(window.location.search);
+
+const subject =
+    params.get("subject") || "digital-technology";
+
+/* =========================
+   COURSE DATABASE
+========================= */
+
+const courses = {
+
+    "digital-technology": {
+        title: "💻 Digital Technology SS1",
+        lessons: [
+            {
+                title: "Introduction to Computer",
+                content:
+                "A computer is an electronic device that processes data into useful information."
+            },
+
+            {
+                title: "Input Devices",
+                content:
+                "Input devices are hardware used to enter data into the computer system."
+            },
+
+            {
+                title: "Output Devices",
+                content:
+                "Output devices display processed information from the computer."
+            },
+
+            {
+                title: "Storage Devices",
+                content:
+                "Storage devices help save data permanently or temporarily."
+            }
+        ]
+    },
+
+    "mathematics": {
+        title: "📐 Mathematics SS1",
+        lessons: [
+            {
+                title: "Algebra",
+                content:
+                "Algebra involves solving mathematical expressions and equations."
+            },
+
+            {
+                title: "Geometry",
+                content:
+                "Geometry studies shapes, sizes, angles and dimensions."
+            },
+
+            {
+                title: "Statistics",
+                content:
+                "Statistics involves collecting and analyzing data."
+            }
+        ]
+    },
+
+    "english": {
+        title: "📖 English Language",
+        lessons: [
+            {
+                title: "Grammar",
+                content:
+                "Grammar explains sentence construction and proper English usage."
+            },
+
+            {
+                title: "Essay Writing",
+                content:
+                "Essay writing teaches organized expression of ideas."
+            },
+
+            {
+                title: "Comprehension",
+                content:
+                "Comprehension improves understanding and interpretation skills."
+            }
+        ]
+    },
+
+    "igbo": {
+        title: "🌍 Igbo Language",
+        lessons: [
+            {
+                title: "Igbo Alphabets",
+                content:
+                "Learn the Igbo alphabet and pronunciation."
+            },
+
+            {
+                title: "Basic Vocabulary",
+                content:
+                "Learn everyday Igbo vocabulary and meanings."
+            },
+
+            {
+                title: "Translation",
+                content:
+                "Practice translating simple English to Igbo."
+            }
+        ]
+    }
+
 };
+
+const course = courses[subject];
+
+/* =========================
+   COURSE TITLE
+========================= */
+
+document.getElementById("courseTitle").innerText =
+    course.title;
+
+/* =========================
+   LESSON CONTROL
+========================= */
 
 let currentIndex = 0;
 
-function loadLessons() {
-    const list = document.getElementById("lessonList");
+let completedLessons = JSON.parse(
+    localStorage.getItem(subject + "_progress")
+) || [];
+
+/* =========================
+   LOAD LESSONS
+========================= */
+
+function loadLessons(){
+
+    const list =
+        document.getElementById("lessonList");
+
     list.innerHTML = "";
 
-    course.lessons.forEach((lesson, index) => {
+    course.lessons.forEach((lesson,index)=>{
+
+        const completed =
+            completedLessons.includes(index)
+            ? "✔ "
+            : "";
+
         list.innerHTML += `
-            <div class="lesson" onclick="openLesson(${index})">
+
+            <div
+                class="lesson"
+                onclick="openLesson(${index})">
+
+                ${completed}
                 ${index + 1}. ${lesson.title}
+
             </div>
+
         `;
     });
+
+    highlightLesson(currentIndex);
+
+    updateProgress();
 }
 
-function openLesson(index) {
+/* =========================
+   OPEN LESSON
+========================= */
+
+function openLesson(index){
+
     currentIndex = index;
 
-    document.getElementById("lessonTitle").innerText = course.lessons[index].title;
-    document.getElementById("lessonContent").innerText = course.lessons[index].content;
+    document.getElementById("lessonTitle")
+    .innerText = course.lessons[index].title;
+
+    document.getElementById("lessonContent")
+    .innerText = course.lessons[index].content;
 
     highlightLesson(index);
 }
 
+/* =========================
+   ACTIVE LESSON
+========================= */
+
 function highlightLesson(index){
-    const items = document.querySelectorAll(".lesson");
-    items.forEach((el, i) => {
-        el.classList.toggle("active", i === index);
+
+    const items =
+        document.querySelectorAll(".lesson");
+
+    items.forEach((el,i)=>{
+
+        el.classList.toggle(
+            "active",
+            i === index
+        );
+
     });
+
 }
 
-function nextLesson() {
-    if (currentIndex < course.lessons.length - 1) {
+/* =========================
+   NEXT LESSON
+========================= */
+
+function nextLesson(){
+
+    if(currentIndex < course.lessons.length - 1){
+
         currentIndex++;
+
         openLesson(currentIndex);
+
     } else {
-        alert("🎉 Course Completed!");
+
+        alert("🎉 You reached the end of this course!");
+
     }
+
 }
+
+/* =========================
+   PREVIOUS LESSON
+========================= */
+
+function previousLesson(){
+
+    if(currentIndex > 0){
+
+        currentIndex--;
+
+        openLesson(currentIndex);
+
+    }
+
+}
+
+/* =========================
+   MARK COMPLETED
+========================= */
+
+function markCompleted(){
+
+    if(!completedLessons.includes(currentIndex)){
+
+        completedLessons.push(currentIndex);
+
+        localStorage.setItem(
+            subject + "_progress",
+            JSON.stringify(completedLessons)
+        );
+
+    }
+
+    loadLessons();
+
+    checkCertificate();
+}
+
+/* =========================
+   UPDATE PROGRESS
+========================= */
+
+function updateProgress(){
+
+    const progress =
+        Math.round(
+            (completedLessons.length /
+            course.lessons.length) * 100
+        );
+
+    document.getElementById("progressText")
+    .innerText = progress + "%";
+
+    document.getElementById("progressBar")
+    .style.width = progress + "%";
+}
+
+/* =========================
+   CERTIFICATE CHECK
+========================= */
+
+function checkCertificate(){
+
+    if(
+        completedLessons.length ===
+        course.lessons.length
+    ){
+
+        document.getElementById(
+            "certificateBox"
+        ).style.display = "block";
+
+    }
+
+}
+
+/* =========================
+   DOWNLOAD CERTIFICATE
+========================= */
+
+function downloadCertificate(){
+
+    alert(
+        "🏆 Certificate feature connected successfully! PDF generation comes next."
+    );
+
+}
+
+/* =========================
+   LOGOUT
+========================= */
 
 function logout(){
+
     localStorage.removeItem("currentUser");
+
     window.location.href = "login.html";
 }
 
+/* =========================
+   INITIALIZE
+========================= */
+
 loadLessons();
+
 openLesson(0);
+
+checkCertificate();
+
 </script>
 
 </body>

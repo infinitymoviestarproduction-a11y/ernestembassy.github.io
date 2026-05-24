@@ -1,422 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LMS Dashboard - Ernest Embassy Digital Solutions</title>
-
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
-}
-
-body{
-    background:#f5f7fa;
-    color:#333;
-}
-
-/* NAVBAR */
-nav{
-    background:#1a1a2e;
-    color:white;
-    padding:15px 20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-}
-
-.logo{
-    font-size:20px;
-    font-weight:bold;
-}
-
-.nav-right{
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
-
-.logout{
-    background:#dc3545;
-    color:white;
-    border:none;
-    padding:10px 18px;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-.logout:hover{
-    background:#bb2d3b;
-}
-
-/* CONTAINER */
-.container{
-    max-width:1200px;
-    margin:auto;
-    padding:20px;
-}
-
-/* HERO */
-.hero{
-    background:linear-gradient(135deg,#667eea,#764ba2);
-    color:white;
-    padding:40px;
-    border-radius:18px;
-    margin:20px 0;
-}
-
-.hero h1{
-    margin-bottom:10px;
-    font-size:32px;
-}
-
-/* STATS */
-.stats{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:20px;
-    margin-top:30px;
-}
-
-.stat{
-    background:white;
-    padding:25px;
-    border-radius:14px;
-    text-align:center;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08);
-}
-
-.stat h2{
-    color:#667eea;
-    font-size:30px;
-}
-
-/* COURSES */
-.section-title{
-    margin-top:40px;
-    margin-bottom:20px;
-    font-size:26px;
-    color:#1a1a2e;
-}
-
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-    gap:20px;
-}
-
-.card{
-    background:white;
-    padding:25px;
-    border-radius:16px;
-    box-shadow:0 4px 15px rgba(0,0,0,0.08);
-    transition:0.3s;
-}
-
-.card:hover{
-    transform:translateY(-5px);
-}
-
-.card h3{
-    margin-bottom:10px;
-    color:#1a1a2e;
-}
-
-.card p{
-    color:#666;
-    margin-bottom:15px;
-    line-height:1.5;
-}
-
-.card a{
-    display:inline-block;
-    text-decoration:none;
-    background:#667eea;
-    color:white;
-    padding:10px 18px;
-    border-radius:8px;
-    font-weight:bold;
-    transition:0.3s;
-}
-
-.card a:hover{
-    background:#5a67d8;
-}
-
-/* BADGES */
-.badge{
-    display:inline-block;
-    background:#28a745;
-    color:white;
-    padding:5px 10px;
-    border-radius:20px;
-    font-size:12px;
-    margin-bottom:10px;
-}
-
-/* FOOTER */
-footer{
-    margin-top:60px;
-    background:#1a1a2e;
-    color:white;
-    text-align:center;
-    padding:30px;
-}
-
-/* MOBILE */
-@media(max-width:768px){
-
-    .hero{
-        padding:25px;
-    }
-
-    .hero h1{
-        font-size:24px;
-    }
-
-    nav{
-        flex-direction:column;
-        gap:15px;
-        text-align:center;
-    }
-
-}
-</style>
-</head>
-
-<body>
-
-<!-- 🔐 LMS LOGIN PROTECTION -->
 <script>
+/* =========================
+   LOAD USER SESSION
+========================= */
 const user = JSON.parse(localStorage.getItem("currentUser"));
 
 if (!user) {
     window.location.href = "login.html";
 }
-</script>
-
-<!-- NAVIGATION -->
-<nav>
-
-    <div class="logo">
-        🎓 Ernest Embassy LMS
-    </div>
-
-    <div class="nav-right">
-        <span id="topUser"></span>
-        <button class="logout" onclick="logout()">Logout</button>
-    </div>
-
-</nav>
-
-<div class="container">
-
-    <!-- HERO -->
-    <div class="hero">
-        <h1>
-            Welcome, <span id="userName"></span> 👋
-        </h1>
-
-        <p>
-            Your learning dashboard with Question Bank, Courses,
-            Progress Tracking, Mock Exams and Digital Resources.
-        </p>
-    </div>
-
-    <!-- STATS -->
-    <div class="stats">
-
-        <div class="stat">
-            <h2>200+</h2>
-            <p>Available Questions</p>
-        </div>
-
-        <div class="stat">
-            <h2>4</h2>
-            <p>Subjects</p>
-        </div>
-
-        <div class="stat">
-            <h2>SS1–SS3</h2>
-            <p>Levels</p>
-        </div>
-
-        <div class="stat">
-            <h2>24/7</h2>
-            <p>Learning Access</p>
-        </div>
-
-    </div>
-
-    <!-- COURSES -->
-    <h2 class="section-title">📚 Your Courses</h2>
-
-    <div class="grid">
-
-        <!-- DIGITAL TECHNOLOGY -->
-        <div class="card">
-
-            <div class="badge">POPULAR</div>
-
-            <h3>💻 Digital Technology</h3>
-
-            <p>
-                Learn computer basics, ICT, software,
-                internet technology and programming fundamentals.
-            </p>
-
-            <!-- ✅ FIXED -->
-            <a href="course.html?subject=digital-technology">
-                Start Learning
-            </a>
-
-        </div>
-
-        <!-- MATHEMATICS -->
-        <div class="card">
-
-            <div class="badge">WAEC</div>
-
-            <h3>📐 Mathematics</h3>
-
-            <p>
-                Master algebra, geometry, equations,
-                statistics and WAEC preparation questions.
-            </p>
-
-            <!-- ✅ FIXED -->
-            <a href="course.html?subject=mathematics">
-                Start Learning
-            </a>
-
-        </div>
-
-        <!-- ENGLISH -->
-        <div class="card">
-
-            <div class="badge">LANGUAGE</div>
-
-            <h3>📖 English Language</h3>
-
-            <p>
-                Improve grammar, essay writing,
-                comprehension and communication skills.
-            </p>
-
-            <!-- ✅ FIXED -->
-            <a href="course.html?subject=english">
-                Start Learning
-            </a>
-
-        </div>
-
-        <!-- IGBO -->
-        <div class="card">
-
-            <div class="badge">LOCAL</div>
-
-            <h3>🌍 Igbo Language</h3>
-
-            <p>
-                Learn vocabulary, translation,
-                grammar and cultural language studies.
-            </p>
-
-            <!-- ✅ FIXED -->
-            <a href="course.html?subject=igbo">
-                Start Learning
-            </a>
-
-        </div>
-
-    </div>
-
-    <!-- COMING SOON -->
-    <h2 class="section-title">🚀 Coming Soon</h2>
-
-    <div class="grid">
-
-        <div class="card">
-            <h3>📝 CBT Mock Exams</h3>
-
-            <p>
-                Practice WAEC, NECO and JAMB CBT
-                examinations with timer and scoring system.
-            </p>
-        </div>
-
-        <div class="card">
-            <h3>📊 Progress Tracking</h3>
-
-            <p>
-                Track completed lessons,
-                quiz scores and learning performance.
-            </p>
-        </div>
-
-        <div class="card">
-            <h3>🏆 Certificates</h3>
-
-            <p>
-                Download digital certificates
-                after completing courses successfully.
-            </p>
-        </div>
-
-    </div>
-
-</div>
-
-<!-- FOOTER -->
-<footer>
-
-    <p>
-        © 2026 Ernest Embassy Digital Solutions
-    </p>
-
-    <p>
-        Professional Online Learning Platform
-    </p>
-
-</footer>
-
-<script>
-
-/* =========================
-   LMS USER SESSION
-========================= */
-
-const currentUser =
-    JSON.parse(localStorage.getItem("currentUser")) || null;
 
 /* =========================
    DISPLAY USER NAME
 ========================= */
-
 document.getElementById("userName").innerText =
-    currentUser?.name || "Student";
-
-document.getElementById("topUser").innerText =
-    currentUser?.email || "";
+    user?.name || "Student";
 
 /* =========================
-   LOGOUT
+   SHOW ADMIN BUTTON (IF ADMIN)
 ========================= */
+if (user.role === "admin") {
+    const nav = document.querySelector(".user-area");
 
-function logout(){
+    const adminBtn = document.createElement("button");
+    adminBtn.innerText = "Admin Panel";
+    adminBtn.style.background = "#28a745";
+    adminBtn.style.color = "white";
+    adminBtn.style.border = "none";
+    adminBtn.style.padding = "10px 18px";
+    adminBtn.style.borderRadius = "8px";
+    adminBtn.style.cursor = "pointer";
 
+    adminBtn.onclick = () => {
+        window.location.href = "admin.html";
+    };
+
+    nav.insertBefore(adminBtn, nav.children[0]);
+}
+
+/* =========================
+   LOGOUT FUNCTION
+========================= */
+function logout() {
     localStorage.removeItem("currentUser");
     localStorage.removeItem("userLoggedIn");
 
+    // optional firebase logout safety (if auth exists)
+    if (window.firebase && firebase.auth) {
+        firebase.auth().signOut();
+    }
+
     window.location.href = "login.html";
 }
-
 </script>
-
-</body>
-</html>

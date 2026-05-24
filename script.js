@@ -1,7 +1,6 @@
-<script>
-/* =========================
+/* =========================================
    FIREBASE INIT
-========================= */
+========================================= */
 const firebaseConfig = {
     apiKey: "AIzaSyD6xpH_zLnoJP2PTSMHg80R94_Vd-fUZSA",
     authDomain: "ernest-embassy-travel-website.firebaseapp.com",
@@ -14,9 +13,9 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
-/* =========================
-   SESSION FORMAT
-========================= */
+/* =========================================
+   SESSION BUILDER (UDEMY STYLE)
+========================================= */
 function createSessionUser(user) {
     return {
         uid: user.uid,
@@ -27,52 +26,64 @@ function createSessionUser(user) {
     };
 }
 
-/* =========================
+/* =========================================
    LOGIN HANDLER
-========================= */
-document.getElementById("loginForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
+========================================= */
+const loginForm = document.getElementById("loginForm");
 
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const errorBox = document.getElementById("errorBox");
+if (loginForm) {
+    loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-    errorBox.style.display = "none";
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const errorBox = document.getElementById("errorBox");
 
-    try {
-        const result = await auth.signInWithEmailAndPassword(email, password);
-        const user = result.user;
+        try {
+            const result = await auth.signInWithEmailAndPassword(email, password);
+            const user = result.user;
 
-        if (!user.emailVerified) {
-            errorBox.innerText = "Please verify your email before login.";
+            if (!user.emailVerified) {
+                errorBox.innerText = "Please verify your email before login.";
+                errorBox.style.display = "block";
+                await auth.signOut();
+                return;
+            }
+
+            const sessionUser = createSessionUser(user);
+
+            localStorage.setItem("currentUser", JSON.stringify(sessionUser));
+            localStorage.setItem("userLoggedIn", "true");
+
+            window.location.href = "dashboard.html";
+
+        } catch (error) {
+            errorBox.innerText = error.message;
             errorBox.style.display = "block";
-            await auth.signOut();
-            return;
         }
+    });
+}
 
-        const sessionUser = createSessionUser(user);
-
-        // STORE SESSION
-        localStorage.setItem("currentUser", JSON.stringify(sessionUser));
-        localStorage.setItem("userLoggedIn", "true");
-
-        // REDIRECT ONCE ONLY
-        window.location.href = "dashboard.html";
-
-    } catch (error) {
-        errorBox.innerText = error.message;
-        errorBox.style.display = "block";
-    }
-});
-
-/* =========================
-   KEEP SESSION SYNC ONLY (NO REDIRECT)
-========================= */
+/* =========================================
+   SESSION SYNC ONLY (NO REDIRECT LOOP)
+========================================= */
 auth.onAuthStateChanged((user) => {
     if (user) {
         const sessionUser = createSessionUser(user);
         localStorage.setItem("currentUser", JSON.stringify(sessionUser));
         localStorage.setItem("userLoggedIn", "true");
+    } else {
+        localStorage.removeItem("currentUser");
+        localStorage.removeItem("userLoggedIn");
     }
 });
-</script>
+
+/* =========================================
+   LOGOUT FUNCTION (GLOBAL USE)
+========================================= */
+function logout() {
+    auth.signOut();
+    localStorage.removeItem("currentUser");
+    localStorage.removeItem("userLoggedIn");
+    window.location.href = "login.html";
+}

@@ -1,277 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Course Player - LMS</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f4f6f9;
+}
+
+/* TOP NAV */
+.top-nav {
+    background: #1a1a2e;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.back-btn {
+    background: #667eea;
+    padding: 8px 12px;
+    border-radius: 6px;
+    color: white;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.logout {
+    background: crimson;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* LAYOUT */
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 280px;
+    background: white;
+    border-right: 1px solid #ddd;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.lesson {
+    padding: 12px;
+    margin-bottom: 10px;
+    background: #f0f0f0;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.lesson.active {
+    background: #667eea;
+    color: white;
+}
+
+.content {
+    flex: 1;
+    padding: 30px;
+}
+
+.lesson-box {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+button {
+    margin-top: 20px;
+    padding: 10px 16px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🔐 LOGIN PROTECTION -->
 <script>
-/* =========================================
-   🔐 LMS LOGIN PROTECTION
-========================================= */
 const user = JSON.parse(localStorage.getItem("currentUser"));
 
 if (!user) {
     window.location.href = "login.html";
 }
+</script>
 
-/* =========================================
-   DISPLAY USER
-========================================= */
-document.getElementById("userName").innerText =
-    user.name || "Student";
+<!-- TOP NAV -->
+<div class="top-nav">
+    <div>
+        <a href="dashboard.html" class="back-btn">⬅ Back to Dashboard</a>
+        🎓 LMS Course Player
+    </div>
 
-/* =========================================
-   PROFESSIONAL COURSE DATA
-========================================= */
+    <div>
+        Welcome, <b id="userName"></b>
+        <button class="logout" onclick="logout()">Logout</button>
+    </div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <h3>Lessons</h3>
+        <div id="lessonList"></div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+        <div class="lesson-box">
+            <h2 id="lessonTitle">Welcome</h2>
+            <p id="lessonContent">Select a lesson</p>
+
+            <button onclick="nextLesson()">Next Lesson</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+document.getElementById("userName").innerText = user.name || "Student";
+
+/* COURSE DATA */
 const course = {
-    title: "Digital Technology SS1",
-
     lessons: [
-
         {
             title: "Introduction to Computer",
-
-            content: `
-A computer is an electronic device that accepts data, processes it, stores it, and produces useful information.
-
-Computers are used in schools, hospitals, banks, offices, airports, and homes.
-
-Characteristics of a Computer:
-1. Speed
-2. Accuracy
-3. Storage Capacity
-4. Automation
-5. Reliability
-
-Types of Computers:
-- Desktop Computers
-- Laptop Computers
-- Tablets
-- Smartphones
-- Supercomputers
-
-Uses of Computers:
-- Education
-- Communication
-- Banking
-- Entertainment
-- Medical Services
-- Security Operations
-
-A computer system consists of hardware and software working together.
-            `
+            content: "A computer is an electronic device that processes data into information..."
         },
-
         {
             title: "Input Devices",
-
-            content: `
-Input devices are hardware components used to enter data into a computer system.
-
-Examples of Input Devices:
-1. Keyboard
-2. Mouse
-3. Scanner
-4. Microphone
-5. Webcam
-6. Joystick
-7. Light Pen
-
-Functions of Input Devices:
-- Enter text
-- Control movement
-- Capture sound
-- Capture images
-- Scan documents
-
-Keyboard:
-Used for typing letters, numbers, and commands.
-
-Mouse:
-Used for clicking, dragging, selecting, and navigating.
-
-Scanner:
-Converts paper documents into digital format.
-            `
+            content: "Input devices include keyboard, mouse, scanner..."
         },
-
         {
             title: "Output Devices",
-
-            content: `
-Output devices are hardware devices that display processed information to users.
-
-Examples:
-1. Monitor
-2. Printer
-3. Speaker
-4. Projector
-5. Plotter
-
-Monitor:
-Displays visual information on screen.
-
-Printer:
-Produces hard copies on paper.
-
-Speakers:
-Produce sound output.
-
-Projector:
-Displays computer output on large screens.
-
-Soft Copy:
-Information displayed electronically.
-
-Hard Copy:
-Information printed on paper.
-            `
+            content: "Output devices include monitor, printer, speakers..."
         },
-
         {
             title: "Storage Devices",
-
-            content: `
-Storage devices are used to save data and information for future use.
-
-Types of Storage:
-1. Primary Storage
-2. Secondary Storage
-
-Primary Storage:
-- RAM
-- ROM
-
-Secondary Storage:
-- Hard Disk
-- Flash Drive
-- CD/DVD
-- Memory Card
-
-RAM:
-Temporary memory used while computer is running.
-
-ROM:
-Permanent memory containing startup instructions.
-
-Hard Disk:
-Stores operating systems, files, and applications.
-
-Flash Drive:
-Portable storage device connected through USB.
-            `
+            content: "Storage devices include RAM, ROM, Hard Disk, Flash Drive..."
         }
-
     ]
 };
 
-/* =========================================
-   COURSE PLAYER
-========================================= */
 let currentIndex = 0;
 
-function loadLessons() {
-
+/* LOAD LESSONS */
+function loadLessons(){
     const list = document.getElementById("lessonList");
-
     list.innerHTML = "";
 
-    course.lessons.forEach((lesson, index) => {
-
+    course.lessons.forEach((l, i) => {
         list.innerHTML += `
-            <div class="lesson"
-                 onclick="openLesson(${index})">
-
-                ${index + 1}. ${lesson.title}
-
+            <div class="lesson" onclick="openLesson(${i})">
+                ${i + 1}. ${l.title}
             </div>
         `;
     });
 }
 
-/* =========================================
-   OPEN LESSON
-========================================= */
-function openLesson(index) {
+/* OPEN LESSON */
+function openLesson(i){
+    currentIndex = i;
 
-    currentIndex = index;
+    document.getElementById("lessonTitle").innerText = course.lessons[i].title;
+    document.getElementById("lessonContent").innerText = course.lessons[i].content;
 
-    document.getElementById("lessonTitle").innerText =
-        course.lessons[index].title;
-
-    document.getElementById("lessonContent").innerText =
-        course.lessons[index].content;
-
-    highlightLesson(index);
-
-    saveProgress(index);
+    highlight(i);
 }
 
-/* =========================================
-   ACTIVE LESSON HIGHLIGHT
-========================================= */
-function highlightLesson(index){
-
-    const items = document.querySelectorAll(".lesson");
-
-    items.forEach((el, i) => {
-        el.classList.toggle("active", i === index);
+/* HIGHLIGHT */
+function highlight(i){
+    document.querySelectorAll(".lesson").forEach((el, index) => {
+        el.classList.toggle("active", index === i);
     });
 }
 
-/* =========================================
-   NEXT LESSON
-========================================= */
-function nextLesson() {
-
-    if (currentIndex < course.lessons.length - 1) {
-
+/* NEXT */
+function nextLesson(){
+    if(currentIndex < course.lessons.length - 1){
         currentIndex++;
-
         openLesson(currentIndex);
-
     } else {
-
-        alert("🎉 Congratulations! Course Completed.");
+        alert("🎉 Course Completed!");
     }
 }
 
-/* =========================================
-   SAVE LEARNING PROGRESS
-========================================= */
-function saveProgress(index){
-
-    localStorage.setItem(
-        "digitalTechProgress",
-        index
-    );
-}
-
-/* =========================================
-   LOAD SAVED PROGRESS
-========================================= */
-function loadSavedProgress(){
-
-    const saved =
-        localStorage.getItem("digitalTechProgress");
-
-    if(saved !== null){
-
-        currentIndex = parseInt(saved);
-
-    }
-
-    openLesson(currentIndex);
-}
-
-/* =========================================
-   LOGOUT
-========================================= */
+/* LOGOUT */
 function logout(){
-
     localStorage.removeItem("currentUser");
-
     window.location.href = "login.html";
 }
 
-/* =========================================
-   INITIALIZE LMS
-========================================= */
+/* INIT */
 loadLessons();
-loadSavedProgress();
-
+openLesson(0);
 </script>
+
+</body>
+</html>

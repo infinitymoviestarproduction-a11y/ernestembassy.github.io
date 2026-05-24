@@ -3,47 +3,118 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LMS Dashboard - Ernest Embassy</title>
+<title>LMS Dashboard - Ernest Embassy Digital Solutions</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI;}
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
 
 body{
     background:#f5f7fa;
+    color:#333;
 }
 
+/* NAVBAR */
 nav{
     background:#1a1a2e;
     color:white;
-    padding:15px;
+    padding:15px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
 }
 
+.logo{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.nav-right{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.logout{
+    background:#dc3545;
+    color:white;
+    border:none;
+    padding:10px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.logout:hover{
+    background:#bb2d3b;
+}
+
+/* CONTAINER */
 .container{
-    max-width:1100px;
+    max-width:1200px;
     margin:auto;
     padding:20px;
 }
 
+/* HERO */
 .hero{
     background:linear-gradient(135deg,#667eea,#764ba2);
     color:white;
     padding:40px;
-    border-radius:15px;
+    border-radius:18px;
     margin:20px 0;
+}
+
+.hero h1{
+    margin-bottom:10px;
+    font-size:32px;
+}
+
+/* STATS */
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+    margin-top:30px;
+}
+
+.stat{
+    background:white;
+    padding:25px;
+    border-radius:14px;
+    text-align:center;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+.stat h2{
+    color:#667eea;
+    font-size:30px;
+}
+
+/* COURSES */
+.section-title{
+    margin-top:40px;
+    margin-bottom:20px;
+    font-size:26px;
+    color:#1a1a2e;
 }
 
 .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:15px;
-    margin-top:20px;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:20px;
 }
 
 .card{
     background:white;
-    padding:20px;
-    border-radius:12px;
-    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+    padding:25px;
+    border-radius:16px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.08);
     transition:0.3s;
 }
 
@@ -51,150 +122,300 @@ nav{
     transform:translateY(-5px);
 }
 
+.card h3{
+    margin-bottom:10px;
+    color:#1a1a2e;
+}
+
+.card p{
+    color:#666;
+    margin-bottom:15px;
+    line-height:1.5;
+}
+
 .card a{
     display:inline-block;
-    margin-top:10px;
     text-decoration:none;
     background:#667eea;
     color:white;
-    padding:10px;
+    padding:10px 18px;
     border-radius:8px;
+    font-weight:bold;
+    transition:0.3s;
 }
 
-.stats{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-    gap:15px;
-    margin-top:20px;
+.card a:hover{
+    background:#5a67d8;
 }
 
-.stat{
-    background:white;
-    padding:20px;
-    border-radius:10px;
-    text-align:center;
-}
-
-.stat h2{
-    color:#667eea;
-}
-
-.logout{
-    background:red;
+/* BADGES */
+.badge{
+    display:inline-block;
+    background:#28a745;
     color:white;
-    border:none;
-    padding:10px 20px;
-    border-radius:8px;
-    cursor:pointer;
-    float:right;
+    padding:5px 10px;
+    border-radius:20px;
+    font-size:12px;
+    margin-bottom:10px;
+}
+
+/* FOOTER */
+footer{
+    margin-top:60px;
+    background:#1a1a2e;
+    color:white;
+    text-align:center;
+    padding:30px;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+
+    .hero{
+        padding:25px;
+    }
+
+    .hero h1{
+        font-size:24px;
+    }
+
+    nav{
+        flex-direction:column;
+        gap:15px;
+        text-align:center;
+    }
+
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🔐 LOGIN PROTECTION -->
+<!-- 🔐 LMS LOGIN PROTECTION -->
 <script>
-if(!localStorage.getItem("currentUser")){
-    window.location.href="login.html";
+const user = JSON.parse(localStorage.getItem("currentUser"));
+
+if (!user) {
+    window.location.href = "login.html";
 }
 </script>
 
+<!-- NAVIGATION -->
 <nav>
-    LMS Dashboard - Ernest Embassy Digital Solutions
-    <button class="logout" onclick="logout()">Logout</button>
+
+    <div class="logo">
+        🎓 Ernest Embassy LMS
+    </div>
+
+    <div class="nav-right">
+        <span id="topUser"></span>
+        <button class="logout" onclick="logout()">Logout</button>
+    </div>
+
 </nav>
 
 <div class="container">
 
-<div class="hero">
-    <h1>Welcome, <span id="userName"></span> 👋</h1>
-    <p>Your learning dashboard (Question Bank + Courses + Progress)</p>
+    <!-- HERO -->
+    <div class="hero">
+        <h1>
+            Welcome, <span id="userName"></span> 👋
+        </h1>
+
+        <p>
+            Your learning dashboard with Question Bank, Courses,
+            Progress Tracking, Mock Exams and Digital Resources.
+        </p>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+
+        <div class="stat">
+            <h2>200+</h2>
+            <p>Available Questions</p>
+        </div>
+
+        <div class="stat">
+            <h2>4</h2>
+            <p>Subjects</p>
+        </div>
+
+        <div class="stat">
+            <h2>SS1–SS3</h2>
+            <p>Levels</p>
+        </div>
+
+        <div class="stat">
+            <h2>24/7</h2>
+            <p>Learning Access</p>
+        </div>
+
+    </div>
+
+    <!-- COURSES -->
+    <h2 class="section-title">📚 Your Courses</h2>
+
+    <div class="grid">
+
+        <!-- DIGITAL TECHNOLOGY -->
+        <div class="card">
+
+            <div class="badge">POPULAR</div>
+
+            <h3>💻 Digital Technology</h3>
+
+            <p>
+                Learn computer basics, ICT, software,
+                internet technology and programming fundamentals.
+            </p>
+
+            <!-- ✅ FIXED -->
+            <a href="course.html?subject=digital-technology">
+                Start Learning
+            </a>
+
+        </div>
+
+        <!-- MATHEMATICS -->
+        <div class="card">
+
+            <div class="badge">WAEC</div>
+
+            <h3>📐 Mathematics</h3>
+
+            <p>
+                Master algebra, geometry, equations,
+                statistics and WAEC preparation questions.
+            </p>
+
+            <!-- ✅ FIXED -->
+            <a href="course.html?subject=mathematics">
+                Start Learning
+            </a>
+
+        </div>
+
+        <!-- ENGLISH -->
+        <div class="card">
+
+            <div class="badge">LANGUAGE</div>
+
+            <h3>📖 English Language</h3>
+
+            <p>
+                Improve grammar, essay writing,
+                comprehension and communication skills.
+            </p>
+
+            <!-- ✅ FIXED -->
+            <a href="course.html?subject=english">
+                Start Learning
+            </a>
+
+        </div>
+
+        <!-- IGBO -->
+        <div class="card">
+
+            <div class="badge">LOCAL</div>
+
+            <h3>🌍 Igbo Language</h3>
+
+            <p>
+                Learn vocabulary, translation,
+                grammar and cultural language studies.
+            </p>
+
+            <!-- ✅ FIXED -->
+            <a href="course.html?subject=igbo">
+                Start Learning
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- COMING SOON -->
+    <h2 class="section-title">🚀 Coming Soon</h2>
+
+    <div class="grid">
+
+        <div class="card">
+            <h3>📝 CBT Mock Exams</h3>
+
+            <p>
+                Practice WAEC, NECO and JAMB CBT
+                examinations with timer and scoring system.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>📊 Progress Tracking</h3>
+
+            <p>
+                Track completed lessons,
+                quiz scores and learning performance.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>🏆 Certificates</h3>
+
+            <p>
+                Download digital certificates
+                after completing courses successfully.
+            </p>
+        </div>
+
+    </div>
+
 </div>
 
-<!-- STATS -->
-<div class="stats">
-    <div class="stat">
-        <h2 id="qCount">200+</h2>
-        <p>Available Questions</p>
-    </div>
+<!-- FOOTER -->
+<footer>
 
-    <div class="stat">
-        <h2>4</h2>
-        <p>Subjects</p>
-    </div>
+    <p>
+        © 2026 Ernest Embassy Digital Solutions
+    </p>
 
-    <div class="stat">
-        <h2>SS1–SS3</h2>
-        <p>Levels</p>
-    </div>
-</div>
+    <p>
+        Professional Online Learning Platform
+    </p>
 
-<!-- COURSES SECTION -->
-<h2 style="margin-top:30px;">📚 Your Courses</h2>
-
-<div class="grid">
-
-    <div class="card">
-        <h3>💻 Digital Technology</h3>
-        <p>Computer basics, ICT, programming fundamentals</p>
-        <a href="senior-secondary-resources/digital-technology-ss1.md">Start Learning</a>
-    </div>
-
-    <div class="card">
-        <h3>📐 Mathematics</h3>
-        <p>Algebra, geometry, equations, WAEC practice</p>
-        <a href="senior-secondary-resources/mathematics-ss1.md">Start Learning</a>
-    </div>
-
-    <div class="card">
-        <h3>📖 English Language</h3>
-        <p>Grammar, comprehension, essay writing</p>
-        <a href="senior-secondary-resources/english-ss1.md">Start Learning</a>
-    </div>
-
-    <div class="card">
-        <h3>🌍 Igbo Language</h3>
-        <p>Vocabulary, grammar, translation practice</p>
-        <a href="senior-secondary-resources/igbo-ss1.md">Start Learning</a>
-    </div>
-
-</div>
-
-<!-- FUTURE LMS SECTION -->
-<h2 style="margin-top:40px;">🚀 Coming Soon</h2>
-
-<div class="grid">
-
-    <div class="card">
-        <h3>📝 Mock Exams</h3>
-        <p>WAEC / JAMB simulation tests</p>
-    </div>
-
-    <div class="card">
-        <h3>📊 Progress Tracking</h3>
-        <p>See your performance growth</p>
-    </div>
-
-    <div class="card">
-        <h3>📄 PDF Notes</h3>
-        <p>Download revision materials</p>
-    </div>
-
-</div>
-
-</div>
+</footer>
 
 <script>
-// user session
-let user = JSON.parse(localStorage.getItem("currentUser"));
 
-document.getElementById("userName").innerText = user?.name || "Student";
+/* =========================
+   LMS USER SESSION
+========================= */
+
+const currentUser =
+    JSON.parse(localStorage.getItem("currentUser")) || null;
+
+/* =========================
+   DISPLAY USER NAME
+========================= */
+
+document.getElementById("userName").innerText =
+    currentUser?.name || "Student";
+
+document.getElementById("topUser").innerText =
+    currentUser?.email || "";
+
+/* =========================
+   LOGOUT
+========================= */
 
 function logout(){
+
     localStorage.removeItem("currentUser");
-    window.location.href="login.html";
+    localStorage.removeItem("userLoggedIn");
+
+    window.location.href = "login.html";
 }
+
 </script>
 
 </body>

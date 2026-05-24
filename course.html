@@ -22,13 +22,19 @@ body {
     align-items: center;
 }
 
+.top-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .back-btn {
     background: #667eea;
     padding: 8px 12px;
     border-radius: 6px;
     color: white;
     text-decoration: none;
-    margin-right: 10px;
+    font-size: 14px;
 }
 
 .logout {
@@ -43,7 +49,7 @@ body {
 /* LAYOUT */
 .container {
     display: flex;
-    height: 100vh;
+    height: calc(100vh - 60px);
 }
 
 .sidebar {
@@ -93,7 +99,7 @@ button {
 
 <body>
 
-<!-- 🔐 LOGIN PROTECTION -->
+<!-- 🔐 LOGIN CHECK -->
 <script>
 const user = JSON.parse(localStorage.getItem("currentUser"));
 
@@ -104,9 +110,9 @@ if (!user) {
 
 <!-- TOP NAV -->
 <div class="top-nav">
-    <div>
-        <a href="dashboard.html" class="back-btn">⬅ Back to Dashboard</a>
-        🎓 LMS Course Player
+    <div class="top-left">
+        <a href="dashboard.html" class="back-btn">⬅ Dashboard</a>
+        <b id="courseTitle">Course</b>
     </div>
 
     <div>
@@ -118,17 +124,15 @@ if (!user) {
 <!-- MAIN -->
 <div class="container">
 
-    <!-- SIDEBAR -->
     <div class="sidebar">
         <h3>Lessons</h3>
         <div id="lessonList"></div>
     </div>
 
-    <!-- CONTENT -->
     <div class="content">
         <div class="lesson-box">
             <h2 id="lessonTitle">Welcome</h2>
-            <p id="lessonContent">Select a lesson</p>
+            <p id="lessonContent">Select a lesson to begin</p>
 
             <button onclick="nextLesson()">Next Lesson</button>
         </div>
@@ -139,31 +143,60 @@ if (!user) {
 <script>
 document.getElementById("userName").innerText = user.name || "Student";
 
-/* COURSE DATA */
-const course = {
-    lessons: [
-        {
-            title: "Introduction to Computer",
-            content: "A computer is an electronic device that processes data into information..."
-        },
-        {
-            title: "Input Devices",
-            content: "Input devices include keyboard, mouse, scanner..."
-        },
-        {
-            title: "Output Devices",
-            content: "Output devices include monitor, printer, speakers..."
-        },
-        {
-            title: "Storage Devices",
-            content: "Storage devices include RAM, ROM, Hard Disk, Flash Drive..."
-        }
-    ]
+/* =========================
+   GET COURSE FROM URL
+========================= */
+const params = new URLSearchParams(window.location.search);
+const subject = params.get("subject");
+
+/* =========================
+   COURSE DATABASE (LOCAL NOW)
+   later move to Firebase
+========================= */
+const courses = {
+    "digital-tech": {
+        title: "Digital Technology SS1",
+        lessons: [
+            {
+                title: "Introduction to Computer",
+                content: "A computer is an electronic device that processes data into information..."
+            },
+            {
+                title: "Input Devices",
+                content: "Input devices include keyboard, mouse, scanner..."
+            },
+            {
+                title: "Output Devices",
+                content: "Output devices include monitor, printer, speakers..."
+            },
+            {
+                title: "Storage Devices",
+                content: "Storage devices include RAM, ROM, Hard Disk, Flash Drive..."
+            }
+        ]
+    },
+
+    "mathematics": {
+        title: "Mathematics SS1",
+        lessons: [
+            { title: "Numbers", content: "Types of numbers and operations..." },
+            { title: "Algebra", content: "Basic algebraic expressions..." }
+        ]
+    }
 };
 
+/* =========================
+   LOAD COURSE
+========================= */
+const course = courses[subject] || courses["digital-tech"];
+
+document.getElementById("courseTitle").innerText = course.title;
+
+/* =========================
+   LESSON LOGIC
+========================= */
 let currentIndex = 0;
 
-/* LOAD LESSONS */
 function loadLessons(){
     const list = document.getElementById("lessonList");
     list.innerHTML = "";
@@ -177,7 +210,6 @@ function loadLessons(){
     });
 }
 
-/* OPEN LESSON */
 function openLesson(i){
     currentIndex = i;
 
@@ -187,14 +219,12 @@ function openLesson(i){
     highlight(i);
 }
 
-/* HIGHLIGHT */
 function highlight(i){
     document.querySelectorAll(".lesson").forEach((el, index) => {
         el.classList.toggle("active", index === i);
     });
 }
 
-/* NEXT */
 function nextLesson(){
     if(currentIndex < course.lessons.length - 1){
         currentIndex++;
@@ -204,7 +234,6 @@ function nextLesson(){
     }
 }
 
-/* LOGOUT */
 function logout(){
     localStorage.removeItem("currentUser");
     window.location.href = "login.html";

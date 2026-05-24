@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <title>Admin Panel - LMS</title>
 
 <style>
@@ -10,12 +11,24 @@ body{
     margin:0;
 }
 
+/* NAVBAR */
 nav{
     background:#1a1a2e;
     color:white;
     padding:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
 }
 
+nav a{
+    color:white;
+    text-decoration:none;
+    margin-right:15px;
+}
+
+/* CONTAINER */
 .container{
     max-width:900px;
     margin:30px auto;
@@ -24,30 +37,58 @@ nav{
     border-radius:10px;
 }
 
+/* INPUTS */
 input, textarea, select{
     width:100%;
     padding:10px;
     margin:8px 0;
 }
 
+/* BUTTONS */
 button{
-    padding:10px;
+    padding:10px 14px;
     background:#667eea;
     color:white;
     border:none;
     cursor:pointer;
+    border-radius:6px;
+}
+
+button:hover{
+    background:#5a67d8;
+}
+
+/* SECTION */
+.section{
+    margin-bottom:30px;
+}
+
+.logout{
+    background:crimson;
 }
 </style>
 </head>
 
 <body>
 
+<!-- NAVIGATION -->
 <nav>
-🎓 Admin Instructor Panel
+    <div>
+        🎓 Admin Instructor Panel
+    </div>
+
+    <div>
+        <a href="index.html">🏠 Home</a>
+        <a href="dashboard.html">📊 Dashboard</a>
+        <a href="course.html">📚 Courses</a>
+        <button class="logout" onclick="logout()">Logout</button>
+    </div>
 </nav>
 
 <div class="container">
 
+<!-- CREATE COURSE -->
+<div class="section">
 <h2>Create Course</h2>
 
 <input id="title" placeholder="Course Title">
@@ -55,9 +96,12 @@ button{
 <input id="level" placeholder="Level (SS1, SS2...)">
 
 <button onclick="createCourse()">Create Course</button>
+</div>
 
 <hr>
 
+<!-- ADD LESSON -->
+<div class="section">
 <h2>Add Lesson</h2>
 
 <input id="courseId" placeholder="Course ID">
@@ -65,14 +109,19 @@ button{
 <textarea id="lessonContent" placeholder="Lesson Content"></textarea>
 
 <button onclick="addLesson()">Add Lesson</button>
+</div>
 
 </div>
 
+<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
 <script>
+/* =======================
+   FIREBASE INIT
+======================= */
 const firebaseConfig = {
     apiKey: "YOUR_KEY",
     authDomain: "YOUR_DOMAIN",
@@ -85,7 +134,7 @@ const db = firebase.firestore();
 const auth = firebase.auth();
 
 /* =======================
-   ADMIN CHECK
+   ROLE PROTECTION
 ======================= */
 auth.onAuthStateChanged(async user => {
     if (!user) {
@@ -110,6 +159,11 @@ async function createCourse(){
     const desc = document.getElementById("desc").value;
     const level = document.getElementById("level").value;
 
+    if(!title || !desc){
+        alert("Please fill all fields");
+        return;
+    }
+
     const courseRef = await db.collection("courses").add({
         title,
         description: desc,
@@ -129,6 +183,11 @@ async function addLesson(){
     const title = document.getElementById("lessonTitle").value;
     const content = document.getElementById("lessonContent").value;
 
+    if(!courseId || !title || !content){
+        alert("Please fill all fields");
+        return;
+    }
+
     await db.collection("courses")
         .doc(courseId)
         .collection("lessons")
@@ -138,7 +197,16 @@ async function addLesson(){
             order: Date.now()
         });
 
-    alert("Lesson added!");
+    alert("Lesson added successfully!");
+}
+
+/* =======================
+   LOGOUT FUNCTION
+======================= */
+function logout(){
+    auth.signOut();
+    localStorage.removeItem("currentUser");
+    window.location.href = "login.html";
 }
 </script>
 

@@ -1,536 +1,224 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Course Player - Ernest Embassy LMS</title>
-
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
-}
-
-body{
-    background:#f4f6f9;
-    color:#333;
-}
-
-/* HEADER */
-header{
-    background:#1a1a2e;
-    color:white;
-    padding:20px;
-    text-align:center;
-}
-
-/* USER BAR */
-.user-bar{
-    background:white;
-    padding:15px 20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    border-bottom:1px solid #ddd;
-    flex-wrap:wrap;
-    gap:10px;
-}
-
-.user-info{
-    font-size:14px;
-}
-
-.progress-box{
-    font-size:14px;
-    font-weight:bold;
-    color:#667eea;
-}
-
-.container{
-    display:flex;
-    height:calc(100vh - 120px);
-}
-
-/* SIDEBAR */
-.sidebar{
-    width:30%;
-    background:white;
-    padding:20px;
-    overflow-y:auto;
-    border-right:1px solid #ddd;
-}
-
-.sidebar h3{
-    margin-bottom:20px;
-}
-
-.lesson{
-    padding:15px;
-    margin-bottom:12px;
-    background:#f0f0f0;
-    cursor:pointer;
-    border-radius:10px;
-    transition:0.3s;
-}
-
-.lesson:hover{
-    background:#ddd;
-}
-
-.lesson.active{
-    background:#667eea;
-    color:white;
-}
-
-/* CONTENT */
-.content{
-    flex:1;
-    padding:30px;
-    overflow-y:auto;
-}
-
-.lesson-box{
-    background:white;
-    padding:30px;
-    border-radius:15px;
-    box-shadow:0 5px 15px rgba(0,0,0,0.08);
-}
-
-.lesson-box h2{
-    margin-bottom:20px;
-    color:#1a1a2e;
-}
-
-.lesson-box p{
-    line-height:1.8;
-    margin-bottom:20px;
-}
-
-/* BUTTONS */
-.btn-group{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-top:20px;
-}
-
-button{
-    padding:12px 20px;
-    background:#667eea;
-    color:white;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:bold;
-    transition:0.3s;
-}
-
-button:hover{
-    background:#5a67d8;
-}
-
-.logout{
-    background:crimson;
-}
-
-.logout:hover{
-    background:#b3002d;
-}
-
-.complete-btn{
-    background:#28a745;
-}
-
-.complete-btn:hover{
-    background:#218838;
-}
-
-/* PROGRESS BAR */
-.progress-container{
-    width:100%;
-    height:12px;
-    background:#ddd;
-    border-radius:10px;
-    overflow:hidden;
-    margin-top:15px;
-}
-
-.progress-bar{
-    height:100%;
-    width:0%;
-    background:#28a745;
-    transition:0.4s;
-}
-
-/* CERTIFICATE */
-.certificate-box{
-    margin-top:30px;
-    background:#fff3cd;
-    padding:20px;
-    border-radius:12px;
-    border:1px solid #ffeeba;
-    display:none;
-}
-
-.certificate-box h3{
-    margin-bottom:10px;
-    color:#856404;
-}
-
-/* MOBILE */
-@media(max-width:900px){
-
-    .container{
-        flex-direction:column;
-        height:auto;
-    }
-
-    .sidebar{
-        width:100%;
-        border-right:none;
-        border-bottom:1px solid #ddd;
-    }
-
-    .content{
-        width:100%;
-    }
-
-}
-</style>
-</head>
-
-<body>
-
-<!-- 🔐 LMS LOGIN PROTECTION -->
 <script>
+/* =========================================
+   🔐 LMS LOGIN PROTECTION
+========================================= */
 const user = JSON.parse(localStorage.getItem("currentUser"));
 
 if (!user) {
     window.location.href = "login.html";
 }
-</script>
 
-<!-- HEADER -->
-<header>
-    <h1>🎓 Ernest Embassy LMS Course Player</h1>
-</header>
-
-<!-- USER BAR -->
-<div class="user-bar">
-
-    <div class="user-info">
-        Logged in as:
-        <b id="userName"></b>
-    </div>
-
-    <div class="progress-box">
-        Progress:
-        <span id="progressText">0%</span>
-    </div>
-
-    <button class="logout" onclick="logout()">
-        Logout
-    </button>
-
-</div>
-
-<div class="container">
-
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-
-        <h3 id="courseTitle">
-            Course Lessons
-        </h3>
-
-        <div id="lessonList"></div>
-
-    </div>
-
-    <!-- CONTENT -->
-    <div class="content">
-
-        <div class="lesson-box">
-
-            <h2 id="lessonTitle">
-                Welcome
-            </h2>
-
-            <p id="lessonContent">
-                Select a lesson to begin learning.
-            </p>
-
-            <!-- PROGRESS -->
-            <div class="progress-container">
-                <div class="progress-bar" id="progressBar"></div>
-            </div>
-
-            <!-- BUTTONS -->
-            <div class="btn-group">
-
-                <button onclick="previousLesson()">
-                    ⬅ Previous
-                </button>
-
-                <button onclick="nextLesson()">
-                    Next ➡
-                </button>
-
-                <button class="complete-btn" onclick="markCompleted()">
-                    ✔ Mark Completed
-                </button>
-
-            </div>
-
-            <!-- CERTIFICATE -->
-            <div class="certificate-box" id="certificateBox">
-
-                <h3>
-                    🏆 Congratulations!
-                </h3>
-
-                <p>
-                    You completed this course successfully.
-                </p>
-
-                <button onclick="downloadCertificate()">
-                    📄 Download Certificate
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<script>
-
-/* =========================
-   USER INFO
-========================= */
-
+/* =========================================
+   DISPLAY USER
+========================================= */
 document.getElementById("userName").innerText =
     user.name || "Student";
 
-/* =========================
-   SUBJECT DETECTION
-========================= */
+/* =========================================
+   PROFESSIONAL COURSE DATA
+========================================= */
+const course = {
+    title: "Digital Technology SS1",
 
-const params = new URLSearchParams(window.location.search);
+    lessons: [
 
-const subject =
-    params.get("subject") || "digital-technology";
+        {
+            title: "Introduction to Computer",
 
-/* =========================
-   COURSE DATABASE
-========================= */
+            content: `
+A computer is an electronic device that accepts data, processes it, stores it, and produces useful information.
 
-const courses = {
+Computers are used in schools, hospitals, banks, offices, airports, and homes.
 
-    "digital-technology": {
-        title: "💻 Digital Technology SS1",
-        lessons: [
-            {
-                title: "Introduction to Computer",
-                content:
-                "A computer is an electronic device that processes data into useful information."
-            },
+Characteristics of a Computer:
+1. Speed
+2. Accuracy
+3. Storage Capacity
+4. Automation
+5. Reliability
 
-            {
-                title: "Input Devices",
-                content:
-                "Input devices are hardware used to enter data into the computer system."
-            },
+Types of Computers:
+- Desktop Computers
+- Laptop Computers
+- Tablets
+- Smartphones
+- Supercomputers
 
-            {
-                title: "Output Devices",
-                content:
-                "Output devices display processed information from the computer."
-            },
+Uses of Computers:
+- Education
+- Communication
+- Banking
+- Entertainment
+- Medical Services
+- Security Operations
 
-            {
-                title: "Storage Devices",
-                content:
-                "Storage devices help save data permanently or temporarily."
-            }
-        ]
-    },
+A computer system consists of hardware and software working together.
+            `
+        },
 
-    "mathematics": {
-        title: "📐 Mathematics SS1",
-        lessons: [
-            {
-                title: "Algebra",
-                content:
-                "Algebra involves solving mathematical expressions and equations."
-            },
+        {
+            title: "Input Devices",
 
-            {
-                title: "Geometry",
-                content:
-                "Geometry studies shapes, sizes, angles and dimensions."
-            },
+            content: `
+Input devices are hardware components used to enter data into a computer system.
 
-            {
-                title: "Statistics",
-                content:
-                "Statistics involves collecting and analyzing data."
-            }
-        ]
-    },
+Examples of Input Devices:
+1. Keyboard
+2. Mouse
+3. Scanner
+4. Microphone
+5. Webcam
+6. Joystick
+7. Light Pen
 
-    "english": {
-        title: "📖 English Language",
-        lessons: [
-            {
-                title: "Grammar",
-                content:
-                "Grammar explains sentence construction and proper English usage."
-            },
+Functions of Input Devices:
+- Enter text
+- Control movement
+- Capture sound
+- Capture images
+- Scan documents
 
-            {
-                title: "Essay Writing",
-                content:
-                "Essay writing teaches organized expression of ideas."
-            },
+Keyboard:
+Used for typing letters, numbers, and commands.
 
-            {
-                title: "Comprehension",
-                content:
-                "Comprehension improves understanding and interpretation skills."
-            }
-        ]
-    },
+Mouse:
+Used for clicking, dragging, selecting, and navigating.
 
-    "igbo": {
-        title: "🌍 Igbo Language",
-        lessons: [
-            {
-                title: "Igbo Alphabets",
-                content:
-                "Learn the Igbo alphabet and pronunciation."
-            },
+Scanner:
+Converts paper documents into digital format.
+            `
+        },
 
-            {
-                title: "Basic Vocabulary",
-                content:
-                "Learn everyday Igbo vocabulary and meanings."
-            },
+        {
+            title: "Output Devices",
 
-            {
-                title: "Translation",
-                content:
-                "Practice translating simple English to Igbo."
-            }
-        ]
-    }
+            content: `
+Output devices are hardware devices that display processed information to users.
 
+Examples:
+1. Monitor
+2. Printer
+3. Speaker
+4. Projector
+5. Plotter
+
+Monitor:
+Displays visual information on screen.
+
+Printer:
+Produces hard copies on paper.
+
+Speakers:
+Produce sound output.
+
+Projector:
+Displays computer output on large screens.
+
+Soft Copy:
+Information displayed electronically.
+
+Hard Copy:
+Information printed on paper.
+            `
+        },
+
+        {
+            title: "Storage Devices",
+
+            content: `
+Storage devices are used to save data and information for future use.
+
+Types of Storage:
+1. Primary Storage
+2. Secondary Storage
+
+Primary Storage:
+- RAM
+- ROM
+
+Secondary Storage:
+- Hard Disk
+- Flash Drive
+- CD/DVD
+- Memory Card
+
+RAM:
+Temporary memory used while computer is running.
+
+ROM:
+Permanent memory containing startup instructions.
+
+Hard Disk:
+Stores operating systems, files, and applications.
+
+Flash Drive:
+Portable storage device connected through USB.
+            `
+        }
+
+    ]
 };
 
-const course = courses[subject];
-
-/* =========================
-   COURSE TITLE
-========================= */
-
-document.getElementById("courseTitle").innerText =
-    course.title;
-
-/* =========================
-   LESSON CONTROL
-========================= */
-
+/* =========================================
+   COURSE PLAYER
+========================================= */
 let currentIndex = 0;
 
-let completedLessons = JSON.parse(
-    localStorage.getItem(subject + "_progress")
-) || [];
+function loadLessons() {
 
-/* =========================
-   LOAD LESSONS
-========================= */
-
-function loadLessons(){
-
-    const list =
-        document.getElementById("lessonList");
+    const list = document.getElementById("lessonList");
 
     list.innerHTML = "";
 
-    course.lessons.forEach((lesson,index)=>{
-
-        const completed =
-            completedLessons.includes(index)
-            ? "✔ "
-            : "";
+    course.lessons.forEach((lesson, index) => {
 
         list.innerHTML += `
+            <div class="lesson"
+                 onclick="openLesson(${index})">
 
-            <div
-                class="lesson"
-                onclick="openLesson(${index})">
-
-                ${completed}
                 ${index + 1}. ${lesson.title}
 
             </div>
-
         `;
     });
-
-    highlightLesson(currentIndex);
-
-    updateProgress();
 }
 
-/* =========================
+/* =========================================
    OPEN LESSON
-========================= */
-
-function openLesson(index){
+========================================= */
+function openLesson(index) {
 
     currentIndex = index;
 
-    document.getElementById("lessonTitle")
-    .innerText = course.lessons[index].title;
+    document.getElementById("lessonTitle").innerText =
+        course.lessons[index].title;
 
-    document.getElementById("lessonContent")
-    .innerText = course.lessons[index].content;
+    document.getElementById("lessonContent").innerText =
+        course.lessons[index].content;
 
     highlightLesson(index);
+
+    saveProgress(index);
 }
 
-/* =========================
-   ACTIVE LESSON
-========================= */
-
+/* =========================================
+   ACTIVE LESSON HIGHLIGHT
+========================================= */
 function highlightLesson(index){
 
-    const items =
-        document.querySelectorAll(".lesson");
+    const items = document.querySelectorAll(".lesson");
 
-    items.forEach((el,i)=>{
-
-        el.classList.toggle(
-            "active",
-            i === index
-        );
-
+    items.forEach((el, i) => {
+        el.classList.toggle("active", i === index);
     });
-
 }
 
-/* =========================
+/* =========================================
    NEXT LESSON
-========================= */
+========================================= */
+function nextLesson() {
 
-function nextLesson(){
-
-    if(currentIndex < course.lessons.length - 1){
+    if (currentIndex < course.lessons.length - 1) {
 
         currentIndex++;
 
@@ -538,104 +226,41 @@ function nextLesson(){
 
     } else {
 
-        alert("🎉 You reached the end of this course!");
-
+        alert("🎉 Congratulations! Course Completed.");
     }
-
 }
 
-/* =========================
-   PREVIOUS LESSON
-========================= */
+/* =========================================
+   SAVE LEARNING PROGRESS
+========================================= */
+function saveProgress(index){
 
-function previousLesson(){
-
-    if(currentIndex > 0){
-
-        currentIndex--;
-
-        openLesson(currentIndex);
-
-    }
-
-}
-
-/* =========================
-   MARK COMPLETED
-========================= */
-
-function markCompleted(){
-
-    if(!completedLessons.includes(currentIndex)){
-
-        completedLessons.push(currentIndex);
-
-        localStorage.setItem(
-            subject + "_progress",
-            JSON.stringify(completedLessons)
-        );
-
-    }
-
-    loadLessons();
-
-    checkCertificate();
-}
-
-/* =========================
-   UPDATE PROGRESS
-========================= */
-
-function updateProgress(){
-
-    const progress =
-        Math.round(
-            (completedLessons.length /
-            course.lessons.length) * 100
-        );
-
-    document.getElementById("progressText")
-    .innerText = progress + "%";
-
-    document.getElementById("progressBar")
-    .style.width = progress + "%";
-}
-
-/* =========================
-   CERTIFICATE CHECK
-========================= */
-
-function checkCertificate(){
-
-    if(
-        completedLessons.length ===
-        course.lessons.length
-    ){
-
-        document.getElementById(
-            "certificateBox"
-        ).style.display = "block";
-
-    }
-
-}
-
-/* =========================
-   DOWNLOAD CERTIFICATE
-========================= */
-
-function downloadCertificate(){
-
-    alert(
-        "🏆 Certificate feature connected successfully! PDF generation comes next."
+    localStorage.setItem(
+        "digitalTechProgress",
+        index
     );
-
 }
 
-/* =========================
-   LOGOUT
-========================= */
+/* =========================================
+   LOAD SAVED PROGRESS
+========================================= */
+function loadSavedProgress(){
 
+    const saved =
+        localStorage.getItem("digitalTechProgress");
+
+    if(saved !== null){
+
+        currentIndex = parseInt(saved);
+
+    }
+
+    openLesson(currentIndex);
+}
+
+/* =========================================
+   LOGOUT
+========================================= */
 function logout(){
 
     localStorage.removeItem("currentUser");
@@ -643,17 +268,10 @@ function logout(){
     window.location.href = "login.html";
 }
 
-/* =========================
-   INITIALIZE
-========================= */
-
+/* =========================================
+   INITIALIZE LMS
+========================================= */
 loadLessons();
-
-openLesson(0);
-
-checkCertificate();
+loadSavedProgress();
 
 </script>
-
-</body>
-</html>

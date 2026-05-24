@@ -3,184 +3,212 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Course Player - LMS</title>
+<title>Course - Ernest Embassy LMS</title>
 
 <style>
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    background: #f4f6f9;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', sans-serif;
 }
 
-/* TOP NAV */
-.top-nav {
-    background: #1a1a2e;
-    color: white;
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+body{
+    background:#f5f7fa;
+    color:#333;
 }
 
-.top-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+/* NAV */
+nav{
+    background:#1a1a2e;
+    color:white;
+    padding:15px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
 }
 
-.back-btn {
-    background: #667eea;
-    padding: 8px 12px;
-    border-radius: 6px;
-    color: white;
-    text-decoration: none;
-    font-size: 14px;
+.nav-left{
+    display:flex;
+    align-items:center;
+    gap:10px;
 }
 
-.logout {
-    background: crimson;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
+.btn{
+    padding:8px 14px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+    text-decoration:none;
+    color:white;
 }
 
-/* LAYOUT */
-.container {
-    display: flex;
-    height: calc(100vh - 60px);
+.home{ background:#667eea; }
+.back{ background:#28a745; }
+.logout{ background:#dc3545; }
+
+.nav-right{
+    display:flex;
+    align-items:center;
+    gap:10px;
 }
 
-.sidebar {
-    width: 280px;
-    background: white;
-    border-right: 1px solid #ddd;
-    padding: 15px;
-    overflow-y: auto;
+/* HEADER */
+.header{
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    color:white;
+    padding:40px;
+    text-align:center;
 }
 
-.lesson {
-    padding: 12px;
-    margin-bottom: 10px;
-    background: #f0f0f0;
-    border-radius: 8px;
-    cursor: pointer;
+.header h1{
+    font-size:30px;
+    margin-bottom:10px;
 }
 
-.lesson.active {
-    background: #667eea;
-    color: white;
+/* CONTAINER */
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:25px;
 }
 
-.content {
-    flex: 1;
-    padding: 30px;
+/* LESSON GRID */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:20px;
+    margin-top:20px;
 }
 
-.lesson-box {
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+.card{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.08);
+    transition:0.3s;
 }
 
-button {
-    margin-top: 20px;
-    padding: 10px 16px;
-    background: #667eea;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
+.card:hover{
+    transform:translateY(-5px);
+}
+
+.card h3{
+    margin-bottom:10px;
+    color:#1a1a2e;
+}
+
+.card p{
+    color:#666;
+    margin-bottom:15px;
+}
+
+.start-btn{
+    display:inline-block;
+    background:#667eea;
+    color:white;
+    padding:10px 15px;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.start-btn:hover{
+    background:#5a67d8;
+}
+
+/* FOOTER */
+footer{
+    text-align:center;
+    padding:25px;
+    background:#1a1a2e;
+    color:white;
+    margin-top:40px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🔐 LOGIN CHECK -->
+<!-- NAV -->
+<nav>
+    <div class="nav-left">
+        <a class="btn home" href="index.html">🏠 Home</a>
+        <a class="btn back" href="dashboard.html">⬅ Back</a>
+    </div>
+
+    <div class="nav-right">
+        <span id="userName"></span>
+        <button class="btn logout" onclick="logout()">Logout</button>
+    </div>
+</nav>
+
+<!-- HEADER -->
+<div class="header">
+    <h1 id="courseTitle">Loading Course...</h1>
+    <p>Select a lesson to continue learning</p>
+</div>
+
+<!-- CONTENT -->
+<div class="container">
+
+    <h2>📚 Lessons</h2>
+
+    <div class="grid" id="lessonGrid">
+
+        <!-- Dynamic lessons will load here -->
+
+    </div>
+
+</div>
+
+<footer>
+    © 2026 Ernest Embassy LMS - Course Page
+</footer>
+
 <script>
+/* =========================
+   SESSION CHECK
+========================= */
 const user = JSON.parse(localStorage.getItem("currentUser"));
 
 if (!user) {
     window.location.href = "login.html";
 }
-</script>
 
-<!-- TOP NAV -->
-<div class="top-nav">
-    <div class="top-left">
-        <a href="dashboard.html" class="back-btn">⬅ Dashboard</a>
-        <b id="courseTitle">Course</b>
-    </div>
-
-    <div>
-        Welcome, <b id="userName"></b>
-        <button class="logout" onclick="logout()">Logout</button>
-    </div>
-</div>
-
-<!-- MAIN -->
-<div class="container">
-
-    <div class="sidebar">
-        <h3>Lessons</h3>
-        <div id="lessonList"></div>
-    </div>
-
-    <div class="content">
-        <div class="lesson-box">
-            <h2 id="lessonTitle">Welcome</h2>
-            <p id="lessonContent">Select a lesson to begin</p>
-
-            <button onclick="nextLesson()">Next Lesson</button>
-        </div>
-    </div>
-
-</div>
-
-<script>
 document.getElementById("userName").innerText = user.name || "Student";
 
 /* =========================
    GET COURSE FROM URL
 ========================= */
 const params = new URLSearchParams(window.location.search);
-const subject = params.get("subject");
+const course = params.get("subject") || params.get("course");
 
 /* =========================
-   COURSE DATABASE (LOCAL NOW)
-   later move to Firebase
+   COURSE DATA (TEMP - Firebase later)
 ========================= */
 const courses = {
-    "digital-tech": {
-        title: "Digital Technology SS1",
+    "digital-technology": {
+        title: "Digital Technology",
         lessons: [
-            {
-                title: "Introduction to Computer",
-                content: "A computer is an electronic device that processes data into information..."
-            },
-            {
-                title: "Input Devices",
-                content: "Input devices include keyboard, mouse, scanner..."
-            },
-            {
-                title: "Output Devices",
-                content: "Output devices include monitor, printer, speakers..."
-            },
-            {
-                title: "Storage Devices",
-                content: "Storage devices include RAM, ROM, Hard Disk, Flash Drive..."
-            }
+            { title: "Introduction to Computer", desc: "Basics of ICT and computing." },
+            { title: "Computer Hardware", desc: "Learn components of a computer." },
+            { title: "Software Types", desc: "System vs Application software." }
         ]
     },
-
     "mathematics": {
-        title: "Mathematics SS1",
+        title: "Mathematics",
         lessons: [
-            { title: "Numbers", content: "Types of numbers and operations..." },
-            { title: "Algebra", content: "Basic algebraic expressions..." }
+            { title: "Algebra Basics", desc: "Variables and expressions." },
+            { title: "Linear Equations", desc: "Solving equations step by step." }
+        ]
+    },
+    "english": {
+        title: "English Language",
+        lessons: [
+            { title: "Grammar Rules", desc: "Parts of speech and structure." }
         ]
     }
 };
@@ -188,60 +216,48 @@ const courses = {
 /* =========================
    LOAD COURSE
 ========================= */
-const course = courses[subject] || courses["digital-tech"];
+function loadCourse(){
 
-document.getElementById("courseTitle").innerText = course.title;
+    const data = courses[course];
+
+    if(!data){
+        document.getElementById("courseTitle").innerText = "Course Not Found";
+        return;
+    }
+
+    document.getElementById("courseTitle").innerText = data.title;
+
+    const grid = document.getElementById("lessonGrid");
+    grid.innerHTML = "";
+
+    data.lessons.forEach((lesson, index) => {
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+            <h3>Lesson ${index + 1}: ${lesson.title}</h3>
+            <p>${lesson.desc}</p>
+            <a class="start-btn" href="class.html?course=${course}&lesson=${index}">
+                Start Lesson
+            </a>
+        `;
+
+        grid.appendChild(card);
+    });
+}
 
 /* =========================
-   LESSON LOGIC
+   LOGOUT
 ========================= */
-let currentIndex = 0;
-
-function loadLessons(){
-    const list = document.getElementById("lessonList");
-    list.innerHTML = "";
-
-    course.lessons.forEach((l, i) => {
-        list.innerHTML += `
-            <div class="lesson" onclick="openLesson(${i})">
-                ${i + 1}. ${l.title}
-            </div>
-        `;
-    });
-}
-
-function openLesson(i){
-    currentIndex = i;
-
-    document.getElementById("lessonTitle").innerText = course.lessons[i].title;
-    document.getElementById("lessonContent").innerText = course.lessons[i].content;
-
-    highlight(i);
-}
-
-function highlight(i){
-    document.querySelectorAll(".lesson").forEach((el, index) => {
-        el.classList.toggle("active", index === i);
-    });
-}
-
-function nextLesson(){
-    if(currentIndex < course.lessons.length - 1){
-        currentIndex++;
-        openLesson(currentIndex);
-    } else {
-        alert("🎉 Course Completed!");
-    }
-}
-
 function logout(){
     localStorage.removeItem("currentUser");
+    localStorage.removeItem("userLoggedIn");
     window.location.href = "login.html";
 }
 
 /* INIT */
-loadLessons();
-openLesson(0);
+loadCourse();
 </script>
 
 </body>

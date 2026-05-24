@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login - Ernest Embassy Digital Solutions</title>
+<title>Login - Ernest Embassy LMS</title>
 
 <style>
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa, #e9ecef);
     margin: 0;
 }
 
@@ -61,22 +61,12 @@ button:hover {
 }
 
 .error {
+    display: none;
     background: #ffdddd;
     color: red;
     padding: 10px;
-    margin-bottom: 10px;
-    display: none;
     border-radius: 8px;
-}
-
-.link {
-    text-align: center;
-    margin-top: 15px;
-}
-
-.link a {
-    color: #667eea;
-    text-decoration: none;
+    margin-bottom: 10px;
 }
 </style>
 </head>
@@ -84,13 +74,13 @@ button:hover {
 <body>
 
 <nav>
-🔐 Ernest Embassy Digital Solutions - Login
+🔐 Ernest Embassy LMS - Login
 </nav>
 
 <div class="container">
 
 <h1>Welcome Back</h1>
-<p>Login to access your learning dashboard</p>
+<p>Login to access your courses</p>
 
 <div id="errorBox" class="error"></div>
 
@@ -100,10 +90,6 @@ button:hover {
     <button type="submit">Login</button>
 </form>
 
-<div class="link">
-    <p>Don't have an account? <a href="register.html">Register</a></p>
-</div>
-
 </div>
 
 <!-- Firebase -->
@@ -111,6 +97,9 @@ button:hover {
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
 <script>
+/* =========================
+   FIREBASE INIT
+========================= */
 const firebaseConfig = {
     apiKey: "AIzaSyD6xpH_zLnoJP2PTSMHg80R94_Vd-fUZSA",
     authDomain: "ernest-embassy-travel-website.firebaseapp.com",
@@ -124,35 +113,36 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
 /* =========================
-   LMS SESSION FORMAT (STANDARD)
-   ========================= */
+   LMS SESSION FORMAT
+========================= */
 function createSessionUser(user) {
     return {
         uid: user.uid,
         email: user.email,
         name: user.displayName || user.email.split("@")[0],
-        loginTime: new Date().toISOString(),
-        role: "student"
+        role: "student",
+        loginTime: new Date().toISOString()
     };
 }
 
 /* =========================
-   AUTO SESSION RESTORE
-   ========================= */
+   PREVENT LOOP REDIRECT
+========================= */
 auth.onAuthStateChanged((user) => {
     if (user) {
         const sessionUser = createSessionUser(user);
-
         localStorage.setItem("currentUser", JSON.stringify(sessionUser));
 
-        // 🚀 ALWAYS GO TO DASHBOARD
-        window.location.href = "dashboard.html";
+        // only redirect if NOT already on dashboard
+        if (!window.location.href.includes("dashboard.html")) {
+            window.location.href = "dashboard.html";
+        }
     }
 });
 
 /* =========================
    LOGIN HANDLER
-   ========================= */
+========================= */
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -163,8 +153,8 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     errorBox.style.display = "none";
 
     try {
-        const userCredential = await auth.signInWithEmailAndPassword(email, password);
-        const user = userCredential.user;
+        const result = await auth.signInWithEmailAndPassword(email, password);
+        const user = result.user;
 
         if (!user.emailVerified) {
             errorBox.innerText = "Please verify your email before login.";
@@ -173,16 +163,13 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
             return;
         }
 
-        // 🔐 CREATE LMS SESSION
         const sessionUser = createSessionUser(user);
 
-        // REQUIRED FOR ALL LMS PAGES (course.html, class.html, dashboard.html)
+        // 🔐 GLOBAL LMS SESSION (USED BY ALL PAGES)
         localStorage.setItem("currentUser", JSON.stringify(sessionUser));
-
-        // optional tracking flag
         localStorage.setItem("userLoggedIn", "true");
 
-        // 🚀 REDIRECT TO DASHBOARD (Udemy-style entry point)
+        // 🚀 GO TO DASHBOARD
         window.location.href = "dashboard.html";
 
     } catch (error) {

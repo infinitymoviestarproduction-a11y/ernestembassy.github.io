@@ -6,93 +6,151 @@
 <title>Login - Ernest Embassy LMS</title>
 
 <style>
-body {
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #f5f7fa, #e9ecef);
-    margin: 0;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', sans-serif;
 }
 
-nav {
-    background: #1a1a2e;
-    padding: 15px;
-    color: white;
+body{
+    background:linear-gradient(135deg,#f5f7fa,#e9ecef);
 }
 
-.container {
-    max-width: 450px;
-    margin: 80px auto;
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+/* NAV */
+nav{
+    background:#1a1a2e;
+    color:white;
+    padding:15px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
 }
 
-h1 {
-    text-align: center;
-    color: #1a1a2e;
+.nav-left{
+    display:flex;
+    gap:10px;
+    align-items:center;
 }
 
-p {
-    text-align: center;
-    color: #666;
+.btn{
+    padding:8px 14px;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:bold;
+    color:white;
 }
 
-input {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 8px;
-    border: 1px solid #ccc;
+.home{ background:#667eea; }
+.register{ background:#28a745; }
+
+/* LOGIN BOX */
+.container{
+    max-width:450px;
+    margin:80px auto;
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
 }
 
-button {
-    width: 100%;
-    padding: 12px;
-    background: #667eea;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
+h1{
+    text-align:center;
+    color:#1a1a2e;
 }
 
-button:hover {
-    background: #5a67d8;
+p{
+    text-align:center;
+    color:#666;
+    margin-bottom:20px;
 }
 
-.error {
-    display: none;
-    background: #ffdddd;
-    color: red;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 10px;
+input{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    background:#667eea;
+    color:white;
+    border:none;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#5a67d8;
+}
+
+.error{
+    display:none;
+    background:#ffdddd;
+    color:red;
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:10px;
+}
+
+.footer-text{
+    text-align:center;
+    margin-top:20px;
+    font-size:14px;
+}
+
+.footer-text a{
+    color:#667eea;
+    text-decoration:none;
 }
 </style>
 </head>
 
 <body>
 
+<!-- NAVIGATION -->
 <nav>
-🔐 Ernest Embassy LMS - Login
+    <div class="nav-left">
+        <a class="btn home" href="index.html">🏠 Home</a>
+        <a class="btn register" href="register.html">📝 Register</a>
+    </div>
+
+    <div>
+        🔐 Ernest Embassy LMS
+    </div>
 </nav>
 
+<!-- LOGIN CONTAINER -->
 <div class="container">
 
-<h1>Welcome Back</h1>
-<p>Login to access your courses</p>
+    <h1>Welcome Back</h1>
+    <p>Login to continue learning</p>
 
-<div id="errorBox" class="error"></div>
+    <div id="errorBox" class="error"></div>
 
-<form id="loginForm">
-    <input type="email" id="email" placeholder="Email Address" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <button type="submit">Login</button>
-</form>
+    <form id="loginForm">
+
+        <input type="email" id="email" placeholder="Email Address" required>
+
+        <input type="password" id="password" placeholder="Password" required>
+
+        <button type="submit">Login</button>
+
+    </form>
+
+    <div class="footer-text">
+        Don’t have an account?
+        <a href="register.html">Create one</a>
+    </div>
 
 </div>
 
-<!-- Firebase -->
+<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
@@ -113,9 +171,9 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
 /* =========================
-   LMS SESSION FORMAT
+   SESSION BUILDER
 ========================= */
-function createSessionUser(user) {
+function createSessionUser(user){
     return {
         uid: user.uid,
         email: user.email,
@@ -124,21 +182,6 @@ function createSessionUser(user) {
         loginTime: new Date().toISOString()
     };
 }
-
-/* =========================
-   PREVENT LOOP REDIRECT
-========================= */
-auth.onAuthStateChanged((user) => {
-    if (user) {
-        const sessionUser = createSessionUser(user);
-        localStorage.setItem("currentUser", JSON.stringify(sessionUser));
-
-        // only redirect if NOT already on dashboard
-        if (!window.location.href.includes("dashboard.html")) {
-            window.location.href = "dashboard.html";
-        }
-    }
-});
 
 /* =========================
    LOGIN HANDLER
@@ -165,11 +208,9 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
         const sessionUser = createSessionUser(user);
 
-        // 🔐 GLOBAL LMS SESSION (USED BY ALL PAGES)
         localStorage.setItem("currentUser", JSON.stringify(sessionUser));
         localStorage.setItem("userLoggedIn", "true");
 
-        // 🚀 GO TO DASHBOARD
         window.location.href = "dashboard.html";
 
     } catch (error) {

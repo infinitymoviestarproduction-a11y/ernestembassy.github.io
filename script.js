@@ -1,5 +1,5 @@
 /* =========================================
-   FIREBASE INIT
+   FIREBASE INIT (ONLY ONCE)
 ========================================= */
 const firebaseConfig = {
     apiKey: "AIzaSyD6xpH_zLnoJP2PTSMHg80R94_Vd-fUZSA",
@@ -11,17 +11,19 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+
 const auth = firebase.auth();
+const db = firebase.firestore();
 
 /* =========================================
-   SESSION BUILDER (UDEMY STYLE)
+   SESSION BUILDER
 ========================================= */
-function createSessionUser(user) {
+function createSessionUser(user, role = "student") {
     return {
         uid: user.uid,
         email: user.email,
         name: user.displayName || user.email.split("@")[0],
-        role: "student",
+        role: role,
         loginTime: new Date().toISOString()
     };
 }
@@ -50,12 +52,25 @@ if (loginForm) {
                 return;
             }
 
-            const sessionUser = createSessionUser(user);
+            // 🔥 FETCH USER ROLE FROM FIRESTORE
+            const userDoc = await db.collection("users").doc(user.uid).get();
+
+            let role = "student";
+            if (userDoc.exists) {
+                role = userDoc.data().role || "student";
+            }
+
+            const sessionUser = createSessionUser(user, role);
 
             localStorage.setItem("currentUser", JSON.stringify(sessionUser));
             localStorage.setItem("userLoggedIn", "true");
 
-            window.location.href = "dashboard.html";
+            // 🔥 ROLE-BASED REDIRECT
+            if (role === "admin") {
+                window.location.href = "admin.html";
+            } else {
+                window.location.href = "dashboard.html";
+            }
 
         } catch (error) {
             errorBox.innerText = error.message;
@@ -65,13 +80,24 @@ if (loginForm) {
 }
 
 /* =========================================
-   SESSION SYNC ONLY (NO REDIRECT LOOP)
+   SESSION SYNC (NO LOOP)
 ========================================= */
-auth.onAuthStateChanged((user) => {
+auth.onAuthStateChanged(async (user) => {
     if (user) {
-        const sessionUser = createSessionUser(user);
+
+        let role = "student";
+
+        const userDoc = await db.collection("users").doc(user.uid).get();
+
+        if (userDoc.exists) {
+            role = userDoc.data().role || "student";
+        }
+
+        const sessionUser = createSessionUser(user, role);
+
         localStorage.setItem("currentUser", JSON.stringify(sessionUser));
         localStorage.setItem("userLoggedIn", "true");
+
     } else {
         localStorage.removeItem("currentUser");
         localStorage.removeItem("userLoggedIn");
@@ -79,7 +105,7 @@ auth.onAuthStateChanged((user) => {
 });
 
 /* =========================================
-   LOGOUT FUNCTION (GLOBAL USE)
+   LOGOUT FUNCTION (GLOBAL)
 ========================================= */
 function logout() {
     auth.signOut();

@@ -1,366 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Ernest Embassy Digital Solutions</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register - LMS</title>
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
-            min-height: 100vh;
-        }
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa, #e9ecef);
+    margin: 0;
+}
 
-        nav {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
-        }
+nav {
+    background: #1a1a2e;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+}
 
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+.container {
+    max-width: 450px;
+    margin: 60px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-        }
+h1 {
+    text-align: center;
+    color: #1a1a2e;
+}
 
-        .logo-icon {
-            font-size: 2rem;
-            background: linear-gradient(135deg, #ffd700, #ffaa00);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
 
-        .logo-text {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #ffd700;
-            letter-spacing: 1px;
-        }
+button {
+    width: 100%;
+    padding: 12px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
 
-        .logo-sub {
-            font-size: 0.65rem;
-            color: rgba(255, 215, 0, 0.8);
-            display: block;
-            margin-top: 2px;
-        }
+button:hover {
+    background: #5a67d8;
+}
 
-        .nav-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
+.error, .success {
+    display: none;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
 
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-            padding: 8px 0;
-            font-size: 0.85rem;
-        }
+.error {
+    background: #ffdddd;
+    color: red;
+}
 
-        .nav-links a:hover {
-            color: #ffd700;
-        }
+.success {
+    background: #ddffdd;
+    color: green;
+}
 
-        .container {
-            max-width: 500px;
-            margin: 60px auto;
-            padding: 0 20px;
-        }
-
-        .register-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .register-card h1 {
-            color: #1a1a2e;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .register-card p {
-            color: #666;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #333;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .btn-register {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s;
-        }
-
-        .btn-register:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .login-link {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        .login-link a {
-            color: #667eea;
-            text-decoration: none;
-        }
-
-        .login-link a:hover {
-            text-decoration: underline;
-        }
-
-        .error-msg {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .success-msg {
-            background: #d4edda;
-            color: #155724;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        footer {
-            background: #1a1a2e;
-            color: white;
-            text-align: center;
-            padding: 30px;
-            margin-top: 60px;
-        }
-
-        @media (max-width: 768px) {
-            .nav-container {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            .nav-links {
-                justify-content: center;
-                gap: 10px;
-                flex-wrap: wrap;
-            }
-            .register-card {
-                padding: 25px;
-            }
-        }
-    </style>
+a {
+    color: #667eea;
+}
+</style>
 </head>
+
 <body>
 
-<nav>
-    <div class="nav-container">
-        <div class="logo">
-            <span class="logo-icon">🔐</span>
-            <div>
-                <span class="logo-text">Ernest Embassy</span>
-                <span class="logo-sub">Digital Solutions</span>
-            </div>
-        </div>
-        <div class="nav-links">
-            <a href="index.html">🏠 Home</a>
-            <a href="about.html">📖 About</a>
-            <a href="services.html">⚙️ Services</a>
-            <a href="webdev.html">💻 Web Dev</a>
-            <a href="visa.html">✈️ Visa</a>
-            <a href="movie.html">🎬 Movie Studio</a>
-            <a href="portfolio.html">🎨 Portfolio</a>
-            <a href="teaching.html">📚 Teaching</a>
-            <a href="tutoring.html">💻 Tutoring</a>
-            <a href="education.html">🎓 Education</a>
-            <a href="class.html">🎓 Class</a>
-            <a href="booking.html">📅 Book</a>
-            <a href="contact.html">📞 Contact</a>
-        </div>
-    </div>
-</nav>
+<nav>🔐 LMS Registration</nav>
 
 <div class="container">
-    <div class="register-card">
-        <h1>Create Account</h1>
-        <p>Register to manage your appointments and access exclusive content</p>
 
-        <div id="errorMsg" class="error-msg"></div>
-        <div id="successMsg" class="success-msg"></div>
+<h1>Create Account</h1>
 
-        <form id="registerForm">
-            <div class="form-group">
-                <label>Full Name</label>
-                <input type="text" id="fullName" placeholder="Enter your full name" required>
-            </div>
-            <div class="form-group">
-                <label>Email Address</label>
-                <input type="email" id="email" placeholder="Enter your email" required>
-            </div>
-            <div class="form-group">
-                <label>Phone Number</label>
-                <input type="tel" id="phone" placeholder="Enter your phone number">
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="password" placeholder="Create a password (min 6 characters)" required>
-            </div>
-            <div class="form-group">
-                <label>Confirm Password</label>
-                <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
-            </div>
-            <button type="submit" class="btn-register">Create Account</button>
-        </form>
+<div id="errorBox" class="error"></div>
+<div id="successBox" class="success"></div>
 
-        <div class="login-link">
-            Already have an account? <a href="login.html">Sign in here</a>
-        </div>
-    </div>
+<form id="registerForm">
+    <input type="text" id="name" placeholder="Full Name" required>
+    <input type="email" id="email" placeholder="Email Address" required>
+    <input type="tel" id="phone" placeholder="Phone Number">
+    <input type="password" id="password" placeholder="Password (min 6 chars)" required>
+    <input type="password" id="confirm" placeholder="Confirm Password" required>
+
+    <button type="submit" id="btn">Create Account</button>
+</form>
+
+<p style="text-align:center;margin-top:15px;">
+    Already have account? <a href="login.html">Login</a>
+</p>
+
 </div>
 
-<footer>
-    <div class="container">
-        <p>&copy; 2026 Ernest Embassy Digital Solutions. All rights reserved.</p>
-    </div>
-</footer>
-
-<!-- Firebase SDKs -->
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
 <script>
-    // YOUR FIREBASE CONFIGURATION - REPLACED
-    const firebaseConfig = {
-        apiKey: "AIzaSyD6xpH_zLnoJP2PTSMHg80R94_Vd-fUZSA",
-        authDomain: "ernest-embassy-travel-website.firebaseapp.com",
-        projectId: "ernest-embassy-travel-website",
-        storageBucket: "ernest-embassy-travel-website.firebasestorage.app",
-        messagingSenderId: "831442789419",
-        appId: "1:831442789419:web:1845791aafb7ac9d31366e"
-    };
+/* =========================
+   FIREBASE INIT
+========================= */
+const firebaseConfig = {
+    apiKey: "AIzaSyD6xpH_zLnoJP2PTSMHg80R94_Vd-fUZSA",
+    authDomain: "ernest-embassy-travel-website.firebaseapp.com",
+    projectId: "ernest-embassy-travel-website",
+};
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+firebase.initializeApp(firebaseConfig);
 
-    // Register form submission
-    document.getElementById('registerForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const fullName = document.getElementById('fullName').value;
-        const email = document.getElementById('email').value;
-        const phone = document.getElementById('phone').value;
-        const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('confirmPassword').value;
-        
-        const errorDiv = document.getElementById('errorMsg');
-        const successDiv = document.getElementById('successMsg');
-        
-        errorDiv.style.display = 'none';
-        successDiv.style.display = 'none';
-        
-        if (password !== confirmPassword) {
-            errorDiv.innerText = 'Passwords do not match.';
-            errorDiv.style.display = 'block';
-            return;
-        }
-        
-        if (password.length < 6) {
-            errorDiv.innerText = 'Password must be at least 6 characters.';
-            errorDiv.style.display = 'block';
-            return;
-        }
-        
-        try {
-            const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-            const user = userCredential.user;
-            
-            await user.updateProfile({ displayName: fullName });
-            
-            await db.collection('users').doc(user.uid).set({
-                fullName: fullName,
-                email: email,
-                phone: phone,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                role: 'client'
-            });
-            
-            await user.sendEmailVerification();
-            
-            successDiv.innerText = 'Account created successfully! Please check your email for verification. Redirecting to login...';
-            successDiv.style.display = 'block';
-            
-            setTimeout(() => {
-                window.location.href = 'login.html';
-            }, 3000);
-            
-        } catch (error) {
-            errorDiv.innerText = error.message;
-            errorDiv.style.display = 'block';
-        }
-    });
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+/* =========================
+   REGISTER HANDLER
+========================= */
+
+document.getElementById("registerForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const phone = document.getElementById("phone").value;
+    const password = document.getElementById("password").value;
+    const confirm = document.getElementById("confirm").value;
+
+    const errorBox = document.getElementById("errorBox");
+    const successBox = document.getElementById("successBox");
+    const btn = document.getElementById("btn");
+
+    errorBox.style.display = "none";
+    successBox.style.display = "none";
+
+    if (password !== confirm) {
+        errorBox.innerText = "Passwords do not match";
+        errorBox.style.display = "block";
+        return;
+    }
+
+    if (password.length < 6) {
+        errorBox.innerText = "Password must be at least 6 characters";
+        errorBox.style.display = "block";
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerText = "Creating account...";
+
+    try {
+
+        // 1. CREATE AUTH USER
+        const result = await auth.createUserWithEmailAndPassword(email, password);
+        const user = result.user;
+
+        // 2. UPDATE DISPLAY NAME
+        await user.updateProfile({
+            displayName: name
+        });
+
+        // 3. CREATE LMS USER PROFILE (IMPORTANT)
+        const lmsUser = {
+            uid: user.uid,
+            name: name,
+            email: email,
+            phone: phone || "",
+            role: "student",
+            createdAt: new Date()
+        };
+
+        await db.collection("users").doc(user.uid).set(lmsUser);
+
+        // 4. SAVE SESSION (USED ACROSS LMS)
+        localStorage.setItem("currentUser", JSON.stringify(lmsUser));
+
+        successBox.innerText = "Account created successfully! Redirecting...";
+        successBox.style.display = "block";
+
+        // 5. REDIRECT TO DASHBOARD
+        setTimeout(() => {
+            window.location.href = "dashboard.html";
+        }, 2000);
+
+    } catch (err) {
+        errorBox.innerText = err.message;
+        errorBox.style.display = "block";
+    }
+
+    btn.disabled = false;
+    btn.innerText = "Create Account";
+});
 </script>
 
 </body>

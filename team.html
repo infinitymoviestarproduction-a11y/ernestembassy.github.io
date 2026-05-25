@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Team - Infinity Movie Star Production</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+        }
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffd700;
+            letter-spacing: 1px;
+        }
+
+        .logo-sub {
+            font-size: 0.65rem;
+            color: rgba(255, 215, 0, 0.8);
+            display: block;
+            margin-top: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 0;
+            font-size: 0.8rem;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #1a1a2e;
+            margin-top: 60px;
+        }
+
+        .section-title span {
+            border-bottom: 3px solid #ffd700;
+            padding-bottom: 10px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        /* Team Grid */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin: 40px 0;
+        }
+
+        .team-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .team-image {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .team-image img {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #ffd700;
+        }
+
+        .team-info {
+            padding: 25px;
+            text-align: center;
+        }
+
+        .team-info h3 {
+            color: #1a1a2e;
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+
+        .team-title {
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            display: inline-block;
+            background: #f0f0f5;
+            padding: 4px 15px;
+            border-radius: 20px;
+        }
+
+        .team-bio {
+            color: #555;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .team-bio p {
+            margin-bottom: 10px;
+        }
+
+        .team-social {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .team-social a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .team-social a:hover {
+            transform: translateY(-3px);
+        }
+
+        .founder-badge {
+            position: relative;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .founder-star {
+            background: #ffd700;
+            color: #1a1a2e;
+            font-size: 0.7rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        footer {
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+
+        .cac-badge {
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.05);
+            background-color: #20b859;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .nav-links {
+                justify-content: center;
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+            .nav-links a {
+                font-size: 0.65rem;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+            .team-image img {
+                width: 140px;
+                height: 140px;
+            }
+            .whatsapp-float {
+                padding: 8px 15px;
+                bottom: 15px;
+                right: 15px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- PROFESSIONAL NAVIGATION WITH ALL LINKS -->
+<nav>
+    <div class="nav-container">
+        <div class="logo">
+            <span class="logo-icon">⭐</span>
+            <div>
+                <span class="logo-text">Ernest Embassy</span>
+                <span class="logo-sub">Digital Solutions</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="about.html">📖 About</a>
+            <a href="services.html">⚙️ Services</a>
+            <a href="webdev.html">💻 Web Dev</a>
+            <a href="visa.html">✈️ Visa</a>
+            <a href="movie.html">🎬 Movie Studio</a>
+            <a href="portfolio.html">🎨 Portfolio</a>
+            <a href="teaching.html">📚 Teaching</a>
+            <a href="tutoring.html">💻 Tutoring</a>
+            <a href="education.html">🎓 Education</a>
+            <a href="class.html">🎓 Class</a>
+            <a href="booking.html">📅 Book</a>
+            <a href="contact.html">📞 Contact</a>
+            <a href="team.html">⭐ Team</a>
+            <a href="gallery.html">📸 Gallery</a>
+            <a href="faq.html">❓ FAQ</a>
+            <a href="testimonials.html">⭐ Testimonials</a>
+            <a href="register.html">📝 Register</a>
+            <a href="login.html">🔐 Login</a>
+            <a href="dashboard.html">👤 Dashboard</a>
+            <a href="admin.html">🔒 Admin</a>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO SECTION -->
+<div class="hero">
+    <h1>⭐ Our Team</h1>
+    <p>The pioneers and visionaries behind Infinity Movie Star Production</p>
+</div>
+
+<div class="container">
+    <!-- FOUNDER SECTION -->
+    <div class="section-title"><span>👨‍🎬 Founder & Creative Director</span></div>
+    <div class="section-subtitle">The vision behind Infinity Movie Star Production</div>
+
+    <div class="team-grid">
+        <div class="team-card">
+            <div class="team-image">
+                <img src="images/damian-okafor.jpg" alt="Damian Anielozie Okafor" onerror="this.src='https://placehold.co/400x400?text=Damian+Okafor'">
+            </div>
+            <div class="team-info">
+                <h3>Damian Anielozie Okafor</h3>
+                <div class="team-title">🎬 Founder & Creative Director</div>
+                <div class="founder-badge"><span class="founder-star">⭐ FOUNDER & VISIONARY ⭐</span></div>
+                <div class="team-bio">
+                    <p>Damian is a Nigerian screenwriter, director, producer, and film trainer with over a decade of experience in the film industry. He founded Infinity Movie Star Production in 2017 with a vision to create compelling stories that inspire, entertain, and address real social issues.</p>
+                    <p>His passion for storytelling has led to the creation of over 20 original screenplays, including political thrillers, crime dramas, and inspirational narratives. Damian's work focuses on authentic African storytelling with international appeal.</p>
+                    <p>Beyond filmmaking, Damian is also an accomplished musician, educator, and web developer, combining creative arts with digital innovation to build a comprehensive creative ecosystem.</p>
+                </div>
+                <div class="team-social">
+                    <a href="https://facebook.com/damian.okafor31131" target="_blank">📘</a>
+                    <a href="https://twitter.com/danoka33" target="_blank">🐦</a>
+                    <a href="https://instagram.com/imspenugu" target="_blank">📷</a>
+                    <a href="https://youtube.com/@infinitymoviestarproductio6222" target="_blank">▶️</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PIONEERS & CO-FOUNDERS SECTION -->
+    <div class="section-title"><span>🤝 Pioneers & Partners</span></div>
+    <div class="section-subtitle">The people who helped build Infinity Movie Star</div>
+
+    <div class="team-grid">
+        <div class="team-card">
+            <div class="team-image">
+                <img src="images/never-matewere.jpg" alt="Never Matewere" onerror="this.src='https://placehold.co/400x400?text=Never+Matewere'">
+            </div>
+            <div class="team-info">
+                <h3>Never Matewere</h3>
+                <div class="team-title">🇲🇼 Partner - Zomba Film Production (Malawi)</div>
+                <div class="team-bio">
+                    <p>Never Matewere is a film producer and creative entrepreneur based in Malawi, dedicated to telling authentic African stories through visual media. As the founder of Zomba Film Production, he leads local productions, talent coordination, and film training initiatives across Malawi.</p>
+                    <p>Never's collaboration with Infinity Movie Star Production has opened doors for cross-continental film projects, talent exchange programs, and shared production resources between Nigeria and Malawi.</p>
+                    <p>His expertise in local production logistics and his deep understanding of Southern African storytelling traditions make him an invaluable partner in expanding Infinity's reach across the continent.</p>
+                </div>
+                <div class="team-social">
+                    <a href="#" target="_blank">🎬</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="team-card">
+            <div class="team-image">
+                <img src="images/emmanuel-francisque.jpg" alt="Emmanuel Fragrance Francisque" onerror="this.src='https://placehold.co/400x400?text=Emmanuel+Francisque'">
+            </div>
+            <div class="team-info">
+                <h3>Emmanuel Fragrance Francisque</h3>
+                <div class="team-title">🌍 Partner - Ashanti Media Logistics</div>
+                <div class="team-bio">
+                    <p>Emmanuel Fragrance Francisque is an international media logistics expert and creative collaborator with a global network spanning Africa, Europe, and the United States. Through Ashanti Media Logistics, he provides international production support, media logistics, and global creative collaboration.</p>
+                    <p>Emmanuel's expertise in navigating international production requirements, talent sourcing, and cross-border media distribution has been instrumental in positioning Infinity Movie Star Production for global audiences.</p>
+                    <p>His commitment to building bridges between African creatives and international markets continues to create new opportunities for collaborative storytelling.</p>
+                </div>
+                <div class="team-social">
+                    <a href="#" target="_blank">🌍</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EARLY PIONEERS SECTION - Add more people here -->
+    <div class="section-title"><span>🌟 Early Pioneers</span></div>
+    <div class="section-subtitle">The foundation team who started the journey</div>
+
+    <div class="team-grid" id="earlyPioneersGrid">
+        <!-- Template for adding new pioneers - Copy this block for each new person -->
+        <!--
+        <div class="team-card">
+            <div class="team-image">
+                <img src="images/person-name.jpg" alt="Person Name" onerror="this.src='https://placehold.co/400x400?text=Name'">
+            </div>
+            <div class="team-info">
+                <h3>Person Full Name</h3>
+                <div class="team-title">🎭 Role / Position</div>
+                <div class="team-bio">
+                    <p>Write their story here. How they contributed to Infinity Movie Star. What they did. Their role in the journey.</p>
+                    <p>Add multiple paragraphs as needed.</p>
+                </div>
+                <div class="team-social">
+                    <a href="#">🔗</a>
+                </div>
+            </div>
+        </div>
+        -->
+    </div>
+
+    <!-- CALL TO ACTION -->
+    <div class="cta-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; padding: 50px; text-align: center; color: white; margin: 60px 0;">
+        <h2>🎬 Want to Join Our Team?</h2>
+        <p style="margin-top: 15px;">We're always looking for passionate creatives to collaborate with.</p>
+        <a href="contact.html" class="btn" style="display: inline-block; background: #ffd700; color: #1a1a2e; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: bold; margin-top: 20px;">📞 Contact Us</a>
+    </div>
+</div>
+
+<!-- CAC BADGE -->
+<div style="text-align: center; padding: 20px;">
+    <div class="cac-badge">
+        ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
+        📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <p><strong>Infinity Movie Star Production & Ernest Embassy Digital Solutions</strong></p>
+        <p>📧 infinitymoviestarproduction@gmail.com | ernestembassytravels@gmail.com | Danoka33@gmail.com</p>
+        <p>📞 +2348032607809 | +2349050205053</p>
+        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
+        <p style="margin-top: 20px;">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- WHATSAPP BUTTON -->
+<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
+    <span>💬</span>
+    <span>Chat with Damian on WhatsApp</span>
+</a>
+
+</body>
+</html>

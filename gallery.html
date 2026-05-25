@@ -1,4 +1,320 @@
-    <!-- GALLERY SECTION - BEHIND THE SCENES -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery & Music - Infinity Movie Star Production</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+        }
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #1a1a2e;
+            margin-top: 60px;
+        }
+
+        .section-title span {
+            border-bottom: 3px solid #ffd700;
+            padding-bottom: 10px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .gallery-item {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .gallery-caption {
+            padding: 12px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        /* Music Grid */
+        .music-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .music-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .music-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .music-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .music-title {
+            font-weight: bold;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: #1a1a2e;
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 10px;
+            border-radius: 30px;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+
+        .lightbox.show {
+            display: flex;
+        }
+
+        .close-lightbox {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+        }
+
+        footer {
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+
+        .cac-badge {
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .nav-links {
+                justify-content: center;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .gallery-grid, .music-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-container">
+        <div class="logo">
+            <span class="logo-icon">🎬</span>
+            <div>
+                <span class="logo-text">Ernest Embassy</span>
+                <span class="logo-sub">Digital Solutions</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="about.html">📖 About</a>
+            <a href="services.html">⚙️ Services</a>
+            <a href="webdev.html">💻 Web Dev</a>
+            <a href="visa.html">✈️ Visa</a>
+            <a href="movie.html">🎬 Movie Studio</a>
+            <a href="portfolio.html">🎨 Portfolio</a>
+            <a href="teaching.html">📚 Teaching</a>
+            <a href="tutoring.html">💻 Tutoring</a>
+            <a href="education.html">🎓 Education</a>
+            <a href="class.html">🎓 Class</a>
+            <a href="booking.html">📅 Book</a>
+            <a href="contact.html">📞 Contact</a>
+            <a href="gallery.html">📸 Gallery</a>
+            <a href="faq.html">❓ FAQ</a>
+            <a href="testimonials.html">⭐ Testimonials</a>
+            <a href="register.html">📝 Register</a>
+            <a href="login.html">🔐 Login</a>
+            <a href="dashboard.html">👤 Dashboard</a>
+            <a href="admin.html">🔒 Admin</a>
+        </div>
+    </div>
+</nav>
+
+<div class="hero">
+    <h1>🎬 Infinity Movie Star Gallery</h1>
+    <p>Behind-the-scenes photos and original music from Infinity Movie Star Productions</p>
+</div>
+
+<div class="container">
+    <!-- GALLERY SECTION -->
     <div class="section-title"><span>🎬 Behind the Scenes Gallery</span></div>
     <div class="section-subtitle">Photos from Infinity Movie Star Productions</div>
 
@@ -53,85 +369,115 @@
         <div class="music-card">
             <div class="music-icon">🎤</div>
             <div class="music-title">I Gotta Make It</div>
-            <audio controls preload="none">
-                <source src="I Gotta Make It.mp3" type="audio/mpeg">
-            </audio>
+            <audio controls preload="none"><source src="I Gotta Make It.mp3" type="audio/mpeg"></audio>
         </div>
         <div class="music-card">
             <div class="music-icon">🎤</div>
             <div class="music-title">Who Am I 2</div>
-            <audio controls preload="none">
-                <source src="music/Who Am I 2 (1).mp3" type="audio/mpeg">
-            </audio>
+            <audio controls preload="none"><source src="music/Who Am I 2 (1).mp3" type="audio/mpeg"></audio>
         </div>
         <div class="music-card">
             <div class="music-icon">🎤</div>
             <div class="music-title">House Boy</div>
-            <audio controls preload="none">
-                <source src="music/House boy (1).mp3" type="audio/mpeg">
-            </audio>
+            <audio controls preload="none"><source src="music/House boy (1).mp3" type="audio/mpeg"></audio>
         </div>
         <div class="music-card">
             <div class="music-icon">🎤</div>
             <div class="music-title">Stressed 3</div>
-            <audio controls preload="none">
-                <source src="music/stressed 3 (1).mp3" type="audio/mpeg">
-            </audio>
+            <audio controls preload="none"><source src="music/stressed 3 (1).mp3" type="audio/mpeg"></audio>
         </div>
         <div class="music-card">
             <div class="music-icon">🎤</div>
             <div class="music-title">Ogini</div>
-            <audio controls preload="none">
-                <source src="music/Ogini.mp3" type="audio/mpeg">
-            </audio>
+            <audio controls preload="none"><source src="music/Ogini.mp3" type="audio/mpeg"></audio>
         </div>
         <div class="music-card">
             <div class="music-icon">🎤</div>
             <div class="music-title">Judge Me</div>
-            <audio controls preload="none">
-                <source src="music/Judge me (1).mp3" type="audio/mpeg">
-            </audio>
+            <audio controls preload="none"><source src="music/Judge me (1).mp3" type="audio/mpeg"></audio>
         </div>
         <div class="music-card">
             <div class="music-icon">🎤</div>
             <div class="music-title">Whatcha Gon Do</div>
-            <audio controls preload="none">
-                <source src="music/whatcha gon do.mp3" type="audio/mpeg">
-            </audio>
+            <audio controls preload="none"><source src="music/whatcha gon do.mp3" type="audio/mpeg"></audio>
         </div>
         <div class="music-card">
             <div class="music-icon">🎤</div>
             <div class="music-title">Igbakigba</div>
-            <audio controls preload="none">
-                <source src="music/Igbakigba (1).mp3" type="audio/mpeg">
-            </audio>
+            <audio controls preload="none"><source src="music/Igbakigba (1).mp3" type="audio/mpeg"></audio>
         </div>
         <div class="music-card">
             <div class="music-icon">🎤</div>
             <div class="music-title">Peace 3</div>
-            <audio controls preload="none">
-                <source src="music/Peace 3 (1).mp3" type="audio/mpeg">
-            </audio>
+            <audio controls preload="none"><source src="music/Peace 3 (1).mp3" type="audio/mpeg"></audio>
         </div>
         <div class="music-card">
             <div class="music-icon">🎤</div>
             <div class="music-title">Making Luv 2</div>
-            <audio controls preload="none">
-                <source src="music/Making Luv 2 (1).mp3" type="audio/mpeg">
-            </audio>
+            <audio controls preload="none"><source src="music/Making Luv 2 (1).mp3" type="audio/mpeg"></audio>
         </div>
         <div class="music-card">
             <div class="music-icon">🎤</div>
             <div class="music-title">Champ</div>
-            <audio controls preload="none">
-                <source src="music/champ.mp3" type="audio/mpeg">
-            </audio>
+            <audio controls preload="none"><source src="music/champ.mp3" type="audio/mpeg"></audio>
         </div>
         <div class="music-card">
             <div class="music-icon">🎤</div>
             <div class="music-title">2026</div>
-            <audio controls preload="none">
-                <source src="music/2026.mp3" type="audio/mpeg">
-            </audio>
+            <audio controls preload="none"><source src="music/2026.mp3" type="audio/mpeg"></audio>
         </div>
     </div>
+
+    <!-- CAC BADGE -->
+    <div style="text-align: center; margin: 40px 0;">
+        <div class="cac-badge">
+            ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
+            📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
+        </div>
+    </div>
+</div>
+
+<!-- Lightbox Modal -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+    <img id="lightboxImg" src="">
+</div>
+
+<footer>
+    <div class="container">
+        <p><strong>Infinity Movie Star Production & Ernest Embassy Digital Solutions</strong></p>
+        <p>📧 infinitymoviestarproduction@gmail.com | ernestembassytravels@gmail.com</p>
+        <p>📞 +2348032607809 | +2349050205053</p>
+        <p>&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
+    </div>
+</footer>
+
+<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
+    <span>💬</span>
+    <span>Chat with Damian</span>
+</a>
+
+<script>
+    function openLightbox(imgSrc) {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        lightboxImg.src = imgSrc;
+        lightbox.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        const lightbox = document.getElementById('lightbox');
+        lightbox.classList.remove('show');
+        document.body.style.overflow = 'auto';
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeLightbox();
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -262,6 +262,135 @@
             font-size: 0.85rem;
         }
 
+        /* Gallery Grid - NEW */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .gallery-item {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.02);
+        }
+
+        .gallery-caption {
+            padding: 12px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* Music Grid - NEW */
+        .music-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .music-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .music-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        }
+
+        .music-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 10px;
+            border-radius: 50%;
+            color: white;
+        }
+
+        .music-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin: 10px 0;
+            color: #1a1a2e;
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 10px;
+            border-radius: 30px;
+        }
+
+        audio::-webkit-media-controls-panel {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+        }
+
+        /* Lightbox Modal - NEW */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+
+        .lightbox.show {
+            display: flex;
+        }
+
+        .close-lightbox {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .close-lightbox:hover {
+            transform: scale(1.1);
+        }
+
         /* Partnerships */
         .partners-grid {
             display: grid;
@@ -400,6 +529,12 @@
             .screenplays-grid {
                 grid-template-columns: 1fr;
             }
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            .music-grid {
+                grid-template-columns: 1fr;
+            }
             .partners-grid {
                 grid-template-columns: 1fr;
             }
@@ -408,6 +543,11 @@
                 bottom: 15px;
                 right: 15px;
                 font-size: 12px;
+            }
+            .close-lightbox {
+                top: 10px;
+                right: 20px;
+                font-size: 30px;
             }
         }
     </style>
@@ -579,54 +719,18 @@
     <div class="section-subtitle">With a growing catalog of completed feature screenplays—including political thrillers, crime dramas, inspirational stories, social commentaries, and culturally rich narratives—Infinity Movie Star Production develops stories designed for local impact and international audiences.</div>
 
     <div class="screenplays-grid">
-        <div class="screenplay-card">
-            <h4>Official Card</h4>
-            <p>Political conspiracy thriller</p>
-        </div>
-        <div class="screenplay-card">
-            <h4>Round Table</h4>
-            <p>Anti-corruption political thriller</p>
-        </div>
-        <div class="screenplay-card">
-            <h4>Thuglord</h4>
-            <p>Crime, redemption, and justice drama</p>
-        </div>
-        <div class="screenplay-card">
-            <h4>Alex: Friend of Sorrow</h4>
-            <p>Emotional family drama</p>
-        </div>
-        <div class="screenplay-card">
-            <h4>Jerry</h4>
-            <p>Inspirational drama</p>
-        </div>
-        <div class="screenplay-card">
-            <h4>SOHK</h4>
-            <p>Suspense thriller</p>
-        </div>
-        <div class="screenplay-card">
-            <h4>Playground</h4>
-            <p>Youth-centered drama</p>
-        </div>
-        <div class="screenplay-card">
-            <h4>Land of Edomita</h4>
-            <p>Epic adventure and cultural drama</p>
-        </div>
-        <div class="screenplay-card">
-            <h4>Heaven's Gate</h4>
-            <p>Spiritual and inspirational drama</p>
-        </div>
-        <div class="screenplay-card">
-            <h4>Twins Blood</h4>
-            <p>Mystery and family thriller</p>
-        </div>
-        <div class="screenplay-card">
-            <h4>Girls Go Wild</h4>
-            <p>Contemporary social drama</p>
-        </div>
-        <div class="screenplay-card">
-            <h4>Rupert</h4>
-            <p>Inspirational drama</p>
-        </div>
+        <div class="screenplay-card"><h4>Official Card</h4><p>Political conspiracy thriller</p></div>
+        <div class="screenplay-card"><h4>Round Table</h4><p>Anti-corruption political thriller</p></div>
+        <div class="screenplay-card"><h4>Thuglord</h4><p>Crime, redemption, and justice drama</p></div>
+        <div class="screenplay-card"><h4>Alex: Friend of Sorrow</h4><p>Emotional family drama</p></div>
+        <div class="screenplay-card"><h4>Jerry</h4><p>Inspirational drama</p></div>
+        <div class="screenplay-card"><h4>SOHK</h4><p>Suspense thriller</p></div>
+        <div class="screenplay-card"><h4>Playground</h4><p>Youth-centered drama</p></div>
+        <div class="screenplay-card"><h4>Land of Edomita</h4><p>Epic adventure and cultural drama</p></div>
+        <div class="screenplay-card"><h4>Heaven's Gate</h4><p>Spiritual and inspirational drama</p></div>
+        <div class="screenplay-card"><h4>Twins Blood</h4><p>Mystery and family thriller</p></div>
+        <div class="screenplay-card"><h4>Girls Go Wild</h4><p>Contemporary social drama</p></div>
+        <div class="screenplay-card"><h4>Rupert</h4><p>Inspirational drama</p></div>
     </div>
 
     <!-- INTERNATIONAL PARTNERSHIPS -->
@@ -658,29 +762,129 @@
     <!-- WHY PARTNER WITH US -->
     <div class="section-title"><span>🌟 Why Partner With Us?</span></div>
     <div class="partners-grid">
-        <div class="partner-card">
-            <h3>📜 Original Scripts</h3>
-            <p>Production-ready, compelling screenplays</p>
+        <div class="partner-card"><h3>📜 Original Scripts</h3><p>Production-ready, compelling screenplays</p></div>
+        <div class="partner-card"><h3>🎬 Experienced Leadership</h3><p>Expert writing and directing since 2014</p></div>
+        <div class="partner-card"><h3>🌍 Global Partnerships</h3><p>International production network</p></div>
+        <div class="partner-card"><h3>⭐ Diverse Casting</h3><p>Access to international talent</p></div>
+        <div class="partner-card"><h3>🎓 Practical Training</h3><p>Hands-on film education</p></div>
+        <div class="partner-card"><h3>🌐 Global Distribution</h3><p>Festival and international market potential</p></div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- GALLERY SECTION - BEHIND THE SCENES (NEW)    -->
+    <!-- ============================================ -->
+    <div class="section-title"><span>🎬 Behind the Scenes Gallery</span></div>
+    <div class="section-subtitle">Exclusive photos from Infinity Movie Star Productions</div>
+
+    <div class="gallery-grid">
+        <div class="gallery-item" onclick="openLightbox('images/young n up doing.jpg')">
+            <img src="images/young n up doing.jpg" alt="Young N Up Doing" onerror="this.style.display='none'">
+            <div class="gallery-caption">🎬 Young N Up Doing</div>
         </div>
-        <div class="partner-card">
-            <h3>🎬 Experienced Leadership</h3>
-            <p>Expert writing and directing since 2014</p>
+        <div class="gallery-item" onclick="openLightbox('images/2014 then.jpg')">
+            <img src="images/2014 then.jpg" alt="2014 Then" onerror="this.style.display='none'">
+            <div class="gallery-caption">📸 2014 Then</div>
         </div>
-        <div class="partner-card">
-            <h3>🌍 Global Partnerships</h3>
-            <p>International production network</p>
+        <div class="gallery-item" onclick="openLightbox('images/abuba forest.jpg')">
+            <img src="images/abuba forest.jpg" alt="Abuba Forest" onerror="this.style.display='none'">
+            <div class="gallery-caption">🌳 Abuba Forest Shoot</div>
         </div>
-        <div class="partner-card">
-            <h3>⭐ Diverse Casting</h3>
-            <p>Access to international talent</p>
+        <div class="gallery-item" onclick="openLightbox('images/infinity team.jpg')">
+            <img src="images/infinity team.jpg" alt="Infinity Team" onerror="this.style.display='none'">
+            <div class="gallery-caption">👥 Infinity Movie Star Team</div>
         </div>
-        <div class="partner-card">
-            <h3>🎓 Practical Training</h3>
-            <p>Hands-on film education</p>
+        <div class="gallery-item" onclick="openLightbox('images/me and zubby.jpg')">
+            <img src="images/me and zubby.jpg" alt="Me and Zubby" onerror="this.style.display='none'">
+            <div class="gallery-caption">⭐ Damian with Zubby</div>
         </div>
-        <div class="partner-card">
-            <h3>🌐 Global Distribution</h3>
-            <p>Festival and international market potential</p>
+        <div class="gallery-item" onclick="openLightbox('images/scout reloaded training.jpg')">
+            <img src="images/scout reloaded training.jpg" alt="Scout Reloaded Training" onerror="this.style.display='none'">
+            <div class="gallery-caption">📚 Scout Reloaded Training</div>
+        </div>
+        <div class="gallery-item" onclick="openLightbox('images/training malawi.jpg')">
+            <img src="images/training malawi.jpg" alt="Training Malawi" onerror="this.style.display='none'">
+            <div class="gallery-caption">🌍 Training in Malawi</div>
+        </div>
+        <div class="gallery-item" onclick="openLightbox('images/drama nta.jpg')">
+            <img src="images/drama nta.jpg" alt="Drama NTA" onerror="this.style.display='none'">
+            <div class="gallery-caption">📺 Drama NTA Production</div>
+        </div>
+        <div class="gallery-item" onclick="openLightbox('images/escet drama.jpg')">
+            <img src="images/escet drama.jpg" alt="ESCET Drama" onerror="this.style.display='none'">
+            <div class="gallery-caption">🎭 ESCET Drama</div>
+        </div>
+        <div class="gallery-item" onclick="openLightbox('images/zomba.jpg')">
+            <img src="images/zomba.jpg" alt="Zomba" onerror="this.style.display='none'">
+            <div class="gallery-caption">📍 Zomba Production</div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MUSIC SECTION (NEW)                          -->
+    <!-- ============================================ -->
+    <div class="section-title"><span>🎵 Original Music</span></div>
+    <div class="section-subtitle">Listen to original tracks from Infinity Movie Star Productions</div>
+
+    <div class="music-grid">
+        <div class="music-card">
+            <div class="music-icon">🎤</div>
+            <div class="music-title">I Gotta Make It</div>
+            <audio controls preload="none"><source src="I Gotta Make It.mp3" type="audio/mpeg"></audio>
+        </div>
+        <div class="music-card">
+            <div class="music-icon">🎤</div>
+            <div class="music-title">Who Am I 2</div>
+            <audio controls preload="none"><source src="music/Who Am I 2 (1).mp3" type="audio/mpeg"></audio>
+        </div>
+        <div class="music-card">
+            <div class="music-icon">🎤</div>
+            <div class="music-title">House Boy</div>
+            <audio controls preload="none"><source src="music/House boy (1).mp3" type="audio/mpeg"></audio>
+        </div>
+        <div class="music-card">
+            <div class="music-icon">🎤</div>
+            <div class="music-title">Stressed 3</div>
+            <audio controls preload="none"><source src="music/stressed 3 (1).mp3" type="audio/mpeg"></audio>
+        </div>
+        <div class="music-card">
+            <div class="music-icon">🎤</div>
+            <div class="music-title">Ogini</div>
+            <audio controls preload="none"><source src="music/Ogini.mp3" type="audio/mpeg"></audio>
+        </div>
+        <div class="music-card">
+            <div class="music-icon">🎤</div>
+            <div class="music-title">Judge Me</div>
+            <audio controls preload="none"><source src="music/Judge me (1).mp3" type="audio/mpeg"></audio>
+        </div>
+        <div class="music-card">
+            <div class="music-icon">🎤</div>
+            <div class="music-title">Whatcha Gon Do</div>
+            <audio controls preload="none"><source src="music/whatcha gon do.mp3" type="audio/mpeg"></audio>
+        </div>
+        <div class="music-card">
+            <div class="music-icon">🎤</div>
+            <div class="music-title">Igbakigba</div>
+            <audio controls preload="none"><source src="music/Igbakigba (1).mp3" type="audio/mpeg"></audio>
+        </div>
+        <div class="music-card">
+            <div class="music-icon">🎤</div>
+            <div class="music-title">Peace 3</div>
+            <audio controls preload="none"><source src="music/Peace 3 (1).mp3" type="audio/mpeg"></audio>
+        </div>
+        <div class="music-card">
+            <div class="music-icon">🎤</div>
+            <div class="music-title">Making Luv 2</div>
+            <audio controls preload="none"><source src="music/Making Luv 2 (1).mp3" type="audio/mpeg"></audio>
+        </div>
+        <div class="music-card">
+            <div class="music-icon">🎤</div>
+            <div class="music-title">Champ</div>
+            <audio controls preload="none"><source src="music/champ.mp3" type="audio/mpeg"></audio>
+        </div>
+        <div class="music-card">
+            <div class="music-icon">🎤</div>
+            <div class="music-title">2026</div>
+            <audio controls preload="none"><source src="music/2026.mp3" type="audio/mpeg"></audio>
         </div>
     </div>
 
@@ -709,6 +913,12 @@
     </div>
 </div>
 
+<!-- Lightbox Modal -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+    <img id="lightboxImg" src="">
+</div>
+
 <!-- FOOTER -->
 <footer>
     <div class="container">
@@ -725,6 +935,29 @@
     <span>💬</span>
     <span>Chat with Damian on WhatsApp</span>
 </a>
+
+<script>
+    function openLightbox(imgSrc) {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        lightboxImg.src = imgSrc;
+        lightbox.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        const lightbox = document.getElementById('lightbox');
+        lightbox.classList.remove('show');
+        document.body.style.overflow = 'auto';
+    }
+
+    // Close lightbox with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeLightbox();
+        }
+    });
+</script>
 
 </body>
 </html>

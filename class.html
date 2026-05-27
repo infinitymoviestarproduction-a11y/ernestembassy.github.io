@@ -343,6 +343,8 @@
             <a href="index.html">🏠 Home</a>
             <a href="class.html">🎓 Class</a>
             <a href="contact.html">📞 Contact</a>
+            <a href="team.html">⭐ Team</a>
+            <a href="gallery.html">📸 Gallery</a>
         </div>
     </div>
 </nav>
@@ -353,32 +355,32 @@
 </div>
 
 <div class="container">
-    <!-- FREE RESOURCES SECTION -->
+    <!-- FREE RESOURCES SECTION - UPDATED PATHS -->
     <div style="text-align: center; margin-bottom: 20px;">
         <h2>📚 Free Learning Resources</h2>
         <p style="color: #666; margin-bottom: 30px;">Access all study materials, notes, and practice questions for FREE</p>
     </div>
 
     <div class="resources-grid">
-        <a href="educational-resources/mathematics-ss1.md" class="resource-card">
+        <a href="mathematics-ss1.md" class="resource-card">
             <div class="resource-icon">📐</div>
             <h3>Mathematics SS1</h3>
             <p>Algebra, Trigonometry, Number Bases - Complete notes & 500+ questions</p>
             <span class="free-badge">🎓 FREE ACCESS</span>
         </a>
-        <a href="educational-resources/english-ss1.md" class="resource-card">
+        <a href="english-ss1.md" class="resource-card">
             <div class="resource-icon">📖</div>
             <h3>English Language SS1</h3>
             <p>Grammar, Comprehension, Essay Writing - Complete notes & 500+ questions</p>
             <span class="free-badge">🎓 FREE ACCESS</span>
         </a>
-        <a href="educational-resources/digital-technology-ss1.md" class="resource-card">
+        <a href="digital-technology-ss1.md" class="resource-card">
             <div class="resource-icon">💻</div>
             <h3>Digital Technology SS1</h3>
             <p>Computer Fundamentals, ICT - Complete notes & 500+ questions</p>
             <span class="free-badge">🎓 FREE ACCESS</span>
         </a>
-        <a href="educational-resources/igbo-ss1.md" class="resource-card">
+        <a href="igbo-ss1.md" class="resource-card">
             <div class="resource-icon">🌍</div>
             <h3>Igbo Language SS1</h3>
             <p>Alphabet, Grammar, Culture - Complete notes & 500+ questions</p>
@@ -395,7 +397,6 @@
         </div>
 
         <div id="quizContainer">
-            <!-- Quiz will be loaded here -->
             <div style="text-align: center; padding: 40px;">
                 <button class="btn" onclick="startQuiz()">🎯 Start Challenge Quiz (₦100)</button>
             </div>
@@ -412,7 +413,6 @@
 </footer>
 
 <script>
-    // Quiz State
     let quizActive = false;
     let currentStage = 1;
     let currentQuestionIndex = 0;
@@ -421,19 +421,20 @@
     let timerInterval = null;
     let timeLeft = 30;
     let quizPaid = false;
-    let selectedSubject = null;
 
-    // Sample questions for each stage (replace with your actual questions from .md files)
-    const stageQuestions = {
-        1: [
-            { text: "What is a computer?", options: ["A. Cooking machine", "B. Electronic device that processes data", "C. Washing machine", "D. Radio"], correct: "B. Electronic device that processes data", explanation: "A computer processes data to produce information." },
-            { text: "Which is an input device?", options: ["A. Monitor", "B. Printer", "C. Keyboard", "D. Speaker"], correct: "C. Keyboard", explanation: "Keyboard inputs data." }
-        ],
-        2: [
-            { text: "What does CPU stand for?", options: ["A. Central Processing Unit", "B. Computer Personal Unit", "C. Central Program Utility", "D. Core Processing Unit"], correct: "A. Central Processing Unit", explanation: "CPU is the brain of the computer." }
-        ]
-        // Add more questions for stages 3-10
-    };
+    // Load questions from courses.json
+    let coursesData = null;
+
+    async function loadCourses() {
+        try {
+            const response = await fetch('courses.json');
+            if (!response.ok) throw new Error('courses.json not found');
+            coursesData = await response.json();
+            console.log('Courses loaded:', coursesData);
+        } catch (error) {
+            console.error('Error loading courses:', error);
+        }
+    }
 
     function startQuiz() {
         showPaymentModal();
@@ -456,13 +457,11 @@
     }
 
     function processPayment() {
-        // WhatsApp payment link
         const message = `Hello Damian, I want to take the Challenge Quiz.\n\nAmount: ₦100\nQuiz: 10 Stages | 30 seconds per question\n\nPlease provide payment details.`;
         window.open(`https://wa.me/2348032607809?text=${encodeURIComponent(message)}`, '_blank');
         
         alert("✅ Payment request sent! After payment confirmation, your quiz will be activated.");
         
-        // For demo - in production, verify payment via webhook
         setTimeout(() => {
             document.querySelector('.payment-modal')?.remove();
             activateQuiz();
@@ -477,14 +476,28 @@
     }
 
     function loadStageQuestions() {
-        // Load questions for current stage
-        currentQuestions = stageQuestions[currentStage] || [];
-        if (currentQuestions.length === 0) {
-            // Generate dummy questions if not available
+        if (!coursesData) {
+            loadCourses().then(() => loadStageQuestions());
+            return;
+        }
+        
+        // Collect questions for current stage from all subjects
+        let allStageQuestions = [];
+        coursesData.subjects.forEach(subject => {
+            if (subject.quizQuestions) {
+                const stageQuestions = subject.quizQuestions.filter(q => q.stage === currentStage);
+                allStageQuestions.push(...stageQuestions);
+            }
+        });
+        
+        if (allStageQuestions.length > 0) {
+            currentQuestions = allStageQuestions;
+        } else {
             currentQuestions = [
-                { text: `Stage ${currentStage} Question 1: Sample question here`, options: ["A. Option 1", "B. Option 2", "C. Option 3", "D. Option 4"], correct: "A. Option 1", explanation: "Sample explanation" }
+                { text: `Stage ${currentStage} - Sample Question`, options: ["A. Option 1", "B. Option 2", "C. Option 3", "D. Option 4"], correct: "A. Option 1", explanation: "Sample explanation" }
             ];
         }
+        
         currentQuestionIndex = 0;
         userAnswers = new Array(currentQuestions.length).fill(null);
         renderQuizInterface();
@@ -494,7 +507,6 @@
     function renderQuizInterface() {
         const container = document.getElementById('quizContainer');
         
-        // Build stage indicators
         let stagesHtml = '<div class="stage-indicator">';
         for (let i = 1; i <= 10; i++) {
             let stageClass = '';
@@ -505,7 +517,6 @@
         stagesHtml += '</div>';
         
         if (currentQuestionIndex >= currentQuestions.length) {
-            // Stage completed
             if (currentStage === 10) {
                 showCompletion();
                 return;
@@ -546,7 +557,6 @@
         
         userAnswers[currentQuestionIndex] = option;
         
-        // Update UI
         const options = document.querySelectorAll('.options-list li');
         options.forEach(opt => {
             if (opt.textContent === option) {
@@ -556,7 +566,6 @@
             }
         });
         
-        // Check answer
         const question = currentQuestions[currentQuestionIndex];
         const isCorrect = (option === question.correct);
         
@@ -572,7 +581,6 @@
             feedbackDiv.style.color = '#721c24';
             feedbackDiv.innerHTML = `❌ Wrong! Correct: ${question.correct}. ${question.explanation}`;
             
-            // FAILURE: Go back to Stage 1 if past Stage 5
             if (currentStage >= 5) {
                 clearInterval(timerInterval);
                 feedbackDiv.innerHTML += `<br><br><strong>⚠️ You failed at Stage ${currentStage}! Going back to Stage 1.</strong>`;
@@ -584,14 +592,12 @@
             }
         }
         
-        // Auto proceed to next question after 1.5 seconds
         setTimeout(() => {
             if (currentQuestionIndex + 1 < currentQuestions.length) {
                 currentQuestionIndex++;
                 renderQuizInterface();
                 startTimer();
             } else {
-                // Move to next stage
                 if (currentStage === 10) {
                     showCompletion();
                 } else {
@@ -612,7 +618,6 @@
         const isCorrect = (userAnswers[currentQuestionIndex] === question.correct);
         
         if (!isCorrect && currentStage >= 5) {
-            // Handle failure
             clearInterval(timerInterval);
             setTimeout(() => {
                 currentStage = 1;
@@ -653,7 +658,6 @@
             
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
-                // Time's up = wrong answer
                 const question = currentQuestions[currentQuestionIndex];
                 const feedbackDiv = document.getElementById('feedback');
                 feedbackDiv.style.display = 'block';
@@ -711,6 +715,9 @@
         quizActive = true;
         loadStageQuestions();
     }
+
+    // Initialize
+    loadCourses();
 </script>
 
 </body>

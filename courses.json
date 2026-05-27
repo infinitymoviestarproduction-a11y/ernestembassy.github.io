@@ -14,46 +14,26 @@
       "notes": "https://ernestembassydigitalsolutions.com/educational-resources/mathematics-ss1.md",
       "totalQuestions": 500,
       "quizQuestions": [
-        {
-          "id": 1,
-          "text": "Solve: 2x + 7 = 15",
-          "options": ["A. 2", "B. 3", "C. 4", "D. 5"],
-          "correct": "C. 4",
-          "explanation": "Subtract 7: 2x = 8, divide by 2: x = 4",
-          "stage": 1
-        },
-        {
-          "id": 2,
-          "text": "If 3x - 5 = 10, what is x?",
-          "options": ["A. 3", "B. 5", "C. 7", "D. 9"],
-          "correct": "B. 5",
-          "explanation": "Add 5: 3x = 15, divide by 3: x = 5",
-          "stage": 1
-        },
-        {
-          "id": 3,
-          "text": "Simplify: 4x + 3x - 2x",
-          "options": ["A. 3x", "B. 5x", "C. 6x", "D. 9x"],
-          "correct": "B. 5x",
-          "explanation": "4x+3x=7x, 7x-2x=5x",
-          "stage": 2
-        },
-        {
-          "id": 4,
-          "text": "What is the value of x if 5x = 25?",
-          "options": ["A. 3", "B. 4", "C. 5", "D. 6"],
-          "correct": "C. 5",
-          "explanation": "Divide both sides by 5: x = 5",
-          "stage": 2
-        },
-        {
-          "id": 5,
-          "text": "Solve: x/2 = 10",
-          "options": ["A. 5", "B. 10", "C. 15", "D. 20"],
-          "correct": "D. 20",
-          "explanation": "Multiply both sides by 2: x = 20",
-          "stage": 3
-        }
+        {"id": 1, "text": "Simplify: 2 + 3 × 4", "options": ["A. 20", "B. 14", "C. 24", "D. 10"], "correct": "B. 14", "explanation": "Multiply first: 3 × 4 = 12, then add 2 → 14", "stage": 1},
+        {"id": 2, "text": "What is the value of 5²?", "options": ["A. 10", "B. 20", "C. 25", "D. 15"], "correct": "C. 25", "explanation": "5² means 5 × 5 = 25", "stage": 1},
+        {"id": 3, "text": "Solve: 2x = 10", "options": ["A. 2", "B. 3", "C. 5", "D. 8"], "correct": "C. 5", "explanation": "Divide both sides by 2 → x = 5", "stage": 1},
+        {"id": 4, "text": "What is ½ + ½?", "options": ["A. 1", "B. 2", "C. 3", "D. ¼"], "correct": "A. 1", "explanation": "½ + ½ = 1 whole", "stage": 1},
+        {"id": 5, "text": "Find the LCM of 4 and 6", "options": ["A. 12", "B. 24", "C. 18", "D. 6"], "correct": "A. 12", "explanation": "Multiples of 4: 4,8,12… Multiples of 6: 6,12…", "stage": 1},
+        {"id": 6, "text": "Find the HCF of 12 and 18", "options": ["A. 3", "B. 6", "C. 9", "D. 12"], "correct": "B. 6", "explanation": "Highest common factor is 6", "stage": 2},
+        {"id": 7, "text": "What is 10% of 200?", "options": ["A. 10", "B. 20", "C. 30", "D. 40"], "correct": "B. 20", "explanation": "10/100 × 200 = 20", "stage": 2},
+        {"id": 8, "text": "Convert 0.5 to fraction", "options": ["A. 1/5", "B. 1/2", "C. 2/5", "D. 5/10"], "correct": "B. 1/2", "explanation": "0.5 = 1/2", "stage": 2},
+        {"id": 9, "text": "Solve: x + 7 = 12", "options": ["A. 3", "B. 5", "C. 7", "D. 9"], "correct": "B. 5", "explanation": "x = 12 − 7 = 5", "stage": 2},
+        {"id": 10, "text": "What is 3 × 3 × 3?", "options": ["A. 9", "B. 18", "C. 27", "D. 36"], "correct": "C. 27", "explanation": "3³ = 27", "stage": 2},
+        {"id": 11, "text": "What is the square root of 16?", "options": ["A. 2", "B. 3", "C. 4", "D. 8"], "correct": "C. 4", "explanation": "4 × 4 = 16", "stage": 3},
+        {"id": 12, "text": "Simplify: 6 ÷ 2(1+2)", "options": ["A. 1", "B. 3", "C. 9", "D. 6"], "correct": "C. 9", "explanation": "Bracket first: 1+2=3, then 6 ÷ 2 × 3 = 9", "stage": 3},
+        {"id": 13, "text": "What is 1000 ÷ 10?", "options": ["A. 10", "B. 100", "C. 1000", "D. 1"], "correct": "B. 100", "explanation": "1000 divided by 10 = 100", "stage": 3},
+        {"id": 14, "text": "Find perimeter of a square with side 5cm", "options": ["A. 10cm", "B. 15cm", "C. 20cm", "D. 25cm"], "correct": "C. 20cm", "explanation": "4 × 5 = 20cm", "stage": 3},
+        {"id": 15, "text": "What is area of square side 4cm?", "options": ["A. 8", "B. 12", "C. 16", "D. 20"], "correct": "C. 16", "explanation": "4 × 4 = 16cm²", "stage": 3},
+        {"id": 16, "text": "What is 1/4 of 100?", "options": ["A. 20", "B. 25", "C. 30", "D. 40"], "correct": "B. 25", "explanation": "100 ÷ 4 = 25", "stage": 4},
+        {"id": 17, "text": "What is 50% of 100?", "options": ["A. 25", "B. 50", "C. 75", "D. 100"], "correct": "B. 50", "explanation": "Half of 100 is 50", "stage": 4},
+        {"id": 18, "text": "What is 3/4 of 100?", "options": ["A. 50", "B. 60", "C. 70", "D. 75"], "correct": "D. 75", "explanation": "100 × 3/4 = 75", "stage": 4},
+        {"id": 19, "text": "What is 2³?", "options": ["A. 4", "B. 6", "C. 8", "D. 10"], "correct": "C. 8", "explanation": "2 × 2 × 2 = 8", "stage": 4},
+        {"id": 20, "text": "What is 7 × 7?", "options": ["A. 42", "B. 45", "C. 49", "D. 56"], "correct": "C. 49", "explanation": "7 × 7 = 49", "stage": 4}
       ]
     },
     {
@@ -65,22 +45,26 @@
       "notes": "https://ernestembassydigitalsolutions.com/educational-resources/english-ss1.md",
       "totalQuestions": 500,
       "quizQuestions": [
-        {
-          "id": 1,
-          "text": "Choose the correct option: She ___ to school every day.",
-          "options": ["A. go", "B. goes", "C. going", "D. gone"],
-          "correct": "B. goes",
-          "explanation": "For third person singular (She/He/It), add 'es' to the verb",
-          "stage": 1
-        },
-        {
-          "id": 2,
-          "text": "Select the correct spelling:",
-          "options": ["A. Recieve", "B. Receive", "C. Receeve", "D. Recive"],
-          "correct": "B. Receive",
-          "explanation": "The correct spelling is 'Receive' (i before e except after c)",
-          "stage": 1
-        }
+        {"id": 1, "text": "Which of the following is a noun?", "options": ["A. Quickly", "B. Beautiful", "C. Book", "D. Run"], "correct": "C. Book", "explanation": "A noun is a name of a person, place, or thing. 'Book' is a thing.", "stage": 1},
+        {"id": 2, "text": "A verb is a word that shows:", "options": ["A. Name", "B. Action", "C. Place", "D. Time"], "correct": "B. Action", "explanation": "A verb shows action or state of being.", "stage": 1},
+        {"id": 3, "text": "Which is an adjective?", "options": ["A. Run", "B. Happy", "C. Quickly", "D. House"], "correct": "B. Happy", "explanation": "An adjective describes a noun.", "stage": 1},
+        {"id": 4, "text": "Choose the correct pronoun:", "options": ["A. She", "B. Book", "C. Table", "D. Fast"], "correct": "A. She", "explanation": "'She' is a pronoun used in place of a noun.", "stage": 1},
+        {"id": 5, "text": "Identify the verb:", "options": ["A. Blue", "B. Jump", "C. Chair", "D. Beautiful"], "correct": "B. Jump", "explanation": "'Jump' is an action word.", "stage": 1},
+        {"id": 6, "text": "Antonym of 'big' is:", "options": ["A. Large", "B. Small", "C. Huge", "D. Wide"], "correct": "B. Small", "explanation": "'Small' is the opposite of 'big'.", "stage": 2},
+        {"id": 7, "text": "Synonym of 'happy' is:", "options": ["A. Sad", "B. Angry", "C. Joyful", "D. Tired"], "correct": "C. Joyful", "explanation": "'Joyful' means the same as 'happy'.", "stage": 2},
+        {"id": 8, "text": "Which is a proper noun?", "options": ["A. Boy", "B. School", "C. Lagos", "D. City"], "correct": "C. Lagos", "explanation": "'Lagos' is a specific name of a place.", "stage": 2},
+        {"id": 9, "text": "Choose the correct sentence:", "options": ["A. goes he school", "B. He goes to school", "C. School he goes", "D. To school goes he"], "correct": "B. He goes to school", "explanation": "Option B is grammatically correct.", "stage": 2},
+        {"id": 10, "text": "A conjunction is used to:", "options": ["A. Name things", "B. Join words or sentences", "C. Describe verbs", "D. Show actions"], "correct": "B. Join words or sentences", "explanation": "Conjunctions join words or sentences.", "stage": 2},
+        {"id": 11, "text": "Which is a vowel?", "options": ["A. B", "B. C", "C. A", "D. D"], "correct": "C. A", "explanation": "A, E, I, O, U are vowels.", "stage": 3},
+        {"id": 12, "text": "The plural of child is:", "options": ["A. Childs", "B. Children", "C. Childes", "D. Childer"], "correct": "B. Children", "explanation": "Irregular plural form is 'children'.", "stage": 3},
+        {"id": 13, "text": "Which is a sentence?", "options": ["A. Quickly run", "B. Beautiful house", "C. She sings well", "D. In the school"], "correct": "C. She sings well", "explanation": "Option C expresses a complete idea.", "stage": 3},
+        {"id": 14, "text": "A question mark is used for:", "options": ["A. Statements", "B. Questions", "C. Commands", "D. Exclamations"], "correct": "B. Questions", "explanation": "It ends interrogative sentences.", "stage": 3},
+        {"id": 15, "text": "Which is a collective noun?", "options": ["A. Book", "B. Team", "C. Chair", "D. Girl"], "correct": "B. Team", "explanation": "A team is a group noun.", "stage": 3},
+        {"id": 16, "text": "The opposite of 'hot' is:", "options": ["A. Warm", "B. Cold", "C. Boiling", "D. Heat"], "correct": "B. Cold", "explanation": "Cold is the opposite of hot.", "stage": 4},
+        {"id": 17, "text": "Choose correct spelling:", "options": ["A. Freind", "B. Friend", "C. Frend", "D. Freand"], "correct": "B. Friend", "explanation": "Correct spelling is 'friend'.", "stage": 4},
+        {"id": 18, "text": "Capital letter is used:", "options": ["A. In middle of sentence", "B. At beginning of sentence", "C. At end only", "D. Never"], "correct": "B. At beginning of sentence", "explanation": "Sentences start with capital letters.", "stage": 4},
+        {"id": 19, "text": "A full stop is used:", "options": ["A. After questions", "B. After statements", "C. Before sentences", "D. In names"], "correct": "B. After statements", "explanation": "It ends a sentence.", "stage": 4},
+        {"id": 20, "text": "'And' is a:", "options": ["A. Verb", "B. Conjunction", "C. Noun", "D. Adjective"], "correct": "B. Conjunction", "explanation": "It joins words or sentences.", "stage": 4}
       ]
     },
     {
@@ -92,30 +76,26 @@
       "notes": "https://ernestembassydigitalsolutions.com/educational-resources/digital-technology-ss1.md",
       "totalQuestions": 500,
       "quizQuestions": [
-        {
-          "id": 1,
-          "text": "What is a computer?",
-          "options": ["A. A cooking machine", "B. An electronic device that processes data", "C. A washing machine", "D. A radio"],
-          "correct": "B. An electronic device that processes data",
-          "explanation": "A computer is an electronic device that accepts data, processes it, and produces meaningful information.",
-          "stage": 1
-        },
-        {
-          "id": 2,
-          "text": "Which of the following is an input device?",
-          "options": ["A. Monitor", "B. Printer", "C. Keyboard", "D. Speaker"],
-          "correct": "C. Keyboard",
-          "explanation": "A keyboard is used to enter data into the computer.",
-          "stage": 1
-        },
-        {
-          "id": 3,
-          "text": "The brain of the computer is called:",
-          "options": ["A. RAM", "B. CPU", "C. Hard disk", "D. Monitor"],
-          "correct": "B. CPU",
-          "explanation": "The CPU (Central Processing Unit) controls all operations of the computer.",
-          "stage": 2
-        }
+        {"id": 1, "text": "What is a computer?", "options": ["A. A cooking machine", "B. An electronic device that processes data", "C. A washing machine", "D. A radio"], "correct": "B. An electronic device that processes data", "explanation": "A computer is an electronic device that accepts data, processes it, and produces meaningful information.", "stage": 1},
+        {"id": 2, "text": "Which of the following is an input device?", "options": ["A. Monitor", "B. Printer", "C. Keyboard", "D. Speaker"], "correct": "C. Keyboard", "explanation": "A keyboard is used to enter data into the computer.", "stage": 1},
+        {"id": 3, "text": "The brain of the computer is called:", "options": ["A. RAM", "B. CPU", "C. Hard disk", "D. Monitor"], "correct": "B. CPU", "explanation": "The CPU (Central Processing Unit) controls all operations of the computer.", "stage": 1},
+        {"id": 4, "text": "Which of these is an output device?", "options": ["A. Mouse", "B. Keyboard", "C. Monitor", "D. Scanner"], "correct": "C. Monitor", "explanation": "A monitor displays information from the computer.", "stage": 1},
+        {"id": 5, "text": "Data that has been processed is called:", "options": ["A. Raw data", "B. Information", "C. Input", "D. Output device"], "correct": "B. Information", "explanation": "Information is processed data that is meaningful.", "stage": 1},
+        {"id": 6, "text": "Which of the following stores data permanently?", "options": ["A. RAM", "B. CPU", "C. Hard disk", "D. Cache"], "correct": "C. Hard disk", "explanation": "A hard disk stores data permanently even when the computer is off.", "stage": 2},
+        {"id": 7, "text": "Which device is used to point and click?", "options": ["A. Keyboard", "B. Mouse", "C. Printer", "D. Monitor"], "correct": "B. Mouse", "explanation": "A mouse is used to move the pointer and select items on the screen.", "stage": 2},
+        {"id": 8, "text": "Example of system software is:", "options": ["A. MS Word", "B. Windows", "C. Calculator", "D. Paint"], "correct": "B. Windows", "explanation": "Windows is an operating system that controls computer hardware.", "stage": 2},
+        {"id": 9, "text": "Which of the following is application software?", "options": ["A. Windows", "B. Linux", "C. MS Excel", "D. BIOS"], "correct": "C. MS Excel", "explanation": "MS Excel is used for calculations and data analysis.", "stage": 2},
+        {"id": 10, "text": "The full meaning of ICT is:", "options": ["A. Internet Computer Technology", "B. Information Communication Technology", "C. Internal Computer Transfer", "D. Intelligent Communication Tool"], "correct": "B. Information Communication Technology", "explanation": "ICT stands for Information and Communication Technology.", "stage": 2},
+        {"id": 11, "text": "RAM stands for:", "options": ["A. Random Access Memory", "B. Read And Manage", "C. Run All Memory", "D. Ready Access Machine"], "correct": "A. Random Access Memory", "explanation": "RAM is temporary memory used while the computer is working.", "stage": 3},
+        {"id": 12, "text": "Which device prints documents?", "options": ["A. Monitor", "B. Printer", "C. Speaker", "D. Scanner"], "correct": "B. Printer", "explanation": "A printer produces hard copy output.", "stage": 3},
+        {"id": 13, "text": "Computer system consists of:", "options": ["A. Hardware only", "B. Software only", "C. Hardware and software", "D. Electricity only"], "correct": "C. Hardware and software", "explanation": "A computer system includes both hardware and software.", "stage": 3},
+        {"id": 14, "text": "Which is NOT a computer part?", "options": ["A. CPU", "B. Monitor", "C. Keyboard", "D. Spoon"], "correct": "D. Spoon", "explanation": "A spoon is not related to computers.", "stage": 3},
+        {"id": 15, "text": "Example of secondary storage:", "options": ["A. RAM", "B. ROM", "C. Hard disk", "D. CPU"], "correct": "C. Hard disk", "explanation": "Hard disk stores data permanently.", "stage": 3},
+        {"id": 16, "text": "Which device is used to scan documents?", "options": ["A. Printer", "B. Scanner", "C. Keyboard", "D. Monitor"], "correct": "B. Scanner", "explanation": "A scanner converts paper documents into digital form.", "stage": 4},
+        {"id": 17, "text": "Which is NOT software?", "options": ["A. Windows", "B. Linux", "C. Mouse", "D. MS Word"], "correct": "C. Mouse", "explanation": "Mouse is hardware, not software.", "stage": 4},
+        {"id": 18, "text": "A computer without software is:", "options": ["A. Fully functional", "B. Useless", "C. Faster", "D. Wireless"], "correct": "B. Useless", "explanation": "Hardware cannot function without software.", "stage": 4},
+        {"id": 19, "text": "Example of browser:", "options": ["A. Chrome", "B. Word", "C. Excel", "D. Paint"], "correct": "A. Chrome", "explanation": "Chrome is used to access the internet.", "stage": 4},
+        {"id": 20, "text": "Which device stores memory temporarily?", "options": ["A. Hard disk", "B. RAM", "C. Monitor", "D. Printer"], "correct": "B. RAM", "explanation": "RAM stores data temporarily during processing.", "stage": 4}
       ]
     },
     {
@@ -127,14 +107,26 @@
       "notes": "https://ernestembassydigitalsolutions.com/educational-resources/igbo-ss1.md",
       "totalQuestions": 500,
       "quizQuestions": [
-        {
-          "id": 1,
-          "text": "How many letters are in the Igbo alphabet?",
-          "options": ["A. 26", "B. 36", "C. 28", "D. 32"],
-          "correct": "B. 36",
-          "explanation": "The Igbo alphabet has 36 letters including digraphs like 'ch', 'gb', 'kw', 'nw', 'ny'",
-          "stage": 1
-        }
+        {"id": 1, "text": "Kedu ihe bụ aha (noun)?", "options": ["A. Ihe na-egosi omume", "B. Aha mmadụ, ebe ma ọ bụ ihe", "C. Okwu na-akọwa", "D. Okwu na-eme ihe"], "correct": "B. Aha mmadụ, ebe ma ọ bụ ihe", "explanation": "Aha bụ okwu na-akpọ mmadụ, ebe ma ọ bụ ihe.", "stage": 1},
+        {"id": 2, "text": "'Gaa' bụ ụdị okwu gịnị?", "options": ["A. Aha", "B. Okwu omume", "C. Nkowa", "D. Mgbakwunye"], "correct": "B. Okwu omume", "explanation": "'Gaa' na-egosi ime ihe (verb).", "stage": 1},
+        {"id": 3, "text": "Kedu nke bụ aha ebe?", "options": ["A. Nwoke", "B. Ụlọ", "C. Na-agba ọsọ", "D. Mara mma"], "correct": "B. Ụlọ", "explanation": "Ụlọ bụ ebe mmadụ bi.", "stage": 1},
+        {"id": 4, "text": "'Ọma' bụ:", "options": ["A. Aha", "B. Okwu omume", "C. Nkowa", "D. Mgbakwunye"], "correct": "C. Nkowa", "explanation": "Ọ na-akọwa ihe.", "stage": 1},
+        {"id": 5, "text": "Kedu nke bụ okwu omume?", "options": ["A. Nri", "B. Gụọ", "C. Ụlọ", "D. Nwa"], "correct": "B. Gụọ", "explanation": "'Gụọ' na-egosi ime ihe.", "stage": 1},
+        {"id": 6, "text": "'Mmadụ' pụtara:", "options": ["A. Animal", "B. Person", "C. House", "D. Food"], "correct": "B. Person", "explanation": "Mmadụ bụ human being.", "stage": 2},
+        {"id": 7, "text": "Kedu nke bụ aha?", "options": ["A. Na-eje ije", "B. Akwụkwọ", "C. Mara mma", "D. Na-agba ọsọ"], "correct": "B. Akwụkwọ", "explanation": "Akwụkwọ bụ ihe.", "stage": 2},
+        {"id": 8, "text": "'Ọ na-eri nri' bụ:", "options": ["A. Ajụjụ", "B. Okwu omume", "C. Nkowa", "D. Aha"], "correct": "B. Okwu omume", "explanation": "Ọ na-egosi omume.", "stage": 2},
+        {"id": 9, "text": "'Ụmụaka' bụ:", "options": ["A. Singular", "B. Plural", "C. Verb", "D. Adjective"], "correct": "B. Plural", "explanation": "Ọ na-egosi ọtụtụ ụmụ.", "stage": 2},
+        {"id": 10, "text": "'Ekele' pụtara:", "options": ["A. Fight", "B. Greeting", "C. Run", "D. Eat"], "correct": "B. Greeting", "explanation": "Ekele bụ greeting.", "stage": 2},
+        {"id": 11, "text": "Kedu nke bụ nkowa?", "options": ["A. Mara mma", "B. Gaa", "C. Akwụkwọ", "D. Ụlọ"], "correct": "A. Mara mma", "explanation": "Ọ na-akọwa ihe.", "stage": 3},
+        {"id": 12, "text": "'Abụ m nwa akwụkwọ' pụtara:", "options": ["A. I am a teacher", "B. I am a student", "C. I am a man", "D. I am a house"], "correct": "B. I am a student", "explanation": "Ọ na-egosi na mmadụ bụ student.", "stage": 3},
+        {"id": 13, "text": "'Nne' bụ:", "options": ["A. Father", "B. Mother", "C. Child", "D. Teacher"], "correct": "B. Mother", "explanation": "Nne bụ mother.", "stage": 3},
+        {"id": 14, "text": "'Nnọọ' bụ:", "options": ["A. Goodbye", "B. Welcome", "C. Run", "D. Eat"], "correct": "B. Welcome", "explanation": "Nnọọ pụtara welcome.", "stage": 3},
+        {"id": 15, "text": "'Aga m ụlọ akwụkwọ' bụ:", "options": ["A. Past tense", "B. Future tense", "C. Present", "D. Question"], "correct": "B. Future tense", "explanation": "Ọ na-egosi ihe ga-eme n'ọdịnihu.", "stage": 3},
+        {"id": 16, "text": "'Na-agba ọsọ' bụ:", "options": ["A. Noun", "B. Verb", "C. Adjective", "D. Place"], "correct": "B. Verb", "explanation": "Ọ na-egosi omume.", "stage": 4},
+        {"id": 17, "text": "'Nwa' pụtara:", "options": ["A. Child", "B. Father", "C. Teacher", "D. House"], "correct": "A. Child", "explanation": "Nwa bụ child.", "stage": 4},
+        {"id": 18, "text": "'Ụlọ akwụkwọ' bụ:", "options": ["A. Market", "B. School", "C. House", "D. Road"], "correct": "B. School", "explanation": "School is ụlọ akwụkwọ.", "stage": 4},
+        {"id": 19, "text": "'Nri' bụ:", "options": ["A. Food", "B. Water", "C. House", "D. Book"], "correct": "A. Food", "explanation": "Nri bụ food.", "stage": 4},
+        {"id": 20, "text": "'Ụmụ nwoke' pụtara:", "options": ["A. Girls", "B. Boys", "C. Men", "D. Children"], "correct": "B. Boys", "explanation": "Ọ bụ boys.", "stage": 4}
       ]
     }
   ]

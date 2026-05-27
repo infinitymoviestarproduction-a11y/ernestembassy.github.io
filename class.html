@@ -77,7 +77,6 @@
             padding: 40px 20px;
         }
 
-        /* Free Resources Section */
         .resources-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -126,7 +125,6 @@
             margin-top: 10px;
         }
 
-        /* Quiz Section */
         .quiz-section {
             background: #111111;
             border-radius: 20px;
@@ -147,11 +145,6 @@
             color: #ffd700;
         }
 
-        .quiz-header p {
-            color: #aaa;
-        }
-
-        /* Stage Indicator */
         .stage-indicator {
             display: flex;
             justify-content: center;
@@ -185,7 +178,6 @@
             color: white;
         }
 
-        /* Timer */
         .timer {
             text-align: center;
             margin: 20px 0;
@@ -221,7 +213,6 @@
             color: #aaa;
         }
 
-        /* Question Box - SAME AS TEST QUIZ */
         .question-box {
             background: #1a1a2e;
             border-radius: 20px;
@@ -238,7 +229,6 @@
             line-height: 1.4;
         }
 
-        /* Options - SAME AS TEST QUIZ */
         .options-list {
             list-style: none;
             margin: 20px 0;
@@ -271,17 +261,11 @@
             border-color: #ffd700;
         }
 
-        .options-list li.selected {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-color: #ffd700;
-        }
-
         .options-list li.disabled-option {
             pointer-events: none;
             opacity: 0.8;
         }
 
-        /* Feedback - SAME AS TEST QUIZ */
         .feedback {
             margin: 15px 0;
             padding: 15px;
@@ -305,7 +289,6 @@
             display: block;
         }
 
-        /* Buttons */
         .nav-buttons {
             display: flex;
             justify-content: space-between;
@@ -344,7 +327,6 @@
             background: #28a745;
         }
 
-        /* Payment Modal */
         .payment-modal {
             display: none;
             position: fixed;
@@ -438,9 +420,6 @@
                 gap: 15px;
                 text-align: center;
             }
-            .nav-links {
-                justify-content: center;
-            }
             .question {
                 font-size: 1.2rem;
             }
@@ -533,22 +512,37 @@
 </footer>
 
 <script>
-    // PROFESSIONAL HARD QUESTIONS - SAME FORMAT AS TEST QUIZ
+    // ============================================
+    // IGBO LANGUAGE QUESTIONS (FROM YOUR .MD FILE)
+    // ============================================
     const allQuestions = [
-        // Stage 1 - Easy
-        { text: "What is the value of x in the equation 2x + 5 = 15?", options: ["A. 3", "B. 5", "C. 7", "D. 10"], correct: "B. 5", explanation: "2x + 5 = 15 → 2x = 10 → x = 5", stage: 1 },
-        { text: "Which of these is a prime number?", options: ["A. 4", "B. 6", "C. 7", "D. 8"], correct: "C. 7", explanation: "7 is only divisible by 1 and itself", stage: 1 },
-        { text: "What is 15% of 200?", options: ["A. 15", "B. 20", "C. 25", "D. 30"], correct: "D. 30", explanation: "15/100 × 200 = 30", stage: 1 },
+        // Stage 1 - Basic Igbo
+        { text: "Kedu ihe bụ aha (noun)?", options: ["A. Ihe na-egosi omume", "B. Aha mmadụ, ebe ma ọ bụ ihe", "C. Okwu na-akọwa", "D. Okwu na-eme ihe"], correct: "B. Aha mmadụ, ebe ma ọ bụ ihe", explanation: "Aha bụ okwu na-akpọ mmadụ, ebe ma ọ bụ ihe.", stage: 1 },
+        { text: "'Gaa' bụ ụdị okwu gịnị?", options: ["A. Aha", "B. Okwu omume", "C. Nkowa", "D. Mgbakwunye"], correct: "B. Okwu omume", explanation: "'Gaa' na-egosi ime ihe (verb).", stage: 1 },
+        { text: "Kedu nke bụ aha ebe?", options: ["A. Nwoke", "B. Ụlọ", "C. Na-agba ọsọ", "D. Mara mma"], correct: "B. Ụlọ", explanation: "Ụlọ bụ ebe mmadụ bi.", stage: 1 },
+        { text: "'Ọma' bụ:", options: ["A. Aha", "B. Okwu omume", "C. Nkowa", "D. Mgbakwunye"], correct: "C. Nkowa", explanation: "Ọ na-akọwa ihe.", stage: 1 },
+        { text: "Kedu nke bụ okwu omume?", options: ["A. Nri", "B. Gụọ", "C. Ụlọ", "D. Nwa"], correct: "B. Gụọ", explanation: "'Gụọ' na-egosi ime ihe.", stage: 1 },
         
-        // Stage 2 - Medium
-        { text: "Simplify: 3(2x - 4) + 6", options: ["A. 6x - 6", "B. 6x - 12", "C. 6x - 18", "D. 6x"], correct: "A. 6x - 6", explanation: "3(2x-4)=6x-12, +6 = 6x-6", stage: 2 },
-        { text: "What is the square root of 144?", options: ["A. 10", "B. 11", "C. 12", "D. 13"], correct: "C. 12", explanation: "12 × 12 = 144", stage: 2 },
-        { text: "If a = 3 and b = 4, what is a² + b²?", options: ["A. 12", "B. 25", "C. 7", "D. 16"], correct: "B. 25", explanation: "3²=9, 4²=16, 9+16=25", stage: 2 },
+        // Stage 2 - More Igbo
+        { text: "'Mmadụ' pụtara:", options: ["A. Animal", "B. Person", "C. House", "D. Food"], correct: "B. Person", explanation: "Mmadụ bụ human being.", stage: 2 },
+        { text: "Kedu nke bụ aha?", options: ["A. Na-eje ije", "B. Akwụkwọ", "C. Mara mma", "D. Na-agba ọsọ"], correct: "B. Akwụkwọ", explanation: "Akwụkwọ bụ ihe.", stage: 2 },
+        { text: "'Ọ na-eri nri' bụ:", options: ["A. Ajụjụ", "B. Okwu omume", "C. Nkowa", "D. Aha"], correct: "B. Okwu omume", explanation: "Ọ na-egosi omume.", stage: 2 },
+        { text: "'Ụmụaka' bụ:", options: ["A. Singular", "B. Plural", "C. Verb", "D. Adjective"], correct: "B. Plural", explanation: "Ọ na-egosi ọtụtụ ụmụ.", stage: 2 },
+        { text: "'Ekele' pụtara:", options: ["A. Fight", "B. Greeting", "C. Run", "D. Eat"], correct: "B. Greeting", explanation: "Ekele bụ greeting.", stage: 2 },
         
-        // Stage 3 - Medium Hard
-        { text: "Solve for x: x² - 5x + 6 = 0", options: ["A. 2 and 3", "B. 1 and 6", "C. -2 and -3", "D. -1 and -6"], correct: "A. 2 and 3", explanation: "(x-2)(x-3)=0, so x=2 or x=3", stage: 3 },
-        { text: "What is the area of a circle with radius 7cm? (π = 22/7)", options: ["A. 44cm²", "B. 88cm²", "C. 154cm²", "D. 308cm²"], correct: "C. 154cm²", explanation: "πr² = 22/7 × 7 × 7 = 154", stage: 3 },
-        { text: "If 3x - 7 = 2x + 5, find x", options: ["A. 10", "B. 11", "C. 12", "D. 13"], correct: "C. 12", explanation: "3x-2x = 5+7 → x = 12", stage: 3 }
+        // Stage 3 - Intermediate Igbo
+        { text: "Kedu nke bụ nkowa?", options: ["A. Mara mma", "B. Gaa", "C. Akwụkwọ", "D. Ụlọ"], correct: "A. Mara mma", explanation: "Ọ na-akọwa ihe.", stage: 3 },
+        { text: "'Abụ m nwa akwụkwọ' pụtara:", options: ["A. I am a teacher", "B. I am a student", "C. I am a man", "D. I am a house"], correct: "B. I am a student", explanation: "Ọ na-egosi na mmadụ bụ student.", stage: 3 },
+        { text: "'Nne' bụ:", options: ["A. Father", "B. Mother", "C. Child", "D. Teacher"], correct: "B. Mother", explanation: "Nne bụ mother.", stage: 3 },
+        { text: "'Nnọọ' bụ:", options: ["A. Goodbye", "B. Welcome", "C. Run", "D. Eat"], correct: "B. Welcome", explanation: "Nnọọ pụtara welcome.", stage: 3 },
+        { text: "'Aga m ụlọ akwụkwọ' bụ:", options: ["A. Past tense", "B. Future tense", "C. Present", "D. Question"], correct: "B. Future tense", explanation: "Ọ na-egosi ihe ga-eme n'ọdịnihu.", stage: 3 },
+        
+        // Stage 4 - Advanced Igbo
+        { text: "'Na-agba ọsọ' bụ:", options: ["A. Noun", "B. Verb", "C. Adjective", "D. Place"], correct: "B. Verb", explanation: "Ọ na-egosi omume.", stage: 4 },
+        { text: "'Nwa' pụtara:", options: ["A. Child", "B. Father", "C. Teacher", "D. House"], correct: "A. Child", explanation: "Nwa bụ child.", stage: 4 },
+        { text: "'Ụlọ akwụkwọ' bụ:", options: ["A. Market", "B. School", "C. House", "D. Road"], correct: "B. School", explanation: "School is ụlọ akwụkwọ.", stage: 4 },
+        { text: "'Nri' bụ:", options: ["A. Food", "B. Water", "C. House", "D. Book"], correct: "A. Food", explanation: "Nri bụ food.", stage: 4 },
+        { text: "'Ụmụ nwoke' pụtara:", options: ["A. Girls", "B. Boys", "C. Men", "D. Children"], correct: "B. Boys", explanation: "Ọ bụ boys.", stage: 4 }
     ];
     
     let quizActive = false;
@@ -588,19 +582,16 @@
                 </div>
                 <button class="btn btn-success" onclick="processPayment()">✅ I Have Paid</button>
                 <button class="btn btn-secondary" style="margin-top: 10px;" onclick="this.closest('.payment-modal').remove()">Cancel</button>
-                <p style="margin-top: 15px; font-size: 0.7rem; color: #aaa;">After payment, click "I Have Paid" to activate your quiz instantly.</p>
             </div>
         `;
         document.body.appendChild(modal);
     }
     
     function processPayment() {
-        const message = `✅ QUIZ PAYMENT CONFIRMATION\n\nName: ${currentUser.name}\nAmount: ₦100\nPayment completed. Please activate my quiz.`;
+        const message = `✅ QUIZ PAYMENT\nName: ${currentUser.name}\nAmount: ₦100\nPlease activate my quiz.`;
         window.open(`https://wa.me/2348032607809?text=${encodeURIComponent(message)}`, '_blank');
         
         document.querySelector('.payment-modal')?.remove();
-        
-        // Show activation message
         document.getElementById('quizContainer').innerHTML = `
             <div style="text-align: center; padding: 40px;">
                 <div class="timer-circle" style="margin: 0 auto 20px; background: #ffd700; color: #000; animation: none;">✅</div>
@@ -608,7 +599,6 @@
                 <p style="color: #fff;">Your quiz is now activating...</p>
             </div>
         `;
-        
         setTimeout(() => activateQuiz(), 2000);
     }
     
@@ -621,8 +611,7 @@
     function loadStageQuestions() {
         currentQuestions = allQuestions.filter(q => q.stage === currentStage);
         if (currentQuestions.length === 0) {
-            // Create default question if none exist for stage
-            currentQuestions = [{ text: `Stage ${currentStage} - Challenging Question`, options: ["A. Option 1", "B. Option 2", "C. Option 3", "D. Option 4"], correct: "A. Option 1", explanation: "Sample explanation for this question", stage: currentStage }];
+            currentQuestions = [{ text: `Stage ${currentStage} Complete!`, options: ["A. Next Stage"], correct: "A. Next Stage", explanation: "Click Next to continue", stage: currentStage }];
         }
         currentQuestionIndex = 0;
         userAnswers = new Array(currentQuestions.length).fill(null);
@@ -719,7 +708,7 @@
     
     function nextQuestion() {
         if (userAnswers[currentQuestionIndex] === null) {
-            alert('Please select an answer before continuing!');
+            alert('Please select an answer!');
             return;
         }
         

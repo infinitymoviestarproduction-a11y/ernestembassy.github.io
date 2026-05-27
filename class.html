@@ -219,7 +219,7 @@
             color: #666;
         }
 
-        /* Question Box - IMPROVED */
+        /* Question Box */
         .question-box {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             border-radius: 20px;
@@ -237,7 +237,7 @@
             margin-bottom: 0;
         }
 
-        /* Options - IMPROVED */
+        /* Options */
         .options-list {
             list-style: none;
             margin: 25px 0;
@@ -341,6 +341,10 @@
             color: #1a1a2e;
         }
 
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
@@ -410,6 +414,14 @@
             margin-bottom: 15px;
         }
 
+        .reward-card {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ffd700;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
         footer {
             background: #1a1a2e;
             color: white;
@@ -464,6 +476,7 @@
         <div class="nav-links">
             <a href="index.html">🏠 Home</a>
             <a href="class.html">🎓 Class</a>
+            <a href="winners.html">🏆 Winners</a>
             <a href="team.html">⭐ Team</a>
             <a href="gallery.html">📸 Gallery</a>
             <a href="contact.html">📞 Contact</a>
@@ -473,7 +486,7 @@
 
 <div class="hero">
     <h1>🎓 Challenge Quiz Arena</h1>
-    <p>Free learning resources • ₦100 Challenge Quiz • Win & Prove Yourself!</p>
+    <p>Free learning resources • ₦100 Challenge Quiz • Win ₦1000 + Prizes!</p>
 </div>
 
 <div class="container">
@@ -516,12 +529,16 @@
             <h2>⚡ CHALLENGE QUIZ</h2>
             <p>₦100 Only | 10 Stages | 30 Seconds per Question</p>
             <p style="font-size: 0.9rem; color: #ff6b6b; margin-top: 10px;">⚠️ Fail once after Stage 5 = Return to Stage 1! ⚠️</p>
+            <div style="margin-top: 15px; padding: 10px; background: #fff3cd; border-radius: 10px;">
+                <p style="color: #856404; font-size: 0.85rem;">🏆 <strong>PRIZES:</strong> Certificate of Excellence | Hall of Fame Feature | Monthly Draw for ₦10,000 | Limited ₦1000 Cash Winners!</p>
+            </div>
         </div>
 
         <div id="quizContainer">
             <div style="text-align: center; padding: 40px;">
                 <button class="btn" onclick="startQuiz()">🎯 Start Challenge Quiz (₦100)</button>
                 <button class="btn btn-home" style="margin-top: 15px;" onclick="window.location.href='index.html'">🏠 Back to Home</button>
+                <button class="btn btn-secondary" style="margin-top: 15px;" onclick="window.location.href='winners.html'">🏆 View Hall of Fame</button>
             </div>
         </div>
     </div>
@@ -536,6 +553,7 @@
 </footer>
 
 <script>
+    // Quiz State
     let quizActive = false;
     let currentStage = 1;
     let currentQuestionIndex = 0;
@@ -545,6 +563,23 @@
     let timeLeft = 30;
     let quizPaid = false;
     let coursesData = null;
+    let currentUser = { name: "Quiz Champion", email: "player@example.com" };
+    
+    // Reward System Configuration
+    let winnersThisMonth = 0;
+    const MAX_CASH_WINNERS = 10;
+    const MONTHLY_DRAW_AMOUNT = 10000;
+    
+    // Load winners count from localStorage
+    function loadWinnersCount() {
+        const winners = JSON.parse(localStorage.getItem('quizWinners') || '[]');
+        const thisMonth = new Date().getMonth();
+        const thisYear = new Date().getFullYear();
+        winnersThisMonth = winners.filter(w => {
+            const wDate = new Date(w.date);
+            return wDate.getMonth() === thisMonth && wDate.getFullYear() === thisYear && w.reward === 'cash';
+        }).length;
+    }
 
     async function loadCourses() {
         try {
@@ -552,12 +587,18 @@
             if (!response.ok) throw new Error('courses.json not found');
             coursesData = await response.json();
             console.log('Courses loaded:', coursesData);
+            loadWinnersCount();
         } catch (error) {
             console.error('Error loading courses:', error);
         }
     }
 
     function startQuiz() {
+        // Ask for user name first
+        const userName = prompt("Enter your name to appear on Hall of Fame:", "Quiz Champion");
+        if (userName && userName.trim()) {
+            currentUser.name = userName.trim();
+        }
         showPaymentModal();
     }
 
@@ -572,16 +613,17 @@
                 <button class="btn pay-btn" onclick="processPayment()">💳 Pay Now</button>
                 <button class="btn btn-secondary" style="margin-top: 10px;" onclick="this.closest('.payment-modal').remove()">Cancel</button>
                 <p style="margin-top: 15px; font-size: 0.75rem;">Payment via WhatsApp. Click to complete payment.</p>
+                <p style="margin-top: 10px; font-size: 0.7rem; color: #666;">After payment, your quiz will be activated!</p>
             </div>
         `;
         document.body.appendChild(modal);
     }
 
     function processPayment() {
-        const message = `Hello Damian, I want to take the Challenge Quiz.\n\nAmount: ₦100\nQuiz: 10 Stages | 30 seconds per question\n\nPlease provide payment details.`;
+        const message = `Hello Damian, I want to take the Challenge Quiz.\n\nName: ${currentUser.name}\nAmount: ₦100\nQuiz: 10 Stages | 30 seconds per question\n\nPlease provide payment details.`;
         window.open(`https://wa.me/2348032607809?text=${encodeURIComponent(message)}`, '_blank');
         
-        alert("✅ Payment request sent! After payment confirmation, your quiz will be activated.");
+        alert("✅ Payment request sent! After payment confirmation, your quiz will be activated.\n\n📌 Payment: Send ₦100 to:\nOpay: **********\nAfter payment, WhatsApp me for activation.");
         
         setTimeout(() => {
             document.querySelector('.payment-modal')?.remove();
@@ -827,21 +869,87 @@
         }
     }
 
+    function calculateScore() {
+        let correct = 0;
+        currentQuestions.forEach((q, i) => {
+            if (userAnswers[i] === q.correct) correct++;
+        });
+        return Math.round((correct / currentQuestions.length) * 100);
+    }
+
+    function determineReward(score) {
+        const winners = JSON.parse(localStorage.getItem('quizWinners') || '[]');
+        const thisMonth = new Date().getMonth();
+        const thisYear = new Date().getFullYear();
+        const monthlyCashWinners = winners.filter(w => {
+            const wDate = new Date(w.date);
+            return wDate.getMonth() === thisMonth && wDate.getFullYear() === thisYear && w.reward === 'cash';
+        }).length;
+        
+        if (score >= 80 && monthlyCashWinners < MAX_CASH_WINNERS) {
+            return { type: 'cash', message: '💰 You won ₦1000! The money will be sent to your Opay account within 24 hours.', amount: 1000 };
+        } else if (score >= 70) {
+            return { type: 'draw', message: '🎟️ You entered this month\'s draw for ₦10,000! Winner announced on the 1st of next month.', amount: 0 };
+        } else {
+            return { type: 'certificate', message: '🏆 You earned a Certificate of Excellence! Download your certificate below.', amount: 0 };
+        }
+    }
+
+    function downloadCertificate() {
+        const score = calculateScore();
+        const certContent = `
+            CERTIFICATE OF EXCELLENCE\n
+            Presented to: ${currentUser.name}\n
+            For completing all 10 stages of the Challenge Quiz\n
+            Score: ${score}%\n
+            Date: ${new Date().toLocaleDateString()}\n
+            Ernest Embassy Digital Solutions
+        `;
+        
+        const blob = new Blob([certContent], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Certificate_${currentUser.name.replace(/\s/g, '_')}.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+        alert("📄 Certificate downloaded! You can print it as proof of achievement.");
+    }
+
     function showCompletion() {
         clearInterval(timerInterval);
         quizActive = false;
+        
+        const score = calculateScore();
+        const reward = determineReward(score);
+        
+        // Save winner to localStorage
+        const winners = JSON.parse(localStorage.getItem('quizWinners') || '[]');
+        winners.push({
+            name: currentUser.name,
+            score: score,
+            date: new Date().toISOString(),
+            reward: reward.type
+        });
+        localStorage.setItem('quizWinners', JSON.stringify(winners));
         
         const container = document.getElementById('quizContainer');
         container.innerHTML = `
             <div class="result-box">
                 <div class="result-icon success">🏆</div>
-                <h2>Congratulations!</h2>
-                <p style="font-size: 1.1rem;">You completed all 10 stages!</p>
-                <p style="margin-top: 20px; font-size: 1.3rem;">🎉 You are a Champion! 🎉</p>
-                <div class="nav-buttons" style="margin-top: 30px;">
-                    <button class="btn" onclick="resetQuiz()">🔄 Take Again</button>
-                    <button class="btn btn-home" onclick="window.location.href='index.html'">🏠 Home</button>
+                <h2>Congratulations ${currentUser.name}!</h2>
+                <p style="font-size: 1.2rem;">You completed all 10 stages!</p>
+                <p style="font-size: 1.5rem; margin: 15px 0;">Your Score: ${score}%</p>
+                <div class="reward-card">
+                    <p style="font-size: 1.1rem;">🎁 ${reward.message}</p>
                 </div>
+                <div class="nav-buttons" style="margin-top: 30px;">
+                    <button class="btn btn-success" onclick="downloadCertificate()">📄 Download Certificate</button>
+                    <button class="btn" onclick="resetQuiz()">🔄 Take Again</button>
+                    <button class="btn btn-home" onclick="window.location.href='winners.html'">🏆 Hall of Fame</button>
+                    <button class="btn btn-secondary" onclick="window.location.href='index.html'">🏠 Home</button>
+                </div>
+                ${reward.type === 'cash' ? '<p style="margin-top: 20px; font-size: 0.85rem; color: #28a745;">💳 Payment will be sent to your Opay account. Send your Opay number via WhatsApp to receive payment.</p>' : ''}
             </div>
         `;
     }
@@ -853,6 +961,7 @@
         loadStageQuestions();
     }
 
+    // Initialize
     loadCourses();
 </script>
 

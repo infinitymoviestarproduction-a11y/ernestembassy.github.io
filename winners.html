@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hall of Fame - Quiz Champions</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+        }
+        .winners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        .winner-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .gold {
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: #1a1a2e;
+        }
+        .winner-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="winners-grid" id="winnersList"></div>
+    <script>
+        const winners = JSON.parse(localStorage.getItem('quizWinners') || '[]');
+        const container = document.getElementById('winnersList');
+        winners.reverse().forEach((winner, index) => {
+            container.innerHTML += `
+                <div class="winner-card ${index < 3 ? 'gold' : ''}">
+                    <div class="winner-name">${winner.name}</div>
+                    <div>Score: ${winner.score}%</div>
+                    <div>${new Date(winner.date).toLocaleDateString()}</div>
+                    <div>🏆 ${winner.reward === 'cash' ? '₦1000 Winner!' : winner.reward === 'draw' ? 'Monthly Draw Entry' : 'Certificate'}</div>
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>

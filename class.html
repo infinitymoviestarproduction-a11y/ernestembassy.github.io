@@ -1,275 +1,716 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Class Room - Ernest Embassy LMS</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenge Quiz - Test Your Skills | Ernest Embassy Classroom</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI', sans-serif;
-}
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+        }
 
-body{
-    background:#f5f7fa;
-    color:#333;
-}
+        nav {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-/* NAV */
-nav{
-    background:#1a1a2e;
-    color:white;
-    padding:15px 20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-}
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
 
-.nav-left{
-    display:flex;
-    align-items:center;
-    gap:15px;
-}
+        .logo {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffd700;
+            text-decoration: none;
+        }
 
-.nav-right{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    flex-wrap:wrap;
-}
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
 
-.btn{
-    padding:8px 14px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:bold;
-    text-decoration:none;
-    color:white;
-}
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
 
-.home-btn{ background:#667eea; }
-.back-btn{ background:#28a745; }
-.logout-btn{ background:#dc3545; }
+        .nav-links a:hover {
+            color: #ffd700;
+        }
 
-/* CONTAINER */
-.container{
-    max-width:1000px;
-    margin:auto;
-    padding:25px;
-}
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+        }
 
-/* HEADER */
-.header{
-    background:linear-gradient(135deg,#667eea,#764ba2);
-    color:white;
-    padding:30px;
-    border-radius:15px;
-    margin-top:20px;
-}
+        .hero h1 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
 
-.header h1{
-    margin-bottom:10px;
-}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
 
-/* LESSON BOX */
-.lesson-box{
-    background:white;
-    padding:25px;
-    border-radius:15px;
-    margin-top:20px;
-    box-shadow:0 4px 15px rgba(0,0,0,0.08);
-}
+        /* Free Resources Section */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
 
-.lesson-title{
-    font-size:22px;
-    margin-bottom:10px;
-    color:#1a1a2e;
-}
+        .resource-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+            text-decoration: none;
+            display: block;
+        }
 
-.lesson-content{
-    line-height:1.7;
-    color:#555;
-}
+        .resource-card:hover {
+            transform: translateY(-5px);
+        }
 
-/* NAV LESSON */
-.lesson-nav{
-    display:flex;
-    justify-content:space-between;
-    margin-top:20px;
-}
+        .resource-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
 
-.lesson-nav button{
-    padding:10px 15px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:bold;
-    background:#667eea;
-    color:white;
-}
+        .resource-card h3 {
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
 
-.lesson-nav button:disabled{
-    background:#ccc;
-    cursor:not-allowed;
-}
+        .resource-card p {
+            color: #666;
+            font-size: 0.85rem;
+        }
 
-/* FOOTER */
-footer{
-    text-align:center;
-    padding:25px;
-    margin-top:40px;
-    background:#1a1a2e;
-    color:white;
-}
-</style>
+        .free-badge {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            margin-top: 10px;
+        }
+
+        /* Quiz Section */
+        .quiz-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-top: 40px;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ffd700;
+        }
+
+        .stage-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .stage {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            background: #e0e0e0;
+            color: #888;
+        }
+
+        .stage.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .stage.completed {
+            background: #28a745;
+            color: white;
+        }
+
+        .timer {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .timer-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timer-circle.warning {
+            background: #dc3545;
+            animation: pulse 0.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .question {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ffd700;
+        }
+
+        .options-list {
+            list-style: none;
+        }
+
+        .options-list li {
+            background: #f8f9fa;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .options-list li:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .options-list li.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #ffd700;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .payment-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .payment-modal.show {
+            display: flex;
+        }
+
+        .payment-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .payment-amount {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        .pay-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .result-box {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .result-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .result-icon.success {
+            color: #28a745;
+        }
+
+        .result-icon.fail {
+            color: #dc3545;
+        }
+
+        footer {
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .stage {
+                width: 35px;
+                height: 35px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
 </head>
-
 <body>
 
-<!-- NAV -->
 <nav>
-    <div class="nav-left">
-        <a class="btn home-btn" href="index.html">🏠 Home</a>
-        <a class="btn back-btn" href="dashboard.html">⬅ Back</a>
-    </div>
-
-    <div class="nav-right">
-        <span id="userName"></span>
-        <button class="btn logout-btn" onclick="logout()">Logout</button>
+    <div class="nav-container">
+        <a href="index.html" class="logo">🎓 Ernest Embassy Classroom</a>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="class.html">🎓 Class</a>
+            <a href="contact.html">📞 Contact</a>
+        </div>
     </div>
 </nav>
 
-<!-- CONTENT -->
+<div class="hero">
+    <h1>🎓 Challenge Quiz Arena</h1>
+    <p>Free learning resources • ₦100 Challenge Quiz • Win & Prove Yourself!</p>
+</div>
+
 <div class="container">
-
-    <div class="header">
-        <h1 id="courseTitle">Loading Course...</h1>
-        <p>Welcome to your learning class</p>
+    <!-- FREE RESOURCES SECTION -->
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h2>📚 Free Learning Resources</h2>
+        <p style="color: #666; margin-bottom: 30px;">Access all study materials, notes, and practice questions for FREE</p>
     </div>
 
-    <div class="lesson-box">
-        <div class="lesson-title" id="lessonTitle">Lesson Loading...</div>
-        <div class="lesson-content" id="lessonContent">
-            Please wait while we load your lesson content.
-        </div>
-
-        <div class="lesson-nav">
-            <button id="prevBtn" onclick="prevLesson()">⬅ Previous</button>
-            <button id="nextBtn" onclick="nextLesson()">Next ➡</button>
-        </div>
+    <div class="resources-grid">
+        <a href="educational-resources/mathematics-ss1.md" class="resource-card">
+            <div class="resource-icon">📐</div>
+            <h3>Mathematics SS1</h3>
+            <p>Algebra, Trigonometry, Number Bases - Complete notes & 500+ questions</p>
+            <span class="free-badge">🎓 FREE ACCESS</span>
+        </a>
+        <a href="educational-resources/english-ss1.md" class="resource-card">
+            <div class="resource-icon">📖</div>
+            <h3>English Language SS1</h3>
+            <p>Grammar, Comprehension, Essay Writing - Complete notes & 500+ questions</p>
+            <span class="free-badge">🎓 FREE ACCESS</span>
+        </a>
+        <a href="educational-resources/digital-technology-ss1.md" class="resource-card">
+            <div class="resource-icon">💻</div>
+            <h3>Digital Technology SS1</h3>
+            <p>Computer Fundamentals, ICT - Complete notes & 500+ questions</p>
+            <span class="free-badge">🎓 FREE ACCESS</span>
+        </a>
+        <a href="educational-resources/igbo-ss1.md" class="resource-card">
+            <div class="resource-icon">🌍</div>
+            <h3>Igbo Language SS1</h3>
+            <p>Alphabet, Grammar, Culture - Complete notes & 500+ questions</p>
+            <span class="free-badge">🎓 FREE ACCESS</span>
+        </a>
     </div>
 
+    <!-- CHALLENGE QUIZ SECTION -->
+    <div class="quiz-section" id="quizSection">
+        <div class="quiz-header">
+            <h2>⚡ CHALLENGE QUIZ</h2>
+            <p>₦100 Only | 10 Stages | 30 Seconds per Question</p>
+            <p style="font-size: 0.85rem; color: #ff6b6b;">⚠️ Fail once after Stage 5 = Return to Stage 1! ⚠️</p>
+        </div>
+
+        <div id="quizContainer">
+            <!-- Quiz will be loaded here -->
+            <div style="text-align: center; padding: 40px;">
+                <button class="btn" onclick="startQuiz()">🎯 Start Challenge Quiz (₦100)</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <footer>
-    © 2026 Ernest Embassy LMS - Class Room
+    <div class="container">
+        <p><strong>Ernest Embassy Digital Solutions</strong> | Learn • Challenge • Succeed</p>
+        <p>📧 ernestembassytravels@gmail.com | 📞 +2348032607809</p>
+        <p>&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
+    </div>
 </footer>
 
 <script>
-/* =========================
-   SESSION CHECK
-========================= */
-const user = JSON.parse(localStorage.getItem("currentUser"));
+    // Quiz State
+    let quizActive = false;
+    let currentStage = 1;
+    let currentQuestionIndex = 0;
+    let currentQuestions = [];
+    let userAnswers = [];
+    let timerInterval = null;
+    let timeLeft = 30;
+    let quizPaid = false;
+    let selectedSubject = null;
 
-if (!user) {
-    window.location.href = "login.html";
-}
+    // Sample questions for each stage (replace with your actual questions from .md files)
+    const stageQuestions = {
+        1: [
+            { text: "What is a computer?", options: ["A. Cooking machine", "B. Electronic device that processes data", "C. Washing machine", "D. Radio"], correct: "B. Electronic device that processes data", explanation: "A computer processes data to produce information." },
+            { text: "Which is an input device?", options: ["A. Monitor", "B. Printer", "C. Keyboard", "D. Speaker"], correct: "C. Keyboard", explanation: "Keyboard inputs data." }
+        ],
+        2: [
+            { text: "What does CPU stand for?", options: ["A. Central Processing Unit", "B. Computer Personal Unit", "C. Central Program Utility", "D. Core Processing Unit"], correct: "A. Central Processing Unit", explanation: "CPU is the brain of the computer." }
+        ]
+        // Add more questions for stages 3-10
+    };
 
-document.getElementById("userName").innerText = user.name || "Student";
-
-/* =========================
-   GET COURSE FROM URL
-========================= */
-const params = new URLSearchParams(window.location.search);
-const course = params.get("subject") || params.get("course");
-
-/* =========================
-   SAMPLE LESSON DATA (TEMP)
-   (Later replace with Firebase)
-========================= */
-const lessons = {
-    "digital-technology": [
-        {
-            title: "Introduction to Computer",
-            content: "A computer is an electronic device that processes data..."
-        },
-        {
-            title: "Types of Computer",
-            content: "There are analog, digital and hybrid computers..."
-        }
-    ],
-    "mathematics": [
-        {
-            title: "Algebra Basics",
-            content: "Algebra involves variables and equations..."
-        }
-    ],
-    "english": [
-        {
-            title: "Grammar Basics",
-            content: "Grammar is the structure of language..."
-        }
-    ]
-};
-
-let currentIndex = 0;
-
-/* =========================
-   LOAD COURSE
-========================= */
-function loadLesson(){
-    const courseData = lessons[course];
-
-    if(!courseData){
-        document.getElementById("courseTitle").innerText = "Course Not Found";
-        return;
+    function startQuiz() {
+        showPaymentModal();
     }
 
-    document.getElementById("courseTitle").innerText = course.replace("-", " ");
-
-    const lesson = courseData[currentIndex];
-
-    document.getElementById("lessonTitle").innerText = lesson.title;
-    document.getElementById("lessonContent").innerText = lesson.content;
-
-    document.getElementById("prevBtn").disabled = currentIndex === 0;
-    document.getElementById("nextBtn").disabled = currentIndex === courseData.length - 1;
-}
-
-/* =========================
-   NAVIGATION
-========================= */
-function nextLesson(){
-    const courseData = lessons[course];
-    if(currentIndex < courseData.length - 1){
-        currentIndex++;
-        loadLesson();
+    function showPaymentModal() {
+        const modal = document.createElement('div');
+        modal.className = 'payment-modal show';
+        modal.innerHTML = `
+            <div class="payment-content">
+                <h2>💰 Challenge Quiz</h2>
+                <p>Access 10 stages of questions</p>
+                <div class="payment-amount">₦100 only</div>
+                <button class="btn pay-btn" onclick="processPayment()">💳 Pay Now</button>
+                <button class="btn" style="margin-top: 10px; background: #6c757d;" onclick="this.closest('.payment-modal').remove()">Cancel</button>
+                <p style="margin-top: 15px; font-size: 0.75rem;">Payment via WhatsApp. Click to complete payment.</p>
+            </div>
+        `;
+        document.body.appendChild(modal);
     }
-}
 
-function prevLesson(){
-    if(currentIndex > 0){
-        currentIndex--;
-        loadLesson();
+    function processPayment() {
+        // WhatsApp payment link
+        const message = `Hello Damian, I want to take the Challenge Quiz.\n\nAmount: ₦100\nQuiz: 10 Stages | 30 seconds per question\n\nPlease provide payment details.`;
+        window.open(`https://wa.me/2348032607809?text=${encodeURIComponent(message)}`, '_blank');
+        
+        alert("✅ Payment request sent! After payment confirmation, your quiz will be activated.");
+        
+        // For demo - in production, verify payment via webhook
+        setTimeout(() => {
+            document.querySelector('.payment-modal')?.remove();
+            activateQuiz();
+        }, 3000);
     }
-}
 
-/* =========================
-   LOGOUT
-========================= */
-function logout(){
-    localStorage.removeItem("currentUser");
-    localStorage.removeItem("userLoggedIn");
-    window.location.href = "login.html";
-}
+    function activateQuiz() {
+        quizPaid = true;
+        quizActive = true;
+        currentStage = 1;
+        loadStageQuestions();
+    }
 
-/* INIT */
-loadLesson();
+    function loadStageQuestions() {
+        // Load questions for current stage
+        currentQuestions = stageQuestions[currentStage] || [];
+        if (currentQuestions.length === 0) {
+            // Generate dummy questions if not available
+            currentQuestions = [
+                { text: `Stage ${currentStage} Question 1: Sample question here`, options: ["A. Option 1", "B. Option 2", "C. Option 3", "D. Option 4"], correct: "A. Option 1", explanation: "Sample explanation" }
+            ];
+        }
+        currentQuestionIndex = 0;
+        userAnswers = new Array(currentQuestions.length).fill(null);
+        renderQuizInterface();
+        startTimer();
+    }
+
+    function renderQuizInterface() {
+        const container = document.getElementById('quizContainer');
+        
+        // Build stage indicators
+        let stagesHtml = '<div class="stage-indicator">';
+        for (let i = 1; i <= 10; i++) {
+            let stageClass = '';
+            if (i === currentStage) stageClass = 'active';
+            else if (i < currentStage) stageClass = 'completed';
+            stagesHtml += `<div class="stage ${stageClass}">${i}</div>`;
+        }
+        stagesHtml += '</div>';
+        
+        if (currentQuestionIndex >= currentQuestions.length) {
+            // Stage completed
+            if (currentStage === 10) {
+                showCompletion();
+                return;
+            } else {
+                currentStage++;
+                loadStageQuestions();
+                return;
+            }
+        }
+        
+        const question = currentQuestions[currentQuestionIndex];
+        const selectedAnswer = userAnswers[currentQuestionIndex];
+        
+        let optionsHtml = '';
+        question.options.forEach(opt => {
+            const isSelected = (selectedAnswer === opt);
+            optionsHtml += `<li onclick="selectAnswer('${opt}')" class="${isSelected ? 'selected' : ''}">${opt}</li>`;
+        });
+        
+        container.innerHTML = `
+            ${stagesHtml}
+            <div class="timer">
+                <div class="timer-circle" id="timerCircle">30</div>
+            </div>
+            <div class="question">${question.text}</div>
+            <ul class="options-list" id="optionsList">
+                ${optionsHtml}
+            </ul>
+            <div id="feedback" style="margin-top: 15px; padding: 10px; border-radius: 10px; display: none;"></div>
+            <div class="nav-buttons">
+                <button class="btn" onclick="nextQuestion()">Next →</button>
+            </div>
+        `;
+    }
+
+    function selectAnswer(option) {
+        if (!quizActive) return;
+        
+        userAnswers[currentQuestionIndex] = option;
+        
+        // Update UI
+        const options = document.querySelectorAll('.options-list li');
+        options.forEach(opt => {
+            if (opt.textContent === option) {
+                opt.classList.add('selected');
+            } else {
+                opt.classList.remove('selected');
+            }
+        });
+        
+        // Check answer
+        const question = currentQuestions[currentQuestionIndex];
+        const isCorrect = (option === question.correct);
+        
+        const feedbackDiv = document.getElementById('feedback');
+        feedbackDiv.style.display = 'block';
+        
+        if (isCorrect) {
+            feedbackDiv.style.background = '#d4edda';
+            feedbackDiv.style.color = '#155724';
+            feedbackDiv.innerHTML = `✅ Correct! ${question.explanation}`;
+        } else {
+            feedbackDiv.style.background = '#f8d7da';
+            feedbackDiv.style.color = '#721c24';
+            feedbackDiv.innerHTML = `❌ Wrong! Correct: ${question.correct}. ${question.explanation}`;
+            
+            // FAILURE: Go back to Stage 1 if past Stage 5
+            if (currentStage >= 5) {
+                clearInterval(timerInterval);
+                feedbackDiv.innerHTML += `<br><br><strong>⚠️ You failed at Stage ${currentStage}! Going back to Stage 1.</strong>`;
+                setTimeout(() => {
+                    currentStage = 1;
+                    loadStageQuestions();
+                }, 3000);
+                return;
+            }
+        }
+        
+        // Auto proceed to next question after 1.5 seconds
+        setTimeout(() => {
+            if (currentQuestionIndex + 1 < currentQuestions.length) {
+                currentQuestionIndex++;
+                renderQuizInterface();
+                startTimer();
+            } else {
+                // Move to next stage
+                if (currentStage === 10) {
+                    showCompletion();
+                } else {
+                    currentStage++;
+                    loadStageQuestions();
+                }
+            }
+        }, 1500);
+    }
+
+    function nextQuestion() {
+        if (userAnswers[currentQuestionIndex] === null) {
+            alert('Please select an answer before continuing!');
+            return;
+        }
+        
+        const question = currentQuestions[currentQuestionIndex];
+        const isCorrect = (userAnswers[currentQuestionIndex] === question.correct);
+        
+        if (!isCorrect && currentStage >= 5) {
+            // Handle failure
+            clearInterval(timerInterval);
+            setTimeout(() => {
+                currentStage = 1;
+                loadStageQuestions();
+            }, 2000);
+            return;
+        }
+        
+        if (currentQuestionIndex + 1 < currentQuestions.length) {
+            currentQuestionIndex++;
+            renderQuizInterface();
+            startTimer();
+        } else {
+            if (currentStage === 10) {
+                showCompletion();
+            } else {
+                currentStage++;
+                loadStageQuestions();
+            }
+        }
+    }
+
+    function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        timeLeft = 30;
+        updateTimerDisplay();
+        
+        timerInterval = setInterval(() => {
+            if (!quizActive) return;
+            
+            timeLeft--;
+            updateTimerDisplay();
+            
+            const timerCircle = document.getElementById('timerCircle');
+            if (timeLeft <= 10) {
+                timerCircle.classList.add('warning');
+            }
+            
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                // Time's up = wrong answer
+                const question = currentQuestions[currentQuestionIndex];
+                const feedbackDiv = document.getElementById('feedback');
+                feedbackDiv.style.display = 'block';
+                feedbackDiv.style.background = '#f8d7da';
+                feedbackDiv.style.color = '#721c24';
+                feedbackDiv.innerHTML = `⏰ Time's up! Correct answer: ${question.correct}. ${question.explanation}`;
+                
+                if (currentStage >= 5) {
+                    setTimeout(() => {
+                        currentStage = 1;
+                        loadStageQuestions();
+                    }, 3000);
+                } else {
+                    setTimeout(() => {
+                        if (currentQuestionIndex + 1 < currentQuestions.length) {
+                            currentQuestionIndex++;
+                            renderQuizInterface();
+                            startTimer();
+                        } else {
+                            currentStage++;
+                            loadStageQuestions();
+                        }
+                    }, 2000);
+                }
+            }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const timerCircle = document.getElementById('timerCircle');
+        if (timerCircle) {
+            timerCircle.textContent = timeLeft;
+        }
+    }
+
+    function showCompletion() {
+        clearInterval(timerInterval);
+        quizActive = false;
+        
+        const container = document.getElementById('quizContainer');
+        container.innerHTML = `
+            <div class="result-box">
+                <div class="result-icon success">🏆</div>
+                <h2>Congratulations!</h2>
+                <p>You completed all 10 stages!</p>
+                <p style="margin-top: 20px;">🎉 You are a Champion! 🎉</p>
+                <button class="btn" style="margin-top: 20px;" onclick="resetQuiz()">Take Again</button>
+            </div>
+        `;
+    }
+
+    function resetQuiz() {
+        currentStage = 1;
+        currentQuestionIndex = 0;
+        quizActive = true;
+        loadStageQuestions();
+    }
 </script>
 
 </body>

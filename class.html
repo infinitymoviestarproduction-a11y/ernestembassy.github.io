@@ -359,7 +359,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.9);
             z-index: 2000;
             justify-content: center;
             align-items: center;
@@ -373,21 +373,41 @@
             background: white;
             border-radius: 20px;
             padding: 35px;
-            max-width: 400px;
+            max-width: 450px;
             width: 90%;
             text-align: center;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .payment-amount {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: bold;
-            color: #667eea;
+            color: #28a745;
+            margin: 15px 0;
+        }
+
+        .payment-details {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
             margin: 20px 0;
+            text-align: left;
+        }
+
+        .payment-details p {
+            margin: 10px 0;
+            font-size: 0.95rem;
+        }
+
+        .payment-details strong {
+            color: #1a1a2e;
         }
 
         .pay-btn {
             background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
             width: 100%;
+            margin: 10px 0;
         }
 
         /* Result Box */
@@ -464,6 +484,9 @@
                 width: 80px;
                 height: 80px;
                 font-size: 2rem;
+            }
+            .payment-content {
+                padding: 20px;
             }
         }
     </style>
@@ -565,6 +588,14 @@
     let coursesData = null;
     let currentUser = { name: "Quiz Champion", email: "player@example.com" };
     
+    // Payment Details - YOUR ACTUAL DETAILS
+    const PAYMENT_DETAILS = {
+        accountName: "Damian Anielozie Okafor",
+        opayNumber: "08032607809",
+        bankName: "First Bank",
+        accountNumber: "YOUR_BANK_ACCOUNT_NUMBER" // Add your bank account number here
+    };
+    
     // Reward System Configuration
     let winnersThisMonth = 0;
     const MAX_CASH_WINNERS = 10;
@@ -607,28 +638,56 @@
         modal.className = 'payment-modal show';
         modal.innerHTML = `
             <div class="payment-content">
-                <h2>💰 Challenge Quiz</h2>
-                <p>Access 10 stages of questions</p>
-                <div class="payment-amount">₦100 only</div>
-                <button class="btn pay-btn" onclick="processPayment()">💳 Pay Now</button>
+                <h2>💰 Challenge Quiz Payment</h2>
+                <p>Amount: <strong style="color: #28a745;">₦100 only</strong></p>
+                <div class="payment-amount">₦100</div>
+                
+                <div class="payment-details">
+                    <p style="font-weight: bold; margin-bottom: 10px;">📌 Send ₦100 to:</p>
+                    <p><strong>📱 Opay / Moniepoint / PalmPay</strong></p>
+                    <p>Phone Number: <strong style="color: #1a1a2e; font-size: 1.1rem;">${PAYMENT_DETAILS.opayNumber}</strong></p>
+                    <p>Account Name: <strong>${PAYMENT_DETAILS.accountName}</strong></p>
+                    <hr style="margin: 10px 0;">
+                    <p><strong>🏦 Bank Transfer</strong></p>
+                    <p>Bank: <strong>${PAYMENT_DETAILS.bankName}</strong></p>
+                    <p>Account Name: <strong>${PAYMENT_DETAILS.accountName}</strong></p>
+                    <p>Account Number: <strong>${PAYMENT_DETAILS.accountNumber || '__________'}</strong></p>
+                </div>
+                
+                <button class="btn pay-btn" onclick="sendPaymentConfirmation()">✅ I Have Made Payment</button>
                 <button class="btn btn-secondary" style="margin-top: 10px;" onclick="this.closest('.payment-modal').remove()">Cancel</button>
-                <p style="margin-top: 15px; font-size: 0.75rem;">Payment via WhatsApp. Click to complete payment.</p>
-                <p style="margin-top: 10px; font-size: 0.7rem; color: #666;">After payment, your quiz will be activated!</p>
+                
+                <p style="margin-top: 15px; font-size: 0.7rem; color: #666;">
+                    ⚡ After payment, click "I Have Made Payment" and send confirmation on WhatsApp.<br>
+                    Your quiz will be activated within 5 minutes.
+                </p>
             </div>
         `;
         document.body.appendChild(modal);
     }
 
-    function processPayment() {
-        const message = `Hello Damian, I want to take the Challenge Quiz.\n\nName: ${currentUser.name}\nAmount: ₦100\nQuiz: 10 Stages | 30 seconds per question\n\nPlease provide payment details.`;
+    function sendPaymentConfirmation() {
+        const message = `✅ CHALLENGE QUIZ PAYMENT CONFIRMATION\n\nName: ${currentUser.name}\nAmount: ₦100\nPayment Method: Opay/Bank Transfer\n\nI have completed the payment. Please verify and activate my quiz.`;
         window.open(`https://wa.me/2348032607809?text=${encodeURIComponent(message)}`, '_blank');
         
-        alert("✅ Payment request sent! After payment confirmation, your quiz will be activated.\n\n📌 Payment: Send ₦100 to:\nOpay: **********\nAfter payment, WhatsApp me for activation.");
+        // Show waiting message
+        alert("📌 Payment confirmation sent!\n\n✅ Next Steps:\n1. Complete the ₦100 payment to Opay ${PAYMENT_DETAILS.opayNumber}\n2. I will verify and activate your quiz within 5 minutes\n3. Check WhatsApp for confirmation\n\nThank you for your patience!");
         
-        setTimeout(() => {
-            document.querySelector('.payment-modal')?.remove();
-            activateQuiz();
-        }, 3000);
+        // Close modal
+        document.querySelector('.payment-modal')?.remove();
+        
+        // Show waiting screen
+        const container = document.getElementById('quizContainer');
+        container.innerHTML = `
+            <div style="text-align: center; padding: 40px;">
+                <div class="timer-circle" style="margin: 0 auto 20px; background: #ffd700; color: #1a1a2e;">⏳</div>
+                <h3>Payment Confirmation Sent!</h3>
+                <p>Your quiz will be activated after payment verification.</p>
+                <p style="margin-top: 20px;">📌 Check your WhatsApp for updates.</p>
+                <p style="margin-top: 10px; font-size: 0.85rem;">Paid to: <strong>${PAYMENT_DETAILS.opayNumber}</strong> (Damian Anielozie Okafor)</p>
+                <button class="btn btn-secondary" style="margin-top: 20px;" onclick="location.reload()">Back to Home</button>
+            </div>
+        `;
     }
 
     function activateQuiz() {
@@ -897,14 +956,7 @@
 
     function downloadCertificate() {
         const score = calculateScore();
-        const certContent = `
-            CERTIFICATE OF EXCELLENCE\n
-            Presented to: ${currentUser.name}\n
-            For completing all 10 stages of the Challenge Quiz\n
-            Score: ${score}%\n
-            Date: ${new Date().toLocaleDateString()}\n
-            Ernest Embassy Digital Solutions
-        `;
+        const certContent = `CERTIFICATE OF EXCELLENCE\n\nPresented to: ${currentUser.name}\nFor completing all 10 stages of the Challenge Quiz\nScore: ${score}%\nDate: ${new Date().toLocaleDateString()}\n\nErnest Embassy Digital Solutions\nwww.ernestembassydigitalsolutions.com`;
         
         const blob = new Blob([certContent], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
@@ -949,7 +1001,7 @@
                     <button class="btn btn-home" onclick="window.location.href='winners.html'">🏆 Hall of Fame</button>
                     <button class="btn btn-secondary" onclick="window.location.href='index.html'">🏠 Home</button>
                 </div>
-                ${reward.type === 'cash' ? '<p style="margin-top: 20px; font-size: 0.85rem; color: #28a745;">💳 Payment will be sent to your Opay account. Send your Opay number via WhatsApp to receive payment.</p>' : ''}
+                ${reward.type === 'cash' ? '<p style="margin-top: 20px; font-size: 0.85rem; color: #28a745;">💳 Send your Opay number via WhatsApp to receive your ₦1000 prize!</p>' : ''}
             </div>
         `;
     }

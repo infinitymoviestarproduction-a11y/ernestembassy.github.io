@@ -588,12 +588,12 @@
     let coursesData = null;
     let currentUser = { name: "Quiz Champion", email: "player@example.com" };
     
-    // Payment Details - YOUR ACTUAL DETAILS
+    // Payment Details - YOUR ACTUAL DETAILS (Both Accounts)
     const PAYMENT_DETAILS = {
         accountName: "Damian Anielozie Okafor",
         opayNumber: "08032607809",
-        bankName: "First Bank",
-        accountNumber: "YOUR_BANK_ACCOUNT_NUMBER" // Add your bank account number here
+        bankName: "First Bank Plc",
+        bankAccountNumber: "3113254386"
     };
     
     // Reward System Configuration
@@ -643,15 +643,19 @@
                 <div class="payment-amount">₦100</div>
                 
                 <div class="payment-details">
-                    <p style="font-weight: bold; margin-bottom: 10px;">📌 Send ₦100 to:</p>
-                    <p><strong>📱 Opay / Moniepoint / PalmPay</strong></p>
-                    <p>Phone Number: <strong style="color: #1a1a2e; font-size: 1.1rem;">${PAYMENT_DETAILS.opayNumber}</strong></p>
-                    <p>Account Name: <strong>${PAYMENT_DETAILS.accountName}</strong></p>
-                    <hr style="margin: 10px 0;">
-                    <p><strong>🏦 Bank Transfer</strong></p>
-                    <p>Bank: <strong>${PAYMENT_DETAILS.bankName}</strong></p>
-                    <p>Account Name: <strong>${PAYMENT_DETAILS.accountName}</strong></p>
-                    <p>Account Number: <strong>${PAYMENT_DETAILS.accountNumber || '__________'}</strong></p>
+                    <p style="font-weight: bold; margin-bottom: 10px;">📌 Send ₦100 to ANY of these accounts:</p>
+                    
+                    <div style="background: #e8f5e9; padding: 12px; border-radius: 10px; margin-bottom: 15px;">
+                        <p><strong>📱 Opay / Moniepoint / PalmPay</strong></p>
+                        <p style="font-size: 1.2rem; font-weight: bold; color: #1a1a2e;">${PAYMENT_DETAILS.opayNumber}</p>
+                        <p>Account Name: <strong>${PAYMENT_DETAILS.accountName}</strong></p>
+                    </div>
+                    
+                    <div style="background: #e3f2fd; padding: 12px; border-radius: 10px;">
+                        <p><strong>🏦 ${PAYMENT_DETAILS.bankName}</strong></p>
+                        <p style="font-size: 1.1rem; font-weight: bold;">Account Number: <strong>${PAYMENT_DETAILS.bankAccountNumber}</strong></p>
+                        <p>Account Name: <strong>${PAYMENT_DETAILS.accountName}</strong></p>
+                    </div>
                 </div>
                 
                 <button class="btn pay-btn" onclick="sendPaymentConfirmation()">✅ I Have Made Payment</button>
@@ -667,11 +671,11 @@
     }
 
     function sendPaymentConfirmation() {
-        const message = `✅ CHALLENGE QUIZ PAYMENT CONFIRMATION\n\nName: ${currentUser.name}\nAmount: ₦100\nPayment Method: Opay/Bank Transfer\n\nI have completed the payment. Please verify and activate my quiz.`;
+        const message = `✅ CHALLENGE QUIZ PAYMENT CONFIRMATION\n\nName: ${currentUser.name}\nAmount: ₦100\n\nI have completed the payment to:\nOpay: ${PAYMENT_DETAILS.opayNumber}\nOR\nFirst Bank: ${PAYMENT_DETAILS.bankAccountNumber}\n\nPlease verify and activate my quiz.`;
         window.open(`https://wa.me/2348032607809?text=${encodeURIComponent(message)}`, '_blank');
         
         // Show waiting message
-        alert("📌 Payment confirmation sent!\n\n✅ Next Steps:\n1. Complete the ₦100 payment to Opay ${PAYMENT_DETAILS.opayNumber}\n2. I will verify and activate your quiz within 5 minutes\n3. Check WhatsApp for confirmation\n\nThank you for your patience!");
+        alert("📌 Payment confirmation sent!\n\n✅ Next Steps:\n1. Complete the ₦100 payment to either:\n   - Opay: 08032607809\n   - First Bank: 3113254386\n2. I will verify and activate your quiz within 5 minutes\n3. Check WhatsApp for confirmation\n\nThank you for your patience!");
         
         // Close modal
         document.querySelector('.payment-modal')?.remove();
@@ -684,7 +688,12 @@
                 <h3>Payment Confirmation Sent!</h3>
                 <p>Your quiz will be activated after payment verification.</p>
                 <p style="margin-top: 20px;">📌 Check your WhatsApp for updates.</p>
-                <p style="margin-top: 10px; font-size: 0.85rem;">Paid to: <strong>${PAYMENT_DETAILS.opayNumber}</strong> (Damian Anielozie Okafor)</p>
+                <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 10px;">
+                    <p style="font-size: 0.85rem;">Paid to:<br>
+                    <strong>Opay:</strong> 08032607809<br>
+                    <strong>First Bank:</strong> 3113254386<br>
+                    <strong>Name:</strong> Damian Anielozie Okafor</p>
+                </div>
                 <button class="btn btn-secondary" style="margin-top: 20px;" onclick="location.reload()">Back to Home</button>
             </div>
         `;

@@ -1,0 +1,105 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2026-05-27",
+  "quizPrice": 100,
+  "timePerQuestion": 10,
+  "stages": 10,
+  "subjects": [
+    {
+      "id": "mathematics-ss1",
+      "name": "Mathematics",
+      "level": "SS1",
+      "icon": "📐",
+      "freeResources": true,
+      "totalQuestions": 500,
+      "quizQuestions": [
+        {
+          "id": 1,
+          "text": "What is the value of x in the equation 2x + 5 = 15?",
+          "options": ["A. 3", "B. 5", "C. 7", "D. 10"],
+          "correct": "B. 5",
+          "explanation": "2x + 5 = 15, subtract 5: 2x = 10, divide by 2: x = 5",
+          "stage": 1
+        },
+        {
+          "id": 2,
+          "text": "Simplify: 3(2x - 4) + 6",
+          "options": ["A. 6x - 6", "B. 6x - 12", "C. 6x - 18", "D. 6x"],
+          "correct": "A. 6x - 6",
+          "explanation": "3(2x - 4) = 6x - 12, then +6 = 6x - 6",
+          "stage": 1
+        },
+        {
+          "id": 3,
+          "text": "What is 20% of 250?",
+          "options": ["A. 25", "B. 40", "C. 50", "D. 60"],
+          "correct": "C. 50",
+          "explanation": "20% = 0.2, 0.2 × 250 = 50",
+          "stage": 1
+        }
+      ]
+    },
+    {
+      "id": "english-ss1",
+      "name": "English Language",
+      "level": "SS1",
+      "icon": "📖",
+      "freeResources": true,
+      "totalQuestions": 500,
+      "quizQuestions": [
+        {
+          "id": 1,
+          "text": "Which of these is a pronoun?",
+          "options": ["A. Book", "B. Run", "C. She", "D. Beautiful"],
+          "correct": "C. She",
+          "explanation": "A pronoun replaces a noun. 'She' is a pronoun.",
+          "stage": 1
+        },
+        {
+          "id": 2,
+          "text": "What is the past tense of 'go'?",
+          "options": ["A. Goed", "B. Gone", "C. Went", "D. Going"],
+          "correct": "C. Went",
+          "explanation": "'Went' is the past tense of 'go'.",
+          "stage": 1
+        }
+      ]
+    },
+    {
+      "id": "digital-technology-ss1",
+      "name": "Digital Technology",
+      "level": "SS1",
+      "icon": "💻",
+      "freeResources": true,
+      "totalQuestions": 500,
+      "quizQuestions": [
+        {
+          "id": 1,
+          "text": "What does CPU stand for?",
+          "options": ["A. Central Processing Unit", "B. Computer Personal Unit", "C. Central Program Utility", "D. Core Processing Unit"],
+          "correct": "A. Central Processing Unit",
+          "explanation": "CPU is the brain of the computer.",
+          "stage": 1
+        }
+      ]
+    },
+    {
+      "id": "igbo-ss1",
+      "name": "Igbo Language",
+      "level": "SS1",
+      "icon": "🌍",
+      "freeResources": true,
+      "totalQuestions": 500,
+      "quizQuestions": [
+        {
+          "id": 1,
+          "text": "Kedu ihe bụ 'Nne' na bekee?",
+          "options": ["A. Father", "B. Mother", "C. Child", "D. Brother"],
+          "correct": "B. Mother",
+          "explanation": "'Nne' pụtara mother na bekee.",
+          "stage": 1
+        }
+      ]
+    }
+  ]
+}

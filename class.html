@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Challenge Quiz - Test Your Skills | Ernest Embassy Classroom</title>
+    <title>Challenge Quiz - Ernest Embassy Classroom</title>
     <style>
         * {
             margin: 0;
@@ -13,12 +13,12 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f23 100%);
+            background: #0a0a0a;
             min-height: 100vh;
         }
 
         nav {
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            background: #000000;
             padding: 1rem 0;
             position: sticky;
             top: 0;
@@ -53,7 +53,6 @@
             color: white;
             text-decoration: none;
             font-size: 0.85rem;
-            transition: color 0.3s;
         }
 
         .nav-links a:hover {
@@ -87,20 +86,19 @@
         }
 
         .resource-card {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
+            background: #1a1a1a;
             border-radius: 15px;
             padding: 20px;
             text-align: center;
             text-decoration: none;
             display: block;
             transition: transform 0.3s;
-            border: 1px solid rgba(255,215,0,0.3);
+            border: 1px solid #333;
         }
 
         .resource-card:hover {
             transform: translateY(-5px);
-            background: rgba(255,255,255,0.15);
+            border-color: #ffd700;
         }
 
         .resource-icon {
@@ -114,7 +112,7 @@
         }
 
         .resource-card p {
-            color: #ccc;
+            color: #aaa;
             font-size: 0.85rem;
         }
 
@@ -130,12 +128,11 @@
 
         /* Quiz Section */
         .quiz-section {
-            background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(10px);
+            background: #111111;
             border-radius: 20px;
             padding: 30px;
             margin-top: 40px;
-            border: 1px solid rgba(255,215,0,0.2);
+            border: 1px solid #333;
         }
 
         .quiz-header {
@@ -151,7 +148,7 @@
         }
 
         .quiz-header p {
-            color: #ccc;
+            color: #aaa;
         }
 
         /* Stage Indicator */
@@ -172,8 +169,8 @@
             justify-content: center;
             font-weight: bold;
             font-size: 1rem;
-            background: #333;
-            color: #888;
+            background: #2a2a2a;
+            color: #666;
             transition: all 0.3s;
         }
 
@@ -181,7 +178,6 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             transform: scale(1.1);
-            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
         }
 
         .stage.completed {
@@ -199,7 +195,7 @@
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            background: #dc3545;
             color: white;
             display: flex;
             align-items: center;
@@ -207,7 +203,6 @@
             font-size: 2.5rem;
             font-weight: bold;
             margin: 0 auto;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
 
         .timer-circle.warning {
@@ -226,15 +221,14 @@
             color: #aaa;
         }
 
-        /* Question Box */
+        /* Question Box - SAME AS TEST QUIZ */
         .question-box {
-            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f23 100%);
+            background: #1a1a2e;
             border-radius: 20px;
             padding: 35px 25px;
             margin: 20px 0;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,215,0,0.3);
+            border: 1px solid #ffd700;
         }
 
         .question {
@@ -244,45 +238,41 @@
             line-height: 1.4;
         }
 
-        /* Options */
+        /* Options - SAME AS TEST QUIZ */
         .options-list {
             list-style: none;
             margin: 20px 0;
         }
 
         .options-list li {
-            background: #2a2a3e;
+            background: #2a2a2a;
             margin: 12px 0;
             padding: 15px 20px;
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s;
-            border: 2px solid #3a3a5e;
+            border: 1px solid #444;
             font-size: 1rem;
-            font-weight: 500;
             color: #fff;
         }
 
         .options-list li:hover {
-            background: #3a3a5e;
+            background: #3a3a3a;
             transform: translateX(5px);
         }
 
         .options-list li.correct-highlight {
             background: #28a745;
-            color: white;
             border-color: #ffd700;
         }
 
         .options-list li.wrong-highlight {
             background: #dc3545;
-            color: white;
             border-color: #ffd700;
         }
 
         .options-list li.selected {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
             border-color: #ffd700;
         }
 
@@ -291,7 +281,7 @@
             opacity: 0.8;
         }
 
-        /* Feedback */
+        /* Feedback - SAME AS TEST QUIZ */
         .feedback {
             margin: 15px 0;
             padding: 15px;
@@ -299,7 +289,6 @@
             font-size: 0.95rem;
             line-height: 1.5;
             display: none;
-            animation: fadeIn 0.3s ease;
         }
 
         .feedback.correct {
@@ -316,12 +305,7 @@
             display: block;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Navigation Buttons */
+        /* Buttons */
         .nav-buttons {
             display: flex;
             justify-content: space-between;
@@ -339,41 +323,25 @@
             cursor: pointer;
             font-weight: bold;
             font-size: 0.95rem;
-            transition: all 0.3s;
             flex: 1;
             min-width: 120px;
         }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+
+        .btn-home {
+            background: #ffd700;
+            color: #000;
         }
 
         .btn-secondary {
             background: #6c757d;
         }
 
-        .btn-secondary:hover {
-            background: #5a6268;
-        }
-
-        .btn-home {
-            background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
-            color: #1a1a2e;
-        }
-
         .btn-success {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
+            background: #28a745;
         }
 
         /* Payment Modal */
@@ -395,7 +363,7 @@
         }
 
         .payment-content {
-            background: #1a1a2e;
+            background: #1a1a1a;
             border-radius: 20px;
             padding: 30px;
             max-width: 450px;
@@ -416,7 +384,7 @@
         }
 
         .payment-details {
-            background: #0f0f23;
+            background: #0a0a0a;
             padding: 20px;
             border-radius: 15px;
             margin: 20px 0;
@@ -425,7 +393,6 @@
 
         .payment-details p {
             margin: 10px 0;
-            font-size: 0.95rem;
             color: #fff;
         }
 
@@ -445,11 +412,10 @@
 
         .result-box h2 {
             color: #ffd700;
-            margin-bottom: 10px;
         }
 
         .reward-card {
-            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f23 100%);
+            background: #1a1a1a;
             color: #ffd700;
             padding: 15px;
             border-radius: 12px;
@@ -458,7 +424,7 @@
         }
 
         footer {
-            background: #0a0a0a;
+            background: #000;
             color: #aaa;
             text-align: center;
             padding: 40px 20px;
@@ -474,14 +440,6 @@
             }
             .nav-links {
                 justify-content: center;
-            }
-            .hero h1 {
-                font-size: 1.5rem;
-            }
-            .stage {
-                width: 38px;
-                height: 38px;
-                font-size: 0.85rem;
             }
             .question {
                 font-size: 1.2rem;
@@ -524,25 +482,25 @@
         <a href="mathematics-ss1.md" class="resource-card">
             <div class="resource-icon">📐</div>
             <h3>Mathematics SS1</h3>
-            <p>Complete notes & 500+ questions</p>
+            <p>Complete notes & questions</p>
             <span class="free-badge">🎓 FREE ACCESS</span>
         </a>
         <a href="english-ss1.md" class="resource-card">
             <div class="resource-icon">📖</div>
             <h3>English SS1</h3>
-            <p>Grammar, Comprehension & more</p>
+            <p>Grammar & Comprehension</p>
             <span class="free-badge">🎓 FREE ACCESS</span>
         </a>
         <a href="digital-technology-ss1.md" class="resource-card">
             <div class="resource-icon">💻</div>
             <h3>Digital Tech SS1</h3>
-            <p>Computer Fundamentals & ICT</p>
+            <p>Computer Fundamentals</p>
             <span class="free-badge">🎓 FREE ACCESS</span>
         </a>
         <a href="igbo-ss1.md" class="resource-card">
             <div class="resource-icon">🌍</div>
             <h3>Igbo Language SS1</h3>
-            <p>Alphabet, Grammar & Culture</p>
+            <p>Alphabet & Culture</p>
             <span class="free-badge">🎓 FREE ACCESS</span>
         </a>
     </div>
@@ -552,7 +510,7 @@
             <h2>⚡ CHALLENGE QUIZ</h2>
             <p>₦100 Only | 10 Stages | <strong style="color: #ff6b6b;">10 Seconds per Question</strong></p>
             <p style="font-size: 0.85rem; margin-top: 10px;">⚠️ Fail after Stage 5 = Return to Stage 1!</p>
-            <div style="margin-top: 15px; padding: 10px; background: rgba(255,215,0,0.1); border-radius: 10px;">
+            <div style="margin-top: 15px; padding: 10px; background: #1a1a1a; border-radius: 10px;">
                 <p style="color: #ffd700; font-size: 0.85rem;">🏆 PRIZES: Certificate | Hall of Fame | Monthly Draw ₦10,000 | ₦1000 Cash!</p>
             </div>
         </div>
@@ -560,9 +518,8 @@
         <div id="quizContainer">
             <div style="text-align: center; padding: 40px;">
                 <button class="btn" onclick="startQuiz()">🎯 Start Challenge Quiz (₦100)</button>
-                <div style="margin-top: 20px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <div style="margin-top: 20px;">
                     <button class="btn btn-home" onclick="window.location.href='index.html'">🏠 Home</button>
-                    <button class="btn btn-secondary" onclick="window.location.href='winners.html'">🏆 Hall of Fame</button>
                 </div>
             </div>
         </div>
@@ -576,6 +533,24 @@
 </footer>
 
 <script>
+    // PROFESSIONAL HARD QUESTIONS - SAME FORMAT AS TEST QUIZ
+    const allQuestions = [
+        // Stage 1 - Easy
+        { text: "What is the value of x in the equation 2x + 5 = 15?", options: ["A. 3", "B. 5", "C. 7", "D. 10"], correct: "B. 5", explanation: "2x + 5 = 15 → 2x = 10 → x = 5", stage: 1 },
+        { text: "Which of these is a prime number?", options: ["A. 4", "B. 6", "C. 7", "D. 8"], correct: "C. 7", explanation: "7 is only divisible by 1 and itself", stage: 1 },
+        { text: "What is 15% of 200?", options: ["A. 15", "B. 20", "C. 25", "D. 30"], correct: "D. 30", explanation: "15/100 × 200 = 30", stage: 1 },
+        
+        // Stage 2 - Medium
+        { text: "Simplify: 3(2x - 4) + 6", options: ["A. 6x - 6", "B. 6x - 12", "C. 6x - 18", "D. 6x"], correct: "A. 6x - 6", explanation: "3(2x-4)=6x-12, +6 = 6x-6", stage: 2 },
+        { text: "What is the square root of 144?", options: ["A. 10", "B. 11", "C. 12", "D. 13"], correct: "C. 12", explanation: "12 × 12 = 144", stage: 2 },
+        { text: "If a = 3 and b = 4, what is a² + b²?", options: ["A. 12", "B. 25", "C. 7", "D. 16"], correct: "B. 25", explanation: "3²=9, 4²=16, 9+16=25", stage: 2 },
+        
+        // Stage 3 - Medium Hard
+        { text: "Solve for x: x² - 5x + 6 = 0", options: ["A. 2 and 3", "B. 1 and 6", "C. -2 and -3", "D. -1 and -6"], correct: "A. 2 and 3", explanation: "(x-2)(x-3)=0, so x=2 or x=3", stage: 3 },
+        { text: "What is the area of a circle with radius 7cm? (π = 22/7)", options: ["A. 44cm²", "B. 88cm²", "C. 154cm²", "D. 308cm²"], correct: "C. 154cm²", explanation: "πr² = 22/7 × 7 × 7 = 154", stage: 3 },
+        { text: "If 3x - 7 = 2x + 5, find x", options: ["A. 10", "B. 11", "C. 12", "D. 13"], correct: "C. 12", explanation: "3x-2x = 5+7 → x = 12", stage: 3 }
+    ];
+    
     let quizActive = false;
     let answerLocked = false;
     let currentStage = 1;
@@ -584,8 +559,6 @@
     let userAnswers = [];
     let timerInterval = null;
     let timeLeft = 10;
-    let quizPaid = false;
-    let coursesData = null;
     let currentUser = { name: "Quiz Champion" };
     
     const PAYMENT_DETAILS = {
@@ -595,120 +568,70 @@
         bankAccountNumber: "3113254386"
     };
     
-    let winnersThisMonth = 0;
-    const MAX_CASH_WINNERS = 10;
-
-    function loadWinnersCount() {
-        const winners = JSON.parse(localStorage.getItem('quizWinners') || '[]');
-        const thisMonth = new Date().getMonth();
-        const thisYear = new Date().getFullYear();
-        winnersThisMonth = winners.filter(w => {
-            const wDate = new Date(w.date);
-            return wDate.getMonth() === thisMonth && wDate.getFullYear() === thisYear && w.reward === 'cash';
-        }).length;
-    }
-
-    async function loadCourses() {
-        try {
-            const response = await fetch('courses.json');
-            if (!response.ok) throw new Error('courses.json not found');
-            coursesData = await response.json();
-            loadWinnersCount();
-        } catch (error) {
-            console.error('Error loading courses:', error);
-            document.getElementById('quizContainer').innerHTML = `
-                <div style="text-align: center; padding: 40px; color: #ff6b6b;">
-                    <p>⚠️ Error loading questions. Please contact support.</p>
-                    <button class="btn btn-home" onclick="window.location.href='index.html'" style="margin-top: 20px;">🏠 Back to Home</button>
-                </div>
-            `;
-        }
-    }
-
     function startQuiz() {
         const userName = prompt("Enter your name for Hall of Fame:", "Quiz Champion");
-        if (userName && userName.trim()) {
-            currentUser.name = userName.trim();
-        }
+        if (userName && userName.trim()) currentUser.name = userName.trim();
         showPaymentModal();
     }
-
+    
     function showPaymentModal() {
         const modal = document.createElement('div');
         modal.className = 'payment-modal show';
         modal.innerHTML = `
             <div class="payment-content">
                 <h2>💰 Challenge Quiz Payment</h2>
-                <p style="color: #fff;">Amount: <strong style="color: #28a745;">₦100 only</strong></p>
                 <div class="payment-amount">₦100</div>
                 <div class="payment-details">
-                    <p><strong>📱 Opay / Moniepoint</strong></p>
-                    <p>Number: <strong>${PAYMENT_DETAILS.opayNumber}</strong></p>
-                    <p>Name: <strong>${PAYMENT_DETAILS.accountName}</strong></p>
-                    <hr style="border-color: #333; margin: 10px 0;">
-                    <p><strong>🏦 ${PAYMENT_DETAILS.bankName}</strong></p>
-                    <p>Account: <strong>${PAYMENT_DETAILS.bankAccountNumber}</strong></p>
-                    <p>Name: <strong>${PAYMENT_DETAILS.accountName}</strong></p>
+                    <p><strong>📱 Opay / Moniepoint</strong><br>Number: <strong>${PAYMENT_DETAILS.opayNumber}</strong></p>
+                    <p><strong>🏦 ${PAYMENT_DETAILS.bankName}</strong><br>Account: <strong>${PAYMENT_DETAILS.bankAccountNumber}</strong></p>
+                    <p><strong>Name:</strong> ${PAYMENT_DETAILS.accountName}</p>
                 </div>
-                <button class="btn pay-btn" onclick="sendPaymentConfirmation()">✅ I Have Paid</button>
+                <button class="btn btn-success" onclick="processPayment()">✅ I Have Paid</button>
                 <button class="btn btn-secondary" style="margin-top: 10px;" onclick="this.closest('.payment-modal').remove()">Cancel</button>
+                <p style="margin-top: 15px; font-size: 0.7rem; color: #aaa;">After payment, click "I Have Paid" to activate your quiz instantly.</p>
             </div>
         `;
         document.body.appendChild(modal);
     }
-
-    function sendPaymentConfirmation() {
-        const message = `✅ QUIZ PAYMENT\nName: ${currentUser.name}\nAmount: ₦100\nPlease activate my quiz.`;
+    
+    function processPayment() {
+        const message = `✅ QUIZ PAYMENT CONFIRMATION\n\nName: ${currentUser.name}\nAmount: ₦100\nPayment completed. Please activate my quiz.`;
         window.open(`https://wa.me/2348032607809?text=${encodeURIComponent(message)}`, '_blank');
-        alert("✅ Payment request sent! I will activate your quiz within 5 minutes.");
+        
         document.querySelector('.payment-modal')?.remove();
+        
+        // Show activation message
         document.getElementById('quizContainer').innerHTML = `
             <div style="text-align: center; padding: 40px;">
-                <div class="timer-circle" style="margin: 0 auto 20px; background: #ffd700; color: #1a1a2e;">⏳</div>
+                <div class="timer-circle" style="margin: 0 auto 20px; background: #ffd700; color: #000; animation: none;">✅</div>
                 <h3 style="color: #ffd700;">Payment Confirmed!</h3>
-                <p style="color: #fff;">Your quiz will start in a moment...</p>
+                <p style="color: #fff;">Your quiz is now activating...</p>
             </div>
         `;
+        
         setTimeout(() => activateQuiz(), 2000);
     }
-
+    
     function activateQuiz() {
-        quizPaid = true;
         quizActive = true;
         currentStage = 1;
         loadStageQuestions();
     }
-
+    
     function loadStageQuestions() {
-        if (!coursesData) {
-            loadCourses().then(() => loadStageQuestions());
-            return;
+        currentQuestions = allQuestions.filter(q => q.stage === currentStage);
+        if (currentQuestions.length === 0) {
+            // Create default question if none exist for stage
+            currentQuestions = [{ text: `Stage ${currentStage} - Challenging Question`, options: ["A. Option 1", "B. Option 2", "C. Option 3", "D. Option 4"], correct: "A. Option 1", explanation: "Sample explanation for this question", stage: currentStage }];
         }
-        
-        let allStageQuestions = [];
-        coursesData.subjects.forEach(subject => {
-            if (subject.quizQuestions) {
-                const stageQuestions = subject.quizQuestions.filter(q => q.stage === currentStage);
-                allStageQuestions.push(...stageQuestions);
-            }
-        });
-        
-        if (allStageQuestions.length > 0) {
-            currentQuestions = allStageQuestions;
-        } else {
-            currentQuestions = [
-                { text: `Stage ${currentStage} Challenge Question`, options: ["A. Option 1", "B. Option 2", "C. Option 3", "D. Option 4"], correct: "A. Option 1", explanation: "Sample explanation" }
-            ];
-        }
-        
         currentQuestionIndex = 0;
         userAnswers = new Array(currentQuestions.length).fill(null);
         answerLocked = false;
-        renderQuizInterface();
+        renderQuiz();
         startTimer();
     }
-
-    function renderQuizInterface() {
+    
+    function renderQuiz() {
         const container = document.getElementById('quizContainer');
         
         let stagesHtml = '<div class="stage-indicator">';
@@ -731,13 +654,10 @@
             }
         }
         
-        const question = currentQuestions[currentQuestionIndex];
-        const selectedAnswer = userAnswers[currentQuestionIndex];
-        
+        const q = currentQuestions[currentQuestionIndex];
         let optionsHtml = '';
-        question.options.forEach(opt => {
-            const isSelected = (selectedAnswer === opt);
-            optionsHtml += `<li onclick="selectAnswer('${opt.replace(/'/g, "\\'")}')" class="${isSelected ? 'selected' : ''}">${opt}</li>`;
+        q.options.forEach(opt => {
+            optionsHtml += `<li onclick="selectAnswer('${opt.replace(/'/g, "\\'")}')">${opt}</li>`;
         });
         
         container.innerHTML = `
@@ -747,60 +667,45 @@
                 <div class="timer-label">seconds left</div>
             </div>
             <div class="question-box">
-                <div class="question">${question.text}</div>
+                <div class="question">${q.text}</div>
             </div>
             <ul class="options-list" id="optionsList">
                 ${optionsHtml}
             </ul>
             <div id="feedback" class="feedback"></div>
             <div class="nav-buttons">
-                <button class="btn btn-home" onclick="goHome()">🏠 Home</button>
+                <button class="btn btn-home" onclick="window.location.href='index.html'">🏠 Home</button>
                 <button class="btn" onclick="nextQuestion()" id="nextBtn" disabled>Next →</button>
             </div>
         `;
     }
-
-    function goHome() {
-        if (confirm('Go back to homepage? Your quiz progress will be lost.')) {
-            window.location.href = 'index.html';
-        }
-    }
-
-    function selectAnswer(option) {
+    
+    function selectAnswer(selected) {
         if (!quizActive || answerLocked) return;
-        
         answerLocked = true;
         clearInterval(timerInterval);
         
-        userAnswers[currentQuestionIndex] = option;
+        const q = currentQuestions[currentQuestionIndex];
+        userAnswers[currentQuestionIndex] = selected;
+        const isCorrect = (selected === q.correct);
         
-        const question = currentQuestions[currentQuestionIndex];
-        const isCorrect = (option === question.correct);
-        
-        const optionsList = document.querySelectorAll('.options-list li');
-        
-        optionsList.forEach(opt => {
+        const options = document.querySelectorAll('.options-list li');
+        options.forEach(opt => {
             opt.style.pointerEvents = 'none';
-            opt.classList.add('disabled-option');
-            if (opt.textContent === question.correct) {
-                opt.classList.add('correct-highlight');
-            }
-            if (opt.textContent === option && !isCorrect) {
-                opt.classList.add('wrong-highlight');
-            }
+            if (opt.textContent === q.correct) opt.classList.add('correct-highlight');
+            if (opt.textContent === selected && !isCorrect) opt.classList.add('wrong-highlight');
         });
         
-        const feedbackDiv = document.getElementById('feedback');
-        
+        const feedback = document.getElementById('feedback');
         if (isCorrect) {
-            feedbackDiv.className = 'feedback correct';
-            feedbackDiv.innerHTML = `✅ <strong>CORRECT!</strong><br>${question.explanation}`;
+            feedback.className = 'feedback correct';
+            feedback.innerHTML = `✅ <strong>CORRECT!</strong><br>${q.explanation}`;
         } else {
-            feedbackDiv.className = 'feedback wrong';
-            feedbackDiv.innerHTML = `❌ <strong>WRONG!</strong><br>Correct answer: <strong style="color: #90ee90;">${question.correct}</strong><br><br>📖 ${question.explanation}`;
+            feedback.className = 'feedback wrong';
+            feedback.innerHTML = `❌ <strong>WRONG!</strong><br>Correct answer: <strong style="color: #90ee90;">${q.correct}</strong><br><br>📖 ${q.explanation}`;
             
             if (currentStage >= 5) {
-                feedbackDiv.innerHTML += `<br><br><strong>⚠️ You failed Stage ${currentStage}! Returning to Stage 1...</strong>`;
+                feedback.innerHTML += `<br><br><strong>⚠️ You failed Stage ${currentStage}! Returning to Stage 1...</strong>`;
                 setTimeout(() => {
                     currentStage = 1;
                     loadStageQuestions();
@@ -809,77 +714,57 @@
             }
         }
         
-        const nextBtn = document.getElementById('nextBtn');
-        if (nextBtn) nextBtn.disabled = false;
+        document.getElementById('nextBtn').disabled = false;
     }
-
+    
     function nextQuestion() {
         if (userAnswers[currentQuestionIndex] === null) {
-            alert('Please select an answer!');
+            alert('Please select an answer before continuing!');
             return;
         }
         
         if (currentQuestionIndex + 1 < currentQuestions.length) {
             currentQuestionIndex++;
             answerLocked = false;
-            renderQuizInterface();
+            renderQuiz();
             startTimer();
         } else {
-            if (currentStage === 10) {
-                showCompletion();
-            } else {
-                currentStage++;
-                loadStageQuestions();
-            }
+            if (currentStage === 10) showCompletion();
+            else { currentStage++; loadStageQuestions(); }
         }
     }
-
+    
     function startTimer() {
         if (timerInterval) clearInterval(timerInterval);
         timeLeft = 10;
-        updateTimerDisplay();
+        const timerCircle = document.getElementById('timerCircle');
+        if (timerCircle) timerCircle.textContent = timeLeft;
         
         timerInterval = setInterval(() => {
             if (!quizActive) return;
             timeLeft--;
-            updateTimerDisplay();
-            
-            if (timeLeft <= 3) {
-                const timerCircle = document.getElementById('timerCircle');
-                if (timerCircle) timerCircle.classList.add('warning');
-            }
-            
+            const tc = document.getElementById('timerCircle');
+            if (tc) tc.textContent = timeLeft;
+            if (timeLeft <= 3 && tc) tc.classList.add('warning');
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
                 if (!answerLocked) {
                     answerLocked = true;
-                    const question = currentQuestions[currentQuestionIndex];
-                    
-                    const optionsList = document.querySelectorAll('.options-list li');
-                    optionsList.forEach(opt => {
+                    const q = currentQuestions[currentQuestionIndex];
+                    const options = document.querySelectorAll('.options-list li');
+                    options.forEach(opt => {
                         opt.style.pointerEvents = 'none';
-                        opt.classList.add('disabled-option');
-                        if (opt.textContent === question.correct) {
-                            opt.classList.add('correct-highlight');
-                        }
+                        if (opt.textContent === q.correct) opt.classList.add('correct-highlight');
                     });
-                    
-                    const feedbackDiv = document.getElementById('feedback');
-                    feedbackDiv.className = 'feedback wrong';
-                    feedbackDiv.innerHTML = `⏰ <strong>TIME'S UP!</strong><br>Correct answer: <strong style="color: #90ee90;">${question.correct}</strong><br><br>📖 ${question.explanation}`;
-                    
-                    const nextBtn = document.getElementById('nextBtn');
-                    if (nextBtn) nextBtn.disabled = false;
+                    const feedback = document.getElementById('feedback');
+                    feedback.className = 'feedback wrong';
+                    feedback.innerHTML = `⏰ <strong>TIME'S UP!</strong><br>Correct answer: <strong style="color: #90ee90;">${q.correct}</strong><br><br>📖 ${q.explanation}`;
+                    document.getElementById('nextBtn').disabled = false;
                 }
             }
         }, 1000);
     }
-
-    function updateTimerDisplay() {
-        const timerCircle = document.getElementById('timerCircle');
-        if (timerCircle) timerCircle.textContent = timeLeft;
-    }
-
+    
     function calculateScore() {
         let correct = 0;
         currentQuestions.forEach((q, i) => {
@@ -887,7 +772,7 @@
         });
         return Math.round((correct / currentQuestions.length) * 100);
     }
-
+    
     function determineReward(score) {
         const winners = JSON.parse(localStorage.getItem('quizWinners') || '[]');
         const thisMonth = new Date().getMonth();
@@ -896,6 +781,7 @@
             const wDate = new Date(w.date);
             return wDate.getMonth() === thisMonth && wDate.getFullYear() === thisYear && w.reward === 'cash';
         }).length;
+        const MAX_CASH_WINNERS = 10;
         
         if (score >= 80 && monthlyCashWinners < MAX_CASH_WINNERS) {
             return { type: 'cash', message: '💰 You won ₦1000! Money will be sent to your Opay.', amount: 1000 };
@@ -905,7 +791,7 @@
             return { type: 'certificate', message: '🏆 Certificate of Excellence! Download below.', amount: 0 };
         }
     }
-
+    
     function downloadCertificate() {
         const score = calculateScore();
         const certContent = `CERTIFICATE OF EXCELLENCE\n\nPresented to: ${currentUser.name}\nChallenge Quiz Completion\nScore: ${score}%\nDate: ${new Date().toLocaleDateString()}\n\nErnest Embassy Digital Solutions`;
@@ -917,11 +803,10 @@
         a.click();
         URL.revokeObjectURL(url);
     }
-
+    
     function showCompletion() {
         clearInterval(timerInterval);
         quizActive = false;
-        
         const score = calculateScore();
         const reward = determineReward(score);
         
@@ -933,10 +818,9 @@
             <div class="result-box">
                 <div class="result-icon success">🏆</div>
                 <h2>Congratulations ${currentUser.name}!</h2>
-                <p style="font-size: 1.2rem;">You completed all 10 stages!</p>
                 <p style="font-size: 1.5rem; margin: 15px 0;">Score: ${score}%</p>
                 <div class="reward-card"><p>🎁 ${reward.message}</p></div>
-                <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; margin-top: 20px;">
+                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
                     <button class="btn btn-success" onclick="downloadCertificate()">📄 Certificate</button>
                     <button class="btn" onclick="resetQuiz()">🔄 Try Again</button>
                     <button class="btn btn-home" onclick="window.location.href='winners.html'">🏆 Hall of Fame</button>
@@ -946,7 +830,7 @@
             </div>
         `;
     }
-
+    
     function resetQuiz() {
         currentStage = 1;
         currentQuestionIndex = 0;
@@ -954,8 +838,6 @@
         quizActive = true;
         loadStageQuestions();
     }
-
-    loadCourses();
 </script>
 
 </body>

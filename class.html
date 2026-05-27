@@ -150,7 +150,7 @@
         .stage-indicator {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
             margin: 30px 0;
             flex-wrap: wrap;
         }
@@ -181,17 +181,17 @@
             color: white;
         }
 
-        /* Timer */
+        /* Timer - 10 seconds */
         .timer {
             text-align: center;
-            margin: 30px 0;
+            margin: 20px 0;
         }
 
         .timer-circle {
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
             color: white;
             display: flex;
             align-items: center;
@@ -214,7 +214,7 @@
         }
 
         .timer-label {
-            margin-top: 10px;
+            margin-top: 8px;
             font-size: 0.9rem;
             color: #666;
         }
@@ -224,58 +224,76 @@
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             border-radius: 20px;
             padding: 30px;
-            margin: 25px 0;
+            margin: 20px 0;
             text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
 
         .question {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 600;
             color: #ffd700;
             line-height: 1.4;
-            margin-bottom: 0;
         }
 
         /* Options */
         .options-list {
             list-style: none;
-            margin: 25px 0;
+            margin: 20px 0;
         }
 
         .options-list li {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            margin: 15px 0;
-            padding: 18px 20px;
-            border-radius: 15px;
+            background: #f8f9fa;
+            margin: 12px 0;
+            padding: 15px 20px;
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s;
             border: 2px solid #e0e0e0;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 500;
             color: #333;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .options-list li:hover {
-            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
-            transform: translateX(8px);
-            border-color: #667eea;
+            background: #e9ecef;
+            transform: translateX(5px);
         }
 
-        .options-list li.selected {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        /* Correct answer styling */
+        .options-list li.correct-highlight {
+            background: #28a745;
             color: white;
             border-color: #ffd700;
             transform: scale(1.02);
         }
 
+        /* Wrong answer styling */
+        .options-list li.wrong-highlight {
+            background: #dc3545;
+            color: white;
+            border-color: #ffd700;
+        }
+
+        /* Selected styling before reveal */
+        .options-list li.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #ffd700;
+        }
+
+        /* Disabled options after answer */
+        .options-list li.disabled-option {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
         /* Feedback */
         .feedback {
-            margin: 20px 0;
-            padding: 18px;
-            border-radius: 15px;
-            font-size: 1rem;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 0.95rem;
             line-height: 1.5;
             display: none;
             animation: fadeIn 0.3s ease;
@@ -295,6 +313,14 @@
             display: block;
         }
 
+        .feedback .correct-answer {
+            color: #28a745;
+            font-weight: bold;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #c3e6cb;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -305,7 +331,7 @@
             display: flex;
             justify-content: space-between;
             gap: 15px;
-            margin-top: 30px;
+            margin-top: 25px;
             flex-wrap: wrap;
         }
 
@@ -313,14 +339,14 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 14px 30px;
+            padding: 12px 20px;
             border-radius: 40px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 1rem;
+            font-size: 0.95rem;
             transition: all 0.3s;
             flex: 1;
-            min-width: 150px;
+            min-width: 130px;
         }
 
         .btn:hover {
@@ -372,7 +398,7 @@
         .payment-content {
             background: white;
             border-radius: 20px;
-            padding: 35px;
+            padding: 30px;
             max-width: 450px;
             width: 90%;
             text-align: center;
@@ -410,36 +436,31 @@
             margin: 10px 0;
         }
 
-        /* Result Box */
         .result-box {
             text-align: center;
-            padding: 40px;
+            padding: 30px;
         }
 
         .result-icon {
-            font-size: 5rem;
-            margin-bottom: 20px;
+            font-size: 4rem;
+            margin-bottom: 15px;
         }
 
         .result-icon.success {
             color: #28a745;
         }
 
-        .result-icon.fail {
-            color: #dc3545;
-        }
-
         .result-box h2 {
-            font-size: 2rem;
-            margin-bottom: 15px;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
         }
 
         .reward-card {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: #ffd700;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
         }
 
         footer {
@@ -467,26 +488,24 @@
             .stage {
                 width: 38px;
                 height: 38px;
-                font-size: 0.9rem;
+                font-size: 0.85rem;
             }
             .question {
                 font-size: 1.2rem;
             }
             .options-list li {
-                font-size: 0.95rem;
-                padding: 14px;
+                font-size: 0.9rem;
+                padding: 12px 15px;
             }
             .btn {
-                padding: 12px 20px;
-                font-size: 0.9rem;
+                padding: 10px 15px;
+                font-size: 0.85rem;
+                min-width: 100px;
             }
             .timer-circle {
                 width: 80px;
                 height: 80px;
                 font-size: 2rem;
-            }
-            .payment-content {
-                padding: 20px;
             }
         }
     </style>
@@ -509,16 +528,10 @@
 
 <div class="hero">
     <h1>🎓 Challenge Quiz Arena</h1>
-    <p>Free learning resources • ₦100 Challenge Quiz • Win ₦1000 + Prizes!</p>
+    <p>Free learning resources • ₦100 Challenge Quiz • 10 Seconds per Question!</p>
 </div>
 
 <div class="container">
-    <!-- FREE RESOURCES SECTION -->
-    <div style="text-align: center; margin-bottom: 20px;">
-        <h2>📚 Free Learning Resources</h2>
-        <p style="color: #666; margin-bottom: 30px;">Access all study materials, notes, and practice questions for FREE</p>
-    </div>
-
     <div class="resources-grid">
         <a href="mathematics-ss1.md" class="resource-card">
             <div class="resource-icon">📐</div>
@@ -546,11 +559,10 @@
         </a>
     </div>
 
-    <!-- CHALLENGE QUIZ SECTION -->
     <div class="quiz-section" id="quizSection">
         <div class="quiz-header">
             <h2>⚡ CHALLENGE QUIZ</h2>
-            <p>₦100 Only | 10 Stages | 30 Seconds per Question</p>
+            <p>₦100 Only | 10 Stages | <strong style="color: #dc3545;">10 Seconds per Question</strong></p>
             <p style="font-size: 0.9rem; color: #ff6b6b; margin-top: 10px;">⚠️ Fail once after Stage 5 = Return to Stage 1! ⚠️</p>
             <div style="margin-top: 15px; padding: 10px; background: #fff3cd; border-radius: 10px;">
                 <p style="color: #856404; font-size: 0.85rem;">🏆 <strong>PRIZES:</strong> Certificate of Excellence | Hall of Fame Feature | Monthly Draw for ₦10,000 | Limited ₦1000 Cash Winners!</p>
@@ -576,19 +588,18 @@
 </footer>
 
 <script>
-    // Quiz State
     let quizActive = false;
+    let answerLocked = false; // Prevents multiple answers
     let currentStage = 1;
     let currentQuestionIndex = 0;
     let currentQuestions = [];
     let userAnswers = [];
     let timerInterval = null;
-    let timeLeft = 30;
+    let timeLeft = 10; // Changed to 10 seconds
     let quizPaid = false;
     let coursesData = null;
-    let currentUser = { name: "Quiz Champion", email: "player@example.com" };
+    let currentUser = { name: "Quiz Champion" };
     
-    // Payment Details - YOUR ACTUAL DETAILS (Both Accounts)
     const PAYMENT_DETAILS = {
         accountName: "Damian Anielozie Okafor",
         opayNumber: "08032607809",
@@ -596,12 +607,9 @@
         bankAccountNumber: "3113254386"
     };
     
-    // Reward System Configuration
     let winnersThisMonth = 0;
     const MAX_CASH_WINNERS = 10;
-    const MONTHLY_DRAW_AMOUNT = 10000;
-    
-    // Load winners count from localStorage
+
     function loadWinnersCount() {
         const winners = JSON.parse(localStorage.getItem('quizWinners') || '[]');
         const thisMonth = new Date().getMonth();
@@ -617,7 +625,6 @@
             const response = await fetch('courses.json');
             if (!response.ok) throw new Error('courses.json not found');
             coursesData = await response.json();
-            console.log('Courses loaded:', coursesData);
             loadWinnersCount();
         } catch (error) {
             console.error('Error loading courses:', error);
@@ -625,7 +632,6 @@
     }
 
     function startQuiz() {
-        // Ask for user name first
         const userName = prompt("Enter your name to appear on Hall of Fame:", "Quiz Champion");
         if (userName && userName.trim()) {
             currentUser.name = userName.trim();
@@ -641,59 +647,39 @@
                 <h2>💰 Challenge Quiz Payment</h2>
                 <p>Amount: <strong style="color: #28a745;">₦100 only</strong></p>
                 <div class="payment-amount">₦100</div>
-                
                 <div class="payment-details">
                     <p style="font-weight: bold; margin-bottom: 10px;">📌 Send ₦100 to ANY of these accounts:</p>
-                    
                     <div style="background: #e8f5e9; padding: 12px; border-radius: 10px; margin-bottom: 15px;">
                         <p><strong>📱 Opay / Moniepoint / PalmPay</strong></p>
                         <p style="font-size: 1.2rem; font-weight: bold; color: #1a1a2e;">${PAYMENT_DETAILS.opayNumber}</p>
                         <p>Account Name: <strong>${PAYMENT_DETAILS.accountName}</strong></p>
                     </div>
-                    
                     <div style="background: #e3f2fd; padding: 12px; border-radius: 10px;">
                         <p><strong>🏦 ${PAYMENT_DETAILS.bankName}</strong></p>
                         <p style="font-size: 1.1rem; font-weight: bold;">Account Number: <strong>${PAYMENT_DETAILS.bankAccountNumber}</strong></p>
                         <p>Account Name: <strong>${PAYMENT_DETAILS.accountName}</strong></p>
                     </div>
                 </div>
-                
                 <button class="btn pay-btn" onclick="sendPaymentConfirmation()">✅ I Have Made Payment</button>
                 <button class="btn btn-secondary" style="margin-top: 10px;" onclick="this.closest('.payment-modal').remove()">Cancel</button>
-                
-                <p style="margin-top: 15px; font-size: 0.7rem; color: #666;">
-                    ⚡ After payment, click "I Have Made Payment" and send confirmation on WhatsApp.<br>
-                    Your quiz will be activated within 5 minutes.
-                </p>
+                <p style="margin-top: 15px; font-size: 0.7rem; color: #666;">⚡ After payment, click "I Have Made Payment" and send confirmation on WhatsApp.<br>Your quiz will be activated within 5 minutes.</p>
             </div>
         `;
         document.body.appendChild(modal);
     }
 
     function sendPaymentConfirmation() {
-        const message = `✅ CHALLENGE QUIZ PAYMENT CONFIRMATION\n\nName: ${currentUser.name}\nAmount: ₦100\n\nI have completed the payment to:\nOpay: ${PAYMENT_DETAILS.opayNumber}\nOR\nFirst Bank: ${PAYMENT_DETAILS.bankAccountNumber}\n\nPlease verify and activate my quiz.`;
+        const message = `✅ CHALLENGE QUIZ PAYMENT CONFIRMATION\n\nName: ${currentUser.name}\nAmount: ₦100\n\nPayment completed. Please verify and activate my quiz.`;
         window.open(`https://wa.me/2348032607809?text=${encodeURIComponent(message)}`, '_blank');
-        
-        // Show waiting message
-        alert("📌 Payment confirmation sent!\n\n✅ Next Steps:\n1. Complete the ₦100 payment to either:\n   - Opay: 08032607809\n   - First Bank: 3113254386\n2. I will verify and activate your quiz within 5 minutes\n3. Check WhatsApp for confirmation\n\nThank you for your patience!");
-        
-        // Close modal
+        alert("📌 Payment confirmation sent! I will verify and activate your quiz within 5 minutes.");
         document.querySelector('.payment-modal')?.remove();
         
-        // Show waiting screen
         const container = document.getElementById('quizContainer');
         container.innerHTML = `
             <div style="text-align: center; padding: 40px;">
                 <div class="timer-circle" style="margin: 0 auto 20px; background: #ffd700; color: #1a1a2e;">⏳</div>
                 <h3>Payment Confirmation Sent!</h3>
                 <p>Your quiz will be activated after payment verification.</p>
-                <p style="margin-top: 20px;">📌 Check your WhatsApp for updates.</p>
-                <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 10px;">
-                    <p style="font-size: 0.85rem;">Paid to:<br>
-                    <strong>Opay:</strong> 08032607809<br>
-                    <strong>First Bank:</strong> 3113254386<br>
-                    <strong>Name:</strong> Damian Anielozie Okafor</p>
-                </div>
                 <button class="btn btn-secondary" style="margin-top: 20px;" onclick="location.reload()">Back to Home</button>
             </div>
         `;
@@ -730,6 +716,7 @@
         
         currentQuestionIndex = 0;
         userAnswers = new Array(currentQuestions.length).fill(null);
+        answerLocked = false;
         renderQuizInterface();
         startTimer();
     }
@@ -769,7 +756,7 @@
         container.innerHTML = `
             ${stagesHtml}
             <div class="timer">
-                <div class="timer-circle" id="timerCircle">30</div>
+                <div class="timer-circle" id="timerCircle">10</div>
                 <div class="timer-label">seconds remaining</div>
             </div>
             <div class="question-box">
@@ -782,41 +769,40 @@
             <div class="nav-buttons">
                 <button class="btn btn-secondary" onclick="goBackToResources()">📚 Resources</button>
                 <button class="btn btn-home" onclick="goHome()">🏠 Home</button>
-                <button class="btn" onclick="nextQuestion()">Next →</button>
+                <button class="btn" onclick="nextQuestion()" id="nextBtn">Next →</button>
             </div>
         `;
-    }
-
-    function goBackToResources() {
-        if (confirm('Go back to learning resources? Your quiz progress will be lost.')) {
-            quizActive = false;
-            clearInterval(timerInterval);
-            location.reload();
-        }
-    }
-
-    function goHome() {
-        if (confirm('Go back to homepage? Your quiz progress will be lost.')) {
-            window.location.href = 'index.html';
-        }
+        
+        // Disable next button initially
+        const nextBtn = document.getElementById('nextBtn');
+        if (nextBtn) nextBtn.disabled = true;
     }
 
     function selectAnswer(option) {
-        if (!quizActive) return;
+        if (!quizActive || answerLocked) return;
+        
+        answerLocked = true;
+        clearInterval(timerInterval);
         
         userAnswers[currentQuestionIndex] = option;
         
-        const options = document.querySelectorAll('.options-list li');
-        options.forEach(opt => {
-            if (opt.textContent === option) {
-                opt.classList.add('selected');
-            } else {
-                opt.classList.remove('selected');
-            }
-        });
-        
         const question = currentQuestions[currentQuestionIndex];
         const isCorrect = (option === question.correct);
+        
+        // Highlight options - show correct and wrong
+        const optionsList = document.querySelectorAll('.options-list li');
+        
+        optionsList.forEach(opt => {
+            opt.style.pointerEvents = 'none';
+            opt.classList.add('disabled-option');
+            
+            if (opt.textContent === question.correct) {
+                opt.classList.add('correct-highlight');
+            }
+            if (opt.textContent === option && !isCorrect) {
+                opt.classList.add('wrong-highlight');
+            }
+        });
         
         const feedbackDiv = document.getElementById('feedback');
         
@@ -825,11 +811,9 @@
             feedbackDiv.innerHTML = `✅ <strong>Correct!</strong> ${question.explanation}`;
         } else {
             feedbackDiv.className = 'feedback wrong';
-            feedbackDiv.innerHTML = `❌ <strong>Wrong!</strong> Correct answer: ${question.correct}.<br>📖 ${question.explanation}`;
+            feedbackDiv.innerHTML = `❌ <strong>Wrong!</strong> The correct answer is: <span style="color: #28a745; font-weight: bold;">${question.correct}</span><br><br>📖 ${question.explanation}`;
             
             if (currentStage >= 5) {
-                clearInterval(timerInterval);
-                feedbackDiv.innerHTML += `<br><br><strong>⚠️ You failed at Stage ${currentStage}! Going back to Stage 1 in 3 seconds...</strong>`;
                 setTimeout(() => {
                     currentStage = 1;
                     loadStageQuestions();
@@ -838,20 +822,9 @@
             }
         }
         
-        setTimeout(() => {
-            if (currentQuestionIndex + 1 < currentQuestions.length) {
-                currentQuestionIndex++;
-                renderQuizInterface();
-                startTimer();
-            } else {
-                if (currentStage === 10) {
-                    showCompletion();
-                } else {
-                    currentStage++;
-                    loadStageQuestions();
-                }
-            }
-        }, 2000);
+        // Enable next button
+        const nextBtn = document.getElementById('nextBtn');
+        if (nextBtn) nextBtn.disabled = false;
     }
 
     function nextQuestion() {
@@ -864,16 +837,16 @@
         const isCorrect = (userAnswers[currentQuestionIndex] === question.correct);
         
         if (!isCorrect && currentStage >= 5) {
-            clearInterval(timerInterval);
             setTimeout(() => {
                 currentStage = 1;
                 loadStageQuestions();
-            }, 2000);
+            }, 500);
             return;
         }
         
         if (currentQuestionIndex + 1 < currentQuestions.length) {
             currentQuestionIndex++;
+            answerLocked = false;
             renderQuizInterface();
             startTimer();
         } else {
@@ -888,7 +861,7 @@
 
     function startTimer() {
         if (timerInterval) clearInterval(timerInterval);
-        timeLeft = 30;
+        timeLeft = 10;
         updateTimerDisplay();
         
         timerInterval = setInterval(() => {
@@ -898,33 +871,34 @@
             updateTimerDisplay();
             
             const timerCircle = document.getElementById('timerCircle');
-            if (timeLeft <= 10) {
+            if (timeLeft <= 3) {
                 timerCircle.classList.add('warning');
             }
             
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
-                const question = currentQuestions[currentQuestionIndex];
-                const feedbackDiv = document.getElementById('feedback');
-                feedbackDiv.className = 'feedback wrong';
-                feedbackDiv.innerHTML = `⏰ <strong>Time's up!</strong> Correct answer: ${question.correct}.<br>📖 ${question.explanation}`;
-                
-                if (currentStage >= 5) {
-                    setTimeout(() => {
-                        currentStage = 1;
-                        loadStageQuestions();
-                    }, 3000);
-                } else {
-                    setTimeout(() => {
-                        if (currentQuestionIndex + 1 < currentQuestions.length) {
-                            currentQuestionIndex++;
-                            renderQuizInterface();
-                            startTimer();
-                        } else {
-                            currentStage++;
-                            loadStageQuestions();
+                if (!answerLocked) {
+                    answerLocked = true;
+                    const question = currentQuestions[currentQuestionIndex];
+                    
+                    // Highlight correct answer
+                    const optionsList = document.querySelectorAll('.options-list li');
+                    optionsList.forEach(opt => {
+                        opt.style.pointerEvents = 'none';
+                        opt.classList.add('disabled-option');
+                        if (opt.textContent === question.correct) {
+                            opt.classList.add('correct-highlight');
                         }
-                    }, 2000);
+                    });
+                    
+                    const feedbackDiv = document.getElementById('feedback');
+                    feedbackDiv.className = 'feedback wrong';
+                    feedbackDiv.innerHTML = `⏰ <strong>Time's up!</strong> The correct answer is: <span style="color: #28a745; font-weight: bold;">${question.correct}</span><br><br>📖 ${question.explanation}`;
+                    
+                    const nextBtn = document.getElementById('nextBtn');
+                    if (nextBtn) nextBtn.disabled = false;
+                    
+                    userAnswers[currentQuestionIndex] = null;
                 }
             }
         }, 1000);
@@ -934,6 +908,20 @@
         const timerCircle = document.getElementById('timerCircle');
         if (timerCircle) {
             timerCircle.textContent = timeLeft;
+        }
+    }
+
+    function goBackToResources() {
+        if (confirm('Go back to learning resources? Your quiz progress will be lost.')) {
+            quizActive = false;
+            clearInterval(timerInterval);
+            location.reload();
+        }
+    }
+
+    function goHome() {
+        if (confirm('Go back to homepage? Your quiz progress will be lost.')) {
+            window.location.href = 'index.html';
         }
     }
 
@@ -965,8 +953,7 @@
 
     function downloadCertificate() {
         const score = calculateScore();
-        const certContent = `CERTIFICATE OF EXCELLENCE\n\nPresented to: ${currentUser.name}\nFor completing all 10 stages of the Challenge Quiz\nScore: ${score}%\nDate: ${new Date().toLocaleDateString()}\n\nErnest Embassy Digital Solutions\nwww.ernestembassydigitalsolutions.com`;
-        
+        const certContent = `CERTIFICATE OF EXCELLENCE\n\nPresented to: ${currentUser.name}\nFor completing all 10 stages of the Challenge Quiz\nScore: ${score}%\nDate: ${new Date().toLocaleDateString()}\n\nErnest Embassy Digital Solutions`;
         const blob = new Blob([certContent], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -974,7 +961,7 @@
         a.download = `Certificate_${currentUser.name.replace(/\s/g, '_')}.txt`;
         a.click();
         URL.revokeObjectURL(url);
-        alert("📄 Certificate downloaded! You can print it as proof of achievement.");
+        alert("📄 Certificate downloaded!");
     }
 
     function showCompletion() {
@@ -984,7 +971,6 @@
         const score = calculateScore();
         const reward = determineReward(score);
         
-        // Save winner to localStorage
         const winners = JSON.parse(localStorage.getItem('quizWinners') || '[]');
         winners.push({
             name: currentUser.name,
@@ -999,18 +985,18 @@
             <div class="result-box">
                 <div class="result-icon success">🏆</div>
                 <h2>Congratulations ${currentUser.name}!</h2>
-                <p style="font-size: 1.2rem;">You completed all 10 stages!</p>
-                <p style="font-size: 1.5rem; margin: 15px 0;">Your Score: ${score}%</p>
+                <p style="font-size: 1.1rem;">You completed all 10 stages!</p>
+                <p style="font-size: 1.3rem; margin: 15px 0;">Your Score: ${score}%</p>
                 <div class="reward-card">
-                    <p style="font-size: 1.1rem;">🎁 ${reward.message}</p>
+                    <p>🎁 ${reward.message}</p>
                 </div>
-                <div class="nav-buttons" style="margin-top: 30px;">
-                    <button class="btn btn-success" onclick="downloadCertificate()">📄 Download Certificate</button>
+                <div class="nav-buttons" style="margin-top: 20px;">
+                    <button class="btn btn-success" onclick="downloadCertificate()">📄 Certificate</button>
                     <button class="btn" onclick="resetQuiz()">🔄 Take Again</button>
                     <button class="btn btn-home" onclick="window.location.href='winners.html'">🏆 Hall of Fame</button>
                     <button class="btn btn-secondary" onclick="window.location.href='index.html'">🏠 Home</button>
                 </div>
-                ${reward.type === 'cash' ? '<p style="margin-top: 20px; font-size: 0.85rem; color: #28a745;">💳 Send your Opay number via WhatsApp to receive your ₦1000 prize!</p>' : ''}
+                ${reward.type === 'cash' ? '<p style="margin-top: 15px; font-size: 0.8rem; color: #28a745;">💳 Send your Opay number via WhatsApp to receive your ₦1000 prize!</p>' : ''}
             </div>
         `;
     }
@@ -1018,11 +1004,11 @@
     function resetQuiz() {
         currentStage = 1;
         currentQuestionIndex = 0;
+        answerLocked = false;
         quizActive = true;
         loadStageQuestions();
     }
 
-    // Initialize
     loadCourses();
 </script>
 

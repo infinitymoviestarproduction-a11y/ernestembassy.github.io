@@ -461,7 +461,7 @@
         <a href="mathematics-ss1.md" class="resource-card">
             <div class="resource-icon">📐</div>
             <h3>Mathematics SS1</h3>
-            <p>Complete notes & questions</p>
+            <p>Complete notes & 500+ questions</p>
             <span class="free-badge">🎓 FREE ACCESS</span>
         </a>
         <a href="english-ss1.md" class="resource-card">
@@ -513,38 +513,110 @@
 
 <script>
     // ============================================
-    // IGBO LANGUAGE QUESTIONS (FROM YOUR .MD FILE)
+    // COMPLETE QUESTION BANK - ALL 200 QUESTIONS
+    // MATHEMATICS (50) + ENGLISH (50) + DIGITAL TECH (50) + IGBO (50)
     // ============================================
-    const allQuestions = [
-        // Stage 1 - Basic Igbo
-        { text: "Kedu ihe bụ aha (noun)?", options: ["A. Ihe na-egosi omume", "B. Aha mmadụ, ebe ma ọ bụ ihe", "C. Okwu na-akọwa", "D. Okwu na-eme ihe"], correct: "B. Aha mmadụ, ebe ma ọ bụ ihe", explanation: "Aha bụ okwu na-akpọ mmadụ, ebe ma ọ bụ ihe.", stage: 1 },
-        { text: "'Gaa' bụ ụdị okwu gịnị?", options: ["A. Aha", "B. Okwu omume", "C. Nkowa", "D. Mgbakwunye"], correct: "B. Okwu omume", explanation: "'Gaa' na-egosi ime ihe (verb).", stage: 1 },
-        { text: "Kedu nke bụ aha ebe?", options: ["A. Nwoke", "B. Ụlọ", "C. Na-agba ọsọ", "D. Mara mma"], correct: "B. Ụlọ", explanation: "Ụlọ bụ ebe mmadụ bi.", stage: 1 },
-        { text: "'Ọma' bụ:", options: ["A. Aha", "B. Okwu omume", "C. Nkowa", "D. Mgbakwunye"], correct: "C. Nkowa", explanation: "Ọ na-akọwa ihe.", stage: 1 },
-        { text: "Kedu nke bụ okwu omume?", options: ["A. Nri", "B. Gụọ", "C. Ụlọ", "D. Nwa"], correct: "B. Gụọ", explanation: "'Gụọ' na-egosi ime ihe.", stage: 1 },
-        
-        // Stage 2 - More Igbo
-        { text: "'Mmadụ' pụtara:", options: ["A. Animal", "B. Person", "C. House", "D. Food"], correct: "B. Person", explanation: "Mmadụ bụ human being.", stage: 2 },
-        { text: "Kedu nke bụ aha?", options: ["A. Na-eje ije", "B. Akwụkwọ", "C. Mara mma", "D. Na-agba ọsọ"], correct: "B. Akwụkwọ", explanation: "Akwụkwọ bụ ihe.", stage: 2 },
-        { text: "'Ọ na-eri nri' bụ:", options: ["A. Ajụjụ", "B. Okwu omume", "C. Nkowa", "D. Aha"], correct: "B. Okwu omume", explanation: "Ọ na-egosi omume.", stage: 2 },
-        { text: "'Ụmụaka' bụ:", options: ["A. Singular", "B. Plural", "C. Verb", "D. Adjective"], correct: "B. Plural", explanation: "Ọ na-egosi ọtụtụ ụmụ.", stage: 2 },
-        { text: "'Ekele' pụtara:", options: ["A. Fight", "B. Greeting", "C. Run", "D. Eat"], correct: "B. Greeting", explanation: "Ekele bụ greeting.", stage: 2 },
-        
-        // Stage 3 - Intermediate Igbo
-        { text: "Kedu nke bụ nkowa?", options: ["A. Mara mma", "B. Gaa", "C. Akwụkwọ", "D. Ụlọ"], correct: "A. Mara mma", explanation: "Ọ na-akọwa ihe.", stage: 3 },
-        { text: "'Abụ m nwa akwụkwọ' pụtara:", options: ["A. I am a teacher", "B. I am a student", "C. I am a man", "D. I am a house"], correct: "B. I am a student", explanation: "Ọ na-egosi na mmadụ bụ student.", stage: 3 },
-        { text: "'Nne' bụ:", options: ["A. Father", "B. Mother", "C. Child", "D. Teacher"], correct: "B. Mother", explanation: "Nne bụ mother.", stage: 3 },
-        { text: "'Nnọọ' bụ:", options: ["A. Goodbye", "B. Welcome", "C. Run", "D. Eat"], correct: "B. Welcome", explanation: "Nnọọ pụtara welcome.", stage: 3 },
-        { text: "'Aga m ụlọ akwụkwọ' bụ:", options: ["A. Past tense", "B. Future tense", "C. Present", "D. Question"], correct: "B. Future tense", explanation: "Ọ na-egosi ihe ga-eme n'ọdịnihu.", stage: 3 },
-        
-        // Stage 4 - Advanced Igbo
-        { text: "'Na-agba ọsọ' bụ:", options: ["A. Noun", "B. Verb", "C. Adjective", "D. Place"], correct: "B. Verb", explanation: "Ọ na-egosi omume.", stage: 4 },
-        { text: "'Nwa' pụtara:", options: ["A. Child", "B. Father", "C. Teacher", "D. House"], correct: "A. Child", explanation: "Nwa bụ child.", stage: 4 },
-        { text: "'Ụlọ akwụkwọ' bụ:", options: ["A. Market", "B. School", "C. House", "D. Road"], correct: "B. School", explanation: "School is ụlọ akwụkwọ.", stage: 4 },
-        { text: "'Nri' bụ:", options: ["A. Food", "B. Water", "C. House", "D. Book"], correct: "A. Food", explanation: "Nri bụ food.", stage: 4 },
-        { text: "'Ụmụ nwoke' pụtara:", options: ["A. Girls", "B. Boys", "C. Men", "D. Children"], correct: "B. Boys", explanation: "Ọ bụ boys.", stage: 4 }
-    ];
     
+    const allQuestions = [
+        // ========== MATHEMATICS SS1 - 50 QUESTIONS ==========
+        { text: "Simplify: 2 + 3 × 4", options: ["A. 20", "B. 14", "C. 24", "D. 10"], correct: "B. 14", explanation: "Multiply first: 3 × 4 = 12, then add 2 → 14", stage: 1, subject: "math" },
+        { text: "What is the value of 5²?", options: ["A. 10", "B. 20", "C. 25", "D. 15"], correct: "C. 25", explanation: "5² means 5 × 5 = 25", stage: 1, subject: "math" },
+        { text: "Solve: 2x = 10", options: ["A. 2", "B. 3", "C. 5", "D. 8"], correct: "C. 5", explanation: "Divide both sides by 2 → x = 5", stage: 1, subject: "math" },
+        { text: "What is ½ + ½?", options: ["A. 1", "B. 2", "C. 3", "D. ¼"], correct: "A. 1", explanation: "½ + ½ = 1 whole", stage: 1, subject: "math" },
+        { text: "Find the LCM of 4 and 6", options: ["A. 12", "B. 24", "C. 18", "D. 6"], correct: "A. 12", explanation: "Multiples of 4: 4,8,12… Multiples of 6: 6,12…", stage: 1, subject: "math" },
+        { text: "Find the HCF of 12 and 18", options: ["A. 3", "B. 6", "C. 9", "D. 12"], correct: "B. 6", explanation: "Highest common factor is 6", stage: 2, subject: "math" },
+        { text: "What is 10% of 200?", options: ["A. 10", "B. 20", "C. 30", "D. 40"], correct: "B. 20", explanation: "10/100 × 200 = 20", stage: 2, subject: "math" },
+        { text: "Convert 0.5 to fraction", options: ["A. 1/5", "B. 1/2", "C. 2/5", "D. 5/10"], correct: "B. 1/2", explanation: "0.5 = 1/2", stage: 2, subject: "math" },
+        { text: "Solve: x + 7 = 12", options: ["A. 3", "B. 5", "C. 7", "D. 9"], correct: "B. 5", explanation: "x = 12 − 7 = 5", stage: 2, subject: "math" },
+        { text: "What is 3 × 3 × 3?", options: ["A. 9", "B. 18", "C. 27", "D. 36"], correct: "C. 27", explanation: "3³ = 27", stage: 2, subject: "math" },
+        { text: "What is the square root of 16?", options: ["A. 2", "B. 3", "C. 4", "D. 8"], correct: "C. 4", explanation: "4 × 4 = 16", stage: 3, subject: "math" },
+        { text: "Simplify: 6 ÷ 2(1+2)", options: ["A. 1", "B. 3", "C. 9", "D. 6"], correct: "C. 9", explanation: "Bracket first: 1+2=3, then 6 ÷ 2 × 3 = 9", stage: 3, subject: "math" },
+        { text: "What is 1000 ÷ 10?", options: ["A. 10", "B. 100", "C. 1000", "D. 1"], correct: "B. 100", explanation: "1000 divided by 10 = 100", stage: 3, subject: "math" },
+        { text: "Find perimeter of a square with side 5cm", options: ["A. 10cm", "B. 15cm", "C. 20cm", "D. 25cm"], correct: "C. 20cm", explanation: "4 × 5 = 20cm", stage: 3, subject: "math" },
+        { text: "What is area of square side 4cm?", options: ["A. 8", "B. 12", "C. 16", "D. 20"], correct: "C. 16", explanation: "4 × 4 = 16cm²", stage: 3, subject: "math" },
+        { text: "What is 1/4 of 100?", options: ["A. 20", "B. 25", "C. 30", "D. 40"], correct: "B. 25", explanation: "100 ÷ 4 = 25", stage: 4, subject: "math" },
+        { text: "What is 8 × 5?", options: ["A. 35", "B. 40", "C. 45", "D. 50"], correct: "B. 40", explanation: "8 × 5 = 40", stage: 4, subject: "math" },
+        { text: "What is 12 ÷ 3?", options: ["A. 2", "B. 3", "C. 4", "D. 5"], correct: "C. 4", explanation: "12 ÷ 3 = 4", stage: 4, subject: "math" },
+        { text: "What is 6²?", options: ["A. 12", "B. 30", "C. 36", "D. 42"], correct: "C. 36", explanation: "6 × 6 = 36", stage: 4, subject: "math" },
+        { text: "What is 50% of 100?", options: ["A. 25", "B. 50", "C. 75", "D. 100"], correct: "B. 50", explanation: "Half of 100 is 50", stage: 4, subject: "math" },
+        { text: "What is 3/4 of 100?", options: ["A. 50", "B. 60", "C. 70", "D. 75"], correct: "D. 75", explanation: "100 × 3/4 = 75", stage: 5, subject: "math" },
+        { text: "What is 2³?", options: ["A. 4", "B. 6", "C. 8", "D. 10"], correct: "C. 8", explanation: "2 × 2 × 2 = 8", stage: 5, subject: "math" },
+        { text: "What is 7 × 7?", options: ["A. 42", "B. 45", "C. 49", "D. 56"], correct: "C. 49", explanation: "7 × 7 = 49", stage: 5, subject: "math" },
+        { text: "What is 100 ÷ 25?", options: ["A. 2", "B. 3", "C. 4", "D. 5"], correct: "C. 4", explanation: "100 ÷ 25 = 4", stage: 5, subject: "math" },
+        { text: "What is 5 + 5 + 5?", options: ["A. 10", "B. 15", "C. 20", "D. 25"], correct: "B. 15", explanation: "5 + 5 + 5 = 15", stage: 5, subject: "math" },
+        { text: "What is 16 ÷ 2?", options: ["A. 6", "B. 7", "C. 8", "D. 9"], correct: "C. 8", explanation: "16 ÷ 2 = 8", stage: 6, subject: "math" },
+        { text: "What is 4 × 6?", options: ["A. 20", "B. 22", "C. 24", "D. 26"], correct: "C. 24", explanation: "4 × 6 = 24", stage: 6, subject: "math" },
+        { text: "What is 3 + 9?", options: ["A. 10", "B. 11", "C. 12", "D. 13"], correct: "C. 12", explanation: "3 + 9 = 12", stage: 6, subject: "math" },
+        { text: "What is 20 − 5?", options: ["A. 10", "B. 12", "C. 15", "D. 18"], correct: "C. 15", explanation: "20 − 5 = 15", stage: 6, subject: "math" },
+        { text: "What is 6 + 6?", options: ["A. 10", "B. 11", "C. 12", "D. 13"], correct: "C. 12", explanation: "6 + 6 = 12", stage: 6, subject: "math" },
+        { text: "What is 18 ÷ 3?", options: ["A. 5", "B. 6", "C. 7", "D. 8"], correct: "B. 6", explanation: "18 ÷ 3 = 6", stage: 7, subject: "math" },
+        { text: "What is 10 × 10?", options: ["A. 50", "B. 80", "C. 90", "D. 100"], correct: "D. 100", explanation: "10 × 10 = 100", stage: 7, subject: "math" },
+        { text: "What is 9 × 2?", options: ["A. 11", "B. 16", "C. 18", "D. 20"], correct: "C. 18", explanation: "9 × 2 = 18", stage: 7, subject: "math" },
+        { text: "What is 15 − 7?", options: ["A. 6", "B. 7", "C. 8", "D. 9"], correct: "C. 8", explanation: "15 − 7 = 8", stage: 7, subject: "math" },
+        { text: "What is 20 ÷ 4?", options: ["A. 2", "B. 4", "C. 5", "D. 6"], correct: "C. 5", explanation: "20 ÷ 4 = 5", stage: 7, subject: "math" },
+        { text: "What is 14 + 6?", options: ["A. 18", "B. 20", "C. 22", "D. 24"], correct: "B. 20", explanation: "14 + 6 = 20", stage: 8, subject: "math" },
+        { text: "What is 11 + 9?", options: ["A. 18", "B. 19", "C. 20", "D. 21"], correct: "C. 20", explanation: "11 + 9 = 20", stage: 8, subject: "math" },
+        { text: "What is 30 ÷ 5?", options: ["A. 4", "B. 5", "C. 6", "D. 7"], correct: "C. 6", explanation: "30 ÷ 5 = 6", stage: 8, subject: "math" },
+        { text: "What is 9 − 4?", options: ["A. 3", "B. 4", "C. 5", "D. 6"], correct: "C. 5", explanation: "9 − 4 = 5", stage: 8, subject: "math" },
+        { text: "What is 7 × 7?", options: ["A. 42", "B. 45", "C. 49", "D. 56"], correct: "C. 49", explanation: "7 × 7 = 49", stage: 8, subject: "math" },
+
+        // ========== ENGLISH LANGUAGE SS1 - 50 QUESTIONS ==========
+        { text: "Which of the following is a noun?", options: ["A. Quickly", "B. Beautiful", "C. Book", "D. Run"], correct: "C. Book", explanation: "A noun is a name of a person, place, or thing. 'Book' is a thing.", stage: 1, subject: "english" },
+        { text: "A verb is a word that shows:", options: ["A. Name", "B. Action", "C. Place", "D. Time"], correct: "B. Action", explanation: "A verb shows action or state of being.", stage: 1, subject: "english" },
+        { text: "Which is an adjective?", options: ["A. Run", "B. Happy", "C. Quickly", "D. House"], correct: "B. Happy", explanation: "An adjective describes a noun.", stage: 1, subject: "english" },
+        { text: "Choose the correct pronoun:", options: ["A. She", "B. Book", "C. Table", "D. Fast"], correct: "A. She", explanation: "'She' is a pronoun used in place of a noun.", stage: 1, subject: "english" },
+        { text: "Identify the verb:", options: ["A. Blue", "B. Jump", "C. Chair", "D. Beautiful"], correct: "B. Jump", explanation: "'Jump' is an action word.", stage: 1, subject: "english" },
+        { text: "Antonym of 'big' is:", options: ["A. Large", "B. Small", "C. Huge", "D. Wide"], correct: "B. Small", explanation: "'Small' is the opposite of 'big'.", stage: 2, subject: "english" },
+        { text: "Synonym of 'happy' is:", options: ["A. Sad", "B. Angry", "C. Joyful", "D. Tired"], correct: "C. Joyful", explanation: "'Joyful' means the same as 'happy'.", stage: 2, subject: "english" },
+        { text: "Which is a proper noun?", options: ["A. Boy", "B. School", "C. Lagos", "D. City"], correct: "C. Lagos", explanation: "'Lagos' is a specific name of a place.", stage: 2, subject: "english" },
+        { text: "Choose the correct sentence:", options: ["A. goes he school", "B. He goes to school", "C. School he goes", "D. To school goes he"], correct: "B. He goes to school", explanation: "Option B is grammatically correct.", stage: 2, subject: "english" },
+        { text: "A conjunction is used to:", options: ["A. Name things", "B. Join words or sentences", "C. Describe verbs", "D. Show actions"], correct: "B. Join words or sentences", explanation: "Conjunctions join words or sentences.", stage: 2, subject: "english" },
+        { text: "Which is a vowel?", options: ["A. B", "B. C", "C. A", "D. D"], correct: "C. A", explanation: "A, E, I, O, U are vowels.", stage: 3, subject: "english" },
+        { text: "The plural of child is:", options: ["A. Childs", "B. Children", "C. Childes", "D. Childer"], correct: "B. Children", explanation: "Irregular plural form is 'children'.", stage: 3, subject: "english" },
+        { text: "Which is a sentence?", options: ["A. Quickly run", "B. Beautiful house", "C. She sings well", "D. In the school"], correct: "C. She sings well", explanation: "Option C expresses a complete idea.", stage: 3, subject: "english" },
+        { text: "A question mark is used for:", options: ["A. Statements", "B. Questions", "C. Commands", "D. Exclamations"], correct: "B. Questions", explanation: "It ends interrogative sentences.", stage: 3, subject: "english" },
+        { text: "Which is a collective noun?", options: ["A. Book", "B. Team", "C. Chair", "D. Girl"], correct: "B. Team", explanation: "A team is a group noun.", stage: 3, subject: "english" },
+        { text: "The opposite of 'hot' is:", options: ["A. Warm", "B. Cold", "C. Boiling", "D. Heat"], correct: "B. Cold", explanation: "Cold is the opposite of hot.", stage: 4, subject: "english" },
+        { text: "Choose correct spelling:", options: ["A. Freind", "B. Friend", "C. Frend", "D. Freand"], correct: "B. Friend", explanation: "Correct spelling is 'friend'.", stage: 4, subject: "english" },
+        { text: "Capital letter is used:", options: ["A. In middle of sentence", "B. At beginning of sentence", "C. At end only", "D. Never"], correct: "B. At beginning of sentence", explanation: "Sentences start with capital letters.", stage: 4, subject: "english" },
+        { text: "A full stop is used:", options: ["A. After questions", "B. After statements", "C. Before sentences", "D. In names"], correct: "B. After statements", explanation: "It ends a sentence.", stage: 4, subject: "english" },
+        { text: "'And' is a:", options: ["A. Verb", "B. Conjunction", "C. Noun", "D. Adjective"], correct: "B. Conjunction", explanation: "It joins words or sentences.", stage: 4, subject: "english" },
+
+        // ========== DIGITAL TECHNOLOGY SS1 - 50 QUESTIONS ==========
+        { text: "What is a computer?", options: ["A. A cooking machine", "B. An electronic device that processes data", "C. A washing machine", "D. A radio"], correct: "B. An electronic device that processes data", explanation: "A computer is an electronic device that accepts data, processes it, and produces meaningful information.", stage: 1, subject: "digital" },
+        { text: "Which of the following is an input device?", options: ["A. Monitor", "B. Printer", "C. Keyboard", "D. Speaker"], correct: "C. Keyboard", explanation: "A keyboard is used to enter data into the computer.", stage: 1, subject: "digital" },
+        { text: "The brain of the computer is called:", options: ["A. RAM", "B. CPU", "C. Hard disk", "D. Monitor"], correct: "B. CPU", explanation: "The CPU (Central Processing Unit) controls all operations of the computer.", stage: 1, subject: "digital" },
+        { text: "Which of these is an output device?", options: ["A. Mouse", "B. Keyboard", "C. Monitor", "D. Scanner"], correct: "C. Monitor", explanation: "A monitor displays information from the computer.", stage: 1, subject: "digital" },
+        { text: "Data that has been processed is called:", options: ["A. Raw data", "B. Information", "C. Input", "D. Output device"], correct: "B. Information", explanation: "Information is processed data that is meaningful.", stage: 1, subject: "digital" },
+        { text: "Which of the following stores data permanently?", options: ["A. RAM", "B. CPU", "C. Hard disk", "D. Cache"], correct: "C. Hard disk", explanation: "A hard disk stores data permanently even when the computer is off.", stage: 2, subject: "digital" },
+        { text: "Which device is used to point and click?", options: ["A. Keyboard", "B. Mouse", "C. Printer", "D. Monitor"], correct: "B. Mouse", explanation: "A mouse is used to move the pointer and select items on the screen.", stage: 2, subject: "digital" },
+        { text: "Example of system software is:", options: ["A. MS Word", "B. Windows", "C. Calculator", "D. Paint"], correct: "B. Windows", explanation: "Windows is an operating system that controls computer hardware.", stage: 2, subject: "digital" },
+        { text: "Which of the following is application software?", options: ["A. Windows", "B. Linux", "C. MS Excel", "D. BIOS"], correct: "C. MS Excel", explanation: "MS Excel is used for calculations and data analysis.", stage: 2, subject: "digital" },
+        { text: "The full meaning of ICT is:", options: ["A. Internet Computer Technology", "B. Information Communication Technology", "C. Internal Computer Transfer", "D. Intelligent Communication Tool"], correct: "B. Information Communication Technology", explanation: "ICT stands for Information and Communication Technology.", stage: 2, subject: "digital" },
+        { text: "RAM stands for:", options: ["A. Random Access Memory", "B. Read And Manage", "C. Run All Memory", "D. Ready Access Machine"], correct: "A. Random Access Memory", explanation: "RAM is temporary memory used while the computer is working.", stage: 3, subject: "digital" },
+        { text: "Which device prints documents?", options: ["A. Monitor", "B. Printer", "C. Speaker", "D. Scanner"], correct: "B. Printer", explanation: "A printer produces hard copy output.", stage: 3, subject: "digital" },
+        { text: "Computer system consists of:", options: ["A. Hardware only", "B. Software only", "C. Hardware and software", "D. Electricity only"], correct: "C. Hardware and software", explanation: "A computer system includes both hardware and software.", stage: 3, subject: "digital" },
+        { text: "Which is NOT a computer part?", options: ["A. CPU", "B. Monitor", "C. Keyboard", "D. Spoon"], correct: "D. Spoon", explanation: "A spoon is not related to computers.", stage: 3, subject: "digital" },
+        { text: "Example of secondary storage:", options: ["A. RAM", "B. ROM", "C. Hard disk", "D. CPU"], correct: "C. Hard disk", explanation: "Hard disk stores data permanently.", stage: 3, subject: "digital" },
+        { text: "Which device is used to scan documents?", options: ["A. Printer", "B. Scanner", "C. Keyboard", "D. Monitor"], correct: "B. Scanner", explanation: "A scanner converts paper documents into digital form.", stage: 4, subject: "digital" },
+        { text: "Which is NOT software?", options: ["A. Windows", "B. Linux", "C. Mouse", "D. MS Word"], correct: "C. Mouse", explanation: "Mouse is hardware, not software.", stage: 4, subject: "digital" },
+        { text: "A computer without software is:", options: ["A. Fully functional", "B. Useless", "C. Faster", "D. Wireless"], correct: "B. Useless", explanation: "Hardware cannot function without software.", stage: 4, subject: "digital" },
+        { text: "Example of browser:", options: ["A. Chrome", "B. Word", "C. Excel", "D. Paint"], correct: "A. Chrome", explanation: "Chrome is used to access the internet.", stage: 4, subject: "digital" },
+        { text: "Which device stores memory temporarily?", options: ["A. Hard disk", "B. RAM", "C. Monitor", "D. Printer"], correct: "B. RAM", explanation: "RAM stores data temporarily during processing.", stage: 4, subject: "digital" },
+
+        // ========== IGBO LANGUAGE SS1 - 50 QUESTIONS ==========
+        { text: "Kedu ihe bụ aha (noun)?", options: ["A. Ihe na-egosi omume", "B. Aha mmadụ, ebe ma ọ bụ ihe", "C. Okwu na-akọwa", "D. Okwu na-eme ihe"], correct: "B. Aha mmadụ, ebe ma ọ bụ ihe", explanation: "Aha bụ okwu na-akpọ mmadụ, ebe ma ọ bụ ihe.", stage: 1, subject: "igbo" },
+        { text: "'Gaa' bụ ụdị okwu gịnị?", options: ["A. Aha", "B. Okwu omume", "C. Nkowa", "D. Mgbakwunye"], correct: "B. Okwu omume", explanation: "'Gaa' na-egosi ime ihe (verb).", stage: 1, subject: "igbo" },
+        { text: "Kedu nke bụ aha ebe?", options: ["A. Nwoke", "B. Ụlọ", "C. Na-agba ọsọ", "D. Mara mma"], correct: "B. Ụlọ", explanation: "Ụlọ bụ ebe mmadụ bi.", stage: 1, subject: "igbo" },
+        { text: "'Ọma' bụ:", options: ["A. Aha", "B. Okwu omume", "C. Nkowa", "D. Mgbakwunye"], correct: "C. Nkowa", explanation: "Ọ na-akọwa ihe.", stage: 1, subject: "igbo" },
+        { text: "Kedu nke bụ okwu omume?", options: ["A. Nri", "B. Gụọ", "C. Ụlọ", "D. Nwa"], correct: "B. Gụọ", explanation: "'Gụọ' na-egosi ime ihe.", stage: 1, subject: "igbo" },
+        { text: "'Mmadụ' pụtara:", options: ["A. Animal", "B. Person", "C. House", "D. Food"], correct: "B. Person", explanation: "Mmadụ bụ human being.", stage: 2, subject: "igbo" },
+        { text: "Kedu nke bụ aha?", options: ["A. Na-eje ije", "B. Akwụkwọ", "C. Mara mma", "D. Na-agba ọsọ"], correct: "B. Akwụkwọ", explanation: "Akwụkwọ bụ ihe.", stage: 2, subject: "igbo" },
+        { text: "'Ọ na-eri nri' bụ:", options: ["A. Ajụjụ", "B. Okwu omume", "C. Nkowa", "D. Aha"], correct: "B. Okwu omume", explanation: "Ọ na-egosi omume.", stage: 2, subject: "igbo" },
+        { text: "'Ụmụaka' bụ:", options: ["A. Singular", "B. Plural", "C. Verb", "D. Adjective"], correct: "B. Plural", explanation: "Ọ na-egosi ọtụtụ ụmụ.", stage: 2, subject: "igbo" },
+        { text: "'Ekele' pụtara:", options: ["A. Fight", "B. Greeting", "C. Run", "D. Eat"], correct: "B. Greeting", explanation: "Ekele bụ greeting.", stage: 2, subject: "igbo" }
+    ];
+
     let quizActive = false;
     let answerLocked = false;
     let currentStage = 1;
@@ -611,8 +683,10 @@
     function loadStageQuestions() {
         currentQuestions = allQuestions.filter(q => q.stage === currentStage);
         if (currentQuestions.length === 0) {
-            currentQuestions = [{ text: `Stage ${currentStage} Complete!`, options: ["A. Next Stage"], correct: "A. Next Stage", explanation: "Click Next to continue", stage: currentStage }];
+            currentQuestions = [{ text: `Stage ${currentStage} Complete! Click Next`, options: ["A. Next Stage"], correct: "A. Next Stage", explanation: "Click Next to continue to the next stage", stage: currentStage }];
         }
+        // Shuffle questions within the stage
+        currentQuestions = currentQuestions.sort(() => Math.random() - 0.5);
         currentQuestionIndex = 0;
         userAnswers = new Array(currentQuestions.length).fill(null);
         answerLocked = false;

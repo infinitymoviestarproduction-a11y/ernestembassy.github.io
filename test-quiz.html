@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Free Test Mode - LMS</title>
+<title>Ernest Embassy LMS Quiz Engine</title>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
@@ -21,6 +21,7 @@ background:linear-gradient(135deg,#667eea,#764ba2);
 color:white;
 text-align:center;
 padding:20px;
+font-weight:bold;
 }
 
 /* CONTAINER */
@@ -55,11 +56,8 @@ cursor:pointer;
 transition:0.3s;
 }
 
-.option:hover{
-background:#ddd;
-}
+.option:hover{background:#ddd;}
 
-/* ANSWER STATES */
 .correct{
 background:#c8f7c5 !important;
 border:2px solid green;
@@ -97,7 +95,6 @@ cursor:pointer;
 .back{background:#555;color:white;}
 .home{background:black;color:white;}
 
-/* SCORE */
 .score{
 text-align:center;
 font-size:20px;
@@ -108,8 +105,8 @@ margin-bottom:10px;
 
 <body>
 
-<div class="header">
-🎓 Free Test Mode (Firebase Powered)
+<div class="header" id="title">
+🎓 LMS Quiz Engine
 </div>
 
 <div class="container">
@@ -118,9 +115,7 @@ margin-bottom:10px;
 Score: <span id="score">0</span>
 </div>
 
-<div id="quiz">
-Loading questions...
-</div>
+<div id="quiz"></div>
 
 <div class="nav">
 <button class="back" onclick="prevPage()">⬅ Back</button>
@@ -132,32 +127,45 @@ Loading questions...
 
 <script>
 
-/* ================= FIREBASE INIT ================= */
-
+/* =========================
+   FIREBASE CONFIG
+========================= */
 const firebaseConfig = {
 apiKey: "YOUR_API_KEY",
 authDomain: "YOUR_PROJECT.firebaseapp.com",
-projectId: "YOUR_PROJECT_ID",
-storageBucket: "YOUR_PROJECT.appspot.com",
-messagingSenderId: "XXXX",
-appId: "XXXX"
+projectId: "YOUR_PROJECT_ID"
 };
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-/* ================= STATE ================= */
+/* =========================
+   MODE SYSTEM
+========================= */
+const urlParams = new URLSearchParams(window.location.search);
+let mode = urlParams.get("mode") || "free";
 
+/* UI TITLE */
+if(mode === "paid"){
+document.getElementById("title").innerText =
+"🔴 Paid Challenge Quiz (₦100 Entry)";
+}else{
+document.getElementById("title").innerText =
+"🟢 Free Test Mode";
+}
+
+/* =========================
+   STATE
+========================= */
 let questions = [];
 let page = 0;
 let perPage = 5;
 let score = 0;
 
-/* ================= LOAD QUESTIONS ================= */
-
+/* =========================
+   LOAD QUESTIONS
+========================= */
 async function loadQuestions(){
-
-try {
 
 const snap = await db.collection("questions").get();
 
@@ -167,30 +175,23 @@ snap.forEach(doc=>{
 questions.push(doc.data());
 });
 
-if(questions.length === 0){
-document.getElementById("quiz").innerHTML =
-"<h3>No questions available yet.</h3>";
-return;
+/* PAID MODE RANDOMIZATION */
+if(mode === "paid"){
+questions = questions.sort(()=>Math.random()-0.5);
 }
 
 render();
-
-} catch (error) {
-document.getElementById("quiz").innerHTML =
-"<h3>Failed to load questions.</h3>";
-console.error(error);
 }
 
-}
-
-/* ================= RENDER ================= */
-
+/* =========================
+   RENDER
+========================= */
 function render(){
 
 let start = page * perPage;
 let end = start + perPage;
 
-let slice = questions.slice(start, end);
+let slice = questions.slice(start,end);
 
 let html = "";
 
@@ -200,25 +201,23 @@ html += `<div class="card">
 <div class="question">${q.q}</div>`;
 
 q.o.forEach((opt,oi)=>{
-
 html += `
 <div class="option"
-onclick="check(this,${oi},${q.a},\`${q.exp}\`)">
+onclick="check(this,${oi},${q.a},'${q.exp}')">
 ${opt}
 </div>`;
 });
 
 html += `<div class="explanation"></div></div>`;
-
 });
 
 document.getElementById("quiz").innerHTML = html;
-
 }
 
-/* ================= CHECK ANSWER ================= */
-
-function check(el, selected, correct, exp){
+/* =========================
+   ANSWER CHECK
+========================= */
+function check(el,selected,correct,exp){
 
 let parent = el.parentElement;
 let options = parent.querySelectorAll(".option");
@@ -227,7 +226,6 @@ let explanation = parent.querySelector(".explanation");
 if(parent.classList.contains("done")) return;
 parent.classList.add("done");
 
-/* highlight correct answer */
 options.forEach((o,i)=>{
 if(i === correct){
 o.classList.add("correct");
@@ -244,11 +242,11 @@ el.classList.add("wrong");
 
 explanation.innerHTML = "📖 " + exp;
 explanation.style.display = "block";
-
 }
 
-/* ================= NAVIGATION ================= */
-
+/* =========================
+   NAVIGATION
+========================= */
 function nextPage(){
 if((page+1)*perPage < questions.length){
 page++;
@@ -267,8 +265,7 @@ function goHome(){
 window.location.href = "class.html";
 }
 
-/* ================= START ================= */
-
+/* INIT */
 loadQuestions();
 
 </script>

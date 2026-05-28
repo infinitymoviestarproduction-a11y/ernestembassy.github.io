@@ -16,384 +16,419 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: 'Segoe UI', sans-serif;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     body {
-        background: #f4f7fb;
-        color: #333;
+        background: #0a0a0a;
+        color: #fff;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
     }
 
-    /* NAVBAR */
+    /* GLOBAL NAV BAR CONTAINER */
     nav {
-        background: #1a1a2e;
-        color: white;
-        padding: 15px 20px;
+        background: #000000;
+        padding: 1rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        border-bottom: 2px solid #ffd700;
+    }
+
+    .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        color: #ffd700;
+        font-weight: bold;
+        font-size: 22px;
+    }
+
+    .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .nav-link {
+        color: #aaa;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition: color 0.2s;
+    }
+
+    .nav-link:hover, .nav-link.active {
+        color: #ffd700;
+    }
+
+    .btn-logout {
+        background: transparent;
+        color: #ff4d4d;
+        border: 1px solid #ff4d4d;
+        padding: 6px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 13px;
+        transition: 0.2s;
+    }
+
+    .btn-logout:hover {
+        background: #ff4d4d;
+        color: #fff;
+    }
+
+    /* MAIN CONTAINER INTERFACE */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 30px 20px;
+        width: 100%;
+        flex: 1;
+    }
+
+    /* STUDENT PROFILE OVERVIEW BANNER */
+    .welcome-banner {
+        background: linear-gradient(135deg, #111 0%, #1c1a12 100%);
+        border: 1px solid #222;
+        border-radius: 16px;
+        padding: 30px;
+        margin-bottom: 30px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        gap: 20px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     }
 
-    .logo {
-        font-size: 22px;
-        font-weight: bold;
+    .welcome-text h1 {
+        font-size: 28px;
         color: #ffd700;
+        margin-bottom: 5px;
     }
 
-    .user-area {
+    .welcome-text p {
+        color: #aaa;
+        font-size: 15px;
+    }
+
+    .profile-metrics {
         display: flex;
-        align-items: center;
         gap: 15px;
-    }
-
-    .user-name {
-        color: #ffd700;
-        font-weight: bold;
-    }
-
-    .logout-btn {
-        background: #dc3545;
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: bold;
-        transition: 0.3s;
-    }
-
-    .logout-btn:hover {
-        background: #c82333;
-    }
-
-    /* WELCOME METRICS BANNER */
-    .welcome-banner {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        padding: 40px 20px;
-        text-align: center;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    }
-
-    .welcome-banner h1 {
-        font-size: 32px;
-        margin-bottom: 20px;
-    }
-
-    .stats-container {
-        display: flex;
-        justify-content: center;
-        gap: 30px;
         flex-wrap: wrap;
-        margin-top: 15px;
     }
 
-    .stat-badge {
-        background: rgba(255, 255, 255, 0.15);
-        padding: 12px 25px;
-        border-radius: 30px;
-        backdrop-filter: blur(5px);
-        font-size: 16px;
-        font-weight: 500;
-        border: 1px solid rgba(255,255,255,0.2);
+    .metric-badge {
+        background: #161616;
+        border: 1px solid #333;
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
     }
 
-    .stat-badge span {
+    .metric-badge span {
         color: #ffd700;
-        font-weight: bold;
+        display: block;
+        font-size: 12px;
+        color: #888;
+        font-weight: normal;
+        margin-bottom: 2px;
     }
 
-    /* MAIN CONTAINER */
-    .container {
-        max-width: 1200px;
-        margin: auto;
-        padding: 40px 20px;
-    }
-
-    .section-title {
-        font-size: 26px;
-        color: #1a1a2e;
-        margin-bottom: 25px;
-        border-left: 5px solid #667eea;
-        padding-left: 12px;
-    }
-
-    /* CORE UTILITY PANELS */
-    .utility-grid {
+    /* UTILITY TASK DECKS */
+    .task-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
         gap: 25px;
         margin-bottom: 40px;
     }
 
-    .utility-card {
-        background: white;
-        padding: 25px;
-        border-radius: 16px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        border: 1px solid #eef2f7;
+    @media(max-width: 550px) {
+        .task-grid { grid-template-columns: 1fr; }
     }
 
-    .utility-card h3 {
+    .task-card {
+        background: #111;
+        border: 1px solid #222;
+        border-radius: 16px;
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+
+    .task-header h2 {
+        font-size: 20px;
+        color: #ffd700;
         margin-bottom: 10px;
-        color: #1a1a2e;
         display: flex;
         align-items: center;
         gap: 10px;
     }
 
-    .utility-card p {
-        color: #666;
+    .task-header p {
+        color: #aaa;
         font-size: 14px;
         line-height: 1.6;
         margin-bottom: 20px;
     }
 
     .btn-action {
-        display: inline-block;
-        text-decoration: none;
-        background: #28a745;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 8px;
+        width: 100%;
+        padding: 14px;
+        background: #ffd700;
+        color: #000;
+        border: none;
+        border-radius: 10px;
         font-weight: bold;
-        transition: 0.3s;
+        font-size: 15px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        transition: 0.2s;
     }
 
     .btn-action:hover {
-        background: #218838;
+        background: #ffea70;
     }
 
-    .btn-challenge {
-        background: #ffd700;
-        color: #1a1a2e;
-    }
-    .btn-challenge:hover {
-        background: #e0be00;
+    .btn-secondary-action {
+        background: #222;
+        color: #fff;
+        border: 1px solid #444;
     }
 
-    /* SUBJECT ROUTING PORTALS */
+    .btn-secondary-action:hover {
+        background: #333;
+    }
+
+    /* SUBJECT CHANNELS DECK */
+    .section-title {
+        font-size: 22px;
+        color: #ffd700;
+        margin-bottom: 20px;
+        border-left: 4px solid #ffd700;
+        padding-left: 12px;
+    }
+
     .subject-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 25px;
+        gap: 20px;
     }
 
     .subject-card {
-        background: white;
-        border-radius: 16px;
-        padding: 25px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        transition: 0.3s;
-        border: 1px solid #eef2f7;
+        background: #111;
+        border: 1px solid #222;
+        border-radius: 14px;
+        padding: 20px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        transition: transform 0.2s;
     }
 
     .subject-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        transform: translateY(-3px);
+        border-color: #ffd700;
     }
 
     .subject-info h3 {
-        color: #1a1a2e;
-        font-size: 20px;
-        margin-bottom: 12px;
+        font-size: 17px;
+        color: #fff;
+        margin-bottom: 8px;
     }
 
     .subject-info p {
-        color: #666;
-        font-size: 14px;
-        line-height: 1.6;
+        color: #888;
+        font-size: 13px;
+        line-height: 1.5;
         margin-bottom: 20px;
     }
 
-    .enter-btn {
-        display: block;
-        text-align: center;
+    .course-link {
+        color: #ffd700;
         text-decoration: none;
-        background: #667eea;
-        color: white;
-        padding: 12px;
-        border-radius: 8px;
+        font-size: 14px;
         font-weight: bold;
-        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 5px;
     }
 
-    .subject-card:hover .enter-btn {
-        background: #5a67d8;
+    .course-link:hover {
+        text-decoration: underline;
     }
 
-    /* FOOTER */
+    /* FOOTER LAYER */
     footer {
-        background: #1a1a2e;
-        color: white;
+        background: #000;
+        border-top: 1px solid #222;
+        padding: 20px;
         text-align: center;
-        padding: 30px;
-        margin-top: 60px;
-    }
-
-    /* RESPONSIVE DESIGN */
-    @media(max-width: 768px) {
-        nav {
-            flex-direction: column;
-            gap: 15px;
-            text-align: center;
-        }
-        .utility-grid {
-            grid-template-columns: 1fr;
-        }
-        .welcome-banner h1 {
-            font-size: 26px;
-        }
+        color: #666;
+        font-size: 13px;
+        margin-top: 40px;
     }
 </style>
 </head>
+
 <body>
 
 <nav>
-    <div class="logo">🎓 Ernest Embassy LMS</div>
-    <div class="user-area" id="navUserArea">
-        <span>Welcome, <span id="userName" class="user-name">Student</span>!</span>
-        <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+    <div class="nav-container">
+        <a href="dashboard.html" class="logo-group">🎓 Ernest Embassy LMS</a>
+        <div class="nav-links">
+            <a href="dashboard.html" class="nav-link active">📊 Dashboard</a>
+            <a href="winners.html" class="nav-link">🏆 Hall of Fame</a>
+            <button class="btn-logout" onclick="triggerSessionLogout()">🚪 Logout</button>
+        </div>
     </div>
 </nav>
 
-<div class="welcome-banner">
-    <h1>Keep Advancing Your Education 🚀</h1>
-    <div class="stats-container">
-        <div class="stat-badge">Class Rank: <span id="userRank">Loading...</span></div>
-        <div class="stat-badge">Accumulated Score: <span id="totalPoints">0%</span></div>
-        <div class="stat-badge">Current Stage: <span id="learningStage">SS1</span></div>
-    </div>
-</div>
-
 <div class="container">
-    
+
+    <div class="welcome-banner">
+        <div class="welcome-text">
+            <h1 id="welcomeUser">Welcome, Student!</h1>
+            <p>Keep advancing your cultural and technical educational milestones 🚀</p>
+        </div>
+        <div class="profile-metrics">
+            <div class="metric-badge">
+                <span>Class Rank</span>
+                🥉 Active Learner
+            </div>
+            <div class="metric-badge">
+                <span>Accumulated Score</span>
+                <span id="userScoreDisplay" style="display:inline; font-size:14px; color:#ffd700; font-weight:600;">0%</span>
+            </div>
+            <div class="metric-badge">
+                <span>Current Stage</span>
+                SS1 Academic Tier
+            </div>
+        </div>
+    </div>
+
     <h2 class="section-title">⚡ Quick Learning Tasks</h2>
-    <div class="utility-grid">
-        <div class="utility-card">
-            <h3>💰 Dynamic Challenge Quizzes</h3>
-            <p>Participate in timed assessment tournaments, hit the threshold targets, download completion certificates, and verify your payout rankings in the official Hall of Fame ledger.</p>
-            <a href="class.html" class="btn-action btn-challenge">🏆 Enter Challenge Quiz</a>
+    <div class="task-grid">
+        
+        <div class="task-card">
+            <div class="task-header">
+                <h2>💰 Dynamic Challenge Quizzes</h2>
+                <p>Participate in timed assessment tournaments, hit threshold targets, download completion certificates, and verify your payout rankings in the official Hall of Fame ledger.</p>
+            </div>
+            <a href="class.html?mode=paid" class="btn-action">🏆 Enter Challenge Quiz</a>
         </div>
-        <div class="utility-card">
-            <h3>📂 Class Study Library</h3>
-            <p>Access your digital classroom library textbooks, study summaries, curriculum review guidelines, and shared workspace materials at any time.</p>
-            <a href="educational-resources.html" class="btn-action">📚 Open Study Notes</a>
+
+        <div class="task-card">
+            <div class="task-header">
+                <h2>📂 Class Study Library</h2>
+                <p>Access your digital classroom library textbooks, study summaries, curriculum review guidelines, and shared workspace materials at any time.</p>
+            </div>
+            <a href="library.html" class="btn-action btn-secondary-action">📚 Open Study Notes</a>
         </div>
+
     </div>
 
     <h2 class="section-title">📘 Your Academic Subjects</h2>
-    <div class="subject-grid" id="subjectPortalsContainer">
+    <div class="subject-grid">
+
+        <div class="subject-card">
+            <div class="subject-info">
+                <h3>💻 Digital Technology SS1</h3>
+                <p>Master computer fundamentals, networking, ICT infrastructure, internet tech, and foundational software engineering skills.</p>
+            </div>
+            <a href="class.html?mode=free&subject=digital-technology-ss1" class="course-link">Go to Course ➔</a>
         </div>
+
+        <div class="subject-card">
+            <div class="subject-info">
+                <h3>📐 Mathematics SS1</h3>
+                <p>Build comprehensive skills across algebra, coordinate geometry, structural quadratic equation systems, and WAEC/JAMB components.</p>
+            </div>
+            <a href="class.html?mode=free&subject=mathematics-ss1" class="course-link">Go to Course ➔</a>
+        </div>
+
+        <div class="subject-card">
+            <div class="subject-info">
+                <h3>📖 English Language SS1</h3>
+                <p>Strengthen grammatical competence, syntax error isolation, essay composition strategies, and reading comprehension speeds.</p>
+            </div>
+            <a href="class.html?mode=free&subject=english-language-ss1" class="course-link">Go to Course ➔</a>
+        </div>
+
+        <div class="subject-card">
+            <div class="subject-info">
+                <h3>🌍 Igbo Language SS1</h3>
+                <p>Dive deep into cultural translation matrices, linguistic grammar rules, traditional terminology, and indigenous speech patterns.</p>
+            </div>
+            <a href="class.html?mode=free&subject=igbo-language-ss1" class="course-link">Go to Course ➔</a>
+        </div>
+
+    </div>
+
 </div>
 
 <footer>
-    <p>© 2026 Ernest Embassy Digital Solutions</p>
-    <p>Professional Online Learning Platform</p>
+    © 2026 Ernest Embassy Digital Solutions | Professional Online Learning Platform
 </footer>
 
 <script>
 /* ====================================
-   CURRICULUM ARCHITECTURE CONFIGURATION
+   WORKSPACE LIFECYCLE MANAGEMENT
 ==================================== */
-const curriculumSubjects = [
-    {
-        id: "digital-technology-ss1",
-        title: "💻 Digital Technology SS1",
-        desc: "Master computer fundamentals, networking, ICT infrastructure, internet tech, and foundational software engineering skills."
-    },
-    {
-        id: "mathematics-ss1",
-        title: "📐 Mathematics SS1",
-        desc: "Build comprehensive skills across algebra, coordinate geometry, structural quadratic equation systems, and WAEC/JAMB components."
-    },
-    {
-        id: "english-ss1",
-        title: "📖 English Language SS1",
-        desc: "Strengthen grammatical competence, syntax error isolation, essay composition strategies, and reading comprehension speeds."
-    },
-    {
-        id: "igbo-ss1",
-        title: "🌍 Igbo Language SS1",
-        desc: "Dive deep into cultural translation matrices, linguistic grammar rules, traditional terminology, and indigenous speech patterns."
-    }
-];
-
-/* ====================================
-   RENDER PORTAL MATRIX
-==================================== */
-function buildSubjectPortals() {
-    const portalContainer = document.getElementById("subjectPortalsContainer");
-    if (!portalContainer) return;
-    
-    let htmlMarkup = "";
-    curriculumSubjects.forEach(sub => {
-        htmlMarkup += `
-            <div class="subject-card">
-                <div class="subject-info">
-                    <h3>${sub.title}</h3>
-                    <p>${sub.desc}</p>
-                </div>
-                <a href="course.html?subject=${sub.id}" class="enter-btn">Go to Course ➔</a>
-            </div>
-        `;
-    });
-    portalContainer.innerHTML = htmlMarkup;
-}
-
-/* ====================================
-   ASYNCHRONOUS PROFILE INFRASTRUCTURE
-==================================== */
-async function loadDashboardMetrics() {
-    try {
-        // Fetch explicit username string from auth.js cache
-        const studentName = getUserName();
-        document.getElementById("userName").innerText = studentName;
-        
-        // Query points database metrics
-        const totalScoreValue = await loadUserScore();
-        document.getElementById("totalPoints").innerText = `${totalScoreValue}%`;
-        
-        // Determine system operational badge tier dynamically
-        const rankBadge = document.getElementById("userRank");
-        if (totalScoreValue >= 85) {
-            rankBadge.innerText = "🥇 Elite Scholar";
-        } else if (totalScoreValue >= 60) {
-            rankBadge.innerText = "🥈 Rising Academic";
-        } else {
-            rankBadge.innerText = "🥉 Active Learner";
-        }
-        
-    } catch(err) {
-        console.error("Error executing profile query metrics:", err);
-    }
-}
-
-/* ====================================
-   INITIALIZE DASHBOARD INTERFACE
-==================================== */
-async function initializeDashboard() {
-    // Intercept routes securely and standardize active auth contexts
+async function runDashboardInitialization() {
+    // Invoke secure routing shield from central auth code
     await initAuth(true);
     
-    // Inject admin panel controls inline for verified administrators
-    await showAdminButtonIfNeeded("#navUserArea");
-    
-    // Compile interface matrices
-    buildSubjectPortals();
-    await loadDashboardMetrics();
+    // Read and print local structural profile references safely
+    if (currentUser) {
+        document.getElementById("welcomeUser").innerText = `Welcome, ${getUserName()}!`;
+        if (currentUser.score !== undefined) {
+            document.getElementById("userScoreDisplay").innerText = `${currentUser.score}%`;
+        }
+    }
 }
 
-// Attach execution triggers cleanly 
+/* ====================================
+   TRIGGER SECURITY LOGOUT SEQUENCE
+==================================== */
+async function triggerSessionLogout() {
+    try {
+        await auth.signOut();
+        localStorage.removeItem("currentUser");
+        window.location.href = "login.html";
+    } catch (e) {
+        console.error("Session disconnection exception framework triggered:", e);
+        alert("Logout operation timed out. Verify network layers.");
+    }
+}
+
+// Attach event triggers safely
 if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initializeDashboard);
+    document.addEventListener("DOMContentLoaded", runDashboardInitialization);
 } else {
-    initializeDashboard();
+    runDashboardInitialization();
 }
 </script>
 

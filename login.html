@@ -2,222 +2,124 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login - Ernest Embassy LMS</title>
+<title>LMS Login</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI', sans-serif;
-}
-
 body{
-    background:linear-gradient(135deg,#f5f7fa,#e9ecef);
+margin:0;
+font-family:Segoe UI;
+background:linear-gradient(135deg,#667eea,#764ba2);
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
 }
 
-/* NAV */
-nav{
-    background:#1a1a2e;
-    color:white;
-    padding:15px 20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-}
-
-.nav-left{
-    display:flex;
-    gap:10px;
-    align-items:center;
-}
-
-.btn{
-    padding:8px 14px;
-    border-radius:8px;
-    text-decoration:none;
-    font-weight:bold;
-    color:white;
-}
-
-.home{ background:#667eea; }
-.register{ background:#28a745; }
-
-/* LOGIN BOX */
-.container{
-    max-width:450px;
-    margin:80px auto;
-    background:white;
-    padding:30px;
-    border-radius:15px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.1);
-}
-
-h1{
-    text-align:center;
-    color:#1a1a2e;
-}
-
-p{
-    text-align:center;
-    color:#666;
-    margin-bottom:20px;
+.box{
+background:white;
+padding:30px;
+border-radius:15px;
+width:350px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+text-align:center;
 }
 
 input{
-    width:100%;
-    padding:12px;
-    margin:10px 0;
-    border-radius:8px;
-    border:1px solid #ccc;
+width:100%;
+padding:12px;
+margin:10px 0;
+border-radius:10px;
+border:1px solid #ddd;
+outline:none;
 }
 
 button{
-    width:100%;
-    padding:12px;
-    background:#667eea;
-    color:white;
-    border:none;
-    border-radius:8px;
-    font-weight:bold;
-    cursor:pointer;
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+background:#667eea;
+color:white;
+cursor:pointer;
+font-size:16px;
 }
 
 button:hover{
-    background:#5a67d8;
+background:#5a67d8;
 }
 
-.error{
-    display:none;
-    background:#ffdddd;
-    color:red;
-    padding:10px;
-    border-radius:8px;
-    margin-bottom:10px;
+h2{
+color:#333;
 }
 
-.footer-text{
-    text-align:center;
-    margin-top:20px;
-    font-size:14px;
-}
-
-.footer-text a{
-    color:#667eea;
-    text-decoration:none;
+p{
+color:red;
 }
 </style>
 </head>
 
 <body>
 
-<!-- NAVIGATION -->
-<nav>
-    <div class="nav-left">
-        <a class="btn home" href="index.html">🏠 Home</a>
-        <a class="btn register" href="register.html">📝 Register</a>
-    </div>
+<div class="box">
+<h2>🎓 LMS Login</h2>
 
-    <div>
-        🔐 Ernest Embassy LMS
-    </div>
-</nav>
+<input id="email" type="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
 
-<!-- LOGIN CONTAINER -->
-<div class="container">
+<button onclick="login()">Login</button>
+<button onclick="signup()" style="margin-top:10px;background:black;">Create Account</button>
 
-    <h1>Welcome Back</h1>
-    <p>Login to continue learning</p>
-
-    <div id="errorBox" class="error"></div>
-
-    <form id="loginForm">
-
-        <input type="email" id="email" placeholder="Email Address" required>
-
-        <input type="password" id="password" placeholder="Password" required>
-
-        <button type="submit">Login</button>
-
-    </form>
-
-    <div class="footer-text">
-        Don’t have an account?
-        <a href="register.html">Create one</a>
-    </div>
-
+<p id="msg"></p>
 </div>
 
-<!-- FIREBASE -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-
 <script>
-/* =========================
-   FIREBASE INIT
-========================= */
+
+/* FIREBASE CONFIG */
 const firebaseConfig = {
-    apiKey: "AIzaSyD6xpH_zLnoJP2PTSMHg80R94_Vd-fUZSA",
-    authDomain: "ernest-embassy-travel-website.firebaseapp.com",
-    projectId: "ernest-embassy-travel-website",
-    storageBucket: "ernest-embassy-travel-website.firebasestorage.app",
-    messagingSenderId: "831442789419",
-    appId: "1:831442789419:web:1845791aafb7ac9d31366e"
+apiKey: "YOUR_API_KEY",
+authDomain: "YOUR_PROJECT.firebaseapp.com",
+projectId: "YOUR_PROJECT_ID",
+appId: "XXXX"
 };
 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
-/* =========================
-   SESSION BUILDER
-========================= */
-function createSessionUser(user){
-    return {
-        uid: user.uid,
-        email: user.email,
-        name: user.displayName || user.email.split("@")[0],
-        role: "student",
-        loginTime: new Date().toISOString()
-    };
+/* LOGIN */
+function login(){
+
+let email = document.getElementById("email").value;
+let password = document.getElementById("password").value;
+
+auth.signInWithEmailAndPassword(email,password)
+.then(()=>{
+window.location.href = "class.html";
+})
+.catch(err=>{
+document.getElementById("msg").innerText = err.message;
+});
+
 }
 
-/* =========================
-   LOGIN HANDLER
-========================= */
-document.getElementById("loginForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
+/* SIGNUP */
+function signup(){
 
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const errorBox = document.getElementById("errorBox");
+let email = document.getElementById("email").value;
+let password = document.getElementById("password").value;
 
-    errorBox.style.display = "none";
-
-    try {
-        const result = await auth.signInWithEmailAndPassword(email, password);
-        const user = result.user;
-
-        if (!user.emailVerified) {
-            errorBox.innerText = "Please verify your email before login.";
-            errorBox.style.display = "block";
-            await auth.signOut();
-            return;
-        }
-
-        const sessionUser = createSessionUser(user);
-
-        localStorage.setItem("currentUser", JSON.stringify(sessionUser));
-        localStorage.setItem("userLoggedIn", "true");
-
-        window.location.href = "dashboard.html";
-
-    } catch (error) {
-        errorBox.innerText = error.message;
-        errorBox.style.display = "block";
-    }
+auth.createUserWithEmailAndPassword(email,password)
+.then(()=>{
+window.location.href = "class.html";
+})
+.catch(err=>{
+document.getElementById("msg").innerText = err.message;
 });
+
+}
+
 </script>
 
 </body>

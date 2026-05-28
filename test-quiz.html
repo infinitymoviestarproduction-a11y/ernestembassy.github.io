@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Ernest Embassy LMS Quiz Engine</title>
+<title>LMS Quiz Engine - Secure Exam Mode</title>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
@@ -13,6 +13,7 @@ body{
 margin:0;
 font-family:Segoe UI;
 background:#eef2f7;
+user-select:none;
 }
 
 /* HEADER */
@@ -22,6 +23,15 @@ color:white;
 text-align:center;
 padding:20px;
 font-weight:bold;
+}
+
+/* TIMER */
+.timer{
+text-align:center;
+font-size:22px;
+font-weight:bold;
+color:#dc3545;
+margin-top:10px;
 }
 
 /* CONTAINER */
@@ -105,8 +115,12 @@ margin-bottom:10px;
 
 <body>
 
-<div class="header" id="title">
-🎓 LMS Quiz Engine
+<div class="header">
+🎓 LMS Secure Quiz Engine (Paid + Free Mode)
+</div>
+
+<div class="timer">
+⏱ Time Left: <span id="time">10:00</span>
 </div>
 
 <div class="container">
@@ -119,7 +133,7 @@ Score: <span id="score">0</span>
 
 <div class="nav">
 <button class="back" onclick="prevPage()">⬅ Back</button>
-<button class="home" onclick="goHome()">🏠 Home</button>
+<button class="home" onclick="goHome()">🏠 Exit</button>
 <button class="next" onclick="nextPage()">Next ➡</button>
 </div>
 
@@ -127,9 +141,7 @@ Score: <span id="score">0</span>
 
 <script>
 
-/* =========================
-   FIREBASE CONFIG
-========================= */
+/* FIREBASE */
 const firebaseConfig = {
 apiKey: "YOUR_API_KEY",
 authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -139,32 +151,70 @@ projectId: "YOUR_PROJECT_ID"
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-/* =========================
-   MODE SYSTEM
-========================= */
+/* MODE */
 const urlParams = new URLSearchParams(window.location.search);
 let mode = urlParams.get("mode") || "free";
 
-/* UI TITLE */
-if(mode === "paid"){
-document.getElementById("title").innerText =
-"🔴 Paid Challenge Quiz (₦100 Entry)";
-}else{
-document.getElementById("title").innerText =
-"🟢 Free Test Mode";
-}
+/* TIMER SETTINGS */
+let totalTime = mode === "paid" ? 600 : 1200; // 10 min paid, 20 min free
+let timeLeft = totalTime;
 
-/* =========================
-   STATE
-========================= */
+/* SECURITY FLAGS */
+let examLocked = false;
+let tabSwitchCount = 0;
+
+/* QUESTIONS */
 let questions = [];
 let page = 0;
 let perPage = 5;
 let score = 0;
 
-/* =========================
-   LOAD QUESTIONS
-========================= */
+/* TIMER */
+function startTimer(){
+
+let timer = setInterval(()=>{
+
+if(examLocked) return;
+
+let min = Math.floor(timeLeft / 60);
+let sec = timeLeft % 60;
+
+document.getElementById("time").innerText =
+`${min}:${sec < 10 ? "0"+sec : sec}`;
+
+timeLeft--;
+
+if(timeLeft < 0){
+clearInterval(timer);
+lockExam();
+}
+
+},1000);
+
+}
+
+/* LOCK EXAM */
+function lockExam(){
+examLocked = true;
+alert("⛔ Time is up! Exam submitted automatically.");
+window.location.href = "class.html";
+}
+
+/* SECURITY: TAB SWITCH DETECTION */
+document.addEventListener("visibilitychange", ()=>{
+if(document.hidden && mode === "paid"){
+tabSwitchCount++;
+
+if(tabSwitchCount >= 3){
+alert("🚫 Suspicious activity detected. Exam locked.");
+lockExam();
+}else{
+alert("⚠ Warning: Do not leave the exam tab!");
+}
+}
+});
+
+/* LOAD QUESTIONS */
 async function loadQuestions(){
 
 const snap = await db.collection("questions").get();
@@ -175,17 +225,16 @@ snap.forEach(doc=>{
 questions.push(doc.data());
 });
 
-/* PAID MODE RANDOMIZATION */
+/* shuffle in paid mode */
 if(mode === "paid"){
-questions = questions.sort(()=>Math.random()-0.5);
+questions.sort(()=>Math.random()-0.5);
 }
 
 render();
+startTimer();
 }
 
-/* =========================
-   RENDER
-========================= */
+/* RENDER */
 function render(){
 
 let start = page * perPage;
@@ -195,7 +244,7 @@ let slice = questions.slice(start,end);
 
 let html = "";
 
-slice.forEach((q)=>{
+slice.forEach(q=>{
 
 html += `<div class="card">
 <div class="question">${q.q}</div>`;
@@ -214,10 +263,10 @@ html += `<div class="explanation"></div></div>`;
 document.getElementById("quiz").innerHTML = html;
 }
 
-/* =========================
-   ANSWER CHECK
-========================= */
+/* CHECK ANSWER */
 function check(el,selected,correct,exp){
+
+if(examLocked) return;
 
 let parent = el.parentElement;
 let options = parent.querySelectorAll(".option");
@@ -244,9 +293,7 @@ explanation.innerHTML = "📖 " + exp;
 explanation.style.display = "block";
 }
 
-/* =========================
-   NAVIGATION
-========================= */
+/* NAV */
 function nextPage(){
 if((page+1)*perPage < questions.length){
 page++;
@@ -265,7 +312,6 @@ function goHome(){
 window.location.href = "class.html";
 }
 
-/* INIT */
 loadQuestions();
 
 </script>

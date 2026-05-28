@@ -1,49 +1,401 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Dashboard - Ernest Embassy LMS</title>
-    
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
-    
-    <!-- Central Auth Script -->
-    <script src="auth.js"></script>
-    
-    <style>
-        /* Your styles here */
-        .user-area { display: flex; gap: 10px; align-items: center; }
-        .logout-btn { background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard - Ernest Embassy LMS</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+
+<script src="auth.js"></script>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+        background: #f4f7fb;
+        color: #333;
+    }
+
+    /* NAVBAR */
+    nav {
+        background: #1a1a2e;
+        color: white;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+        font-size: 22px;
+        font-weight: bold;
+        color: #ffd700;
+    }
+
+    .user-area {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .user-name {
+        color: #ffd700;
+        font-weight: bold;
+    }
+
+    .logout-btn {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .logout-btn:hover {
+        background: #c82333;
+    }
+
+    /* WELCOME METRICS BANNER */
+    .welcome-banner {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 40px 20px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+
+    .welcome-banner h1 {
+        font-size: 32px;
+        margin-bottom: 20px;
+    }
+
+    .stats-container {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+        margin-top: 15px;
+    }
+
+    .stat-badge {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 12px 25px;
+        border-radius: 30px;
+        backdrop-filter: blur(5px);
+        font-size: 16px;
+        font-weight: 500;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .stat-badge span {
+        color: #ffd700;
+        font-weight: bold;
+    }
+
+    /* MAIN CONTAINER */
+    .container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 40px 20px;
+    }
+
+    .section-title {
+        font-size: 26px;
+        color: #1a1a2e;
+        margin-bottom: 25px;
+        border-left: 5px solid #667eea;
+        padding-left: 12px;
+    }
+
+    /* CORE UTILITY PANELS */
+    .utility-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+        margin-bottom: 40px;
+    }
+
+    .utility-card {
+        background: white;
+        padding: 25px;
+        border-radius: 16px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        border: 1px solid #eef2f7;
+    }
+
+    .utility-card h3 {
+        margin-bottom: 10px;
+        color: #1a1a2e;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .utility-card p {
+        color: #666;
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .btn-action {
+        display: inline-block;
+        text-decoration: none;
+        background: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .btn-action:hover {
+        background: #218838;
+    }
+
+    .btn-challenge {
+        background: #ffd700;
+        color: #1a1a2e;
+    }
+    .btn-challenge:hover {
+        background: #e0be00;
+    }
+
+    /* SUBJECT ROUTING PORTALS */
+    .subject-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 25px;
+    }
+
+    .subject-card {
+        background: white;
+        border-radius: 16px;
+        padding: 25px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: 0.3s;
+        border: 1px solid #eef2f7;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .subject-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .subject-info h3 {
+        color: #1a1a2e;
+        font-size: 20px;
+        margin-bottom: 12px;
+    }
+
+    .subject-info p {
+        color: #666;
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+
+    .enter-btn {
+        display: block;
+        text-align: center;
+        text-decoration: none;
+        background: #667eea;
+        color: white;
+        padding: 12px;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .subject-card:hover .enter-btn {
+        background: #5a67d8;
+    }
+
+    /* FOOTER */
+    footer {
+        background: #1a1a2e;
+        color: white;
+        text-align: center;
+        padding: 30px;
+        margin-top: 60px;
+    }
+
+    /* RESPONSIVE DESIGN */
+    @media(max-width: 768px) {
+        nav {
+            flex-direction: column;
+            gap: 15px;
+            text-align: center;
+        }
+        .utility-grid {
+            grid-template-columns: 1fr;
+        }
+        .welcome-banner h1 {
+            font-size: 26px;
+        }
+    }
+</style>
 </head>
 <body>
-    <nav>
-        <div class="logo">🎓 Ernest Embassy LMS</div>
-        <div class="user-area">
-            <span>Welcome, <span id="userName">Student</span>!</span>
-            <button class="logout-btn" onclick="logout()">Logout</button>
+
+<nav>
+    <div class="logo">🎓 Ernest Embassy LMS</div>
+    <div class="user-area" id="navUserArea">
+        <span>Welcome, <span id="userName" class="user-name">Student</span>!</span>
+        <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+    </div>
+</nav>
+
+<div class="welcome-banner">
+    <h1>Keep Advancing Your Education 🚀</h1>
+    <div class="stats-container">
+        <div class="stat-badge">Class Rank: <span id="userRank">Loading...</span></div>
+        <div class="stat-badge">Accumulated Score: <span id="totalPoints">0%</span></div>
+        <div class="stat-badge">Current Stage: <span id="learningStage">SS1</span></div>
+    </div>
+</div>
+
+<div class="container">
+    
+    <h2 class="section-title">⚡ Quick Learning Tasks</h2>
+    <div class="utility-grid">
+        <div class="utility-card">
+            <h3>💰 Dynamic Challenge Quizzes</h3>
+            <p>Participate in timed assessment tournaments, hit the threshold targets, download completion certificates, and verify your payout rankings in the official Hall of Fame ledger.</p>
+            <a href="class.html" class="btn-action btn-challenge">🏆 Enter Challenge Quiz</a>
         </div>
-    </nav>
+        <div class="utility-card">
+            <h3>📂 Class Study Library</h3>
+            <p>Access your digital classroom library textbooks, study summaries, curriculum review guidelines, and shared workspace materials at any time.</p>
+            <a href="educational-resources.html" class="btn-action">📚 Open Study Notes</a>
+        </div>
+    </div>
+
+    <h2 class="section-title">📘 Your Academic Subjects</h2>
+    <div class="subject-grid" id="subjectPortalsContainer">
+        </div>
+</div>
+
+<footer>
+    <p>© 2026 Ernest Embassy Digital Solutions</p>
+    <p>Professional Online Learning Platform</p>
+</footer>
+
+<script>
+/* ====================================
+   CURRICULUM ARCHITECTURE CONFIGURATION
+==================================== */
+const curriculumSubjects = [
+    {
+        id: "digital-technology-ss1",
+        title: "💻 Digital Technology SS1",
+        desc: "Master computer fundamentals, networking, ICT infrastructure, internet tech, and foundational software engineering skills."
+    },
+    {
+        id: "mathematics-ss1",
+        title: "📐 Mathematics SS1",
+        desc: "Build comprehensive skills across algebra, coordinate geometry, structural quadratic equation systems, and WAEC/JAMB components."
+    },
+    {
+        id: "english-ss1",
+        title: "📖 English Language SS1",
+        desc: "Strengthen grammatical competence, syntax error isolation, essay composition strategies, and reading comprehension speeds."
+    },
+    {
+        id: "igbo-ss1",
+        title: "🌍 Igbo Language SS1",
+        desc: "Dive deep into cultural translation matrices, linguistic grammar rules, traditional terminology, and indigenous speech patterns."
+    }
+];
+
+/* ====================================
+   RENDER PORTAL MATRIX
+==================================== */
+function buildSubjectPortals() {
+    const portalContainer = document.getElementById("subjectPortalsContainer");
+    if (!portalContainer) return;
     
-    <!-- Rest of your dashboard content -->
+    let htmlMarkup = "";
+    curriculumSubjects.forEach(sub => {
+        htmlMarkup += `
+            <div class="subject-card">
+                <div class="subject-info">
+                    <h3>${sub.title}</h3>
+                    <p>${sub.desc}</p>
+                </div>
+                <a href="course.html?subject=${sub.id}" class="enter-btn">Go to Course ➔</a>
+            </div>
+        `;
+    });
+    portalContainer.innerHTML = htmlMarkup;
+}
+
+/* ====================================
+   ASYNCHRONOUS PROFILE INFRASTRUCTURE
+==================================== */
+async function loadDashboardMetrics() {
+    try {
+        // Fetch explicit username string from auth.js cache
+        const studentName = getUserName();
+        document.getElementById("userName").innerText = studentName;
+        
+        // Query points database metrics
+        const totalScoreValue = await loadUserScore();
+        document.getElementById("totalPoints").innerText = `${totalScoreValue}%`;
+        
+        // Determine system operational badge tier dynamically
+        const rankBadge = document.getElementById("userRank");
+        if (totalScoreValue >= 85) {
+            rankBadge.innerText = "🥇 Elite Scholar";
+        } else if (totalScoreValue >= 60) {
+            rankBadge.innerText = "🥈 Rising Academic";
+        } else {
+            rankBadge.innerText = "🥉 Active Learner";
+        }
+        
+    } catch(err) {
+        console.error("Error executing profile query metrics:", err);
+    }
+}
+
+/* ====================================
+   INITIALIZE DASHBOARD INTERFACE
+==================================== */
+async function initializeDashboard() {
+    // Intercept routes securely and standardize active auth contexts
+    await initAuth(true);
     
-    <script>
-        // No need for additional auth code - auth.js handles everything!
-        // Just use the available functions if needed:
-        
-        // Example: Display user score
-        loadUserScore().then(score => {
-            console.log("User score:", score);
-        });
-        
-        // Check if admin to show extra features
-        isAdmin().then(admin => {
-            if (admin) {
-                console.log("Admin user detected");
-            }
-        });
-    </script>
+    // Inject admin panel controls inline for verified administrators
+    await showAdminButtonIfNeeded("#navUserArea");
+    
+    // Compile interface matrices
+    buildSubjectPortals();
+    await loadDashboardMetrics();
+}
+
+// Attach execution triggers cleanly 
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeDashboard);
+} else {
+    initializeDashboard();
+}
+</script>
+
 </body>
 </html>

@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>LMS Admin Panel</title>
+<title>LMS Admin Panel - Firebase Connected</title>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js"></script>
+<!-- FIREBASE COMPAT -->
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
 
 <style>
 body{
@@ -15,7 +16,6 @@ background:linear-gradient(135deg,#667eea,#764ba2);
 color:white;
 }
 
-/* HEADER */
 .header{
 text-align:center;
 padding:20px;
@@ -23,14 +23,12 @@ font-size:24px;
 font-weight:bold;
 }
 
-/* CONTAINER */
 .container{
 max-width:1000px;
 margin:auto;
 padding:20px;
 }
 
-/* CARD */
 .card{
 background:white;
 color:#333;
@@ -40,24 +38,20 @@ margin-bottom:20px;
 box-shadow:0 10px 25px rgba(0,0,0,0.2);
 }
 
-/* INPUTS */
 input, textarea, select{
 width:100%;
 padding:12px;
-margin-top:8px;
-margin-bottom:15px;
+margin:8px 0 15px 0;
 border-radius:10px;
 border:1px solid #ddd;
-font-size:14px;
 outline:none;
 }
 
 textarea{
+height:120px;
 resize:none;
-height:100px;
 }
 
-/* BUTTON */
 button{
 background:#667eea;
 color:white;
@@ -67,17 +61,16 @@ border-radius:10px;
 cursor:pointer;
 width:100%;
 font-size:16px;
-transition:0.3s;
 }
 
 button:hover{
 background:#5a67d8;
-transform:scale(1.02);
 }
 
-h2{
-margin-bottom:10px;
-color:#444;
+.success{
+color:green;
+font-weight:bold;
+margin-top:10px;
 }
 </style>
 </head>
@@ -85,12 +78,12 @@ color:#444;
 <body>
 
 <div class="header">
-⚙️ LMS ADMIN DASHBOARD
+⚙️ LMS ADMIN PANEL (Firebase Connected)
 </div>
 
 <div class="container">
 
-<!-- ADD QUESTION -->
+<!-- QUESTION -->
 <div class="card">
 <h2>➕ Add Question</h2>
 
@@ -102,18 +95,20 @@ color:#444;
 <input id="o4" placeholder="Option 4">
 
 <select id="ans">
-<option value="0">Correct Answer Index (0)</option>
-<option value="1">Correct Answer Index (1)</option>
-<option value="2">Correct Answer Index (2)</option>
-<option value="3">Correct Answer Index (3)</option>
+<option value="0">Correct Answer (0)</option>
+<option value="1">Correct Answer (1)</option>
+<option value="2">Correct Answer (2)</option>
+<option value="3">Correct Answer (3)</option>
 </select>
 
 <textarea id="exp" placeholder="Explanation"></textarea>
 
 <button onclick="saveQuestion()">💾 Save Question</button>
+
+<div id="qMsg"></div>
 </div>
 
-<!-- ADD LESSON -->
+<!-- LESSON -->
 <div class="card">
 <h2>📚 Add Lesson</h2>
 
@@ -122,13 +117,15 @@ color:#444;
 <textarea id="content" placeholder="Lesson Content"></textarea>
 
 <button onclick="saveLesson()">💾 Save Lesson</button>
+
+<div id="lMsg"></div>
 </div>
 
 </div>
 
 <script>
 
-/* 🔥 FIREBASE CONFIG - REPLACE WITH YOUR OWN */
+/* FIREBASE CONFIG (REPLACE WITH YOUR OWN) */
 const firebaseConfig = {
 apiKey: "YOUR_API_KEY",
 authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -142,65 +139,86 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 /* =========================
-SAVE QUESTION TO FIREBASE
+   SAVE QUESTION TO FIREBASE
 ========================= */
-function saveQuestion(){
+async function saveQuestion(){
 
-const data = {
-q: document.getElementById("q").value,
-o: [
-document.getElementById("o1").value,
-document.getElementById("o2").value,
-document.getElementById("o3").value,
-document.getElementById("o4").value
-],
-a: Number(document.getElementById("ans").value),
-exp: document.getElementById("exp").value,
+let q = document.getElementById("q").value;
+let o1 = document.getElementById("o1").value;
+let o2 = document.getElementById("o2").value;
+let o3 = document.getElementById("o3").value;
+let o4 = document.getElementById("o4").value;
+let a = Number(document.getElementById("ans").value);
+let exp = document.getElementById("exp").value;
+
+if(!q || !o1 || !o2 || !o3 || !o4 || !exp){
+document.getElementById("qMsg").innerHTML =
+"<p style='color:red'>⚠️ Please fill all fields</p>";
+return;
+}
+
+try{
+
+await db.collection("questions").add({
+q: q,
+o: [o1,o2,o3,o4],
+a: a,
+exp: exp,
 createdAt: new Date()
-};
-
-db.collection("questions").add(data)
-.then(() => {
-
-alert("✅ Question saved successfully!");
-
-document.getElementById("q").value = "";
-document.getElementById("o1").value = "";
-document.getElementById("o2").value = "";
-document.getElementById("o3").value = "";
-document.getElementById("o4").value = "";
-document.getElementById("exp").value = "";
-
-})
-.catch(err => {
-alert("❌ Error: " + err.message);
 });
+
+/* clear form */
+document.getElementById("q").value="";
+document.getElementById("o1").value="";
+document.getElementById("o2").value="";
+document.getElementById("o3").value="";
+document.getElementById("o4").value="";
+document.getElementById("exp").value="";
+
+document.getElementById("qMsg").innerHTML =
+"<p class='success'>✅ Question saved successfully!</p>";
+
+}catch(err){
+console.log(err);
+document.getElementById("qMsg").innerHTML =
+"<p style='color:red'>❌ Error saving question</p>";
+}
 
 }
 
 /* =========================
-SAVE LESSON TO FIREBASE
+   SAVE LESSON TO FIREBASE
 ========================= */
-function saveLesson(){
+async function saveLesson(){
 
-const lesson = {
-title: document.getElementById("title").value,
-content: document.getElementById("content").value,
+let title = document.getElementById("title").value;
+let content = document.getElementById("content").value;
+
+if(!title || !content){
+document.getElementById("lMsg").innerHTML =
+"<p style='color:red'>⚠️ Fill all fields</p>";
+return;
+}
+
+try{
+
+await db.collection("lessons").add({
+title: title,
+content: content,
 createdAt: new Date()
-};
-
-db.collection("lessons").add(lesson)
-.then(() => {
-
-alert("📚 Lesson saved successfully!");
-
-document.getElementById("title").value = "";
-document.getElementById("content").value = "";
-
-})
-.catch(err => {
-alert("❌ Error: " + err.message);
 });
+
+document.getElementById("title").value="";
+document.getElementById("content").value="";
+
+document.getElementById("lMsg").innerHTML =
+"<p class='success'>✅ Lesson saved successfully!</p>";
+
+}catch(err){
+console.log(err);
+document.getElementById("lMsg").innerHTML =
+"<p style='color:red'>❌ Error saving lesson</p>";
+}
 
 }
 

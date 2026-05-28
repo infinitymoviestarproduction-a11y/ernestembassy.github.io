@@ -3,100 +3,99 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ernest Embassy Classroom - Quiz Arena</title>
+<title>Ernest Embassy Classroom</title>
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI;
 }
 
-body {
-    background: #eef2f7;
-    color: #333;
+body{
+    background:#eef2f7;
 }
 
 /* HEADER */
-.header {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-    padding: 30px;
-    text-align: center;
+.header{
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    color:white;
+    padding:25px;
+    text-align:center;
 }
 
-/* CONTAINER */
-.container {
-    max-width: 1000px;
-    margin: auto;
-    padding: 20px;
+/* DASHBOARD */
+.dashboard{
+    max-width:1000px;
+    margin:20px auto;
+    padding:20px;
 }
 
-/* SUBJECT SELECT */
-select, button {
-    padding: 12px;
-    margin: 10px 0;
-    width: 100%;
-    border-radius: 10px;
-    border: none;
-    font-size: 16px;
+.card{
+    background:white;
+    padding:20px;
+    margin:15px 0;
+    border-radius:15px;
+    cursor:pointer;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    transition:0.3s;
 }
 
-button {
-    background: #667eea;
-    color: white;
-    cursor: pointer;
+.card:hover{
+    transform:scale(1.02);
 }
 
-button:hover {
-    background: #5a67d8;
+.card h2{
+    color:#333;
 }
 
-/* QUIZ BOX */
-.quiz-box {
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
-    margin-top: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+.card p{
+    color:#777;
+}
+
+/* QUIZ AREA */
+.quiz-box{
+    max-width:900px;
+    margin:20px auto;
+    background:white;
+    padding:20px;
+    border-radius:15px;
 }
 
 /* QUESTION */
-.question {
-    font-size: 18px;
-    margin-bottom: 15px;
-    font-weight: bold;
+.question{
+    font-weight:bold;
+    margin:10px 0;
 }
 
-/* OPTIONS */
-.option {
-    background: #f4f4f4;
-    padding: 12px;
-    margin: 8px 0;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
+/* OPTION */
+.option{
+    background:#f1f1f1;
+    padding:10px;
+    margin:5px 0;
+    border-radius:10px;
+    cursor:pointer;
 }
 
-.option:hover {
-    background: #e0e7ff;
+.option.correct{background:#c8f7c5;}
+.option.wrong{background:#ffcccc;}
+
+.nav-btn{
+    margin:10px 5px;
+    padding:10px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
 }
 
-/* CORRECT / WRONG */
-.correct {
-    background: #c6f6d5 !important;
-}
+.next{background:#667eea;color:white;}
+.prev{background:#555;color:white;}
+.home{background:#000;color:white;}
 
-.wrong {
-    background: #fed7d7 !important;
-}
-
-/* SCORE */
-.score {
-    font-size: 20px;
-    margin-top: 15px;
-    font-weight: bold;
+.pagination{
+    text-align:center;
+    margin-top:10px;
 }
 </style>
 </head>
@@ -104,129 +103,138 @@ button:hover {
 <body>
 
 <div class="header">
-    <h1>🎓 Ernest Embassy Quiz Arena</h1>
-    <p>Select a subject and start learning</p>
+    <h1>🎓 Ernest Embassy Classroom</h1>
 </div>
 
-<div class="container">
+<!-- DASHBOARD -->
+<div id="dashboard" class="dashboard">
 
-    <select id="subjectSelect">
-        <option value="">-- Select Subject --</option>
-    </select>
+    <div class="card" onclick="openFreeTest()">
+        <h2>🟢 Free Test Mode</h2>
+        <p>Practice with 5 questions per page</p>
+    </div>
 
-    <button onclick="startQuiz()">Start Quiz</button>
+    <div class="card" onclick="openChallenge()">
+        <h2>🔴 Challenge Quiz (₦100)</h2>
+        <p>Win ₦10,000 monthly draw</p>
+    </div>
 
-    <div id="quizBox" class="quiz-box" style="display:none;">
-        <div id="question" class="question"></div>
-        <div id="options"></div>
-        <div id="score" class="score"></div>
-        <button onclick="nextQuestion()">Next</button>
+    <div class="card">
+        <h2>📚 Educational Resources</h2>
+        <p>Study notes and explanations (coming soon)</p>
     </div>
 
 </div>
 
+<!-- FREE TEST -->
+<div id="freeTest" class="quiz-box" style="display:none;"></div>
+
+<!-- CHALLENGE -->
+<div id="challenge" style="display:none;" class="quiz-box">
+    <h2>Challenge Quiz Coming Soon...</h2>
+</div>
+
 <script>
 
-let coursesData = {};
-let currentQuestions = [];
-let currentIndex = 0;
-let score = 0;
-let selectedSubject = "";
+/* SAMPLE QUESTIONS (replace with JSON later) */
+const questions = [
+    {q:"What is a computer?", o:["A cooking tool","A machine that processes data","A car","A pen"], a:1, exp:"A computer processes data."},
+    {q:"CPU stands for?", o:["Central Processing Unit","Car Power Unit","Control Panel","None"], a:0, exp:"CPU is the brain of computer."},
+    {q:"Keyboard is?", o:["Output","Input","Software","Game"], a:1, exp:"Keyboard is input device."},
+    {q:"RAM is?", o:["Storage","Temporary memory","Printer","Screen"], a:1, exp:"RAM is temporary memory."},
+    {q:"Monitor is?", o:["Input","Output","CPU","Cable"], a:1, exp:"Monitor shows output."},
+    {q:"Mouse is?", o:["Input","Output","Power","Memory"], a:0, exp:"Mouse is input device."},
+    {q:"Data becomes?", o:["Information","Noise","Light","Sound"], a:0, exp:"Processed data is information."}
+];
 
-/* LOAD JSON */
-fetch('courses.json')
-.then(res => res.json())
-.then(data => {
-    coursesData = data;
+let page = 0;
+const perPage = 5;
 
-    const select = document.getElementById("subjectSelect");
-
-    data.subjects.forEach(sub => {
-        let option = document.createElement("option");
-        option.value = sub.id;
-        option.textContent = `${sub.icon} ${sub.name} (${sub.level})`;
-        select.appendChild(option);
-    });
-});
-
-/* START QUIZ */
-function startQuiz() {
-
-    selectedSubject = document.getElementById("subjectSelect").value;
-
-    if (!selectedSubject) {
-        alert("Please select a subject");
-        return;
-    }
-
-    let subject = coursesData.subjects.find(s => s.id === selectedSubject);
-
-    currentQuestions = subject.quizQuestions;
-    currentIndex = 0;
-    score = 0;
-
-    document.getElementById("quizBox").style.display = "block";
-
-    showQuestion();
+/* DASHBOARD NAV */
+function openFreeTest(){
+    document.getElementById("dashboard").style.display="none";
+    document.getElementById("freeTest").style.display="block";
+    renderPage();
 }
 
-/* SHOW QUESTION */
-function showQuestion() {
-
-    let q = currentQuestions[currentIndex];
-
-    document.getElementById("question").innerText =
-        (currentIndex + 1) + ". " + q.text;
-
-    let optionsHtml = "";
-
-    q.options.forEach(opt => {
-        optionsHtml += `
-            <div class="option" onclick="selectAnswer(this, '${opt}', '${q.correct}')">
-                ${opt}
-            </div>
-        `;
-    });
-
-    document.getElementById("options").innerHTML = optionsHtml;
-
-    document.getElementById("score").innerText =
-        "Score: " + score;
+function openChallenge(){
+    alert("Challenge quiz loading (₦100 system)");
 }
 
-/* SELECT ANSWER */
-function selectAnswer(el, selected, correct) {
+/* FREE TEST RENDER */
+function renderPage(){
 
-    let options = document.querySelectorAll(".option");
+    let start = page * perPage;
+    let end = start + perPage;
 
-    options.forEach(opt => opt.style.pointerEvents = "none");
+    let html = "";
 
-    if (selected === correct) {
+    let slice = questions.slice(start,end);
+
+    slice.forEach((q,i)=>{
+
+        html += `<div>
+        <div class="question">${q.q}</div>`;
+
+        q.o.forEach((opt,idx)=>{
+            html += `<div class="option"
+            onclick="check(this,${idx},${q.a},'${q.exp}')">${opt}</div>`;
+        });
+
+        html += `<div class="ex"></div></div><hr>`;
+    });
+
+    html += `
+    <div class="pagination">
+        <button class="nav-btn prev" onclick="prevPage()">⬅ Prev</button>
+        <button class="nav-btn next" onclick="nextPage()">Next ➡</button>
+        <button class="nav-btn home" onclick="backHome()">🏠 Home</button>
+    </div>`;
+
+    document.getElementById("freeTest").innerHTML = html;
+}
+
+/* CHECK ANSWER */
+function check(el,selected,correct,exp){
+
+    if(selected===correct){
         el.classList.add("correct");
-        score++;
-    } else {
+    }else{
         el.classList.add("wrong");
     }
 
-    document.getElementById("score").innerText =
-        "Score: " + score;
+    let parent = el.parentElement;
+    let all = parent.querySelectorAll(".option");
+
+    all.forEach((o,i)=>{
+        if(i===correct){
+            o.classList.add("correct");
+        }
+    });
+
+    let ex = parent.querySelector(".ex");
+    ex.innerHTML = `<p>📖 ${exp}</p>`;
 }
 
-/* NEXT */
-function nextQuestion() {
-
-    currentIndex++;
-
-    if (currentIndex >= currentQuestions.length) {
-        document.getElementById("quizBox").innerHTML = `
-            <h2>🎉 Quiz Completed</h2>
-            <p>Your Final Score: ${score} / ${currentQuestions.length}</p>
-            <button onclick="location.reload()">Restart</button>
-        `;
-        return;
+/* PAGINATION */
+function nextPage(){
+    if((page+1)*perPage < questions.length){
+        page++;
+        renderPage();
     }
+}
 
-    showQuestion();
+function prevPage(){
+    if(page>0){
+        page--;
+        renderPage();
+    }
+}
+
+/* BACK HOME */
+function backHome(){
+    document.getElementById("dashboard").style.display="block";
+    document.getElementById("freeTest").style.display="none";
 }
 
 </script>

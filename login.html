@@ -2,79 +2,143 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Ernest Embassy LMS Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Ernest Embassy LMS</title>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
 
 <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body{
-margin:0;
-font-family:Segoe UI;
-background:linear-gradient(135deg,#667eea,#764ba2);
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
+    margin:0;
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
 }
 
 .box{
-background:white;
-padding:35px;
-border-radius:18px;
-width:360px;
-box-shadow:0 15px 30px rgba(0,0,0,0.25);
-text-align:center;
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    width:400px;
+    max-width:90%;
+    box-shadow:0 20px 40px rgba(0,0,0,0.25);
+    text-align:center;
 }
 
 h2{
-color:#333;
-margin-bottom:15px;
+    color:#1a1a2e;
+    margin-bottom:10px;
+    font-size:28px;
+}
+
+.subtitle{
+    color:#666;
+    font-size:14px;
+    margin-bottom:25px;
 }
 
 input{
-width:100%;
-padding:12px;
-margin:10px 0;
-border-radius:10px;
-border:1px solid #ddd;
-outline:none;
-font-size:14px;
+    width:100%;
+    padding:14px;
+    margin:10px 0;
+    border-radius:12px;
+    border:1px solid #ddd;
+    outline:none;
+    font-size:15px;
+    transition:0.3s;
+    box-sizing:border-box;
+}
+
+input:focus{
+    border-color:#667eea;
+    box-shadow:0 0 0 3px rgba(102,126,234,0.1);
 }
 
 button{
-width:100%;
-padding:12px;
-border:none;
-border-radius:10px;
-background:#667eea;
-color:white;
-cursor:pointer;
-font-size:15px;
-margin-top:8px;
-transition:0.3s;
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:bold;
+    margin-top:12px;
+    transition:0.3s;
 }
 
 button:hover{
-background:#5a67d8;
-transform:scale(1.02);
+    transform:translateY(-2px);
+    box-shadow:0 5px 15px rgba(102,126,234,0.4);
 }
 
 .secondary{
-background:black;
+    background:#1a1a2e;
 }
 
-p{
-color:red;
-margin-top:10px;
-font-size:13px;
+.secondary:hover{
+    background:#16213e;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+.msg{
+    margin-top:15px;
+    font-size:13px;
+    min-height:40px;
+}
+
+.error{
+    color:#dc3545;
+    background:#f8d7da;
+    padding:10px;
+    border-radius:8px;
+}
+
+.success{
+    color:#155724;
+    background:#d4edda;
+    padding:10px;
+    border-radius:8px;
 }
 
 .small{
-font-size:12px;
-color:#777;
-margin-top:10px;
+    font-size:12px;
+    color:#888;
+    margin-top:20px;
+    padding-top:15px;
+    border-top:1px solid #eee;
+}
+
+.loading{
+    opacity:0.7;
+    pointer-events:none;
+}
+
+.toggle-link{
+    margin-top:15px;
+    font-size:13px;
+}
+
+.toggle-link a{
+    color:#667eea;
+    text-decoration:none;
+    cursor:pointer;
+}
+
+.toggle-link a:hover{
+    text-decoration:underline;
 }
 </style>
 </head>
@@ -82,109 +146,277 @@ margin-top:10px;
 <body>
 
 <div class="box">
-<h2>🎓 Ernest Embassy LMS</h2>
+    <h2>🎓 Ernest Embassy LMS</h2>
+    <div class="subtitle">Login to continue learning</div>
 
-<input id="email" type="email" placeholder="Email Address">
-<input id="password" type="password" placeholder="Password">
+    <input id="email" type="email" placeholder="Email Address" autocomplete="email">
+    <input id="password" type="password" placeholder="Password" autocomplete="current-password">
 
-<button onclick="login()">Login</button>
-<button class="secondary" onclick="signup()">Create Account</button>
+    <button id="loginBtn" onclick="login()">🔐 Login</button>
+    <button class="secondary" onclick="showSignup()">📝 Create New Account</button>
 
-<p id="msg"></p>
+    <div id="msg" class="msg"></div>
 
-<div class="small">
-Secure Firebase Authentication System
-</div>
+    <div class="small">
+        🔒 Secure Firebase Authentication<br>
+        Your data is protected
+    </div>
 </div>
 
 <script>
 
 /* =========================
-FIREBASE CONFIG
+   FIREBASE CONFIGURATION
 ========================= */
 
 const firebaseConfig = {
-
-apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
-
-authDomain: "ernest-embassy-lms.firebaseapp.com",
-
-projectId: "ernest-embassy-lms",
-
-storageBucket: "ernest-embassy-lms.firebasestorage.app",
-
-messagingSenderId: "204896421221",
-
-appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
-
+    apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+    authDomain: "ernest-embassy-lms.firebaseapp.com",
+    projectId: "ernest-embassy-lms",
+    storageBucket: "ernest-embassy-lms.firebasestorage.app",
+    messagingSenderId: "204896421221",
+    appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
 };
 
-firebase.initializeApp(firebaseConfig);
+// Initialize Firebase
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
 
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-/* ================= LOGIN ================= */
+/* =========================
+   CHECK IF USER IS ALREADY LOGGED IN
+========================= */
 
-function login(){
-
-let email = document.getElementById("email").value;
-let password = document.getElementById("password").value;
-
-if(!email || !password){
-document.getElementById("msg").innerText = "Please fill all fields";
-return;
-}
-
-document.getElementById("msg").innerText = "Logging in...";
-
-auth.signInWithEmailAndPassword(email,password)
-.then(()=>{
-window.location.href = "class.html";
-})
-.catch(err=>{
-document.getElementById("msg").innerText = err.message;
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        // User is already logged in - redirect to dashboard
+        window.location.href = "dashboard.html";
+    }
 });
 
+/* =========================
+   LOGIN FUNCTION
+========================= */
+
+async function login() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const msgDiv = document.getElementById("msg");
+    const loginBtn = document.getElementById("loginBtn");
+    
+    // Clear previous messages
+    msgDiv.innerHTML = "";
+    msgDiv.className = "msg";
+    
+    // Validate inputs
+    if (!email || !password) {
+        msgDiv.innerHTML = '<div class="error">⚠️ Please fill in all fields</div>';
+        return;
+    }
+    
+    // Validate email format
+    const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        msgDiv.innerHTML = '<div class="error">⚠️ Please enter a valid email address</div>';
+        return;
+    }
+    
+    // Show loading state
+    msgDiv.innerHTML = '<div class="success">🔄 Logging in...</div>';
+    loginBtn.classList.add("loading");
+    loginBtn.disabled = true;
+    
+    try {
+        const userCredential = await auth.signInWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+        
+        // Get user data from Firestore
+        const userDoc = await db.collection("users").doc(user.uid).get();
+        const userData = userDoc.exists ? userDoc.data() : {};
+        
+        // Store user info in localStorage for quick access
+        localStorage.setItem("currentUser", JSON.stringify({
+            uid: user.uid,
+            name: userData.name || email.split('@')[0],
+            email: user.email,
+            role: userData.role || "student",
+            score: userData.score || 0
+        }));
+        
+        // Redirect to dashboard
+        window.location.href = "dashboard.html";
+        
+    } catch (error) {
+        let errorMessage = "";
+        
+        switch (error.code) {
+            case 'auth/user-not-found':
+                errorMessage = "❌ No account found with this email. Please create an account.";
+                break;
+            case 'auth/wrong-password':
+                errorMessage = "❌ Incorrect password. Please try again.";
+                break;
+            case 'auth/invalid-email':
+                errorMessage = "❌ Invalid email format.";
+                break;
+            case 'auth/user-disabled':
+                errorMessage = "❌ This account has been disabled. Contact support.";
+                break;
+            case 'auth/too-many-requests':
+                errorMessage = "❌ Too many failed attempts. Please try again later.";
+                break;
+            default:
+                errorMessage = `❌ Login failed: ${error.message}`;
+        }
+        
+        msgDiv.innerHTML = `<div class="error">${errorMessage}</div>`;
+    } finally {
+        loginBtn.classList.remove("loading");
+        loginBtn.disabled = false;
+    }
 }
 
-/* ================= SIGNUP + PROFILE ================= */
+/* =========================
+   SIGNUP FUNCTION
+========================= */
 
-function signup(){
-
-let email = document.getElementById("email").value;
-let password = document.getElementById("password").value;
-
-if(!email || !password){
-document.getElementById("msg").innerText = "Please fill all fields";
-return;
+async function signup() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const msgDiv = document.getElementById("msg");
+    const loginBtn = document.getElementById("loginBtn");
+    
+    // Clear previous messages
+    msgDiv.innerHTML = "";
+    msgDiv.className = "msg";
+    
+    // Validate inputs
+    if (!email || !password) {
+        msgDiv.innerHTML = '<div class="error">⚠️ Please fill in all fields</div>';
+        return;
+    }
+    
+    // Validate email format
+    const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        msgDiv.innerHTML = '<div class="error">⚠️ Please enter a valid email address</div>';
+        return;
+    }
+    
+    // Validate password strength
+    if (password.length < 6) {
+        msgDiv.innerHTML = '<div class="error">⚠️ Password must be at least 6 characters</div>';
+        return;
+    }
+    
+    // Show loading state
+    msgDiv.innerHTML = '<div class="success">🔄 Creating your account...</div>';
+    loginBtn.classList.add("loading");
+    loginBtn.disabled = true;
+    
+    try {
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+        
+        // Create user profile in Firestore
+        await db.collection("users").doc(user.uid).set({
+            uid: user.uid,
+            email: user.email,
+            name: email.split('@')[0],
+            score: 0,
+            role: "student",
+            createdAt: new Date(),
+            lastLogin: new Date()
+        });
+        
+        // Store user info in localStorage
+        localStorage.setItem("currentUser", JSON.stringify({
+            uid: user.uid,
+            name: email.split('@')[0],
+            email: user.email,
+            role: "student",
+            score: 0
+        }));
+        
+        msgDiv.innerHTML = '<div class="success">✅ Account created successfully! Redirecting...</div>';
+        
+        // Redirect to dashboard after short delay
+        setTimeout(() => {
+            window.location.href = "dashboard.html";
+        }, 1500);
+        
+    } catch (error) {
+        let errorMessage = "";
+        
+        switch (error.code) {
+            case 'auth/email-already-in-use':
+                errorMessage = "❌ This email is already registered. Please login instead.";
+                break;
+            case 'auth/invalid-email':
+                errorMessage = "❌ Invalid email format.";
+                break;
+            case 'auth/weak-password':
+                errorMessage = "❌ Password is too weak. Use at least 6 characters.";
+                break;
+            case 'auth/operation-not-allowed':
+                errorMessage = "❌ Email/password accounts are not enabled. Contact support.";
+                break;
+            default:
+                errorMessage = `❌ Signup failed: ${error.message}`;
+        }
+        
+        msgDiv.innerHTML = `<div class="error">${errorMessage}</div>`;
+    } finally {
+        loginBtn.classList.remove("loading");
+        loginBtn.disabled = false;
+    }
 }
 
-document.getElementById("msg").innerText = "Creating account...";
+/* =========================
+   SHOW SIGNUP MODE (Change button behavior)
+========================= */
 
-auth.createUserWithEmailAndPassword(email,password)
-.then(async (userCredential)=>{
+let isSignupMode = false;
 
-let user = userCredential.user;
+function showSignup() {
+    const loginBtn = document.getElementById("loginBtn");
+    const msgDiv = document.getElementById("msg");
+    
+    if (!isSignupMode) {
+        loginBtn.innerText = "📝 Sign Up";
+        loginBtn.onclick = signup;
+        isSignupMode = true;
+        msgDiv.innerHTML = '<div class="success">📝 Fill details to create your account</div>';
+    } else {
+        loginBtn.innerText = "🔐 Login";
+        loginBtn.onclick = login;
+        isSignupMode = false;
+        msgDiv.innerHTML = '';
+    }
+}
 
-/* CREATE FIRESTORE USER PROFILE */
-await db.collection("users").doc(user.uid).set({
-uid: user.uid,
-email: user.email,
-name: email.split("@")[0],
-score: 0,
-role: "student",
-createdAt: new Date()
+/* =========================
+   ENTER KEY SUPPORT
+========================= */
+
+document.getElementById("password").addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+        if (isSignupMode) {
+            signup();
+        } else {
+            login();
+        }
+    }
 });
 
-window.location.href = "class.html";
-
-})
-.catch(err=>{
-document.getElementById("msg").innerText = err.message;
+document.getElementById("email").addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+        document.getElementById("password").focus();
+    }
 });
-
-}
 
 </script>
 

@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Student LMS Quiz</title>
+<title>Student LMS Quiz - Firebase Powered</title>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js"></script>
+<!-- ✅ FIREBASE COMPAT SDK (IMPORTANT FIX) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
 
 <style>
 body{
@@ -19,6 +20,7 @@ background:linear-gradient(135deg,#667eea,#764ba2);
 color:white;
 text-align:center;
 padding:20px;
+font-weight:bold;
 }
 
 .container{
@@ -38,12 +40,13 @@ box-shadow:0 5px 15px rgba(0,0,0,0.1);
 .question{
 font-weight:bold;
 margin-bottom:10px;
+font-size:18px;
 }
 
 .option{
 background:#f1f1f1;
-padding:10px;
-margin:5px 0;
+padding:12px;
+margin:6px 0;
 border-radius:10px;
 cursor:pointer;
 transition:0.3s;
@@ -75,6 +78,7 @@ display:none;
 display:flex;
 justify-content:space-between;
 margin-top:20px;
+gap:10px;
 }
 
 button{
@@ -82,6 +86,7 @@ padding:10px;
 border:none;
 border-radius:10px;
 cursor:pointer;
+flex:1;
 }
 
 .next{background:#667eea;color:white;}
@@ -92,6 +97,7 @@ cursor:pointer;
 text-align:center;
 font-size:20px;
 margin-bottom:10px;
+font-weight:bold;
 }
 </style>
 </head>
@@ -99,7 +105,7 @@ margin-bottom:10px;
 <body>
 
 <div class="header">
-🎓 Student Quiz (Firebase Powered)
+🎓 Student Quiz (Firebase Powered LMS)
 </div>
 
 <div class="container">
@@ -120,7 +126,10 @@ Score: <span id="score">0</span>
 
 <script>
 
-/* FIREBASE CONFIG */
+/* =========================
+   FIREBASE CONFIG
+   (REPLACE WITH YOUR OWN)
+========================= */
 const firebaseConfig = {
 apiKey: "YOUR_API_KEY",
 authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -133,14 +142,26 @@ appId: "XXXX"
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-/* STATE */
+/* =========================
+   STATE MANAGEMENT
+========================= */
 let questions = [];
 let page = 0;
 let perPage = 5;
 let score = 0;
 
-/* LOAD QUESTIONS FROM FIREBASE */
+/* RESET SCORE ON LOAD */
+function reset(){
+score = 0;
+document.getElementById("score").innerText = score;
+}
+
+/* =========================
+   LOAD QUESTIONS
+========================= */
 async function loadQuestions(){
+
+try{
 
 const snap = await db.collection("questions").get();
 
@@ -151,9 +172,18 @@ questions.push(doc.data());
 });
 
 render();
+
+}catch(err){
+console.log("Error loading questions:", err);
+document.getElementById("quiz").innerHTML =
+"<p style='color:red'>Failed to load questions. Check Firebase connection.</p>";
 }
 
-/* RENDER PAGE */
+}
+
+/* =========================
+   RENDER QUESTIONS (5 per page)
+========================= */
 function render(){
 
 let start = page * perPage;
@@ -163,37 +193,45 @@ let slice = questions.slice(start,end);
 
 let html = "";
 
-slice.forEach((q,qi)=>{
+slice.forEach((q)=>{
 
-html += `<div class="card">
-<div class="question">${q.q}</div>`;
+html += `
+<div class="card">
+<div class="question">${q.q}</div>
+`;
 
 q.o.forEach((opt,oi)=>{
 
-html += `<div class="option"
-onclick="check(this,${oi},${q.a},'${q.exp}')">
+html += `
+<div class="option"
+onclick="check(this,${oi},${q.a},'${q.exp.replace(/'/g,"")}')">
 ${opt}
-</div>`;
+</div>
+`;
 
 });
 
 html += `<div class="explanation"></div></div>`;
+
 });
 
 document.getElementById("quiz").innerHTML = html;
 }
 
-/* CHECK ANSWER */
+/* =========================
+   CHECK ANSWER
+========================= */
 function check(el,selected,correct,exp){
 
 let parent = el.parentElement;
-let options = parent.querySelectorAll(".option");
-let explanation = parent.querySelector(".explanation");
 
-/* prevent double clicks */
 if(parent.classList.contains("done")) return;
 parent.classList.add("done");
 
+let options = parent.querySelectorAll(".option");
+let explanation = parent.querySelector(".explanation");
+
+/* show correct answer */
 options.forEach((o,i)=>{
 if(i === correct){
 o.classList.add("correct");
@@ -212,7 +250,9 @@ explanation.innerHTML = "📖 " + exp;
 explanation.style.display = "block";
 }
 
-/* NAVIGATION */
+/* =========================
+   PAGINATION
+========================= */
 function nextPage(){
 if((page+1)*perPage < questions.length){
 page++;
@@ -221,17 +261,23 @@ render();
 }
 
 function prevPage(){
-if(page>0){
+if(page > 0){
 page--;
 render();
 }
 }
 
+/* =========================
+   NAVIGATION
+========================= */
 function goHome(){
 window.location.href = "class.html";
 }
 
-/* INIT */
+/* =========================
+   INIT
+========================= */
+reset();
 loadQuestions();
 
 </script>

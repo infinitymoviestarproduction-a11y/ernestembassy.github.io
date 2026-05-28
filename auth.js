@@ -27,13 +27,11 @@ let currentUserData = null;
 
 /* ============================================
    CHECK AUTHENTICATION STATUS
-   Use this function to protect pages
    ============================================ */
-
 async function checkAuth(redirectToLogin = true) {
     return new Promise((resolve, reject) => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
-            unsubscribe();
+            unsubscribe(); // Detach listener instantly to avoid memory leaks
             
             if (user) {
                 currentUser = user;
@@ -43,7 +41,7 @@ async function checkAuth(redirectToLogin = true) {
                     const userDoc = await db.collection("users").doc(user.uid).get();
                     currentUserData = userDoc.exists ? userDoc.data() : {};
                     
-                    // Store in localStorage for backward compatibility
+                    // Store in localStorage for rapid access across dashboards
                     localStorage.setItem("currentUser", JSON.stringify({
                         uid: user.uid,
                         name: currentUserData.name || user.email.split('@')[0],
@@ -54,8 +52,7 @@ async function checkAuth(redirectToLogin = true) {
                     resolve(true);
                 } catch (err) {
                     console.error("Error fetching user data:", err);
-                    // Still resolve as true since user is authenticated
-                    resolve(true);
+                    resolve(true); // Still authenticate if network blips but user is valid
                 }
             } else {
                 // Check localStorage fallback
@@ -74,36 +71,21 @@ async function checkAuth(redirectToLogin = true) {
 }
 
 /* ============================================
-   GET CURRENT USER
+   GETTERS FOR DATA
    ============================================ */
-
-function getCurrentUser() {
-    return currentUser;
-}
-
-function getCurrentUserData() {
-    return currentUserData;
-}
-
-/* ============================================
-   GET USER NAME
-   ============================================ */
+function getCurrentUser() { return currentUser; }
+function getCurrentUserData() { return currentUserData; }
 
 function getUserName() {
-    if (currentUserData && currentUserData.name) {
-        return currentUserData.name;
-    }
-    if (currentUser) {
-        return currentUser.email.split('@')[0];
-    }
+    if (currentUserData && currentUserData.name) return currentUserData.name;
+    if (currentUser) return currentUser.email.split('@')[0];
     const localUser = JSON.parse(localStorage.getItem("currentUser"));
     return localUser ? (localUser.name || "Student") : "Student";
 }
 
 /* ============================================
-   CHECK IF USER IS ADMIN
+   ROLE CHECKING
    ============================================ */
-
 async function isAdmin() {
     if (currentUser) {
         try {
@@ -118,9 +100,8 @@ async function isAdmin() {
 }
 
 /* ============================================
-   SHOW ADMIN BUTTON IN NAVIGATION
+   UI HELPERS
    ============================================ */
-
 async function showAdminButtonIfNeeded(containerSelector = ".user-area") {
     if (await isAdmin()) {
         const container = document.querySelector(containerSelector);
@@ -135,17 +116,11 @@ async function showAdminButtonIfNeeded(containerSelector = ".user-area") {
             adminBtn.style.borderRadius = "6px";
             adminBtn.style.cursor = "pointer";
             adminBtn.style.fontWeight = "bold";
-            adminBtn.onclick = () => {
-                window.location.href = "admin.html";
-            };
+            adminBtn.onclick = () => { window.location.href = "admin.html"; };
             container.insertBefore(adminBtn, container.children[0]);
         }
     }
 }
-
-/* ============================================
-   UPDATE USER NAME IN UI
-   ============================================ */
 
 function updateUserNameUI(elementId = "userName") {
     const element = document.getElementById(elementId);
@@ -155,9 +130,8 @@ function updateUserNameUI(elementId = "userName") {
 }
 
 /* ============================================
-   LOGOUT FUNCTION
+   LOGOUT
    ============================================ */
-
 async function logout() {
     try {
         if (auth && auth.signOut) {
@@ -166,19 +140,14 @@ async function logout() {
     } catch (err) {
         console.error("Logout error:", err);
     }
-    
-    // Clear localStorage
     localStorage.removeItem("currentUser");
     localStorage.removeItem("userLoggedIn");
-    
-    // Redirect to login
     window.location.href = "login.html";
 }
 
 /* ============================================
-   UPDATE USER SCORE
+   DATABASE UPDATES (Scores & Progress Tracking)
    ============================================ */
-
 async function updateUserScore(score) {
     if (currentUser) {
         try {
@@ -197,10 +166,6 @@ async function updateUserScore(score) {
     }
     return false;
 }
-
-/* ============================================
-   SAVE QUIZ ATTEMPT
-   ============================================ */
 
 async function saveQuizAttempt(subject, score, totalQuestions, quizType = "practice") {
     if (currentUser) {
@@ -224,10 +189,6 @@ async function saveQuizAttempt(subject, score, totalQuestions, quizType = "pract
     return false;
 }
 
-/* ============================================
-   LOAD USER SCORE
-   ============================================ */
-
 async function loadUserScore() {
     if (currentUser) {
         try {
@@ -248,20 +209,17 @@ async function loadUserScore() {
 }
 
 /* ============================================
-   INITIALIZE AUTH ON PAGE LOAD
+   INITIALIZE AUTH EXPLICITLY PER PAGE
    ============================================ */
-
-async function initAuth() {
-    await checkAuth(true);
+async function initAuth(protectPage = true) {
+    if (protectPage) {
+        await checkAuth(true);
+    } else {
+        await checkAuth(false);
+    }
     updateUserNameUI();
     return currentUser;
 }
 
-// Auto-initialize when script loads
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => {
-        initAuth();
-    });
-} else {
-    initAuth();
-}
+// NOTE: Auto-initialization was removed from here. 
+// Simply call `initAuth()` inside your protected dashboard pages scripts explicitly!

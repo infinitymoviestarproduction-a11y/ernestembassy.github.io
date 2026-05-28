@@ -1,63 +1,176 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Admin Panel</title>
+<meta charset="UTF-8">
+<title>LMS Admin Panel</title>
+
 <style>
-body{font-family:Segoe UI;background:#111;color:#fff;padding:20px}
-input,textarea{width:100%;padding:10px;margin:5px 0}
-button{padding:10px;margin:5px;cursor:pointer}
-.card{background:#222;padding:15px;margin:10px 0;border-radius:10px}
+body{
+margin:0;
+font-family:Segoe UI;
+background:linear-gradient(135deg,#667eea,#764ba2);
+color:white;
+}
+
+/* HEADER */
+.header{
+text-align:center;
+padding:20px;
+font-size:24px;
+font-weight:bold;
+}
+
+/* CONTAINER */
+.container{
+max-width:1000px;
+margin:auto;
+padding:20px;
+}
+
+/* SECTION CARD */
+.card{
+background:white;
+color:#333;
+padding:20px;
+border-radius:15px;
+margin-bottom:20px;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* INPUTS */
+input, textarea, select{
+width:100%;
+padding:12px;
+margin-top:8px;
+margin-bottom:15px;
+border-radius:10px;
+border:1px solid #ddd;
+font-size:14px;
+outline:none;
+}
+
+textarea{
+resize:none;
+height:100px;
+}
+
+/* BUTTON */
+button{
+background:#667eea;
+color:white;
+padding:12px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+width:100%;
+font-size:16px;
+transition:0.3s;
+}
+
+button:hover{
+background:#5a67d8;
+transform:scale(1.02);
+}
+
+/* SMALL TITLE */
+h2{
+margin-bottom:10px;
+color:#444;
+}
+
+/* GRID */
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
+}
+
+@media(max-width:768px){
+.grid{grid-template-columns:1fr;}
+}
 </style>
 </head>
 
 <body>
 
-<h1>⚙️ LMS Admin Panel</h1>
+<div class="header">
+⚙️ LMS ADMIN DASHBOARD
+</div>
 
-<h2>Add Question</h2>
-<input id="q">
+<div class="container">
+
+<!-- ADD QUESTION -->
+<div class="card">
+<h2>➕ Add Question</h2>
+
+<input id="q" placeholder="Enter question">
+
 <input id="o1" placeholder="Option 1">
 <input id="o2" placeholder="Option 2">
 <input id="o3" placeholder="Option 3">
 <input id="o4" placeholder="Option 4">
-<input id="ans" placeholder="Correct index (0-3)">
+
+<select id="ans">
+<option value="0">Correct Answer Index (0)</option>
+<option value="1">Correct Answer Index (1)</option>
+<option value="2">Correct Answer Index (2)</option>
+<option value="3">Correct Answer Index (3)</option>
+</select>
+
 <textarea id="exp" placeholder="Explanation"></textarea>
 
-<button onclick="saveQ()">Save Question</button>
+<button onclick="saveQuestion()">💾 Save Question</button>
+</div>
 
-<h2>Add Lesson</h2>
-<input id="title" placeholder="Title">
-<textarea id="content" placeholder="Content"></textarea>
-<button onclick="saveL()">Save Lesson</button>
+<!-- ADD LESSON -->
+<div class="card">
+<h2>📚 Add Lesson</h2>
+
+<input id="title" placeholder="Lesson Title">
+
+<textarea id="content" placeholder="Lesson Content"></textarea>
+
+<button onclick="saveLesson()">💾 Save Lesson</button>
+</div>
+
+</div>
 
 <script>
 
-/* QUESTIONS */
-function saveQ(){
-let db = JSON.parse(localStorage.getItem("questions_db")) || [];
+/* FIREBASE PLACEHOLDER (connect later) */
+let db = null;
 
-db.push({
-q: q.value,
-o: [o1.value,o2.value,o3.value,o4.value],
-a: parseInt(ans.value),
-exp: exp.value
-});
+/* SAVE QUESTION */
+function saveQuestion(){
 
-localStorage.setItem("questions_db",JSON.stringify(db));
-alert("Question saved!");
+const data = {
+q: document.getElementById("q").value,
+o: [
+document.getElementById("o1").value,
+document.getElementById("o2").value,
+document.getElementById("o3").value,
+document.getElementById("o4").value
+],
+a: Number(document.getElementById("ans").value),
+exp: document.getElementById("exp").value
+};
+
+alert("Question ready to save to Firebase (next step we connect DB)");
+
+console.log(data);
 }
 
-/* LESSONS */
-function saveL(){
-let db = JSON.parse(localStorage.getItem("lessons_db")) || [];
+/* SAVE LESSON */
+function saveLesson(){
 
-db.push({
-title:title.value,
-content:content.value
-});
+const lesson = {
+title: document.getElementById("title").value,
+content: document.getElementById("content").value
+};
 
-localStorage.setItem("lessons_db",JSON.stringify(db));
-alert("Lesson saved!");
+alert("Lesson ready to save to Firebase (next step we connect DB)");
+
+console.log(lesson);
 }
 
 </script>

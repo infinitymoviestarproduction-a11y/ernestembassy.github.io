@@ -11,6 +11,9 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
 
+<!-- Central Auth Script -->
+<script src="auth.js"></script>
+
 <style>
 
 *{
@@ -61,6 +64,25 @@ nav{
 
 .nav-links a:hover{
     background:#5a67d8;
+}
+
+.user-area{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.user-name{
+    color:#ffd700;
+    font-weight:bold;
+}
+
+.logout-link{
+    background:#dc3545 !important;
+}
+
+.logout-link:hover{
+    background:#c82333 !important;
 }
 
 /* HERO */
@@ -181,6 +203,11 @@ nav{
     background:#218838;
 }
 
+.start-btn:disabled{
+    background:#6c757d;
+    cursor:not-allowed;
+}
+
 /* FOOTER */
 
 footer{
@@ -199,6 +226,10 @@ footer{
         flex-direction:column;
         gap:15px;
         text-align:center;
+    }
+
+    .user-area{
+        justify-content:center;
     }
 
     .hero h1{
@@ -226,261 +257,125 @@ footer{
 
 <body>
 
-<!-- LOGIN PROTECTION -->
-
-<script>
-
-const user = JSON.parse(localStorage.getItem("currentUser"));
-
-if(!user){
-    window.location.href = "login.html";
-}
-
-</script>
-
 <!-- NAVIGATION -->
-
 <nav>
-
     <div class="logo">
         🎓 Ernest Embassy LMS
     </div>
 
     <div class="nav-links">
-
-        <a href="index.html">
-            🏠 Home
-        </a>
-
-        <a href="dashboard.html">
-            📊 Dashboard
-        </a>
-
-        <a href="class.html">
-            💰 Challenge Quiz
-        </a>
-
-        <a href="javascript:history.back()">
-            ⬅ Back
-        </a>
-
+        <a href="index.html">🏠 Home</a>
+        <a href="dashboard.html">📊 Dashboard</a>
+        <a href="class.html">💰 Challenge Quiz</a>
+        <a href="javascript:history.back()">⬅ Back</a>
     </div>
 
+    <div class="user-area">
+        <span class="user-name">Welcome, <span id="userNameDisplay">Student</span>!</span>
+        <button class="logout-link" onclick="logout()" style="background:#dc3545; color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">🚪 Logout</button>
+    </div>
 </nav>
 
 <!-- HERO -->
-
 <div class="hero">
-
-    <h1 id="courseTitle">
-        Loading Course...
-    </h1>
-
-    <p id="courseDescription">
-        Please wait while we load course information.
-    </p>
-
+    <h1 id="courseTitle">Loading Course...</h1>
+    <p id="courseDescription">Please wait while we load course information.</p>
 </div>
 
 <!-- MAIN -->
-
 <div class="container">
 
     <!-- COURSE OVERVIEW -->
-
     <div class="course-card">
-
-        <h2>
-            📘 Course Overview
-        </h2>
-
+        <h2>📘 Course Overview</h2>
         <div class="course-grid">
-
             <div class="info-box">
                 <h3>Level</h3>
                 <p id="courseLevel">SS1</p>
             </div>
-
             <div class="info-box">
                 <h3>Total Questions</h3>
                 <p id="courseQuestions">Loading...</p>
             </div>
-
             <div class="info-box">
                 <h3>Access</h3>
                 <p>24/7 Learning</p>
             </div>
-
         </div>
-
     </div>
 
     <!-- LESSONS -->
-
-    <h2 class="section-title">
-        🚀 Learning Activities
-    </h2>
-
+    <h2 class="section-title">🚀 Learning Activities</h2>
     <div class="lesson-grid">
-
-        <!-- QUIZ -->
-
         <div class="lesson-card">
-
-            <h3>
-                📝 CBT Quiz Practice
-            </h3>
-
-            <p>
-                Practice interactive objective questions with explanations,
-                scoring and instant feedback system.
-            </p>
-
-            <button id="quizBtn"
-               class="start-btn">
-               Start Quiz
-            </button>
-
+            <h3>📝 CBT Quiz Practice</h3>
+            <p>Practice interactive objective questions with explanations, scoring and instant feedback system.</p>
+            <button id="quizBtn" class="start-btn">Start Quiz</button>
         </div>
-
-        <!-- NOTES -->
-
         <div class="lesson-card">
-
-            <h3>
-                📚 Study Notes
-            </h3>
-
-            <p>
-                Access digital classroom materials,
-                lesson explanations and revision resources.
-            </p>
-
-            <a href="educational-resources.html"
-               class="start-btn">
-               Open Resources
-            </a>
-
+            <h3>📚 Study Notes</h3>
+            <p>Access digital classroom materials, lesson explanations and revision resources.</p>
+            <a href="educational-resources.html" class="start-btn">Open Resources</a>
         </div>
-
     </div>
-
 </div>
 
 <!-- FOOTER -->
-
 <footer>
-
-    <p>
-        © 2026 Ernest Embassy Digital Solutions
-    </p>
-
-    <p>
-        Professional Online Learning Platform
-    </p>
-
+    <p>© 2026 Ernest Embassy Digital Solutions</p>
+    <p>Professional Online Learning Platform</p>
 </footer>
 
 <script>
-
-/* ====================================
-   FIREBASE CONFIGURATION
-==================================== */
-
-const firebaseConfig = {
-    apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
-    authDomain: "ernest-embassy-lms.firebaseapp.com",
-    projectId: "ernest-embassy-lms",
-    storageBucket: "ernest-embassy-lms.firebasestorage.app",
-    messagingSenderId: "204896421221",
-    appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const auth = firebase.auth();
-
 /* ====================================
    GET SUBJECT FROM URL
 ==================================== */
 
-const params =
-    new URLSearchParams(window.location.search);
-
-const subject =
-    params.get("subject");
+const params = new URLSearchParams(window.location.search);
+const subject = params.get("subject");
 
 /* ====================================
    SUBJECT DATA
 ==================================== */
 
 const subjects = {
-
     "digital-technology-ss1": {
-
-        title:
-            "💻 Digital Technology SS1",
-
-        description:
-            "Learn computer fundamentals, ICT, internet technology and digital skills.",
-
-        level:
-            "SS1",
-
-        questions:
-            "Loading..."
-
+        title: "💻 Digital Technology SS1",
+        description: "Learn computer fundamentals, ICT, internet technology and digital skills.",
+        level: "SS1",
+        questions: "Loading..."
     },
-
     "mathematics-ss1": {
-
-        title:
-            "📐 Mathematics SS1",
-
-        description:
-            "Master algebra, equations, geometry and WAEC preparation.",
-
-        level:
-            "SS1",
-
-        questions:
-            "Loading..."
-
+        title: "📐 Mathematics SS1",
+        description: "Master algebra, equations, geometry and WAEC preparation.",
+        level: "SS1",
+        questions: "Loading..."
     },
-
     "english-ss1": {
-
-        title:
-            "📖 English Language SS1",
-
-        description:
-            "Improve grammar, essay writing, comprehension and communication skills.",
-
-        level:
-            "SS1",
-
-        questions:
-            "Loading..."
-
+        title: "📖 English Language SS1",
+        description: "Improve grammar, essay writing, comprehension and communication skills.",
+        level: "SS1",
+        questions: "Loading..."
     },
-
     "igbo-ss1": {
-
-        title:
-            "🌍 Igbo Language SS1",
-
-        description:
-            "Learn vocabulary, grammar, translation and language practice.",
-
-        level:
-            "SS1",
-
-        questions:
-            "Loading..."
-
+        title: "🌍 Igbo Language SS1",
+        description: "Learn vocabulary, grammar, translation and language practice.",
+        level: "SS1",
+        questions: "Loading..."
     }
-
 };
+
+/* ====================================
+   UPDATE USER NAME IN UI
+==================================== */
+
+function updateUserNameUI() {
+    const userNameElement = document.getElementById("userNameDisplay");
+    if (userNameElement) {
+        const name = getUserName();
+        userNameElement.innerText = name;
+    }
+}
 
 /* ====================================
    LOAD ACTUAL QUESTION COUNT FROM FIRESTORE
@@ -492,7 +387,6 @@ async function loadQuestionCount() {
         let questionCount = 0;
         
         if (subject && subjects[subject]) {
-            // Count questions for this specific subject
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
                 if (data.subject === subject) {
@@ -503,11 +397,11 @@ async function loadQuestionCount() {
             questionCount = querySnapshot.size;
         }
         
-        // Update the questions count in UI
+        const questionElement = document.getElementById("courseQuestions");
         if (questionCount > 0) {
-            document.getElementById("courseQuestions").innerText = questionCount;
+            questionElement.innerText = questionCount;
         } else {
-            document.getElementById("courseQuestions").innerHTML = "500+ <span style='font-size:12px;'>(Coming Soon)</span>";
+            questionElement.innerHTML = "500+ <span style='font-size:12px;'>(Coming Soon)</span>";
         }
         
         return questionCount;
@@ -523,22 +417,15 @@ async function loadQuestionCount() {
 ==================================== */
 
 async function loadCourseDetails() {
-    
     // Show loading state
     document.getElementById("courseTitle").innerHTML = "📚 Loading...";
     document.getElementById("courseDescription").innerHTML = "Please wait while we load course information.";
     
     // Check if subject exists
-    if(subjects[subject]){
-        
-        document.getElementById("courseTitle").innerText =
-            subjects[subject].title;
-            
-        document.getElementById("courseDescription").innerText =
-            subjects[subject].description;
-            
-        document.getElementById("courseLevel").innerText =
-            subjects[subject].level;
+    if (subjects[subject]) {
+        document.getElementById("courseTitle").innerText = subjects[subject].title;
+        document.getElementById("courseDescription").innerText = subjects[subject].description;
+        document.getElementById("courseLevel").innerText = subjects[subject].level;
         
         // Load actual question count from Firestore
         await loadQuestionCount();
@@ -556,7 +443,6 @@ async function loadCourseDetails() {
         document.getElementById("courseLevel").innerHTML = "N/A";
         document.getElementById("courseQuestions").innerHTML = "0";
         
-        // Disable quiz button
         const quizBtn = document.getElementById("quizBtn");
         quizBtn.disabled = true;
         quizBtn.style.background = "#6c757d";
@@ -566,29 +452,26 @@ async function loadCourseDetails() {
 }
 
 /* ====================================
-   CHECK AUTHENTICATION
+   INITIALIZE PAGE
 ==================================== */
 
-auth.onAuthStateChanged((user) => {
-    if (user) {
-        // User is logged in, load course details
-        loadCourseDetails();
-    } else {
-        // No user, redirect to login
-        window.location.href = "login.html";
-    }
-});
-
-/* ====================================
-   FALLBACK FOR LOCALSTORAGE AUTH
-==================================== */
-
-// Also check localStorage for backward compatibility
-if (!auth.currentUser && localStorage.getItem("currentUser")) {
-    // Still load the page but with localStorage user
-    loadCourseDetails();
+async function initializePage() {
+    // Wait for auth to be ready
+    await checkAuth(true);
+    
+    // Update user name in UI
+    updateUserNameUI();
+    
+    // Load course details
+    await loadCourseDetails();
 }
 
+// Start initialization when page loads
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializePage);
+} else {
+    initializePage();
+}
 </script>
 
 </body>

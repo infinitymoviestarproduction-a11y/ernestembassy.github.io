@@ -1,203 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Quiz - No Cache</title>
-    <style>
-        body {
-            background: #1a1a2e;
-            color: white;
-            font-family: Arial, sans-serif;
-            padding: 40px;
-        }
-        .question-box {
-            background: #0f0f23;
-            padding: 30px;
-            border-radius: 15px;
-            margin: 20px 0;
-            border: 1px solid #ffd700;
-        }
-        .question {
-            font-size: 1.5rem;
-            color: #ffd700;
-            margin-bottom: 20px;
-        }
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .option {
-            background: #2a2a3e;
-            padding: 12px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .option:hover {
-            background: #3a3a5e;
-        }
-        .option.correct-highlight {
-            background: #28a745;
-        }
-        .option.wrong-highlight {
-            background: #dc3545;
-        }
-        .feedback {
-            margin: 20px 0;
-            padding: 15px;
-            border-radius: 10px;
-            display: none;
-        }
-        .feedback.correct {
-            background: #1a3a2a;
-            color: #90ee90;
-            display: block;
-        }
-        .feedback.wrong {
-            background: #3a1a1a;
-            color: #ff9999;
-            display: block;
-        }
-        button {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 30px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-        .home-btn {
-            background: #ffd700;
-            color: #1a1a2e;
-            margin-left: 10px;
-        }
-    </style>
-</head>
-<body>
-    <h1>⚡ TEST QUIZ (No Cache)</h1>
-    <div id="quizContainer"></div>
-    <button onclick="goHome()" class="home-btn">🏠 Home</button>
+<meta charset="UTF-8">
+<title>Student LMS Quiz</title>
 
-    <script>
-        // Hardcoded test questions - NO JSON file needed
-        const testQuestions = [
-            {
-                text: "What is 2 + 2?",
-                options: ["A. 3", "B. 4", "C. 5", "D. 6"],
-                correct: "B. 4",
-                explanation: "2 + 2 equals 4"
-            },
-            {
-                text: "What is the capital of Nigeria?",
-                options: ["A. Lagos", "B. Abuja", "C. Kano", "D. Port Harcourt"],
-                correct: "B. Abuja",
-                explanation: "Abuja is the capital city of Nigeria"
-            },
-            {
-                text: "Which of these is a verb?",
-                options: ["A. Book", "B. Table", "C. Run", "D. Chair"],
-                correct: "C. Run",
-                explanation: "Run is an action word (verb)"
-            }
-        ];
-        
-        let currentIndex = 0;
-        let userAnswers = [];
-        let answerLocked = false;
-        let currentQuestions = testQuestions;
-        
-        function renderQuestion() {
-            if (currentIndex >= currentQuestions.length) {
-                showResults();
-                return;
-            }
-            
-            const q = currentQuestions[currentIndex];
-            const container = document.getElementById('quizContainer');
-            
-            let optionsHtml = '';
-            q.options.forEach(opt => {
-                optionsHtml += `<div class="option" onclick="selectAnswer('${opt}')">${opt}</div>`;
-            });
-            
-            container.innerHTML = `
-                <div class="question-box">
-                    <div class="question">${q.text}</div>
-                    <div class="options" id="optionsList">
-                        ${optionsHtml}
-                    </div>
-                    <div id="feedback" class="feedback"></div>
-                    <button onclick="nextQuestion()" id="nextBtn" disabled>Next →</button>
-                </div>
-            `;
-            answerLocked = false;
-        }
-        
-        function selectAnswer(selected) {
-            if (answerLocked) return;
-            answerLocked = true;
-            
-            const q = currentQuestions[currentIndex];
-            userAnswers[currentIndex] = selected;
-            const isCorrect = (selected === q.correct);
-            
-            const options = document.querySelectorAll('.option');
-            options.forEach(opt => {
-                opt.style.pointerEvents = 'none';
-                if (opt.textContent === q.correct) {
-                    opt.classList.add('correct-highlight');
-                }
-                if (opt.textContent === selected && !isCorrect) {
-                    opt.classList.add('wrong-highlight');
-                }
-            });
-            
-            const feedback = document.getElementById('feedback');
-            if (isCorrect) {
-                feedback.className = 'feedback correct';
-                feedback.innerHTML = `✅ CORRECT! ${q.explanation}`;
-            } else {
-                feedback.className = 'feedback wrong';
-                feedback.innerHTML = `❌ WRONG! Correct answer: ${q.correct}. ${q.explanation}`;
-            }
-            
-            document.getElementById('nextBtn').disabled = false;
-        }
-        
-        function nextQuestion() {
-            if (currentIndex + 1 < currentQuestions.length) {
-                currentIndex++;
-                renderQuestion();
-            } else {
-                showResults();
-            }
-        }
-        
-        function showResults() {
-            let correct = 0;
-            currentQuestions.forEach((q, i) => {
-                if (userAnswers[i] === q.correct) correct++;
-            });
-            const score = Math.round((correct / currentQuestions.length) * 100);
-            
-            document.getElementById('quizContainer').innerHTML = `
-                <div class="question-box" style="text-align: center;">
-                    <h2>🎉 Quiz Complete!</h2>
-                    <p style="font-size: 2rem; color: #ffd700;">Score: ${score}%</p>
-                    <p>You got ${correct} out of ${currentQuestions.length} correct</p>
-                    <button onclick="location.reload()">🔄 Try Again</button>
-                </div>
-            `;
-        }
-        
-        function goHome() {
-            window.location.href = 'index.html';
-        }
-        
-        renderQuestion();
-    </script>
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js"></script>
+
+<style>
+body{
+margin:0;
+font-family:Segoe UI;
+background:#eef2f7;
+}
+
+.header{
+background:linear-gradient(135deg,#667eea,#764ba2);
+color:white;
+text-align:center;
+padding:20px;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+padding:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:15px;
+margin-bottom:20px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.question{
+font-weight:bold;
+margin-bottom:10px;
+}
+
+.option{
+background:#f1f1f1;
+padding:10px;
+margin:5px 0;
+border-radius:10px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.option:hover{
+background:#ddd;
+}
+
+.correct{
+background:#c8f7c5 !important;
+border:2px solid green;
+}
+
+.wrong{
+background:#ffcccc !important;
+border:2px solid red;
+}
+
+.explanation{
+margin-top:10px;
+padding:10px;
+background:#f9f9f9;
+border-left:4px solid #667eea;
+display:none;
+}
+
+.nav{
+display:flex;
+justify-content:space-between;
+margin-top:20px;
+}
+
+button{
+padding:10px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+}
+
+.next{background:#667eea;color:white;}
+.back{background:#555;color:white;}
+.home{background:black;color:white;}
+
+.score{
+text-align:center;
+font-size:20px;
+margin-bottom:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+🎓 Student Quiz (Firebase Powered)
+</div>
+
+<div class="container">
+
+<div class="score">
+Score: <span id="score">0</span>
+</div>
+
+<div id="quiz"></div>
+
+<div class="nav">
+<button class="back" onclick="prevPage()">⬅ Back</button>
+<button class="home" onclick="goHome()">🏠 Home</button>
+<button class="next" onclick="nextPage()">Next ➡</button>
+</div>
+
+</div>
+
+<script>
+
+/* FIREBASE CONFIG */
+const firebaseConfig = {
+apiKey: "YOUR_API_KEY",
+authDomain: "YOUR_PROJECT.firebaseapp.com",
+projectId: "YOUR_PROJECT_ID",
+storageBucket: "YOUR_PROJECT.appspot.com",
+messagingSenderId: "XXXX",
+appId: "XXXX"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+/* STATE */
+let questions = [];
+let page = 0;
+let perPage = 5;
+let score = 0;
+
+/* LOAD QUESTIONS FROM FIREBASE */
+async function loadQuestions(){
+
+const snap = await db.collection("questions").get();
+
+questions = [];
+
+snap.forEach(doc=>{
+questions.push(doc.data());
+});
+
+render();
+}
+
+/* RENDER PAGE */
+function render(){
+
+let start = page * perPage;
+let end = start + perPage;
+
+let slice = questions.slice(start,end);
+
+let html = "";
+
+slice.forEach((q,qi)=>{
+
+html += `<div class="card">
+<div class="question">${q.q}</div>`;
+
+q.o.forEach((opt,oi)=>{
+
+html += `<div class="option"
+onclick="check(this,${oi},${q.a},'${q.exp}')">
+${opt}
+</div>`;
+
+});
+
+html += `<div class="explanation"></div></div>`;
+});
+
+document.getElementById("quiz").innerHTML = html;
+}
+
+/* CHECK ANSWER */
+function check(el,selected,correct,exp){
+
+let parent = el.parentElement;
+let options = parent.querySelectorAll(".option");
+let explanation = parent.querySelector(".explanation");
+
+/* prevent double clicks */
+if(parent.classList.contains("done")) return;
+parent.classList.add("done");
+
+options.forEach((o,i)=>{
+if(i === correct){
+o.classList.add("correct");
+}
+});
+
+if(selected === correct){
+el.classList.add("correct");
+score++;
+document.getElementById("score").innerText = score;
+}else{
+el.classList.add("wrong");
+}
+
+explanation.innerHTML = "📖 " + exp;
+explanation.style.display = "block";
+}
+
+/* NAVIGATION */
+function nextPage(){
+if((page+1)*perPage < questions.length){
+page++;
+render();
+}
+}
+
+function prevPage(){
+if(page>0){
+page--;
+render();
+}
+}
+
+function goHome(){
+window.location.href = "class.html";
+}
+
+/* INIT */
+loadQuestions();
+
+</script>
+
 </body>
 </html>

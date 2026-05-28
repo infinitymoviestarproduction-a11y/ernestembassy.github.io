@@ -46,15 +46,6 @@ body{
     transform:scale(1.02);
 }
 
-.card h2{
-    color:#333;
-}
-
-.card p{
-    color:#777;
-}
-
-/* QUIZ AREA */
 .quiz-box{
     max-width:900px;
     margin:20px auto;
@@ -63,13 +54,12 @@ body{
     border-radius:15px;
 }
 
-/* QUESTION */
+/* QUESTIONS */
 .question{
     font-weight:bold;
     margin:10px 0;
 }
 
-/* OPTION */
 .option{
     background:#f1f1f1;
     padding:10px;
@@ -97,6 +87,11 @@ body{
     text-align:center;
     margin-top:10px;
 }
+
+/* RESOURCES */
+pre{
+    white-space:pre-wrap;
+}
 </style>
 </head>
 
@@ -109,6 +104,11 @@ body{
 <!-- DASHBOARD -->
 <div id="dashboard" class="dashboard">
 
+    <div class="card" onclick="openResources()">
+        <h2>📚 Educational Resources</h2>
+        <p>Subject notes, explanations & downloads</p>
+    </div>
+
     <div class="card" onclick="openFreeTest()">
         <h2>🟢 Free Test Mode</h2>
         <p>Practice with 5 questions per page</p>
@@ -119,83 +119,127 @@ body{
         <p>Win ₦10,000 monthly draw</p>
     </div>
 
-    <div class="card">
-        <h2>📚 Educational Resources</h2>
-        <p>Study notes and explanations (coming soon)</p>
-    </div>
-
 </div>
 
 <!-- FREE TEST -->
 <div id="freeTest" class="quiz-box" style="display:none;"></div>
 
+<!-- RESOURCES -->
+<div id="resources" class="quiz-box" style="display:none;"></div>
+
 <!-- CHALLENGE -->
-<div id="challenge" style="display:none;" class="quiz-box">
-    <h2>Challenge Quiz Coming Soon...</h2>
-</div>
+<div id="challenge" class="quiz-box" style="display:none;"></div>
 
 <script>
 
-/* SAMPLE QUESTIONS (replace with JSON later) */
-const questions = [
-    {q:"What is a computer?", o:["A cooking tool","A machine that processes data","A car","A pen"], a:1, exp:"A computer processes data."},
-    {q:"CPU stands for?", o:["Central Processing Unit","Car Power Unit","Control Panel","None"], a:0, exp:"CPU is the brain of computer."},
-    {q:"Keyboard is?", o:["Output","Input","Software","Game"], a:1, exp:"Keyboard is input device."},
-    {q:"RAM is?", o:["Storage","Temporary memory","Printer","Screen"], a:1, exp:"RAM is temporary memory."},
-    {q:"Monitor is?", o:["Input","Output","CPU","Cable"], a:1, exp:"Monitor shows output."},
-    {q:"Mouse is?", o:["Input","Output","Power","Memory"], a:0, exp:"Mouse is input device."},
-    {q:"Data becomes?", o:["Information","Noise","Light","Sound"], a:0, exp:"Processed data is information."}
-];
-
+/* =========================
+   NAVIGATION STATE
+========================= */
 let page = 0;
 const perPage = 5;
 
-/* DASHBOARD NAV */
+/* =========================
+   QUESTIONS (SAMPLE)
+========================= */
+const questions = [
+    {q:"What is a computer?", o:["Cooking tool","Data processor","Car","Pen"], a:1, exp:"A computer processes data."},
+    {q:"CPU stands for?", o:["Central Processing Unit","Car Unit","Control Panel","None"], a:0, exp:"CPU is brain of computer."},
+    {q:"Keyboard is?", o:["Output","Input","Software","Game"], a:1, exp:"Keyboard is input device."},
+    {q:"RAM is?", o:["Storage","Temporary memory","Printer","Screen"], a:1, exp:"RAM is temporary memory."},
+    {q:"Monitor is?", o:["Input","Output","CPU","Cable"], a:1, exp:"Monitor shows output."},
+    {q:"Mouse is?", o:["Input","Output","Power","Memory"], a:0, exp:"Mouse is input device."}
+];
+
+/* =========================
+   DASHBOARD NAVIGATION
+========================= */
 function openFreeTest(){
-    document.getElementById("dashboard").style.display="none";
+    hideAll();
     document.getElementById("freeTest").style.display="block";
     renderPage();
 }
 
-function openChallenge(){
-    alert("Challenge quiz loading (₦100 system)");
+function openResources(){
+    hideAll();
+    document.getElementById("resources").style.display="block";
+
+    const data = {
+        Math:[
+            {t:"Basic Algebra",c:"Algebra uses letters like x.\nExample: x+2=5"},
+            {t:"Fractions",c:"1/2 + 1/2 = 1"}
+        ],
+        English:[
+            {t:"Noun",c:"Name of person, place or thing"},
+            {t:"Verb",c:"Action words like run, eat"}
+        ],
+        ICT:[
+            {t:"Computer",c:"Processes data into information"},
+            {t:"Input Device",c:"Keyboard, Mouse"}
+        ]
+    };
+
+    let html = "<h2>📚 Educational Resources</h2><button class='nav-btn home' onclick='backHome()'>🏠 Back</button>";
+
+    for(let subject in data){
+        html += `<h3 style="margin-top:15px;">${subject}</h3>`;
+
+        data[subject].forEach((item,i)=>{
+            html += `
+            <div class="card">
+                <strong onclick="toggle(this)">📖 ${item.t}</strong>
+                <div style="display:none;margin-top:10px;">
+                    <pre>${item.c}</pre>
+                    <button class="nav-btn next" onclick="downloadNote('${item.t}','${item.c}')">📄 Download</button>
+                </div>
+            </div>`;
+        });
+    }
+
+    document.getElementById("resources").innerHTML = html;
 }
 
-/* FREE TEST RENDER */
+function openChallenge(){
+    alert("Challenge Quiz Coming Soon (₦100 System)");
+}
+
+/* =========================
+   FREE TEST SYSTEM
+========================= */
 function renderPage(){
 
     let start = page * perPage;
-    let end = start + perPage;
+    let slice = questions.slice(start,start+perPage);
 
     let html = "";
 
-    let slice = questions.slice(start,end);
-
     slice.forEach((q,i)=>{
-
-        html += `<div>
-        <div class="question">${q.q}</div>`;
+        html += `<div class="question">${q.q}</div>`;
 
         q.o.forEach((opt,idx)=>{
-            html += `<div class="option"
-            onclick="check(this,${idx},${q.a},'${q.exp}')">${opt}</div>`;
+            html += `<div class="option" onclick="check(this,${idx},${q.a},'${q.exp}')">${opt}</div>`;
         });
 
-        html += `<div class="ex"></div></div><hr>`;
+        html += `<hr>`;
     });
 
     html += `
     <div class="pagination">
-        <button class="nav-btn prev" onclick="prevPage()">⬅ Prev</button>
-        <button class="nav-btn next" onclick="nextPage()">Next ➡</button>
+        <button class="nav-btn prev" onclick="prev()">⬅ Prev</button>
+        <button class="nav-btn next" onclick="next()">Next ➡</button>
         <button class="nav-btn home" onclick="backHome()">🏠 Home</button>
     </div>`;
 
     document.getElementById("freeTest").innerHTML = html;
 }
 
-/* CHECK ANSWER */
 function check(el,selected,correct,exp){
+
+    let parent = el.parentElement;
+    let options = parent.querySelectorAll(".option");
+
+    options.forEach((o,i)=>{
+        if(i===correct) o.classList.add("correct");
+    });
 
     if(selected===correct){
         el.classList.add("correct");
@@ -203,38 +247,55 @@ function check(el,selected,correct,exp){
         el.classList.add("wrong");
     }
 
-    let parent = el.parentElement;
-    let all = parent.querySelectorAll(".option");
-
-    all.forEach((o,i)=>{
-        if(i===correct){
-            o.classList.add("correct");
-        }
-    });
-
-    let ex = parent.querySelector(".ex");
-    ex.innerHTML = `<p>📖 ${exp}</p>`;
+    parent.innerHTML += `<p>📖 ${exp}</p>`;
 }
 
-/* PAGINATION */
-function nextPage(){
+/* =========================
+   NAVIGATION CONTROLS
+========================= */
+function next(){
     if((page+1)*perPage < questions.length){
         page++;
         renderPage();
     }
 }
 
-function prevPage(){
+function prev(){
     if(page>0){
         page--;
         renderPage();
     }
 }
 
-/* BACK HOME */
+/* =========================
+   BACK HOME
+========================= */
 function backHome(){
+    hideAll();
     document.getElementById("dashboard").style.display="block";
+}
+
+function hideAll(){
+    document.getElementById("dashboard").style.display="none";
     document.getElementById("freeTest").style.display="none";
+    document.getElementById("resources").style.display="none";
+    document.getElementById("challenge").style.display="none";
+}
+
+/* =========================
+   DOWNLOAD SYSTEM
+========================= */
+function downloadNote(title,content){
+    const file = new Blob([title+"\n\n"+content],{type:"text/plain"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(file);
+    a.download = title+".txt";
+    a.click();
+}
+
+function toggle(el){
+    let next = el.nextElementSibling;
+    next.style.display = next.style.display==="block"?"none":"block";
 }
 
 </script>

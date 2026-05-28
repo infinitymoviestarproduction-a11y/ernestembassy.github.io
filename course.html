@@ -6,6 +6,11 @@
 
 <title>Course Details - Ernest Embassy LMS</title>
 
+<!-- FIREBASE SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+
 <style>
 
 *{
@@ -168,6 +173,8 @@ nav{
     border-radius:8px;
     font-weight:bold;
     transition:0.3s;
+    border:none;
+    cursor:pointer;
 }
 
 .start-btn:hover{
@@ -200,6 +207,20 @@ footer{
 
 }
 
+.loading{
+    text-align:center;
+    padding:40px;
+    color:#667eea;
+}
+
+.error-message{
+    background:#f8d7da;
+    color:#721c24;
+    padding:20px;
+    border-radius:12px;
+    text-align:center;
+}
+
 </style>
 </head>
 
@@ -209,8 +230,7 @@ footer{
 
 <script>
 
-const user =
-    JSON.parse(localStorage.getItem("currentUser"));
+const user = JSON.parse(localStorage.getItem("currentUser"));
 
 if(!user){
     window.location.href = "login.html";
@@ -237,7 +257,7 @@ if(!user){
         </a>
 
         <a href="class.html">
-            📚 Classes
+            💰 Challenge Quiz
         </a>
 
         <a href="javascript:history.back()">
@@ -253,11 +273,11 @@ if(!user){
 <div class="hero">
 
     <h1 id="courseTitle">
-        Course Details
+        Loading Course...
     </h1>
 
     <p id="courseDescription">
-        Professional learning experience powered by Ernest Embassy Digital Solutions.
+        Please wait while we load course information.
     </p>
 
 </div>
@@ -283,7 +303,7 @@ if(!user){
 
             <div class="info-box">
                 <h3>Total Questions</h3>
-                <p id="courseQuestions">500+</p>
+                <p id="courseQuestions">Loading...</p>
             </div>
 
             <div class="info-box">
@@ -316,11 +336,10 @@ if(!user){
                 scoring and instant feedback system.
             </p>
 
-            <a id="quizBtn"
-               href="#"
+            <button id="quizBtn"
                class="start-btn">
                Start Quiz
-            </a>
+            </button>
 
         </div>
 
@@ -337,7 +356,7 @@ if(!user){
                 lesson explanations and revision resources.
             </p>
 
-            <a href="courses.html"
+            <a href="educational-resources.html"
                class="start-btn">
                Open Resources
             </a>
@@ -363,6 +382,23 @@ if(!user){
 </footer>
 
 <script>
+
+/* ====================================
+   FIREBASE CONFIGURATION
+==================================== */
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+    authDomain: "ernest-embassy-lms.firebaseapp.com",
+    projectId: "ernest-embassy-lms",
+    storageBucket: "ernest-embassy-lms.firebasestorage.app",
+    messagingSenderId: "204896421221",
+    appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const auth = firebase.auth();
 
 /* ====================================
    GET SUBJECT FROM URL
@@ -392,7 +428,7 @@ const subjects = {
             "SS1",
 
         questions:
-            "500+"
+            "Loading..."
 
     },
 
@@ -408,7 +444,7 @@ const subjects = {
             "SS1",
 
         questions:
-            "500+"
+            "Loading..."
 
     },
 
@@ -424,7 +460,7 @@ const subjects = {
             "SS1",
 
         questions:
-            "500+"
+            "Loading..."
 
     },
 
@@ -440,33 +476,117 @@ const subjects = {
             "SS1",
 
         questions:
-            "500+"
+            "Loading..."
 
     }
 
 };
 
 /* ====================================
-   LOAD SUBJECT
+   LOAD ACTUAL QUESTION COUNT FROM FIRESTORE
 ==================================== */
 
-if(subjects[subject]){
+async function loadQuestionCount() {
+    try {
+        const querySnapshot = await db.collection("questions").get();
+        let questionCount = 0;
+        
+        if (subject && subjects[subject]) {
+            // Count questions for this specific subject
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                if (data.subject === subject) {
+                    questionCount++;
+                }
+            });
+        } else {
+            questionCount = querySnapshot.size;
+        }
+        
+        // Update the questions count in UI
+        if (questionCount > 0) {
+            document.getElementById("courseQuestions").innerText = questionCount;
+        } else {
+            document.getElementById("courseQuestions").innerHTML = "500+ <span style='font-size:12px;'>(Coming Soon)</span>";
+        }
+        
+        return questionCount;
+    } catch (error) {
+        console.error("Error loading question count:", error);
+        document.getElementById("courseQuestions").innerHTML = "500+";
+        return 0;
+    }
+}
 
-    document.getElementById("courseTitle").innerText =
-        subjects[subject].title;
+/* ====================================
+   LOAD COURSE DETAILS
+==================================== */
 
-    document.getElementById("courseDescription").innerText =
-        subjects[subject].description;
+async function loadCourseDetails() {
+    
+    // Show loading state
+    document.getElementById("courseTitle").innerHTML = "📚 Loading...";
+    document.getElementById("courseDescription").innerHTML = "Please wait while we load course information.";
+    
+    // Check if subject exists
+    if(subjects[subject]){
+        
+        document.getElementById("courseTitle").innerText =
+            subjects[subject].title;
+            
+        document.getElementById("courseDescription").innerText =
+            subjects[subject].description;
+            
+        document.getElementById("courseLevel").innerText =
+            subjects[subject].level;
+        
+        // Load actual question count from Firestore
+        await loadQuestionCount();
+        
+        // Set the quiz button to link to courses.html with subject parameter
+        const quizBtn = document.getElementById("quizBtn");
+        quizBtn.onclick = function() {
+            window.location.href = `courses.html?subject=${subject}`;
+        };
+        
+    } else {
+        // Invalid subject
+        document.getElementById("courseTitle").innerHTML = "⚠️ Course Not Found";
+        document.getElementById("courseDescription").innerHTML = "The requested course could not be found. Please go back to the dashboard and select a valid course.";
+        document.getElementById("courseLevel").innerHTML = "N/A";
+        document.getElementById("courseQuestions").innerHTML = "0";
+        
+        // Disable quiz button
+        const quizBtn = document.getElementById("quizBtn");
+        quizBtn.disabled = true;
+        quizBtn.style.background = "#6c757d";
+        quizBtn.style.cursor = "not-allowed";
+        quizBtn.innerText = "Course Unavailable";
+    }
+}
 
-    document.getElementById("courseLevel").innerText =
-        subjects[subject].level;
+/* ====================================
+   CHECK AUTHENTICATION
+==================================== */
 
-    document.getElementById("courseQuestions").innerText =
-        subjects[subject].questions;
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        // User is logged in, load course details
+        loadCourseDetails();
+    } else {
+        // No user, redirect to login
+        window.location.href = "login.html";
+    }
+});
 
-    document.getElementById("quizBtn").href =
-        `courses.html?subject=${subject}`;
+/* ====================================
+   FALLBACK FOR LOCALSTORAGE AUTH
+==================================== */
 
+// Also check localStorage for backward compatibility
+if (!auth.currentUser && localStorage.getItem("currentUser")) {
+    // Still load the page but with localStorage user
+    loadCourseDetails();
 }
 
 </script>

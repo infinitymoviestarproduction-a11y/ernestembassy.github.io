@@ -4,9 +4,13 @@
 <meta charset="UTF-8">
 <title>Ernest Embassy LMS Quiz Engine</title>
 
+<!-- FIREBASE SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+
+<!-- Central Auth Script -->
+<script src="auth.js"></script>
 
 <style>
 
@@ -140,6 +144,15 @@ text-align:center;
 box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
+.user-info{
+background:rgba(255,255,255,0.2);
+padding:5px 15px;
+border-radius:20px;
+display:inline-block;
+margin-bottom:10px;
+font-size:14px;
+}
+
 @media(max-width:768px){
 
 .top-bar{
@@ -157,8 +170,9 @@ width:100%;
 
 <body>
 
-<div class="header" id="title">
-🎓 Ernest Embassy LMS Quiz Engine
+<div class="header">
+    <div class="user-info" id="userInfo">👤 Loading...</div>
+    <div id="title">🎓 Ernest Embassy LMS Quiz Engine</div>
 </div>
 
 <div class="container">
@@ -169,7 +183,7 @@ width:100%;
 Score: <span id="score">0</span>
 </div>
 
-<div class="timer-box">
+<div class="timer-box" id="timerBox">
 ⏰ Time Left:
 <span id="timer">30:00</span>
 </div>
@@ -180,13 +194,8 @@ Score: <span id="score">0</span>
 
 <div class="nav">
 <button class="back" onclick="prevPage()">⬅ Back</button>
-
 <button class="home" onclick="goHome()">🏠 Dashboard</button>
-
-<button class="submit" onclick="submitQuiz()">
-✅ Submit Quiz
-</button>
-
+<button class="submit" onclick="submitQuiz()">✅ Submit Quiz</button>
 <button class="next" onclick="nextPage()">Next ➡</button>
 </div>
 
@@ -195,366 +204,365 @@ Score: <span id="score">0</span>
 <script>
 
 /* =========================
-FIREBASE CONFIG
+   MODE SYSTEM
 ========================= */
 
-const firebaseConfig = {
-
-apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
-
-authDomain: "ernest-embassy-lms.firebaseapp.com",
-
-projectId: "ernest-embassy-lms",
-
-storageBucket: "ernest-embassy-lms.firebasestorage.app",
-
-messagingSenderId: "204896421221",
-
-appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
-
-};
-
-firebase.initializeApp(firebaseConfig);
-
-const db = firebase.firestore();
-const auth = firebase.auth();
+const urlParams = new URLSearchParams(window.location.search);
+let mode = urlParams.get("mode") || "free";
 
 /* =========================
-MODE SYSTEM
-========================= */
-
-const urlParams =
-new URLSearchParams(window.location.search);
-
-let mode =
-urlParams.get("mode") || "free";
-
-/* =========================
-QUIZ SETTINGS
+   QUIZ SETTINGS
 ========================= */
 
 let questions = [];
 let page = 0;
 let perPage = 5;
 let score = 0;
-
 let answeredQuestions = {};
-
-let totalTime = mode === "paid" ? 1800 : 999999;
-
-/* 30 mins paid mode */
+let totalTime = mode === "paid" ? 1800 : 999999; // 30 mins for paid mode
+let timerInterval = null;
+let currentUserInfo = null;
 
 /* =========================
-TITLE
+   UPDATE UI BASED ON MODE
 ========================= */
 
 if(mode === "paid"){
-
-document.getElementById("title").innerText =
-"🔴 Paid Challenge Quiz";
-
-}else{
-
-document.getElementById("title").innerText =
-"🟢 Free Test Mode";
-
-document.querySelector(".timer-box").style.display =
-"none";
-
+    document.getElementById("title").innerHTML = "🔴 Paid Challenge Quiz (₦100)";
+    document.getElementById("timerBox").style.display = "flex";
+} else {
+    document.getElementById("title").innerHTML = "🟢 Free Test Mode";
+    document.getElementById("timerBox").style.display = "none";
 }
 
 /* =========================
-LOAD QUESTIONS
+   UPDATE USER DISPLAY
+========================= */
+
+function updateUserDisplay() {
+    const userInfoDiv = document.getElementById("userInfo");
+    if (userInfoDiv) {
+        const userName = getUserName();
+        userInfoDiv.innerHTML = `👤 ${userName}`;
+    }
+}
+
+/* =========================
+   LOAD QUESTIONS FROM FIRESTORE
 ========================= */
 
 async function loadQuestions(){
-
-const snap =
-await db.collection("questions").get();
-
-questions = [];
-
-snap.forEach(doc=>{
-
-questions.push({
-id: doc.id,
-...doc.data()
-});
-
-});
-
-/* randomize paid mode */
-
-if(mode === "paid"){
-
-questions =
-questions.sort(()=>Math.random()-0.5);
-
-}
-
-render();
-
+    const container = document.getElementById("quiz");
+    container.innerHTML = '<div style="text-align:center; padding:40px;">📚 Loading questions...</div>';
+    
+    try {
+        const snap = await db.collection("questions").get();
+        questions = [];
+        
+        snap.forEach(doc=>{
+            const data = doc.data();
+            questions.push({
+                id: doc.id,
+                q: data.q,
+                o: data.o || [],
+                a: data.a || 0,
+                exp: data.exp || "No explanation available",
+                stage: data.stage || 1,
+                subject: data.subject || "general"
+            });
+        });
+        
+        if (questions.length === 0) {
+            container.innerHTML = `
+                <div style="text-align:center; padding:40px;">
+                    <p>⚠️ No questions found in the database.</p>
+                    <p>Please contact the administrator to add questions.</p>
+                    <button class="home" onclick="goHome()" style="margin-top:20px;">🏠 Dashboard</button>
+                </div>
+            `;
+            return;
+        }
+        
+        // Randomize questions for paid mode
+        if(mode === "paid"){
+            questions = questions.sort(()=>Math.random()-0.5);
+        }
+        
+        render();
+        
+    } catch (error) {
+        console.error("Error loading questions:", error);
+        container.innerHTML = `
+            <div style="text-align:center; padding:40px;">
+                <p>⚠️ Error loading questions. Please try again.</p>
+                <button class="home" onclick="location.reload()" style="margin-top:20px;">🔄 Retry</button>
+            </div>
+        `;
+    }
 }
 
 /* =========================
-RENDER
+   RENDER QUESTIONS
 ========================= */
 
 function render(){
-
-let start = page * perPage;
-let end = start + perPage;
-
-let slice =
-questions.slice(start,end);
-
-let html = "";
-
-slice.forEach((q,index)=>{
-
-html += `
-<div class="card">
-
-<div class="question">
-${start + index + 1}. ${q.q}
-</div>
-`;
-
-q.o.forEach((opt,oi)=>{
-
-html += `
-<div class="option"
-onclick="check(this,
-${start+index},
-${oi},
-${q.a},
-'${q.exp}')">
-
-${opt}
-
-</div>
-`;
-
-});
-
-html += `
-<div class="explanation"></div>
-</div>
-`;
-
-});
-
-document.getElementById("quiz").innerHTML =
-html;
-
+    let start = page * perPage;
+    let end = start + perPage;
+    let slice = questions.slice(start, end);
+    
+    if(slice.length === 0){
+        document.getElementById("quiz").innerHTML = `
+            <div style="text-align:center; padding:40px;">
+                <p>You have completed all questions!</p>
+                <button class="submit" onclick="submitQuiz()">✅ Submit Quiz</button>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = "";
+    
+    slice.forEach((q, idx)=>{
+        const globalIndex = start + idx;
+        const isAnswered = answeredQuestions[globalIndex] !== undefined;
+        
+        html += `
+        <div class="card" id="card-${globalIndex}">
+            <div class="question">${globalIndex + 1}. ${escapeHtml(q.q)}</div>
+        `;
+        
+        q.o.forEach((opt, optIdx)=>{
+            const isCorrect = (optIdx === q.a);
+            let additionalClass = "";
+            
+            if(isAnswered){
+                if(isCorrect){
+                    additionalClass = "correct";
+                } else if(answeredQuestions[globalIndex] === optIdx && !isCorrect){
+                    additionalClass = "wrong";
+                }
+            }
+            
+            html += `
+            <div class="option ${additionalClass}"
+                 onclick="check(this, ${globalIndex}, ${optIdx}, ${q.a}, '${escapeHtml(q.exp)}')"
+                 style="${isAnswered ? 'pointer-events:none;' : ''}">
+                ${escapeHtml(opt)}
+            </div>
+            `;
+        });
+        
+        if(isAnswered && mode === "free"){
+            html += `
+            <div class="explanation" style="display:block;">
+                📖 ${escapeHtml(q.exp)}
+            </div>
+            `;
+        } else {
+            html += `<div class="explanation"></div>`;
+        }
+        
+        html += `</div>`;
+    });
+    
+    document.getElementById("quiz").innerHTML = html;
 }
 
 /* =========================
-CHECK ANSWER
+   CHECK ANSWER
 ========================= */
 
-function check(el,qIndex,selected,correct,exp){
-
-if(answeredQuestions[qIndex]) return;
-
-answeredQuestions[qIndex] = true;
-
-let parent = el.parentElement;
-
-let options =
-parent.querySelectorAll(".option");
-
-let explanation =
-parent.querySelector(".explanation");
-
-options.forEach((o,i)=>{
-
-o.style.pointerEvents = "none";
-
-if(i === correct){
-
-o.classList.add("correct");
-
-}
-
-});
-
-if(selected === correct){
-
-el.classList.add("correct");
-
-score++;
-
-document.getElementById("score").innerText =
-score;
-
-}else{
-
-el.classList.add("wrong");
-
-}
-
-/* explanation only in free mode */
-
-if(mode === "free"){
-
-explanation.innerHTML =
-"📖 " + exp;
-
-explanation.style.display = "block";
-
-}
-
+function check(el, qIndex, selected, correct, exp){
+    if(answeredQuestions[qIndex] !== undefined) return;
+    
+    answeredQuestions[qIndex] = selected;
+    
+    let parent = el.parentElement;
+    let options = parent.querySelectorAll(".option");
+    let explanation = parent.querySelector(".explanation");
+    
+    options.forEach((o, i)=>{
+        o.style.pointerEvents = "none";
+        if(i === correct){
+            o.classList.add("correct");
+        }
+    });
+    
+    if(selected === correct){
+        el.classList.add("correct");
+        score++;
+        document.getElementById("score").innerText = score;
+    } else {
+        el.classList.add("wrong");
+    }
+    
+    // Show explanation only in free mode
+    if(mode === "free"){
+        explanation.innerHTML = "📖 " + exp;
+        explanation.style.display = "block";
+    }
 }
 
 /* =========================
-PAGINATION
+   PAGINATION
 ========================= */
 
 function nextPage(){
-
-if((page+1)*perPage < questions.length){
-
-page++;
-
-render();
-
-}
-
+    if((page + 1) * perPage < questions.length){
+        page++;
+        render();
+    } else {
+        // On last page, you can auto-submit or just show message
+        if(mode === "paid"){
+            alert("This is the last page. Click Submit Quiz when ready.");
+        }
+    }
 }
 
 function prevPage(){
-
-if(mode === "paid"){
-
-alert("Back navigation disabled in paid mode.");
-
-return;
-
-}
-
-if(page > 0){
-
-page--;
-
-render();
-
-}
-
+    if(mode === "paid"){
+        alert("⚠️ Back navigation is disabled in paid challenge mode to maintain fairness.");
+        return;
+    }
+    
+    if(page > 0){
+        page--;
+        render();
+    }
 }
 
 /* =========================
-TIMER SYSTEM
+   TIMER SYSTEM (PAID MODE ONLY)
 ========================= */
 
-if(mode === "paid"){
-
-const timer =
-setInterval(()=>{
-
-let minutes =
-Math.floor(totalTime / 60);
-
-let seconds =
-totalTime % 60;
-
-seconds =
-seconds < 10 ? "0"+seconds : seconds;
-
-document.getElementById("timer").innerText =
-minutes + ":" + seconds;
-
-if(totalTime <= 0){
-
-clearInterval(timer);
-
-submitQuiz();
-
-}
-
-totalTime--;
-
-},1000);
-
+function startTimer(){
+    if(mode !== "paid") return;
+    
+    timerInterval = setInterval(()=>{
+        let minutes = Math.floor(totalTime / 60);
+        let seconds = totalTime % 60;
+        seconds = seconds < 10 ? "0"+seconds : seconds;
+        document.getElementById("timer").innerText = minutes + ":" + seconds;
+        
+        if(totalTime <= 0){
+            clearInterval(timerInterval);
+            alert("⏰ Time's up! Submitting your quiz...");
+            submitQuiz();
+        }
+        
+        totalTime--;
+    }, 1000);
 }
 
 /* =========================
-SUBMIT QUIZ
+   SUBMIT QUIZ
 ========================= */
 
 async function submitQuiz(){
-
-let user =
-auth.currentUser;
-
-if(user){
-
-await db.collection("users")
-.doc(user.uid)
-.update({
-
-score: score
-
-});
-
-}
-
-document.querySelector(".container").innerHTML = `
-
-<div class="result-box">
-
-<h1>🎉 Quiz Submitted</h1>
-
-<h2>Your Score: ${score}</h2>
-
-<p>
-Thank you for participating in the
-Ernest Embassy LMS Challenge.
-</p>
-
-<br>
-
-<button class="home"
-onclick="goHome()">
-
-🏠 Return Dashboard
-
-</button>
-
-</div>
-`;
-
+    // Clear timer
+    if(timerInterval){
+        clearInterval(timerInterval);
+    }
+    
+    // Calculate final score
+    let finalScore = score;
+    let totalQuestions = questions.length;
+    let percentage = Math.round((finalScore / totalQuestions) * 100);
+    
+    // Save result to Firestore using auth.js function
+    if(currentUserInfo && mode === "paid"){
+        await saveQuizAttempt("challenge", percentage, totalQuestions, "paid");
+        await updateUserScore(percentage);
+    } else if(currentUserInfo && mode === "free"){
+        await saveQuizAttempt("practice", percentage, totalQuestions, "free");
+    }
+    
+    let resultMessage = "";
+    if(percentage >= 80){
+        resultMessage = "🎉 Excellent! You're a star! Keep it up! 🎉";
+    } else if(percentage >= 60){
+        resultMessage = "👍 Good job! Review the explanations and try again to improve!";
+    } else {
+        resultMessage = "📚 Keep practicing! Review the explanations and take the quiz again!";
+    }
+    
+    document.querySelector(".container").innerHTML = `
+        <div class="result-box">
+            <h1>🎉 Quiz Completed!</h1>
+            <h2>Your Score: ${finalScore} / ${totalQuestions}</h2>
+            <p style="font-size: 1.5rem; margin: 15px 0;">Percentage: ${percentage}%</p>
+            <div style="margin: 20px 0; padding: 15px; background: #f1f3f5; border-radius: 10px;">
+                <p>${resultMessage}</p>
+            </div>
+            ${mode === "paid" && percentage >= 80 ? '<p style="color: #28a745;">🏆 Congratulations! You qualify for the ₦1000 prize!</p>' : ''}
+            <br>
+            <button class="home" onclick="goHome()">🏠 Return to Dashboard</button>
+            <button class="next" style="margin-left: 10px;" onclick="location.reload()">🔄 Try Again</button>
+        </div>
+    `;
 }
 
 /* =========================
-HOME
+   ESCAPE HTML
+========================= */
+
+function escapeHtml(str){
+    if(!str) return "";
+    return str.replace(/[&<>]/g, function(m){
+        if(m === "&") return "&amp;";
+        if(m === "<") return "&lt;";
+        if(m === ">") return "&gt;";
+        return m;
+    });
+}
+
+/* =========================
+   GO HOME
 ========================= */
 
 function goHome(){
-
-window.location.href = "class.html";
-
+    window.location.href = "dashboard.html";
 }
 
 /* =========================
-ANTI REFRESH SECURITY
+   ANTI REFRESH SECURITY (PAID MODE)
 ========================= */
 
 if(mode === "paid"){
-
-window.onbeforeunload = function(){
-
-return "Quiz in progress.";
-
-};
-
+    window.onbeforeunload = function(){
+        return "⚠️ Quiz in progress! If you refresh, your progress will be lost.";
+    };
 }
 
 /* =========================
-INIT
+   INITIALIZE PAGE
 ========================= */
 
-loadQuestions();
+async function initializePage() {
+    // Wait for authentication
+    await checkAuth(true);
+    
+    // Get current user
+    currentUserInfo = currentUser;
+    
+    // Update user display
+    updateUserDisplay();
+    
+    // Load questions
+    await loadQuestions();
+    
+    // Start timer for paid mode
+    if(mode === "paid"){
+        startTimer();
+    }
+}
+
+// Start initialization when page loads
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializePage);
+} else {
+    initializePage();
+}
 
 </script>
 

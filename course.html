@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Course Details - Ernest Embassy LMS</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+    color:#333;
+}
+
+/* NAVBAR */
+
+nav{
+    background:#1a1a2e;
+    color:white;
+    padding:15px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:bold;
+    color:#ffd700;
+}
+
+.nav-links{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:white;
+    background:#667eea;
+    padding:10px 16px;
+    border-radius:8px;
+    transition:0.3s;
+    font-size:14px;
+}
+
+.nav-links a:hover{
+    background:#5a67d8;
+}
+
+/* HERO */
+
+.hero{
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    color:white;
+    padding:60px 20px;
+    text-align:center;
+}
+
+.hero h1{
+    font-size:38px;
+    margin-bottom:15px;
+}
+
+.hero p{
+    max-width:800px;
+    margin:auto;
+    line-height:1.7;
+}
+
+/* CONTAINER */
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:30px 20px;
+}
+
+/* COURSE OVERVIEW */
+
+.course-card{
+    background:white;
+    padding:30px;
+    border-radius:18px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+    margin-bottom:30px;
+}
+
+.course-card h2{
+    margin-bottom:20px;
+    color:#1a1a2e;
+}
+
+.course-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+    margin-top:25px;
+}
+
+.info-box{
+    background:#f5f7fa;
+    padding:20px;
+    border-radius:12px;
+    text-align:center;
+}
+
+.info-box h3{
+    color:#667eea;
+    margin-bottom:10px;
+}
+
+/* LESSONS */
+
+.section-title{
+    margin-bottom:20px;
+    font-size:28px;
+    color:#1a1a2e;
+}
+
+.lesson-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:20px;
+}
+
+.lesson-card{
+    background:white;
+    padding:25px;
+    border-radius:16px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+    transition:0.3s;
+}
+
+.lesson-card:hover{
+    transform:translateY(-5px);
+}
+
+.lesson-card h3{
+    margin-bottom:12px;
+    color:#1a1a2e;
+}
+
+.lesson-card p{
+    color:#666;
+    line-height:1.6;
+    margin-bottom:18px;
+}
+
+/* BUTTONS */
+
+.start-btn{
+    display:inline-block;
+    text-decoration:none;
+    background:#28a745;
+    color:white;
+    padding:12px 18px;
+    border-radius:8px;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+.start-btn:hover{
+    background:#218838;
+}
+
+/* FOOTER */
+
+footer{
+    margin-top:60px;
+    background:#1a1a2e;
+    color:white;
+    text-align:center;
+    padding:30px;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    nav{
+        flex-direction:column;
+        gap:15px;
+        text-align:center;
+    }
+
+    .hero h1{
+        font-size:28px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN PROTECTION -->
+
+<script>
+
+const user =
+    JSON.parse(localStorage.getItem("currentUser"));
+
+if(!user){
+    window.location.href = "login.html";
+}
+
+</script>
+
+<!-- NAVIGATION -->
+
+<nav>
+
+    <div class="logo">
+        🎓 Ernest Embassy LMS
+    </div>
+
+    <div class="nav-links">
+
+        <a href="index.html">
+            🏠 Home
+        </a>
+
+        <a href="dashboard.html">
+            📊 Dashboard
+        </a>
+
+        <a href="class.html">
+            📚 Classes
+        </a>
+
+        <a href="javascript:history.back()">
+            ⬅ Back
+        </a>
+
+    </div>
+
+</nav>
+
+<!-- HERO -->
+
+<div class="hero">
+
+    <h1 id="courseTitle">
+        Course Details
+    </h1>
+
+    <p id="courseDescription">
+        Professional learning experience powered by Ernest Embassy Digital Solutions.
+    </p>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="container">
+
+    <!-- COURSE OVERVIEW -->
+
+    <div class="course-card">
+
+        <h2>
+            📘 Course Overview
+        </h2>
+
+        <div class="course-grid">
+
+            <div class="info-box">
+                <h3>Level</h3>
+                <p id="courseLevel">SS1</p>
+            </div>
+
+            <div class="info-box">
+                <h3>Total Questions</h3>
+                <p id="courseQuestions">500+</p>
+            </div>
+
+            <div class="info-box">
+                <h3>Access</h3>
+                <p>24/7 Learning</p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- LESSONS -->
+
+    <h2 class="section-title">
+        🚀 Learning Activities
+    </h2>
+
+    <div class="lesson-grid">
+
+        <!-- QUIZ -->
+
+        <div class="lesson-card">
+
+            <h3>
+                📝 CBT Quiz Practice
+            </h3>
+
+            <p>
+                Practice interactive objective questions with explanations,
+                scoring and instant feedback system.
+            </p>
+
+            <a id="quizBtn"
+               href="#"
+               class="start-btn">
+               Start Quiz
+            </a>
+
+        </div>
+
+        <!-- NOTES -->
+
+        <div class="lesson-card">
+
+            <h3>
+                📚 Study Notes
+            </h3>
+
+            <p>
+                Access digital classroom materials,
+                lesson explanations and revision resources.
+            </p>
+
+            <a href="courses.html"
+               class="start-btn">
+               Open Resources
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+
+<footer>
+
+    <p>
+        © 2026 Ernest Embassy Digital Solutions
+    </p>
+
+    <p>
+        Professional Online Learning Platform
+    </p>
+
+</footer>
+
+<script>
+
+/* ====================================
+   GET SUBJECT FROM URL
+==================================== */
+
+const params =
+    new URLSearchParams(window.location.search);
+
+const subject =
+    params.get("subject");
+
+/* ====================================
+   SUBJECT DATA
+==================================== */
+
+const subjects = {
+
+    "digital-technology-ss1": {
+
+        title:
+            "💻 Digital Technology SS1",
+
+        description:
+            "Learn computer fundamentals, ICT, internet technology and digital skills.",
+
+        level:
+            "SS1",
+
+        questions:
+            "500+"
+
+    },
+
+    "mathematics-ss1": {
+
+        title:
+            "📐 Mathematics SS1",
+
+        description:
+            "Master algebra, equations, geometry and WAEC preparation.",
+
+        level:
+            "SS1",
+
+        questions:
+            "500+"
+
+    },
+
+    "english-ss1": {
+
+        title:
+            "📖 English Language SS1",
+
+        description:
+            "Improve grammar, essay writing, comprehension and communication skills.",
+
+        level:
+            "SS1",
+
+        questions:
+            "500+"
+
+    },
+
+    "igbo-ss1": {
+
+        title:
+            "🌍 Igbo Language SS1",
+
+        description:
+            "Learn vocabulary, grammar, translation and language practice.",
+
+        level:
+            "SS1",
+
+        questions:
+            "500+"
+
+    }
+
+};
+
+/* ====================================
+   LOAD SUBJECT
+==================================== */
+
+if(subjects[subject]){
+
+    document.getElementById("courseTitle").innerText =
+        subjects[subject].title;
+
+    document.getElementById("courseDescription").innerText =
+        subjects[subject].description;
+
+    document.getElementById("courseLevel").innerText =
+        subjects[subject].level;
+
+    document.getElementById("courseQuestions").innerText =
+        subjects[subject].questions;
+
+    document.getElementById("quizBtn").href =
+        `courses.html?subject=${subject}`;
+
+}
+
+</script>
+
+</body>
+</html>

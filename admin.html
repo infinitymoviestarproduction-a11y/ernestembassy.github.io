@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>LMS Admin Panel - Firebase Connected</title>
 
-<!-- FIREBASE COMPAT -->
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
 
@@ -45,6 +44,7 @@ margin:8px 0 15px 0;
 border-radius:10px;
 border:1px solid #ddd;
 outline:none;
+font-size:14px;
 }
 
 textarea{
@@ -61,14 +61,22 @@ border-radius:10px;
 cursor:pointer;
 width:100%;
 font-size:16px;
+transition:0.3s;
 }
 
 button:hover{
 background:#5a67d8;
+transform:scale(1.02);
 }
 
 .success{
 color:green;
+font-weight:bold;
+margin-top:10px;
+}
+
+.error{
+color:red;
 font-weight:bold;
 margin-top:10px;
 }
@@ -78,12 +86,12 @@ margin-top:10px;
 <body>
 
 <div class="header">
-⚙️ LMS ADMIN PANEL (Firebase Connected)
+⚙️ LMS ADMIN PANEL (Firebase Engine)
 </div>
 
 <div class="container">
 
-<!-- QUESTION -->
+<!-- QUESTION SECTION -->
 <div class="card">
 <h2>➕ Add Question</h2>
 
@@ -95,10 +103,11 @@ margin-top:10px;
 <input id="o4" placeholder="Option 4">
 
 <select id="ans">
-<option value="0">Correct Answer (0)</option>
-<option value="1">Correct Answer (1)</option>
-<option value="2">Correct Answer (2)</option>
-<option value="3">Correct Answer (3)</option>
+<option value="">Select Correct Answer Index</option>
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
 </select>
 
 <textarea id="exp" placeholder="Explanation"></textarea>
@@ -108,7 +117,7 @@ margin-top:10px;
 <div id="qMsg"></div>
 </div>
 
-<!-- LESSON -->
+<!-- LESSON SECTION -->
 <div class="card">
 <h2>📚 Add Lesson</h2>
 
@@ -125,7 +134,8 @@ margin-top:10px;
 
 <script>
 
-/* FIREBASE CONFIG (REPLACE WITH YOUR OWN) */
+/* ================= FIREBASE INIT ================= */
+
 const firebaseConfig = {
 apiKey: "YOUR_API_KEY",
 authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -138,76 +148,76 @@ appId: "XXXX"
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-/* =========================
-   SAVE QUESTION TO FIREBASE
-========================= */
+/* ================= SAVE QUESTION ================= */
+
 async function saveQuestion(){
 
-let q = document.getElementById("q").value;
-let o1 = document.getElementById("o1").value;
-let o2 = document.getElementById("o2").value;
-let o3 = document.getElementById("o3").value;
-let o4 = document.getElementById("o4").value;
-let a = Number(document.getElementById("ans").value);
-let exp = document.getElementById("exp").value;
+let q = document.getElementById("q").value.trim();
+let o1 = document.getElementById("o1").value.trim();
+let o2 = document.getElementById("o2").value.trim();
+let o3 = document.getElementById("o3").value.trim();
+let o4 = document.getElementById("o4").value.trim();
+let a = document.getElementById("ans").value;
+let exp = document.getElementById("exp").value.trim();
 
-if(!q || !o1 || !o2 || !o3 || !o4 || !exp){
+if(!q || !o1 || !o2 || !o3 || !o4 || !exp || a === ""){
 document.getElementById("qMsg").innerHTML =
-"<p style='color:red'>⚠️ Please fill all fields</p>";
+"<p class='error'>⚠️ Please fill all fields properly</p>";
 return;
 }
 
 try{
 
 await db.collection("questions").add({
-q: q,
-o: [o1,o2,o3,o4],
-a: a,
-exp: exp,
-createdAt: new Date()
+q,
+o:[o1,o2,o3,o4],
+a:Number(a),
+exp,
+createdAt:new Date()
 });
 
-/* clear form */
+/* reset */
 document.getElementById("q").value="";
 document.getElementById("o1").value="";
 document.getElementById("o2").value="";
 document.getElementById("o3").value="";
 document.getElementById("o4").value="";
 document.getElementById("exp").value="";
+document.getElementById("ans").value="";
 
 document.getElementById("qMsg").innerHTML =
 "<p class='success'>✅ Question saved successfully!</p>";
 
 }catch(err){
-console.log(err);
+console.error(err);
 document.getElementById("qMsg").innerHTML =
-"<p style='color:red'>❌ Error saving question</p>";
+"<p class='error'>❌ Failed to save question</p>";
 }
 
 }
 
-/* =========================
-   SAVE LESSON TO FIREBASE
-========================= */
+/* ================= SAVE LESSON ================= */
+
 async function saveLesson(){
 
-let title = document.getElementById("title").value;
-let content = document.getElementById("content").value;
+let title = document.getElementById("title").value.trim();
+let content = document.getElementById("content").value.trim();
 
 if(!title || !content){
 document.getElementById("lMsg").innerHTML =
-"<p style='color:red'>⚠️ Fill all fields</p>";
+"<p class='error'>⚠️ Fill all fields properly</p>";
 return;
 }
 
 try{
 
 await db.collection("lessons").add({
-title: title,
-content: content,
-createdAt: new Date()
+title,
+content,
+createdAt:new Date()
 });
 
+/* reset */
 document.getElementById("title").value="";
 document.getElementById("content").value="";
 
@@ -215,9 +225,9 @@ document.getElementById("lMsg").innerHTML =
 "<p class='success'>✅ Lesson saved successfully!</p>";
 
 }catch(err){
-console.log(err);
+console.error(err);
 document.getElementById("lMsg").innerHTML =
-"<p style='color:red'>❌ Error saving lesson</p>";
+"<p class='error'>❌ Failed to save lesson</p>";
 }
 
 }

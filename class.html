@@ -6,321 +6,181 @@
 <title>Ernest Embassy LMS</title>
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Segoe UI;
-}
-
-body{
-    background:#eef2f7;
-}
-
-/* HEADER */
-.header{
-    background:linear-gradient(135deg,#667eea,#764ba2);
-    color:white;
-    padding:25px;
-    text-align:center;
-}
-
-/* DASHBOARD */
-.dashboard{
-    max-width:1000px;
-    margin:20px auto;
-    padding:20px;
-}
+body{font-family:Segoe UI;background:#eef2f7;margin:0}
+.header{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:20px;text-align:center}
+.container{max-width:1000px;margin:auto;padding:20px}
 
 .card{
-    background:white;
-    padding:20px;
-    margin:15px 0;
-    border-radius:15px;
-    cursor:pointer;
-    box-shadow:0 5px 15px rgba(0,0,0,0.1);
-    transition:0.3s;
+background:#fff;padding:20px;margin:15px 0;border-radius:12px;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);cursor:pointer;
 }
 
-.card:hover{
-    transform:scale(1.02);
-}
+.hidden{display:none}
 
-/* BOX */
-.box{
-    max-width:900px;
-    margin:20px auto;
-    background:white;
-    padding:20px;
-    border-radius:15px;
-}
+/* quiz */
+.option{background:#f1f1f1;padding:10px;margin:5px;border-radius:8px;cursor:pointer}
+.correct{background:#c8f7c5}
+.wrong{background:#ffcccc}
 
-/* QUESTION */
-.question{
-    font-weight:bold;
-    margin:10px 0;
-}
-
-.option{
-    background:#f1f1f1;
-    padding:10px;
-    margin:5px 0;
-    border-radius:10px;
-    cursor:pointer;
-}
-
-.option.correct{background:#c8f7c5;}
-.option.wrong{background:#ffcccc;}
-
-/* NAV */
-.nav-btn{
-    margin:10px 5px;
-    padding:10px;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
-}
-
-.next{background:#667eea;color:white;}
-.prev{background:#555;color:white;}
-.home{background:#000;color:white;}
-
-/* PROFILE */
-.profile{
-    background:#fff;
-    padding:15px;
-    border-radius:12px;
-    margin-bottom:15px;
-    box-shadow:0 3px 10px rgba(0,0,0,0.1);
-}
-
-/* RESOURCES */
-.lesson{
-    padding:10px;
-    background:#f5f5f5;
-    margin:10px 0;
-    border-radius:10px;
-    cursor:pointer;
-}
-.lesson-content{
-    display:none;
-    padding:10px;
-    margin-top:10px;
-    background:#fff;
-    border-left:4px solid #667eea;
-}
+.nav-btn{padding:10px;margin:5px;border:none;border-radius:8px;cursor:pointer}
+.next{background:#667eea;color:#fff}
+.back{background:#333;color:#fff}
+.home{background:#000;color:#fff}
 </style>
 </head>
 
 <body>
 
 <div class="header">
-    <h1>🎓 Ernest Embassy LMS</h1>
+<h1>🎓 LMS Student Portal</h1>
+<p>Learn • Practice • Compete</p>
 </div>
+
+<div class="container">
 
 <!-- DASHBOARD -->
-<div id="dashboard" class="dashboard">
+<div id="dashboard">
 
-    <div class="profile">
-        👤 Student: <span id="studentName">Guest</span><br>
-        📊 Score: <span id="score">0</span>
-    </div>
+<div class="card" onclick="openResources()">
+<h2>📚 Educational Resources</h2>
+</div>
 
-    <div class="card" onclick="openResources()">
-        <h2>📚 Educational Resources</h2>
-        <p>Learn subjects step-by-step</p>
-    </div>
+<div class="card" onclick="openFreeTest()">
+<h2>🟢 Free CBT Mode</h2>
+</div>
 
-    <div class="card" onclick="openFreeTest()">
-        <h2>🟢 Free CBT Test</h2>
-        <p>5 Questions per page + scoring</p>
-    </div>
+<div class="card" onclick="openChallenge()">
+<h2>🔴 Challenge Quiz (₦100)</h2>
+</div>
 
-    <div class="card" onclick="openChallenge()">
-        <h2>🔴 Challenge Quiz (₦100)</h2>
-        <p>Win ₦10,000 monthly draw</p>
-    </div>
+<div class="card" onclick="goAdmin()">
+<h2>⚙️ Admin Panel</h2>
+</div>
 
 </div>
 
-<!-- FREE TEST -->
-<div id="freeTest" class="box" style="display:none;"></div>
+<!-- FREE CBT -->
+<div id="freeTest" class="hidden"></div>
 
 <!-- RESOURCES -->
-<div id="resources" class="box" style="display:none;"></div>
+<div id="resources" class="hidden"></div>
 
 <script>
 
-/* ======================
-   STUDENT PROFILE
-====================== */
-let student = localStorage.getItem("studentName");
-
+/* =========================
+STUDENT PROFILE
+========================= */
+let student = localStorage.getItem("student");
 if(!student){
-    student = prompt("Enter your name:");
-    localStorage.setItem("studentName", student);
+student = prompt("Enter your name:");
+localStorage.setItem("student",student);
 }
 
-document.getElementById("studentName").innerText = student;
-
-/* ======================
-   SCORE SYSTEM
-====================== */
-let score = 0;
-
-/* ======================
-   QUESTIONS
-====================== */
-const questions = [
-    {q:"What is a computer?",o:["Cooker","Data processor","Car","Pen"],a:1,exp:"Computer processes data."},
-    {q:"CPU stands for?",o:["Central Processing Unit","Car Unit","None","Power Unit"],a:0,exp:"CPU is brain of computer."},
-    {q:"Keyboard is?",o:["Input","Output","Game","Power"],a:0,exp:"Keyboard is input device."},
-    {q:"RAM is?",o:["Storage","Temporary memory","Printer","Screen"],a:1,exp:"RAM is temporary memory."},
-    {q:"Monitor is?",o:["Input","Output","CPU","Cable"],a:1,exp:"Monitor displays output."},
-    {q:"Mouse is?",o:["Input","Output","Power","Light"],a:0,exp:"Mouse is input device."}
+/* =========================
+DATABASE (FROM ADMIN)
+========================= */
+let questions = JSON.parse(localStorage.getItem("questions_db")) || [
+{q:"What is CPU?",o:["Brain","Car","Pen","Book"],a:0,exp:"CPU is brain of computer"},
+{q:"Keyboard is?",o:["Input","Output","Food","Game"],a:0,exp:"Keyboard inputs data"}
 ];
 
 let page = 0;
 const perPage = 5;
 
-/* ======================
-   NAVIGATION
-====================== */
-function hideAll(){
-    dashboard.style.display="none";
-    freeTest.style.display="none";
-    resources.style.display="none";
+/* =========================
+NAVIGATION
+========================= */
+function show(id){
+dashboard.classList.add("hidden");
+freeTest.classList.add("hidden");
+resources.classList.add("hidden");
+document.getElementById(id).classList.remove("hidden");
 }
 
-/* ======================
-   FREE TEST
-====================== */
+/* =========================
+FREE TEST
+========================= */
 function openFreeTest(){
-    hideAll();
-    freeTest.style.display="block";
-    renderTest();
+show("freeTest");
+render();
 }
 
-function renderTest(){
+function render(){
+let start = page*perPage;
+let slice = questions.slice(start,start+perPage);
 
-    let start = page * perPage;
-    let slice = questions.slice(start,start+perPage);
+let html = "";
 
-    let html = "";
+slice.forEach(q=>{
+html += `<div>
+<h3>${q.q}</h3>`;
 
-    slice.forEach((q,i)=>{
-        html += `<div>
-        <div class="question">${q.q}</div>`;
+q.o.forEach((opt,i)=>{
+html += `<div class="option" onclick="check(this,${i},${q.a},'${q.exp}')">${opt}</div>`;
+});
 
-        q.o.forEach((opt,idx)=>{
-            html += `<div class="option" onclick="check(this,${idx},${q.a},'${q.exp}')">${opt}</div>`;
-        });
+html += `</div><hr>`;
+});
 
-        html += `</div><hr>`;
-    });
+html += `
+<button class="nav-btn back" onclick="prev()">⬅</button>
+<button class="nav-btn next" onclick="next()">➡</button>
+<button class="nav-btn home" onclick="back()">🏠 Home</button>
+`;
 
-    html += `
-    <button class="nav-btn prev" onclick="prev()">⬅</button>
-    <button class="nav-btn next" onclick="next()">➡</button>
-    <button class="nav-btn home" onclick="backHome()">🏠 Home</button>
-    `;
-
-    freeTest.innerHTML = html;
+freeTest.innerHTML = html;
 }
 
-/* ANSWER CHECK */
-function check(el,selected,correct,exp){
-
-    let parent = el.parentElement;
-    let options = parent.querySelectorAll(".option");
-
-    options.forEach((o,i)=>{
-        if(i===correct){
-            o.classList.add("correct");
-        }
-    });
-
-    if(selected===correct){
-        el.classList.add("correct");
-        score++;
-    }else{
-        el.classList.add("wrong");
-    }
-
-    document.getElementById("score").innerText = score;
-
-    parent.innerHTML += `<p>📖 ${exp}</p>`;
+function check(el,i,a,exp){
+if(i===a){
+el.classList.add("correct");
+}else{
+el.classList.add("wrong");
+}
+el.parentElement.innerHTML += `<p>📖 ${exp}</p>`;
 }
 
-/* PAGINATION */
-function next(){
-    if((page+1)*perPage < questions.length){
-        page++;
-        renderTest();
-    }
-}
+function next(){ if((page+1)*perPage < questions.length){page++;render();} }
+function prev(){ if(page>0){page--;render();} }
 
-function prev(){
-    if(page>0){
-        page--;
-        renderTest();
-    }
-}
-
-/* ======================
-   RESOURCES SYSTEM
-====================== */
+/* =========================
+RESOURCES (FROM ADMIN)
+========================= */
 function openResources(){
-    hideAll();
-    resources.style.display="block";
+show("resources");
 
-    resources.innerHTML = `
-    <h2>📚 Educational Resources</h2>
-    <button class="nav-btn home" onclick="backHome()">🏠 Back</button>
+let lessons = JSON.parse(localStorage.getItem("lessons_db")) || [];
 
-    <div class="lesson" onclick="toggle(this)">
-        📘 Computer Basics
-        <div class="lesson-content">
-            A computer processes data into information.<br>
-            CPU is the brain of the computer.
-        </div>
-    </div>
+let html = "<h2>📚 Lessons</h2>";
 
-    <div class="lesson" onclick="toggle(this)">
-        📘 Input Devices
-        <div class="lesson-content">
-            Keyboard, Mouse, Scanner are input devices.
-        </div>
-    </div>
+lessons.forEach(l=>{
+html += `<div class="card">
+<h3>${l.title}</h3>
+<p>${l.content}</p>
+</div>`;
+});
 
-    <div class="lesson" onclick="toggle(this)">
-        📘 Output Devices
-        <div class="lesson-content">
-            Monitor, Printer are output devices.
-        </div>
-    </div>
-    `;
+resources.innerHTML = html;
 }
 
-/* TOGGLE LESSON */
-function toggle(el){
-    let content = el.querySelector(".lesson-content");
-    content.style.display = content.style.display==="block"?"none":"block";
-}
-
-/* ======================
-   CHALLENGE QUIZ
-====================== */
+/* =========================
+CHALLENGE
+========================= */
 function openChallenge(){
-    alert("Challenge Quiz (₦100) coming next upgrade 🚀");
+window.location.href="challenge.html";
 }
 
-/* ======================
-   BACK HOME
-====================== */
-function backHome(){
-    hideAll();
-    dashboard.style.display="block";
+/* =========================
+ADMIN
+========================= */
+function goAdmin(){
+window.location.href="admin.html";
+}
+
+function back(){
+dashboard.classList.remove("hidden");
+freeTest.classList.add("hidden");
+resources.classList.add("hidden");
 }
 
 </script>

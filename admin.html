@@ -1,213 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>Admin Panel - LMS</title>
-
+<title>Admin Panel</title>
 <style>
-body{
-    font-family: Arial;
-    background:#f4f6f9;
-    margin:0;
-}
-
-/* NAVBAR */
-nav{
-    background:#1a1a2e;
-    color:white;
-    padding:15px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-}
-
-nav a{
-    color:white;
-    text-decoration:none;
-    margin-right:15px;
-}
-
-/* CONTAINER */
-.container{
-    max-width:900px;
-    margin:30px auto;
-    background:white;
-    padding:20px;
-    border-radius:10px;
-}
-
-/* INPUTS */
-input, textarea, select{
-    width:100%;
-    padding:10px;
-    margin:8px 0;
-}
-
-/* BUTTONS */
-button{
-    padding:10px 14px;
-    background:#667eea;
-    color:white;
-    border:none;
-    cursor:pointer;
-    border-radius:6px;
-}
-
-button:hover{
-    background:#5a67d8;
-}
-
-/* SECTION */
-.section{
-    margin-bottom:30px;
-}
-
-.logout{
-    background:crimson;
-}
+body{font-family:Segoe UI;background:#111;color:#fff;padding:20px}
+input,textarea{width:100%;padding:10px;margin:5px 0}
+button{padding:10px;margin:5px;cursor:pointer}
+.card{background:#222;padding:15px;margin:10px 0;border-radius:10px}
 </style>
 </head>
 
 <body>
 
-<!-- NAVIGATION -->
-<nav>
-    <div>
-        🎓 Admin Instructor Panel
-    </div>
+<h1>⚙️ LMS Admin Panel</h1>
 
-    <div>
-        <a href="index.html">🏠 Home</a>
-        <a href="dashboard.html">📊 Dashboard</a>
-        <a href="course.html">📚 Courses</a>
-        <button class="logout" onclick="logout()">Logout</button>
-    </div>
-</nav>
+<h2>Add Question</h2>
+<input id="q">
+<input id="o1" placeholder="Option 1">
+<input id="o2" placeholder="Option 2">
+<input id="o3" placeholder="Option 3">
+<input id="o4" placeholder="Option 4">
+<input id="ans" placeholder="Correct index (0-3)">
+<textarea id="exp" placeholder="Explanation"></textarea>
 
-<div class="container">
+<button onclick="saveQ()">Save Question</button>
 
-<!-- CREATE COURSE -->
-<div class="section">
-<h2>Create Course</h2>
-
-<input id="title" placeholder="Course Title">
-<textarea id="desc" placeholder="Course Description"></textarea>
-<input id="level" placeholder="Level (SS1, SS2...)">
-
-<button onclick="createCourse()">Create Course</button>
-</div>
-
-<hr>
-
-<!-- ADD LESSON -->
-<div class="section">
 <h2>Add Lesson</h2>
-
-<input id="courseId" placeholder="Course ID">
-<input id="lessonTitle" placeholder="Lesson Title">
-<textarea id="lessonContent" placeholder="Lesson Content"></textarea>
-
-<button onclick="addLesson()">Add Lesson</button>
-</div>
-
-</div>
-
-<!-- FIREBASE -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<input id="title" placeholder="Title">
+<textarea id="content" placeholder="Content"></textarea>
+<button onclick="saveL()">Save Lesson</button>
 
 <script>
-/* =======================
-   FIREBASE INIT
-======================= */
-const firebaseConfig = {
-    apiKey: "YOUR_KEY",
-    authDomain: "YOUR_DOMAIN",
-    projectId: "YOUR_PROJECT"
-};
 
-firebase.initializeApp(firebaseConfig);
+/* QUESTIONS */
+function saveQ(){
+let db = JSON.parse(localStorage.getItem("questions_db")) || [];
 
-const db = firebase.firestore();
-const auth = firebase.auth();
-
-/* =======================
-   ROLE PROTECTION
-======================= */
-auth.onAuthStateChanged(async user => {
-    if (!user) {
-        window.location.href = "login.html";
-        return;
-    }
-
-    const doc = await db.collection("users").doc(user.uid).get();
-
-    if (!doc.exists || doc.data().role !== "admin") {
-        alert("Access denied!");
-        window.location.href = "dashboard.html";
-    }
+db.push({
+q: q.value,
+o: [o1.value,o2.value,o3.value,o4.value],
+a: parseInt(ans.value),
+exp: exp.value
 });
 
-/* =======================
-   CREATE COURSE
-======================= */
-async function createCourse(){
-
-    const title = document.getElementById("title").value;
-    const desc = document.getElementById("desc").value;
-    const level = document.getElementById("level").value;
-
-    if(!title || !desc){
-        alert("Please fill all fields");
-        return;
-    }
-
-    const courseRef = await db.collection("courses").add({
-        title,
-        description: desc,
-        level,
-        createdAt: new Date()
-    });
-
-    alert("Course created: " + courseRef.id);
+localStorage.setItem("questions_db",JSON.stringify(db));
+alert("Question saved!");
 }
 
-/* =======================
-   ADD LESSON
-======================= */
-async function addLesson(){
+/* LESSONS */
+function saveL(){
+let db = JSON.parse(localStorage.getItem("lessons_db")) || [];
 
-    const courseId = document.getElementById("courseId").value;
-    const title = document.getElementById("lessonTitle").value;
-    const content = document.getElementById("lessonContent").value;
+db.push({
+title:title.value,
+content:content.value
+});
 
-    if(!courseId || !title || !content){
-        alert("Please fill all fields");
-        return;
-    }
-
-    await db.collection("courses")
-        .doc(courseId)
-        .collection("lessons")
-        .add({
-            title,
-            content,
-            order: Date.now()
-        });
-
-    alert("Lesson added successfully!");
+localStorage.setItem("lessons_db",JSON.stringify(db));
+alert("Lesson saved!");
 }
 
-/* =======================
-   LOGOUT FUNCTION
-======================= */
-function logout(){
-    auth.signOut();
-    localStorage.removeItem("currentUser");
-    window.location.href = "login.html";
-}
 </script>
 
 </body>

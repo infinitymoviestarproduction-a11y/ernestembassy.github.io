@@ -32,6 +32,7 @@ font-size:24px;
 .user-info{
 margin-top:5px;
 font-size:14px;
+opacity:0.9;
 }
 
 /* LOGOUT */
@@ -125,7 +126,8 @@ Score: <span id="score">0</span>
 
 <script>
 
-/* FIREBASE CONFIG */
+/* ================= FIREBASE INIT ================= */
+
 const firebaseConfig = {
 apiKey: "YOUR_API_KEY",
 authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -138,9 +140,8 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-/* =========================
-   AUTH PROTECTION
-========================= */
+/* ================= AUTH PROTECTION ================= */
+
 auth.onAuthStateChanged(async (user)=>{
 
 if(!user){
@@ -148,37 +149,48 @@ window.location.href = "login.html";
 return;
 }
 
-/* LOAD USER PROFILE */
+try{
+
 let doc = await db.collection("users").doc(user.uid).get();
 
 if(doc.exists){
 
 let data = doc.data();
 
-/* SHOW USER INFO */
+/* USER NAME */
 document.getElementById("userInfo").innerHTML =
-`Welcome, <b>${data.name}</b>`;
+`Welcome, <b>${data.name || "Student"}</b>`;
 
-/* SHOW SCORE */
+/* SCORE */
 document.getElementById("score").innerText =
-data.score || 0;
+data.score ?? 0;
 
+}else{
+
+document.getElementById("userInfo").innerText =
+"Welcome, Student";
+
+document.getElementById("score").innerText = 0;
+}
+
+}catch(err){
+console.error(err);
+document.getElementById("userInfo").innerText =
+"Welcome, Student";
 }
 
 });
 
-/* =========================
-   LOGOUT
-========================= */
+/* ================= LOGOUT ================= */
+
 function logout(){
 auth.signOut().then(()=>{
 window.location.href = "login.html";
 });
 }
 
-/* =========================
-   NAVIGATION
-========================= */
+/* ================= NAVIGATION ================= */
+
 function openFreeTest(){
 window.location.href = "test-quiz.html";
 }

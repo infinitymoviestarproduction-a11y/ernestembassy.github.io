@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ernest Embassy Classroom</title>
+<title>Ernest Embassy LMS</title>
 
 <style>
 *{
@@ -46,7 +46,8 @@ body{
     transform:scale(1.02);
 }
 
-.quiz-box{
+/* BOX */
+.box{
     max-width:900px;
     margin:20px auto;
     background:white;
@@ -54,7 +55,7 @@ body{
     border-radius:15px;
 }
 
-/* QUESTIONS */
+/* QUESTION */
 .question{
     font-weight:bold;
     margin:10px 0;
@@ -71,6 +72,7 @@ body{
 .option.correct{background:#c8f7c5;}
 .option.wrong{background:#ffcccc;}
 
+/* NAV */
 .nav-btn{
     margin:10px 5px;
     padding:10px;
@@ -83,14 +85,29 @@ body{
 .prev{background:#555;color:white;}
 .home{background:#000;color:white;}
 
-.pagination{
-    text-align:center;
-    margin-top:10px;
+/* PROFILE */
+.profile{
+    background:#fff;
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:15px;
+    box-shadow:0 3px 10px rgba(0,0,0,0.1);
 }
 
 /* RESOURCES */
-pre{
-    white-space:pre-wrap;
+.lesson{
+    padding:10px;
+    background:#f5f5f5;
+    margin:10px 0;
+    border-radius:10px;
+    cursor:pointer;
+}
+.lesson-content{
+    display:none;
+    padding:10px;
+    margin-top:10px;
+    background:#fff;
+    border-left:4px solid #667eea;
 }
 </style>
 </head>
@@ -98,20 +115,25 @@ pre{
 <body>
 
 <div class="header">
-    <h1>🎓 Ernest Embassy Classroom</h1>
+    <h1>🎓 Ernest Embassy LMS</h1>
 </div>
 
 <!-- DASHBOARD -->
 <div id="dashboard" class="dashboard">
 
+    <div class="profile">
+        👤 Student: <span id="studentName">Guest</span><br>
+        📊 Score: <span id="score">0</span>
+    </div>
+
     <div class="card" onclick="openResources()">
         <h2>📚 Educational Resources</h2>
-        <p>Subject notes, explanations & downloads</p>
+        <p>Learn subjects step-by-step</p>
     </div>
 
     <div class="card" onclick="openFreeTest()">
-        <h2>🟢 Free Test Mode</h2>
-        <p>Practice with 5 questions per page</p>
+        <h2>🟢 Free CBT Test</h2>
+        <p>5 Questions per page + scoring</p>
     </div>
 
     <div class="card" onclick="openChallenge()">
@@ -122,90 +144,64 @@ pre{
 </div>
 
 <!-- FREE TEST -->
-<div id="freeTest" class="quiz-box" style="display:none;"></div>
+<div id="freeTest" class="box" style="display:none;"></div>
 
 <!-- RESOURCES -->
-<div id="resources" class="quiz-box" style="display:none;"></div>
-
-<!-- CHALLENGE -->
-<div id="challenge" class="quiz-box" style="display:none;"></div>
+<div id="resources" class="box" style="display:none;"></div>
 
 <script>
 
-/* =========================
-   NAVIGATION STATE
-========================= */
+/* ======================
+   STUDENT PROFILE
+====================== */
+let student = localStorage.getItem("studentName");
+
+if(!student){
+    student = prompt("Enter your name:");
+    localStorage.setItem("studentName", student);
+}
+
+document.getElementById("studentName").innerText = student;
+
+/* ======================
+   SCORE SYSTEM
+====================== */
+let score = 0;
+
+/* ======================
+   QUESTIONS
+====================== */
+const questions = [
+    {q:"What is a computer?",o:["Cooker","Data processor","Car","Pen"],a:1,exp:"Computer processes data."},
+    {q:"CPU stands for?",o:["Central Processing Unit","Car Unit","None","Power Unit"],a:0,exp:"CPU is brain of computer."},
+    {q:"Keyboard is?",o:["Input","Output","Game","Power"],a:0,exp:"Keyboard is input device."},
+    {q:"RAM is?",o:["Storage","Temporary memory","Printer","Screen"],a:1,exp:"RAM is temporary memory."},
+    {q:"Monitor is?",o:["Input","Output","CPU","Cable"],a:1,exp:"Monitor displays output."},
+    {q:"Mouse is?",o:["Input","Output","Power","Light"],a:0,exp:"Mouse is input device."}
+];
+
 let page = 0;
 const perPage = 5;
 
-/* =========================
-   QUESTIONS (SAMPLE)
-========================= */
-const questions = [
-    {q:"What is a computer?", o:["Cooking tool","Data processor","Car","Pen"], a:1, exp:"A computer processes data."},
-    {q:"CPU stands for?", o:["Central Processing Unit","Car Unit","Control Panel","None"], a:0, exp:"CPU is brain of computer."},
-    {q:"Keyboard is?", o:["Output","Input","Software","Game"], a:1, exp:"Keyboard is input device."},
-    {q:"RAM is?", o:["Storage","Temporary memory","Printer","Screen"], a:1, exp:"RAM is temporary memory."},
-    {q:"Monitor is?", o:["Input","Output","CPU","Cable"], a:1, exp:"Monitor shows output."},
-    {q:"Mouse is?", o:["Input","Output","Power","Memory"], a:0, exp:"Mouse is input device."}
-];
+/* ======================
+   NAVIGATION
+====================== */
+function hideAll(){
+    dashboard.style.display="none";
+    freeTest.style.display="none";
+    resources.style.display="none";
+}
 
-/* =========================
-   DASHBOARD NAVIGATION
-========================= */
+/* ======================
+   FREE TEST
+====================== */
 function openFreeTest(){
     hideAll();
-    document.getElementById("freeTest").style.display="block";
-    renderPage();
+    freeTest.style.display="block";
+    renderTest();
 }
 
-function openResources(){
-    hideAll();
-    document.getElementById("resources").style.display="block";
-
-    const data = {
-        Math:[
-            {t:"Basic Algebra",c:"Algebra uses letters like x.\nExample: x+2=5"},
-            {t:"Fractions",c:"1/2 + 1/2 = 1"}
-        ],
-        English:[
-            {t:"Noun",c:"Name of person, place or thing"},
-            {t:"Verb",c:"Action words like run, eat"}
-        ],
-        ICT:[
-            {t:"Computer",c:"Processes data into information"},
-            {t:"Input Device",c:"Keyboard, Mouse"}
-        ]
-    };
-
-    let html = "<h2>📚 Educational Resources</h2><button class='nav-btn home' onclick='backHome()'>🏠 Back</button>";
-
-    for(let subject in data){
-        html += `<h3 style="margin-top:15px;">${subject}</h3>`;
-
-        data[subject].forEach((item,i)=>{
-            html += `
-            <div class="card">
-                <strong onclick="toggle(this)">📖 ${item.t}</strong>
-                <div style="display:none;margin-top:10px;">
-                    <pre>${item.c}</pre>
-                    <button class="nav-btn next" onclick="downloadNote('${item.t}','${item.c}')">📄 Download</button>
-                </div>
-            </div>`;
-        });
-    }
-
-    document.getElementById("resources").innerHTML = html;
-}
-
-function openChallenge(){
-    alert("Challenge Quiz Coming Soon (₦100 System)");
-}
-
-/* =========================
-   FREE TEST SYSTEM
-========================= */
-function renderPage(){
+function renderTest(){
 
     let start = page * perPage;
     let slice = questions.slice(start,start+perPage);
@@ -213,89 +209,118 @@ function renderPage(){
     let html = "";
 
     slice.forEach((q,i)=>{
-        html += `<div class="question">${q.q}</div>`;
+        html += `<div>
+        <div class="question">${q.q}</div>`;
 
         q.o.forEach((opt,idx)=>{
             html += `<div class="option" onclick="check(this,${idx},${q.a},'${q.exp}')">${opt}</div>`;
         });
 
-        html += `<hr>`;
+        html += `</div><hr>`;
     });
 
     html += `
-    <div class="pagination">
-        <button class="nav-btn prev" onclick="prev()">⬅ Prev</button>
-        <button class="nav-btn next" onclick="next()">Next ➡</button>
-        <button class="nav-btn home" onclick="backHome()">🏠 Home</button>
-    </div>`;
+    <button class="nav-btn prev" onclick="prev()">⬅</button>
+    <button class="nav-btn next" onclick="next()">➡</button>
+    <button class="nav-btn home" onclick="backHome()">🏠 Home</button>
+    `;
 
-    document.getElementById("freeTest").innerHTML = html;
+    freeTest.innerHTML = html;
 }
 
+/* ANSWER CHECK */
 function check(el,selected,correct,exp){
 
     let parent = el.parentElement;
     let options = parent.querySelectorAll(".option");
 
     options.forEach((o,i)=>{
-        if(i===correct) o.classList.add("correct");
+        if(i===correct){
+            o.classList.add("correct");
+        }
     });
 
     if(selected===correct){
         el.classList.add("correct");
+        score++;
     }else{
         el.classList.add("wrong");
     }
 
+    document.getElementById("score").innerText = score;
+
     parent.innerHTML += `<p>📖 ${exp}</p>`;
 }
 
-/* =========================
-   NAVIGATION CONTROLS
-========================= */
+/* PAGINATION */
 function next(){
     if((page+1)*perPage < questions.length){
         page++;
-        renderPage();
+        renderTest();
     }
 }
 
 function prev(){
     if(page>0){
         page--;
-        renderPage();
+        renderTest();
     }
 }
 
-/* =========================
+/* ======================
+   RESOURCES SYSTEM
+====================== */
+function openResources(){
+    hideAll();
+    resources.style.display="block";
+
+    resources.innerHTML = `
+    <h2>📚 Educational Resources</h2>
+    <button class="nav-btn home" onclick="backHome()">🏠 Back</button>
+
+    <div class="lesson" onclick="toggle(this)">
+        📘 Computer Basics
+        <div class="lesson-content">
+            A computer processes data into information.<br>
+            CPU is the brain of the computer.
+        </div>
+    </div>
+
+    <div class="lesson" onclick="toggle(this)">
+        📘 Input Devices
+        <div class="lesson-content">
+            Keyboard, Mouse, Scanner are input devices.
+        </div>
+    </div>
+
+    <div class="lesson" onclick="toggle(this)">
+        📘 Output Devices
+        <div class="lesson-content">
+            Monitor, Printer are output devices.
+        </div>
+    </div>
+    `;
+}
+
+/* TOGGLE LESSON */
+function toggle(el){
+    let content = el.querySelector(".lesson-content");
+    content.style.display = content.style.display==="block"?"none":"block";
+}
+
+/* ======================
+   CHALLENGE QUIZ
+====================== */
+function openChallenge(){
+    alert("Challenge Quiz (₦100) coming next upgrade 🚀");
+}
+
+/* ======================
    BACK HOME
-========================= */
+====================== */
 function backHome(){
     hideAll();
-    document.getElementById("dashboard").style.display="block";
-}
-
-function hideAll(){
-    document.getElementById("dashboard").style.display="none";
-    document.getElementById("freeTest").style.display="none";
-    document.getElementById("resources").style.display="none";
-    document.getElementById("challenge").style.display="none";
-}
-
-/* =========================
-   DOWNLOAD SYSTEM
-========================= */
-function downloadNote(title,content){
-    const file = new Blob([title+"\n\n"+content],{type:"text/plain"});
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(file);
-    a.download = title+".txt";
-    a.click();
-}
-
-function toggle(el){
-    let next = el.nextElementSibling;
-    next.style.display = next.style.display==="block"?"none":"block";
+    dashboard.style.display="block";
 }
 
 </script>

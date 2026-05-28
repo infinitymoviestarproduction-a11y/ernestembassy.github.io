@@ -1,53 +1,147 @@
-<script>
 /* =========================
-   LOAD USER SESSION
+   FIREBASE CONFIGURATION
 ========================= */
-const user = JSON.parse(localStorage.getItem("currentUser"));
 
-if (!user) {
-    window.location.href = "login.html";
+const firebaseConfig = {
+    apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+    authDomain: "ernest-embassy-lms.firebaseapp.com",
+    projectId: "ernest-embassy-lms",
+    storageBucket: "ernest-embassy-lms.firebasestorage.app",
+    messagingSenderId: "204896421221",
+    appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
+};
+
+// Initialize Firebase if not already initialized
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+
+const db = firebase.firestore();
+const auth = firebase.auth();
+
+/* =========================
+   LOAD USER SESSION - FIREBASE VERSION
+========================= */
+
+let currentUser = null;
+
+auth.onAuthStateChanged(async (user) => {
+    if (user) {
+        currentUser = user;
+        
+        // Get user data from Firestore
+        try {
+            const userDoc = await db.collection("users").doc(user.uid).get();
+            const userData = userDoc.exists ? userDoc.data() : {};
+            
+            // Display user name
+            const userNameElement = document.getElementById("userName");
+            if (userNameElement) {
+                userNameElement.innerText = userData.name || user.email.split('@')[0];
+            }
+            
+            // Store in localStorage for backward compatibility
+            localStorage.setItem("currentUser", JSON.stringify({
+                uid: user.uid,
+                name: userData.name || user.email.split('@')[0],
+                email: user.email,
+                role: userData.role || "student"
+            }));
+            
+            // Show admin button if user is admin
+            if (userData.role === "admin") {
+                showAdminButton();
+            }
+            
+        } catch (err) {
+            console.error("Error loading user data:", err);
+            // Fallback to email only
+            const userNameElement = document.getElementById("userName");
+            if (userNameElement) {
+                userNameElement.innerText = user.email.split('@')[0];
+            }
+        }
+        
+    } else {
+        // No user logged in - redirect to login
+        window.location.href = "login.html";
+    }
+});
+
+// Also check localStorage for fallback (for pages not yet migrated)
+const localUser = JSON.parse(localStorage.getItem("currentUser"));
+if (localUser && !currentUser) {
+    const userNameElement = document.getElementById("userName");
+    if (userNameElement) {
+        userNameElement.innerText = localUser.name || "Student";
+    }
+    
+    if (localUser.role === "admin") {
+        showAdminButton();
+    }
 }
 
 /* =========================
-   DISPLAY USER NAME
+   SHOW ADMIN BUTTON
 ========================= */
-document.getElementById("userName").innerText =
-    user?.name || "Student";
 
-/* =========================
-   SHOW ADMIN BUTTON (IF ADMIN)
-========================= */
-if (user.role === "admin") {
+function showAdminButton() {
     const nav = document.querySelector(".user-area");
-
-    const adminBtn = document.createElement("button");
-    adminBtn.innerText = "Admin Panel";
-    adminBtn.style.background = "#28a745";
-    adminBtn.style.color = "white";
-    adminBtn.style.border = "none";
-    adminBtn.style.padding = "10px 18px";
-    adminBtn.style.borderRadius = "8px";
-    adminBtn.style.cursor = "pointer";
-
-    adminBtn.onclick = () => {
-        window.location.href = "admin.html";
-    };
-
-    nav.insertBefore(adminBtn, nav.children[0]);
+    
+    if (nav && !document.getElementById("adminBtn")) {
+        const adminBtn = document.createElement("button");
+        adminBtn.id = "adminBtn";
+        adminBtn.innerText = "⚙️ Admin Panel";
+        adminBtn.style.background = "#28a745";
+        adminBtn.style.color = "white";
+        adminBtn.style.border = "none";
+        adminBtn.style.padding = "10px 18px";
+        adminBtn.style.borderRadius = "8px";
+        adminBtn.style.cursor = "pointer";
+        adminBtn.style.marginRight = "10px";
+        
+        adminBtn.onclick = () => {
+            window.location.href = "admin.html";
+        };
+        
+        nav.insertBefore(adminBtn, nav.children[0]);
+    }
 }
 
 /* =========================
    LOGOUT FUNCTION
 ========================= */
+
 function logout() {
-    localStorage.removeItem("currentUser");
-    localStorage.removeItem("userLoggedIn");
-
-    // optional firebase logout safety (if auth exists)
-    if (window.firebase && firebase.auth) {
-        firebase.auth().signOut();
-    }
-
-    window.location.href = "login.html";
+    // Sign out from Firebase
+    auth.signOut().then(() => {
+        // Clear localStorage
+        localStorage.removeItem("currentUser");
+        localStorage.removeItem("userLoggedIn");
+        
+        // Redirect to login
+        window.location.href = "login.html";
+    }).catch((error) => {
+        console.error("Logout error:", error);
+        // Force redirect even if Firebase logout fails
+        localStorage.removeItem("currentUser");
+        localStorage.removeItem("userLoggedIn");
+        window.location.href = "login.html";
+    });
 }
-</script>
+
+/* =========================
+   CHECK IF USER IS ADMIN (HELPER)
+========================= */
+
+async function isAdmin() {
+    if (currentUser) {
+        try {
+            const userDoc = await db.collection("users").doc(currentUser.uid).get();
+            return userDoc.exists && userDoc.data().role === "admin";
+        } catch (err) {
+            return false;
+        }
+    }
+    return false;
+}

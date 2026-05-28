@@ -3,37 +3,48 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ernest Embassy LMS</title>
+<title>Ernest Embassy LMS (Firebase)</title>
 
 <style>
 body{font-family:Segoe UI;background:#eef2f7;margin:0}
-.header{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:20px;text-align:center}
+
+.header{
+background:linear-gradient(135deg,#667eea,#764ba2);
+color:white;padding:20px;text-align:center
+}
+
 .container{max-width:1000px;margin:auto;padding:20px}
 
 .card{
-background:#fff;padding:20px;margin:15px 0;border-radius:12px;
-box-shadow:0 3px 10px rgba(0,0,0,0.1);cursor:pointer;
+background:white;padding:18px;margin:12px 0;
+border-radius:12px;cursor:pointer;
+box-shadow:0 3px 10px rgba(0,0,0,0.1)
 }
 
 .hidden{display:none}
 
-/* quiz */
-.option{background:#f1f1f1;padding:10px;margin:5px;border-radius:8px;cursor:pointer}
+.option{
+background:#f1f1f1;padding:10px;margin:6px;
+border-radius:8px;cursor:pointer
+}
+
 .correct{background:#c8f7c5}
 .wrong{background:#ffcccc}
 
 .nav-btn{padding:10px;margin:5px;border:none;border-radius:8px;cursor:pointer}
-.next{background:#667eea;color:#fff}
-.back{background:#333;color:#fff}
-.home{background:#000;color:#fff}
+.next{background:#667eea;color:white}
+.back{background:#333;color:white}
+.home{background:black;color:white}
+.lock{background:red;color:white;padding:10px;text-align:center;border-radius:8px}
 </style>
+
 </head>
 
 <body>
 
 <div class="header">
-<h1>🎓 LMS Student Portal</h1>
-<p>Learn • Practice • Compete</p>
+<h1>🎓 Ernest Embassy LMS</h1>
+<p>Firebase Powered Learning System</p>
 </div>
 
 <div class="container">
@@ -43,146 +54,167 @@ box-shadow:0 3px 10px rgba(0,0,0,0.1);cursor:pointer;
 
 <div class="card" onclick="openResources()">
 <h2>📚 Educational Resources</h2>
+<p>Learn topics & notes</p>
 </div>
 
-<div class="card" onclick="openFreeTest()">
-<h2>🟢 Free CBT Mode</h2>
+<div class="card" onclick="openFree()">
+<h2>🟢 Free Test Mode</h2>
+<p>Practice questions (5 per page)</p>
 </div>
 
-<div class="card" onclick="openChallenge()">
-<h2>🔴 Challenge Quiz (₦100)</h2>
-</div>
-
-<div class="card" onclick="goAdmin()">
-<h2>⚙️ Admin Panel</h2>
+<div class="card" onclick="openPaid()">
+<h2>🔴 Paid Quiz (₦100)</h2>
+<p>Win ₦10,000 monthly draw</p>
 </div>
 
 </div>
 
-<!-- FREE CBT -->
-<div id="freeTest" class="hidden"></div>
+<!-- FREE MODE -->
+<div id="freeBox" class="hidden"></div>
 
 <!-- RESOURCES -->
-<div id="resources" class="hidden"></div>
+<div id="resBox" class="hidden"></div>
+
+<!-- PAID -->
+<div id="paidBox" class="hidden"></div>
+
+</div>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js"></script>
 
 <script>
+/* ================= FIREBASE CONFIG ================= */
+const firebaseConfig = {
+apiKey: "YOUR_API_KEY",
+authDomain: "YOUR_PROJECT.firebaseapp.com",
+projectId: "YOUR_PROJECT_ID",
+storageBucket: "YOUR_PROJECT.appspot.com",
+messagingSenderId: "XXXX",
+appId: "XXXX"
+};
 
-/* =========================
-STUDENT PROFILE
-========================= */
-let student = localStorage.getItem("student");
-if(!student){
-student = prompt("Enter your name:");
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+/* ================= STUDENT ================= */
+let student = prompt("Enter your name");
+if(student){
 localStorage.setItem("student",student);
 }
 
-/* =========================
-DATABASE (FROM ADMIN)
-========================= */
-let questions = JSON.parse(localStorage.getItem("questions_db")) || [
-{q:"What is CPU?",o:["Brain","Car","Pen","Book"],a:0,exp:"CPU is brain of computer"},
-{q:"Keyboard is?",o:["Input","Output","Food","Game"],a:0,exp:"Keyboard inputs data"}
-];
-
-let page = 0;
-const perPage = 5;
-
-/* =========================
-NAVIGATION
-========================= */
+/* ================= NAV ================= */
 function show(id){
 dashboard.classList.add("hidden");
-freeTest.classList.add("hidden");
-resources.classList.add("hidden");
+freeBox.classList.add("hidden");
+resBox.classList.add("hidden");
+paidBox.classList.add("hidden");
 document.getElementById(id).classList.remove("hidden");
 }
 
-/* =========================
-FREE TEST
-========================= */
-function openFreeTest(){
-show("freeTest");
-render();
+/* ================= FREE QUESTIONS ================= */
+let freeQ = [];
+
+db.collection("questions").onSnapshot(snapshot=>{
+freeQ = [];
+snapshot.forEach(doc=>{
+freeQ.push(doc.data());
+});
+});
+
+/* ================= FREE MODE ================= */
+let page=0;
+const perPage=5;
+
+function openFree(){
+show("freeBox");
+renderFree();
 }
 
-function render(){
-let start = page*perPage;
-let slice = questions.slice(start,start+perPage);
+function renderFree(){
 
-let html = "";
+let start=page*perPage;
+let slice=freeQ.slice(start,start+perPage);
+
+let html="";
 
 slice.forEach(q=>{
-html += `<div>
+html+=`<div>
 <h3>${q.q}</h3>`;
 
 q.o.forEach((opt,i)=>{
-html += `<div class="option" onclick="check(this,${i},${q.a},'${q.exp}')">${opt}</div>`;
+html+=`<div class="option"
+onclick="checkFree(this,${i},${q.a},'${q.exp}')">
+${opt}</div>`;
 });
 
-html += `</div><hr>`;
+html+=`</div><hr>`;
 });
 
-html += `
+html+=`
 <button class="nav-btn back" onclick="prev()">⬅</button>
 <button class="nav-btn next" onclick="next()">➡</button>
 <button class="nav-btn home" onclick="back()">🏠 Home</button>
 `;
 
-freeTest.innerHTML = html;
+freeBox.innerHTML=html;
 }
 
-function check(el,i,a,exp){
-if(i===a){
-el.classList.add("correct");
-}else{
-el.classList.add("wrong");
-}
+function checkFree(el,i,a,exp){
+if(i===a){el.classList.add("correct")}
+else{el.classList.add("wrong")}
+
 el.parentElement.innerHTML += `<p>📖 ${exp}</p>`;
 }
 
-function next(){ if((page+1)*perPage < questions.length){page++;render();} }
-function prev(){ if(page>0){page--;render();} }
+function next(){if((page+1)*perPage<freeQ.length){page++;renderFree();}}
+function prev(){if(page>0){page--;renderFree();}}
 
-/* =========================
-RESOURCES (FROM ADMIN)
-========================= */
+/* ================= RESOURCES ================= */
 function openResources(){
-show("resources");
+show("resBox");
 
-let lessons = JSON.parse(localStorage.getItem("lessons_db")) || [];
+db.collection("lessons").get().then(snapshot=>{
 
-let html = "<h2>📚 Lessons</h2>";
+let html="<h2>📚 Lessons</h2>";
 
-lessons.forEach(l=>{
-html += `<div class="card">
-<h3>${l.title}</h3>
-<p>${l.content}</p>
+snapshot.forEach(doc=>{
+let d=doc.data();
+html+=`
+<div class="card">
+<h3>${d.title}</h3>
+<p>${d.content}</p>
 </div>`;
 });
 
-resources.innerHTML = html;
+resBox.innerHTML=html;
+
+});
 }
 
-/* =========================
-CHALLENGE
-========================= */
-function openChallenge(){
-window.location.href="challenge.html";
+/* ================= PAID QUIZ ================= */
+function openPaid(){
+show("paidBox");
+
+paidBox.innerHTML=`
+<div class="lock">
+🔒 Paid Quiz Locked (₦100 Required)
+</div>
+<button onclick="alert('Redirect to payment system next upgrade')">
+Pay & Unlock
+</button>
+<button class="nav-btn home" onclick="back()">🏠 Home</button>
+`;
 }
 
-/* =========================
-ADMIN
-========================= */
-function goAdmin(){
-window.location.href="admin.html";
-}
-
+/* ================= BACK ================= */
 function back(){
 dashboard.classList.remove("hidden");
-freeTest.classList.add("hidden");
-resources.classList.add("hidden");
+freeBox.classList.add("hidden");
+resBox.classList.add("hidden");
+paidBox.classList.add("hidden");
 }
-
 </script>
 
 </body>

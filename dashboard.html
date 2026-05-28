@@ -1,147 +1,49 @@
-/* =========================
-   FIREBASE CONFIGURATION
-========================= */
-
-const firebaseConfig = {
-    apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
-    authDomain: "ernest-embassy-lms.firebaseapp.com",
-    projectId: "ernest-embassy-lms",
-    storageBucket: "ernest-embassy-lms.firebasestorage.app",
-    messagingSenderId: "204896421221",
-    appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
-};
-
-// Initialize Firebase if not already initialized
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
-
-const db = firebase.firestore();
-const auth = firebase.auth();
-
-/* =========================
-   LOAD USER SESSION - FIREBASE VERSION
-========================= */
-
-let currentUser = null;
-
-auth.onAuthStateChanged(async (user) => {
-    if (user) {
-        currentUser = user;
-        
-        // Get user data from Firestore
-        try {
-            const userDoc = await db.collection("users").doc(user.uid).get();
-            const userData = userDoc.exists ? userDoc.data() : {};
-            
-            // Display user name
-            const userNameElement = document.getElementById("userName");
-            if (userNameElement) {
-                userNameElement.innerText = userData.name || user.email.split('@')[0];
-            }
-            
-            // Store in localStorage for backward compatibility
-            localStorage.setItem("currentUser", JSON.stringify({
-                uid: user.uid,
-                name: userData.name || user.email.split('@')[0],
-                email: user.email,
-                role: userData.role || "student"
-            }));
-            
-            // Show admin button if user is admin
-            if (userData.role === "admin") {
-                showAdminButton();
-            }
-            
-        } catch (err) {
-            console.error("Error loading user data:", err);
-            // Fallback to email only
-            const userNameElement = document.getElementById("userName");
-            if (userNameElement) {
-                userNameElement.innerText = user.email.split('@')[0];
-            }
-        }
-        
-    } else {
-        // No user logged in - redirect to login
-        window.location.href = "login.html";
-    }
-});
-
-// Also check localStorage for fallback (for pages not yet migrated)
-const localUser = JSON.parse(localStorage.getItem("currentUser"));
-if (localUser && !currentUser) {
-    const userNameElement = document.getElementById("userName");
-    if (userNameElement) {
-        userNameElement.innerText = localUser.name || "Student";
-    }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Ernest Embassy LMS</title>
     
-    if (localUser.role === "admin") {
-        showAdminButton();
-    }
-}
-
-/* =========================
-   SHOW ADMIN BUTTON
-========================= */
-
-function showAdminButton() {
-    const nav = document.querySelector(".user-area");
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
     
-    if (nav && !document.getElementById("adminBtn")) {
-        const adminBtn = document.createElement("button");
-        adminBtn.id = "adminBtn";
-        adminBtn.innerText = "⚙️ Admin Panel";
-        adminBtn.style.background = "#28a745";
-        adminBtn.style.color = "white";
-        adminBtn.style.border = "none";
-        adminBtn.style.padding = "10px 18px";
-        adminBtn.style.borderRadius = "8px";
-        adminBtn.style.cursor = "pointer";
-        adminBtn.style.marginRight = "10px";
+    <!-- Central Auth Script -->
+    <script src="auth.js"></script>
+    
+    <style>
+        /* Your styles here */
+        .user-area { display: flex; gap: 10px; align-items: center; }
+        .logout-btn { background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">🎓 Ernest Embassy LMS</div>
+        <div class="user-area">
+            <span>Welcome, <span id="userName">Student</span>!</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+    
+    <!-- Rest of your dashboard content -->
+    
+    <script>
+        // No need for additional auth code - auth.js handles everything!
+        // Just use the available functions if needed:
         
-        adminBtn.onclick = () => {
-            window.location.href = "admin.html";
-        };
+        // Example: Display user score
+        loadUserScore().then(score => {
+            console.log("User score:", score);
+        });
         
-        nav.insertBefore(adminBtn, nav.children[0]);
-    }
-}
-
-/* =========================
-   LOGOUT FUNCTION
-========================= */
-
-function logout() {
-    // Sign out from Firebase
-    auth.signOut().then(() => {
-        // Clear localStorage
-        localStorage.removeItem("currentUser");
-        localStorage.removeItem("userLoggedIn");
-        
-        // Redirect to login
-        window.location.href = "login.html";
-    }).catch((error) => {
-        console.error("Logout error:", error);
-        // Force redirect even if Firebase logout fails
-        localStorage.removeItem("currentUser");
-        localStorage.removeItem("userLoggedIn");
-        window.location.href = "login.html";
-    });
-}
-
-/* =========================
-   CHECK IF USER IS ADMIN (HELPER)
-========================= */
-
-async function isAdmin() {
-    if (currentUser) {
-        try {
-            const userDoc = await db.collection("users").doc(currentUser.uid).get();
-            return userDoc.exists && userDoc.data().role === "admin";
-        } catch (err) {
-            return false;
-        }
-    }
-    return false;
-}
+        // Check if admin to show extra features
+        isAdmin().then(admin => {
+            if (admin) {
+                console.log("Admin user detected");
+            }
+        });
+    </script>
+</body>
+</html>

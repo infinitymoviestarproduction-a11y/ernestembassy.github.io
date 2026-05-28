@@ -9,8 +9,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
 
-    <script src="auth.js"></script>
-
     <style>
         * {
             margin: 0;
@@ -21,6 +19,7 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #0a0a0a;
+            color: #fff;
             min-height: 100vh;
         }
 
@@ -67,7 +66,8 @@
         }
 
         .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #111 0%, #1c1a12 100%);
+            border-bottom: 1px solid #222;
             color: white;
             text-align: center;
             padding: 50px 20px;
@@ -75,6 +75,7 @@
 
         .hero h1 {
             font-size: 2rem;
+            color: #ffd700;
             margin-bottom: 15px;
         }
 
@@ -175,8 +176,8 @@
         }
 
         .stage.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: #ffd700;
+            color: #000;
             transform: scale(1.1);
         }
 
@@ -221,7 +222,7 @@
         }
 
         .question-box {
-            background: #1a1a2e;
+            background: #161616;
             border-radius: 20px;
             padding: 35px 25px;
             margin: 20px 0;
@@ -254,18 +255,26 @@
         }
 
         .options-list li:hover {
-            background: #3a3a3a;
+            background: #333;
             transform: translateX(5px);
+            border-color: #ffd700;
         }
 
         .options-list li.correct-highlight {
             background: #28a745 !important;
             border-color: #ffd700;
+            color: white;
         }
 
         .options-list li.wrong-highlight {
             background: #dc3545 !important;
             border-color: #ffd700;
+            color: white;
+        }
+
+        .options-list li.disabled-option {
+            pointer-events: none;
+            opacity: 0.8;
         }
 
         .feedback {
@@ -300,39 +309,49 @@
         }
 
         .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: #ffd700;
+            color: #000;
             border: none;
             padding: 12px 20px;
-            border-radius: 40px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
             font-size: 0.95rem;
             flex: 1;
             min-width: 120px;
+            transition: 0.2s;
         }
 
         .btn:hover {
+            background: #ffea70;
             transform: translateY(-2px);
         }
 
         .btn:disabled {
             background: #444;
+            color: #888;
             cursor: not-allowed;
             transform: none;
         }
 
         .btn-home {
-            background: #ffd700;
-            color: #000;
+            background: #222;
+            color: #fff;
+            border: 1px solid #444;
+        }
+
+        .btn-home:hover {
+            background: #333;
         }
 
         .btn-secondary {
             background: #6c757d;
+            color: #fff;
         }
 
         .btn-success {
             background: #28a745;
+            color: #fff;
         }
 
         .payment-modal {
@@ -427,6 +446,7 @@
             padding: 40px 20px;
             margin-top: 60px;
             border-top: 1px solid #333;
+            font-size: 0.85rem;
         }
 
         @media (max-width: 768px) {
@@ -473,25 +493,25 @@
 
 <div class="container">
     <div class="resources-grid">
-        <a href="mathematics-ss1.md" class="resource-card">
+        <a href="class.html?mode=free&subject=mathematics-ss1" class="resource-card">
             <div class="resource-icon">📐</div>
             <h3>Mathematics SS1</h3>
             <p>Complete notes & questions</p>
             <span class="free-badge">🎓 FREE ACCESS</span>
         </a>
-        <a href="english-ss1.md" class="resource-card">
+        <a href="class.html?mode=free&subject=english-language-ss1" class="resource-card">
             <div class="resource-icon">📖</div>
             <h3>English SS1</h3>
             <p>Grammar & Comprehension</p>
             <span class="free-badge">🎓 FREE ACCESS</span>
         </a>
-        <a href="digital-technology-ss1.md" class="resource-card">
+        <a href="class.html?mode=free&subject=digital-technology-ss1" class="resource-card">
             <div class="resource-icon">💻</div>
             <h3>Digital Tech SS1</h3>
             <p>Computer Fundamentals</p>
             <span class="free-badge">🎓 FREE ACCESS</span>
         </a>
-        <a href="igbo-ss1.md" class="resource-card">
+        <a href="class.html?mode=free&subject=igbo-language-ss1" class="resource-card">
             <div class="resource-icon">🌍</div>
             <h3>Igbo Language SS1</h3>
             <p>Alphabet & Culture</p>
@@ -526,6 +546,22 @@
 
 <script>
     // ============================================
+    // FIREBASE CONFIGURATION
+    // ============================================
+    const firebaseConfig = {
+        apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+        authDomain: "ernest-embassy-lms.firebaseapp.com",
+        projectId: "ernest-embassy-lms",
+        storageBucket: "ernest-embassy-lms.firebasestorage.app",
+        messagingSenderId: "204896421221",
+        appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    // ============================================
     // QUIZ STATE
     // ============================================
     let quizActive = false;
@@ -548,25 +584,30 @@
     };
 
     // ============================================
-    // INITIALIZATION VIA CENTRAL AUTH
+    // AUTH CHECK
     // ============================================
-    async function initializeQuizPage() {
-        try {
-            // Check credentials cleanly using auth.js library logic
-            const user = await initAuth(true); 
-            if (user) {
-                currentUser.uid = user.uid;
-                currentUser.email = user.email;
-                currentUser.name = getUserName();
-                
-                console.log("✅ User verification loaded:", currentUser.name);
-                loadQuestionsFromFirestore();
+    auth.onAuthStateChanged(async (user) => {
+        if (user) {
+            currentUser.uid = user.uid;
+            currentUser.email = user.email;
+            
+            try {
+                const userDoc = await db.collection("users").doc(user.uid).get();
+                if (userDoc.exists) {
+                    currentUser.name = userDoc.data().name || user.email.split('@')[0];
+                } else {
+                    currentUser.name = user.email.split('@')[0];
+                }
+            } catch (err) {
+                currentUser.name = user.email.split('@')[0];
             }
-        } catch (err) {
-            console.error("Auth routing failure:", err);
+            
+            console.log("✅ User logged in:", currentUser.name);
+            loadQuestionsFromFirestore();
+        } else {
             window.location.href = "login.html";
         }
-    }
+    });
 
     // ============================================
     // LOAD QUESTIONS FROM FIRESTORE
@@ -578,17 +619,19 @@
             
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
+                // Map the matching structure from your seeded database array (q, o, a, exp)
                 allQuestionsCache.push({
                     id: doc.id,
                     text: data.q,
                     options: data.o || [],
+                    correct: data.o && data.a !== undefined ? data.o[data.a] : "",
                     correctIndex: data.a,
-                    explanation: data.exp,
-                    stage: data.stage || 1
+                    explanation: data.exp || "No explanation provided.",
+                    subject: data.subject || "mathematics-ss1"
                 });
             });
             
-            console.log(`✅ Loaded ${allQuestionsCache.length} questions from Firestore`);
+            console.log(`✅ Loaded ${allQuestionsCache.length} structural questions from Firestore`);
             
             if (allQuestionsCache.length === 0) {
                 document.getElementById('quizContainer').innerHTML = `
@@ -605,7 +648,7 @@
             document.getElementById('quizContainer').innerHTML = `
                 <div style="text-align: center; padding: 40px;">
                     <div style="margin-bottom: 20px;">
-                        <span style="background: #28a745; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem;">${allQuestionsCache.length} Questions Ready</span>
+                        <span style="background: #28a745; color: #fff; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;">${allQuestionsCache.length} Challenge Questions Ready</span>
                     </div>
                     <button class="btn" onclick="startQuiz()">🎯 Start Challenge Quiz (₦100)</button>
                     <div style="margin-top: 20px;">
@@ -626,6 +669,9 @@
         }
     }
 
+    // ============================================
+    // QUIZ FUNCTIONS
+    // ============================================
     function startQuiz() {
         const userName = prompt("Enter your name for Hall of Fame:", currentUser.name);
         if (userName && userName.trim()) {
@@ -677,15 +723,21 @@
     }
 
     function loadStageQuestions() {
-        let stageQuestions = allQuestionsCache.filter(q => (q.stage || 1) === currentStage);
+        // Since database objects don't explicitly store stages, we partition the 40 questions dynamically
+        // 4 random questions per stage across 10 stages total
+        const questionsPerStage = 4;
+        const startIndex = (currentStage - 1) * questionsPerStage;
+        
+        // Shuffle everything once or slice based on calculation
+        let stageQuestions = allQuestionsCache.slice(startIndex, startIndex + questionsPerStage);
         
         if (stageQuestions.length === 0) {
             stageQuestions = [{ 
                 text: `🎉 Stage ${currentStage} Complete! 🎉`, 
                 options: ["A. Continue to Next Stage"], 
-                correctIndex: 0, 
-                explanation: "Click Next to proceed to the next stage",
-                stage: currentStage 
+                correct: "A. Continue to Next Stage", 
+                explanation: "Click Next to proceed to the next tier.",
+                subject: "mathematics-ss1"
             }];
         }
         
@@ -724,9 +776,8 @@
         const q = currentQuestions[currentQuestionIndex];
         let optionsHtml = '';
         if (q.options && q.options.length > 0) {
-            q.options.forEach((opt, index) => {
-                // Fixed: Pass array element index parameter instead of unsafe string literals
-                optionsHtml += `<li data-index="${index}" onclick="selectAnswer(${index})">${escapeHtml(opt)}</li>`;
+            q.options.forEach(opt => {
+                optionsHtml += `<li onclick="selectAnswer('${opt.replace(/'/g, "\\'")}')">${opt}</li>`;
             });
         }
         
@@ -737,7 +788,7 @@
                 <div class="timer-label">seconds left</div>
             </div>
             <div class="question-box">
-                <div class="question">${escapeHtml(q.text)}</div>
+                <div class="question">${q.text}</div>
             </div>
             <ul class="options-list" id="optionsList">
                 ${optionsHtml}
@@ -750,35 +801,29 @@
         `;
     }
 
-    function selectAnswer(selectedIndex) {
+    function selectAnswer(selected) {
         if (!quizActive || answerLocked) return;
         answerLocked = true;
         clearInterval(timerInterval);
         
         const q = currentQuestions[currentQuestionIndex];
-        userAnswers[currentQuestionIndex] = selectedIndex;
-        
-        // Fixed: Strict evaluation based on index integrity instead of volatile strings
-        const isCorrect = (selectedIndex === q.correctIndex);
+        userAnswers[currentQuestionIndex] = selected;
+        const isCorrect = (selected === q.correct);
         
         const options = document.querySelectorAll('.options-list li');
         options.forEach(opt => {
             opt.style.pointerEvents = 'none';
-            const optIndex = parseInt(opt.getAttribute('data-index'));
-            
-            if (optIndex === q.correctIndex) opt.classList.add('correct-highlight');
-            if (optIndex === selectedIndex && !isCorrect) opt.classList.add('wrong-highlight');
+            if (opt.textContent === q.correct) opt.classList.add('correct-highlight');
+            if (opt.textContent === selected && !isCorrect) opt.classList.add('wrong-highlight');
         });
         
         const feedback = document.getElementById('feedback');
-        const correctText = q.options[q.correctIndex] || "N/A";
-        
         if (isCorrect) {
             feedback.className = 'feedback correct';
-            feedback.innerHTML = `✅ <strong>CORRECT!</strong><br>${escapeHtml(q.explanation)}`;
+            feedback.innerHTML = `✅ <strong>CORRECT!</strong><br>${q.explanation}`;
         } else {
             feedback.className = 'feedback wrong';
-            feedback.innerHTML = `❌ <strong>WRONG!</strong><br>Correct answer: <strong style="color: #90ee90;">${escapeHtml(correctText)}</strong><br><br>📖 ${escapeHtml(q.explanation)}`;
+            feedback.innerHTML = `❌ <strong>WRONG!</strong><br>Correct answer: <strong style="color: #90ee90;">${q.correct}</strong><br><br>📖 ${q.explanation}`;
             
             if (currentStage >= 5) {
                 feedback.innerHTML += `<br><br><strong>⚠️ You failed Stage ${currentStage}! Returning to Stage 1...</strong>`;
@@ -835,14 +880,11 @@
                     const options = document.querySelectorAll('.options-list li');
                     options.forEach(opt => {
                         opt.style.pointerEvents = 'none';
-                        if (parseInt(opt.getAttribute('data-index')) === q.correctIndex) {
-                            opt.classList.add('correct-highlight');
-                        }
+                        if (opt.textContent === q.correct) opt.classList.add('correct-highlight');
                     });
                     const feedback = document.getElementById('feedback');
                     feedback.className = 'feedback wrong';
-                    const correctText = q.options[q.correctIndex] || "N/A";
-                    feedback.innerHTML = `⏰ <strong>TIME'S UP!</strong><br>Correct answer: <strong style="color: #90ee90;">${escapeHtml(correctText)}</strong><br><br>📖 ${escapeHtml(q.explanation)}`;
+                    feedback.innerHTML = `⏰ <strong>TIME'S UP!</strong><br>Correct answer: <strong style="color: #90ee90;">${q.correct}</strong><br><br>📖 ${q.explanation}`;
                     document.getElementById('nextBtn').disabled = false;
                 }
             }
@@ -851,14 +893,36 @@
 
     async function saveQuizResult() {
         const score = calculateScore();
-        // Use central auth helper to persist quiz logs to collection
-        await saveQuizAttempt("Paid Challenge Quiz Arena", score, currentQuestions.length, "paid");
+        
+        try {
+            await db.collection("quizAttempts").add({
+                userId: currentUser.uid,
+                userName: currentUser.name,
+                score: score,
+                stage: currentStage,
+                date: new Date(),
+                quizType: "paid"
+            });
+            
+            const userRef = db.collection("users").doc(currentUser.uid);
+            const userDoc = await userRef.get();
+            if (userDoc.exists) {
+                const currentScore = userDoc.data().score || 0;
+                if (score > currentScore) {
+                    await userRef.update({ score: score });
+                }
+            }
+            
+            console.log("✅ Quiz result saved to Firestore");
+        } catch (err) {
+            console.error("Error saving quiz result:", err);
+        }
     }
 
     function calculateScore() {
         let correct = 0;
         currentQuestions.forEach((q, i) => {
-            if (userAnswers[i] === q.correctIndex) correct++;
+            if (userAnswers[i] === q.correct) correct++;
         });
         return Math.round((correct / currentQuestions.length) * 100);
     }
@@ -904,4 +968,31 @@
         winners.push({ name: currentUser.name, score: score, date: new Date().toISOString(), reward: reward.type });
         localStorage.setItem('quizWinners', JSON.stringify(winners));
         
-        document
+        document.getElementById('quizContainer').innerHTML = `
+            <div class="result-box">
+                <div class="result-icon success">🏆</div>
+                <h2>Congratulations ${currentUser.name}!</h2>
+                <p style="font-size: 1.5rem; margin: 15px 0;">Score: ${score}%</p>
+                <div class="reward-card"><p>🎁 ${reward.message}</p></div>
+                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
+                    <button class="btn btn-success" onclick="downloadCertificate()">📄 Certificate</button>
+                    <button class="btn" onclick="resetQuiz()">🔄 Try Again</button>
+                    <button class="btn btn-home" onclick="window.location.href='winners.html'">🏆 Hall of Fame</button>
+                    <button class="btn btn-secondary" onclick="window.location.href='dashboard.html'">📊 Dashboard</button>
+                </div>
+                ${reward.type === 'cash' ? '<p style="margin-top: 20px; font-size: 0.85rem; color: #90ee90;">💰 Send your Opay number via WhatsApp to claim ₦1000!</p>' : ''}
+            </div>
+        `;
+    }
+
+    function resetQuiz() {
+        currentStage = 1;
+        currentQuestionIndex = 0;
+        answerLocked = false;
+        quizActive = true;
+        loadStageQuestions();
+    }
+</script>
+
+</body>
+</html>

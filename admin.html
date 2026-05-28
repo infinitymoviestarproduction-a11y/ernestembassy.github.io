@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <title>LMS Admin Panel</title>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js"></script>
+
 <style>
 body{
 margin:0;
@@ -27,7 +30,7 @@ margin:auto;
 padding:20px;
 }
 
-/* SECTION CARD */
+/* CARD */
 .card{
 background:white;
 color:#333;
@@ -72,21 +75,9 @@ background:#5a67d8;
 transform:scale(1.02);
 }
 
-/* SMALL TITLE */
 h2{
 margin-bottom:10px;
 color:#444;
-}
-
-/* GRID */
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:20px;
-}
-
-@media(max-width:768px){
-.grid{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -137,10 +128,22 @@ gap:20px;
 
 <script>
 
-/* FIREBASE PLACEHOLDER (connect later) */
-let db = null;
+/* 🔥 FIREBASE CONFIG - REPLACE WITH YOUR OWN */
+const firebaseConfig = {
+apiKey: "YOUR_API_KEY",
+authDomain: "YOUR_PROJECT.firebaseapp.com",
+projectId: "YOUR_PROJECT_ID",
+storageBucket: "YOUR_PROJECT.appspot.com",
+messagingSenderId: "XXXX",
+appId: "XXXX"
+};
 
-/* SAVE QUESTION */
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+/* =========================
+SAVE QUESTION TO FIREBASE
+========================= */
 function saveQuestion(){
 
 const data = {
@@ -152,25 +155,53 @@ document.getElementById("o3").value,
 document.getElementById("o4").value
 ],
 a: Number(document.getElementById("ans").value),
-exp: document.getElementById("exp").value
+exp: document.getElementById("exp").value,
+createdAt: new Date()
 };
 
-alert("Question ready to save to Firebase (next step we connect DB)");
+db.collection("questions").add(data)
+.then(() => {
 
-console.log(data);
+alert("✅ Question saved successfully!");
+
+document.getElementById("q").value = "";
+document.getElementById("o1").value = "";
+document.getElementById("o2").value = "";
+document.getElementById("o3").value = "";
+document.getElementById("o4").value = "";
+document.getElementById("exp").value = "";
+
+})
+.catch(err => {
+alert("❌ Error: " + err.message);
+});
+
 }
 
-/* SAVE LESSON */
+/* =========================
+SAVE LESSON TO FIREBASE
+========================= */
 function saveLesson(){
 
 const lesson = {
 title: document.getElementById("title").value,
-content: document.getElementById("content").value
+content: document.getElementById("content").value,
+createdAt: new Date()
 };
 
-alert("Lesson ready to save to Firebase (next step we connect DB)");
+db.collection("lessons").add(lesson)
+.then(() => {
 
-console.log(lesson);
+alert("📚 Lesson saved successfully!");
+
+document.getElementById("title").value = "";
+document.getElementById("content").value = "";
+
+})
+.catch(err => {
+alert("❌ Error: " + err.message);
+});
+
 }
 
 </script>

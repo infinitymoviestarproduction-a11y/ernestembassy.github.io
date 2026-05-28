@@ -1,54 +1,320 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hall of Fame - Quiz Champions</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
-        }
-        .winners-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 20px;
-        }
-        .winner-card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        .gold {
-            background: linear-gradient(135deg, #ffd700, #ffaa00);
-            color: #1a1a2e;
-        }
-        .winner-name {
-            font-size: 1.3rem;
-            font-weight: bold;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hall of Fame - Quiz Champions</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+
+<script src="auth.js"></script>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        background: #0a0a0a;
+        color: #fff;
+        min-height: 100vh;
+    }
+
+    /* NAVIGATION BAR */
+    nav {
+        background: #000000;
+        padding: 1rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        border-bottom: 2px solid #ffd700;
+    }
+
+    .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        font-size: 20px;
+        font-weight: bold;
+        color: #ffd700;
+        text-decoration: none;
+    }
+
+    .btn-dashboard {
+        background: #ffd700;
+        color: #000;
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: 0.2s;
+    }
+
+    .btn-dashboard:hover {
+        background: #ffea70;
+    }
+
+    /* LEADERBOARD CONTAINER */
+    .header-banner {
+        text-align: center;
+        padding: 50px 20px 20px;
+    }
+
+    .header-banner h1 {
+        font-size: 36px;
+        color: #ffd700;
+        margin-bottom: 10px;
+    }
+
+    .header-banner p {
+        color: #888;
+        font-size: 16px;
+    }
+
+    .winners-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        max-width: 1200px;
+        margin: 20px auto 60px;
+        padding: 20px;
+    }
+
+    /* PREMIUM CARD GRAPHICS */
+    .winner-card {
+        background: #111;
+        border-radius: 16px;
+        padding: 25px;
+        text-align: center;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        border: 1px solid #222;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: transform 0.3s ease;
+    }
+
+    .winner-card:hover {
+        transform: translateY(-5px);
+    }
+
+    /* Highlighting elite top performers natively */
+    .elite-gold {
+        border-color: #ffd700;
+        background: linear-gradient(145deg, #111111 0%, #1a1600 100%);
+        box-shadow: 0 8px 30px rgba(255, 215, 0, 0.15);
+    }
+
+    .badge-icon {
+        font-size: 40px;
+        margin-bottom: 15px;
+    }
+
+    .winner-name {
+        font-size: 22px;
+        font-weight: bold;
+        color: #fff;
+        margin-bottom: 5px;
+    }
+
+    .elite-gold .winner-name {
+        color: #ffd700;
+    }
+
+    .subject-tag {
+        display: inline-block;
+        background: #222;
+        color: #aaa;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .score-display {
+        font-size: 28px;
+        font-weight: 800;
+        color: #fff;
+        margin: 10px 0;
+    }
+
+    .score-display span {
+        color: #ffd700;
+    }
+
+    .date-stamp {
+        font-size: 13px;
+        color: #666;
+        margin-top: 10px;
+    }
+
+    .reward-status {
+        margin-top: 15px;
+        padding: 8px 15px;
+        background: #1a1a1a;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #ffd700;
+        border: 1px solid #333;
+    }
+
+    .elite-gold .reward-status {
+        background: rgba(255, 215, 0, 0.1);
+        border-color: #ffd700;
+    }
+
+    /* SYSTEM STATUS SPINNER */
+    .status-msg {
+        text-align: center;
+        padding: 60px;
+        font-size: 18px;
+        color: #ffd700;
+        width: 100%;
+        grid-column: 1 / -1;
+    }
+</style>
 </head>
 <body>
-    <div class="winners-grid" id="winnersList"></div>
-    <script>
-        const winners = JSON.parse(localStorage.getItem('quizWinners') || '[]');
-        const container = document.getElementById('winnersList');
-        winners.reverse().forEach((winner, index) => {
-            container.innerHTML += `
-                <div class="winner-card ${index < 3 ? 'gold' : ''}">
-                    <div class="winner-name">${winner.name}</div>
-                    <div>Score: ${winner.score}%</div>
-                    <div>${new Date(winner.date).toLocaleDateString()}</div>
-                    <div>🏆 ${winner.reward === 'cash' ? '₦1000 Winner!' : winner.reward === 'draw' ? 'Monthly Draw Entry' : 'Certificate'}</div>
+
+<nav>
+    <div class="nav-container">
+        <a href="dashboard.html" class="logo">🎓 Ernest Embassy LMS</a>
+        <a href="dashboard.html" class="btn-dashboard">📊 Dashboard Portal</a>
+    </div>
+</nav>
+
+<div class="header-banner">
+    <h1>🏆 Academic Hall of Fame</h1>
+    <p>Honoring verified high achievers across our curriculum platforms</p>
+</div>
+
+<div class="winners-grid" id="winnersList">
+    <div class="status-msg" id="statusMessage">🔄 Retrieving verified database ledger entries...</div>
+</div>
+
+<script>
+/* ====================================
+   FETCH GLOBAL ENTRIES FROM FIRESTORE
+==================================== */
+async function loadLeaderboardData() {
+    const container = document.getElementById("winnersList");
+    const statusMsg = document.getElementById("statusMessage");
+    
+    try {
+        // Query the shared quiz_attempts collection we connected in the previous module
+        const snap = await db.collection("quiz_attempts")
+                             .where("examType", "==", "paid")
+                             .where("percentage", ">=", 80)
+                             .orderBy("percentage", "desc")
+                             .limit(24)
+                             .get();
+                             
+        if (snap.empty) {
+            container.innerHTML = `
+                <div class="status-msg" style="color:#888; border:1px dashed #333; border-radius:12px; padding:40px;">
+                    🏆 Roster Open! Complete a Paid Challenge with an 80% score or higher to secure your spot here.
                 </div>
             `;
+            return;
+        }
+        
+        // Remove status spinner to make way for entries
+        container.innerHTML = "";
+        
+        snap.forEach(doc => {
+            const entry = doc.data();
+            
+            // Format time accurately
+            let submissionDate = "Recent Run";
+            if (entry.completedAt && typeof entry.completedAt.toDate === "function") {
+                submissionDate = entry.completedAt.toDate().toLocaleDateString(undefined, {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            }
+            
+            // Determine styling tiers for top results
+            const isElite = entry.percentage >= 90;
+            const cardClass = isElite ? "winner-card elite-gold" : "winner-card";
+            const trophyBadge = isElite ? "👑" : "🏆";
+            const localizedSubject = entry.subject.replace(/-/g, " ");
+            
+            // Secure DOM construction node layout elements safely
+            const cardElement = document.createElement("div");
+            cardElement.className = cardClass;
+            
+            cardElement.innerHTML = `
+                <div>
+                    <div class="badge-icon">${trophyBadge}</div>
+                    <div class="winner-name">${escapeHtml(entry.studentName)}</div>
+                    <div class="subject-tag">📚 ${escapeHtml(localizedSubject)}</div>
+                </div>
+                <div>
+                    <div class="score-display">Grade: <span>${entry.percentage}%</span></div>
+                    <div class="reward-status">💰 Verified ₦1000 Payout</div>
+                    <div class="date-stamp">${submissionDate}</div>
+                </div>
+            `;
+            
+            container.appendChild(cardElement);
         });
-    </script>
+        
+    } catch (error) {
+        console.error("Leaderboard database error context:", error);
+        statusMsg.innerHTML = `
+            <span style="color:#ff4d4d;">⚠️ Error loading global records.</span><br>
+            <button onclick="location.reload()" style="margin-top:15px; padding:8px 16px; background:#222; border:1px solid #444; color:#fff; border-radius:6px; cursor:pointer; font-weight:bold;">🔄 Retry Sync</button>
+        `;
+    }
+}
+
+/* ====================================
+   ESCAPE STRINGS SECURE PROTOCOL
+==================================== */
+function escapeHtml(str) {
+    if (!str) return "";
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+/* ====================================
+   SYSTEM LIFE-CYCLE GATEWAY
+==================================== */
+async function initWinnersPortal() {
+    // Rely seamlessly on centralized library configurations
+    await initAuth(true);
+    
+    // Execute data extraction
+    await loadLeaderboardData();
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initWinnersPortal);
+} else {
+    initWinnersPortal();
+}
+</script>
+
 </body>
 </html>

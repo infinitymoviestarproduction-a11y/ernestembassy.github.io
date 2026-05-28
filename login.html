@@ -99,9 +99,8 @@ Secure Firebase Authentication System
 
 <script>
 
-/* =========================
-   FIREBASE CONFIG
-========================= */
+/* ================= FIREBASE INIT ================= */
+
 const firebaseConfig = {
 apiKey: "YOUR_API_KEY",
 authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -114,21 +113,23 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-/* =========================
-   LOGIN FUNCTION
-========================= */
+/* ================= LOGIN ================= */
+
 function login(){
 
 let email = document.getElementById("email").value;
 let password = document.getElementById("password").value;
 
+if(!email || !password){
+document.getElementById("msg").innerText = "Please fill all fields";
+return;
+}
+
 document.getElementById("msg").innerText = "Logging in...";
 
 auth.signInWithEmailAndPassword(email,password)
 .then(()=>{
-
 window.location.href = "class.html";
-
 })
 .catch(err=>{
 document.getElementById("msg").innerText = err.message;
@@ -136,13 +137,17 @@ document.getElementById("msg").innerText = err.message;
 
 }
 
-/* =========================
-   SIGNUP + PROFILE CREATE
-========================= */
+/* ================= SIGNUP + PROFILE ================= */
+
 function signup(){
 
 let email = document.getElementById("email").value;
 let password = document.getElementById("password").value;
+
+if(!email || !password){
+document.getElementById("msg").innerText = "Please fill all fields";
+return;
+}
 
 document.getElementById("msg").innerText = "Creating account...";
 
@@ -151,8 +156,9 @@ auth.createUserWithEmailAndPassword(email,password)
 
 let user = userCredential.user;
 
-/* CREATE USER PROFILE IN FIRESTORE */
+/* CREATE FIRESTORE USER PROFILE */
 await db.collection("users").doc(user.uid).set({
+uid: user.uid,
 email: user.email,
 name: email.split("@")[0],
 score: 0,

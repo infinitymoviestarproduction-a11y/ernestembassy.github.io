@@ -2,46 +2,55 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>LMS Quiz Engine - Secure Exam Mode</title>
+<title>Ernest Embassy LMS Quiz Engine</title>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
 
 <style>
+
 body{
 margin:0;
 font-family:Segoe UI;
 background:#eef2f7;
-user-select:none;
 }
 
-/* HEADER */
 .header{
 background:linear-gradient(135deg,#667eea,#764ba2);
 color:white;
-text-align:center;
 padding:20px;
-font-weight:bold;
-}
-
-/* TIMER */
-.timer{
 text-align:center;
-font-size:22px;
-font-weight:bold;
-color:#dc3545;
-margin-top:10px;
 }
 
-/* CONTAINER */
 .container{
-max-width:900px;
+max-width:950px;
 margin:auto;
 padding:20px;
 }
 
-/* CARD */
+.top-bar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.score-box,
+.timer-box{
+background:white;
+padding:15px;
+border-radius:12px;
+font-weight:bold;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.timer-box{
+color:#dc3545;
+}
+
 .card{
 background:white;
 padding:20px;
@@ -50,23 +59,24 @@ margin-bottom:20px;
 box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
-/* QUESTION */
 .question{
+font-size:18px;
 font-weight:bold;
-margin-bottom:10px;
+margin-bottom:15px;
 }
 
-/* OPTIONS */
 .option{
 background:#f1f1f1;
-padding:10px;
-margin:5px 0;
+padding:12px;
+margin:8px 0;
 border-radius:10px;
 cursor:pointer;
 transition:0.3s;
 }
 
-.option:hover{background:#ddd;}
+.option:hover{
+background:#ddd;
+}
 
 .correct{
 background:#c8f7c5 !important;
@@ -78,7 +88,6 @@ background:#ffcccc !important;
 border:2px solid red;
 }
 
-/* EXPLANATION */
 .explanation{
 margin-top:10px;
 padding:10px;
@@ -87,53 +96,97 @@ border-left:4px solid #667eea;
 display:none;
 }
 
-/* NAV */
 .nav{
 display:flex;
 justify-content:space-between;
 margin-top:20px;
+flex-wrap:wrap;
+gap:10px;
 }
 
 button{
-padding:10px;
+padding:12px 18px;
 border:none;
 border-radius:10px;
 cursor:pointer;
+font-weight:bold;
 }
 
-.next{background:#667eea;color:white;}
-.back{background:#555;color:white;}
-.home{background:black;color:white;}
+.next{
+background:#667eea;
+color:white;
+}
 
-.score{
+.back{
+background:#555;
+color:white;
+}
+
+.home{
+background:black;
+color:white;
+}
+
+.submit{
+background:#28a745;
+color:white;
+}
+
+.result-box{
+background:white;
+padding:30px;
+border-radius:15px;
 text-align:center;
-font-size:20px;
-margin-bottom:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
+
+@media(max-width:768px){
+
+.top-bar{
+flex-direction:column;
+}
+
+button{
+width:100%;
+}
+
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="header">
-🎓 LMS Secure Quiz Engine (Paid + Free Mode)
-</div>
-
-<div class="timer">
-⏱ Time Left: <span id="time">10:00</span>
+<div class="header" id="title">
+🎓 Ernest Embassy LMS Quiz Engine
 </div>
 
 <div class="container">
 
-<div class="score">
+<div class="top-bar">
+
+<div class="score-box">
 Score: <span id="score">0</span>
+</div>
+
+<div class="timer-box">
+⏰ Time Left:
+<span id="timer">30:00</span>
+</div>
+
 </div>
 
 <div id="quiz"></div>
 
 <div class="nav">
 <button class="back" onclick="prevPage()">⬅ Back</button>
-<button class="home" onclick="goHome()">🏠 Exit</button>
+
+<button class="home" onclick="goHome()">🏠 Dashboard</button>
+
+<button class="submit" onclick="submitQuiz()">
+✅ Submit Quiz
+</button>
+
 <button class="next" onclick="nextPage()">Next ➡</button>
 </div>
 
@@ -141,176 +194,365 @@ Score: <span id="score">0</span>
 
 <script>
 
-/* FIREBASE */
+/* =========================
+FIREBASE CONFIG
+========================= */
+
 const firebaseConfig = {
+
 apiKey: "YOUR_API_KEY",
+
 authDomain: "YOUR_PROJECT.firebaseapp.com",
-projectId: "YOUR_PROJECT_ID"
+
+projectId: "YOUR_PROJECT_ID",
+
+storageBucket: "YOUR_PROJECT.appspot.com",
+
+messagingSenderId: "XXXX",
+
+appId: "XXXX"
+
 };
 
 firebase.initializeApp(firebaseConfig);
+
 const db = firebase.firestore();
+const auth = firebase.auth();
 
-/* MODE */
-const urlParams = new URLSearchParams(window.location.search);
-let mode = urlParams.get("mode") || "free";
+/* =========================
+MODE SYSTEM
+========================= */
 
-/* TIMER SETTINGS */
-let totalTime = mode === "paid" ? 600 : 1200; // 10 min paid, 20 min free
-let timeLeft = totalTime;
+const urlParams =
+new URLSearchParams(window.location.search);
 
-/* SECURITY FLAGS */
-let examLocked = false;
-let tabSwitchCount = 0;
+let mode =
+urlParams.get("mode") || "free";
 
-/* QUESTIONS */
+/* =========================
+QUIZ SETTINGS
+========================= */
+
 let questions = [];
 let page = 0;
 let perPage = 5;
 let score = 0;
 
-/* TIMER */
-function startTimer(){
+let answeredQuestions = {};
 
-let timer = setInterval(()=>{
+let totalTime = mode === "paid" ? 1800 : 999999;
 
-if(examLocked) return;
+/* 30 mins paid mode */
 
-let min = Math.floor(timeLeft / 60);
-let sec = timeLeft % 60;
+/* =========================
+TITLE
+========================= */
 
-document.getElementById("time").innerText =
-`${min}:${sec < 10 ? "0"+sec : sec}`;
+if(mode === "paid"){
 
-timeLeft--;
+document.getElementById("title").innerText =
+"🔴 Paid Challenge Quiz";
 
-if(timeLeft < 0){
-clearInterval(timer);
-lockExam();
-}
-
-},1000);
-
-}
-
-/* LOCK EXAM */
-function lockExam(){
-examLocked = true;
-alert("⛔ Time is up! Exam submitted automatically.");
-window.location.href = "class.html";
-}
-
-/* SECURITY: TAB SWITCH DETECTION */
-document.addEventListener("visibilitychange", ()=>{
-if(document.hidden && mode === "paid"){
-tabSwitchCount++;
-
-if(tabSwitchCount >= 3){
-alert("🚫 Suspicious activity detected. Exam locked.");
-lockExam();
 }else{
-alert("⚠ Warning: Do not leave the exam tab!");
-}
-}
-});
 
-/* LOAD QUESTIONS */
+document.getElementById("title").innerText =
+"🟢 Free Test Mode";
+
+document.querySelector(".timer-box").style.display =
+"none";
+
+}
+
+/* =========================
+LOAD QUESTIONS
+========================= */
+
 async function loadQuestions(){
 
-const snap = await db.collection("questions").get();
+const snap =
+await db.collection("questions").get();
 
 questions = [];
 
 snap.forEach(doc=>{
-questions.push(doc.data());
+
+questions.push({
+id: doc.id,
+...doc.data()
 });
 
-/* shuffle in paid mode */
+});
+
+/* randomize paid mode */
+
 if(mode === "paid"){
+
+questions =
 questions.sort(()=>Math.random()-0.5);
+
 }
 
 render();
-startTimer();
+
 }
 
-/* RENDER */
+/* =========================
+RENDER
+========================= */
+
 function render(){
 
 let start = page * perPage;
 let end = start + perPage;
 
-let slice = questions.slice(start,end);
+let slice =
+questions.slice(start,end);
 
 let html = "";
 
-slice.forEach(q=>{
+slice.forEach((q,index)=>{
 
-html += `<div class="card">
-<div class="question">${q.q}</div>`;
+html += `
+<div class="card">
+
+<div class="question">
+${start + index + 1}. ${q.q}
+</div>
+`;
 
 q.o.forEach((opt,oi)=>{
+
 html += `
 <div class="option"
-onclick="check(this,${oi},${q.a},'${q.exp}')">
+onclick="check(this,
+${start+index},
+${oi},
+${q.a},
+'${q.exp}')">
+
 ${opt}
-</div>`;
+
+</div>
+`;
+
 });
 
-html += `<div class="explanation"></div></div>`;
+html += `
+<div class="explanation"></div>
+</div>
+`;
+
 });
 
-document.getElementById("quiz").innerHTML = html;
+document.getElementById("quiz").innerHTML =
+html;
+
 }
 
-/* CHECK ANSWER */
-function check(el,selected,correct,exp){
+/* =========================
+CHECK ANSWER
+========================= */
 
-if(examLocked) return;
+function check(el,qIndex,selected,correct,exp){
+
+if(answeredQuestions[qIndex]) return;
+
+answeredQuestions[qIndex] = true;
 
 let parent = el.parentElement;
-let options = parent.querySelectorAll(".option");
-let explanation = parent.querySelector(".explanation");
 
-if(parent.classList.contains("done")) return;
-parent.classList.add("done");
+let options =
+parent.querySelectorAll(".option");
+
+let explanation =
+parent.querySelector(".explanation");
 
 options.forEach((o,i)=>{
+
+o.style.pointerEvents = "none";
+
 if(i === correct){
+
 o.classList.add("correct");
+
 }
+
 });
 
 if(selected === correct){
+
 el.classList.add("correct");
+
 score++;
-document.getElementById("score").innerText = score;
+
+document.getElementById("score").innerText =
+score;
+
 }else{
+
 el.classList.add("wrong");
+
 }
 
-explanation.innerHTML = "📖 " + exp;
+/* explanation only in free mode */
+
+if(mode === "free"){
+
+explanation.innerHTML =
+"📖 " + exp;
+
 explanation.style.display = "block";
+
 }
 
-/* NAV */
-function nextPage(){
-if((page+1)*perPage < questions.length){
-page++;
-render();
 }
+
+/* =========================
+PAGINATION
+========================= */
+
+function nextPage(){
+
+if((page+1)*perPage < questions.length){
+
+page++;
+
+render();
+
+}
+
 }
 
 function prevPage(){
-if(page>0){
-page--;
-render();
-}
+
+if(mode === "paid"){
+
+alert("Back navigation disabled in paid mode.");
+
+return;
+
 }
 
-function goHome(){
-window.location.href = "class.html";
+if(page > 0){
+
+page--;
+
+render();
+
 }
+
+}
+
+/* =========================
+TIMER SYSTEM
+========================= */
+
+if(mode === "paid"){
+
+const timer =
+setInterval(()=>{
+
+let minutes =
+Math.floor(totalTime / 60);
+
+let seconds =
+totalTime % 60;
+
+seconds =
+seconds < 10 ? "0"+seconds : seconds;
+
+document.getElementById("timer").innerText =
+minutes + ":" + seconds;
+
+if(totalTime <= 0){
+
+clearInterval(timer);
+
+submitQuiz();
+
+}
+
+totalTime--;
+
+},1000);
+
+}
+
+/* =========================
+SUBMIT QUIZ
+========================= */
+
+async function submitQuiz(){
+
+let user =
+auth.currentUser;
+
+if(user){
+
+await db.collection("users")
+.doc(user.uid)
+.update({
+
+score: score
+
+});
+
+}
+
+document.querySelector(".container").innerHTML = `
+
+<div class="result-box">
+
+<h1>🎉 Quiz Submitted</h1>
+
+<h2>Your Score: ${score}</h2>
+
+<p>
+Thank you for participating in the
+Ernest Embassy LMS Challenge.
+</p>
+
+<br>
+
+<button class="home"
+onclick="goHome()">
+
+🏠 Return Dashboard
+
+</button>
+
+</div>
+`;
+
+}
+
+/* =========================
+HOME
+========================= */
+
+function goHome(){
+
+window.location.href = "class.html";
+
+}
+
+/* =========================
+ANTI REFRESH SECURITY
+========================= */
+
+if(mode === "paid"){
+
+window.onbeforeunload = function(){
+
+return "Quiz in progress.";
+
+};
+
+}
+
+/* =========================
+INIT
+========================= */
 
 loadQuestions();
 

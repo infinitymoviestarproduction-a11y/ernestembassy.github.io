@@ -1,340 +1,473 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Subject Quiz - Ernest Embassy LMS</title>
 
-<title>SS1 Digital Technology Quiz</title>
+<!-- FIREBASE SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
 
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
-}
-
-body{
-    background:#eef2f7;
-    color:#333;
-    padding:30px;
-}
-
-/* HEADER */
-
-.header{
-    background:linear-gradient(135deg,#667eea,#764ba2);
-    color:white;
-    padding:30px;
-    border-radius:18px;
-    margin-bottom:30px;
-    text-align:center;
-    box-shadow:0 5px 20px rgba(0,0,0,0.15);
-}
-
-.header h1{
-    font-size:35px;
-    margin-bottom:10px;
-}
-
-/* QUIZ CONTAINER */
-
-.quiz-container{
-    max-width:1000px;
-    margin:auto;
-}
-
-/* QUESTION CARD */
-
-.question-card{
-    background:white;
-    border-radius:16px;
-    padding:25px;
-    margin-bottom:25px;
-    box-shadow:0 5px 15px rgba(0,0,0,0.08);
-    border-left:8px solid #667eea;
-    transition:0.3s;
-}
-
-.question-card:hover{
-    transform:translateY(-3px);
-}
-
-/* QUESTION */
-
-.question{
-    font-size:20px;
-    font-weight:bold;
-    margin-bottom:20px;
-    color:#1a1a2e;
-}
-
-/* OPTIONS */
-
-.option{
-    background:#f5f7fa;
-    padding:14px;
-    margin-bottom:12px;
-    border-radius:10px;
-    cursor:pointer;
-    transition:0.3s;
-    border:2px solid transparent;
-}
-
-.option:hover{
-    background:#e8ecff;
-}
-
-/* CORRECT */
-
-.correct{
-    background:#d4edda !important;
-    border:2px solid #28a745 !important;
-    color:#155724;
-    font-weight:bold;
-}
-
-/* WRONG */
-
-.wrong{
-    background:#f8d7da !important;
-    border:2px solid #dc3545 !important;
-    color:#721c24;
-    font-weight:bold;
-}
-
-/* EXPLANATION */
-
-.explanation{
-    margin-top:15px;
-    padding:15px;
-    background:#f1f3f5;
-    border-left:5px solid #667eea;
-    border-radius:10px;
-    display:none;
-    line-height:1.6;
-}
-
-/* SCORE */
-
-.score-board{
-    position:sticky;
-    top:10px;
-    background:white;
-    padding:15px;
-    border-radius:12px;
-    margin-bottom:20px;
-    text-align:center;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08);
-    font-size:22px;
-    font-weight:bold;
-    color:#667eea;
-}
-
-/* MOBILE */
-
-@media(max-width:768px){
-
-    body{
-        padding:15px;
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', sans-serif;
     }
 
-    .question{
-        font-size:18px;
+    body {
+        background: #eef2f7;
+        padding: 20px;
     }
 
-}
+    .header {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 30px;
+        border-radius: 18px;
+        margin-bottom: 30px;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    }
 
+    .header h1 {
+        font-size: 35px;
+        margin-bottom: 10px;
+    }
+
+    .quiz-container {
+        max-width: 1000px;
+        margin: auto;
+    }
+
+    .score-board {
+        position: sticky;
+        top: 10px;
+        background: white;
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        font-size: 22px;
+        font-weight: bold;
+        color: #667eea;
+        z-index: 100;
+    }
+
+    .question-card {
+        background: white;
+        border-radius: 16px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        border-left: 8px solid #667eea;
+        transition: 0.3s;
+    }
+
+    .question-card:hover {
+        transform: translateY(-3px);
+    }
+
+    .question {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        color: #1a1a2e;
+    }
+
+    .option {
+        background: #f5f7fa;
+        padding: 14px;
+        margin-bottom: 12px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+        border: 2px solid transparent;
+    }
+
+    .option:hover {
+        background: #e8ecff;
+    }
+
+    .correct {
+        background: #d4edda !important;
+        border: 2px solid #28a745 !important;
+        color: #155724;
+        font-weight: bold;
+    }
+
+    .wrong {
+        background: #f8d7da !important;
+        border: 2px solid #dc3545 !important;
+        color: #721c24;
+        font-weight: bold;
+    }
+
+    .explanation {
+        margin-top: 15px;
+        padding: 15px;
+        background: #f1f3f5;
+        border-left: 5px solid #667eea;
+        border-radius: 10px;
+        display: none;
+        line-height: 1.6;
+    }
+
+    .loading {
+        text-align: center;
+        padding: 60px;
+        background: white;
+        border-radius: 20px;
+    }
+
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    .btn {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 40px;
+        cursor: pointer;
+        font-weight: bold;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .btn-home {
+        background: #ffd700;
+        color: #1a1a2e;
+    }
+
+    .result-box {
+        text-align: center;
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+    }
+
+    .result-icon {
+        font-size: 4rem;
+        margin-bottom: 15px;
+    }
+
+    @media (max-width: 768px) {
+        body {
+            padding: 15px;
+        }
+        .question {
+            font-size: 18px;
+        }
+        .option {
+            padding: 12px;
+        }
+    }
 </style>
 </head>
 
 <body>
 
-<div class="header">
-    <h1>💻 Digital Technology SS1 Quiz</h1>
-    <p>Interactive Question Bank for Students</p>
+<div class="header" id="pageHeader">
+    <h1 id="subjectTitle">Loading Quiz...</h1>
+    <p id="subjectDesc">Please wait while we load your questions</p>
 </div>
 
 <div class="quiz-container">
-
-<div class="score-board">
-    Score:
-    <span id="score">0</span>
-</div>
-
-<!-- QUESTION 1 -->
-
-<div class="question-card">
-
-    <div class="question">
-        1. What is a computer?
+    <div class="score-board">
+        Score: <span id="score">0</span>
     </div>
 
-    <div class="option"
-         onclick="checkAnswer(this,false)">
-         A. A cooking machine
+    <div id="questionsContainer">
+        <div class="loading">
+            <div style="font-size: 3rem;">📚</div>
+            <p>Loading questions from database...</p>
+        </div>
     </div>
 
-    <div class="option"
-         onclick="checkAnswer(this,true)">
-         B. An electronic device that processes data
+    <div class="nav-buttons" id="navButtons" style="display: none;">
+        <button class="btn btn-home" onclick="goHome()">🏠 Home</button>
+        <button class="btn" onclick="submitQuiz()" id="submitBtn">✅ Submit Quiz</button>
     </div>
-
-    <div class="option"
-         onclick="checkAnswer(this,false)">
-         C. A washing machine
-    </div>
-
-    <div class="option"
-         onclick="checkAnswer(this,false)">
-         D. A radio
-    </div>
-
-    <div class="explanation">
-        ✅ Correct Answer: B<br><br>
-        A computer is an electronic device that accepts data,
-        processes it and produces meaningful information.
-    </div>
-
-</div>
-
-<!-- QUESTION 2 -->
-
-<div class="question-card">
-
-    <div class="question">
-        2. Which of the following is an input device?
-    </div>
-
-    <div class="option"
-         onclick="checkAnswer(this,false)">
-         A. Monitor
-    </div>
-
-    <div class="option"
-         onclick="checkAnswer(this,false)">
-         B. Printer
-    </div>
-
-    <div class="option"
-         onclick="checkAnswer(this,true)">
-         C. Keyboard
-    </div>
-
-    <div class="option"
-         onclick="checkAnswer(this,false)">
-         D. Speaker
-    </div>
-
-    <div class="explanation">
-        ✅ Correct Answer: C<br><br>
-        A keyboard is used to enter data into the computer.
-    </div>
-
-</div>
-
-<!-- QUESTION 3 -->
-
-<div class="question-card">
-
-    <div class="question">
-        3. The brain of the computer is called:
-    </div>
-
-    <div class="option"
-         onclick="checkAnswer(this,false)">
-         A. RAM
-    </div>
-
-    <div class="option"
-         onclick="checkAnswer(this,true)">
-         B. CPU
-    </div>
-
-    <div class="option"
-         onclick="checkAnswer(this,false)">
-         C. Hard disk
-    </div>
-
-    <div class="option"
-         onclick="checkAnswer(this,false)">
-         D. Monitor
-    </div>
-
-    <div class="explanation">
-        ✅ Correct Answer: B<br><br>
-        CPU means Central Processing Unit.
-        It controls all computer operations.
-    </div>
-
-</div>
-
 </div>
 
 <script>
+    // Firebase Config
+    const firebaseConfig = {
+        apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+        authDomain: "ernest-embassy-lms.firebaseapp.com",
+        projectId: "ernest-embassy-lms",
+        storageBucket: "ernest-embassy-lms.firebasestorage.app",
+        messagingSenderId: "204896421221",
+        appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
+    };
 
-let score = 0;
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
 
-/* =========================
-   CHECK ANSWER
-========================= */
+    // Get subject from URL
+    const params = new URLSearchParams(window.location.search);
+    const subject = params.get("subject");
 
-function checkAnswer(element, correct){
+    // Subject display names
+    const subjectNames = {
+        "mathematics-ss1": { name: "📐 Mathematics SS1", desc: "Test your knowledge in Algebra, Geometry & Trigonometry" },
+        "english-ss1": { name: "📖 English Language SS1", desc: "Test your grammar, comprehension & writing skills" },
+        "digital-technology-ss1": { name: "💻 Digital Technology SS1", desc: "Test your knowledge in Computer Fundamentals & ICT" },
+        "igbo-ss1": { name: "🌍 Igbo Language SS1", desc: "Test your Igbo vocabulary, grammar & translation skills" }
+    };
 
-    const parent =
-        element.parentElement;
-
-    const options =
-        parent.querySelectorAll(".option");
-
-    const explanation =
-        parent.querySelector(".explanation");
-
-    /* prevent multiple clicks */
-
-    if(parent.classList.contains("answered")){
-        return;
-    }
-
-    parent.classList.add("answered");
-
-    options.forEach(option => {
-
-        option.style.pointerEvents = "none";
-
-        const isCorrect =
-            option.getAttribute("onclick")
-            .includes("true");
-
-        if(isCorrect){
-            option.classList.add("correct");
-        }
-
-    });
-
-    if(correct){
-
-        element.classList.add("correct");
-
-        score++;
-
-        document.getElementById("score")
-        .innerText = score;
-
+    if (subjectNames[subject]) {
+        document.getElementById("subjectTitle").innerText = subjectNames[subject].name;
+        document.getElementById("subjectDesc").innerText = subjectNames[subject].desc;
     } else {
-
-        element.classList.add("wrong");
-
+        document.getElementById("subjectTitle").innerText = "📚 Subject Quiz";
+        document.getElementById("subjectDesc").innerText = "Test your knowledge with these questions";
     }
 
-    explanation.style.display = "block";
+    let questions = [];
+    let userAnswers = [];
+    let currentUser = null;
 
-}
+    // Load questions from Firestore
+    async function loadQuestions() {
+        try {
+            const querySnapshot = await db.collection("questions").get();
+            const allQuestions = [];
+            
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                allQuestions.push({
+                    id: doc.id,
+                    text: data.q,
+                    options: data.o || [],
+                    correct: data.o ? data.o[data.a] : "",
+                    explanation: data.exp,
+                    subject: data.subject || "general"
+                });
+            });
+            
+            // Filter by subject if needed, or just take first 10
+            let filteredQuestions = allQuestions;
+            if (subject && subjectNames[subject]) {
+                filteredQuestions = allQuestions.filter(q => q.subject === subject);
+            }
+            
+            // Take first 10 questions
+            questions = filteredQuestions.slice(0, 10);
+            
+            if (questions.length === 0) {
+                // Fallback to sample questions if no questions in Firestore
+                questions = getSampleQuestions();
+            }
+            
+            userAnswers = new Array(questions.length).fill(null);
+            renderQuestions();
+            document.getElementById("navButtons").style.display = "flex";
+            
+        } catch (error) {
+            console.error("Error loading questions:", error);
+            // Fallback to sample questions
+            questions = getSampleQuestions();
+            userAnswers = new Array(questions.length).fill(null);
+            renderQuestions();
+            document.getElementById("navButtons").style.display = "flex";
+        }
+    }
 
+    function getSampleQuestions() {
+        return [
+            {
+                text: "What is a computer?",
+                options: ["A. A cooking machine", "B. An electronic device that processes data", "C. A washing machine", "D. A radio"],
+                correct: "B. An electronic device that processes data",
+                explanation: "A computer is an electronic device that accepts data, processes it, and produces meaningful information."
+            },
+            {
+                text: "Which of the following is an input device?",
+                options: ["A. Monitor", "B. Printer", "C. Keyboard", "D. Speaker"],
+                correct: "C. Keyboard",
+                explanation: "A keyboard is used to enter data into the computer."
+            },
+            {
+                text: "The brain of the computer is called:",
+                options: ["A. RAM", "B. CPU", "C. Hard disk", "D. Monitor"],
+                correct: "B. CPU",
+                explanation: "CPU (Central Processing Unit) controls all computer operations."
+            }
+        ];
+    }
+
+    function renderQuestions() {
+        const container = document.getElementById("questionsContainer");
+        let html = "";
+        
+        questions.forEach((q, index) => {
+            const selectedAnswer = userAnswers[index];
+            let optionsHtml = "";
+            
+            q.options.forEach(opt => {
+                const isSelected = (selectedAnswer === opt);
+                optionsHtml += `
+                    <div class="option" onclick="selectAnswer(${index}, '${opt.replace(/'/g, "\\'")}')">
+                        ${opt}
+                    </div>
+                `;
+            });
+            
+            html += `
+                <div class="question-card" id="question-${index}" data-answered="${selectedAnswer !== null}">
+                    <div class="question">${index + 1}. ${q.text}</div>
+                    <div class="options-container">
+                        ${optionsHtml}
+                    </div>
+                    <div class="explanation" id="explanation-${index}">
+                        ${q.explanation}
+                    </div>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+        updateScore();
+    }
+
+    function selectAnswer(questionIndex, selected) {
+        const questionCard = document.getElementById(`question-${questionIndex}`);
+        if (questionCard.getAttribute("data-answered") === "true") return;
+        
+        const q = questions[questionIndex];
+        const isCorrect = (selected === q.correct);
+        
+        // Mark as answered
+        questionCard.setAttribute("data-answered", "true");
+        userAnswers[questionIndex] = selected;
+        
+        // Get all options in this question
+        const options = questionCard.querySelectorAll(".option");
+        const explanation = document.getElementById(`explanation-${questionIndex}`);
+        
+        options.forEach(opt => {
+            opt.style.pointerEvents = "none";
+            if (opt.textContent === q.correct) {
+                opt.classList.add("correct");
+            }
+            if (opt.textContent === selected && !isCorrect) {
+                opt.classList.add("wrong");
+            }
+        });
+        
+        explanation.style.display = "block";
+        
+        // Update score
+        updateScore();
+    }
+
+    function updateScore() {
+        let score = 0;
+        questions.forEach((q, i) => {
+            if (userAnswers[i] === q.correct) score++;
+        });
+        document.getElementById("score").innerText = score;
+    }
+
+    async function submitQuiz() {
+        // Check if all questions answered
+        let allAnswered = true;
+        for (let i = 0; i < questions.length; i++) {
+            if (userAnswers[i] === null) {
+                allAnswered = false;
+                document.getElementById(`question-${i}`).scrollIntoView({ behavior: "smooth", block: "center" });
+                alert(`Please answer question ${i + 1} before submitting.`);
+                return;
+            }
+        }
+        
+        const score = userAnswers.filter((ans, i) => ans === questions[i].correct).length;
+        const percentage = Math.round((score / questions.length) * 100);
+        
+        // Save result to Firestore if user is logged in
+        if (currentUser) {
+            try {
+                await db.collection("quizAttempts").add({
+                    userId: currentUser.uid,
+                    userName: currentUser.displayName || currentUser.email,
+                    subject: subject || "general",
+                    score: percentage,
+                    correctAnswers: score,
+                    totalQuestions: questions.length,
+                    date: new Date(),
+                    quizType: "practice"
+                });
+                
+                // Update user's high score
+                const userRef = db.collection("users").doc(currentUser.uid);
+                const userDoc = await userRef.get();
+                const currentScore = userDoc.exists ? (userDoc.data().score || 0) : 0;
+                if (percentage > currentScore) {
+                    await userRef.set({ score: percentage }, { merge: true });
+                }
+            } catch (err) {
+                console.error("Error saving score:", err);
+            }
+        }
+        
+        // Show results
+        let resultMessage = "";
+        if (percentage >= 80) {
+            resultMessage = "🎉 Excellent! You're a star! Keep it up! 🎉";
+        } else if (percentage >= 60) {
+            resultMessage = "👍 Good job! Review the explanations and try again to improve!";
+        } else {
+            resultMessage = "📚 Keep practicing! Review the explanations and take the quiz again!";
+        }
+        
+        document.getElementById("questionsContainer").innerHTML = `
+            <div class="result-box">
+                <div class="result-icon">🏆</div>
+                <h2>Quiz Complete!</h2>
+                <p style="font-size: 2rem; margin: 20px 0;">Your Score: ${percentage}%</p>
+                <p>You got ${score} out of ${questions.length} correct</p>
+                <div style="margin: 20px 0; padding: 15px; background: #f1f3f5; border-radius: 10px;">
+                    <p>${resultMessage}</p>
+                </div>
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn" onclick="location.reload()">🔄 Try Again</button>
+                    <button class="btn btn-home" onclick="window.location.href='dashboard.html'">📊 Dashboard</button>
+                    <button class="btn" onclick="window.location.href='course.html?subject=${subject}'">📚 Back to Course</button>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById("navButtons").style.display = "none";
+    }
+
+    function goHome() {
+        window.location.href = "dashboard.html";
+    }
+
+    // Check auth and load
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            currentUser = user;
+            loadQuestions();
+        } else {
+            // Still load questions but don't save to Firestore
+            currentUser = null;
+            loadQuestions();
+        }
+    });
 </script>
 
 </body>
 </html>
-```

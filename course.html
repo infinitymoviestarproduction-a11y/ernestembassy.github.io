@@ -12,19 +12,10 @@
 <script src="auth.js"></script>
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
-}
+*{ margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',sans-serif; }
 
-body{
-    background:#f4f7fb;
-    color:#333;
-}
+body{ background:#f4f7fb; color:#333; }
 
-/* NAVBAR */
 nav{
     background:#1a1a2e;
     color:white;
@@ -35,17 +26,9 @@ nav{
     flex-wrap:wrap;
 }
 
-.logo{
-    font-size:22px;
-    font-weight:bold;
-    color:#ffd700;
-}
+.logo{ font-size:22px; font-weight:bold; color:#ffd700; }
 
-.nav-links{
-    display:flex;
-    gap:12px;
-    flex-wrap:wrap;
-}
+.nav-links{ display:flex; gap:12px; flex-wrap:wrap; }
 
 .nav-links a{
     text-decoration:none;
@@ -57,30 +40,21 @@ nav{
     font-size:14px;
 }
 
-.nav-links a:hover{
-    background:#5a67d8;
-}
+.nav-links a:hover{ background:#5a67d8; }
 
-.user-area{
-    display:flex;
-    align-items:center;
-    gap:15px;
-}
+.user-area{ display:flex; align-items:center; gap:15px; }
+.user-name{ color:#ffd700; font-weight:bold; }
 
-.user-name{
-    color:#ffd700;
+.logout-link{
+    background:#dc3545;
+    color:white;
+    border:none;
+    padding:8px 15px;
+    border-radius:8px;
+    cursor:pointer;
     font-weight:bold;
 }
 
-.logout-link{
-    background:#dc3545 !important;
-}
-
-.logout-link:hover{
-    background:#c82333 !important;
-}
-
-/* HERO */
 .hero{
     background:linear-gradient(135deg,#667eea,#764ba2);
     color:white;
@@ -88,25 +62,11 @@ nav{
     text-align:center;
 }
 
-.hero h1{
-    font-size:38px;
-    margin-bottom:15px;
-}
+.hero h1{ font-size:36px; margin-bottom:15px; }
+.hero p{ max-width:800px; margin:auto; line-height:1.7; }
 
-.hero p{
-    max-width:800px;
-    margin:auto;
-    line-height:1.7;
-}
+.container{ max-width:1200px; margin:auto; padding:30px 20px; }
 
-/* CONTAINER */
-.container{
-    max-width:1200px;
-    margin:auto;
-    padding:30px 20px;
-}
-
-/* COURSE OVERVIEW */
 .course-card{
     background:white;
     padding:30px;
@@ -115,14 +75,11 @@ nav{
     margin-bottom:30px;
 }
 
-.course-card h2{
-    margin-bottom:20px;
-    color:#1a1a2e;
-}
+.course-card h2{ margin-bottom:20px; color:#1a1a2e; }
 
 .course-grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
     gap:20px;
     margin-top:25px;
 }
@@ -134,17 +91,9 @@ nav{
     text-align:center;
 }
 
-.info-box h3{
-    color:#667eea;
-    margin-bottom:10px;
-}
+.info-box h3{ color:#667eea; margin-bottom:10px; }
 
-/* LESSONS */
-.section-title{
-    margin-bottom:20px;
-    font-size:28px;
-    color:#1a1a2e;
-}
+.section-title{ margin-bottom:20px; font-size:26px; color:#1a1a2e; }
 
 .lesson-grid{
     display:grid;
@@ -160,22 +109,10 @@ nav{
     transition:0.3s;
 }
 
-.lesson-card:hover{
-    transform:translateY(-5px);
-}
+.lesson-card:hover{ transform:translateY(-5px); }
+.lesson-card h3{ margin-bottom:12px; color:#1a1a2e; }
+.lesson-card p{ color:#666; line-height:1.6; margin-bottom:18px; }
 
-.lesson-card h3{
-    margin-bottom:12px;
-    color:#1a1a2e;
-}
-
-.lesson-card p{
-    color:#666;
-    line-height:1.6;
-    margin-bottom:18px;
-}
-
-/* BUTTONS */
 .start-btn{
     display:inline-block;
     text-decoration:none;
@@ -187,19 +124,13 @@ nav{
     transition:0.3s;
     border:none;
     cursor:pointer;
+    width:100%;
     text-align:center;
 }
 
-.start-btn:hover{
-    background:#218838;
-}
+.start-btn:hover{ background:#218838; }
+.start-btn:disabled{ background:#6c757d; cursor:not-allowed; }
 
-.start-btn:disabled{
-    background:#6c757d;
-    cursor:not-allowed;
-}
-
-/* FOOTER */
 footer{
     margin-top:60px;
     background:#1a1a2e;
@@ -208,39 +139,26 @@ footer{
     padding:30px;
 }
 
-/* MOBILE */
 @media(max-width:768px){
-    nav{
-        flex-direction:column;
-        gap:15px;
-        text-align:center;
-    }
-    .user-area{
-        justify-content:center;
-    }
-    .hero h1{
-        font-size:28px;
-    }
+    nav{ flex-direction:column; gap:15px; text-align:center; }
+    .user-area{ justify-content:center; }
+    .hero h1{ font-size:26px; }
 }
 </style>
 </head>
 <body>
 
 <nav>
-    <div class="logo">
-        🎓 Ernest Embassy LMS
-    </div>
-
-    <div class="nav-links" id="navLinksContainer">
+    <div class="logo">🎓 Ernest Embassy LMS</div>
+    <div class="nav-links">
         <a href="index.html">🏠 Home</a>
         <a href="dashboard.html">📊 Dashboard</a>
         <a href="class.html">💰 Challenge Quiz</a>
         <a href="javascript:history.back()">⬅ Back</a>
     </div>
-
-    <div class="user-area" id="userMenuArea">
+    <div class="user-area">
         <span class="user-name">Welcome, <span id="userNameDisplay">Student</span>!</span>
-        <button class="logout-link" onclick="logout()" style="background:#dc3545; color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">🚪 Logout</button>
+        <button class="logout-link" onclick="doLogout()">🚪 Logout</button>
     </div>
 </nav>
 
@@ -273,90 +191,78 @@ footer{
     <div class="lesson-grid">
         <div class="lesson-card">
             <h3>📝 CBT Quiz Practice</h3>
-            <p>Practice interactive objective questions with explanations, scoring and instant feedback system.</p>
+            <p>Practice objective questions with explanations, scoring, and instant feedback.</p>
             <button id="quizBtn" class="start-btn">Start Quiz</button>
         </div>
         <div class="lesson-card">
             <h3>📚 Study Notes</h3>
-            <p>Access digital classroom materials, lesson explanations and revision resources.</p>
+            <p>Access digital classroom materials, lesson explanations, and revision resources.</p>
             <a id="resourcesBtn" href="educational-resources.html" class="start-btn">Open Resources</a>
         </div>
     </div>
+
 </div>
 
 <footer>
     <p>© 2026 Ernest Embassy Digital Solutions</p>
-    <p>Professional Online Learning Platform</p>
 </footer>
 
 <script>
 /* ====================================
-   GET SUBJECT FROM URL
+   SUBJECT KEY NORMALIZATION
 ==================================== */
-const params = new URLSearchParams(window.location.search);
-const subject = params.get("subject");
+function normalizeSubject(raw) {
+    const map = {
+        "english-language-ss1": "english-ss1",
+        "igbo-language-ss1":    "igbo-ss1",
+        "digital-technology-ss1": "digital-technology-ss1",
+        "mathematics-ss1":      "mathematics-ss1"
+    };
+    return map[raw] || raw;
+}
 
-/* ====================================
-   SUBJECT DATA
-==================================== */
+const params     = new URLSearchParams(window.location.search);
+const rawSubject = params.get("subject") || "";
+const subject    = normalizeSubject(rawSubject);
+
 const subjects = {
     "digital-technology-ss1": {
-        title: "💻 Digital Technology SS1",
-        description: "Learn computer fundamentals, ICT, internet technology and digital skills.",
-        level: "SS1",
+        title:        "💻 Digital Technology SS1",
+        description:  "Learn computer fundamentals, ICT, internet technology and digital skills.",
+        level:        "SS1",
         resourceLink: "digital-technology-ss1.md"
     },
     "mathematics-ss1": {
-        title: "📐 Mathematics SS1",
-        description: "Master algebra, equations, geometry and WAEC preparation.",
-        level: "SS1",
+        title:        "📐 Mathematics SS1",
+        description:  "Master algebra, equations, geometry and WAEC preparation.",
+        level:        "SS1",
         resourceLink: "mathematics-ss1.md"
     },
     "english-ss1": {
-        title: "📖 English Language SS1",
-        description: "Improve grammar, essay writing, comprehension and communication skills.",
-        level: "SS1",
+        title:        "📖 English Language SS1",
+        description:  "Improve grammar, essay writing, comprehension and communication skills.",
+        level:        "SS1",
         resourceLink: "english-ss1.md"
     },
     "igbo-ss1": {
-        title: "🌍 Igbo Language SS1",
-        description: "Learn vocabulary, grammar, translation and language practice.",
-        level: "SS1",
+        title:        "🌍 Igbo Language SS1",
+        description:  "Learn vocabulary, grammar, translation and language practice.",
+        level:        "SS1",
         resourceLink: "igbo-ss1.md"
     }
 };
 
 /* ====================================
-   LOAD ACTUAL QUESTION COUNT FROM FIRESTORE
+   LOAD QUESTION COUNT FROM FIRESTORE
 ==================================== */
 async function loadQuestionCount() {
     try {
-        const querySnapshot = await db.collection("questions").get();
-        let questionCount = 0;
-        
-        if (subject && subjects[subject]) {
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                if (data.subject === subject) {
-                    questionCount++;
-                }
-            });
-        } else {
-            questionCount = querySnapshot.size;
-        }
-        
-        const questionElement = document.getElementById("courseQuestions");
-        if (questionCount > 0) {
-            questionElement.innerText = questionCount;
-        } else {
-            questionElement.innerHTML = "500+ <span style='font-size:12px;'>(Coming Soon)</span>";
-        }
-        
-        return questionCount;
-    } catch (error) {
-        console.error("Error loading question count:", error);
-        document.getElementById("courseQuestions").innerHTML = "500+";
-        return 0;
+        const snap = await db.collection("questions").where("subject", "==", subject).get();
+        const count = snap.size;
+        document.getElementById("courseQuestions").innerText =
+            count > 0 ? count : "500+ (Coming Soon)";
+    } catch (e) {
+        document.getElementById("courseQuestions").innerText = "500+";
     }
 }
 
@@ -364,58 +270,66 @@ async function loadQuestionCount() {
    LOAD COURSE DETAILS
 ==================================== */
 async function loadCourseDetails() {
-    document.getElementById("courseTitle").innerHTML = "📚 Loading...";
-    document.getElementById("courseDescription").innerHTML = "Please wait while we load course information.";
-    
     if (subjects[subject]) {
-        document.getElementById("courseTitle").innerText = subjects[subject].title;
-        document.getElementById("courseDescription").innerText = subjects[subject].description;
-        document.getElementById("courseLevel").innerText = subjects[subject].level;
-        
+        const s = subjects[subject];
+        document.getElementById("courseTitle").innerText       = s.title;
+        document.getElementById("courseDescription").innerText = s.description;
+        document.getElementById("courseLevel").innerText       = s.level;
+
         await loadQuestionCount();
-        
-        // Link to the customized quiz system
-        const quizBtn = document.getElementById("quizBtn");
-        quizBtn.onclick = function() {
-            window.location.href = `courses.html?subject=${subject}`;
+
+        document.getElementById("quizBtn").onclick = function() {
+            // Pass the RAW subject so normalizeSubject in courses.html handles it
+            window.location.href = `courses.html?subject=${rawSubject || subject}`;
         };
-        
-        // Dynamic markdown document targeting based on course selection
-        const resourcesBtn = document.getElementById("resourcesBtn");
-        if (resourcesBtn && subjects[subject].resourceLink) {
-            resourcesBtn.href = subjects[subject].resourceLink;
-        }
-        
+
+        const resBtn = document.getElementById("resourcesBtn");
+        if (resBtn && s.resourceLink) resBtn.href = s.resourceLink;
+
     } else {
-        document.getElementById("courseTitle").innerHTML = "⚠️ Course Not Found";
-        document.getElementById("courseDescription").innerHTML = "The requested course could not be found. Please go back to the dashboard and select a valid course.";
-        document.getElementById("courseLevel").innerHTML = "N/A";
-        document.getElementById("courseQuestions").innerHTML = "0";
-        
+        document.getElementById("courseTitle").innerHTML       = "⚠️ Course Not Found";
+        document.getElementById("courseDescription").innerHTML = "The requested course could not be found.";
+        document.getElementById("courseLevel").innerHTML       = "N/A";
+        document.getElementById("courseQuestions").innerHTML   = "0";
+
         const quizBtn = document.getElementById("quizBtn");
         quizBtn.disabled = true;
-        quizBtn.style.background = "#6c757d";
-        quizBtn.style.cursor = "not-allowed";
         quizBtn.innerText = "Course Unavailable";
-        
-        const resourcesBtn = document.getElementById("resourcesBtn");
-        if(resourcesBtn) {
-            resourcesBtn.style.background = "#6c757d";
-            resourcesBtn.style.cursor = "not-allowed";
-            resourcesBtn.onclick = (e) => e.preventDefault();
-        }
+
+        const resBtn = document.getElementById("resourcesBtn");
+        if (resBtn) { resBtn.style.background="#6c757d"; resBtn.onclick = e => e.preventDefault(); }
     }
 }
 
 /* ====================================
-   INITIALIZE PAGE
+   LOGOUT
+==================================== */
+function doLogout() {
+    localStorage.removeItem("currentUser");
+    localStorage.removeItem("devBypass");
+    if (typeof auth !== "undefined") auth.signOut().catch(() => {});
+    window.location.href = "login.html";
+}
+
+/* ====================================
+   INIT — supports dev bypass
 ==================================== */
 async function initializePage() {
-    // Standardizes auth checks and runs admin buttons cleanly
-    await initAuth(true);
-    await showAdminButtonIfNeeded("#userMenuArea");
-    
-    // Load dashboard course specs
+    const devBypass = localStorage.getItem("devBypass") === "true";
+
+    if (devBypass) {
+        const stored = localStorage.getItem("currentUser");
+        if (stored) {
+            const u = JSON.parse(stored);
+            document.getElementById("userNameDisplay").innerText = u.name || "Dev Admin";
+        }
+    } else {
+        await initAuth(true);
+        if (typeof getUserName === "function") {
+            document.getElementById("userNameDisplay").innerText = getUserName();
+        }
+    }
+
     await loadCourseDetails();
 }
 

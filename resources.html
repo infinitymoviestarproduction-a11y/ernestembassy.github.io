@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Resources - Ernest Embassy LMS</title>
+    
+    <!-- FIREBASE SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: #f4f7fb;
+            min-height: 100vh;
+        }
+        
+        nav {
+            background: #1a1a2e;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            border-bottom: 2px solid #ffd700;
+        }
+        
+        .logo {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #ffd700;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: 0.3s;
+            background: #667eea;
+            font-size: 0.9rem;
+        }
+        
+        .nav-links a:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-name {
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .filter-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        
+        .filter-btn {
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 10px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .resource-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .resource-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+        }
+        
+        .resource-subject {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+        
+        .resource-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .resource-date {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            margin-top: 8px;
+        }
+        
+        .resource-preview {
+            padding: 20px;
+            color: #555;
+            line-height: 1.6;
+            max-height: 120px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .resource-preview::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(transparent, white);
+        }
+        
+        .resource-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .read-more {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+        }
+        
+        .modal-header h2 {
+            margin-bottom: 5px;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: white;
+        }
+        
+        .modal-body {
+            padding: 25px;
+            line-height: 1.7;
+        }
+        
+        .modal-body h3 {
+            color: #667eea;
+            margin: 20px 0 10px;
+        }
+        
+        .loading, .empty-state {
+            text-align: center;
+            padding: 60px;
+            color: #888;
+        }
+        
+        footer {
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 60px;
+        }
+        
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                text-align: center;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="dashboard.html" class="logo">🎓 Ernest Embassy LMS</a>
+    <div class="nav-links">
+        <a href="dashboard.html">📊 Dashboard</a>
+        <a href="courses.html">📝 Practice</a>
+        <a href="class.html">💰 Challenge</a>
+        <a href="resources.html" style="background: #ffd700; color: #1a1a2e;">📚 Resources</a>
+        <a href="winners.html">🏆 Winners</a>
+        <a href="team.html">⭐ Team</a>
+    </div>
+    <div class="user-area">
+        <span class="user-name">Welcome, <span id="userNameDisplay">Student</span>!</span>
+        <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+    </div>
+</nav>
+
+<div class="hero">
+    <h1>📚 Educational Resources</h1>
+    <p>Free study notes, lesson materials, and revision guides</p>
+</div>
+
+<div class="container">
+    <div class="filter-section" id="filterSection">
+        <button class="filter-btn active" data-subject="all">📚 All</button>
+        <button class="filter-btn" data-subject="mathematics-ss1">📐 Mathematics</button>
+        <button class="filter-btn" data-subject="english-ss1">📖 English</button>
+        <button class="filter-btn" data-subject="digital-technology-ss1">💻 Digital Tech</button>
+        <button class="filter-btn" data-subject="igbo-ss1">🌍 Igbo</button>
+    </div>
+    
+    <div id="resourcesContainer">
+        <div class="loading">📚 Loading resources...</div>
+    </div>
+</div>
+
+<footer>
+    <p>© 2026 Ernest Embassy Digital Solutions | Empowering Education Through Technology</p>
+</footer>
+
+<div id="resourceModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Loading...</h2>
+            <div id="modalSubject" class="resource-subject"></div>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+        authDomain: "ernest-embassy-lms.firebaseapp.com",
+        projectId: "ernest-embassy-lms",
+        storageBucket: "ernest-embassy-lms.firebasestorage.app",
+        messagingSenderId: "204896421221",
+        appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
+    };
+    
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+    
+    let allLessons = [];
+    let currentFilter = "all";
+    
+    auth.onAuthStateChanged(async (user) => {
+        if (!user) {
+            window.location.href = "login.html";
+            return;
+        }
+        
+        const userNameElement = document.getElementById("userNameDisplay");
+        if (userNameElement) {
+            const userDoc = await db.collection("users").doc(user.uid).get();
+            const name = userDoc.exists ? userDoc.data().name : user.email.split('@')[0];
+            userNameElement.innerText = name;
+        }
+        
+        loadLessons();
+    });
+    
+    async function loadLessons() {
+        const container = document.getElementById("resourcesContainer");
+        container.innerHTML = '<div class="loading">📚 Loading resources...</div>';
+        
+        try {
+            const snapshot = await db.collection("lessons").orderBy("createdAt", "desc").get();
+            allLessons = [];
+            
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                allLessons.push({
+                    id: doc.id,
+                    subject: data.subject || "general",
+                    title: data.title || "Untitled",
+                    content: data.content || "No content",
+                    createdAt: data.createdAt
+                });
+            });
+            
+            renderLessons();
+        } catch (err) {
+            console.error("Error loading lessons:", err);
+            container.innerHTML = '<div class="empty-state">⚠️ Error loading resources. Please try again.</div>';
+        }
+    }
+    
+    function renderLessons() {
+        const container = document.getElementById("resourcesContainer");
+        
+        let filtered = allLessons;
+        if (currentFilter !== "all") {
+            filtered = allLessons.filter(l => l.subject === currentFilter);
+        }
+        
+        if (filtered.length === 0) {
+            container.innerHTML = '<div class="empty-state">📭 No resources found. Check back later!</div>';
+            return;
+        }
+        
+        let html = '<div class="resources-grid">';
+        
+        filtered.forEach(lesson => {
+            const subjectNames = {
+                "mathematics-ss1": "📐 Mathematics SS1",
+                "english-ss1": "📖 English SS1",
+                "digital-technology-ss1": "💻 Digital Technology SS1",
+                "igbo-ss1": "🌍 Igbo SS1"
+            };
+            const subjectName = subjectNames[lesson.subject] || "📚 General";
+            
+            const strippedContent = lesson.content.replace(/<[^>]*>/g, '');
+            const preview = strippedContent.substring(0, 150) + '...';
+            const date = lesson.createdAt ? lesson.createdAt.toDate().toLocaleDateString() : 'Recent';
+            
+            html += `
+                <div class="resource-card" onclick="openLesson('${lesson.id}')">
+                    <div class="resource-header">
+                        <div class="resource-subject">${subjectName}</div>
+                        <div class="resource-title">${escapeHtml(lesson.title)}</div>
+                        <div class="resource-date">📅 ${date}</div>
+                    </div>
+                    <div class="resource-preview">${escapeHtml(preview)}</div>
+                    <div class="resource-footer">
+                        <span>📖 Read full lesson</span>
+                        <button class="read-more" onclick="event.stopPropagation(); openLesson('${lesson.id}')">Read More →</button>
+                    </div>
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+        container.innerHTML = html;
+    }
+    
+    async function openLesson(lessonId) {
+        const lesson = allLessons.find(l => l.id === lessonId);
+        if (!lesson) return;
+        
+        const subjectNames = {
+            "mathematics-ss1": "📐 Mathematics SS1",
+            "english-ss1": "📖 English SS1",
+            "digital-technology-ss1": "💻 Digital Technology SS1",
+            "igbo-ss1": "🌍 Igbo SS1"
+        };
+        
+        document.getElementById("modalTitle").innerHTML = lesson.title;
+        document.getElementById("modalSubject").innerHTML = subjectNames[lesson.subject] || "📚 General";
+        document.getElementById("modalBody").innerHTML = lesson.content;
+        document.getElementById("resourceModal").classList.add("show");
+        document.body.style.overflow = "hidden";
+    }
+    
+    function closeModal() {
+        document.getElementById("resourceModal").classList.remove("show");
+        document.body.style.overflow = "auto";
+    }
+    
+    function escapeHtml(str) {
+        if (!str) return "";
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === "&") return "&amp;";
+            if (m === "<") return "&lt;";
+            if (m === ">") return "&gt;";
+            return m;
+        });
+    }
+    
+    function logout() {
+        auth.signOut().then(() => {
+            window.location.href = "login.html";
+        });
+    }
+    
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            currentFilter = btn.getAttribute("data-subject");
+            renderLessons();
+        });
+    });
+    
+    document.getElementById("resourceModal").addEventListener("click", function(e) {
+        if (e.target === this) closeModal();
+    });
+    
+    document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") closeModal();
+    });
+</script>
+
+</body>
+</html>

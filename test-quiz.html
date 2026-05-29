@@ -250,6 +250,19 @@
 </div>
 
 <script>
+/* ==========================================================
+   CRITICAL FIREBASE INITIALIZATION BYPASS
+   (If db isn't defined inside auth.js, this prevents failure)
+========================================================== */
+if (typeof db === "undefined") {
+    // If your app config isn't initialized yet, let's fall back or expect it from firebase window object
+    try {
+        window.db = firebase.firestore();
+    } catch(e) {
+        console.warn("Firebase App initialized via auth.js expected.");
+    }
+}
+
 /* ====================================
    SUBJECT KEY NORMALIZATION
 ==================================== */
@@ -258,6 +271,7 @@ function normalizeSubject(raw) {
         "english-language-ss1": "english-ss1",
         "igbo-language-ss1":    "igbo-ss1",
         "digital-technology-ss1": "digital-technology-ss1",
+        "data-processing-ss1": "data-processing-ss1",
         "mathematics-ss1":      "mathematics-ss1"
     };
     return map[raw] || raw;
@@ -271,7 +285,8 @@ const subjectNames = {
     "mathematics-ss1":        { name: "📐 Mathematics SS1",          desc: "Algebra, Geometry & Trigonometry" },
     "english-ss1":            { name: "📖 English Language SS1",      desc: "Grammar, comprehension & writing" },
     "digital-technology-ss1": { name: "💻 Digital Technology SS1",    desc: "Computer Fundamentals & ICT" },
-    "igbo-ss1":               { name: "🌍 Igbo Language SS1",         desc: "Vocabulary, grammar & translation" }
+    "data-processing-ss1":    { name: "📊 Data Processing SS1",       desc: "Data Concepts & Operating Systems" },
+    "igbo-ss1":               { name: "🌍 Igbo Language SS1",          desc: "Vocabulary, grammar & translation" }
 };
 
 /* ====================================
@@ -289,7 +304,13 @@ async function loadQuestions() {
     container.innerHTML = '<div class="loading"><div style="font-size:3rem;">📚</div><p>Loading questions...</p></div>';
 
     try {
-        let query = db.collection("questions");
+        // Safe access check to Firestore instance
+        const firestoreInstance = typeof db !== "undefined" ? db : window.db;
+        if (!firestoreInstance) {
+            throw new Error("Database instance (db) is missing. Check your Firebase initialization config.");
+        }
+
+        let query = firestoreInstance.collection("questions");
         if (subject) query = query.where("subject", "==", subject);
 
         const snap = await query.get();
@@ -307,6 +328,7 @@ async function loadQuestions() {
             });
         });
 
+        // Pick 10 random questions out of the returned documents
         questions    = all.sort(() => Math.random() - 0.5).slice(0, 10);
         userAnswers  = new Array(questions.length).fill(null);
 
@@ -314,8 +336,8 @@ async function loadQuestions() {
             container.innerHTML = `
                 <div class="loading">
                     <div style="font-size:3rem;">📭</div>
-                    <p>No questions for <strong>${subject || "this subject"}</strong> yet.</p>
-                    <p style="margin-top:10px; color:#888;">Admin needs to add questions via the admin panel.</p>
+                    <p>No questions for <strong>${subjectNames[subject] ? subjectNames[subject].name : (subject || "this subject")}</strong> yet.</p>
+                    <p style="margin-top:10px; color:#888;">Admin needs to add questions via the database panel.</p>
                     <button class="btn btn-home" style="margin-top:20px;" onclick="window.location.href='dashboard.html'">📊 Dashboard</button>
                 </div>
             `;
@@ -332,6 +354,7 @@ async function loadQuestions() {
             <div class="loading">
                 <div style="font-size:3rem;">⚠️</div>
                 <p>Error loading questions: ${error.message}</p>
+                <p style="font-size: 12px; color: #ff4d4d; margin-top: 5px;">Verify that your database credentials match and internet access is stable.</p>
                 <button class="btn" style="margin-top:20px;" onclick="location.reload()">🔄 Retry</button>
             </div>
         `;
@@ -366,7 +389,7 @@ function renderQuestions() {
                     ${optsHtml}
                 </div>
                 <div class="explanation" id="exp-${qIdx}">
-                    📖 <strong>Explanation:</strong> ${escapeHtml(q.explanation)}
+                    Ki 📖 <strong>Explanation:</strong> ${escapeHtml(q.explanation)}
                 </div>
             </div>
         `;
@@ -409,6 +432,7 @@ function updateScoreBoard() {
     let answered  = 0;
     questions.forEach((q, i) => {
         if (userAnswers[i] !== null) {
+            value = userAnswers[i];
             answered++;
             if (userAnswers[i] === q.correctIndex) correct++;
         }
@@ -433,10 +457,11 @@ async function submitQuiz() {
 
     const correct    = userAnswers.filter((ans, i) => ans === questions[i].correctIndex).length;
     const percentage = Math.round((correct / questions.length) * 100);
+    const firestoreInstance = typeof db !== "undefined" ? db : window.db;
 
-    if (currentUserId && currentUserId !== "dev-admin-uid-001") {
+    if (currentUserId && currentUserId !== "dev-admin-uid-001" && firestoreInstance) {
         try {
-            await db.collection("quiz_attempts").add({
+            await firestoreInstance.collection("quiz_attempts").add({
                 uid:          currentUserId,
                 subject:      subject || "general",
                 correct,
@@ -449,9 +474,9 @@ async function submitQuiz() {
     }
 
     let icon, msg;
-    if (percentage >= 80) { icon = "🏆"; msg = "🎉 Excellent! Outstanding performance!"; }
+    if (percentage >= 80) { icon = "🏆"; msg = "🎉 Excellent Work! Outstanding performance!"; }
     else if (percentage >= 60) { icon = "📚"; msg = "👍 Good job! Review missed questions and try again."; }
-    else { icon = "💪"; msg = "📚 Keep practising! Go through the explanations and retry."; }
+    else { icon = "💪"; msg = "📚 Keep practicing! Review the explanations carefully and retry."; }
 
     document.getElementById("questionsContainer").innerHTML = `
         <div class="result-box">
@@ -500,7 +525,9 @@ async function initializePage() {
             document.getElementById("userNameDisplay").innerText = u.name || "Dev Admin";
         }
     } else {
-        await initAuth(true);
+        if (typeof initAuth === "function") {
+            await initAuth(true);
+        }
         currentUserId = typeof currentUser !== "undefined" && currentUser ? currentUser.uid : null;
         const nameEl = document.getElementById("userNameDisplay");
         if (nameEl && typeof getUserName === "function") nameEl.innerText = getUserName();
@@ -514,6 +541,7 @@ async function initializePage() {
         document.getElementById("subjectDesc").innerText  = "Test your knowledge";
     }
 
+    // Run question loader safely after configuration validation
     await loadQuestions();
 }
 

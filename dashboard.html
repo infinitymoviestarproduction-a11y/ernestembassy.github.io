@@ -12,24 +12,12 @@
 <script src="auth.js"></script>
 
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 
-    body {
-        background: #0a0a0a;
-        color: #fff;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-    }
+    body { background: #0a0a0a; color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
 
-    /* GLOBAL NAV BAR CONTAINER */
     nav {
-        background: #000000;
+        background: #000;
         padding: 1rem 0;
         position: sticky;
         top: 0;
@@ -56,22 +44,19 @@
         font-size: 22px;
     }
 
-    .nav-links {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-    }
+    .nav-links { display: flex; align-items: center; gap: 20px; }
 
-    .nav-link {
-        color: #aaa;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: 500;
-        transition: color 0.2s;
-    }
+    .nav-link { color: #aaa; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+    .nav-link:hover, .nav-link.active { color: #ffd700; }
 
-    .nav-link:hover, .nav-link.active {
-        color: #ffd700;
+    /* Dev badge */
+    .dev-badge {
+        background: #f97316;
+        color: white;
+        font-size: 11px;
+        padding: 3px 8px;
+        border-radius: 10px;
+        font-weight: bold;
     }
 
     .btn-logout {
@@ -86,21 +71,10 @@
         transition: 0.2s;
     }
 
-    .btn-logout:hover {
-        background: #ff4d4d;
-        color: #fff;
-    }
+    .btn-logout:hover { background: #ff4d4d; color: #fff; }
 
-    /* MAIN CONTAINER INTERFACE */
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 30px 20px;
-        width: 100%;
-        flex: 1;
-    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; width: 100%; flex: 1; }
 
-    /* STUDENT PROFILE OVERVIEW BANNER */
     .welcome-banner {
         background: linear-gradient(135deg, #111 0%, #1c1a12 100%);
         border: 1px solid #222;
@@ -115,22 +89,10 @@
         box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     }
 
-    .welcome-text h1 {
-        font-size: 28px;
-        color: #ffd700;
-        margin-bottom: 5px;
-    }
+    .welcome-text h1 { font-size: 28px; color: #ffd700; margin-bottom: 5px; }
+    .welcome-text p  { color: #aaa; font-size: 15px; }
 
-    .welcome-text p {
-        color: #aaa;
-        font-size: 15px;
-    }
-
-    .profile-metrics {
-        display: flex;
-        gap: 15px;
-        flex-wrap: wrap;
-    }
+    .profile-metrics { display: flex; gap: 15px; flex-wrap: wrap; }
 
     .metric-badge {
         background: #161616;
@@ -141,26 +103,16 @@
         font-weight: 600;
     }
 
-    .metric-badge span {
-        color: #ffd700;
-        display: block;
-        font-size: 12px;
-        color: #888;
-        font-weight: normal;
-        margin-bottom: 2px;
-    }
+    .metric-badge span { color: #888; display: block; font-size: 12px; font-weight: normal; margin-bottom: 2px; }
 
-    /* UTILITY TASK DECKS */
     .task-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
         gap: 25px;
         margin-bottom: 40px;
     }
 
-    @media(max-width: 550px) {
-        .task-grid { grid-template-columns: 1fr; }
-    }
+    @media(max-width: 500px) { .task-grid { grid-template-columns: 1fr; } }
 
     .task-card {
         background: #111;
@@ -173,21 +125,8 @@
         box-shadow: 0 8px 20px rgba(0,0,0,0.4);
     }
 
-    .task-header h2 {
-        font-size: 20px;
-        color: #ffd700;
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .task-header p {
-        color: #aaa;
-        font-size: 14px;
-        line-height: 1.6;
-        margin-bottom: 20px;
-    }
+    .task-header h2 { font-size: 20px; color: #ffd700; margin-bottom: 10px; }
+    .task-header p  { color: #aaa; font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
 
     .btn-action {
         width: 100%;
@@ -207,21 +146,11 @@
         transition: 0.2s;
     }
 
-    .btn-action:hover {
-        background: #ffea70;
-    }
+    .btn-action:hover { background: #ffea70; }
 
-    .btn-secondary-action {
-        background: #222;
-        color: #fff;
-        border: 1px solid #444;
-    }
+    .btn-secondary-action { background: #222; color: #fff; border: 1px solid #444; }
+    .btn-secondary-action:hover { background: #333; }
 
-    .btn-secondary-action:hover {
-        background: #333;
-    }
-
-    /* SUBJECT CHANNELS DECK */
     .section-title {
         font-size: 22px;
         color: #ffd700;
@@ -248,23 +177,10 @@
         transition: transform 0.2s;
     }
 
-    .subject-card:hover {
-        transform: translateY(-3px);
-        border-color: #ffd700;
-    }
+    .subject-card:hover { transform: translateY(-3px); border-color: #ffd700; }
 
-    .subject-info h3 {
-        font-size: 17px;
-        color: #fff;
-        margin-bottom: 8px;
-    }
-
-    .subject-info p {
-        color: #888;
-        font-size: 13px;
-        line-height: 1.5;
-        margin-bottom: 20px;
-    }
+    .subject-info h3 { font-size: 17px; color: #fff; margin-bottom: 8px; }
+    .subject-info p  { color: #888; font-size: 13px; line-height: 1.5; margin-bottom: 20px; }
 
     .course-link {
         color: #ffd700;
@@ -276,11 +192,8 @@
         gap: 5px;
     }
 
-    .course-link:hover {
-        text-decoration: underline;
-    }
+    .course-link:hover { text-decoration: underline; }
 
-    /* FOOTER LAYER */
     footer {
         background: #000;
         border-top: 1px solid #222;
@@ -299,6 +212,7 @@
     <div class="nav-container">
         <a href="dashboard.html" class="logo-group">🎓 Ernest Embassy LMS</a>
         <div class="nav-links">
+            <span id="devIndicator" style="display:none;" class="dev-badge">🛠️ Dev Mode</span>
             <a href="dashboard.html" class="nav-link active">📊 Dashboard</a>
             <a href="winners.html" class="nav-link">🏆 Hall of Fame</a>
             <button class="btn-logout" onclick="triggerSessionLogout()">🚪 Logout</button>
@@ -311,15 +225,15 @@
     <div class="welcome-banner">
         <div class="welcome-text">
             <h1 id="welcomeUser">Welcome, Student!</h1>
-            <p>Keep advancing your cultural and technical educational milestones 🚀</p>
+            <p>Keep advancing your educational milestones 🚀</p>
         </div>
         <div class="profile-metrics">
             <div class="metric-badge">
                 <span>Class Rank</span>
-                自由 Active Learner
+                Active Learner
             </div>
             <div class="metric-badge">
-                <span>Accumulated Score</span>
+                <span>Best Score</span>
                 <span id="userScoreDisplay" style="display:inline; font-size:14px; color:#ffd700; font-weight:600;">0%</span>
             </div>
             <div class="metric-badge">
@@ -331,11 +245,11 @@
 
     <h2 class="section-title">⚡ Quick Learning Tasks</h2>
     <div class="task-grid">
-        
+
         <div class="task-card">
             <div class="task-header">
-                <h2>💰 Dynamic Challenge Quizzes</h2>
-                <p>Participate in timed assessment tournaments, hit threshold targets, download completion certificates, and verify your payout rankings in the official Hall of Fame ledger.</p>
+                <h2>💰 Challenge Quiz (Paid)</h2>
+                <p>Timed tournament quiz — 10 stages, ₦100 entry fee. Score 80%+ to win ₦1000 cash or enter the monthly ₦10,000 draw!</p>
             </div>
             <a href="class.html?mode=paid" class="btn-action">🏆 Enter Challenge Quiz</a>
         </div>
@@ -343,7 +257,7 @@
         <div class="task-card">
             <div class="task-header">
                 <h2>📂 Class Study Library</h2>
-                <p>Access your digital classroom library textbooks, study summaries, curriculum review guidelines, and shared workspace materials at any time.</p>
+                <p>Access your digital classroom textbooks, study summaries, curriculum guidelines, and shared workspace materials any time.</p>
             </div>
             <a href="library.html" class="btn-action btn-secondary-action">📚 Open Study Notes</a>
         </div>
@@ -356,33 +270,37 @@
         <div class="subject-card">
             <div class="subject-info">
                 <h3>💻 Digital Technology SS1</h3>
-                <p>Master computer fundamentals, networking, ICT infrastructure, internet tech, and foundational software engineering skills.</p>
+                <p>Computer fundamentals, networking, ICT, internet tech, and foundational software engineering.</p>
             </div>
+            <!-- KEY: digital-technology-ss1 (matches Firestore) -->
             <a href="class.html?mode=free&subject=digital-technology-ss1" class="course-link">Go to Course ➔</a>
         </div>
 
         <div class="subject-card">
             <div class="subject-info">
                 <h3>📐 Mathematics SS1</h3>
-                <p>Build comprehensive skills across algebra, coordinate geometry, structural quadratic equation systems, and WAEC/JAMB components.</p>
+                <p>Algebra, coordinate geometry, quadratic equations, and WAEC/JAMB preparation.</p>
             </div>
+            <!-- KEY: mathematics-ss1 (matches Firestore) -->
             <a href="class.html?mode=free&subject=mathematics-ss1" class="course-link">Go to Course ➔</a>
         </div>
 
         <div class="subject-card">
             <div class="subject-info">
                 <h3>📖 English Language SS1</h3>
-                <p>Strengthen grammatical competence, syntax error isolation, essay composition strategies, and reading comprehension speeds.</p>
+                <p>Grammar, essay writing, comprehension, and communication skills.</p>
             </div>
-            <a href="class.html?mode=free&subject=english-language-ss1" class="course-link">Go to Course ➔</a>
+            <!-- KEY: english-ss1 (matches Firestore) -->
+            <a href="class.html?mode=free&subject=english-ss1" class="course-link">Go to Course ➔</a>
         </div>
 
         <div class="subject-card">
             <div class="subject-info">
                 <h3>🌍 Igbo Language SS1</h3>
-                <p>Dive deep into cultural translation matrices, linguistic grammar rules, traditional terminology, and indigenous speech patterns.</p>
+                <p>Grammar, vocabulary, cultural translation, and indigenous speech patterns.</p>
             </div>
-            <a href="class.html?mode=free&subject=igbo-language-ss1" class="course-link">Go to Course ➔</a>
+            <!-- KEY: igbo-ss1 (matches Firestore) -->
+            <a href="class.html?mode=free&subject=igbo-ss1" class="course-link">Go to Course ➔</a>
         </div>
 
     </div>
@@ -395,14 +313,30 @@
 
 <script>
 /* ====================================
-   WORKSPACE LIFECYCLE MANAGEMENT
+   INIT DASHBOARD
 ==================================== */
 async function runDashboardInitialization() {
-    // Invoke secure routing shield from central auth code
+    const devBypass = localStorage.getItem("devBypass") === "true";
+
+    if (devBypass) {
+        // Show dev mode indicator
+        document.getElementById("devIndicator").style.display = "inline";
+
+        const stored = localStorage.getItem("currentUser");
+        if (stored) {
+            const u = JSON.parse(stored);
+            document.getElementById("welcomeUser").innerText = `Welcome, ${u.name || "Dev Admin"}! 🛠️`;
+            if (u.score !== undefined) {
+                document.getElementById("userScoreDisplay").innerText = `${u.score}%`;
+            }
+        }
+        return;
+    }
+
+    // Normal flow
     await initAuth(true);
-    
-    // Read and print local structural profile references safely
-    if (currentUser) {
+
+    if (typeof currentUser !== "undefined" && currentUser) {
         document.getElementById("welcomeUser").innerText = `Welcome, ${getUserName()}!`;
         if (currentUser.score !== undefined) {
             document.getElementById("userScoreDisplay").innerText = `${currentUser.score}%`;
@@ -411,328 +345,29 @@ async function runDashboardInitialization() {
 }
 
 /* ====================================
-   TRIGGER SECURITY LOGOUT SEQUENCE
+   LOGOUT — clears dev bypass too
 ==================================== */
 async function triggerSessionLogout() {
     try {
-        await auth.signOut();
         localStorage.removeItem("currentUser");
+        localStorage.removeItem("devBypass");
+
+        // Only call Firebase signOut if not in dev mode
+        if (typeof auth !== "undefined") {
+            await auth.signOut().catch(() => {});
+        }
+
         window.location.href = "login.html";
     } catch (e) {
-        console.error("Session disconnection exception framework triggered:", e);
-        alert("Logout operation timed out. Verify network layers.");
+        console.error("Logout error:", e);
+        window.location.href = "login.html";
     }
 }
 
-// Attach event triggers safely
 if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", runDashboardInitialization);
 } else {
     runDashboardInitialization();
-}
-
-/* ========================================================
-   TEMPORARY UPLOADER SEED DATA & FUNCTIONS
-   (Feel free to delete this block after seeding is complete)
-   ======================================================== */
-const mathematicsSS1Bank = [
-  {
-    q: "Simplify: 2 + 3 × 4",
-    o: ["20", "14", "24", "10"],
-    a: 1,
-    exp: "Multiply first according to BODMAS: 3 × 4 = 12, then add 2 to get 14.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is the value of 5²?",
-    o: ["10", "20", "25", "15"],
-    a: 2,
-    exp: "5² means 5 multiplied by itself: 5 × 5 = 25.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "Solve: 2x = 10",
-    o: ["2", "3", "5", "8"],
-    a: 2,
-    exp: "Divide both sides of the equation by 2: x = 10 / 2 → x = 5.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is ½ + ½?",
-    o: ["1", "2", "3", "¼"],
-    a: 0,
-    exp: "Two halves make one whole: ½ + ½ = 1.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "Find the LCM of 4 and 6",
-    o: ["12", "24", "18", "6"],
-    a: 0,
-    exp: "Multiples of 4: 4, 8, 12... Multiples of 6: 6, 12... The lowest common multiple is 12.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "Find the HCF of 12 and 18",
-    o: ["3", "6", "9", "12"],
-    a: 1,
-    exp: "The highest factor that divides both 12 and 18 evenly is 6.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 10% of 200?",
-    o: ["10", "20", "30", "40"],
-    a: 1,
-    exp: "10% of 200 is calculated as (10/100) × 200 = 20.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "Convert 0.5 to fraction",
-    o: ["1/5", "1/2", "2/5", "5/10"],
-    a: 1,
-    exp: "0.5 is five-tenths, which simplifies down to 1/2.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "Solve: x + 7 = 12",
-    o: ["3", "5", "7", "9"],
-    a: 1,
-    exp: "Subtract 7 from both sides: x = 12 − 7 → x = 5.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 3 × 3 × 3?",
-    o: ["9", "18", "27", "36"],
-    a: 2,
-    exp: "3 × 3 = 9, and 9 × 3 = 27.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is the square root of 16?",
-    o: ["2", "3", "4", "8"],
-    a: 2,
-    exp: "The square root of 16 is 4 because 4 × 4 = 16.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "Simplify: 6 ÷ 2(1+2)",
-    o: ["1", "3", "9", "6"],
-    a: 2,
-    exp: "Clear brackets first: 1+2=3. Then evaluate expression from left to right: 6 ÷ 2 × 3 = 3 × 3 = 9.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 1000 ÷ 10?",
-    o: ["10", "100", "1000", "1"],
-    a: 1,
-    exp: "1000 divided by 10 is 100.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 7 + 8?",
-    o: ["14", "15", "16", "17"],
-    a: 1,
-    exp: "Basic addition: 7 + 8 = 15.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "Find perimeter of a square with side 5cm",
-    o: ["10cm", "15cm", "20cm", "25cm"],
-    a: 2,
-    exp: "Perimeter of a square = 4 × side length → 4 × 5cm = 20cm.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is area of square side 4cm?",
-    o: ["8", "12", "16", "20"],
-    a: 2,
-    exp: "Area of a square = side × side → 4cm × 4cm = 16cm².",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 1/4 of 100?",
-    o: ["20", "25", "30", "40"],
-    a: 1,
-    exp: "One quarter of 100 is 100 divided by 4, which is 25.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 9 × 2?",
-    o: ["11", "16", "18", "20"],
-    a: 2,
-    exp: "Multiplication table: 9 × 2 = 18.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 15 − 7?",
-    o: ["6", "7", "8", "9"],
-    a: 2,
-    exp: "Subtraction: 15 minus 7 leaves 8.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 20 ÷ 4?",
-    o: ["2", "4", "5", "6"],
-    a: 2,
-    exp: "Division: 20 divided into 4 parts equals 5.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 8 × 5?",
-    o: ["35", "40", "45", "50"],
-    a: 1,
-    exp: "8 multiplied by 5 equals 40.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 12 ÷ 3?",
-    o: ["2", "3", "4", "5"],
-    a: 2,
-    exp: "12 divided by 3 equals 4.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 6²?",
-    o: ["12", "30", "36", "42"],
-    a: 2,
-    exp: "6 squared means 6 × 6 = 36.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 14 + 6?",
-    o: ["18", "20", "22", "24"],
-    a: 1,
-    exp: "14 plus 6 equals 20.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 50% of 100?",
-    o: ["25", "50", "75", "100"],
-    a: 1,
-    exp: "50% represents exactly half, and half of 100 is 50.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 3/4 of 100?",
-    o: ["50", "60", "70", "75"],
-    a: 3,
-    exp: "Three quarters of 100 is calculated as 100 × 0.75 = 75.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 11 + 9?",
-    o: ["18", "19", "20", "21"],
-    a: 2,
-    exp: "11 plus 9 equals 20.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 30 ÷ 5?",
-    o: ["4", "5", "6", "7"],
-    a: 2,
-    exp: "30 divided by 5 equals 6.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 2³?",
-    o: ["4", "6", "8", "10"],
-    a: 2,
-    exp: "2 cubed means multiplying 2 three times: 2 × 2 × 2 = 8.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 9 − 4?",
-    o: ["3", "4", "5", "6"],
-    a: 2,
-    exp: "9 minus 4 equals 5.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 7 × 7?",
-    o: ["42", "45", "49", "56"],
-    a: 2,
-    exp: "7 times 7 equals 49.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 100 ÷ 25?",
-    o: ["2", "3", "4", "5"],
-    a: 2,
-    exp: "100 divided by 25 equals 4.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 5 + 5 + 5?",
-    o: ["10", "15", "20", "25"],
-    a: 1,
-    exp: "Adding 5 three times equals 15.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 16 ÷ 2?",
-    o: ["6", "7", "8", "9"],
-    a: 2,
-    exp: "Half of 16 is 8.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 4 × 6?",
-    o: ["20", "22", "24", "26"],
-    a: 2,
-    exp: "4 multiplied by 6 equals 24.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 3 + 9?",
-    o: ["10", "11", "12", "13"],
-    a: 2,
-    exp: "3 plus 9 equals 12.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 20 − 5?",
-    o: ["10", "12", "15", "18"],
-    a: 2,
-    exp: "20 minus 5 equals 15.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 6 + 6?",
-    o: ["10", "11", "12", "13"],
-    a: 2,
-    exp: "6 plus 6 equals 12.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 18 ÷ 3?",
-    o: ["5", "6", "7", "8"],
-    a: 1,
-    exp: "18 divided by 3 equals 6.",
-    subject: "mathematics-ss1"
-  },
-  {
-    q: "What is 10 × 10?",
-    o: ["50", "80", "90", "100"],
-    a: 3,
-    exp: "10 times 10 equals 100.",
-    subject: "mathematics-ss1"
-  }
-];
-
-async function massUploadQuestions() {
-    console.log("🚀 Starting database upload protocol...");
-    let successCount = 0;
-    
-    for (const item of mathematicsSS1Bank) {
-        try {
-            await db.collection("questions").add(item);
-            successCount++;
-            console.log(`✅ Uploaded successfully: "${item.q.substring(0, 25)}..."`);
-        } catch (error) {
-            console.error("❌ Failed to push document context:", error);
-        }
-    }
-    
-    alert(`🎉 Success! Packed and configured ${successCount} questions into Firebase instantly.`);
 }
 </script>
 

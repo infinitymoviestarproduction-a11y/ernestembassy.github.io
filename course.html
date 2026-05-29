@@ -279,8 +279,8 @@ async function loadCourseDetails() {
         await loadQuestionCount();
 
         document.getElementById("quizBtn").onclick = function() {
-            // Pass the RAW subject so normalizeSubject in courses.html handles it
-            window.location.href = `courses.html?subject=${rawSubject || subject}`;
+            // Pointing to quiz.html (your subject practice engine file)
+            window.location.href = `quiz.html?subject=${rawSubject || subject}`;
         };
 
         const resBtn = document.getElementById("resourcesBtn");
@@ -339,6 +339,5 @@ if (document.readyState === "loading") {
     initializePage();
 }
 </script>
-
 </body>
 </html>

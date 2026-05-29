@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Upload - Admin Only | Ernest Embassy LMS</title>
+    
+    <!-- FIREBASE SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-storage-compat.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a2e;
+            color: white;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            background: #1a1a3e;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+        
+        .tab-pane {
+            display: none;
+            background: #1a1a3e;
+            padding: 30px;
+            border-radius: 20px;
+        }
+        
+        .tab-pane.active {
+            display: block;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 400px;
+            background: #0f0f2e;
+            border: 1px solid #333;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            margin: 15px 0;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background: #0f0f2e;
+            border: 1px solid #333;
+            color: white;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.3s;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #ffc107, #e0a800);
+            color: #1a1a2e;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #0f0f2e;
+        }
+        
+        .success {
+            color: #90ee90;
+        }
+        
+        .error {
+            color: #ff9999;
+        }
+        
+        .progress-bar {
+            background: #333;
+            border-radius: 10px;
+            height: 20px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+            border-radius: 10px;
+        }
+        
+        pre {
+            background: #0f0f2e;
+            padding: 15px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-size: 12px;
+            margin: 15px 0;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: #0f0f2e;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        hr {
+            border-color: #333;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .tabs {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>📤 Bulk Upload Manager</h1>
+        <p>Upload questions, lessons, and materials in bulk</p>
+    </div>
+    
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('questions')">📝 Bulk Questions</button>
+        <button class="tab-btn" onclick="showTab('lessons')">📚 Bulk Lessons</button>
+        <button class="tab-btn" onclick="showTab('stats')">📊 Database Stats</button>
+        <button class="tab-btn" onclick="showTab('template')">📋 Template</button>
+    </div>
+    
+    <!-- BULK QUESTIONS TAB -->
+    <div id="questionsTab" class="tab-pane active">
+        <h2>📝 Bulk Upload Questions</h2>
+        <p>Paste your questions in JSON format below. The system will upload them all at once.</p>
+        
+        <textarea id="questionsJson" placeholder='{
+  "questions": [
+    {
+      "subject": "mathematics-ss1",
+      "q": "What is 2 + 2?",
+      "o": ["A. 3", "B. 4", "C. 5", "D. 6"],
+      "a": 1,
+      "stage": 1,
+      "exp": "2 + 2 equals 4"
+    }
+  ]
+}'></textarea>
+        
+        <div>
+            <button onclick="uploadQuestions()">🚀 Upload Questions</button>
+            <button class="btn-warning" onclick="clearQuestionsForm()">🗑 Clear</button>
+        </div>
+        
+        <div id="questionsStatus" class="status"></div>
+    </div>
+    
+    <!-- BULK LESSONS TAB -->
+    <div id="lessonsTab" class="tab-pane">
+        <h2>📚 Bulk Upload Lessons/Resources</h2>
+        <p>Paste your lessons in JSON format below.</p>
+        
+        <textarea id="lessonsJson" placeholder='{
+  "lessons": [
+    {
+      "subject": "mathematics-ss1",
+      "title": "Introduction to Algebra",
+      "content": "<h3>What is Algebra?</h3><p>Algebra is the study of mathematical symbols...</p>",
+      "featured": true
+    }
+  ]
+}'></textarea>
+        
+        <div>
+            <button onclick="uploadLessons()">📚 Upload Lessons</button>
+            <button class="btn-warning" onclick="clearLessonsForm()">🗑 Clear</button>
+        </div>
+        
+        <div id="lessonsStatus" class="status"></div>
+    </div>
+    
+    <!-- STATS TAB -->
+    <div id="statsTab" class="tab-pane">
+        <h2>📊 Database Statistics</h2>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalQuestions">0</div>
+                <div>Total Questions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalLessons">0</div>
+                <div>Total Lessons</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalUsers">0</div>
+                <div>Total Users</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalAttempts">0</div>
+                <div>Quiz Attempts</div>
+            </div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="mathQuestions">0</div>
+                <div>📐 Mathematics</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="englishQuestions">0</div>
+                <div>📖 English</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="digitalQuestions">0</div>
+                <div>💻 Digital Tech</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="igboQuestions">0</div>
+                <div>🌍 Igbo</div>
+            </div>
+        </div>
+        
+        <button onclick="refreshStats()">🔄 Refresh Stats</button>
+        <button class="btn-danger" onclick="confirmDeleteAll()">⚠️ Delete All Questions</button>
+        
+        <div id="statsStatus" class="status"></div>
+    </div>
+    
+    <!-- TEMPLATE TAB -->
+    <div id="templateTab" class="tab-pane">
+        <h2>📋 JSON Template Guide</h2>
+        
+        <h3>Question Template:</h3>
+        <pre>{
+  "questions": [
+    {
+      "subject": "mathematics-ss1",     // subject: mathematics-ss1, english-ss1, digital-technology-ss1, igbo-ss1
+      "q": "What is the value of x?",
+      "o": ["A. 2", "B. 4", "C. 6", "D. 8"],
+      "a": 1,                          // index of correct answer (0,1,2,3)
+      "stage": 1,                      // difficulty stage 1-10
+      "exp": "Full explanation here"
+    }
+  ]
+}</pre>
+
+        <h3>Lesson Template:</h3>
+        <pre>{
+  "lessons": [
+    {
+      "subject": "mathematics-ss1",
+      "title": "Lesson Title",
+      "content": "&lt;h3&gt;Heading&lt;/h3&gt;&lt;p&gt;Content here&lt;/p&gt;",
+      "featured": true
+    }
+  ]
+}</pre>
+
+        <h3>Available Subjects:</h3>
+        <ul style="margin-left: 20px; line-height: 1.8;">
+            <li><code>mathematics-ss1</code> - 📐 Mathematics SS1</li>
+            <li><code>english-ss1</code> - 📖 English Language SS1</li>
+            <li><code>digital-technology-ss1</code> - 💻 Digital Technology SS1</li>
+            <li><code>igbo-ss1</code> - 🌍 Igbo Language SS1</li>
+        </ul>
+        
+        <hr>
+        
+        <h3>Stage Difficulty Levels:</h3>
+        <ul style="margin-left: 20px; line-height: 1.8;">
+            <li><code>stage: 1-2</code> - Easy (Basic recall)</li>
+            <li><code>stage: 3-4</code> - Medium (Understanding)</li>
+            <li><code>stage: 5-6</code> - Hard (Application)</li>
+            <li><code>stage: 7-8</code> - Expert (Analysis)</li>
+            <li><code>stage: 9-10</code> - Master (Synthesis)</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    // Firebase Config
+    const firebaseConfig = {
+        apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+        authDomain: "ernest-embassy-lms.firebaseapp.com",
+        projectId: "ernest-embassy-lms",
+        storageBucket: "ernest-embassy-lms.firebasestorage.app",
+        messagingSenderId: "204896421221",
+        appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
+    };
+    
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+    
+    let currentUser = null;
+    
+    // Check admin access
+    auth.onAuthStateChanged(async (user) => {
+        if (!user) {
+            window.location.href = "login.html";
+            return;
+        }
+        
+        currentUser = user;
+        
+        // Check if user is admin
+        const userDoc = await db.collection("users").doc(user.uid).get();
+        if (userDoc.exists && userDoc.data().role !== "admin") {
+            alert("⚠️ Admin access required!");
+            window.location.href = "dashboard.html";
+            return;
+        }
+        
+        refreshStats();
+    });
+    
+    // Tab switching
+    function showTab(tabName) {
+        document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        
+        if (tabName === 'questions') {
+            document.getElementById('questionsTab').classList.add('active');
+            document.querySelectorAll('.tab-btn')[0].classList.add('active');
+        } else if (tabName === 'lessons') {
+            document.getElementById('lessonsTab').classList.add('active');
+            document.querySelectorAll('.tab-btn')[1].classList.add('active');
+        } else if (tabName === 'stats') {
+            document.getElementById('statsTab').classList.add('active');
+            document.querySelectorAll('.tab-btn')[2].classList.add('active');
+            refreshStats();
+        } else if (tabName === 'template') {
+            document.getElementById('templateTab').classList.add('active');
+            document.querySelectorAll('.tab-btn')[3].classList.add('active');
+        }
+    }
+    
+    // Upload Questions
+    async function uploadQuestions() {
+        const jsonText = document.getElementById('questionsJson').value;
+        const statusDiv = document.getElementById('questionsStatus');
+        
+        if (!jsonText.trim()) {
+            statusDiv.innerHTML = '<div class="error">❌ Please paste JSON data</div>';
+            return;
+        }
+        
+        let data;
+        try {
+            const parsed = JSON.parse(jsonText);
+            data = parsed.questions || parsed;
+            if (!Array.isArray(data)) {
+                throw new Error("Data must contain a 'questions' array");
+            }
+        } catch (e) {
+            statusDiv.innerHTML = `<div class="error">❌ Invalid JSON: ${e.message}</div>`;
+            return;
+        }
+        
+        statusDiv.innerHTML = '<div>⏳ Uploading questions... <div class="progress-bar"><div class="progress-fill" id="uploadProgress" style="width: 0%"></div></div></div>';
+        
+        let successCount = 0;
+        let errorCount = 0;
+        
+        for (let i = 0; i < data.length; i++) {
+            const q = data[i];
+            try {
+                await db.collection("questions").add({
+                    subject: q.subject || "general",
+                    q: q.q,
+                    o: q.o || [],
+                    a: q.a || 0,
+                    stage: q.stage || 1,
+                    exp: q.exp || "No explanation provided",
+                    createdAt: new Date()
+                });
+                successCount++;
+            } catch (err) {
+                errorCount++;
+                console.error(`Error uploading question ${i+1}:`, err);
+            }
+            
+            const progress = ((i + 1) / data.length) * 100;
+            document.getElementById('uploadProgress').style.width = `${progress}%`;
+        }
+        
+        statusDiv.innerHTML = `
+            <div class="success">✅ Upload Complete!</div>
+            <div>✅ Successfully uploaded: ${successCount} questions</div>
+            <div>❌ Failed: ${errorCount} questions</div>
+        `;
+        
+        refreshStats();
+    }
+    
+    // Upload Lessons
+    async function uploadLessons() {
+        const jsonText = document.getElementById('lessonsJson').value;
+        const statusDiv = document.getElementById('lessonsStatus');
+        
+        if (!jsonText.trim()) {
+            statusDiv.innerHTML = '<div class="error">❌ Please paste JSON data</div>';
+            return;
+        }
+        
+        let data;
+        try {
+            const parsed = JSON.parse(jsonText);
+            data = parsed.lessons || parsed;
+            if (!Array.isArray(data)) {
+                throw new Error("Data must contain a 'lessons' array");
+            }
+        } catch (e) {
+            statusDiv.innerHTML = `<div class="error">❌ Invalid JSON: ${e.message}</div>`;
+            return;
+        }
+        
+        statusDiv.innerHTML = '<div>⏳ Uploading lessons...</div>';
+        
+        let successCount = 0;
+        let errorCount = 0;
+        
+        for (let i = 0; i < data.length; i++) {
+            const lesson = data[i];
+            try {
+                await db.collection("lessons").add({
+                    subject: lesson.subject || "general",
+                    title: lesson.title || "Untitled Lesson",
+                    content: lesson.content || "No content",
+                    featured: lesson.featured || false,
+                    createdAt: new Date()
+                });
+                successCount++;
+            } catch (err) {
+                errorCount++;
+            }
+        }
+        
+        statusDiv.innerHTML = `
+            <div class="success">✅ Upload Complete!</div>
+            <div>✅ Successfully uploaded: ${successCount} lessons</div>
+            <div>❌ Failed: ${errorCount} lessons</div>
+        `;
+        
+        refreshStats();
+    }
+    
+    // Refresh Statistics
+    async function refreshStats() {
+        try {
+            const questionsSnap = await db.collection("questions").get();
+            const lessonsSnap = await db.collection("lessons").get();
+            const usersSnap = await db.collection("users").get();
+            const attemptsSnap = await db.collection("quizAttempts").get();
+            
+            document.getElementById("totalQuestions").innerText = questionsSnap.size;
+            document.getElementById("totalLessons").innerText = lessonsSnap.size;
+            document.getElementById("totalUsers").innerText = usersSnap.size;
+            document.getElementById("totalAttempts").innerText = attemptsSnap.size;
+            
+            // Subject breakdown
+            let math = 0, english = 0, digital = 0, igbo = 0;
+            questionsSnap.forEach(doc => {
+                const subject = doc.data().subject;
+                if (subject === "mathematics-ss1") math++;
+                else if (subject === "english-ss1") english++;
+                else if (subject === "digital-technology-ss1") digital++;
+                else if (subject === "igbo-ss1") igbo++;
+            });
+            
+            document.getElementById("mathQuestions").innerText = math;
+            document.getElementById("englishQuestions").innerText = english;
+            document.getElementById("digitalQuestions").innerText = digital;
+            document.getElementById("igboQuestions").innerText = igbo;
+            
+            document.getElementById("statsStatus").innerHTML = '<div class="success">✅ Stats refreshed</div>';
+            setTimeout(() => {
+                document.getElementById("statsStatus").innerHTML = '';
+            }, 2000);
+            
+        } catch (err) {
+            console.error("Error refreshing stats:", err);
+        }
+    }
+    
+    // Clear forms
+    function clearQuestionsForm() {
+        document.getElementById('questionsJson').value = '';
+    }
+    
+    function clearLessonsForm() {
+        document.getElementById('lessonsJson').value = '';
+    }
+    
+    // Delete all questions (with confirmation)
+    async function confirmDeleteAll() {
+        if (confirm("⚠️ WARNING: This will delete ALL questions from the database!\n\nAre you absolutely sure?")) {
+            if (confirm("LAST WARNING: This action cannot be undone. Type 'DELETE' to confirm.")) {
+                const confirmation = prompt('Type "DELETE" to confirm:');
+                if (confirmation === "DELETE") {
+                    await deleteAllQuestions();
+                } else {
+                    alert("Deletion cancelled.");
+                }
+            }
+        }
+    }
+    
+    async function deleteAllQuestions() {
+        const statusDiv = document.getElementById("statsStatus");
+        statusDiv.innerHTML = '<div>⏳ Deleting all questions...</div>';
+        
+        const questionsSnap = await db.collection("questions").get();
+        let deletedCount = 0;
+        
+        for (const doc of questionsSnap.docs) {
+            await db.collection("questions").doc(doc.id).delete();
+            deletedCount++;
+        }
+        
+        statusDiv.innerHTML = `<div class="success">✅ Deleted ${deletedCount} questions</div>`;
+        refreshStats();
+    }
+</script>
+
+</body>
+</html>

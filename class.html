@@ -4,17 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paid Challenge Quiz - Ernest Embassy LMS</title>
-    
+
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -24,7 +20,7 @@
         }
 
         nav {
-            background: #000000;
+            background: #000;
             padding: 1rem 0;
             position: sticky;
             top: 0;
@@ -61,9 +57,7 @@
             font-size: 0.85rem;
         }
 
-        .nav-links a:hover {
-            color: #ffd700;
-        }
+        .nav-links a:hover { color: #ffd700; }
 
         .hero {
             background: linear-gradient(135deg, #111 0%, #1c1a12 100%);
@@ -73,11 +67,7 @@
             padding: 50px 20px;
         }
 
-        .hero h1 {
-            font-size: 2rem;
-            color: #ffd700;
-            margin-bottom: 15px;
-        }
+        .hero h1 { font-size: 2rem; color: #ffd700; margin-bottom: 15px; }
 
         .container {
             max-width: 1200px;
@@ -108,20 +98,9 @@
             border-color: #ffd700;
         }
 
-        .resource-icon {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        .resource-card h3 {
-            color: #ffd700;
-            margin-bottom: 10px;
-        }
-
-        .resource-card p {
-            color: #aaa;
-            font-size: 0.85rem;
-        }
+        .resource-icon { font-size: 2.5rem; margin-bottom: 10px; }
+        .resource-card h3 { color: #ffd700; margin-bottom: 10px; }
+        .resource-card p { color: #aaa; font-size: 0.85rem; }
 
         .free-badge {
             display: inline-block;
@@ -148,10 +127,7 @@
             border-bottom: 2px solid #ffd700;
         }
 
-        .quiz-header h2 {
-            font-size: 1.8rem;
-            color: #ffd700;
-        }
+        .quiz-header h2 { font-size: 1.8rem; color: #ffd700; }
 
         .stage-indicator {
             display: flex;
@@ -175,21 +151,10 @@
             transition: all 0.3s;
         }
 
-        .stage.active {
-            background: #ffd700;
-            color: #000;
-            transform: scale(1.1);
-        }
+        .stage.active { background: #ffd700; color: #000; transform: scale(1.1); }
+        .stage.completed { background: #28a745; color: white; }
 
-        .stage.completed {
-            background: #28a745;
-            color: white;
-        }
-
-        .timer {
-            text-align: center;
-            margin: 20px 0;
-        }
+        .timer { text-align: center; margin: 20px 0; }
 
         .timer-circle {
             width: 100px;
@@ -205,9 +170,7 @@
             margin: 0 auto;
         }
 
-        .timer-circle.warning {
-            animation: pulse 0.5s infinite;
-        }
+        .timer-circle.warning { animation: pulse 0.5s infinite; }
 
         @keyframes pulse {
             0% { transform: scale(1); }
@@ -215,12 +178,9 @@
             100% { transform: scale(1); }
         }
 
-        .timer-label {
-            margin-top: 8px;
-            font-size: 0.9rem;
-            color: #aaa;
-        }
+        .timer-label { margin-top: 8px; font-size: 0.9rem; color: #aaa; }
 
+        /* ===== QUESTION BOX ===== */
         .question-box {
             background: #161616;
             border-radius: 20px;
@@ -230,59 +190,104 @@
             border: 1px solid #ffd700;
         }
 
-        .question {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #ffd700;
-            line-height: 1.4;
+        .question-number {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
+        .question {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #ffd700;
+            line-height: 1.5;
+        }
+
+        /* ===== OPTIONS ===== */
         .options-list {
             list-style: none;
             margin: 20px 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .options-list { grid-template-columns: 1fr; }
         }
 
         .options-list li {
-            background: #2a2a2a;
-            margin: 12px 0;
-            padding: 15px 20px;
+            background: #1e1e1e;
+            padding: 16px 20px;
             border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s;
-            border: 1px solid #444;
+            transition: all 0.25s;
+            border: 2px solid #333;
             font-size: 1rem;
-            color: #fff;
+            color: #e0e0e0;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .options-list li .opt-label {
+            background: #333;
+            color: #ffd700;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.85rem;
+            flex-shrink: 0;
         }
 
         .options-list li:hover {
-            background: #333;
-            transform: translateX(5px);
+            background: #2a2a2a;
             border-color: #ffd700;
+            color: #fff;
+            transform: translateY(-2px);
         }
 
         .options-list li.correct-highlight {
-            background: #28a745 !important;
-            border-color: #ffd700;
-            color: white;
+            background: #1a3a2a !important;
+            border-color: #28a745 !important;
+            color: #90ee90 !important;
+        }
+
+        .options-list li.correct-highlight .opt-label {
+            background: #28a745;
+            color: #fff;
         }
 
         .options-list li.wrong-highlight {
-            background: #dc3545 !important;
-            border-color: #ffd700;
-            color: white;
+            background: #3a1a1a !important;
+            border-color: #dc3545 !important;
+            color: #ff9999 !important;
+        }
+
+        .options-list li.wrong-highlight .opt-label {
+            background: #dc3545;
+            color: #fff;
         }
 
         .options-list li.disabled-option {
             pointer-events: none;
-            opacity: 0.8;
+            opacity: 0.85;
         }
 
+        /* ===== FEEDBACK ===== */
         .feedback {
             margin: 15px 0;
-            padding: 15px;
+            padding: 18px;
             border-radius: 12px;
             font-size: 0.95rem;
-            line-height: 1.5;
+            line-height: 1.6;
             display: none;
         }
 
@@ -300,6 +305,23 @@
             display: block;
         }
 
+        /* ===== PROGRESS ===== */
+        .progress-bar-wrap {
+            background: #222;
+            border-radius: 10px;
+            height: 8px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: #ffd700;
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+
+        /* ===== BUTTONS ===== */
         .nav-buttons {
             display: flex;
             justify-content: space-between;
@@ -322,54 +344,26 @@
             transition: 0.2s;
         }
 
-        .btn:hover {
-            background: #ffea70;
-            transform: translateY(-2px);
-        }
+        .btn:hover { background: #ffea70; transform: translateY(-2px); }
+        .btn:disabled { background: #444; color: #888; cursor: not-allowed; transform: none; }
+        .btn-home { background: #222; color: #fff; border: 1px solid #444; }
+        .btn-home:hover { background: #333; }
+        .btn-secondary { background: #6c757d; color: #fff; }
+        .btn-success { background: #28a745; color: #fff; }
 
-        .btn:disabled {
-            background: #444;
-            color: #888;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-home {
-            background: #222;
-            color: #fff;
-            border: 1px solid #444;
-        }
-
-        .btn-home:hover {
-            background: #333;
-        }
-
-        .btn-secondary {
-            background: #6c757d;
-            color: #fff;
-        }
-
-        .btn-success {
-            background: #28a745;
-            color: #fff;
-        }
-
+        /* ===== PAYMENT MODAL ===== */
         .payment-modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: rgba(0,0,0,0.95);
             z-index: 2000;
             justify-content: center;
             align-items: center;
         }
 
-        .payment-modal.show {
-            display: flex;
-        }
+        .payment-modal.show { display: flex; }
 
         .payment-content {
             background: #1a1a1a;
@@ -381,16 +375,8 @@
             border: 1px solid #ffd700;
         }
 
-        .payment-content h2 {
-            color: #ffd700;
-        }
-
-        .payment-amount {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #28a745;
-            margin: 15px 0;
-        }
+        .payment-content h2 { color: #ffd700; }
+        .payment-amount { font-size: 2rem; font-weight: bold; color: #28a745; margin: 15px 0; }
 
         .payment-details {
             background: #0a0a0a;
@@ -400,28 +386,13 @@
             text-align: left;
         }
 
-        .payment-details p {
-            margin: 10px 0;
-            color: #fff;
-        }
+        .payment-details p { margin: 10px 0; color: #fff; }
+        .payment-details strong { color: #ffd700; }
 
-        .payment-details strong {
-            color: #ffd700;
-        }
-
-        .result-box {
-            text-align: center;
-            padding: 30px;
-        }
-
-        .result-icon {
-            font-size: 4rem;
-            margin-bottom: 15px;
-        }
-
-        .result-box h2 {
-            color: #ffd700;
-        }
+        /* ===== RESULT ===== */
+        .result-box { text-align: center; padding: 30px; }
+        .result-icon { font-size: 4rem; margin-bottom: 15px; }
+        .result-box h2 { color: #ffd700; }
 
         .reward-card {
             background: #1a1a1a;
@@ -450,23 +421,10 @@
         }
 
         @media (max-width: 768px) {
-            .nav-container {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            .question {
-                font-size: 1.2rem;
-            }
-            .options-list li {
-                font-size: 0.9rem;
-                padding: 12px 15px;
-            }
-            .btn {
-                padding: 10px 15px;
-                font-size: 0.85rem;
-                min-width: 100px;
-            }
+            .nav-container { flex-direction: column; gap: 15px; text-align: center; }
+            .question { font-size: 1.15rem; }
+            .options-list li { font-size: 0.9rem; padding: 12px 15px; }
+            .btn { padding: 10px 15px; font-size: 0.85rem; min-width: 100px; }
         }
     </style>
 </head>
@@ -492,6 +450,7 @@
 </div>
 
 <div class="container">
+    <!-- Subject Quick-Access Cards -->
     <div class="resources-grid">
         <a href="class.html?mode=free&subject=mathematics-ss1" class="resource-card">
             <div class="resource-icon">📐</div>
@@ -499,7 +458,7 @@
             <p>Complete notes & questions</p>
             <span class="free-badge">🎓 FREE ACCESS</span>
         </a>
-        <a href="class.html?mode=free&subject=english-language-ss1" class="resource-card">
+        <a href="class.html?mode=free&subject=english-ss1" class="resource-card">
             <div class="resource-icon">📖</div>
             <h3>English SS1</h3>
             <p>Grammar & Comprehension</p>
@@ -511,7 +470,7 @@
             <p>Computer Fundamentals</p>
             <span class="free-badge">🎓 FREE ACCESS</span>
         </a>
-        <a href="class.html?mode=free&subject=igbo-language-ss1" class="resource-card">
+        <a href="class.html?mode=free&subject=igbo-ss1" class="resource-card">
             <div class="resource-icon">🌍</div>
             <h3>Igbo Language SS1</h3>
             <p>Alphabet & Culture</p>
@@ -546,7 +505,7 @@
 
 <script>
     // ============================================
-    // FIREBASE CONFIGURATION
+    // FIREBASE CONFIG
     // ============================================
     const firebaseConfig = {
         apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
@@ -557,112 +516,162 @@
         appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
     };
 
-    firebase.initializeApp(firebaseConfig);
+    // Only init if not already done by auth.js
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+
     const db = firebase.firestore();
     const auth = firebase.auth();
 
     // ============================================
+    // SUBJECT KEY NORMALIZER
+    // Fixes mismatches between dashboard links and
+    // Firestore stored keys (e.g. english-language-ss1 → english-ss1)
+    // ============================================
+    function normalizeSubject(raw) {
+        const map = {
+            "english-language-ss1": "english-ss1",
+            "igbo-language-ss1":    "igbo-ss1",
+            "digital-technology-ss1": "digital-technology-ss1",
+            "mathematics-ss1":      "mathematics-ss1"
+        };
+        return map[raw] || raw;
+    }
+
+    // ============================================
     // QUIZ STATE
     // ============================================
-    let quizActive = false;
-    let answerLocked = false;
-    let currentStage = 1;
-    let currentQuestionIndex = 0;
-    let currentQuestions = [];
-    let userAnswers = [];
-    let timerInterval = null;
-    let timeLeft = 10;
-    let currentUser = { name: "Quiz Champion", email: "", uid: "" };
-    let allQuestionsCache = [];
-    let quizPaid = false;
+    let quizActive     = false;
+    let answerLocked   = false;
+    let currentStage   = 1;
+    let currentQIdx    = 0;
+    let currentQs      = [];
+    let userAnswers    = [];
+    let timerInterval  = null;
+    let timeLeft       = 10;
+    let allQsCache     = [];
+    let quizPaid       = false;
+
+    // Read URL params
+    const urlParams = new URLSearchParams(window.location.search);
+    const mode      = urlParams.get("mode") || "paid";
+    const rawSubject = urlParams.get("subject") || "";
+    const subject   = normalizeSubject(rawSubject);
+
+    let currentUser = { name: "Quiz Champion", email: "", uid: "dev" };
 
     const PAYMENT_DETAILS = {
-        accountName: "Damian Anielozie Okafor",
-        opayNumber: "08032607809",
-        bankName: "First Bank Plc",
+        accountName:       "Damian Anielozie Okafor",
+        opayNumber:        "08032607809",
+        bankName:          "First Bank Plc",
         bankAccountNumber: "3113254386"
     };
 
     // ============================================
-    // AUTH CHECK
+    // AUTH CHECK  — supports dev bypass
     // ============================================
-    auth.onAuthStateChanged(async (user) => {
-        if (user) {
-            currentUser.uid = user.uid;
-            currentUser.email = user.email;
-            
-            try {
-                const userDoc = await db.collection("users").doc(user.uid).get();
-                if (userDoc.exists) {
-                    currentUser.name = userDoc.data().name || user.email.split('@')[0];
-                } else {
+    function initQuizPage() {
+        const devBypass = localStorage.getItem("devBypass") === "true";
+
+        if (devBypass) {
+            // Use stored dev user
+            const stored = localStorage.getItem("currentUser");
+            if (stored) {
+                const u = JSON.parse(stored);
+                currentUser = { name: u.name || "Dev Admin", email: u.email || "", uid: u.uid || "dev" };
+            }
+            console.log("🛠️ Dev bypass active — skipping Firebase auth");
+            loadQuestionsFromFirestore();
+            return;
+        }
+
+        // Normal Firebase auth check
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser.uid   = user.uid;
+                currentUser.email = user.email;
+                try {
+                    const userDoc = await db.collection("users").doc(user.uid).get();
+                    currentUser.name = userDoc.exists
+                        ? (userDoc.data().name || user.email.split('@')[0])
+                        : user.email.split('@')[0];
+                } catch {
                     currentUser.name = user.email.split('@')[0];
                 }
-            } catch (err) {
-                currentUser.name = user.email.split('@')[0];
+                loadQuestionsFromFirestore();
+            } else {
+                window.location.href = "login.html";
             }
-            
-            console.log("✅ User logged in:", currentUser.name);
-            loadQuestionsFromFirestore();
-        } else {
-            window.location.href = "login.html";
-        }
-    });
+        });
+    }
 
     // ============================================
-    // LOAD QUESTIONS FROM FIRESTORE
+    // LOAD QUESTIONS
     // ============================================
     async function loadQuestionsFromFirestore() {
         try {
-            const querySnapshot = await db.collection("questions").get();
-            allQuestionsCache = [];
-            
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                // Map the matching structure from your seeded database array (q, o, a, exp)
-                allQuestionsCache.push({
-                    id: doc.id,
-                    text: data.q,
-                    options: data.o || [],
-                    correct: data.o && data.a !== undefined ? data.o[data.a] : "",
-                    correctIndex: data.a,
-                    explanation: data.exp || "No explanation provided.",
-                    subject: data.subject || "mathematics-ss1"
+            let query = db.collection("questions");
+
+            // Filter by subject if provided in URL
+            if (subject) {
+                query = query.where("subject", "==", subject);
+            }
+
+            const snap = await query.get();
+            allQsCache = [];
+
+            snap.forEach((doc) => {
+                const d = doc.data();
+                allQsCache.push({
+                    id:           doc.id,
+                    text:         d.q,
+                    options:      d.o || [],
+                    correctIndex: typeof d.a === "number" ? d.a : 0,
+                    explanation:  d.exp || "No explanation provided.",
+                    subject:      d.subject || "general"
                 });
             });
-            
-            console.log(`✅ Loaded ${allQuestionsCache.length} structural questions from Firestore`);
-            
-            if (allQuestionsCache.length === 0) {
+
+            console.log(`✅ Loaded ${allQsCache.length} questions`);
+
+            if (allQsCache.length === 0) {
                 document.getElementById('quizContainer').innerHTML = `
-                    <div style="text-align: center; padding: 40px;">
-                        <div class="timer-circle" style="margin: 0 auto 20px; background: #ffd700; color: #000; animation: none;">📚</div>
-                        <h3 style="color: #ffd700;">No Questions Yet</h3>
-                        <p style="color: #fff;">Please wait for questions to be added by admin.</p>
-                        <button class="btn btn-home" onclick="window.location.href='dashboard.html'">📊 Dashboard</button>
+                    <div style="text-align:center; padding:40px;">
+                        <div class="timer-circle" style="margin:0 auto 20px; background:#ffd700; color:#000; animation:none;">📭</div>
+                        <h3 style="color:#ffd700;">No Questions Yet</h3>
+                        <p style="color:#aaa; margin:10px 0;">Subject: <strong style="color:#ffd700;">${subject || "All"}</strong></p>
+                        <p style="color:#aaa;">Ask admin to add questions, or try another subject.</p>
+                        <button class="btn btn-home" style="margin-top:20px;" onclick="window.location.href='dashboard.html'">📊 Dashboard</button>
                     </div>
                 `;
                 return;
             }
-            
+
             document.getElementById('quizContainer').innerHTML = `
-                <div style="text-align: center; padding: 40px;">
-                    <div style="margin-bottom: 20px;">
-                        <span style="background: #28a745; color: #fff; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;">${allQuestionsCache.length} Challenge Questions Ready</span>
+                <div style="text-align:center; padding:40px;">
+                    <div style="margin-bottom:20px;">
+                        <span style="background:#28a745; color:#fff; padding:5px 15px; border-radius:20px; font-size:0.8rem; font-weight:bold;">
+                            ${allQsCache.length} Questions Ready
+                        </span>
                     </div>
-                    <button class="btn" onclick="startQuiz()">🎯 Start Challenge Quiz (₦100)</button>
-                    <div style="margin-top: 20px;">
+                    <p style="color:#aaa; margin-bottom:25px;">Welcome, <strong style="color:#ffd700;">${currentUser.name}</strong>!</p>
+                    ${mode === "paid"
+                        ? `<button class="btn" onclick="startQuiz()">🎯 Start Challenge Quiz (₦100)</button>`
+                        : `<button class="btn btn-success" onclick="activateQuiz()">🎓 Start Free Practice</button>`
+                    }
+                    <div style="margin-top:20px;">
                         <button class="btn btn-home" onclick="window.location.href='dashboard.html'">📊 Dashboard</button>
                     </div>
                 </div>
             `;
-            
+
         } catch (error) {
             console.error("Error loading questions:", error);
             document.getElementById('quizContainer').innerHTML = `
-                <div style="text-align: center; padding: 40px; color: #ff6b6b;">
-                    <h3>⚠️ Error Loading Questions</h3>
-                    <p>Could not connect to database.</p>
+                <div style="text-align:center; padding:40px; color:#ff6b6b;">
+                    <h3>⚠️ Could not load questions</h3>
+                    <p style="margin:10px 0;">${error.message}</p>
                     <button class="btn btn-home" onclick="window.location.href='dashboard.html'">📊 Dashboard</button>
                 </div>
             `;
@@ -670,13 +679,11 @@
     }
 
     // ============================================
-    // QUIZ FUNCTIONS
+    // QUIZ START FLOW
     // ============================================
     function startQuiz() {
-        const userName = prompt("Enter your name for Hall of Fame:", currentUser.name);
-        if (userName && userName.trim()) {
-            currentUser.name = userName.trim();
-        }
+        const name = prompt("Enter your name for Hall of Fame:", currentUser.name);
+        if (name && name.trim()) currentUser.name = name.trim();
         showPaymentModal();
     }
 
@@ -693,102 +700,102 @@
                     <p><strong>Name:</strong> ${PAYMENT_DETAILS.accountName}</p>
                 </div>
                 <button class="btn btn-success" onclick="processPayment()">✅ I Have Paid</button>
-                <button class="btn btn-secondary" style="margin-top: 10px;" onclick="this.closest('.payment-modal').remove()">Cancel</button>
-                <p style="margin-top: 15px; font-size: 0.7rem; color: #aaa;">After payment, click "I Have Paid" to activate your quiz.</p>
+                <button class="btn btn-secondary" style="margin-top:10px;" onclick="this.closest('.payment-modal').remove()">Cancel</button>
+                <p style="margin-top:15px; font-size:0.7rem; color:#aaa;">Click "I Have Paid" after completing your transfer.</p>
             </div>
         `;
         document.body.appendChild(modal);
     }
 
     function processPayment() {
-        const message = `✅ QUIZ PAYMENT\nName: ${currentUser.name}\nEmail: ${currentUser.email}\nAmount: ₦100\nPlease activate my quiz.`;
-        window.open(`https://wa.me/2348032607809?text=${encodeURIComponent(message)}`, '_blank');
-        
+        const msg = `✅ QUIZ PAYMENT\nName: ${currentUser.name}\nEmail: ${currentUser.email}\nAmount: ₦100\nPlease activate my quiz.`;
+        window.open(`https://wa.me/2348032607809?text=${encodeURIComponent(msg)}`, '_blank');
         document.querySelector('.payment-modal')?.remove();
         document.getElementById('quizContainer').innerHTML = `
-            <div style="text-align: center; padding: 40px;">
-                <div class="timer-circle" style="margin: 0 auto 20px; background: #ffd700; color: #000; animation: none;">✅</div>
-                <h3 style="color: #ffd700;">Payment Confirmed!</h3>
-                <p style="color: #fff;">Your quiz is now activating...</p>
+            <div style="text-align:center; padding:40px;">
+                <div class="timer-circle" style="margin:0 auto 20px; background:#ffd700; color:#000; animation:none;">✅</div>
+                <h3 style="color:#ffd700;">Payment Confirmed!</h3>
+                <p style="color:#fff;">Activating your quiz...</p>
             </div>
         `;
-        setTimeout(() => activateQuiz(), 2000);
+        setTimeout(activateQuiz, 2000);
     }
 
     function activateQuiz() {
-        quizPaid = true;
+        quizPaid   = true;
         quizActive = true;
         currentStage = 1;
         loadStageQuestions();
     }
 
+    // ============================================
+    // LOAD STAGE QUESTIONS
+    // ============================================
     function loadStageQuestions() {
-        // Since database objects don't explicitly store stages, we partition the 40 questions dynamically
-        // 4 random questions per stage across 10 stages total
-        const questionsPerStage = 4;
-        const startIndex = (currentStage - 1) * questionsPerStage;
-        
-        // Shuffle everything once or slice based on calculation
-        let stageQuestions = allQuestionsCache.slice(startIndex, startIndex + questionsPerStage);
-        
-        if (stageQuestions.length === 0) {
-            stageQuestions = [{ 
-                text: `🎉 Stage ${currentStage} Complete! 🎉`, 
-                options: ["A. Continue to Next Stage"], 
-                correct: "A. Continue to Next Stage", 
-                explanation: "Click Next to proceed to the next tier.",
-                subject: "mathematics-ss1"
-            }];
+        const perStage = 4;
+        const start    = (currentStage - 1) * perStage;
+        let stageQs    = allQsCache.slice(start, start + perStage);
+
+        if (stageQs.length === 0) {
+            stageQs = allQsCache.slice(0, perStage);
         }
-        
-        currentQuestions = stageQuestions.sort(() => Math.random() - 0.5);
-        currentQuestionIndex = 0;
-        userAnswers = new Array(currentQuestions.length).fill(null);
+
+        // Shuffle stage questions for variety
+        currentQs   = [...stageQs].sort(() => Math.random() - 0.5);
+        currentQIdx = 0;
+        userAnswers = new Array(currentQs.length).fill(null);
         answerLocked = false;
         renderQuiz();
         startTimer();
     }
 
+    // ============================================
+    // RENDER QUIZ
+    // ============================================
     function renderQuiz() {
         const container = document.getElementById('quizContainer');
-        
+
+        // Stage indicators
         let stagesHtml = '<div class="stage-indicator">';
         for (let i = 1; i <= 10; i++) {
-            let stageClass = '';
-            if (i === currentStage) stageClass = 'active';
-            else if (i < currentStage) stageClass = 'completed';
-            stagesHtml += `<div class="stage ${stageClass}">${i}</div>`;
+            let cls = '';
+            if (i === currentStage) cls = 'active';
+            else if (i < currentStage) cls = 'completed';
+            stagesHtml += `<div class="stage ${cls}">${i}</div>`;
         }
         stagesHtml += '</div>';
-        
-        if (currentQuestionIndex >= currentQuestions.length) {
-            if (currentStage === 10) {
-                saveQuizResult();
-                showCompletion();
-                return;
-            } else {
-                currentStage++;
-                loadStageQuestions();
-                return;
-            }
+
+        if (currentQIdx >= currentQs.length) {
+            if (currentStage === 10) { saveQuizResult(); showCompletion(); return; }
+            else { currentStage++; loadStageQuestions(); return; }
         }
-        
-        const q = currentQuestions[currentQuestionIndex];
+
+        const q = currentQs[currentQIdx];
+        const labels = ['A', 'B', 'C', 'D'];
+        const progress = Math.round((currentQIdx / currentQs.length) * 100);
+
+        // Build options using index-based selection (no string matching bugs)
         let optionsHtml = '';
-        if (q.options && q.options.length > 0) {
-            q.options.forEach(opt => {
-                optionsHtml += `<li onclick="selectAnswer('${opt.replace(/'/g, "\\'")}')">${opt}</li>`;
-            });
-        }
-        
+        q.options.forEach((opt, idx) => {
+            optionsHtml += `
+                <li onclick="selectAnswer(${idx})" data-idx="${idx}">
+                    <span class="opt-label">${labels[idx] || idx + 1}</span>
+                    <span class="opt-text">${escapeHtml(opt)}</span>
+                </li>`;
+        });
+
         container.innerHTML = `
             ${stagesHtml}
+            <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" style="width: ${progress}%"></div>
+            </div>
             <div class="timer">
                 <div class="timer-circle" id="timerCircle">10</div>
                 <div class="timer-label">seconds left</div>
             </div>
             <div class="question-box">
-                <div class="question">${q.text}</div>
+                <div class="question-number">Question ${currentQIdx + 1} of ${currentQs.length} — Stage ${currentStage}</div>
+                <div class="question">${escapeHtml(q.text)}</div>
             </div>
             <ul class="options-list" id="optionsList">
                 ${optionsHtml}
@@ -801,196 +808,202 @@
         `;
     }
 
-    function selectAnswer(selected) {
+    // ============================================
+    // SELECT ANSWER — uses INDEX not string matching
+    // ============================================
+    function selectAnswer(selectedIdx) {
         if (!quizActive || answerLocked) return;
         answerLocked = true;
         clearInterval(timerInterval);
-        
-        const q = currentQuestions[currentQuestionIndex];
-        userAnswers[currentQuestionIndex] = selected;
-        const isCorrect = (selected === q.correct);
-        
+
+        const q          = currentQs[currentQIdx];
+        const isCorrect  = (selectedIdx === q.correctIndex);
+        userAnswers[currentQIdx] = selectedIdx;
+
+        // Style all options
         const options = document.querySelectorAll('.options-list li');
-        options.forEach(opt => {
-            opt.style.pointerEvents = 'none';
-            if (opt.textContent === q.correct) opt.classList.add('correct-highlight');
-            if (opt.textContent === selected && !isCorrect) opt.classList.add('wrong-highlight');
+        options.forEach((li, idx) => {
+            li.classList.add('disabled-option');
+            li.style.pointerEvents = 'none';
+            if (idx === q.correctIndex)            li.classList.add('correct-highlight');
+            if (idx === selectedIdx && !isCorrect) li.classList.add('wrong-highlight');
         });
-        
+
         const feedback = document.getElementById('feedback');
         if (isCorrect) {
             feedback.className = 'feedback correct';
-            feedback.innerHTML = `✅ <strong>CORRECT!</strong><br>${q.explanation}`;
+            feedback.innerHTML = `✅ <strong>CORRECT!</strong><br><br>📖 ${escapeHtml(q.explanation)}`;
         } else {
+            const correctText = q.options[q.correctIndex] || "";
             feedback.className = 'feedback wrong';
-            feedback.innerHTML = `❌ <strong>WRONG!</strong><br>Correct answer: <strong style="color: #90ee90;">${q.correct}</strong><br><br>📖 ${q.explanation}`;
-            
+            feedback.innerHTML = `❌ <strong>WRONG!</strong> Correct answer: <strong style="color:#90ee90;">${escapeHtml(correctText)}</strong><br><br>📖 ${escapeHtml(q.explanation)}`;
+
             if (currentStage >= 5) {
-                feedback.innerHTML += `<br><br><strong>⚠️ You failed Stage ${currentStage}! Returning to Stage 1...</strong>`;
-                setTimeout(() => {
-                    currentStage = 1;
-                    loadStageQuestions();
-                }, 3000);
+                feedback.innerHTML += `<br><br><strong>⚠️ Failed Stage ${currentStage}! Returning to Stage 1...</strong>`;
+                setTimeout(() => { currentStage = 1; loadStageQuestions(); }, 3000);
                 return;
             }
         }
-        
+
         document.getElementById('nextBtn').disabled = false;
     }
 
+    // ============================================
+    // NEXT QUESTION
+    // ============================================
     function nextQuestion() {
-        if (userAnswers[currentQuestionIndex] === null) {
-            alert('Please select an answer!');
-            return;
-        }
-        
-        if (currentQuestionIndex + 1 < currentQuestions.length) {
-            currentQuestionIndex++;
+        if (userAnswers[currentQIdx] === null) { alert('Please select an answer!'); return; }
+
+        if (currentQIdx + 1 < currentQs.length) {
+            currentQIdx++;
             answerLocked = false;
             renderQuiz();
             startTimer();
         } else {
-            if (currentStage === 10) {
-                saveQuizResult();
-                showCompletion();
-            } else {
-                currentStage++;
-                loadStageQuestions();
-            }
+            if (currentStage === 10) { saveQuizResult(); showCompletion(); }
+            else { currentStage++; loadStageQuestions(); }
         }
     }
 
+    // ============================================
+    // TIMER
+    // ============================================
     function startTimer() {
         if (timerInterval) clearInterval(timerInterval);
         timeLeft = 10;
-        const timerCircle = document.getElementById('timerCircle');
-        if (timerCircle) timerCircle.textContent = timeLeft;
-        
+        const tc = document.getElementById('timerCircle');
+        if (tc) tc.textContent = timeLeft;
+
         timerInterval = setInterval(() => {
             if (!quizActive) return;
             timeLeft--;
-            const tc = document.getElementById('timerCircle');
-            if (tc) tc.textContent = timeLeft;
-            if (timeLeft <= 3 && tc) tc.classList.add('warning');
+            const t = document.getElementById('timerCircle');
+            if (t) { t.textContent = timeLeft; if (timeLeft <= 3) t.classList.add('warning'); }
+
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
                 if (!answerLocked) {
                     answerLocked = true;
-                    const q = currentQuestions[currentQuestionIndex];
-                    const options = document.querySelectorAll('.options-list li');
-                    options.forEach(opt => {
-                        opt.style.pointerEvents = 'none';
-                        if (opt.textContent === q.correct) opt.classList.add('correct-highlight');
+                    const q = currentQs[currentQIdx];
+                    const opts = document.querySelectorAll('.options-list li');
+                    opts.forEach((li, idx) => {
+                        li.style.pointerEvents = 'none';
+                        if (idx === q.correctIndex) li.classList.add('correct-highlight');
                     });
-                    const feedback = document.getElementById('feedback');
-                    feedback.className = 'feedback wrong';
-                    feedback.innerHTML = `⏰ <strong>TIME'S UP!</strong><br>Correct answer: <strong style="color: #90ee90;">${q.correct}</strong><br><br>📖 ${q.explanation}`;
+                    const fb = document.getElementById('feedback');
+                    fb.className = 'feedback wrong';
+                    fb.innerHTML = `⏰ <strong>TIME'S UP!</strong> Correct: <strong style="color:#90ee90;">${escapeHtml(q.options[q.correctIndex])}</strong><br><br>📖 ${escapeHtml(q.explanation)}`;
                     document.getElementById('nextBtn').disabled = false;
                 }
             }
         }, 1000);
     }
 
-    async function saveQuizResult() {
-        const score = calculateScore();
-        
-        try {
-            await db.collection("quizAttempts").add({
-                userId: currentUser.uid,
-                userName: currentUser.name,
-                score: score,
-                stage: currentStage,
-                date: new Date(),
-                quizType: "paid"
-            });
-            
-            const userRef = db.collection("users").doc(currentUser.uid);
-            const userDoc = await userRef.get();
-            if (userDoc.exists) {
-                const currentScore = userDoc.data().score || 0;
-                if (score > currentScore) {
-                    await userRef.update({ score: score });
-                }
-            }
-            
-            console.log("✅ Quiz result saved to Firestore");
-        } catch (err) {
-            console.error("Error saving quiz result:", err);
-        }
-    }
-
+    // ============================================
+    // SCORE & SAVE
+    // ============================================
     function calculateScore() {
         let correct = 0;
-        currentQuestions.forEach((q, i) => {
-            if (userAnswers[i] === q.correct) correct++;
-        });
-        return Math.round((correct / currentQuestions.length) * 100);
+        currentQs.forEach((q, i) => { if (userAnswers[i] === q.correctIndex) correct++; });
+        return Math.round((correct / currentQs.length) * 100);
+    }
+
+    async function saveQuizResult() {
+        const score = calculateScore();
+        try {
+            await db.collection("quizAttempts").add({
+                userId:   currentUser.uid,
+                userName: currentUser.name,
+                score,
+                stage:    currentStage,
+                date:     new Date(),
+                quizType: "paid"
+            });
+            if (currentUser.uid !== "dev") {
+                const userRef = db.collection("users").doc(currentUser.uid);
+                const userDoc = await userRef.get();
+                if (userDoc.exists && score > (userDoc.data().score || 0)) {
+                    await userRef.update({ score });
+                }
+            }
+        } catch (err) { console.error("Save error:", err); }
     }
 
     function determineReward(score) {
         const winners = JSON.parse(localStorage.getItem('quizWinners') || '[]');
-        const thisMonth = new Date().getMonth();
-        const thisYear = new Date().getFullYear();
-        const monthlyCashWinners = winners.filter(w => {
-            const wDate = new Date(w.date);
-            return wDate.getMonth() === thisMonth && wDate.getFullYear() === thisYear && w.reward === 'cash';
+        const now = new Date();
+        const cashCount = winners.filter(w => {
+            const d = new Date(w.date);
+            return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear() && w.reward === 'cash';
         }).length;
-        const MAX_CASH_WINNERS = 10;
-        
-        if (score >= 80 && monthlyCashWinners < MAX_CASH_WINNERS) {
-            return { type: 'cash', message: '💰 You won ₦1000! Money will be sent to your Opay.', amount: 1000 };
-        } else if (score >= 70) {
-            return { type: 'draw', message: '🎟️ You entered the monthly draw for ₦10,000!', amount: 0 };
-        } else {
-            return { type: 'certificate', message: '🏆 Certificate of Excellence! Download below.', amount: 0 };
-        }
+
+        if (score >= 80 && cashCount < 10) return { type: 'cash',        message: '💰 You won ₦1000! Money will be sent to your Opay.' };
+        if (score >= 70)                   return { type: 'draw',        message: '🎟️ You entered the monthly draw for ₦10,000!' };
+        return                                    { type: 'certificate', message: '🏆 Certificate of Excellence! Download below.' };
     }
 
     function downloadCertificate() {
         const score = calculateScore();
-        const certContent = `CERTIFICATE OF EXCELLENCE\n\nPresented to: ${currentUser.name}\nChallenge Quiz Completion\nScore: ${score}%\nDate: ${new Date().toLocaleDateString()}\n\nErnest Embassy Digital Solutions`;
-        const blob = new Blob([certContent], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `Certificate_${currentUser.name.replace(/\s/g, '_')}.txt`;
-        a.click();
-        URL.revokeObjectURL(url);
+        const cert  = `CERTIFICATE OF EXCELLENCE\n\nPresented to: ${currentUser.name}\nChallenge Quiz Completion\nScore: ${score}%\nDate: ${new Date().toLocaleDateString()}\n\nErnest Embassy Digital Solutions`;
+        const blob  = new Blob([cert], { type: 'text/plain' });
+        const url   = URL.createObjectURL(blob);
+        const a     = document.createElement('a');
+        a.href = url; a.download = `Certificate_${currentUser.name.replace(/\s/g,'_')}.txt`;
+        a.click(); URL.revokeObjectURL(url);
     }
 
     function showCompletion() {
         clearInterval(timerInterval);
         quizActive = false;
-        const score = calculateScore();
+        const score  = calculateScore();
         const reward = determineReward(score);
-        
+
         const winners = JSON.parse(localStorage.getItem('quizWinners') || '[]');
-        winners.push({ name: currentUser.name, score: score, date: new Date().toISOString(), reward: reward.type });
+        winners.push({ name: currentUser.name, score, date: new Date().toISOString(), reward: reward.type });
         localStorage.setItem('quizWinners', JSON.stringify(winners));
-        
+
         document.getElementById('quizContainer').innerHTML = `
             <div class="result-box">
-                <div class="result-icon success">🏆</div>
-                <h2>Congratulations ${currentUser.name}!</h2>
-                <p style="font-size: 1.5rem; margin: 15px 0;">Score: ${score}%</p>
+                <div class="result-icon">🏆</div>
+                <h2>Congratulations, ${escapeHtml(currentUser.name)}!</h2>
+                <p style="font-size:1.5rem; margin:15px 0;">Score: ${score}%</p>
                 <div class="reward-card"><p>🎁 ${reward.message}</p></div>
-                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
+                <div style="display:flex; gap:15px; justify-content:center; margin-top:20px; flex-wrap:wrap;">
                     <button class="btn btn-success" onclick="downloadCertificate()">📄 Certificate</button>
                     <button class="btn" onclick="resetQuiz()">🔄 Try Again</button>
                     <button class="btn btn-home" onclick="window.location.href='winners.html'">🏆 Hall of Fame</button>
                     <button class="btn btn-secondary" onclick="window.location.href='dashboard.html'">📊 Dashboard</button>
                 </div>
-                ${reward.type === 'cash' ? '<p style="margin-top: 20px; font-size: 0.85rem; color: #90ee90;">💰 Send your Opay number via WhatsApp to claim ₦1000!</p>' : ''}
+                ${reward.type === 'cash' ? '<p style="margin-top:20px; font-size:0.85rem; color:#90ee90;">💰 Send your Opay number via WhatsApp to claim ₦1000!</p>' : ''}
             </div>
         `;
     }
 
     function resetQuiz() {
-        currentStage = 1;
-        currentQuestionIndex = 0;
-        answerLocked = false;
-        quizActive = true;
+        currentStage = 1; currentQIdx = 0;
+        answerLocked = false; quizActive = true;
         loadStageQuestions();
+    }
+
+    // ============================================
+    // ESCAPE HTML HELPER
+    // ============================================
+    function escapeHtml(str) {
+        if (!str) return "";
+        return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;");
+    }
+
+    // ============================================
+    // BOOT
+    // ============================================
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initQuizPage);
+    } else {
+        initQuizPage();
     }
 </script>
 

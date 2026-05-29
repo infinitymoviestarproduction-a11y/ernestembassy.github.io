@@ -251,17 +251,9 @@
 
 <script>
 /* ==========================================================
-   CRITICAL FIREBASE INITIALIZATION BYPASS
-   (If db isn't defined inside auth.js, this prevents failure)
+   FIREBASE SAFETY LAYER CONNECTIONS
 ========================================================== */
-if (typeof db === "undefined") {
-    // If your app config isn't initialized yet, let's fall back or expect it from firebase window object
-    try {
-        window.db = firebase.firestore();
-    } catch(e) {
-        console.warn("Firebase App initialized via auth.js expected.");
-    }
-}
+const firestoreInstance = (typeof db !== "undefined") ? db : ((typeof firebase !== "undefined") ? firebase.firestore() : null);
 
 /* ====================================
    SUBJECT KEY NORMALIZATION
@@ -304,10 +296,8 @@ async function loadQuestions() {
     container.innerHTML = '<div class="loading"><div style="font-size:3rem;">📚</div><p>Loading questions...</p></div>';
 
     try {
-        // Safe access check to Firestore instance
-        const firestoreInstance = typeof db !== "undefined" ? db : window.db;
         if (!firestoreInstance) {
-            throw new Error("Database instance (db) is missing. Check your Firebase initialization config.");
+            throw new Error("Firestore instance (db) could not be resolved from auth.js context.");
         }
 
         let query = firestoreInstance.collection("questions");
@@ -328,7 +318,7 @@ async function loadQuestions() {
             });
         });
 
-        // Pick 10 random questions out of the returned documents
+        // Pick up to 10 random questions out of the returned documents
         questions    = all.sort(() => Math.random() - 0.5).slice(0, 10);
         userAnswers  = new Array(questions.length).fill(null);
 
@@ -354,7 +344,7 @@ async function loadQuestions() {
             <div class="loading">
                 <div style="font-size:3rem;">⚠️</div>
                 <p>Error loading questions: ${error.message}</p>
-                <p style="font-size: 12px; color: #ff4d4d; margin-top: 5px;">Verify that your database credentials match and internet access is stable.</p>
+                <p style="font-size: 12px; color: #ff4d4d; margin-top: 5px;">Verify that your Firestore collection rules allow public reads.</p>
                 <button class="btn" style="margin-top:20px;" onclick="location.reload()">🔄 Retry</button>
             </div>
         `;
@@ -362,7 +352,7 @@ async function loadQuestions() {
 }
 
 /* ====================================
-   RENDER ALL QUESTIONS AT ONCE
+   RENDER QUESTIONS
 ==================================== */
 function renderQuestions() {
     const container = document.getElementById("questionsContainer");
@@ -389,7 +379,7 @@ function renderQuestions() {
                     ${optsHtml}
                 </div>
                 <div class="explanation" id="exp-${qIdx}">
-                    Ki 📖 <strong>Explanation:</strong> ${escapeHtml(q.explanation)}
+                    📖 <strong>Explanation:</strong> ${escapeHtml(q.explanation)}
                 </div>
             </div>
         `;
@@ -432,7 +422,6 @@ function updateScoreBoard() {
     let answered  = 0;
     questions.forEach((q, i) => {
         if (userAnswers[i] !== null) {
-            value = userAnswers[i];
             answered++;
             if (userAnswers[i] === q.correctIndex) correct++;
         }
@@ -457,9 +446,8 @@ async function submitQuiz() {
 
     const correct    = userAnswers.filter((ans, i) => ans === questions[i].correctIndex).length;
     const percentage = Math.round((correct / questions.length) * 100);
-    const firestoreInstance = typeof db !== "undefined" ? db : window.db;
 
-    if (currentUserId && currentUserId !== "dev-admin-uid-001" && firestoreInstance) {
+    if (currentUserId && currentUserId !== "dev" && firestoreInstance) {
         try {
             await firestoreInstance.collection("quiz_attempts").add({
                 uid:          currentUserId,
@@ -490,7 +478,6 @@ async function submitQuiz() {
             <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
                 <button class="btn" onclick="location.reload()">🔄 Try Again</button>
                 <button class="btn btn-home" onclick="window.location.href='dashboard.html'">📊 Dashboard</button>
-                <button class="btn" onclick="window.location.href='course.html?subject=${rawSubject}'">📚 Back to Course</button>
             </div>
         </div>
     `;
@@ -498,7 +485,7 @@ async function submitQuiz() {
 }
 
 /* ====================================
-   HTML ESCAPE
+   UTILS
 ==================================== */
 function escapeHtml(str) {
     if (!str) return "";
@@ -512,7 +499,7 @@ function escapeHtml(str) {
 function goHome() { window.location.href = "dashboard.html"; }
 
 /* ====================================
-   INIT
+   UPDATED INITIATION LOGIC
 ==================================== */
 async function initializePage() {
     const devBypass = localStorage.getItem("devBypass") === "true";
@@ -525,12 +512,28 @@ async function initializePage() {
             document.getElementById("userNameDisplay").innerText = u.name || "Dev Admin";
         }
     } else {
-        if (typeof initAuth === "function") {
-            await initAuth(true);
+        // Changed to use the proper checkAuth function from auth.js
+        if (typeof checkAuth === "function") {
+            try {
+                await checkAuth(true);
+            } catch(e) {
+                console.warn("Auth redirect running.");
+                return;
+            }
         }
-        currentUserId = typeof currentUser !== "undefined" && currentUser ? currentUser.uid : null;
+        
+        // Secure token sync alignment checking
+        if (typeof firebase !== "undefined" && firebase.auth().currentUser) {
+            currentUserId = firebase.auth().currentUser.uid;
+        } else {
+            const localUser = JSON.parse(localStorage.getItem("currentUser"));
+            if (localUser) currentUserId = localUser.uid;
+        }
+        
         const nameEl = document.getElementById("userNameDisplay");
-        if (nameEl && typeof getUserName === "function") nameEl.innerText = getUserName();
+        if (nameEl && typeof getUserName === "function") {
+            nameEl.innerText = getUserName();
+        }
     }
 
     if (subjectNames[subject]) {
@@ -541,7 +544,7 @@ async function initializePage() {
         document.getElementById("subjectDesc").innerText  = "Test your knowledge";
     }
 
-    // Run question loader safely after configuration validation
+    // Run question loader
     await loadQuestions();
 }
 

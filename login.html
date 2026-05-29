@@ -3,23 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Authentication Portal - Ernest Embassy LMS</title>
+<title>Login - Ernest Embassy LMS</title>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
 
-<script src="auth.js"></script>
-
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-        margin: 0;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background: linear-gradient(135deg, #667eea, #764ba2);
         display: flex;
@@ -32,351 +25,387 @@
         background: white;
         padding: 40px;
         border-radius: 20px;
-        width: 400px;
-        max-width: 90%;
+        width: 420px;
+        max-width: 92%;
         box-shadow: 0 20px 40px rgba(0,0,0,0.25);
         text-align: center;
     }
 
-    h2 {
-        color: #1a1a2e;
-        margin-bottom: 10px;
-        font-size: 28px;
-    }
+    .logo-icon { font-size: 48px; margin-bottom: 10px; }
 
-    .subtitle {
-        color: #666;
-        font-size: 14px;
-        margin-bottom: 25px;
-    }
+    h2 { color: #1a1a2e; margin-bottom: 6px; font-size: 26px; }
+
+    .subtitle { color: #888; font-size: 13px; margin-bottom: 25px; }
 
     input {
         width: 100%;
-        padding: 14px;
-        margin: 10px 0;
-        border-radius: 12px;
-        border: 1px solid #ddd;
+        padding: 13px 16px;
+        margin: 8px 0;
+        border-radius: 10px;
+        border: 1.5px solid #e0e0e0;
         outline: none;
         font-size: 15px;
-        transition: 0.3s;
+        transition: 0.25s;
         box-sizing: border-box;
+        color: #333;
     }
 
     input:focus {
         border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+        box-shadow: 0 0 0 3px rgba(102,126,234,0.12);
     }
 
-    button {
+    .btn-primary {
         width: 100%;
         padding: 14px;
         border: none;
-        border-radius: 12px;
+        border-radius: 10px;
         background: linear-gradient(135deg, #667eea, #764ba2);
         color: white;
         cursor: pointer;
-        font-size: 16px;
+        font-size: 15px;
         font-weight: bold;
-        margin-top: 12px;
-        transition: 0.3s;
+        margin-top: 14px;
+        transition: 0.25s;
+        letter-spacing: 0.3px;
     }
 
-    button:hover {
+    .btn-primary:hover {
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        box-shadow: 0 6px 18px rgba(102,126,234,0.4);
     }
 
-    .secondary {
-        background: #1a1a2e;
+    .btn-primary:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
     }
 
-    .secondary:hover {
-        background: #16213e;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    .btn-secondary {
+        width: 100%;
+        padding: 13px;
+        border: 1.5px solid #1a1a2e;
+        border-radius: 10px;
+        background: transparent;
+        color: #1a1a2e;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+        margin-top: 10px;
+        transition: 0.25s;
     }
 
-    .msg {
-        margin-top: 15px;
+    .btn-secondary:hover { background: #1a1a2e; color: white; }
+
+    /* Dev bypass button */
+    .btn-dev {
+        width: 100%;
+        padding: 11px;
+        border: 1.5px dashed #f97316;
+        border-radius: 10px;
+        background: #fff8f0;
+        color: #f97316;
+        cursor: pointer;
         font-size: 13px;
-        min-height: 40px;
+        font-weight: bold;
+        margin-top: 10px;
+        transition: 0.25s;
     }
+
+    .btn-dev:hover { background: #f97316; color: white; }
+
+    .dev-warning {
+        font-size: 11px;
+        color: #f97316;
+        margin-top: 5px;
+        font-weight: 600;
+    }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 16px 0 6px;
+        color: #ccc;
+        font-size: 12px;
+    }
+
+    .divider::before, .divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: #e8e8e8;
+    }
+
+    .msg { margin-top: 14px; font-size: 13px; min-height: 36px; }
 
     .error {
         color: #dc3545;
-        background: #f8d7da;
-        padding: 10px;
+        background: #fff0f0;
+        padding: 10px 14px;
         border-radius: 8px;
+        border-left: 3px solid #dc3545;
+        text-align: left;
     }
 
     .success {
         color: #155724;
-        background: #d4edda;
-        padding: 10px;
+        background: #f0fff4;
+        padding: 10px 14px;
         border-radius: 8px;
+        border-left: 3px solid #28a745;
+        text-align: left;
     }
 
-    .small {
-        font-size: 12px;
-        color: #888;
+    .footer-note {
+        font-size: 11px;
+        color: #bbb;
         margin-top: 20px;
-        padding-top: 15px;
-        border-top: 1px solid #eee;
-    }
-
-    .loading {
-        opacity: 0.7;
-        pointer-events: none;
+        padding-top: 14px;
+        border-top: 1px solid #f0f0f0;
+        line-height: 1.6;
     }
 </style>
 </head>
 
 <body>
-
 <div class="box">
-    <h2 id="authTitle">🎓 Ernest Embassy LMS</h2>
-    <div id="authSubtitle" class="subtitle">Login to continue learning</div>
+    <div class="logo-icon">🎓</div>
+    <h2 id="authTitle">Ernest Embassy LMS</h2>
+    <div id="authSubtitle" class="subtitle">Sign in to continue learning</div>
 
-    <div id="nameInputContainer" style="display: none;">
-        <input id="fullName" type="text" placeholder="Full Student Name" autocomplete="name">
+    <div id="nameInputContainer" style="display:none;">
+        <input id="fullName" type="text" placeholder="Full Name" autocomplete="name">
     </div>
-    
+
     <input id="email" type="email" placeholder="Email Address" autocomplete="email">
     <input id="password" type="password" placeholder="Password" autocomplete="current-password">
 
-    <button id="loginBtn" onclick="executeLogin()">🔐 Login</button>
-    <button id="toggleModeBtn" class="secondary" onclick="toggleAuthViewMode()">📝 Create New Account</button>
+    <button class="btn-primary" id="loginBtn" onclick="executeLogin()">🔐 Login</button>
+    <button class="btn-secondary" id="toggleModeBtn" onclick="toggleAuthViewMode()">📝 Create New Account</button>
+
+    <!-- =====================================================
+         DEV BYPASS — lets you skip login as admin/developer
+         DELETE this button before going live to students
+    ====================================================== -->
+    <div class="divider">or</div>
+    <button class="btn-dev" onclick="devBypassLogin()">🛠️ Developer Quick Login (Skip Auth)</button>
+    <div class="dev-warning">⚠️ Remove before going public</div>
+    <!-- ================================================== -->
 
     <div id="msg" class="msg"></div>
 
-    <div class="small">
-        🔒 Secure Firebase Authentication<br>
-        Your data is protected
+    <div class="footer-note">
+        🔒 Secured by Firebase Authentication<br>
+        Ernest Embassy Digital Solutions © 2026
     </div>
 </div>
 
 <script>
-/* ====================================
-   GLOBAL STATE CONFIGURATION
-==================================== */
+/* ============================================================
+   FIREBASE CONFIG — same project as your other files
+============================================================ */
+const firebaseConfig = {
+    apiKey:            "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+    authDomain:        "ernest-embassy-lms.firebaseapp.com",
+    projectId:         "ernest-embassy-lms",
+    storageBucket:     "ernest-embassy-lms.firebasestorage.app",
+    messagingSenderId: "204896421221",
+    appId:             "1:204896421221:web:9407b523da68c3e5b88d8c"
+};
+
+// Guard against double-init (in case auth.js is also present)
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+
+const auth = firebase.auth();
+const db   = firebase.firestore();
+
+/* ============================================================
+   STATE
+============================================================ */
 let isSignupMode = false;
 
-/* ====================================
-   EXECUTE ACCOUNT SIGNUP ROUTINE
-==================================== */
-async function executeSignup() {
-    const name = document.getElementById("fullName").value.trim();
-    const email = document.getElementById("email").value.trim();
+/* ============================================================
+   DEV BYPASS — skips Firebase entirely
+   Stores a fake admin session and goes to dashboard
+============================================================ */
+function devBypassLogin() {
+    localStorage.setItem("devBypass", "true");
+    localStorage.setItem("currentUser", JSON.stringify({
+        uid:   "dev-admin-uid-001",
+        name:  "Damian (Dev)",
+        email: "admin@ernestembassy.dev",
+        role:  "admin",
+        score: 100
+    }));
+    window.location.href = "dashboard.html";
+}
+
+/* ============================================================
+   LOGIN
+============================================================ */
+async function executeLogin() {
+    const email    = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
-    const msgDiv = document.getElementById("msg");
+    const msgDiv   = document.getElementById("msg");
     const loginBtn = document.getElementById("loginBtn");
-    
+
     msgDiv.innerHTML = "";
-    msgDiv.className = "msg";
-    
-    if (!name || !email || !password) {
-        msgDiv.innerHTML = '<div class="error">⚠️ Please fill in all registration fields</div>';
+
+    if (!email || !password) {
+        msgDiv.innerHTML = '<div class="error">⚠️ Please enter your email and password.</div>';
         return;
     }
-    
-    const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        msgDiv.innerHTML = '<div class="error">⚠️ Please enter a valid email address</div>';
-        return;
-    }
-    
-    if (password.length < 6) {
-        msgDiv.innerHTML = '<div class="error">⚠️ Password must be at least 6 characters</div>';
-        return;
-    }
-    
-    msgDiv.innerHTML = '<div class="success">🔄 Creating your account profile...</div>';
-    loginBtn.classList.add("loading");
+
+    msgDiv.innerHTML = '<div class="success">🔄 Logging in...</div>';
     loginBtn.disabled = true;
-    
+
     try {
-        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-        const user = userCredential.user;
-        
-        // Structure the database records under central users collections
+        const cred    = await auth.signInWithEmailAndPassword(email, password);
+        const userDoc = await db.collection("users").doc(cred.user.uid).get();
+        const data    = userDoc.exists ? userDoc.data() : {};
+
+        localStorage.setItem("currentUser", JSON.stringify({
+            uid:   cred.user.uid,
+            name:  data.name  || email.split('@')[0],
+            email: cred.user.email,
+            role:  data.role  || "student",
+            score: data.score || 0
+        }));
+
+        window.location.href = "dashboard.html";
+
+    } catch (err) {
+        const msgs = {
+            'auth/user-not-found':      '❌ No account found with this email.',
+            'auth/wrong-password':      '❌ Incorrect password. Please try again.',
+            'auth/invalid-credential':  '❌ Incorrect email or password.',
+            'auth/invalid-email':       '❌ Please enter a valid email address.',
+            'auth/too-many-requests':   '❌ Too many attempts. Please wait a moment.',
+            'auth/network-request-failed': '❌ Network error. Check your connection.'
+        };
+        msgDiv.innerHTML = `<div class="error">${msgs[err.code] || '❌ ' + err.message}</div>`;
+        loginBtn.disabled = false;
+    }
+}
+
+/* ============================================================
+   SIGNUP
+============================================================ */
+async function executeSignup() {
+    const name     = document.getElementById("fullName").value.trim();
+    const email    = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const msgDiv   = document.getElementById("msg");
+    const loginBtn = document.getElementById("loginBtn");
+
+    msgDiv.innerHTML = "";
+
+    if (!name || !email || !password) {
+        msgDiv.innerHTML = '<div class="error">⚠️ Please fill in all fields.</div>';
+        return;
+    }
+
+    if (password.length < 6) {
+        msgDiv.innerHTML = '<div class="error">⚠️ Password must be at least 6 characters.</div>';
+        return;
+    }
+
+    msgDiv.innerHTML = '<div class="success">🔄 Creating your account...</div>';
+    loginBtn.disabled = true;
+
+    try {
+        const cred = await auth.createUserWithEmailAndPassword(email, password);
+        const user = cred.user;
+
         await db.collection("users").doc(user.uid).set({
-            uid: user.uid,
-            email: user.email,
-            name: name,
-            score: 0,
-            role: "student",
+            uid:       user.uid,
+            email:     user.email,
+            name:      name,
+            score:     0,
+            role:      "student",
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             lastLogin: firebase.firestore.FieldValue.serverTimestamp()
         });
-        
-        // Cache basic attributes locally for immediate interface reads
+
         localStorage.setItem("currentUser", JSON.stringify({
-            uid: user.uid,
-            name: name,
-            email: user.email,
-            role: "student",
-            score: 0
+            uid: user.uid, name, email: user.email, role: "student", score: 0
         }));
-        
-        msgDiv.innerHTML = '<div class="success">✅ Account verified! Preparing workspace...</div>';
-        
-        setTimeout(() => {
-            window.location.href = "dashboard.html";
-        }, 1200);
-        
-    } catch (error) {
-        console.error("Signup context exception:", error);
-        let errorMessage = "";
-        
-        switch (error.code) {
-            case 'auth/email-already-in-use':
-                errorMessage = "❌ Email is registered. Flip back to Login panel.";
-                break;
-            case 'auth/invalid-email':
-                errorMessage = "❌ Invalid format string patterns assigned.";
-                break;
-            case 'auth/weak-password':
-                errorMessage = "❌ Security rule constraint: Weak string signature used.";
-                break;
-            default:
-                errorMessage = `❌ Process Exception: ${error.message}`;
-        }
-        msgDiv.innerHTML = `<div class="error">${errorMessage}</div>`;
-        loginBtn.classList.remove("loading");
+
+        msgDiv.innerHTML = '<div class="success">✅ Account created! Redirecting...</div>';
+        setTimeout(() => { window.location.href = "dashboard.html"; }, 1200);
+
+    } catch (err) {
+        const msgs = {
+            'auth/email-already-in-use': '❌ This email is already registered. Please login instead.',
+            'auth/invalid-email':        '❌ Please enter a valid email address.',
+            'auth/weak-password':        '❌ Password is too weak. Use at least 6 characters.'
+        };
+        msgDiv.innerHTML = `<div class="error">${msgs[err.code] || '❌ ' + err.message}</div>`;
         loginBtn.disabled = false;
     }
 }
 
-/* ====================================
-   EXECUTE ACCOUNT LOGIN ROUTINE
-==================================== */
-async function executeLogin() {
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-    const msgDiv = document.getElementById("msg");
-    const loginBtn = document.getElementById("loginBtn");
-    
-    msgDiv.innerHTML = "";
-    msgDiv.className = "msg";
-    
-    if (!email || !password) {
-        msgDiv.innerHTML = '<div class="error">⚠️ Please fill in email and password fields</div>';
-        return;
-    }
-    
-    msgDiv.innerHTML = '<div class="success">🔄 Authenticating security credentials...</div>';
-    loginBtn.classList.add("loading");
-    loginBtn.disabled = true;
-    
-    try {
-        const userCredential = await auth.signInWithEmailAndPassword(email, password);
-        const user = userCredential.user;
-        
-        const userDoc = await db.collection("users").doc(user.uid).get();
-        const userData = userDoc.exists ? userDoc.data() : {};
-        
-        localStorage.setItem("currentUser", JSON.stringify({
-            uid: user.uid,
-            name: userData.name || email.split('@')[0],
-            email: user.email,
-            role: userData.role || "student",
-            score: userData.score || 0
-        }));
-        
-        window.location.href = "dashboard.html";
-        
-    } catch (error) {
-        console.error("Login authorization exception:", error);
-        let errorMessage = "";
-        
-        switch (error.code) {
-            case 'auth/user-not-found':
-            case 'auth/wrong-password':
-                errorMessage = "❌ Invalid authentication matching logs found.";
-                break;
-            case 'auth/too-many-requests':
-                errorMessage = "❌ Service blocked due to burst requests. Try later.";
-                break;
-            default:
-                errorMessage = `❌ Gateway Failure: ${error.message}`;
-        }
-        msgDiv.innerHTML = `<div class="error">${errorMessage}</div>`;
-    } finally {
-        loginBtn.classList.remove("loading");
-        loginBtn.disabled = false;
-    }
-}
-
-/* ====================================
-   TOGGLE SYSTEM INTERFACE MODAL VIEW
-==================================== */
+/* ============================================================
+   TOGGLE LOGIN / SIGNUP
+============================================================ */
 function toggleAuthViewMode() {
-    const loginBtn = document.getElementById("loginBtn");
-    const toggleModeBtn = document.getElementById("toggleModeBtn");
-    const nameContainer = document.getElementById("nameInputContainer");
-    const authTitle = document.getElementById("authTitle");
-    const authSubtitle = document.getElementById("authSubtitle");
-    const msgDiv = document.getElementById("msg");
-    
-    // Wipe runtime error logs on screen flip
-    msgDiv.innerHTML = "";
-    
+    const loginBtn     = document.getElementById("loginBtn");
+    const toggleBtn    = document.getElementById("toggleModeBtn");
+    const nameBox      = document.getElementById("nameInputContainer");
+    const title        = document.getElementById("authTitle");
+    const subtitle     = document.getElementById("authSubtitle");
+    document.getElementById("msg").innerHTML = "";
+
     if (!isSignupMode) {
-        authTitle.innerText = "📝 Register Account";
-        authSubtitle.innerText = "Join the online student academy space";
-        nameContainer.style.display = "block";
-        loginBtn.innerText = "🚀 Register & Verify";
-        loginBtn.onclick = executeSignup;
-        toggleModeBtn.innerText = "🔐 Back to Login";
+        title.innerText    = "Create Account";
+        subtitle.innerText = "Join the Ernest Embassy student academy";
+        nameBox.style.display  = "block";
+        loginBtn.innerText     = "🚀 Create Account";
+        loginBtn.onclick       = executeSignup;
+        toggleBtn.innerText    = "← Back to Login";
         isSignupMode = true;
     } else {
-        authTitle.innerText = "🎓 Ernest Embassy LMS";
-        authSubtitle.innerText = "Login to continue learning";
-        nameContainer.style.display = "none";
-        loginBtn.innerText = "🔐 Login";
-        loginBtn.onclick = executeLogin;
-        toggleModeBtn.innerText = "📝 Create New Account";
+        title.innerText    = "Ernest Embassy LMS";
+        subtitle.innerText = "Sign in to continue learning";
+        nameBox.style.display  = "none";
+        loginBtn.innerText     = "🔐 Login";
+        loginBtn.onclick       = executeLogin;
+        toggleBtn.innerText    = "📝 Create New Account";
         isSignupMode = false;
     }
 }
 
-/* ====================================
-   KEYBOARD NAVIGATION MAPS
-==================================== */
-document.getElementById("email").addEventListener("keypress", (event) => {
-    if (event.key === "Enter") {
-        document.getElementById("password").focus();
-    }
+/* ============================================================
+   KEYBOARD SHORTCUTS
+============================================================ */
+document.getElementById("email").addEventListener("keypress", e => {
+    if (e.key === "Enter") document.getElementById("password").focus();
+});
+document.getElementById("password").addEventListener("keypress", e => {
+    if (e.key === "Enter") { isSignupMode ? executeSignup() : executeLogin(); }
 });
 
-document.getElementById("password").addEventListener("keypress", (event) => {
-    if (event.key === "Enter") {
-        if (isSignupMode) {
-            executeSignup();
-        } else {
-            executeLogin();
-        }
-    }
-});
-
-/* ====================================
-   SECURE AUTOMATIC ROUTE BALANCERS
-==================================== */
-async function runPortalInit() {
-    // Rely on centralized library verification engine cleanly
-    await initAuth(false);
-    
-    // Redirect cleanly if user session exists natively
-    if (currentUser) {
+/* ============================================================
+   AUTO-REDIRECT IF ALREADY LOGGED IN
+   Checks both dev bypass and real Firebase session
+============================================================ */
+function checkExistingSession() {
+    // Dev bypass check (instant, no async needed)
+    if (localStorage.getItem("devBypass") === "true") {
         window.location.href = "dashboard.html";
+        return;
     }
+
+    // Real Firebase session check
+    auth.onAuthStateChanged(user => {
+        if (user) window.location.href = "dashboard.html";
+    });
 }
 
-// Attach listeners safely
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", runPortalInit);
-} else {
-    runPortalInit();
-}
+checkExistingSession();
 </script>
 
 </body>

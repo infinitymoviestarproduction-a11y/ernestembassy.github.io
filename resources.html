@@ -2,57 +2,163 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>School Resource Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subject Resources - Ernest Embassy LMS</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+    <script src="auth.js"></script>
+
     <style>
-        /* This fixes the plain background issue */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f6f9;
-            margin: 0;
             padding: 20px;
         }
+        
         .container {
             max-width: 1000px;
             margin: auto;
         }
+        
         .header {
             text-align: center;
-            padding: 20px;
-            background: #1e3a8a;
+            padding: 35px 20px;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
             color: white;
-            border-radius: 8px;
+            border-radius: 12px;
             margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.2);
+            position: relative;
         }
-        /* Grid layout to give students distinct choices */
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 15px;
+            opacity: 0.9;
+        }
+
+        .user-badge {
+            position: absolute;
+            top: 12px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        
         .subject-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
         }
+        
         .subject-card {
             background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             text-align: center;
-            cursor: pointer;
-            transition: transform 0.2s;
+            border-top: 5px solid #2563eb;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
+        
         .subject-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
+
+        .subject-card.data-proc {
+            border-top-color: #10b981;
+        }
+        
         .icon {
-            font-size: 40px;
-            margin-bottom: 10px;
+            font-size: 50px;
+            margin-bottom: 15px;
         }
+
+        .subject-card h3 {
+            color: #1e293b;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .subject-card p {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        
+        .actions-wrap {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
         .btn {
+            flex: 1;
             display: inline-block;
-            background: #2563eb;
             color: white;
-            padding: 10px 20px;
+            padding: 10px 14px;
             text-decoration: none;
-            border-radius: 5px;
-            margin-top: 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: opacity 0.2s;
+            text-align: center;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn-notes {
+            background: #2563eb;
+        }
+
+        .subject-card.data-proc .btn-notes {
+            background: #10b981;
+        }
+
+        .btn-quiz {
+            background: #7c3aed;
+        }
+
+        .btn-dashboard {
+            display: inline-block;
+            background: #475569;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+
+        .btn-dashboard:hover {
+            background: #334155;
+        }
+
+        .footer-nav {
+            text-align: center;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -60,26 +166,69 @@
 
 <div class="container">
     <div class="header">
+        <div class="user-badge">👤 <span id="portalUser">Student</span></div>
         <h1>Welcome to the Student Resource Portal</h1>
-        <p>Select a subject below to access your termly lesson materials.</p>
+        <p>Select a subject track below to study lesson contents or practice timed quizzes.</p>
     </div>
 
     <div class="subject-grid">
-        <div class="subject-card">
-            <div class="icon">💻</div>
-            <h3>Digital Technology</h3>
-            <p>SS1 Curriculum (35 Lessons)</p>
-            <a href="digital_tech_ss1.html" class="btn">Open Materials</a>
+        <div class="subject-card digi-tech">
+            <div>
+                <div class="icon">💻</div>
+                <h3>Digital Technology</h3>
+                <p>Explore foundations of computer architecture, binary systems, networks, and algorithms across 35 structured lessons.</p>
+            </div>
+            <div class="actions-wrap">
+                <a href="educational-resources.html?subject=digital-technology-ss1" class="btn btn-notes">📖 Notes</a>
+                <a href="test-quiz.html?subject=digital-technology-ss1" class="btn btn-quiz">✍️ Quiz</a>
+            </div>
         </div>
 
-        <div class="subject-card">
-            <div class="icon">📊</div>
-            <h3>Data Processing</h3>
-            <p>SS1 Curriculum (35 Lessons)</p>
-            <a href="data_processing_ss1.html" class="btn">Open Materials</a>
+        <div class="subject-card data-proc">
+            <div>
+                <div class="icon">📊</div>
+                <h3>Data Processing</h3>
+                <p>Master spreadsheet operations, database management objects, word processing, and information cycle modules.</p>
+            </div>
+            <div class="actions-wrap">
+                <a href="educational-resources.html?subject=data-processing-ss1" class="btn btn-notes">📖 Notes</a>
+                <a href="test-quiz.html?subject=data-processing-ss1" class="btn btn-quiz">✍️ Quiz</a>
+            </div>
         </div>
+    </div>
+
+    <div class="footer-nav">
+        <a href="dashboard.html" class="btn-dashboard">🏠 Return to Dashboard</a>
     </div>
 </div>
 
+<script>
+    // Initialize user metadata securely from auth.js context or fallback session cache
+    async function setupHub() {
+        const devBypass = localStorage.getItem("devBypass") === "true";
+        const userDisplay = document.getElementById("portalUser");
+
+        if (devBypass) {
+            const storedUser = localStorage.getItem("currentUser");
+            if (storedUser) {
+                const u = JSON.parse(storedUser);
+                if (userDisplay) userDisplay.innerText = u.name || "Dev Admin";
+            }
+        } else {
+            if (typeof initAuth === "function") {
+                await initAuth(true);
+            }
+            if (userDisplay && typeof getUserName === "function") {
+                userDisplay.innerText = getUserName();
+            }
+        }
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", setupHub);
+    } else {
+        setupHub();
+    }
+</script>
 </body>
 </html>

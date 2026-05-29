@@ -1,526 +1,206 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Educational Resources - Ernest Embassy LMS</title>
-    
-    <!-- FIREBASE SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+{
+  "subject": "english-ss1",
+  "name": "English Language SS1",
+  "icon": "📖",
+  "totalLessons": 45,
+  "terms": [
+    {
+      "term": 1,
+      "name": "First Term",
+      "weeks": [
+        {
+          "week": 1,
+          "title": "Parts of Speech",
+          "content": "<h2>Parts of Speech</h2><p>Parts of speech are the basic building blocks of English Language. Every word in English belongs to a particular class depending on how it functions in a sentence.</p><h3>Meaning of Parts of Speech</h3><p>Parts of speech are groups into which words are classified according to their functions in sentences.</p><h3>Types of Parts of Speech</h3><ol><li>Nouns</li><li>Pronouns</li><li>Verbs</li><li>Adjectives</li><li>Adverbs</li><li>Prepositions</li><li>Conjunctions</li><li>Interjections</li></ol><h3>Noun</h3><p>A noun is a naming word used for persons, places, animals, or things.<br><strong>Examples:</strong> teacher, Lagos, goat, book.</p><h3>Pronoun</h3><p>A pronoun is used in place of a noun.<br><strong>Examples:</strong> he, she, they.</p><h3>Verb</h3><p>A verb expresses action or state of being.<br><strong>Examples:</strong> run, eat, sing.</p><h3>Adjective</h3><p>An adjective describes a noun or pronoun.<br><strong>Examples:</strong> tall, beautiful, short.</p><h3>Adverb</h3><p>An adverb modifies a verb, adjective, or another adverb.<br><strong>Examples:</strong> quickly, slowly.</p><h3>Preposition</h3><p>A preposition shows relationship between words.<br><strong>Examples:</strong> in, on, under.</p><h3>Conjunction</h3><p>A conjunction joins words or sentences.<br><strong>Examples:</strong> and, but, because.</p><h3>Interjection</h3><p>An interjection expresses sudden emotion.<br><strong>Examples:</strong> wow!, oh!, alas!</p><h3>Practice Questions</h3><ol><li>Define parts of speech.</li><li>Mention eight parts of speech.</li><li>Use two nouns in sentences.</li><li>Identify the adjective in: 'The tall man entered the room.'</li></ol>",
+          "keywords": ["grammar", "parts of speech", "noun", "verb", "adjective", "adverb"]
+        },
+        {
+          "week": 2,
+          "title": "Nouns and Their Types",
+          "content": "<h2>Nouns and Their Types</h2><h3>Meaning of Noun</h3><p>A noun is a naming word used for persons, places, animals, or things.</p><h3>Types of Nouns</h3><ol><li><strong>Proper Noun:</strong> Specific names (Nigeria, John)</li><li><strong>Common Noun:</strong> General names (teacher, city)</li><li><strong>Collective Noun:</strong> Group names (team, crowd)</li><li><strong>Abstract Noun:</strong> Ideas and qualities (honesty, wisdom)</li><li><strong>Concrete Noun:</strong> Physical objects (water, chair)</li></ol><h3>Functions of Nouns</h3><ul><li>Subject of a sentence</li><li>Object of a verb</li><li>Complement in a sentence</li></ul><h3>Practice Questions</h3><ol><li>What is a noun?</li><li>Mention four types of nouns.</li><li>Give examples of abstract nouns.</li></ol>",
+          "keywords": ["nouns", "proper noun", "common noun", "collective noun", "abstract noun"]
+        },
+        {
+          "week": 3,
+          "title": "Pronouns",
+          "content": "<h2>Pronouns</h2><h3>Meaning of Pronoun</h3><p>A pronoun is a word used in place of a noun.</p><h3>Types of Pronouns</h3><ol><li><strong>Personal Pronouns:</strong> he, she, we</li><li><strong>Possessive Pronouns:</strong> mine, ours</li><li><strong>Demonstrative Pronouns:</strong> this, that</li><li><strong>Relative Pronouns:</strong> who, which</li><li><strong>Interrogative Pronouns:</strong> who, what</li></ol><h3>Importance of Pronouns</h3><ul><li>They avoid repetition</li><li>They improve sentence flow</li></ul><h3>Practice Questions</h3><ol><li>Define pronoun.</li><li>Mention three types of pronouns.</li><li>Use 'mine' in a sentence.</li></ol>",
+          "keywords": ["pronouns", "personal", "possessive", "demonstrative", "relative", "interrogative"]
+        },
+        {
+          "week": 4,
+          "title": "Verbs",
+          "content": "<h2>Verbs</h2><h3>Meaning of Verb</h3><p>A verb is a doing or action word.</p><h3>Types of Verbs</h3><ol><li><strong>Action Verbs:</strong> run, jump</li><li><strong>Auxiliary Verbs:</strong> is, was, have</li><li><strong>Transitive Verbs:</strong> kick the ball (takes object)</li><li><strong>Intransitive Verbs:</strong> sleep (no object needed)</li></ol><h3>Functions of Verbs</h3><ul><li>Show action</li><li>Express state of being</li></ul><h3>Practice Questions</h3><ol><li>Define verb.</li><li>Mention two types of verbs.</li><li>Write five action verbs.</li></ol>",
+          "keywords": ["verbs", "action verbs", "auxiliary verbs", "transitive", "intransitive"]
+        },
+        {
+          "week": 5,
+          "title": "Adjectives",
+          "content": "<h2>Adjectives</h2><h3>Meaning of Adjective</h3><p>An adjective is a word that describes a noun or pronoun.</p><h3>Examples</h3><p>beautiful girl, tall building, red car</p><h3>Types of Adjectives</h3><ol><li>Descriptive adjectives</li><li>Quantitative adjectives</li><li>Demonstrative adjectives</li><li>Possessive adjectives</li></ol><h3>Practice Questions</h3><ol><li>Define adjective.</li><li>Mention four adjectives.</li><li>Use adjectives in sentences.</li></ol>",
+          "keywords": ["adjectives", "descriptive", "quantitative", "demonstrative", "possessive"]
+        },
+        {
+          "week": 6,
+          "title": "Adverbs",
+          "content": "<h2>Adverbs</h2><h3>Meaning of Adverb</h3><p>An adverb modifies a verb, adjective, or another adverb.</p><h3>Examples</h3><p>She sings beautifully. The boy runs quickly.</p><h3>Types of Adverbs</h3><ol><li>Adverb of manner (how)</li><li>Adverb of time (when)</li><li>Adverb of place (where)</li><li>Adverb of frequency (how often)</li></ol><h3>Practice Questions</h3><ol><li>What is an adverb?</li><li>Mention three types of adverbs.</li><li>Use 'quickly' in a sentence.</li></ol>",
+          "keywords": ["adverbs", "manner", "time", "place", "frequency"]
+        },
+        {
+          "week": 7,
+          "title": "Tenses",
+          "content": "<h2>Tenses</h2><h3>Meaning of Tense</h3><p>Tense shows the time an action takes place.</p><h3>Types of Tenses</h3><ol><li><strong>Present tense:</strong> I eat rice.</li><li><strong>Past tense:</strong> I ate rice.</li><li><strong>Future tense:</strong> I will eat rice.</li></ol><h3>Importance of Tense</h3><ul><li>It shows time correctly</li><li>It improves grammar</li></ul><h3>Practice Questions</h3><ol><li>Define tense.</li><li>Mention the three major tenses.</li><li>Write examples of each tense.</li></ol>",
+          "keywords": ["tenses", "present tense", "past tense", "future tense", "grammar"]
+        },
+        {
+          "week": 8,
+          "title": "Sentence Structure",
+          "content": "<h2>Sentence Structure</h2><h3>Meaning of Sentence</h3><p>A sentence is a group of words that expresses a complete thought.</p><h3>Types of Sentences</h3><ol><li><strong>Simple sentence:</strong> The boy ran.</li><li><strong>Compound sentence:</strong> I came and I saw.</li><li><strong>Complex sentence:</strong> Because it rained, we stayed indoors.</li><li><strong>Compound-complex sentence:</strong> Combination of compound and complex.</li></ol><h3>Practice Questions</h3><ol><li>Define sentence.</li><li>Mention types of sentences.</li><li>Write one complex sentence.</li></ol>",
+          "keywords": ["sentence structure", "simple sentence", "compound sentence", "complex sentence"]
+        },
+        {
+          "week": 9,
+          "title": "Comprehension",
+          "content": "<h2>Comprehension</h2><h3>Meaning of Comprehension</h3><p>Comprehension is the ability to read and understand passages.</p><h3>Skills Needed</h3><ul><li>Reading carefully</li><li>Identifying main ideas</li><li>Understanding vocabulary</li><li>Answering questions correctly</li></ul><h3>Importance</h3><ul><li>Improves understanding</li><li>Builds vocabulary</li><li>Enhances communication</li></ul><h3>Practice Questions</h3><ol><li>Define comprehension.</li><li>Mention two comprehension skills.</li><li>Explain why comprehension is important.</li></ol>",
+          "keywords": ["comprehension", "reading", "vocabulary", "main idea"]
+        },
+        {
+          "week": 10,
+          "title": "Vocabulary Development",
+          "content": "<h2>Vocabulary Development</h2><h3>Meaning of Vocabulary</h3><p>Vocabulary refers to the words known and used by a person.</p><h3>Ways to Improve Vocabulary</h3><ul><li>Reading books</li><li>Using dictionaries</li><li>Learning new words daily</li><li>Practising writing</li></ul><h3>Word Relationships</h3><ul><li>Synonyms (same meaning)</li><li>Antonyms (opposite meaning)</li><li>Homophones (same sound, different meaning)</li></ul><h3>Practice Questions</h3><ol><li>Define vocabulary.</li><li>Mention ways of improving vocabulary.</li><li>Give two synonyms.</li></ol>",
+          "keywords": ["vocabulary", "synonyms", "antonyms", "homophones", "word building"]
         }
-        
-        body {
-            background: #f4f7fb;
-            min-height: 100vh;
+      ]
+    },
+    {
+      "term": 2,
+      "name": "Second Term",
+      "weeks": [
+        {
+          "week": 1,
+          "title": "Oral English - Vowel Sounds",
+          "content": "<h2>Oral English - Vowel Sounds</h2><h3>Meaning of Vowel Sounds</h3><p>Vowel sounds are produced without obstruction of airflow.</p><h3>Examples of Vowel Sounds</h3><ul><li>/i:/ as in 'see'</li><li>/e/ as in 'bed'</li><li>/u:/ as in 'food'</li></ul><h3>Importance</h3><ul><li>Helps correct pronunciation</li><li>Improves spoken English</li></ul><h3>Practice Questions</h3><ol><li>Define vowel sounds.</li><li>Mention three vowel sounds.</li><li>Give examples.</li></ol>",
+          "keywords": ["oral english", "vowel sounds", "pronunciation", "phonetics"]
+        },
+        {
+          "week": 2,
+          "title": "Consonant Sounds",
+          "content": "<h2>Consonant Sounds</h2><h3>Meaning of Consonant Sounds</h3><p>Consonants are produced with obstruction of airflow.</p><h3>Examples</h3><ul><li>/p/ as in 'pen'</li><li>/t/ as in 'top'</li><li>/k/ as in 'cat'</li></ul><h3>Practice Questions</h3><ol><li>Define consonants.</li><li>Mention examples.</li><li>Differentiate between vowels and consonants.</li></ol>",
+          "keywords": ["consonants", "pronunciation", "phonetics", "speech sounds"]
+        },
+        {
+          "week": 3,
+          "title": "Stress and Intonation",
+          "content": "<h2>Stress and Intonation</h2><h3>Meaning of Stress</h3><p>Stress is the emphasis placed on a syllable or word.</p><h3>Meaning of Intonation</h3><p>Intonation refers to the rise and fall of the voice during speech.</p><h3>Importance</h3><ul><li>Helps meaning in communication</li><li>Improves pronunciation</li></ul><h3>Practice Questions</h3><ol><li>Define stress.</li><li>Define intonation.</li><li>State their importance.</li></ol>",
+          "keywords": ["stress", "intonation", "pronunciation", "oral english"]
+        },
+        {
+          "week": 4,
+          "title": "Letter Writing",
+          "content": "<h2>Letter Writing</h2><h3>Types of Letters</h3><ol><li>Formal letter</li><li>Informal letter</li><li>Semi-formal letter</li></ol><h3>Features of Formal Letter</h3><ul><li>Writer's address</li><li>Date</li><li>Receiver's address</li><li>Salutation (Dear Sir,)</li><li>Title/Subject</li><li>Body</li><li>Conclusion (Yours faithfully,)</li><li>Signature</li></ul><h3>Practice Questions</h3><ol><li>Mention types of letters.</li><li>State features of formal letter.</li><li>Write a formal letter outline.</li></ol>",
+          "keywords": ["letter writing", "formal letter", "informal letter", "semi-formal letter"]
+        },
+        {
+          "week": 5,
+          "title": "Essay Writing",
+          "content": "<h2>Essay Writing</h2><h3>Meaning of Essay</h3><p>An essay is a piece of writing on a particular topic.</p><h3>Types of Essays</h3><ol><li><strong>Narrative Essay:</strong> Tells a story (e.g., 'A Day I Will Never Forget')</li><li><strong>Descriptive Essay:</strong> Describes a person, place, or event (e.g., 'My School')</li><li><strong>Argumentative Essay:</strong> Presents arguments for or against a topic (e.g., 'Should School Uniforms Be Abolished?')</li><li><strong>Expository Essay:</strong> Explains or informs (e.g., 'The Importance of Education')</li></ol><h3>Features of a Good Essay</h3><ul><li>Good title</li><li>Clear introduction</li><li>Well-organized body</li><li>Correct grammar</li><li>Good conclusion</li><li>Proper punctuation</li><li>Neat presentation</li></ul><h3>Steps in Essay Writing</h3><ol><li>Choose a topic</li><li>Brainstorm ideas</li><li>Write the introduction</li><li>Develop the body</li><li>Write the conclusion</li><li>Edit and proofread</li></ol><h3>Practice Questions</h3><ol><li>Define essay writing.</li><li>Mention four types of essays.</li><li>State five characteristics of a good essay.</li><li>Explain the importance of essay writing.</li></ol><h3>Assignment</h3><p>Write an essay of not less than 250 words on 'The Importance of Discipline in Schools.'</p>",
+          "keywords": ["essay writing", "narrative", "descriptive", "argumentative", "expository"]
+        },
+        {
+          "week": 6,
+          "title": "Figures of Speech",
+          "content": "<h2>Figures of Speech</h2><h3>Meaning</h3><p>Figures of speech are expressions used to create special effects in language.</p><h3>Types</h3><ol><li><strong>Simile:</strong> Comparison using 'like' or 'as' (e.g., 'As brave as a lion')</li><li><strong>Metaphor:</strong> Direct comparison without 'like' or 'as' (e.g., 'Time is money')</li><li><strong>Hyperbole:</strong> Exaggeration (e.g., 'I cried a river')</li><li><strong>Personification:</strong> Giving human qualities to non-human things (e.g., 'The wind whispered')</li><li><strong>Irony:</strong> Opposite of what is expected (e.g., 'The fire station burned down')</li></ol><h3>Practice Questions</h3><ol><li>Define figures of speech.</li><li>Mention five types.</li><li>Give examples of each.</li></ol>",
+          "keywords": ["figures of speech", "simile", "metaphor", "personification", "hyperbole", "irony"]
+        },
+        {
+          "week": 7,
+          "title": "Idioms and Proverbs",
+          "content": "<h2>Idioms and Proverbs</h2><h3>Meaning of Idioms</h3><p>Idioms are expressions whose meanings differ from their literal meanings.</p><h3>Examples of Idioms</h3><ul><li>Kick the bucket (to die)</li><li>Spill the beans (reveal a secret)</li><li>Bite the bullet (face something difficult)</li></ul><h3>Meaning of Proverbs</h3><p>Proverbs are wise traditional sayings.</p><h3>Examples of Proverbs</h3><ul><li>A stitch in time saves nine.</li><li>Too many cooks spoil the broth.</li><li>All that glitters is not gold.</li></ul><h3>Practice Questions</h3><ol><li>Define idiom.</li><li>Define proverb.</li><li>Give three examples of each.</li></ol>",
+          "keywords": ["idioms", "proverbs", "figurative language", "wise sayings"]
+        },
+        {
+          "week": 8,
+          "title": "Drama",
+          "content": "<h2>Drama</h2><h3>Meaning of Drama</h3><p>Drama is a literary work written for stage performance.</p><h3>Elements of Drama</h3><ol><li><strong>Plot:</strong> Sequence of events in the play</li><li><strong>Characterization:</strong> The people involved in the play</li><li><strong>Setting:</strong> Place and time of the play</li><li><strong>Theme:</strong> Central message of the drama</li><li><strong>Dialogue:</strong> Conversation between characters</li><li><strong>Conflict:</strong> Struggle between opposing forces</li></ol><h3>Types of Drama</h3><ul><li>Comedy (humorous, happy ending)</li><li>Tragedy (serious, sad ending)</li><li>Tragicomedy (mix of comedy and tragedy)</li><li>Melodrama (exaggerated emotions)</li></ul><h3>Characteristics of Drama</h3><ul><li>Written in dialogue form</li><li>Intended for stage performance</li><li>Contains actors and audience</li><li>Includes stage directions</li></ul><h3>Importance of Drama</h3><ul><li>Provides entertainment</li><li>Teaches moral lessons</li><li>Preserves culture</li><li>Develops speaking skills</li><li>Encourages teamwork</li></ul><h3>Practice Questions</h3><ol><li>Define drama.</li><li>Mention four elements of drama.</li><li>State the importance of drama.</li><li>Explain two advantages of drama.</li></ol><h3>Assignment</h3><p>Write a short drama involving three characters discussing examination malpractice.</p>",
+          "keywords": ["drama", "plot", "characterization", "setting", "theme", "dialogue", "conflict"]
+        },
+        {
+          "week": 9,
+          "title": "Poetry",
+          "content": "<h2>Poetry</h2><h3>Meaning of Poetry</h3><p>Poetry is a literary work written in verses.</p><h3>Features of Poetry</h3><ul><li>Rhythm (pattern of stressed/unstressed syllables)</li><li>Rhyme (similar ending sounds)</li><li>Stanza (group of lines)</li><li>Imagery (vivid descriptions)</li></ul><h3>Types of Poems</h3><ul><li>Sonnet (14 lines)</li><li>Ode (praising a person or thing)</li><li>Elegy (mourning the dead)</li><li>Ballad (story-telling poem)</li></ul><h3>Practice Questions</h3><ol><li>Define poetry.</li><li>Mention features of poetry.</li><li>State types of poems.</li></ol>",
+          "keywords": ["poetry", "rhythm", "rhyme", "stanza", "imagery", "sonnet", "ode", "elegy", "ballad"]
+        },
+        {
+          "week": 10,
+          "title": "Prose",
+          "content": "<h2>Prose</h2><h3>Meaning of Prose</h3><p>Prose is ordinary written language that is not poetry.</p><h3>Types of Prose</h3><ul><li><strong>Fiction:</strong> Imaginary stories (novels, short stories)</li><li><strong>Non-fiction:</strong> Factual writing (biographies, essays, news articles)</li></ul><h3>Features of Prose</h3><ul><li>Plot (sequence of events)</li><li>Characterization (people in the story)</li><li>Theme (central message)</li><li>Setting (time and place)</li></ul><h3>Practice Questions</h3><ol><li>Define prose.</li><li>Mention types of prose.</li><li>State features of prose.</li></ol>",
+          "keywords": ["prose", "fiction", "non-fiction", "plot", "characterization", "theme", "setting"]
         }
-        
-        nav {
-            background: #1a1a2e;
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            border-bottom: 2px solid #ffd700;
+      ]
+    },
+    {
+      "term": 3,
+      "name": "Third Term",
+      "weeks": [
+        {
+          "week": 1,
+          "title": "Direct and Indirect Speech",
+          "content": "<h2>Direct and Indirect Speech</h2><h3>Direct Speech</h3><p>The exact words of a speaker are reported with quotation marks.<br><strong>Example:</strong> John said, 'I am happy.'</p><h3>Indirect Speech</h3><p>The speaker's words are reported without quotation marks; tense and pronouns may change.<br><strong>Example:</strong> John said that he was happy.</p><h3>Rules for Changing Direct to Indirect Speech</h3><ul><li>Remove quotation marks</li><li>Change present tense to past tense</li><li>Change pronouns appropriately</li><li>Add 'that' (optional in some cases)</li></ul><h3>Practice Questions</h3><ol><li>Define direct speech.</li><li>Define indirect speech.</li><li>Change sentences from direct to indirect speech.</li></ol>",
+          "keywords": ["direct speech", "indirect speech", "reported speech", "grammar"]
+        },
+        {
+          "week": 2,
+          "title": "Active and Passive Voice",
+          "content": "<h2>Active and Passive Voice</h2><h3>Active Voice</h3><p>The subject performs the action.<br><strong>Example:</strong> The boy kicked the ball.</p><h3>Passive Voice</h3><p>The subject receives the action.<br><strong>Example:</strong> The ball was kicked by the boy.</p><h3>When to Use Passive Voice</h3><ul><li>When the doer is unknown or unimportant</li><li>To emphasize the receiver of the action</li><li>In formal or scientific writing</li></ul><h3>Practice Questions</h3><ol><li>Define active voice.</li><li>Define passive voice.</li><li>Change sentences from active to passive voice.</li></ol>",
+          "keywords": ["active voice", "passive voice", "grammar", "sentence transformation"]
+        },
+        {
+          "week": 3,
+          "title": "Concord (Subject-Verb Agreement)",
+          "content": "<h2>Concord (Subject-Verb Agreement)</h2><h3>Meaning of Concord</h3><p>Concord refers to agreement between subject and verb in number and person.</p><h3>Rules of Concord</h3><ol><li>Singular subjects take singular verbs (e.g., She goes to school.)</li><li>Plural subjects take plural verbs (e.g., They go to school.)</li><li>Collective nouns can take singular or plural verbs depending on context.</li><li>Neither/Either take singular verbs.</li><li>Each/Every take singular verbs.</li></ol><h3>Practice Questions</h3><ol><li>Define concord.</li><li>State two rules of concord.</li><li>Write examples of each rule.</li></ol>",
+          "keywords": ["concord", "subject-verb agreement", "grammar", "rules of concord"]
+        },
+        {
+          "week": 4,
+          "title": "Summary Writing",
+          "content": "<h2>Summary Writing</h2><h3>Meaning of Summary</h3><p>Summary is a shortened version of a passage that contains only the main points.</p><h3>Features of a Good Summary</h3><ul><li>Brevity (concise)</li><li>Accuracy (preserves original meaning)</li><li>Clarity (easy to understand)</li><li>Objectivity (no personal opinions)</li></ul><h3>Steps in Summary Writing</h3><ol><li>Read the passage carefully</li><li>Identify the main ideas</li><li>Ignore minor details and examples</li><li>Rewrite the main points in your own words</li><li>Keep it brief (usually one-third of original)</li></ol><h3>Practice Questions</h3><ol><li>Define summary.</li><li>Mention features of a good summary.</li><li>State steps in summary writing.</li></ol>",
+          "keywords": ["summary writing", "comprehension", "main ideas", "paraphrasing"]
+        },
+        {
+          "week": 5,
+          "title": "Registers",
+          "content": "<h2>Registers</h2><h3>Meaning of Register</h3><p>Registers are specialized vocabularies associated with particular professions or fields.</p><h3>Examples of Registers</h3><ul><li><strong>Medical register:</strong> diagnosis, prescription, surgery, patient</li><li><strong>Legal register:</strong> plaintiff, defendant, verdict, appeal</li><li><strong>Sports register:</strong> goal, penalty, referee, tournament</li><li><strong>Educational register:</strong> syllabus, lecture, assignment, examination</li></ul><h3>Importance of Register</h3><ul><li>Enables precise communication within professions</li><li>Shows understanding of field-specific terms</li></ul><h3>Practice Questions</h3><ol><li>Define register.</li><li>Mention examples of registers from different professions.</li><li>Explain the importance of registers.</li></ol>",
+          "keywords": ["registers", "medical register", "legal register", "sports register", "vocabulary"]
+        },
+        {
+          "week": 6,
+          "title": "Debate",
+          "content": "<h2>Debate</h2><h3>Meaning of Debate</h3><p>A debate is a formal argument on a specific topic between two opposing sides.</p><h3>Features of Debate</h3><ul><li>Chairman/Moderator</li><li>Proposition (supporting the motion)</li><li>Opposition (against the motion)</li><li>Audience</li><li>Time limits for speakers</li></ul><h3>Structure of a Debate Speech</h3><ol><li>Salutation ('Mr. Chairman, distinguished guests...')</li><li>Introduction of the topic</li><li>Statement of position</li><li>Arguments with evidence</li><li>Conclusion</li></ol><h3>Importance of Debate</h3><ul><li>Builds confidence and public speaking skills</li><li>Improves critical thinking</li><li>Enhances research skills</li></ul><h3>Practice Questions</h3><ol><li>Define debate.</li><li>Mention features of a debate.</li><li>State the importance of debate.</li></ol>",
+          "keywords": ["debate", "public speaking", "argumentation", "proposition", "opposition"]
+        },
+        {
+          "week": 7,
+          "title": "Listening Skills",
+          "content": "<h2>Listening Skills</h2><h3>Meaning of Listening</h3><p>Listening is the ability to pay attention and understand spoken language.</p><h3>Good Listening Habits</h3><ul><li>Pay attention to the speaker</li><li>Avoid distractions</li><li>Take notes if necessary</li><li>Ask clarifying questions</li><li>Do not interrupt</li></ul><h3>Types of Listening</h3><ul><li>Discriminative listening</li><li>Comprehensive listening</li><li>Critical listening</li><li>Empathetic listening</li></ul><h3>Practice Questions</h3><ol><li>Define listening.</li><li>Mention good listening habits.</li><li>Explain the importance of listening.</li></ol>",
+          "keywords": ["listening skills", "active listening", "communication", "oral skills"]
+        },
+        {
+          "week": 8,
+          "title": "Reading Skills",
+          "content": "<h2>Reading Skills</h2><h3>Meaning of Reading</h3><p>Reading is the ability to recognize and understand written words.</p><h3>Types of Reading</h3><ul><li><strong>Skimming:</strong> Reading quickly to get the main idea</li><li><strong>Scanning:</strong> Looking for specific information</li><li><strong>Intensive reading:</strong> Careful, detailed reading</li><li><strong>Extensive reading:</strong> Reading long texts for pleasure</li></ul><h3>Practice Questions</h3><ol><li>Define reading.</li><li>Mention types of reading.</li><li>Explain the difference between skimming and scanning.</li></ol>",
+          "keywords": ["reading skills", "skimming", "scanning", "intensive reading", "extensive reading"]
+        },
+        {
+          "week": 9,
+          "title": "Speech Writing",
+          "content": "<h2>Speech Writing</h2><h3>Meaning of Speech Writing</h3><p>Speech writing is preparing written words to be delivered before an audience.</p><h3>Features of a Good Speech</h3><ul><li>Clear introduction (greet audience, state topic)</li><li>Organized body (main points in logical order)</li><li>Strong conclusion (summarize and leave memorable message)</li><li>Appropriate language for audience</li><li>Use of rhetorical devices</li></ul><h3>Structure of a Speech</h3><ol><li>Salutation ('Good morning, respected teachers and fellow students...')</li><li>Introduction of topic</li><li>Body (2-4 main points with evidence)</li><li>Conclusion (summary and call to action)</li><li>Thank you</li></ol><h3>Practice Questions</h3><ol><li>Define speech writing.</li><li>Mention features of a good speech.</li><li>State the importance of speech writing.</li></ol>",
+          "keywords": ["speech writing", "public speaking", "communication", "oral presentation"]
+        },
+        {
+          "week": 10,
+          "title": "Examination Techniques",
+          "content": "<h2>Examination Techniques</h2><h3>Tips for Examination Success</h3><ul><li>Study regularly, not just before exams</li><li>Read instructions carefully</li><li>Manage time wisely (allocate time per question)</li><li>Answer easier questions first</li><li>Revise past questions</li><li>Write neatly and legibly</li><li>Review answers before submitting</li></ul><h3>Common Mistakes to Avoid</h3><ul><li>Not reading instructions</li><li>Spending too much time on one question</li><li>Leaving blanks</li><li>Not reviewing answers</li></ul><h3>Practice Questions</h3><ol><li>Mention examination tips.</li><li>Explain time management in exams.</li><li>State the importance of revision.</li></ol>",
+          "keywords": ["examination techniques", "exam preparation", "time management", "study tips"]
         }
-        
-        .logo {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: #ffd700;
-            text-decoration: none;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            transition: 0.3s;
-            background: #667eea;
-            font-size: 0.9rem;
-        }
-        
-        .nav-links a:hover {
-            background: #5a67d8;
-            transform: translateY(-2px);
-        }
-        
-        .user-area {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .user-name {
-            color: #ffd700;
-            font-weight: bold;
-        }
-        
-        .logout-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        
-        .hero {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            text-align: center;
-            padding: 60px 20px;
-        }
-        
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-        }
-        
-        .container {
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        
-        .filter-section {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            justify-content: center;
-            margin-bottom: 40px;
-        }
-        
-        .filter-btn {
-            background: white;
-            border: 2px solid #667eea;
-            color: #667eea;
-            padding: 10px 24px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        
-        .filter-btn:hover, .filter-btn.active {
-            background: #667eea;
-            color: white;
-            transform: translateY(-2px);
-        }
-        
-        .resources-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 25px;
-        }
-        
-        .resource-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        
-        .resource-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-        }
-        
-        .resource-header {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 20px;
-        }
-        
-        .resource-subject {
-            font-size: 0.8rem;
-            opacity: 0.9;
-            margin-bottom: 5px;
-        }
-        
-        .resource-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-        
-        .resource-date {
-            font-size: 0.7rem;
-            opacity: 0.8;
-            margin-top: 8px;
-        }
-        
-        .resource-preview {
-            padding: 20px;
-            color: #555;
-            line-height: 1.6;
-            max-height: 120px;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .resource-preview::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 40px;
-            background: linear-gradient(transparent, white);
-        }
-        
-        .resource-footer {
-            padding: 15px 20px;
-            border-top: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .read-more {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .modal.show {
-            display: flex;
-        }
-        
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            max-width: 800px;
-            width: 90%;
-            max-height: 85vh;
-            overflow-y: auto;
-            animation: slideIn 0.3s ease;
-        }
-        
-        @keyframes slideIn {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-        
-        .modal-header {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 20px;
-            position: sticky;
-            top: 0;
-        }
-        
-        .modal-header h2 {
-            margin-bottom: 5px;
-        }
-        
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 28px;
-            cursor: pointer;
-            color: white;
-        }
-        
-        .modal-body {
-            padding: 25px;
-            line-height: 1.7;
-        }
-        
-        .modal-body h3 {
-            color: #667eea;
-            margin: 20px 0 10px;
-        }
-        
-        .loading, .empty-state {
-            text-align: center;
-            padding: 60px;
-            color: #888;
-        }
-        
-        footer {
-            background: #1a1a2e;
-            color: white;
-            text-align: center;
-            padding: 30px;
-            margin-top: 60px;
-        }
-        
-        @media (max-width: 768px) {
-            nav {
-                flex-direction: column;
-                text-align: center;
-            }
-            .hero h1 {
-                font-size: 1.8rem;
-            }
-            .resources-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-</head>
-<body>
-
-<nav>
-    <a href="dashboard.html" class="logo">🎓 Ernest Embassy LMS</a>
-    <div class="nav-links">
-        <a href="dashboard.html">📊 Dashboard</a>
-        <a href="courses.html">📝 Practice</a>
-        <a href="class.html">💰 Challenge</a>
-        <a href="resources.html" style="background: #ffd700; color: #1a1a2e;">📚 Resources</a>
-        <a href="winners.html">🏆 Winners</a>
-        <a href="team.html">⭐ Team</a>
-    </div>
-    <div class="user-area">
-        <span class="user-name">Welcome, <span id="userNameDisplay">Student</span>!</span>
-        <button class="logout-btn" onclick="logout()">🚪 Logout</button>
-    </div>
-</nav>
-
-<div class="hero">
-    <h1>📚 Educational Resources</h1>
-    <p>Free study notes, lesson materials, and revision guides</p>
-</div>
-
-<div class="container">
-    <div class="filter-section" id="filterSection">
-        <button class="filter-btn active" data-subject="all">📚 All</button>
-        <button class="filter-btn" data-subject="mathematics-ss1">📐 Mathematics</button>
-        <button class="filter-btn" data-subject="english-ss1">📖 English</button>
-        <button class="filter-btn" data-subject="digital-technology-ss1">💻 Digital Tech</button>
-        <button class="filter-btn" data-subject="igbo-ss1">🌍 Igbo</button>
-    </div>
-    
-    <div id="resourcesContainer">
-        <div class="loading">📚 Loading resources...</div>
-    </div>
-</div>
-
-<footer>
-    <p>© 2026 Ernest Embassy Digital Solutions | Empowering Education Through Technology</p>
-</footer>
-
-<div id="resourceModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <span class="close-modal" onclick="closeModal()">&times;</span>
-            <h2 id="modalTitle">Loading...</h2>
-            <div id="modalSubject" class="resource-subject"></div>
-        </div>
-        <div class="modal-body" id="modalBody"></div>
-    </div>
-</div>
-
-<script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
-        authDomain: "ernest-embassy-lms.firebaseapp.com",
-        projectId: "ernest-embassy-lms",
-        storageBucket: "ernest-embassy-lms.firebasestorage.app",
-        messagingSenderId: "204896421221",
-        appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
-    };
-    
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
+      ]
     }
-    
-    const db = firebase.firestore();
-    const auth = firebase.auth();
-    
-    let allLessons = [];
-    let currentFilter = "all";
-    
-    auth.onAuthStateChanged(async (user) => {
-        if (!user) {
-            window.location.href = "login.html";
-            return;
-        }
-        
-        const userNameElement = document.getElementById("userNameDisplay");
-        if (userNameElement) {
-            const userDoc = await db.collection("users").doc(user.uid).get();
-            const name = userDoc.exists ? userDoc.data().name : user.email.split('@')[0];
-            userNameElement.innerText = name;
-        }
-        
-        loadLessons();
-    });
-    
-    async function loadLessons() {
-        const container = document.getElementById("resourcesContainer");
-        container.innerHTML = '<div class="loading">📚 Loading resources...</div>';
-        
-        try {
-            const snapshot = await db.collection("lessons").orderBy("createdAt", "desc").get();
-            allLessons = [];
-            
-            snapshot.forEach(doc => {
-                const data = doc.data();
-                allLessons.push({
-                    id: doc.id,
-                    subject: data.subject || "general",
-                    title: data.title || "Untitled",
-                    content: data.content || "No content",
-                    createdAt: data.createdAt
-                });
-            });
-            
-            renderLessons();
-        } catch (err) {
-            console.error("Error loading lessons:", err);
-            container.innerHTML = '<div class="empty-state">⚠️ Error loading resources. Please try again.</div>';
-        }
-    }
-    
-    function renderLessons() {
-        const container = document.getElementById("resourcesContainer");
-        
-        let filtered = allLessons;
-        if (currentFilter !== "all") {
-            filtered = allLessons.filter(l => l.subject === currentFilter);
-        }
-        
-        if (filtered.length === 0) {
-            container.innerHTML = '<div class="empty-state">📭 No resources found. Check back later!</div>';
-            return;
-        }
-        
-        let html = '<div class="resources-grid">';
-        
-        filtered.forEach(lesson => {
-            const subjectNames = {
-                "mathematics-ss1": "📐 Mathematics SS1",
-                "english-ss1": "📖 English SS1",
-                "digital-technology-ss1": "💻 Digital Technology SS1",
-                "igbo-ss1": "🌍 Igbo SS1"
-            };
-            const subjectName = subjectNames[lesson.subject] || "📚 General";
-            
-            const strippedContent = lesson.content.replace(/<[^>]*>/g, '');
-            const preview = strippedContent.substring(0, 150) + '...';
-            const date = lesson.createdAt ? lesson.createdAt.toDate().toLocaleDateString() : 'Recent';
-            
-            html += `
-                <div class="resource-card" onclick="openLesson('${lesson.id}')">
-                    <div class="resource-header">
-                        <div class="resource-subject">${subjectName}</div>
-                        <div class="resource-title">${escapeHtml(lesson.title)}</div>
-                        <div class="resource-date">📅 ${date}</div>
-                    </div>
-                    <div class="resource-preview">${escapeHtml(preview)}</div>
-                    <div class="resource-footer">
-                        <span>📖 Read full lesson</span>
-                        <button class="read-more" onclick="event.stopPropagation(); openLesson('${lesson.id}')">Read More →</button>
-                    </div>
-                </div>
-            `;
-        });
-        
-        html += '</div>';
-        container.innerHTML = html;
-    }
-    
-    async function openLesson(lessonId) {
-        const lesson = allLessons.find(l => l.id === lessonId);
-        if (!lesson) return;
-        
-        const subjectNames = {
-            "mathematics-ss1": "📐 Mathematics SS1",
-            "english-ss1": "📖 English SS1",
-            "digital-technology-ss1": "💻 Digital Technology SS1",
-            "igbo-ss1": "🌍 Igbo SS1"
-        };
-        
-        document.getElementById("modalTitle").innerHTML = lesson.title;
-        document.getElementById("modalSubject").innerHTML = subjectNames[lesson.subject] || "📚 General";
-        document.getElementById("modalBody").innerHTML = lesson.content;
-        document.getElementById("resourceModal").classList.add("show");
-        document.body.style.overflow = "hidden";
-    }
-    
-    function closeModal() {
-        document.getElementById("resourceModal").classList.remove("show");
-        document.body.style.overflow = "auto";
-    }
-    
-    function escapeHtml(str) {
-        if (!str) return "";
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === "&") return "&amp;";
-            if (m === "<") return "&lt;";
-            if (m === ">") return "&gt;";
-            return m;
-        });
-    }
-    
-    function logout() {
-        auth.signOut().then(() => {
-            window.location.href = "login.html";
-        });
-    }
-    
-    document.querySelectorAll(".filter-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-            document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
-            currentFilter = btn.getAttribute("data-subject");
-            renderLessons();
-        });
-    });
-    
-    document.getElementById("resourceModal").addEventListener("click", function(e) {
-        if (e.target === this) closeModal();
-    });
-    
-    document.addEventListener("keydown", function(e) {
-        if (e.key === "Escape") closeModal();
-    });
-</script>
-
-</body>
-</html>
+  ]
+}

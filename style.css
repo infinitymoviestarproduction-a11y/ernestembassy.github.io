@@ -1,7 +1,6 @@
 /* ========================================
    PROFESSIONAL DROPDOWN MENU (LMS STYLE)
 ======================================== */
-
 .dropdown {
     position: relative;
     display: inline-flex;
@@ -12,10 +11,10 @@
     background: transparent;
     border: none;
     color: #fff;
-    font-size: 14px;
+    font-size: 0.8rem; /* Adjusted slightly to match nav-links font sizing */
     font-weight: 500;
     cursor: pointer;
-    padding: 10px 12px;
+    padding: 8px 12px;
     border-radius: 8px;
     transition: all 0.3s ease;
     font-family: inherit;
@@ -30,14 +29,13 @@
 }
 
 /* Dropdown Panel */
-
 .dropdown-content {
     position: absolute;
-    top: 48px;
+    top: 40px;
     left: 0;
     min-width: 240px;
-    background: #111;
-    border: 1px solid #333;
+    background: #16213e; /* Matched to theme background colors */
+    border: 1px solid rgba(255, 215, 0, 0.3);
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 15px 40px rgba(0,0,0,0.45);
@@ -50,8 +48,7 @@
     z-index: 9999;
 }
 
-/* Show Menu */
-
+/* Show Menu on Hover or Focus Within */
 .dropdown:hover .dropdown-content,
 .dropdown:focus-within .dropdown-content {
     opacity: 1;
@@ -60,23 +57,18 @@
 }
 
 /* Links */
-
 .dropdown-content a {
     display: flex;
     align-items: center;
     gap: 10px;
-
     color: #fff;
     text-decoration: none;
-
     padding: 14px 18px;
-
     font-size: 14px;
     font-weight: 500;
-
     border-bottom: 1px solid rgba(255,255,255,0.08);
-
     transition: all 0.25s ease;
+    width: 100%;
 }
 
 .dropdown-content a:last-child {
@@ -89,36 +81,23 @@
     padding-left: 24px;
 }
 
-/* Section Header */
-
+/* Section Header styling inside dropdowns if needed */
 .dropdown-header {
     padding: 12px 18px;
-    font-size: 12px;
+    font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #888;
-    background: #0a0a0a;
-    border-bottom: 1px solid #222;
-}
-
-/* Notification Badge */
-
-.dropdown-badge {
-    background: #ff4d4d;
-    color: #fff;
-    font-size: 11px;
+    color: rgba(255, 215, 0, 0.7);
+    background: #12192c;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     font-weight: bold;
-    padding: 2px 7px;
-    border-radius: 50px;
-    margin-left: auto;
+    text-align: left;
 }
 
 /* ========================================
    MOBILE RESPONSIVE
 ======================================== */
-
 @media (max-width: 768px) {
-
     .dropdown {
         width: 100%;
         display: block;
@@ -127,28 +106,27 @@
     .dropbtn {
         width: 100%;
         justify-content: space-between;
-        padding: 14px;
+        padding: 12px 14px;
         border-radius: 10px;
+        color: white;
     }
 
     .dropdown-content {
         position: static;
         width: 100%;
         min-width: unset;
-
         opacity: 1;
         visibility: visible;
         transform: none;
-
         display: none;
-
         margin-top: 5px;
-
         border-radius: 10px;
         box-shadow: none;
-        border: 1px solid #222;
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        background: #12192c;
     }
 
+    /* Trigger layout expansion on mobile view click toggle */
     .dropdown.active .dropdown-content {
         display: block;
     }

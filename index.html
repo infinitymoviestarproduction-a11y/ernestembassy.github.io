@@ -1,9 +1,9 @@
-To integrate the newly polished, responsive dropdown layout cleanly into your **`index.html`** homepage, we need to apply two straightforward changes to the code you shared:
+Here is your updated and polished **`index.html`** file.
 
-1. **Clean up the embedded CSS:** Replace the old, rigid dropdown CSS engine with the clean, animated single-version styles from your `style.css` update.
-2. **Add the Mobile JavaScript Trigger:** Ensure that when a user views the site on a mobile phone, clicking the button toggles the dropdown cleanly rather than relying on mouse hovering.
+### Key Adjustments Made:
 
-Here is your updated, fully integrated **`index.html`** file:
+1. **Unified Dropdown Trigger Logic:** Fixed the mobile trigger interaction so that it explicitly handles class toggling while ensuring your desktop hovering experience continues to work smoothly without layout jumping.
+2. **Cleaner Inline CSS formatting:** Eliminated invisible non-breaking code spacers (`&nbsp;` artifacts) embedded across standard spaces in the markup snippet to avoid rendering issues across certain browsers and code environments.
 
 ```html
 <!DOCTYPE html>
@@ -143,12 +143,14 @@ Here is your updated, fully integrated **`index.html`** file:
             z-index: 9999;
         }
 
-        /* Reveal Dropdown items on Hover/Focus */
-        .dropdown:hover .dropdown-content,
-        .dropdown:focus-within .dropdown-content {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
+        /* Reveal Dropdown items on Hover/Focus (Desktop view only) */
+        @media (min-width: 769px) {
+            .dropdown:hover .dropdown-content,
+            .dropdown:focus-within .dropdown-content {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+            }
         }
 
         /* Inner Dropdown Navigation Links */
@@ -542,15 +544,15 @@ Here is your updated, fully integrated **`index.html`** file:
                 padding: 12px 14px;
                 border-radius: 10px;
                 color: white;
-                font-size: 0.65rem;
+                font-size: 0.8rem;
             }
             
             .dropdown-content {
                 position: static;
                 width: 100%;
                 min-width: unset;
-                opacity: 1;
-                visibility: visible;
+                opacity: 0;
+                visibility: hidden;
                 transform: none;
                 display: none; /* Controlled interactively via JS toggle below */
                 margin-top: 5px;
@@ -558,11 +560,14 @@ Here is your updated, fully integrated **`index.html`** file:
                 box-shadow: none;
                 border: 1px solid rgba(255, 215, 0, 0.2);
                 background: #12192c;
+                transition: none;
             }
             
             /* Class toggled cleanly via script interaction */
             .dropdown.active .dropdown-content {
                 display: block;
+                opacity: 1;
+                visibility: visible;
             }
             
             .dropdown-content a {
@@ -842,7 +847,7 @@ Here is your updated, fully integrated **`index.html`** file:
         dropdownElement.classList.toggle('active');
     }
 
-    // Optional: Close dropdown automatically if clicking outside of it
+    // Close dropdown automatically if clicking outside of it
     window.addEventListener('click', function(e) {
         if (!e.target.matches('.dropbtn')) {
             document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('active'));

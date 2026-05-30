@@ -1,6 +1,3 @@
-Here is the updated `about.html` file with the new, responsive navigation layout matching your studio page. It incorporates a clean grid-based wrapping structure for maximum compatibility across both mobile screens and desktop monitors.
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +18,7 @@ Here is the updated `about.html` file with the new, responsive navigation layout
             background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
         }
 
-        /* Navigation */
+        /* Unified Navigation Bar */
         nav {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             padding: 1rem 0;
@@ -38,7 +35,6 @@ Here is the updated `about.html` file with the new, responsive navigation layout
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
         }
 
         .logo {
@@ -72,187 +68,99 @@ Here is the updated `about.html` file with the new, responsive navigation layout
 
         .nav-links {
             display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            align-items: center;
+            gap: 12px;
         }
 
-        .nav-links a, .dropbtn {
+        .nav-links a {
             color: white;
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
             padding: 8px 0;
-            font-size: 0.85rem;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-family: inherit;
+            font-size: 0.8rem;
+            white-space: nowrap;
         }
 
-        .nav-links a:hover, .dropdown:hover .dropbtn {
+        .nav-links a:hover {
             color: #ffd700;
         }
 
-        /* Dropdown Menu Logic */
-        .dropdown {
-            position: relative;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background: #16213e;
-            min-width: 180px;
-            border-radius: 8px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            overflow: hidden;
-            top: 100%;
-            left: 0;
-            z-index: 1001;
-        }
-
-        .dropdown-content a {
-            display: block;
-            padding: 10px 15px;
-            color: white;
-            width: 100%;
-            text-align: left;
-        }
-
-        .dropdown-content a:hover {
-            background: #1a1a2e;
-            color: #ffd700;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        /* Hero Header Section */
+        .about-hero {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: white;
             text-align: center;
             padding: 80px 20px;
+            border-bottom: 3px solid #ffd700;
         }
 
-        .hero h1 {
+        .about-hero h1 {
             font-size: 2.5rem;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        /* Main Story Layout */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 50px 20px;
+        }
+
+        .profile-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .profile-section h2 {
+            color: #1a1a2e;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffd700;
+            padding-left: 15px;
+        }
+
+        .profile-section p {
+            color: #555;
+            font-size: 1.05rem;
+            line-height: 1.8;
             margin-bottom: 20px;
         }
 
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        /* Section Titles */
-        .section-title {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 15px;
-            color: #1a1a2e;
-            margin-top: 60px;
-        }
-
-        .section-title span {
-            border-bottom: 3px solid #ffd700;
-            padding-bottom: 10px;
-        }
-
-        /* About Content */
-        .about-content {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-        }
-
-        .about-content h2 {
-            color: #1a1a2e;
+        /* Core Values/Branches Matrix */
+        .branches-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
             margin-top: 30px;
-            margin-bottom: 15px;
-            font-size: 1.6rem;
         }
 
-        .about-content h3 {
-            color: #667eea;
-            margin: 20px 0 10px;
-        }
-
-        .about-content p {
-            color: #555;
-            line-height: 1.8;
-            margin-bottom: 15px;
-        }
-
-        .bio-image {
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .bio-image img {
-            width: 100%;
-            max-width: 350px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
-
-        .partner-logo {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .partner-logo img {
-            height: 80px;
-            background: white;
-            padding: 10px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .motto-box {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #ffd700;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .motto-box p {
-            font-size: 1.3rem;
-            font-style: italic;
-            margin-bottom: 0;
-            color: #ffd700;
-        }
-
-        .cac-badge {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #ffd700;
+        .branch-item {
+            background: #f8f9fa;
             padding: 20px;
-            border-radius: 15px;
-            margin: 30px 0;
-            text-align: center;
+            border-radius: 12px;
+            border-top: 3px solid #16213e;
         }
 
-        .signature {
-            font-family: 'Segoe UI', cursive;
-            font-size: 1.2rem;
-            color: #667eea;
-            margin-top: 20px;
+        .branch-item strong {
+            color: #1a1a2e;
+            display: block;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
         }
 
+        .branch-item p {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 0;
+            line-height: 1.6;
+        }
+
+        /* Footer Layout */
         footer {
             background: #1a1a2e;
             color: white;
@@ -261,76 +169,22 @@ Here is the updated `about.html` file with the new, responsive navigation layout
             margin-top: 60px;
         }
 
-        .cac-badge-footer {
-            background: #ffd700;
-            color: #1a1a2e;
-            padding: 10px 20px;
-            border-radius: 30px;
-            display: inline-block;
-            font-size: 0.85rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .whatsapp-float {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #25D366;
-            color: white;
-            border-radius: 50px;
-            padding: 12px 20px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 1000;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .whatsapp-float:hover {
-            transform: scale(1.05);
-            background-color: #20b859;
-        }
-
         @media (max-width: 768px) {
             .nav-container {
                 flex-direction: column;
                 gap: 15px;
-                text-align: center;
             }
             .nav-links {
-                justify-content: center;
-                gap: 12px;
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 5px;
+                gap: 15px;
             }
-            .nav-links a, .dropbtn {
-                font-size: 0.75rem;
+            .branches-grid {
+                grid-template-columns: 1fr;
             }
-            .dropdown-content {
-                position: absolute;
-                background: #16213e;
-                left: 50%;
-                transform: translateX(-50%);
-                box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-            }
-            .hero h1 {
-                font-size: 1.8rem;
-            }
-            .about-content {
-                padding: 25px;
-            }
-            .motto-box p {
-                font-size: 1rem;
-            }
-            .bio-image img {
-                max-width: 100%;
-            }
-            .whatsapp-float {
-                padding: 8px 15px;
-                bottom: 15px;
-                right: 15px;
-                font-size: 12px;
+            .about-hero h1 {
+                font-size: 2rem;
             }
         }
     </style>
@@ -339,13 +193,13 @@ Here is the updated `about.html` file with the new, responsive navigation layout
 
 <nav>
     <div class="nav-container">
-        <div class="logo">
-            <span class="logo-icon">✨</span>
+        <a href="index.html" class="logo">
+            <span class="logo-icon">🌐</span>
             <div>
                 <span class="logo-text">Ernest Embassy</span>
                 <span class="logo-sub">Digital Solutions</span>
             </div>
-        </div>
+        </a>
         <div class="nav-links">
             <a href="index.html">🏠 Home</a>
             <a href="about.html">📖 About</a>
@@ -354,176 +208,56 @@ Here is the updated `about.html` file with the new, responsive navigation layout
             <a href="visa.html">✈️ Visa</a>
             <a href="movie.html">🎬 Movie Studio</a>
             <a href="portfolio.html">🎨 Portfolio</a>
-            
-            <div class="dropdown">
-                <button class="dropbtn">🎓 Education ▼</button>
-                <div class="dropdown-content">
-                    <a href="education.html">🎓 Education Hub</a>
-                    <a href="teaching.html">📚 Teaching Notes</a>
-                    <a href="tutoring.html">💻 Online Tutoring</a>
-                    <a href="class.html">🏫 Virtual Class</a>
-                </div>
-            </div>
-
-            <a href="booking.html">📅 Book</a>
+            <a href="class.html">🎓 Class</a>
             <a href="contact.html">📞 Contact</a>
-            <a href="team.html">⭐ Team</a>
-            <a href="testimonials.html">⭐ Testimonials</a>
-            <a href="register.html">📝 Register</a>
-            <a href="login.html">🔐 Login</a>
-            <a href="dashboard.html">👤 Dashboard</a>
-            <a href="admin.html">🔒 Admin</a>
         </div>
     </div>
 </nav>
 
-<div class="hero">
-    <h1>About Ernest Embassy Digital Solutions</h1>
-    <p>Travel • Film Production • Education Consulting • Online Tutoring • Web Development</p>
+<div class="about-hero">
+    <h1>📖 About Our Enterprise</h1>
+    <p>Discover the journey, drive, and vision behind Ernest Embassy Digital Solutions</p>
 </div>
 
 <div class="container">
-    <div class="about-content">
+    
+    <div class="profile-section">
         <h2>Who We Are</h2>
-        <p>Ernest Embassy Digital Solutions is a multi-service brand operated by <strong>Damian Anielozie Okafor</strong>, a teacher, visa consultant, film producer, online tutor, and web developer.</p>
-        <p>We are not a large agency with anonymous staff. We are a hands-on service provider where you deal directly with the founder.</p>
-
-        <div class="motto-box">
-            <p>🎬 "Creating stories that live beyond the screen."</p>
-        </div>
-
-        <h2>Full Biography of Damian Anielozie Okafor</h2>
-        
-        <div class="bio-image">
-            <img src="images/cover%202.jpg" alt="Damian Anielozie Okafor - Founder & CEO">
-        </div>
-        
-        <p><strong>Founder & CEO, Infinity Movie Star Production</strong><br>
-        <strong>Founder, Ernest Embassy Digital Solutions</strong></p>
-
-        <p>Damian Anielozie Okafor is a Nigerian filmmaker, scriptwriter, entrepreneur, educator, travel consultant, and web developer with a passion for transforming ideas into impactful stories and life-changing opportunities.</p>
-
-        <p>Born into the family of Late Luke Nkwoemeka Okafor Odowa and Mrs. Okwuchukwu Roseline Okafor Odowa, Damian is the sixth child in his family. From an early age, he demonstrated a deep interest in creativity, leadership, education, and entrepreneurship.</p>
-
-        <p>Damian earned his Nigeria Certificate in Education (NCE) from Enugu State College of Education (Technical) and became a registered member of the Teachers Registration Council of Nigeria. He began his teaching career in 2007 and later worked in several sectors including education, logistics, manufacturing, private security, and hospitality. These experiences shaped his broad understanding of people, business, and storytelling.</p>
-
-        <p>In 2013, he founded Infinity Movie Star Production with the vision of producing compelling films that entertain, educate, and inspire audiences around the world. The company was formally registered in 2017 and has grown into a platform for film production, script development, talent discovery, and practical training for aspiring actors and filmmakers.</p>
-
-        <p>Damian is the writer of ambitious film projects such as <strong>Official Card</strong> and <strong>Round Table</strong>, alongside other titles including Playground, Land of Edomita, Heaven's Gate, Twins Blood, and Girls Go Wild. His storytelling often explores themes of justice, corruption, faith, family, and redemption.</p>
-
-        <p>Beyond filmmaking, Damian also founded <strong>Ernest Embassy Digital Solutions</strong>, which encompasses travel consultancy, website development, and online tutoring services.</p>
-
-        <p>A former football and volleyball enthusiast, Damian brings discipline, teamwork, and perseverance to every project. His personal motto, <strong>"Creating stories that live beyond the screen,"</strong> reflects his commitment to producing meaningful content and building ventures that positively impact lives.</p>
-
-        <p>Today, Damian continues to expand his creative and business endeavors, seeking collaborations with investors, artists, and production partners across Nigeria, Zimbabwe, Malawi, and beyond.</p>
-
-        <h2>🎬 Director's Statement / CEO Message</h2>
-        <h3>A Message from Damian Anielozie Okafor</h3>
-
-        <p>Welcome to Ernest Embassy Digital Solutions.</p>
-
-        <p>Storytelling has always been more than entertainment to me—it is a powerful tool for inspiring change, preserving culture, and connecting people across the world. Through film, web development, and education, we can challenge injustice, celebrate humanity, and leave a lasting legacy.</p>
-
-        <p>When I founded Infinity Movie Star Production, my goal was to build a platform where creativity meets purpose. Today, Ernest Embassy Digital Solutions extends that vision to help businesses establish their online presence through professional websites.</p>
-
-        <p>Thank you for visiting our website and for believing in our vision. We welcome collaborations with sponsors, actors, distributors, creative partners, and business owners who share our passion for meaningful storytelling and digital excellence.</p>
-
-        <p>Together, we can create something extraordinary.</p>
-
-        <div class="signature">
-            <p><strong>Damian Anielozie Okafor</strong><br>
-            Founder & CEO, Infinity Movie Star Production<br>
-            Founder, Ernest Embassy Digital Solutions</p>
-        </div>
-
-        <h2>Our Story</h2>
-        <p>Everything started in the classroom in <strong>2007</strong>. As a teacher, Damian saw how many students and families struggled with study abroad applications and visa processes. That led to the birth of Ernest Embassy Travels.</p>
-        <p>At the same time, Damian's passion for storytelling and movies grew into <strong>Infinity Movie Star Production</strong>, registered with the CAC on <strong>June 21, 2017 (Certificate No: BN2517233)</strong>, dedicated to producing quality films and training aspiring filmmakers.</p>
-        <p>Today, Ernest Embassy Digital Solutions has evolved to include website development services, helping businesses and individuals establish a professional online presence.</p>
-
-        <div class="cac-badge">
-            ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
-            📍 6 Ezinifite Close, New Haven, Enugu, Enugu State, Nigeria
-        </div>
-
-        <h2>Our Divisions</h2>
-
-        <h3>💻 Ernest Embassy Digital Solutions</h3>
-        <p>We provide professional website development, hosting, and management services for businesses, schools, and individuals using modern technologies like GitHub and Cloudflare Pages.</p>
-
-        <h3>✈ Ernest Embassy Travels</h3>
-        <p>We specialize in visa processing, travel consultation, flight guidance, and relocation support for students, tourists, and workers.</p>
-
-        <h3>🎬 Infinity Movie Star Production</h3>
-        <p>We create high-quality films, scripts, and entertainment content, including movie production, directing, editing, and storytelling. We also offer hands-on training for aspiring actors, directors, and crew members.</p>
-
-        <h3>🎓 Educational Consulting</h3>
-        <p>We guide students in selecting schools abroad, applying for admission, and securing student visas for international education opportunities.</p>
-
-        <h3>💻 Online Tutoring</h3>
-        <p>Damian personally teaches English Language, Digital Technology, Igbo for diaspora students, and coordinates science exam preparation (Chemistry, Physics, Mathematics for WAEC, NECO, JAMB) via WhatsApp platform. Adult literacy also available.</p>
-
-        <h2>🤝 International Partnerships</h2>
-        <p>Infinity Movie Star Production proudly collaborates with international partners to bring quality storytelling to global audiences.</p>
-        
-        <h3>🌍 Ashanti Media Logistics</h3>
-        
-        <div class="partner-logo">
-            <img src="images/ashsnti%20logo.jpg" alt="Ashanti Media Logistics Logo">
-        </div>
-        
-        <p><strong>Emmanuel Fragrance Francisque</strong> of Ashanti Media Logistics provides international production support, media logistics, and global creative collaboration. This partnership strengthens our ability to execute projects across continents and position African stories for international markets.</p>
-
-        <h3>🇲🇼 Zomba Film Production</h3>
-        <p><strong>Never Matewere</strong> of Zomba Film Production supports local production, talent coordination, and film training in Malawi, expanding training opportunities across Africa.</p>
-
-        <h2>Professional Memberships & Affiliations</h2>
-        <p>Damian and Infinity Movie Star Production are recognized across multiple international platforms:</p>
-        <ul style="margin-left: 30px; margin-top: 15px;">
-            <li>The ISA (International Screenwriters Association)</li>
-            <li>MovieBytes</li>
-            <li>FilmFreeway</li>
-            <li>The Black List</li>
-            <li>PocketMFA</li>
-            <li>Emerging Screenwriters</li>
-            <li>Gigs</li>
-        </ul>
-
-        <h2>Our Mission</h2>
-        <p>To connect people to global opportunities through travel, education, creative entertainment, and digital solutions — while providing honest, direct access to the founder.</p>
-
-        <h2>Our Values</h2>
-        <ul style="margin-left: 30px;">
-            <li><strong>Honesty</strong> – We never promise what we cannot deliver</li>
-            <li><strong>Expertise</strong> – Every service is backed by real experience since 2007</li>
-            <li><strong>Personal attention</strong> – You work directly with Damian, no middlemen</li>
-        </ul>
+        <p>Ernest Embassy Digital Solutions is a versatile, dynamic multi-niche corporate ecosystem designed to solve complex challenges across diverse global fields. We provide operational structures that balance technical innovation, media production excellence, global immigration pathways, and modern educational services.</p>
+        <p>By blending our specialized branches together, we give clients, students, and creative partners a centralized platform to launch websites, navigate international travel borders, produce cinematic content, or access cutting-edge cloud-based learning infrastructure seamlessly.</p>
     </div>
-</div>
 
-<div style="text-align: center; padding: 20px;">
-    <div class="cac-badge-footer">
-        ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
-        📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
+    <div class="profile-section">
+        <h2>Our Core Pillars & Subsidiaries</h2>
+        <p>We do not just perform a single task; we offer a unified framework built on years of verified operational expertise:</p>
+        
+        <div class="branches-grid">
+            <div class="branch-item">
+                <strong>✈️ Ernest Embassy Travels</strong>
+                <p>Handling professional visa consulting protocols, student admissions, work permits, and travel documentation packages.</p>
+            </div>
+            <div class="branch-item">
+                <strong>🎬 Infinity Movie Star Production</strong>
+                <p>A corporate-registered creative engine delivering premium scriptwriting formatting, stage directing, and high-tier cinematic rendering.</p>
+            </div>
+            <div class="branch-item">
+                <strong>💻 Web Dev & Engineering</strong>
+                <p>Building high-performance e-commerce portals, corporate sites, custom UI modifications, and scalable digital tools.</p>
+            </div>
+            <div class="branch-item">
+                <strong>🎓 Learning Management Systems</strong>
+                <p>Serving academic communities with structured curriculum architectures, lesson scheme modules, and automated testing arenas.</p>
+            </div>
+        </div>
     </div>
+
 </div>
 
 <footer>
-    <div class="container">
-        <p><strong>Ernest Embassy Digital Solutions</strong> | Travel • Film • Education • Web Development</p>
-        <p>📧 ernestembassytravels@gmail.com | infinitymoviestarproduction@gmail.com | Danoka33@gmail.com</p>
-        <p>📞 +2348032607809 | +2349050205053</p>
-        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
-        <p style="margin-top: 20px;">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
-    </div>
+    <p><strong>Ernest Embassy Digital Solutions</strong> | Travel • Film • Education • Web Development</p>
+    <p>📍 Enugu, Nigeria</p>
+    <p style="margin-top: 15px; font-size: 0.85rem; color: #aaa;">&copy; 2026 Ernest Embassy Digital Solutions. All rights reserved.</p>
 </footer>
-
-<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
-    <span>💬</span>
-    <span>Chat with Damian on WhatsApp</span>
-</a>
 
 </body>
 </html>
-
-```

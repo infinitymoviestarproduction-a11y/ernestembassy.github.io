@@ -21,6 +21,7 @@
         /* Navigation */
         nav {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 1rem 0;
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -30,7 +31,7 @@
         .nav-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 15px 20px;
+            padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -73,55 +74,111 @@
             align-items: center;
         }
 
-        .nav-links a, .dropbtn {
+        .nav-links a {
             color: white;
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
             padding: 8px 0;
             font-size: 0.8rem;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-family: inherit;
         }
 
-        .nav-links a:hover, .dropdown:hover .dropbtn {
+        .nav-links a:hover {
             color: #ffd700;
         }
 
-        /* Dropdown Menu Logic */
+        /* ========================================
+           PROFESSIONAL DROPDOWN MENU (LMS STYLE)
+        ======================================== */
         .dropdown {
             position: relative;
+            display: inline-flex;
+            align-items: center;
         }
 
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background: #16213e;
-            min-width: 180px;
+        .dropbtn {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 8px 12px;
             border-radius: 8px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            overflow: hidden;
-            top: 100%;
-            left: 0;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
+        .dropbtn:hover {
+            color: #ffd700;
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* Dropdown Panel */
+        .dropdown-content {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            min-width: 240px;
+            background: #16213e;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.45);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.25s ease;
+            z-index: 9999;
+        }
+
+        /* Show Menu */
+        .dropdown:hover .dropdown-content,
+        .dropdown:focus-within .dropdown-content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Links */
         .dropdown-content a {
-            display: block;
-            padding: 10px 15px;
-            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #fff;
+            text-decoration: none;
+            padding: 14px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.25s ease;
             width: 100%;
-            text-align: left;
+        }
+
+        .dropdown-content a:last-child {
+            border-bottom: none;
         }
 
         .dropdown-content a:hover {
-            background: #1a1a2e;
+            background: rgba(255,215,0,0.12);
             color: #ffd700;
+            padding-left: 24px;
         }
 
-        .dropdown:hover .dropdown-content {
-            display: block;
+        /* Section Header */
+        .dropdown-header {
+            padding: 12px 18px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 215, 0, 0.7);
+            background: #12192c;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            font-weight: bold;
+            text-align: left;
         }
 
         /* Hero Section with Background Image */
@@ -537,6 +594,9 @@
             background-color: #20b859;
         }
 
+        /* ========================================
+           MOBILE RESPONSIVE NAVIGATION OVERRIDES
+        ======================================== */
         @media (max-width: 768px) {
             .nav-container {
                 flex-direction: column;
@@ -547,17 +607,45 @@
                 justify-content: center;
                 gap: 8px;
                 flex-wrap: wrap;
+                width: 100%;
             }
-            .nav-links a, .dropbtn {
+            .nav-links a {
+                font-size: 0.65rem;
+            }
+            .dropdown {
+                width: 100%;
+                display: block;
+            }
+            .dropbtn {
+                width: 100%;
+                justify-content: space-between;
+                padding: 12px 14px;
+                border-radius: 10px;
+                color: white;
                 font-size: 0.65rem;
             }
             .dropdown-content {
                 position: static;
+                width: 100%;
+                min-width: unset;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                display: none;
+                margin-top: 5px;
+                border-radius: 10px;
                 box-shadow: none;
-                background: rgba(22, 33, 62, 0.5);
+                border: 1px solid rgba(255, 215, 0, 0.2);
+                background: #12192c;
             }
-            .dropdown:hover .dropdown-content {
+            .dropdown.active .dropdown-content {
                 display: block;
+            }
+            .dropdown-content a {
+                padding: 15px 20px;
+            }
+            .dropdown-content a:hover {
+                padding-left: 28px;
             }
             .hero {
                 padding: 80px 20px;
@@ -569,7 +657,19 @@
             .mission-box p {
                 font-size: 1rem;
             }
-            .services-grid, .screenplays-grid, .gallery-grid, .music-grid, .partners-grid {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            .screenplays-grid {
+                grid-template-columns: 1fr;
+            }
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            .music-grid {
+                grid-template-columns: 1fr;
+            }
+            .partners-grid {
                 grid-template-columns: 1fr;
             }
             .whatsapp-float {
@@ -604,26 +704,34 @@
             <a href="webdev.html">💻 Web Dev</a>
             <a href="visa.html">✈️ Visa</a>
             <a href="movie.html">🎬 Movie Studio</a>
-            <a href="portfolio.html">🎨 Portfolio</a>
             
             <div class="dropdown">
-                <button class="dropbtn">🎓 Education ▼</button>
+                <button class="dropbtn" onclick="toggleMobileDropdown(this)">🎨 Portfolio & Gallery ▾</button>
                 <div class="dropdown-content">
-                    <a href="education.html">🎓 Education Hub</a>
-                    <a href="teaching.html">📚 Teaching Notes</a>
-                    <a href="tutoring.html">💻 Online Tutoring</a>
-                    <a href="class.html">🏫 Virtual Class</a>
+                    <div class="dropdown-header">Media & Showcases</div>
+                    <a href="portfolio.html">🖼️ Portfolio</a>
+                    <a href="gallery.html">📸 Gallery</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="dropbtn" onclick="toggleMobileDropdown(this)">🎓 Education & Teaching ▾</button>
+                <div class="dropdown-content">
+                    <div class="dropdown-header">Academic Portals</div>
+                    <a href="teaching.html">📚 Teaching</a>
+                    <a href="tutoring.html">💻 Tutoring</a>
+                    <a href="education.html">📜 Education</a>
+                    <a href="class.html">🏫 Class</a>
                 </div>
             </div>
 
             <a href="booking.html">📅 Book</a>
             <a href="contact.html">📞 Contact</a>
-            <a href="team.html">⭐ Team</a>
-            <a href="testimonials.html">⭐ Testimonials</a>
             <a href="register.html">📝 Register</a>
             <a href="login.html">🔐 Login</a>
             <a href="dashboard.html">👤 Dashboard</a>
             <a href="admin.html">🔒 Admin</a>
+            <a href="testimonials.html">⭐ Testimonials</a>
         </div>
     </div>
 </nav>
@@ -980,6 +1088,21 @@
             closeLightbox();
         }
     });
+
+    // Mobile Navigation Dropdown Controller Logic
+    function toggleMobileDropdown(button) {
+        if (window.innerWidth <= 768) {
+            const parentDropdown = button.parentElement;
+            
+            // Close other open dropdown areas to avoid overlapping layouts
+            document.querySelectorAll('.dropdown').forEach(item => {
+                if (item !== parentDropdown) item.classList.remove('active');
+            });
+            
+            // Toggle visual status classes dynamically
+            parentDropdown.classList.toggle('active');
+        }
+    }
 </script>
 
 </body>

@@ -1,230 +1,163 @@
-/* ============================================
-   ERNEST EMBASSY LMS - UDEMY LEVEL UI UPGRADE
-   Version: 3.0 (Navigation + UX Fix)
-============================================ */
+/* ========================================
+   PROFESSIONAL DROPDOWN MENU (LMS STYLE)
+======================================== */
 
-/* RESET */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f5f7fa;
-    color: #333;
-}
-
-/* =========================
-   TOP NAVIGATION (NEW FIX)
-========================= */
-
-.top-nav {
-    background: #1a1a2e;
-    color: white;
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
+.dropdown {
+    position: relative;
+    display: inline-flex;
     align-items: center;
-    flex-wrap: wrap;
 }
 
-.top-nav a {
-    color: white;
-    text-decoration: none;
-    margin-right: 15px;
-    font-weight: 500;
-}
-
-.top-nav a:hover {
-    color: #ffd700;
-}
-
-/* BACK BUTTON (CRITICAL FIX) */
-.back-btn {
-    background: #667eea;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 13px;
-    display: inline-block;
-    margin-right: 10px;
-}
-
-.back-btn:hover {
-    background: #5a67d8;
-}
-
-/* =========================
-   LAYOUT SYSTEM
-========================= */
-
-.container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 20px;
-}
-
-.hero {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-    padding: 60px 20px;
-    text-align: center;
-    border-radius: 10px;
-}
-
-/* =========================
-   DASHBOARD GRID (UDEMY STYLE)
-========================= */
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
-}
-
-.card {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-    transition: 0.3s;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-}
-
-.card a {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 10px 14px;
-    background: #667eea;
-    color: white;
-    border-radius: 8px;
-    text-decoration: none;
-}
-
-/* =========================
-   COURSE PLAYER (FIXED UX)
-========================= */
-
-.course-layout {
-    display: flex;
-    height: 100vh;
-}
-
-/* SIDEBAR */
-.sidebar {
-    width: 280px;
-    background: white;
-    border-right: 1px solid #ddd;
-    padding: 15px;
-    overflow-y: auto;
-}
-
-.lesson {
-    padding: 12px;
-    margin-bottom: 10px;
-    background: #f0f0f0;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.lesson:hover {
-    background: #ddd;
-}
-
-.lesson.active {
-    background: #667eea;
-    color: white;
-}
-
-/* CONTENT AREA */
-.content {
-    flex: 1;
-    padding: 30px;
-}
-
-.lesson-box {
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-}
-
-/* =========================
-   NAVIGATION BUTTONS (FIX)
-========================= */
-
-.nav-controls {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
-}
-
-button {
-    padding: 10px 16px;
+.dropbtn {
+    background: transparent;
     border: none;
-    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
-    background: #667eea;
-    color: white;
-}
-
-button:hover {
-    background: #5a67d8;
-}
-
-.logout {
-    background: crimson;
-}
-
-/* =========================
-   USER HEADER BAR (UDEMY STYLE)
-========================= */
-
-.user-bar {
-    background: white;
-    padding: 10px 20px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-family: inherit;
     display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid #ddd;
+    align-items: center;
+    gap: 6px;
 }
 
-/* =========================
-   PROGRESS BAR (NEW FEATURE READY)
-========================= */
+.dropbtn:hover {
+    color: #ffd700;
+    background: rgba(255,255,255,0.05);
+}
 
-.progress-bar {
-    width: 100%;
-    height: 8px;
-    background: #eee;
-    border-radius: 20px;
+/* Dropdown Panel */
+
+.dropdown-content {
+    position: absolute;
+    top: 48px;
+    left: 0;
+    min-width: 240px;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 12px;
     overflow: hidden;
-    margin-top: 10px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.45);
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+
+    transition: all 0.25s ease;
+    z-index: 9999;
 }
 
-.progress-bar-fill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+/* Show Menu */
+
+.dropdown:hover .dropdown-content,
+.dropdown:focus-within .dropdown-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
 }
 
-/* =========================
-   MOBILE FIX
-========================= */
+/* Links */
+
+.dropdown-content a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    color: #fff;
+    text-decoration: none;
+
+    padding: 14px 18px;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+
+    transition: all 0.25s ease;
+}
+
+.dropdown-content a:last-child {
+    border-bottom: none;
+}
+
+.dropdown-content a:hover {
+    background: rgba(255,215,0,0.12);
+    color: #ffd700;
+    padding-left: 24px;
+}
+
+/* Section Header */
+
+.dropdown-header {
+    padding: 12px 18px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888;
+    background: #0a0a0a;
+    border-bottom: 1px solid #222;
+}
+
+/* Notification Badge */
+
+.dropdown-badge {
+    background: #ff4d4d;
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 2px 7px;
+    border-radius: 50px;
+    margin-left: auto;
+}
+
+/* ========================================
+   MOBILE RESPONSIVE
+======================================== */
 
 @media (max-width: 768px) {
-    .course-layout {
-        flex-direction: column;
+
+    .dropdown {
+        width: 100%;
+        display: block;
     }
 
-    .sidebar {
+    .dropbtn {
         width: 100%;
-        height: auto;
+        justify-content: space-between;
+        padding: 14px;
+        border-radius: 10px;
+    }
+
+    .dropdown-content {
+        position: static;
+        width: 100%;
+        min-width: unset;
+
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+
+        display: none;
+
+        margin-top: 5px;
+
+        border-radius: 10px;
+        box-shadow: none;
+        border: 1px solid #222;
+    }
+
+    .dropdown.active .dropdown-content {
+        display: block;
+    }
+
+    .dropdown-content a {
+        padding: 15px 20px;
+    }
+
+    .dropdown-content a:hover {
+        padding-left: 28px;
     }
 }

@@ -1,17 +1,9 @@
-Here is your updated and polished **`index.html`** file.
-
-### Key Adjustments Made:
-
-1. **Unified Dropdown Trigger Logic:** Fixed the mobile trigger interaction so that it explicitly handles class toggling while ensuring your desktop hovering experience continues to work smoothly without layout jumping.
-2. **Cleaner Inline CSS formatting:** Eliminated invisible non-breaking code spacers (`&nbsp;` artifacts) embedded across standard spaces in the markup snippet to avoid rendering issues across certain browsers and code environments.
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ernest Embassy Digital Solutions</title>
+    <title>Ernest Embassy Digital Solutions - Home</title>
     <style>
         * {
             margin: 0;
@@ -26,7 +18,7 @@ Here is your updated and polished **`index.html`** file.
             background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
         }
 
-        /* Navigation */
+        /* Unified Navigation Bar */
         nav {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             padding: 1rem 0;
@@ -43,7 +35,6 @@ Here is your updated and polished **`index.html`** file.
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
         }
 
         .logo {
@@ -77,9 +68,7 @@ Here is your updated and polished **`index.html`** file.
 
         .nav-links {
             display: flex;
-            flex-wrap: wrap;
             gap: 12px;
-            align-items: center;
         }
 
         .nav-links a {
@@ -89,524 +78,134 @@ Here is your updated and polished **`index.html`** file.
             transition: color 0.3s;
             padding: 8px 0;
             font-size: 0.8rem;
+            white-space: nowrap;
         }
 
         .nav-links a:hover {
             color: #ffd700;
         }
 
-        /* ========================================================
-           UPDATED DROPDOWN MENU ENGINE (LMS STYLE)
-        ======================================================== */
-        .dropdown {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-        }
-
-        .dropbtn {
-            background: transparent;
-            border: none;
-            color: #fff;
-            font-size: 0.8rem;
-            font-weight: 500;
-            cursor: pointer;
-            padding: 8px 12px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-family: inherit;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .dropbtn:hover {
-            color: #ffd700;
-            background: rgba(255,255,255,0.05);
-        }
-
-        /* Dropdown Panel Container */
-        .dropdown-content {
-            position: absolute;
-            top: 40px;
-            left: 0;
-            min-width: 240px;
-            background: #16213e;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.45);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(10px);
-            transition: all 0.25s ease;
-            z-index: 9999;
-        }
-
-        /* Reveal Dropdown items on Hover/Focus (Desktop view only) */
-        @media (min-width: 769px) {
-            .dropdown:hover .dropdown-content,
-            .dropdown:focus-within .dropdown-content {
-                opacity: 1;
-                visibility: visible;
-                transform: translateY(0);
-            }
-        }
-
-        /* Inner Dropdown Navigation Links */
-        .dropdown-content a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #fff;
-            text-decoration: none;
-            padding: 14px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            border-bottom: 1px solid rgba(255,255,255,0.08) !important;
-            transition: all 0.25s ease;
-            width: 100%;
-            text-align: left;
-        }
-
-        .dropdown-content a:last-child {
-            border-bottom: none !important;
-        }
-
-        .dropdown-content a:hover {
-            background: rgba(255,215,0,0.12);
-            color: #ffd700;
-            padding-left: 24px;
-        }
-
-        /* Section Header Separators inside menus */
-        .dropdown-header {
-            padding: 12px 18px;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(255, 215, 0, 0.7);
-            background: #12192c;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            font-weight: bold;
-            text-align: left;
-            width: 100%;
-        }
-
-        /* Hero Section with Background Image */
+        /* Hero Portal Presentation */
         .hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url('images/combination%20logo.jpg');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            background-color: #0a0a2e;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: white;
             text-align: center;
             padding: 100px 20px;
-            position: relative;
+            border-bottom: 3px solid #ffd700;
         }
 
         .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-size: 3rem;
+            color: #ffd700;
+            margin-bottom: 15px;
         }
 
         .hero p {
-            font-size: 1.2rem;
-            max-width: 800px;
+            font-size: 1.3rem;
+            max-width: 700px;
             margin: 0 auto 30px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            color: #e9ecef;
         }
 
-        .hero-badges {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .hero-badge {
-            background: rgba(0,0,0,0.6);
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,215,0,0.3);
-        }
-
-        .btn {
-            display: inline-block;
-            background: #ffd700;
-            color: #1a1a2e;
-            padding: 12px 30px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-            margin-top: 20px;
-        }
-
-        .btn:hover {
-            background: #e6c200;
-            transform: translateY(-3px);
-        }
-
+        /* Platform Ecosystem Hub Grid */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        section {
             padding: 60px 20px;
         }
 
-        .section-title {
+        .hub-title {
             text-align: center;
-            font-size: 2rem;
+            font-size: 2.2rem;
             margin-bottom: 40px;
             color: #1a1a2e;
         }
 
-        .section-title span {
-            border-bottom: 3px solid #ffd700;
-            padding-bottom: 10px;
-        }
-
-        .section-subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 20px;
-            font-size: 1rem;
-        }
-
-        /* Service Cards */
-        .services-grid {
+        .hub-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
         }
 
-        .service-card {
+        .hub-card {
             background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             text-align: center;
-            transition: transform 0.3s;
-            text-decoration: none;
-            color: #333;
-            display: block;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
-        .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        .hub-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
 
-        .service-icon {
+        .hub-icon {
             font-size: 3rem;
-            margin-bottom: 20px;
-        }
-
-        .service-card h3 {
             margin-bottom: 15px;
-            color: #1a1a2e;
-        }
-
-        .service-card p {
-            color: #666;
-        }
-
-        .why-section {
-            background: #f0f0f5;
-            border-radius: 20px;
-        }
-
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .testimonial-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            font-style: italic;
-        }
-
-        .testimonial-card .author {
-            margin-top: 15px;
-            font-weight: bold;
-            color: #667eea;
-            font-style: normal;
-        }
-
-        .memberships-section {
-            text-align: center;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            margin: 40px 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-
-        .memberships-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        .membership-badge {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 8px 18px;
-            border-radius: 30px;
-            font-size: 0.85rem;
-            font-weight: bold;
-        }
-
-        /* Social Feed Grid */
-        .social-feed-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin: 40px 0;
-        }
-
-        .youtube-feed, .instagram-feed {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        }
-
-        .feed-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .feed-icon {
-            font-size: 1.8rem;
-        }
-
-        .feed-header h3 {
-            color: #1a1a2e;
-            flex: 1;
-            font-size: 1.1rem;
-        }
-
-        .feed-link {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.85rem;
-            transition: transform 0.3s;
-        }
-
-        .feed-link:hover {
-            transform: translateY(-2px);
-        }
-
-        .video-wrapper {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            border-radius: 12px;
-        }
-
-        .video-wrapper iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 12px;
-        }
-
-        .social-section {
-            text-align: center;
-            padding: 40px 20px;
-            background: white;
-            border-radius: 20px;
-            margin: 40px 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-
-        .social-icons {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .social-icon {
             display: inline-block;
-            background: #f8f9fa;
-            padding: 12px 18px;
-            border-radius: 12px;
+        }
+
+        .hub-card h3 {
+            font-size: 1.4rem;
+            color: #1a1a2e;
+            margin-bottom: 12px;
+        }
+
+        .hub-card p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .hub-btn {
+            display: inline-block;
+            padding: 10px 25px;
+            border-radius: 25px;
             text-decoration: none;
             font-weight: bold;
-            transition: all 0.3s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            color: #333;
+            font-size: 0.9rem;
+            transition: background 0.3s, color 0.3s;
         }
 
-        .social-icon:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-        }
+        .btn-travel { background: #e1f5fe; color: #0288d1; }
+        .btn-travel:hover { background: #0288d1; color: white; }
 
+        .btn-media { background: #fff3e0; color: #f57c00; }
+        .btn-media:hover { background: #f57c00; color: white; }
+
+        .btn-tech { background: #ede7f6; color: #5e35b1; }
+        .btn-tech:hover { background: #5e35b1; color: white; }
+
+        .btn-edu { background: #e8f5e9; color: #388e3c; }
+        .btn-edu:hover { background: #388e3c; color: white; }
+
+        /* Footer */
         footer {
             background: #1a1a2e;
             color: white;
             text-align: center;
             padding: 40px 20px;
-            margin-top: 60px;
+            margin-top: 80px;
+            border-top: 1px solid rgba(255, 215, 0, 0.2);
         }
 
-        .cac-badge {
-            background: #ffd700;
-            color: #1a1a2e;
-            padding: 10px 20px;
-            border-radius: 30px;
-            display: inline-block;
-            font-size: 0.85rem;
-            font-weight: bold;
-            margin: 20px auto;
-        }
-
-        .whatsapp-float {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #25D366;
-            color: white;
-            border-radius: 50px;
-            padding: 12px 20px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 1000;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .whatsapp-float:hover {
-            transform: scale(1.05);
-            background-color: #20b859;
-        }
-
-        /* ========================================================
-           RESPONSIVE DESIGN BREAKPOINTS WITH ASSIGNED UI OVERRIDES
-        ======================================================== */
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
             .nav-container {
                 flex-direction: column;
                 gap: 15px;
-                text-align: center;
             }
             .nav-links {
-                justify-content: center;
-                gap: 12px;
-                flex-wrap: wrap;
                 width: 100%;
-            }
-            
-            /* Responsive Dropdown Adaptations */
-            .dropdown {
-                width: 100%;
-                display: block;
-            }
-            
-            .dropbtn {
-                width: 100%;
-                justify-content: space-between;
-                padding: 12px 14px;
-                border-radius: 10px;
-                color: white;
-                font-size: 0.8rem;
-            }
-            
-            .dropdown-content {
-                position: static;
-                width: 100%;
-                min-width: unset;
-                opacity: 0;
-                visibility: hidden;
-                transform: none;
-                display: none; /* Controlled interactively via JS toggle below */
-                margin-top: 5px;
-                border-radius: 10px;
-                box-shadow: none;
-                border: 1px solid rgba(255, 215, 0, 0.2);
-                background: #12192c;
-                transition: none;
-            }
-            
-            /* Class toggled cleanly via script interaction */
-            .dropdown.active .dropdown-content {
-                display: block;
-                opacity: 1;
-                visibility: visible;
-            }
-            
-            .dropdown-content a {
-                padding: 15px 20px;
-            }
-            
-            .dropdown-content a:hover {
-                padding-left: 28px;
-            }
-
-            .hero {
-                padding: 60px 20px;
-                background-size: 60% auto;
+                overflow-x: auto;
+                padding-bottom: 5px;
+                gap: 15px;
             }
             .hero h1 {
-                font-size: 1.8rem;
-            }
-            .hero-badges {
-                flex-direction: column;
-                align-items: center;
-            }
-            .services-grid {
-                grid-template-columns: 1fr;
-            }
-            .testimonials-grid {
-                grid-template-columns: 1fr;
-            }
-            .social-feed-grid {
-                grid-template-columns: 1fr;
-            }
-            .social-icons {
-                flex-direction: column;
-                align-items: center;
-            }
-            .whatsapp-float {
-                padding: 8px 15px;
-                bottom: 15px;
-                right: 15px;
-                font-size: 12px;
+                font-size: 2.2rem;
             }
         }
     </style>
@@ -616,7 +215,7 @@ Here is your updated and polished **`index.html`** file.
 <nav>
     <div class="nav-container">
         <a href="index.html" class="logo">
-            <span class="logo-icon">🎓</span>
+            <span class="logo-icon">🌐</span>
             <div>
                 <span class="logo-text">Ernest Embassy</span>
                 <span class="logo-sub">Digital Solutions</span>
@@ -630,232 +229,58 @@ Here is your updated and polished **`index.html`** file.
             <a href="visa.html">✈️ Visa</a>
             <a href="movie.html">🎬 Movie Studio</a>
             <a href="portfolio.html">🎨 Portfolio</a>
-            
-            <div class="dropdown">
-                <button class="dropbtn" onclick="toggleMobileDropdown(event, this)">🎓 Education ▾</button>
-                <div class="dropdown-content">
-                    <div class="dropdown-header">LMS Portal Links</div>
-                    <a href="teaching.html">📚 Teaching Materials</a>
-                    <a href="tutoring.html">💻 Online Tutoring</a>
-                    <a href="class.html">🎓 Virtual Classroom</a>
-                </div>
-            </div>
-            
-            <a href="booking.html">📅 Book</a>
+            <a href="class.html">🎓 Class</a>
             <a href="contact.html">📞 Contact</a>
-            <a href="faq.html">❓ FAQ</a>
-            <a href="testimonials.html">⭐ Testimonials</a>
-            <a href="register.html">📝 Register</a>
-            <a href="login.html">🔐 Login</a>
-            <a href="dashboard.html">👤 Dashboard</a>
-            <a href="admin.html">🔒 Admin</a>
         </div>
     </div>
 </nav>
 
 <div class="hero">
-    <h1>Damian Anielozie Okafor</h1>
-    <p>Teacher | Visa Consultant | Film Producer | Online Tutor | Web Developer</p>
-    
-    <div class="hero-badges">
-        <span class="hero-badge">✈️ Visa Processing</span>
-        <span class="hero-badge">🎬 Film Production</span>
-        <span class="hero-badge">📚 Education Consulting</span>
-        <span class="hero-badge">💻 Online Tutoring</span>
-        <span class="hero-badge">🌐 Web Development</span>
-    </div>
-    <div class="hero-badges">
-        <span class="hero-badge">✅ CAC Registered since 2017</span>
-        <span class="hero-badge">📚 Teaching since 2014</span>
-        <span class="hero-badge">💻 Modern Tech Stack</span>
-    </div>
-    <a href="booking.html" class="btn" style="margin-top: 20px;">📅 Start Your Application →</a>
+    <h1>Ernest Embassy Digital Solutions</h1>
+    <p>A multi-niche business framework handling global travel itineraries, cinematic film production, corporate web engineering, and modern institutional learning platforms.</p>
 </div>
 
 <div class="container">
-    <section>
-        <div class="section-title"><span>What I Do</span></div>
-        <div class="services-grid">
-            <a href="webdev.html" class="service-card">
-                <div class="service-icon">💻</div>
-                <h3>Web Development</h3>
-                <p>Custom websites, e-commerce stores, and web applications using modern tech stack.</p>
-            </a>
-            <a href="visa.html" class="service-card">
-                <div class="service-icon">✈️</div>
-                <h3>Visa Processing</h3>
-                <p>Student, tourist, and work visas. Step-by-step guidance.</p>
-            </a>
-            <a href="movie.html" class="service-card">
-                <div class="service-icon">🎬</div>
-                <h3>Film Production & Training</h3>
-                <p>Movie production + hands-on training. CAC registered since 2017.</p>
-            </a>
-            <a href="education.html" class="service-card">
-                <div class="service-icon">📚</div>
-                <h3>Educational Consulting</h3>
-                <p>School selection, admissions, and study abroad planning.</p>
-            </a>
-            <a href="tutoring.html" class="service-card">
-                <div class="service-icon">💻</div>
-                <h3>Online Tutoring</h3>
-                <p>English, Digital Tech, Igbo for diaspora, Science exam prep.</p>
-            </a>
-        </div>
-    </section>
-
-    <section class="why-section">
-        <div class="section-title"><span>Why Choose Me</span></div>
-        <div class="services-grid">
-            <div class="service-card">
-                <h3>👨‍🏫 Direct Access</h3>
-                <p>You deal directly with Damian Okafor. No middlemen.</p>
-            </div>
-            <div class="service-card">
-                <h3>✅ CAC Registered</h3>
-                <p>Infinity Movie Star Production registered June 21, 2017.</p>
-            </div>
-            <div class="service-card">
-                <h3>🎓 10+ Years Experience</h3>
-                <p>Teaching since 2014. Real classroom and online expertise.</p>
-            </div>
-            <div class="service-card">
-                <h3>🌍 Global Reach</h3>
-                <p>Serving Nigerians and international diaspora students.</p>
-            </div>
-            <div class="service-card">
-                <h3>💻 Modern Tech Stack</h3>
-                <p>GitHub + Cloudflare Pages for fast, secure websites.</p>
-            </div>
-        </div>
-    </section>
-
-    <div class="memberships-section">
-        <h3>🎬 Professional Memberships & Affiliations</h3>
-        <div class="memberships-grid">
-            <span class="membership-badge">🏆 The ISA</span>
-            <span class="membership-badge">🎥 MovieBytes</span>
-            <span class="membership-badge">🎬 FilmFreeway</span>
-            <span class="membership-badge">⭐ The Black List</span>
-            <span class="membership-badge">📱 PocketMFA</span>
-            <span class="membership-badge">✍️ Emerging Screenwriters</span>
-            <span class="membership-badge">🎬 Gigs</span>
-        </div>
-    </div>
-
-    <div class="section-title"><span>📱 Latest from Social Media</span></div>
-    <div class="section-subtitle">Follow me on YouTube and Instagram for behind-the-scenes content</div>
-
-    <div class="social-feed-grid">
-        <div class="youtube-feed">
-            <div class="feed-header">
-                <div class="feed-icon">▶️</div>
-                <h3>YouTube - Infinity Movie Star Production</h3>
-                <a href="https://youtube.com/@infinitymoviestarproductio6222" target="_blank" class="feed-link">Subscribe →</a>
-            </div>
-            <div class="video-wrapper">
-                <iframe 
-                    src="https://www.youtube.com/embed?listType=user_uploads&list=infinitymoviestarproductio6222" 
-                    title="YouTube video player" 
-                    frameborder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                    referrerpolicy="strict-origin-when-cross-origin" 
-                    allowfullscreen>
-                </iframe>
-            </div>
+    <h2 class="hub-title">Explore Our Business Ecosystem</h2>
+    
+    <div class="hub-grid">
+        
+        <div class="hub-card">
+            <span class="hub-icon">✈️</span>
+            <h3>Ernest Embassy Travels</h3>
+            <p>Professional visa assistance, work permit pathways, admission placements, and complete documentation reviews for cross-border migration protocols.</p>
+            <a href="visa.html" class="hub-btn btn-travel">Explore Visas →</a>
         </div>
 
-        <div class="instagram-feed">
-            <div class="feed-header">
-                <div class="feed-icon">📷</div>
-                <h3>Instagram - @imspenugu</h3>
-                <a href="https://instagram.com/imspenugu" target="_blank" class="feed-link">Follow →</a>
-            </div>
-            <div class="instagram-embed">
-                <p style="text-align: center; color: #666; margin-top: 20px;">
-                    📱 <a href="https://instagram.com/imspenugu" target="_blank" style="color: #e4405f; text-decoration: none;">View on Instagram →</a>
-                </p>
-                <p style="text-align: center; color: #999; font-size: 0.85rem; margin-top: 10px;">
-                    Follow @imspenugu for behind-the-scenes content, movie updates, and creative shots.
-                </p>
-            </div>
+        <div class="hub-card">
+            <span class="hub-icon">🎬</span>
+            <h3>Infinity Movie Star Production</h3>
+            <p>Full-scale motion picture configurations, script formatting, stage direction, digital editing infrastructure, and creative media talent tracking arrays.</p>
+            <a href="movie.html" class="hub-btn btn-media">Enter Studio →</a>
         </div>
-    </div>
 
-    <section>
-        <div class="section-title"><span>What Clients Say</span></div>
-        <div class="testimonials-grid">
-            <div class="testimonial-card">
-                "Damian helped me get my student visa to Canada after two previous rejections. His attention to detail is unmatched."
-                <div class="author">— Michael O., Lagos</div>
-            </div>
-            <div class="testimonial-card">
-                "The film training at Infinity Movie Star Production changed my life. I went from zero experience to acting in a real production."
-                <div class="author">— Grace E., Enugu</div>
-            </div>
-            <div class="testimonial-card">
-                "My daughter's Igbo improved dramatically after just one month of online tutoring. She now speaks confidently."
-                <div class="author">— Mrs. Ngozi, USA (Diaspora)</div>
-            </div>
+        <div class="hub-card">
+            <span class="hub-icon">💻</span>
+            <h3>Digital Technology & Dev</h3>
+            <p>Bespoke web development infrastructure, e-commerce storefront integration systems, deployment pipelines, and digital technical optimization workflows.</p>
+            <a href="webdev.html" class="hub-btn btn-tech">Request Web Dev →</a>
         </div>
-    </section>
 
-    <div class="social-section">
-        <h3>🌐 Follow & Connect With Damian</h3>
-        <div class="social-icons">
-            <a href="https://facebook.com/damian.okafor31131" target="_blank" class="social-icon">📘 Facebook</a>
-            <a href="https://twitter.com/danoka33" target="_blank" class="social-icon">🐦 Twitter</a>
-            <a href="https://instagram.com/imspenugu" target="_blank" class="social-icon">📷 Instagram</a>
-            <a href="https://tiktok.com/@damianokafor225" target="_blank" class="social-icon">🎵 TikTok</a>
-            <a href="https://youtube.com/@infinitymoviestarproductio6222" target="_blank" class="social-icon">▶️ YouTube</a>
-            <a href="https://on.soundcloud.com/2uhZKraveAXA1zVtJx" target="_blank" class="social-icon">🎧 SoundCloud</a>
-            <a href="https://audiomack.com/infinitymoviestarproduction579" target="_blank" class="social-icon">🔊 Audiomack</a>
-            <a href="https://tunami.com/@infinitymoviestarproduction579" target="_blank" class="social-icon">🌊 Tunami</a>
+        <div class="hub-card">
+            <span class="hub-icon">🎓</span>
+            <h3>LMS Institutional Hub</h3>
+            <p>Virtual curriculum trackers, interactive digital examination portals, complete lesson scheme archives, and academic class infrastructure systems.</p>
+            <a href="class.html" class="hub-btn btn-edu">Access Classroom →</a>
         </div>
-    </div>
-</div>
 
-<div style="text-align: center; padding: 20px;">
-    <div class="cac-badge">
-        ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
-        📍 6 Ezinifite Close, New Haven, Enugu, Enugu State, Nigeria
     </div>
 </div>
 
 <footer>
-    <div class="container">
-        <p><strong>Ernest Embassy Digital Solutions</strong> | Travel • Film • Education • Web Development</p>
-        <p>📧 ernestembassytravels@gmail.com | infinitymoviestarproduction@gmail.com | Danoka33@gmail.com</p>
-        <p>📞 +2348032607809 | +2349050205053</p>
-        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
-        <p style="margin-top: 20px;">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
-    </div>
+    <p><strong>Ernest Embassy Digital Solutions</strong> | Travel • Film • Education • Web Development</p>
+    <p>📍 Enugu, Nigeria</p>
+    <p style="margin-top: 15px; font-size: 0.85rem; color: #aaa;">&copy; 2026 Ernest Embassy Digital Solutions. All rights reserved.</p>
 </footer>
-
-<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
-    <span>💬</span>
-    <span>Chat with Damian on WhatsApp</span>
-</a>
-
-<script>
-    function toggleMobileDropdown(event, button) {
-        // Prevent action mapping if the screen width is wide desktop view
-        if (window.innerWidth > 768) return;
-        
-        event.preventDefault();
-        const dropdownElement = button.closest('.dropdown');
-        dropdownElement.classList.toggle('active');
-    }
-
-    // Close dropdown automatically if clicking outside of it
-    window.addEventListener('click', function(e) {
-        if (!e.target.matches('.dropbtn')) {
-            document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('active'));
-        }
-    });
-</script>
 
 </body>
 </html>
-
-```

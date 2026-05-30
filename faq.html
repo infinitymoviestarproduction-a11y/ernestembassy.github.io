@@ -70,7 +70,8 @@
         .nav-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 12px;
+            align-items: center;
         }
 
         .nav-links a {
@@ -79,11 +80,72 @@
             font-weight: 500;
             transition: color 0.3s;
             padding: 8px 0;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         .nav-links a:hover {
             color: #ffd700;
+        }
+
+        /* Dropdown Menu Styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropbtn {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 0;
+            font-size: 0.8rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .dropbtn:hover {
+            color: #ffd700;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-width: 180px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            z-index: 1000;
+            top: 35px;
+            left: 0;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .dropdown-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-content a:hover {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+            padding-left: 22px;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
         }
 
         /* Hero Section */
@@ -279,6 +341,7 @@
             background-color: #20b859;
         }
 
+        /* Mobile Dropdown Adjustments */
         @media (max-width: 768px) {
             .nav-container {
                 flex-direction: column;
@@ -287,8 +350,21 @@
             }
             .nav-links {
                 justify-content: center;
-                gap: 10px;
+                gap: 8px;
                 flex-wrap: wrap;
+            }
+            .nav-links a {
+                font-size: 0.65rem;
+            }
+            .dropdown {
+                display: block;
+                width: auto;
+            }
+            .dropdown-content {
+                position: absolute;
+                min-width: 160px;
+                right: 0;
+                left: auto;
             }
             .faq-grid {
                 grid-template-columns: 1fr;
@@ -307,7 +383,7 @@
 </head>
 <body>
 
-<!-- Navigation -->
+<!-- PROFESSIONAL NAVIGATION WITH DROPDOWN MENU -->
 <nav>
     <div class="nav-container">
         <div class="logo">
@@ -325,9 +401,17 @@
             <a href="visa.html">✈️ Visa</a>
             <a href="movie.html">🎬 Movie Studio</a>
             <a href="portfolio.html">🎨 Portfolio</a>
-            <a href="teaching.html">📚 Teaching</a>
-            <a href="tutoring.html">💻 Tutoring</a>
-            <a href="education.html">🎓 Education</a>
+            
+            <!-- EDUCATION DROPDOWN -->
+            <div class="dropdown">
+                <button class="dropbtn">🎓 Education ▼</button>
+                <div class="dropdown-content">
+                    <a href="teaching.html">📚 Teaching</a>
+                    <a href="tutoring.html">💻 Tutoring</a>
+                    <a href="class.html">🎓 Class</a>
+                </div>
+            </div>
+            
             <a href="booking.html">📅 Book</a>
             <a href="contact.html">📞 Contact</a>
             <a href="faq.html">❓ FAQ</a>
@@ -343,7 +427,7 @@
 <!-- Hero Section -->
 <div class="hero">
     <h1>❓ Frequently Asked Questions</h1>
-    <p>Find answers to common questions about our visa, education, tutoring, and web development services</p>
+    <p>Find answers to common questions about our visa, education, tutoring, teaching, and web development services</p>
 </div>
 
 <div class="container">
@@ -477,17 +561,17 @@
         </div>
     </div>
 
-    <!-- TUTORING & COACHING FAQ -->
+    <!-- TEACHING & TUTORING FAQ -->
     <div class="faq-category">
-        <h2 class="category-title">💻 Tutoring & Coaching FAQ</h2>
+        <h2 class="category-title">📚 Teaching & Tutoring FAQ</h2>
         <div class="faq-grid">
             <div class="faq-item">
                 <div class="faq-question">
-                    ❓ Do you offer tutoring services?
+                    ❓ Do you offer teaching and tutoring services?
                     <span class="icon">▼</span>
                 </div>
                 <div class="faq-answer">
-                    Yes. We offer tutoring and coaching services for students in various subjects, including computer studies, academic support, examination preparation, and practical digital skills training.
+                    Yes. We offer professional teaching and tutoring services for students in various subjects, including computer studies, English language, Igbo language, science subjects, exam preparation, and practical digital skills training.
                 </div>
             </div>
 
@@ -497,19 +581,16 @@
                     <span class="icon">▼</span>
                 </div>
                 <div class="faq-answer">
-                    Our tutoring and training services may include:
+                    Our teaching and tutoring services may include:
                     <ul>
-                        <li>Computer studies</li>
-                        <li>Basic ICT training</li>
+                        <li>English Language (Grammar, comprehension, literature)</li>
+                        <li>Computer Studies & Digital Literacy</li>
+                        <li>Igbo Language (For diaspora students)</li>
+                        <li>Science Subjects (Chemistry, Physics, Mathematics)</li>
+                        <li>Exam Preparation (WAEC, NECO, JAMB, IGCSE)</li>
+                        <li>Adult Literacy Programs</li>
                         <li>Website development basics</li>
-                        <li>Digital literacy</li>
-                        <li>Academic coaching</li>
-                        <li>Examination preparation support</li>
-                        <li>English Language</li>
-                        <li>Digital Technology</li>
-                        <li>Igbo (Diaspora)</li>
-                        <li>Science Exam Preparation</li>
-                        <li>Adult Literacy</li>
+                        <li>Academic coaching & mentorship</li>
                     </ul>
                     Programs may vary depending on student level and availability.
                 </div>
@@ -521,7 +602,7 @@
                     <span class="icon">▼</span>
                 </div>
                 <div class="faq-answer">
-                    Yes. Depending on the program or service, we may offer online tutoring, virtual consultations, and remote coaching sessions for students and clients. This allows flexibility for students anywhere in the world.
+                    Yes. Depending on the program or service, we offer online tutoring, virtual consultations, and remote coaching sessions for students and clients. This allows flexibility for students anywhere in the world.
                 </div>
             </div>
 
@@ -531,7 +612,7 @@
                     <span class="icon">▼</span>
                 </div>
                 <div class="faq-answer">
-                    Yes. We provide examination preparation support for WAEC, NECO, JAMB, IGCSE, and other standardized tests. Our focus includes subject review, past question practice, study strategies, and confidence building.
+                    Yes. We provide examination preparation support for WAEC, NECO, JAMB, IGCSE, and other standardized tests. Our focus includes subject review, past question practice, study strategies, and confidence building. Our exam success rate is 95%.
                 </div>
             </div>
 
@@ -544,6 +625,22 @@
                     Yes. We offer adult literacy programs, professional development training, digital skills coaching, and career advancement support for adults who want to upgrade their knowledge or transition into new careers.
                 </div>
             </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    ❓ What is your teaching approach?
+                    <span class="icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    Our teaching approach focuses on:
+                    <ul>
+                        <li>Personalized learning tailored to each student's needs</li>
+                        <li>Clarity and understanding of complex topics</li>
+                        <li>Regular progress tracking and assessments</li>
+                        <li>Supportive environment where questions are encouraged</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -553,11 +650,11 @@
         <div class="faq-grid">
             <div class="faq-item">
                 <div class="faq-question">
-                    ❓ What are your fees?
+                    ❓ What are your fees for web development?
                     <span class="icon">▼</span>
                 </div>
                 <div class="faq-answer">
-                    Our fees vary depending on the service, project size, destination country, or training requirements. We provide transparent pricing and detailed quotations before commencing any project or consultation.
+                    Our fees vary depending on the service, project size, destination country, or training requirements. We provide transparent pricing and detailed quotations before commencing any project or consultation. E-commerce websites start at ₦600,000 (WordPress) or ₦900,000 (Shopify).
                 </div>
             </div>
 
@@ -588,7 +685,7 @@
                     <span class="icon">▼</span>
                 </div>
                 <div class="faq-answer">
-                    Yes. We develop professional e-commerce websites with secure payment systems, shopping carts, inventory management, mobile responsiveness, and customer-friendly interfaces.
+                    Yes. We develop professional e-commerce websites with secure payment systems, shopping carts, inventory management, mobile responsiveness, and customer-friendly interfaces using Shopify or WooCommerce.
                 </div>
             </div>
 
@@ -618,7 +715,7 @@
                     <span class="icon">▼</span>
                 </div>
                 <div class="faq-answer">
-                    Yes. We offer ongoing website maintenance services including updates, backups, security monitoring, product uploads, technical support, and performance optimization.
+                    Yes. We offer ongoing website maintenance services including updates, backups, security monitoring, product uploads, technical support, and performance optimization. Annual maintenance starts at ₦70,000/year.
                 </div>
             </div>
 

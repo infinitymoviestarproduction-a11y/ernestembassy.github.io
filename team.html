@@ -89,7 +89,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             text-align: center;
-            padding: 80px 20px;
+            padding: 60px 20px;
         }
 
         .hero h1 {
@@ -104,7 +104,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 40px 20px;
         }
@@ -131,7 +131,7 @@
 
         .team-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
             gap: 40px;
             margin: 40px 0;
         }
@@ -164,14 +164,14 @@
         }
 
         .team-info {
-            padding: 25px;
+            padding: 30px;
             text-align: center;
         }
 
         .team-info h3 {
             color: #1a1a2e;
-            font-size: 1.5rem;
-            margin-bottom: 5px;
+            font-size: 1.6rem;
+            margin-bottom: 8px;
         }
 
         .team-title {
@@ -197,17 +197,55 @@
             margin-bottom: 12px;
         }
 
+        .specializations {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+            justify-content: center;
+        }
+
+        .specialization-tag {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 14px;
+            border-radius: 25px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .signature-role {
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .quote {
+            font-style: italic;
+            color: #667eea;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
         .team-contact {
             background: #f8f9fa;
-            padding: 12px;
-            border-radius: 10px;
+            padding: 15px;
+            border-radius: 12px;
             margin: 15px 0;
             text-align: left;
             font-size: 0.9rem;
         }
 
         .team-contact p {
-            margin: 5px 0;
+            margin: 8px 0;
             color: #555;
         }
 
@@ -258,6 +296,15 @@
             padding: 4px 12px;
             border-radius: 20px;
             font-weight: bold;
+        }
+
+        .gallery-note {
+            background: #f0f4f8;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+            border-left: 4px solid #ffd700;
         }
 
         footer {
@@ -384,7 +431,7 @@
     <div class="team-grid">
         <div class="team-card">
             <div class="team-image">
-                <img src="images/IMG_4951.HEIC.heic" alt="Damian Anielozie Okafor" onerror="this.src='https://placehold.co/400x400?text=Damian+Okafor'">
+                <img src="images/director%20infinity.jpeg" alt="Damian Anielozie Okafor" onerror="this.src='https://placehold.co/400x400?text=Damian+Okafor'">
             </div>
             <div class="team-info">
                 <h3>Damian Anielozie Okafor</h3>
@@ -412,7 +459,7 @@
     <div class="team-grid">
         <div class="team-card">
             <div class="team-image">
-                <img src="images/never-matewere.jpg" alt="Never Matewere" onerror="this.src='https://placehold.co/400x400?text=Never+Matewere'">
+                <img src="images/zomba.jpg" alt="Never Matewere" onerror="this.src='https://placehold.co/400x400?text=Never+Matewere'">
             </div>
             <div class="team-info">
                 <h3>Never Matewere</h3>
@@ -430,7 +477,7 @@
 
         <div class="team-card">
             <div class="team-image">
-                <img src="images/ashsnti logo.jpg" alt="Emmanuel Fragrance Francisque" onerror="this.src='https://placehold.co/400x400?text=Emmanuel+Francisque'">
+                <img src="images/ashsnti%20logo.jpg" alt="Emmanuel Fragrance Francisque" onerror="this.src='https://placehold.co/400x400?text=Emmanuel+Francisque'">
             </div>
             <div class="team-info">
                 <h3>Emmanuel Fragrance Francisque</h3>
@@ -452,6 +499,7 @@
     <div class="section-subtitle">The foundation team who started the journey</div>
 
     <div class="team-grid">
+        <!-- Uchenna Sixtus Uchenna (StSix) - Pioneer Member -->
         <div class="team-card">
             <div class="team-image">
                 <img src="images/stsix.jpeg" alt="Uchenna Sixtus Uchenna (StSix)" onerror="this.src='https://placehold.co/400x400?text=StSix'">
@@ -477,16 +525,134 @@
                 </div>
             </div>
         </div>
+
+        <!-- MAYOR (Innocent Obiorah Eze) - Updated Profile -->
+        <div class="team-card">
+            <div class="team-image">
+                <img src="images/innocent.jpeg" alt="Innocent Obiorah Eze (Mayor)" onerror="this.src='https://placehold.co/400x400?text=Mayor'">
+            </div>
+            <div class="team-info">
+                <h3>Innocent Obiorah Eze (Mayor)</h3>
+                <div class="team-title">👮 Pioneer & Lead Character Interpreter</div>
+                <div class="signature-role">⭐ SIGNATURE ROLE: Don the Police Officer – Official Card Thriller ⭐</div>
+                <div class="specializations">
+                    <span class="specialization-tag">👮 Police Role Specialist</span>
+                    <span class="specialization-tag">🎭 Lead Character Interpreter</span>
+                    <span class="specialization-tag">🎬 Pioneer Member</span>
+                    <span class="specialization-tag">⭐ Commanding Screen Presence</span>
+                </div>
+                <div class="team-bio">
+                    <p>Innocent Obiorah Eze, known professionally as <strong>Mayor</strong>, stands as one of the founding pioneers of Infinity Movie Star Production, Enugu. From our earliest days, his dedication to the craft has been unwavering. As a student at the Enugu State College of Education, Mayor distinguished himself through rare, natural creativity and an unmatched work ethic.</p>
+                    <p>He was always the first to internalize his lines—a testament to his preparation and respect for the art. His breakthrough came with his flawless portrayal of <strong>Don the police officer in Official Card Thriller</strong>, a role that showcased his commanding screen presence and authentic authority.</p>
+                    <p>During training sessions and early movie shots, Mayor delivered perfection in every police act, bringing an unmatched blend of realism, control, and integrity to every character in uniform.</p>
+                </div>
+                <div class="team-contact">
+                    <p><strong>🎭 Stage Name:</strong> Mayor</p>
+                    <p><strong>👮 Signature Role:</strong> Don the Police Officer – Official Card Thriller</p>
+                    <p>📞 <a href="tel:2348088188160">+234 808 818 8160</a></p>
+                </div>
+                <div class="quote">
+                    <p>"Perfection in every act, realism in every role."</p>
+                </div>
+                <div class="team-social">
+                    <a href="tel:2348088188160">📞</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMEKA - Pioneer Member with Full Profile -->
+        <div class="team-card">
+            <div class="team-image">
+                <img src="images/emeka%20up.jpeg" alt="Emeka" onerror="this.src='https://placehold.co/400x400?text=Emeka'">
+            </div>
+            <div class="team-info">
+                <h3>Emeka</h3>
+                <div class="team-title">🎭 Pioneer Member | Digital Media Specialist | Actor | Location Manager</div>
+                <div class="specializations">
+                    <span class="specialization-tag">🤖 Artificial Intelligence</span>
+                    <span class="specialization-tag">✂️ Video Editing</span>
+                    <span class="specialization-tag">📱 Digital Marketing</span>
+                    <span class="specialization-tag">🎨 Graphic Design</span>
+                    <span class="specialization-tag">📍 Location Management</span>
+                </div>
+                <div class="team-bio">
+                    <p>Emeka is one of the pioneering members of Infinity Movie Star Production and has played a significant role in the growth and development of the company from its early stages. With a strong background in digital media and technology, he brings creativity, innovation, and technical excellence to every project he undertakes.</p>
+                    <p>As a Digital Media Specialist, Emeka possesses career-focused expertise in <strong>Artificial Intelligence, Video Editing & Content Creation, Digital Marketing & Content Development, and Graphic Design</strong>. His ability to combine storytelling with modern digital tools has made him a valuable asset both behind and in front of the camera.</p>
+                    <p>Beyond his technical contributions, Emeka is also a talented and dedicated actor. He featured in the proof-of-concept production of <strong>Official Card</strong>, portraying the character <strong>Ken</strong>, where he delivered a convincing performance that demonstrated his passion for the craft and commitment to excellence.</p>
+                    <p>In addition to acting, Emeka served as the <strong>Location Manager</strong> for the production, helping to identify, coordinate, and manage filming locations while ensuring smooth production logistics.</p>
+                </div>
+                <div class="team-contact">
+                    <p><strong>🏢 Business Name:</strong> iVirtue Media and IT</p>
+                    <p>📞 <a href="tel:07064218241">07064218241</a></p>
+                    <p>📧 <a href="mailto:ivirtuemedia@gmail.com">ivirtuemedia@gmail.com</a></p>
+                    <p>▶️ YouTube: <a href="#" target="_blank">@Christ_Ig</a></p>
+                    <p><strong>Acting Credit:</strong> Official Card - Role of <strong>Ken</strong></p>
+                </div>
+                <div class="quote">
+                    <p>"Innovation, creativity, and commitment are the foundations of every great production."</p>
+                </div>
+                <div class="team-social">
+                    <a href="tel:07064218241">📞</a>
+                    <a href="mailto:ivirtuemedia@gmail.com">📧</a>
+                    <a href="#">▶️</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- NNABUIKE - Nwigbo Nnabuike Emmanuel aka Arab -->
+        <div class="team-card">
+            <div class="team-image">
+                <img src="images/nnabuike.jpeg" alt="Nwigbo Nnabuike Emmanuel (Arab)" onerror="this.src='https://placehold.co/400x400?text=Nnabuike'">
+            </div>
+            <div class="team-info">
+                <h3>Nwigbo Nnabuike Emmanuel (Arab)</h3>
+                <div class="team-title">🌟 Volleyball Player / Actor / Creative Talent</div>
+                <div class="specializations">
+                    <span class="specialization-tag">🏐 Volleyball</span>
+                    <span class="specialization-tag">🎭 Acting</span>
+                    <span class="specialization-tag">🎬 Creative Performance</span>
+                    <span class="specialization-tag">🤝 Team Leadership</span>
+                </div>
+                <div class="team-bio">
+                    <p>A dedicated sportsman and talented actor, Arab is one of the pioneer members of Infinity Movie Star Production. His journey with the organization began during his secondary school years, where he was mentored and trained in both volleyball and movie production.</p>
+                    <p>Through discipline, hard work, and passion, he developed not only as an athlete but also as a creative performer. His commitment to teamwork, leadership, and entertainment has made him an important part of the Infinity family.</p>
+                    <p>As a volleyball player, he has inspired many young people through sportsmanship and determination. In filmmaking, he continues to grow as a promising actor with strong screen presence and energy.</p>
+                    <p>He represents the vision of Infinity Movie Star Production — discovering, training, and empowering young talents for greatness.</p>
+                </div>
+                <div class="team-contact">
+                    <p><strong>🌟 Nickname:</strong> Arab</p>
+                    <p>📞 <a href="tel:07062132691">07062132691</a> | <a href="tel:07019596347">07019596347</a></p>
+                    <p>📘 Facebook: <a href="#" target="_blank">Arab's nation</a></p>
+                    <p>📷 Instagram: <a href="#" target="_blank">@arab_sonofman</a></p>
+                    <p>🎵 TikTok: <a href="#" target="_blank">@arab_sonofman</a></p>
+                </div>
+                <div class="quote">
+                    <p>"Discovering, training, and empowering young talents for greatness."</p>
+                </div>
+                <div class="team-social">
+                    <a href="tel:07062132691">📞</a>
+                    <a href="#">📘</a>
+                    <a href="#">📷</a>
+                    <a href="#">🎵</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GALLERY NOTE -->
+    <div class="gallery-note">
+        <p>📸 <strong>Behind the Scenes:</strong> Our team in action during creative meetings and production planning sessions. Check out our <a href="gallery.html" style="color: #667eea;">gallery page</a> for more behind-the-scenes photos!</p>
     </div>
 
     <!-- CALL TO ACTION -->
-    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; padding: 50px; text-align: center; color: white; margin: 60px 0;">
+    <div class="cta-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; padding: 50px; text-align: center; color: white; margin: 60px 0;">
         <h2>🎬 Want to Join Our Team?</h2>
         <p style="margin-top: 15px;">We're always looking for passionate creatives to collaborate with.</p>
-        <a href="contact.html" style="display: inline-block; background: #ffd700; color: #1a1a2e; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: bold; margin-top: 20px;">📞 Contact Us</a>
+        <a href="contact.html" class="btn" style="display: inline-block; background: #ffd700; color: #1a1a2e; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: bold; margin-top: 20px;">📞 Contact Us</a>
     </div>
 </div>
 
+<!-- CAC BADGE -->
 <div style="text-align: center; padding: 20px;">
     <div class="cac-badge">
         ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
@@ -494,6 +660,7 @@
     </div>
 </div>
 
+<!-- FOOTER -->
 <footer>
     <div class="container">
         <p><strong>Infinity Movie Star Production & Ernest Embassy Digital Solutions</strong></p>
@@ -504,6 +671,7 @@
     </div>
 </footer>
 
+<!-- WHATSAPP BUTTON -->
 <a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
     <span>💬</span>
     <span>Chat with Damian on WhatsApp</span>

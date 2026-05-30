@@ -1,11 +1,3 @@
-Here is the updated HTML code for your **Website Development & Management** page (`webdev.html`).
-
-### Key Updates Made:
-
-1. **Fully Unified Navigation Bar:** The `<nav>` link structure has been cross-referenced and perfectly aligned with your `movie.html` page, ensuring seamless, uniform browsing across both sections of your digital presence.
-2. **Cleaned & Validated Layout:** Fixed code alignment and ensured all special characters in the mailto links are properly encoded for flawless functionality.
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -313,6 +305,12 @@ Here is the updated HTML code for your **Website Development & Management** page
             margin-top: 60px;
         }
 
+        .cac-container {
+            text-align: center;
+            padding: 20px;
+            background: transparent;
+        }
+
         .cac-badge {
             background: #ffd700;
             color: #1a1a2e;
@@ -321,7 +319,8 @@ Here is the updated HTML code for your **Website Development & Management** page
             display: inline-block;
             font-size: 0.85rem;
             font-weight: bold;
-            margin-bottom: 20px;
+            max-width: 90%;
+            line-height: 1.4;
         }
 
         .whatsapp-float {
@@ -368,6 +367,10 @@ Here is the updated HTML code for your **Website Development & Management** page
             }
             .workflow-steps {
                 flex-direction: column;
+                margin-top: 50px;
+            }
+            .step {
+                margin-bottom: 30px;
             }
             .whatsapp-float {
                 padding: 8px 15px;
@@ -414,15 +417,15 @@ Here is the updated HTML code for your **Website Development & Management** page
     </div>
 </nav>
 
-<div class="hero">
+<header class="hero">
     <h1>💻 Website Development & Management</h1>
     <p>Professional Website Design, Development, Hosting, and Ongoing Maintenance</p>
-</div>
+</header>
 
-<div class="container">
+<main class="container">
     <p style="text-align: center; font-size: 1.1rem; max-width: 900px; margin: 0 auto;">We develop websites using professional GitHub-based workflows and deploy them on Cloudflare Pages for fast, secure, and reliable performance. This approach enables us to build everything from business websites and online stores to custom web applications with enterprise-level hosting and security.</p>
 
-    <div class="section-title"><span>☁️ Our Modern Development Stack</span></div>
+    <section class="section-title"><span>☁️ Our Modern Development Stack</span></section>
     <div class="section-subtitle">We build and deploy websites using industry-standard technologies and cloud platforms</div>
 
     <div class="tech-grid">
@@ -468,7 +471,7 @@ Here is the updated HTML code for your **Website Development & Management** page
         </div>
     </div>
 
-    <div class="section-title"><span>🚀 Why We Use Cloudflare Pages</span></div>
+    <section class="section-title"><span>🚀 Why We Use Cloudflare Pages</span></section>
     <div class="section-subtitle">Cloudflare Pages offers enterprise-grade infrastructure that helps your website perform exceptionally well</div>
 
     <div class="features-grid">
@@ -482,7 +485,7 @@ Here is the updated HTML code for your **Website Development & Management** page
         <div class="feature-badge">🔐 Enterprise security</div>
     </div>
 
-    <div class="section-title"><span>🌍 Deployment Workflow</span></div>
+    <section class="section-title"><span>🌍 Deployment Workflow</span></section>
     <div class="workflow-steps">
         <div class="step">
             <div class="step-number">1</div>
@@ -510,7 +513,7 @@ Here is the updated HTML code for your **Website Development & Management** page
         </div>
     </div>
 
-    <div class="section-title"><span>🌐 Types of Websites We Create</span></div>
+    <section class="section-title"><span>🌐 Types of Websites We Create</span></section>
 
     <div class="services-grid">
         <div class="service-card">
@@ -606,7 +609,7 @@ Here is the updated HTML code for your **Website Development & Management** page
         </div>
     </div>
 
-    <div class="section-title"><span>🛠️ Website Development Services Included</span></div>
+    <section class="section-title"><span>🛠️ Website Development Services Included</span></section>
     <div class="features-grid">
         <div class="feature-badge">✅ Custom website design</div>
         <div class="feature-badge">✅ Mobile-responsive development</div>
@@ -622,7 +625,7 @@ Here is the updated HTML code for your **Website Development & Management** page
         <div class="feature-badge">✅ Staff training after launch</div>
     </div>
 
-    <div class="section-title"><span>🔧 Website Management & Maintenance</span></div>
+    <section class="section-title"><span>🔧 Website Management & Maintenance</span></section>
     <div class="services-grid">
         <div class="service-card">
             <h3>Maintenance Services Include:</h3>
@@ -650,7 +653,7 @@ Here is the updated HTML code for your **Website Development & Management** page
         </div>
     </div>
 
-    <div class="section-title"><span>💰 E-Commerce Development Pricing</span></div>
+    <section class="section-title"><span>💰 E-Commerce Development Pricing</span></section>
     <div class="services-grid">
         <div class="pricing-card">
             <div class="service-icon">🛍️</div>
@@ -687,7 +690,7 @@ Here is the updated HTML code for your **Website Development & Management** page
         </div>
     </div>
 
-    <div class="section-title"><span>🚀 Search Engine Optimization (SEO)</span></div>
+    <section class="section-title"><span>🚀 Search Engine Optimization (SEO)</span></section>
     <div class="features-grid">
         <div class="feature-badge">Keyword optimization</div>
         <div class="feature-badge">Meta titles and descriptions</div>
@@ -696,7 +699,7 @@ Here is the updated HTML code for your **Website Development & Management** page
         <div class="feature-badge">Technical SEO setup</div>
     </div>
 
-    <div class="section-title"><span>📈 Digital Marketing Integration</span></div>
+    <section class="section-title"><span>📈 Digital Marketing Integration</span></section>
     <div class="features-grid">
         <div class="feature-badge">Email marketing</div>
         <div class="feature-badge">Facebook Pixel</div>
@@ -705,7 +708,7 @@ Here is the updated HTML code for your **Website Development & Management** page
         <div class="feature-badge">Live chat systems</div>
     </div>
 
-    <div class="section-title"><span>💡 Why Choose Ernest Embassy Digital Solutions?</span></div>
+    <section class="section-title"><span>💡 Why Choose Ernest Embassy Digital Solutions?</span></section>
     <div class="features-grid">
         <div class="feature-badge">✅ Custom-built solutions</div>
         <div class="feature-badge">✅ Mobile-friendly designs</div>
@@ -717,7 +720,7 @@ Here is the updated HTML code for your **Website Development & Management** page
         <div class="feature-badge">✅ Enterprise-grade hosting</div>
     </div>
 
-    <div class="section-title"><span>🎓 Training & Handover</span></div>
+    <section class="section-title"><span>🎓 Training & Handover</span></section>
     <div class="services-grid">
         <div class="service-card">
             <p>After your website is completed, we provide training on:</p>
@@ -731,7 +734,7 @@ Here is the updated HTML code for your **Website Development & Management** page
         </div>
     </div>
 
-    <div class="section-title"><span>💰 Payment Terms</span></div>
+    <section class="section-title"><span>💰 Payment Terms</span></section>
     <div class="services-grid">
         <div class="service-card">
             <ul>
@@ -743,7 +746,7 @@ Here is the updated HTML code for your **Website Development & Management** page
         </div>
     </div>
 
-    <div class="email-section">
+    <section class="email-section">
         <h2>📞 Ready to Build Your Website?</h2>
         <p>Whether you need a business website, online store, school portal, or custom platform, we are ready to turn your vision into a powerful online presence that works for you 24/7.</p>
          
@@ -756,10 +759,10 @@ Here is the updated HTML code for your **Website Development & Management** page
             🔒 Your email client will open. Fill in your details and send.<br>
             We will respond within 24 hours.
         </p>
-    </div>
-</div>
+    </section>
+</main>
 
-<div style="text-align: center; padding: 20px;">
+<div class="cac-container">
     <div class="cac-badge">
         ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
         📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
@@ -783,5 +786,3 @@ Here is the updated HTML code for your **Website Development & Management** page
 
 </body>
 </html>
-
-```

@@ -1,558 +1,415 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Subject Quiz - Ernest Embassy LMS</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Arena - Ernest Embassy Digital Solutions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #fff;
+            background: #0f0f1a;
+        }
 
-<script src="auth.js"></script>
+        /* Unified Navigation */
+        nav {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+        }
 
-<style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    body { background: #eef2f7; padding: 20px; }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
 
-    .header {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        padding: 30px;
-        border-radius: 18px;
-        margin-bottom: 30px;
-        text-align: center;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-    }
+        .logo-icon {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
 
-    .header h1 { font-size: 30px; margin-bottom: 10px; }
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffd700;
+            letter-spacing: 1px;
+        }
 
-    .quiz-container { max-width: 1000px; margin: auto; }
+        .logo-sub {
+            font-size: 0.65rem;
+            color: rgba(255, 215, 0, 0.8);
+            display: block;
+            margin-top: 2px;
+        }
 
-    .score-board {
-        position: sticky;
-        top: 10px;
-        background: white;
-        padding: 15px;
-        border-radius: 12px;
-        margin-bottom: 20px;
-        text-align: center;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        font-size: 20px;
-        font-weight: bold;
-        color: #667eea;
-        z-index: 100;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 30px;
-        flex-wrap: wrap;
-    }
+        .nav-links {
+            display: flex;
+            gap: 12px;
+        }
 
-    .score-item { text-align: center; }
-    .score-item .label { font-size: 11px; color: #888; font-weight: normal; text-transform: uppercase; margin-bottom: 3px; }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 0;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
 
-    /* Question cards */
-    .question-card {
-        background: white;
-        border-radius: 16px;
-        padding: 25px;
-        margin-bottom: 25px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        border-left: 8px solid #667eea;
-        transition: 0.3s;
-    }
+        .nav-links a:hover {
+            color: #ffd700;
+        }
 
-    .question-card:hover { transform: translateY(-2px); }
+        /* Quiz Layout Header */
+        .quiz-hero {
+            background: linear-gradient(135deg, #1f4068 0%, #16213e 100%);
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 2px solid #e94560;
+        }
 
-    .question {
-        font-size: 19px;
-        font-weight: bold;
-        margin-bottom: 20px;
-        color: #1a1a2e;
-        line-height: 1.5;
-    }
+        .quiz-hero h1 {
+            color: #ffd700;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
 
-    .q-num {
-        background: #667eea;
-        color: white;
-        padding: 3px 10px;
-        border-radius: 20px;
-        font-size: 13px;
-        margin-right: 8px;
-    }
+        /* Container & Card */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
 
-    /* Options */
-    .option {
-        background: #f5f7fa;
-        padding: 14px 18px;
-        margin-bottom: 10px;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: 0.25s;
-        border: 2px solid transparent;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
+        .quiz-card {
+            background: #1a1a2e;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid #16213e;
+        }
 
-    .option:hover { background: #e8ecff; border-color: #667eea; }
+        .quiz-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #16213e;
+        }
 
-    .opt-badge {
-        background: #667eea;
-        color: white;
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 13px;
-        font-weight: bold;
-        flex-shrink: 0;
-    }
+        .progress-text {
+            font-size: 1.1rem;
+            color: #ffd700;
+        }
 
-    .option.correct {
-        background: #d4edda !important;
-        border: 2px solid #28a745 !important;
-        color: #155724;
-        font-weight: bold;
-    }
+        .timer-box {
+            background: #e94560;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
 
-    .option.correct .opt-badge { background: #28a745; }
+        .question-text {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
 
-    .option.wrong {
-        background: #f8d7da !important;
-        border: 2px solid #dc3545 !important;
-        color: #721c24;
-        font-weight: bold;
-    }
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
 
-    .option.wrong .opt-badge { background: #dc3545; }
+        .option-btn {
+            background: #16213e;
+            border: 2px solid #0f0f1a;
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 10px;
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
 
-    .explanation {
-        margin-top: 15px;
-        padding: 15px;
-        background: #f1f3f5;
-        border-left: 5px solid #667eea;
-        border-radius: 10px;
-        display: none;
-        line-height: 1.6;
-        color: #444;
-        font-size: 14px;
-    }
+        .option-btn:hover {
+            border-color: #ffd700;
+            background: #1f4068;
+        }
 
-    .loading {
-        text-align: center;
-        padding: 60px;
-        background: white;
-        border-radius: 20px;
-    }
+        /* Dynamic Feedback Classes */
+        .option-btn.correct {
+            background: #28a745 !important;
+            border-color: #28a745 !important;
+        }
 
-    .nav-buttons {
-        display: flex;
-        justify-content: space-between;
-        gap: 15px;
-        margin-top: 30px;
-        flex-wrap: wrap;
-    }
+        .option-btn.incorrect {
+            background: #dc3545 !important;
+            border-color: #dc3545 !important;
+        }
 
-    .btn {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        border: none;
-        padding: 12px 25px;
-        border-radius: 40px;
-        cursor: pointer;
-        font-weight: bold;
-        text-decoration: none;
-        display: inline-block;
-        text-align: center;
-        font-size: 15px;
-        transition: 0.2s;
-    }
+        /* Results Screen View */
+        .results-view {
+            text-align: center;
+            display: none;
+        }
 
-    .btn:hover { transform: translateY(-2px); opacity: 0.92; }
-    .btn-home { background: #ffd700; color: #1a1a2e; }
+        .results-view h2 {
+            color: #ffd700;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
 
-    .result-box {
-        text-align: center;
-        background: white;
-        border-radius: 20px;
-        padding: 40px;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    }
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #28a745;
+            margin: 20px 0;
+        }
 
-    .result-icon { font-size: 4rem; margin-bottom: 15px; }
+        .action-btn {
+            background: linear-gradient(135deg, #ffaa00, #ffd700);
+            color: #1a1a2e;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
 
-    .user-info-bar {
-        background: #1a1a2e;
-        color: white;
-        padding: 8px 20px;
-        border-radius: 30px;
-        display: inline-block;
-        margin-bottom: 15px;
-        font-size: 14px;
-    }
+        .action-btn:hover {
+            transform: scale(1.05);
+        }
 
-    /* Unanswered highlight */
-    .question-card.unanswered {
-        border-left-color: #dc3545;
-        animation: shake 0.4s;
-    }
-
-    @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-6px); }
-        75% { transform: translateX(6px); }
-    }
-
-    @media (max-width: 768px) {
-        body { padding: 12px; }
-        .question { font-size: 17px; }
-        .option { padding: 12px; }
-    }
-</style>
+        /* Mobile Optimization */
+        @media (max-width: 900px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .nav-links {
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 5px;
+                gap: 15px;
+            }
+            .nav-links a {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="header" id="pageHeader">
-    <div class="user-info-bar">👤 <span id="userNameDisplay">Student</span></div>
-    <h1 id="subjectTitle">Loading Quiz...</h1>
-    <p id="subjectDesc">Please wait while we load your questions</p>
+<nav>
+    <div class="nav-container">
+        <a href="index.html" class="logo">
+            <span class="logo-icon">⚡</span>
+            <div>
+                <span class="logo-text">Ernest Embassy</span>
+                <span class="logo-sub">Digital LMS Portal</span>
+            </div>
+        </a>
+        <div class="nav-links">
+            <a href="dashboard.html">👤 Dashboard</a>
+            <a href="class.html">🎓 Virtual Class</a>
+            <a href="teaching.html">📚 Teaching Notes</a>
+            <a href="tutoring.html">💻 Online Tutoring</a>
+            <a href="services.html">⚙️ Services</a>
+            <a href="movie.html">🎬 Studio</a>
+        </div>
+    </div>
+</nav>
+
+<div class="quiz-hero">
+    <h1>🎯 Examination & Quiz Arena</h1>
+    <p>Test your proficiency across dynamic tech and curriculum modules</p>
 </div>
 
-<div class="quiz-container">
-    <div class="score-board">
-        <div class="score-item">
-            <div class="label">Score</div>
-            <span id="score">0</span> / <span id="totalQ">0</span>
-        </div>
-        <div class="score-item">
-            <div class="label">Answered</div>
-            <span id="answeredCount">0</span>
-        </div>
-    </div>
+<div class="container">
+    <div class="quiz-card">
+        
+        <div id="quiz-playable-area">
+            <div class="quiz-meta">
+                <span class="progress-text" id="progress-indicator">Question 1 of 5</span>
+                <div class="timer-box">⏱️ <span id="countdown-timer">30</span>s</div>
+            </div>
 
-    <div id="questionsContainer">
-        <div class="loading">
-            <div style="font-size:3rem;">📚</div>
-            <p>Loading questions from database...</p>
-        </div>
-    </div>
+            <div class="question-text" id="question-box">
+                Loading sample curriculum framework data...
+            </div>
 
-    <div class="nav-buttons" id="navButtons" style="display:none;">
-        <button class="btn btn-home" onclick="goHome()">🏠 Dashboard</button>
-        <button class="btn" onclick="submitQuiz()" id="submitBtn">✅ Submit Quiz</button>
+            <div class="options-container" id="options-box">
+                </div>
+        </div>
+
+        <div id="results-area" class="results-view">
+            <h2>🏆 Quiz Completed!</h2>
+            <p>Your performance summary report metrics:</p>
+            <div class="score-display" id="final-score">0/0</div>
+            <p id="performance-feedback">Analyzing performance data ratios...</p>
+            <button class="action-btn" onclick="restartQuiz()">🔄 Retake Quiz</button>
+        </div>
+
     </div>
 </div>
 
 <script>
-/* ==========================================================
-   FIREBASE SAFETY LAYER CONNECTIONS
-========================================================== */
-const firestoreInstance = (typeof db !== "undefined") ? db : ((typeof firebase !== "undefined") ? firebase.firestore() : null);
-
-/* ====================================
-   SUBJECT KEY NORMALIZATION
-==================================== */
-function normalizeSubject(raw) {
-    const map = {
-        "english-language-ss1": "english-ss1",
-        "igbo-language-ss1":    "igbo-ss1",
-        "digital-technology-ss1": "digital-technology-ss1",
-        "data-processing-ss1": "data-processing-ss1",
-        "mathematics-ss1":      "mathematics-ss1"
-    };
-    return map[raw] || raw;
-}
-
-const params = new URLSearchParams(window.location.search);
-const rawSubject = params.get("subject") || "";
-const subject    = normalizeSubject(rawSubject);
-
-const subjectNames = {
-    "mathematics-ss1":        { name: "📐 Mathematics SS1",          desc: "Algebra, Geometry & Trigonometry" },
-    "english-ss1":            { name: "📖 English Language SS1",      desc: "Grammar, comprehension & writing" },
-    "digital-technology-ss1": { name: "💻 Digital Technology SS1",    desc: "Computer Fundamentals & ICT" },
-    "data-processing-ss1":    { name: "📊 Data Processing SS1",       desc: "Data Concepts & Operating Systems" },
-    "igbo-ss1":               { name: "🌍 Igbo Language SS1",          desc: "Vocabulary, grammar & translation" }
-};
-
-/* ====================================
-   GLOBALS
-==================================== */
-let questions    = [];
-let userAnswers  = []; 
-let currentUserId = null;
-
-/* ====================================
-   LOAD QUESTIONS
-==================================== */
-async function loadQuestions() {
-    const container = document.getElementById("questionsContainer");
-    container.innerHTML = '<div class="loading"><div style="font-size:3rem;">📚</div><p>Loading questions...</p></div>';
-
-    try {
-        if (!firestoreInstance) {
-            throw new Error("Firestore instance (db) could not be resolved from auth.js context.");
+    // Sample Curriculum Mock Question Repository (e.g. Digital Technology)
+    const quizDatabase = [
+        {
+            question: "Which of the following belongs specifically to the design phase of digital content creation workflows?",
+            options: ["Publishing an asset live", "Drafting wireframe blueprints", "Auditing past analytical metrics", "Compiling production server codes"],
+            correct: 1
+        },
+        {
+            question: "Under standard digital citizenship codes, what represents an footprint vulnerability?",
+            options: ["Enabling end-to-end cloud encryption", "Leaving unmanaged public social historical tracking logs", "Utilizing complex biometric parameters", "Configuring localized proxy loops"],
+            correct: 1
+        },
+        {
+            question: "Which interface component allows an ecosystem framework to maintain clean cross-platform styling scales?",
+            options: ["Fixed width pixel declarations", "Flexible viewport fluid grid setups", "Inline structural database scripts", "Duplicated absolute style wrappers"],
+            correct: 1
         }
+    ];
 
-        let query = firestoreInstance.collection("questions");
-        if (subject) query = query.where("subject", "==", subject);
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let timer;
+    let timeLeft = 30;
 
-        const snap = await query.get();
-        const all  = [];
+    const progressElement = document.getElementById("progress-indicator");
+    const timerElement = document.getElementById("countdown-timer");
+    const questionElement = document.getElementById("question-box");
+    const optionsElement = document.getElementById("options-box");
+    const playableArea = document.getElementById("quiz-playable-area");
+    const resultsArea = document.getElementById("results-area");
+    const scoreElement = document.getElementById("final-score");
+    const feedbackElement = document.getElementById("performance-feedback");
 
-        snap.forEach((doc) => {
-            const d = doc.data();
-            all.push({
-                id:           doc.id,
-                text:         d.q  || "",
-                options:      d.o  || [],
-                correctIndex: typeof d.a === "number" ? d.a : 0,
-                explanation:  d.exp || "No explanation available.",
-                subject:      d.subject || "general"
-            });
+    function startTimer() {
+        timeLeft = 30;
+        timerElement.innerText = timeLeft;
+        clearInterval(timer);
+        timer = setInterval(() => {
+            timeLeft--;
+            timerElement.innerText = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                handleAnswerSelection(-1); // Time out counts as a wrong answer
+            }
+        }, 1000);
+    }
+
+    function displayQuestion() {
+        startTimer();
+        let currentQuestion = quizDatabase[currentQuestionIndex];
+        progressElement.innerText = `Question ${currentQuestionIndex + 1} of ${quizDatabase.length}`;
+        questionElement.innerText = currentQuestion.question;
+        
+        optionsElement.innerHTML = "";
+        currentQuestion.options.forEach((option, index) => {
+            const button = document.createElement("button");
+            button.className = "option-btn";
+            button.innerText = option;
+            button.onclick = () => handleAnswerSelection(index, button);
+            optionsElement.appendChild(button);
         });
-
-        // Pick up to 10 random questions out of the returned documents
-        questions    = all.sort(() => Math.random() - 0.5).slice(0, 10);
-        userAnswers  = new Array(questions.length).fill(null);
-
-        if (questions.length === 0) {
-            container.innerHTML = `
-                <div class="loading">
-                    <div style="font-size:3rem;">📭</div>
-                    <p>No questions for <strong>${subjectNames[subject] ? subjectNames[subject].name : (subject || "this subject")}</strong> yet.</p>
-                    <p style="margin-top:10px; color:#888;">Admin needs to add questions via the database panel.</p>
-                    <button class="btn btn-home" style="margin-top:20px;" onclick="window.location.href='dashboard.html'">📊 Dashboard</button>
-                </div>
-            `;
-            return;
-        }
-
-        document.getElementById("totalQ").innerText = questions.length;
-        renderQuestions();
-        document.getElementById("navButtons").style.display = "flex";
-
-    } catch (error) {
-        console.error("Question load error:", error);
-        container.innerHTML = `
-            <div class="loading">
-                <div style="font-size:3rem;">⚠️</div>
-                <p>Error loading questions: ${error.message}</p>
-                <p style="font-size: 12px; color: #ff4d4d; margin-top: 5px;">Verify that your Firestore collection rules allow public reads.</p>
-                <button class="btn" style="margin-top:20px;" onclick="location.reload()">🔄 Retry</button>
-            </div>
-        `;
-    }
-}
-
-/* ====================================
-   RENDER QUESTIONS
-==================================== */
-function renderQuestions() {
-    const container = document.getElementById("questionsContainer");
-    const labels    = ['A','B','C','D','E'];
-    let html        = "";
-
-    questions.forEach((q, qIdx) => {
-        let optsHtml = "";
-        q.options.forEach((opt, optIdx) => {
-            optsHtml += `
-                <div class="option" data-q="${qIdx}" data-opt="${optIdx}" onclick="selectAnswer(${qIdx}, ${optIdx})">
-                    <span class="opt-badge">${labels[optIdx] || optIdx + 1}</span>
-                    <span>${escapeHtml(opt)}</span>
-                </div>
-            `;
-        });
-
-        html += `
-            <div class="question-card" id="qcard-${qIdx}">
-                <div class="question">
-                    <span class="q-num">${qIdx + 1}</span>${escapeHtml(q.text)}
-                </div>
-                <div class="options-wrap" id="opts-${qIdx}">
-                    ${optsHtml}
-                </div>
-                <div class="explanation" id="exp-${qIdx}">
-                    📖 <strong>Explanation:</strong> ${escapeHtml(q.explanation)}
-                </div>
-            </div>
-        `;
-    });
-
-    container.innerHTML = html;
-    updateScoreBoard();
-}
-
-/* ====================================
-   SELECT ANSWER
-==================================== */
-function selectAnswer(qIdx, selectedOptIdx) {
-    if (userAnswers[qIdx] !== null) return;
-
-    const q         = questions[qIdx];
-    const isCorrect = selectedOptIdx === q.correctIndex;
-
-    userAnswers[qIdx] = selectedOptIdx;
-
-    const optEls = document.querySelectorAll(`#opts-${qIdx} .option`);
-    optEls.forEach(el => {
-        el.style.pointerEvents = "none";
-        const optIdx = parseInt(el.getAttribute("data-opt"));
-        if (optIdx === q.correctIndex)             el.classList.add("correct");
-        if (optIdx === selectedOptIdx && !isCorrect) el.classList.add("wrong");
-    });
-
-    document.getElementById(`exp-${qIdx}`).style.display = "block";
-    document.getElementById(`qcard-${qIdx}`).classList.remove("unanswered");
-
-    updateScoreBoard();
-}
-
-/* ====================================
-   UPDATE SCORE BOARD
-==================================== */
-function updateScoreBoard() {
-    let correct   = 0;
-    let answered  = 0;
-    questions.forEach((q, i) => {
-        if (userAnswers[i] !== null) {
-            answered++;
-            if (userAnswers[i] === q.correctIndex) correct++;
-        }
-    });
-    document.getElementById("score").innerText        = correct;
-    document.getElementById("answeredCount").innerText = answered;
-}
-
-/* ====================================
-   SUBMIT
-==================================== */
-async function submitQuiz() {
-    for (let i = 0; i < questions.length; i++) {
-        if (userAnswers[i] === null) {
-            const card = document.getElementById(`qcard-${i}`);
-            card.classList.add("unanswered");
-            card.scrollIntoView({ behavior: "smooth", block: "center" });
-            alert(`Please answer question ${i + 1} before submitting.`);
-            return;
-        }
     }
 
-    const correct    = userAnswers.filter((ans, i) => ans === questions[i].correctIndex).length;
-    const percentage = Math.round((correct / questions.length) * 100);
+    function handleAnswerSelection(selectedIndex, selectedButton = null) {
+        clearInterval(timer);
+        const correctIndex = quizDatabase[currentQuestionIndex].correct;
+        const allButtons = optionsElement.getElementsByClassName("option-btn");
 
-    if (currentUserId && currentUserId !== "dev" && firestoreInstance) {
-        try {
-            await firestoreInstance.collection("quiz_attempts").add({
-                uid:          currentUserId,
-                subject:      subject || "general",
-                correct,
-                total:        questions.length,
-                percentage,
-                type:         "practice",
-                completedAt:  firebase.firestore.FieldValue.serverTimestamp()
-            });
-        } catch (e) { console.error("Save error:", e); }
-    }
-
-    let icon, msg;
-    if (percentage >= 80) { icon = "🏆"; msg = "🎉 Excellent Work! Outstanding performance!"; }
-    else if (percentage >= 60) { icon = "📚"; msg = "👍 Good job! Review missed questions and try again."; }
-    else { icon = "💪"; msg = "📚 Keep practicing! Review the explanations carefully and retry."; }
-
-    document.getElementById("questionsContainer").innerHTML = `
-        <div class="result-box">
-            <div class="result-icon">${icon}</div>
-            <h2>Quiz Complete!</h2>
-            <p style="font-size:2rem; margin:20px 0; color:#667eea;">${percentage}%</p>
-            <p>You got <strong>${correct}</strong> out of <strong>${questions.length}</strong> correct</p>
-            <div style="margin:20px 0; padding:15px; background:#f1f3f5; border-radius:10px;">
-                <p>${msg}</p>
-            </div>
-            <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
-                <button class="btn" onclick="location.reload()">🔄 Try Again</button>
-                <button class="btn btn-home" onclick="window.location.href='dashboard.html'">📊 Dashboard</button>
-            </div>
-        </div>
-    `;
-    document.getElementById("navButtons").style.display = "none";
-}
-
-/* ====================================
-   UTILS
-==================================== */
-function escapeHtml(str) {
-    if (!str) return "";
-    return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
-}
-
-function goHome() { window.location.href = "dashboard.html"; }
-
-/* ====================================
-   UPDATED INITIATION LOGIC
-==================================== */
-async function initializePage() {
-    const devBypass = localStorage.getItem("devBypass") === "true";
-
-    if (devBypass) {
-        const stored = localStorage.getItem("currentUser");
-        if (stored) {
-            const u = JSON.parse(stored);
-            currentUserId = u.uid || "dev";
-            document.getElementById("userNameDisplay").innerText = u.name || "Dev Admin";
+        // Disable all buttons immediately to block multiple spam clicks
+        for (let btn of allButtons) {
+            btn.disabled = true;
         }
-    } else {
-        // Changed to use the proper checkAuth function from auth.js
-        if (typeof checkAuth === "function") {
-            try {
-                await checkAuth(true);
-            } catch(e) {
-                console.warn("Auth redirect running.");
-                return;
+
+        if (selectedIndex === correctIndex) {
+            score++;
+            if (selectedButton) selectedButton.classList.add("correct");
+        } else {
+            if (selectedButton) selectedButton.classList.add("incorrect");
+            // Visually highlight the right option for the user's learning clarity
+            if (selectedIndex !== -1 && allButtons[correctIndex]) {
+                allButtons[correctIndex].classList.add("correct");
             }
         }
+
+        // Delay next action state slightly to let users review feedback color cues
+        setTimeout(() => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizDatabase.length) {
+                displayQuestion();
+            } else {
+                showFinalResults();
+            }
+        }, 1500);
+    }
+
+    function showFinalResults() {
+        playableArea.style.display = "none";
+        resultsArea.style.display = "block";
+        scoreElement.innerText = `${score} / ${quizDatabase.length}`;
         
-        // Secure token sync alignment checking
-        if (typeof firebase !== "undefined" && firebase.auth().currentUser) {
-            currentUserId = firebase.auth().currentUser.uid;
+        const percentage = (score / quizDatabase.length) * 100;
+        if (percentage >= 70) {
+            feedbackElement.innerText = "Excellent performance! Deep curriculum proficiency demonstrated.";
+            scoreElement.style.color = "#28a745";
+        } else if (percentage >= 50) {
+            feedbackElement.innerText = "Good effort! Minor content refinement and reviews recommended.";
+            scoreElement.style.color = "#ffd700";
         } else {
-            const localUser = JSON.parse(localStorage.getItem("currentUser"));
-            if (localUser) currentUserId = localUser.uid;
-        }
-        
-        const nameEl = document.getElementById("userNameDisplay");
-        if (nameEl && typeof getUserName === "function") {
-            nameEl.innerText = getUserName();
+            feedbackElement.innerText = "Review your core teaching resources and attempt evaluation modules again.";
+            scoreElement.style.color = "#dc3545";
         }
     }
 
-    if (subjectNames[subject]) {
-        document.getElementById("subjectTitle").innerText = subjectNames[subject].name;
-        document.getElementById("subjectDesc").innerText  = subjectNames[subject].desc;
-    } else {
-        document.getElementById("subjectTitle").innerText = "📚 Subject Quiz";
-        document.getElementById("subjectDesc").innerText  = "Test your knowledge";
+    function restartQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        resultsArea.style.display = "none";
+        playableArea.style.display = "block";
+        displayQuestion();
     }
 
-    // Run question loader
-    await loadQuestions();
-}
-
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initializePage);
-} else {
-    initializePage();
-}
+    // Launch Quiz Lifecycle loop on load instantiation
+    window.onload = displayQuestion;
 </script>
+
 </body>
 </html>

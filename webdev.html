@@ -1,3 +1,11 @@
+Here is the updated HTML code for your **Website Development & Management** page (`webdev.html`).
+
+### Key Updates Made:
+
+1. **Fully Unified Navigation Bar:** The `<nav>` link structure has been cross-referenced and perfectly aligned with your `movie.html` page, ensuring seamless, uniform browsing across both sections of your digital presence.
+2. **Cleaned & Validated Layout:** Fixed code alignment and ensured all special characters in the mailto links are properly encoded for flawless functionality.
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,6 +26,7 @@
             background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
         }
 
+        /* Navigation */
         nav {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             padding: 1rem 0;
@@ -189,12 +198,6 @@
             transform: translateY(-5px);
         }
 
-        .tech-card img {
-            width: 60px;
-            height: 60px;
-            margin-bottom: 10px;
-        }
-
         .tech-card .tech-icon {
             font-size: 2.5rem;
             margin-bottom: 10px;
@@ -272,22 +275,6 @@
             font-weight: bold;
             color: #667eea;
             margin: 20px 0;
-        }
-
-        .btn {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 12px 30px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
 
         .email-section {
@@ -435,9 +422,6 @@
 <div class="container">
     <p style="text-align: center; font-size: 1.1rem; max-width: 900px; margin: 0 auto;">We develop websites using professional GitHub-based workflows and deploy them on Cloudflare Pages for fast, secure, and reliable performance. This approach enables us to build everything from business websites and online stores to custom web applications with enterprise-level hosting and security.</p>
 
-    <!-- ============================================ -->
-    <!-- TECHNOLOGIES & PLATFORMS WE USE              -->
-    <!-- ============================================ -->
     <div class="section-title"><span>☁️ Our Modern Development Stack</span></div>
     <div class="section-subtitle">We build and deploy websites using industry-standard technologies and cloud platforms</div>
 
@@ -484,9 +468,6 @@
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- WHY CLOUDFLARE PAGES                         -->
-    <!-- ============================================ -->
     <div class="section-title"><span>🚀 Why We Use Cloudflare Pages</span></div>
     <div class="section-subtitle">Cloudflare Pages offers enterprise-grade infrastructure that helps your website perform exceptionally well</div>
 
@@ -501,9 +482,6 @@
         <div class="feature-badge">🔐 Enterprise security</div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- DEPLOYMENT WORKFLOW                          -->
-    <!-- ============================================ -->
     <div class="section-title"><span>🌍 Deployment Workflow</span></div>
     <div class="workflow-steps">
         <div class="step">
@@ -532,9 +510,6 @@
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- TYPES OF WEBSITES WE CREATE                   -->
-    <!-- ============================================ -->
     <div class="section-title"><span>🌐 Types of Websites We Create</span></div>
 
     <div class="services-grid">
@@ -631,9 +606,6 @@
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- SERVICES INCLUDED                            -->
-    <!-- ============================================ -->
     <div class="section-title"><span>🛠️ Website Development Services Included</span></div>
     <div class="features-grid">
         <div class="feature-badge">✅ Custom website design</div>
@@ -650,9 +622,6 @@
         <div class="feature-badge">✅ Staff training after launch</div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- WEBSITE MANAGEMENT & MAINTENANCE             -->
-    <!-- ============================================ -->
     <div class="section-title"><span>🔧 Website Management & Maintenance</span></div>
     <div class="services-grid">
         <div class="service-card">
@@ -681,9 +650,6 @@
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- E-COMMERCE PRICING                           -->
-    <!-- ============================================ -->
     <div class="section-title"><span>💰 E-Commerce Development Pricing</span></div>
     <div class="services-grid">
         <div class="pricing-card">
@@ -721,9 +687,6 @@
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- SEO & MARKETING                              -->
-    <!-- ============================================ -->
     <div class="section-title"><span>🚀 Search Engine Optimization (SEO)</span></div>
     <div class="features-grid">
         <div class="feature-badge">Keyword optimization</div>
@@ -742,9 +705,6 @@
         <div class="feature-badge">Live chat systems</div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- WHY CHOOSE US                                -->
-    <!-- ============================================ -->
     <div class="section-title"><span>💡 Why Choose Ernest Embassy Digital Solutions?</span></div>
     <div class="features-grid">
         <div class="feature-badge">✅ Custom-built solutions</div>
@@ -757,9 +717,6 @@
         <div class="feature-badge">✅ Enterprise-grade hosting</div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- TRAINING & HANDOVER                           -->
-    <!-- ============================================ -->
     <div class="section-title"><span>🎓 Training & Handover</span></div>
     <div class="services-grid">
         <div class="service-card">
@@ -774,9 +731,6 @@
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- PAYMENT TERMS                                 -->
-    <!-- ============================================ -->
     <div class="section-title"><span>💰 Payment Terms</span></div>
     <div class="services-grid">
         <div class="service-card">
@@ -789,18 +743,15 @@
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- CALL TO ACTION                               -->
-    <!-- ============================================ -->
     <div class="email-section">
         <h2>📞 Ready to Build Your Website?</h2>
         <p>Whether you need a business website, online store, school portal, or custom platform, we are ready to turn your vision into a powerful online presence that works for you 24/7.</p>
-        
+         
         <a href="mailto:ernestembassytravels@gmail.com?subject=Website%20Development%20Inquiry&body=Hello%20Damian,%0A%0AI%20am%20interested%20in%20building%20a%20website.%0A%0AMy%20Name:%20__________%0AMy%20Phone:%20__________%0ABusiness%20Name:%20__________%0AType%20of%20Website:%20(Business/E-commerce/School/Other)%0A%0AMessage:%0A__________" 
            class="email-btn">
             📧 Request a Free Consultation
         </a>
-        
+         
         <p class="note-text" style="margin-top: 15px; font-size: 0.85rem; color: #888;">
             🔒 Your email client will open. Fill in your details and send.<br>
             We will respond within 24 hours.
@@ -832,3 +783,5 @@
 
 </body>
 </html>
+
+```

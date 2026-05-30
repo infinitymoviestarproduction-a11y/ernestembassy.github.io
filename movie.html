@@ -1,3 +1,10 @@
+Ah, I understand perfectly now! You want to put **portfolio.html**, **gallery.html**, and **team.html** inside the **Movie Studio** nav item as its own specific dropdown menu, rather than making a separate dropdown on the main menu bar. This will keep your homepage and navigation bar clean and perfectly organized.
+
+Here is the complete, fully updated code for your **movie.html** file. I have grouped those links cleanly under the **🎬 Movie Studio** link as a dropdown using your professional LMS styling.
+
+You can copy this entire block and paste it directly into your **movie.html** file:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -703,14 +710,15 @@
             <a href="services.html">⚙️ Services</a>
             <a href="webdev.html">💻 Web Dev</a>
             <a href="visa.html">✈️ Visa</a>
-            <a href="movie.html">🎬 Movie Studio</a>
             
             <div class="dropdown">
-                <button class="dropbtn" onclick="toggleMobileDropdown(this)">🎨 Portfolio & Gallery ▾</button>
+                <button class="dropbtn" onclick="toggleMobileDropdown(this)">🎬 Movie Studio ▾</button>
                 <div class="dropdown-content">
-                    <div class="dropdown-header">Media & Showcases</div>
+                    <div class="dropdown-header">Infinity Productions</div>
+                    <a href="movie.html">📽️ Movie Studio Home</a>
                     <a href="portfolio.html">🖼️ Portfolio</a>
                     <a href="gallery.html">📸 Gallery</a>
+                    <a href="team.html">👥 Our Team</a>
                 </div>
             </div>
 
@@ -1107,3 +1115,5 @@
 
 </body>
 </html>
+
+```

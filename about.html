@@ -21,7 +21,6 @@
         /* Navigation */
         nav {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            padding: 1rem 0;
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -31,7 +30,7 @@
         .nav-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -71,19 +70,58 @@
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
+            align-items: center;
         }
 
-        .nav-links a {
+        .nav-links a, .dropbtn {
             color: white;
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
             padding: 8px 0;
             font-size: 0.8rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
         }
 
-        .nav-links a:hover {
+        .nav-links a:hover, .dropdown:hover .dropbtn {
             color: #ffd700;
+        }
+
+        /* Dropdown Menu Logic */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: #16213e;
+            min-width: 180px;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            overflow: hidden;
+            top: 100%;
+            left: 0;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 10px 15px;
+            color: white;
+            width: 100%;
+            text-align: left;
+        }
+
+        .dropdown-content a:hover {
+            background: #1a1a2e;
+            color: #ffd700;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
         }
 
         /* Hero Section */
@@ -262,8 +300,16 @@
                 gap: 8px;
                 flex-wrap: wrap;
             }
-            .nav-links a {
+            .nav-links a, .dropbtn {
                 font-size: 0.65rem;
+            }
+            .dropdown-content {
+                position: static;
+                box-shadow: none;
+                background: rgba(22, 33, 62, 0.5);
+            }
+            .dropdown:hover .dropdown-content {
+                display: block;
             }
             .hero h1 {
                 font-size: 1.8rem;
@@ -288,7 +334,6 @@
 </head>
 <body>
 
-<!-- PROFESSIONAL NAVIGATION WITH ALL LINKS -->
 <nav>
     <div class="nav-container">
         <div class="logo">
@@ -306,23 +351,29 @@
             <a href="visa.html">✈️ Visa</a>
             <a href="movie.html">🎬 Movie Studio</a>
             <a href="portfolio.html">🎨 Portfolio</a>
-            <a href="teaching.html">📚 Teaching</a>
-            <a href="tutoring.html">💻 Tutoring</a>
-            <a href="education.html">🎓 Education</a>
-            <a href="class.html">🎓 Class</a>
+            
+            <div class="dropdown">
+                <button class="dropbtn">🎓 Education ▼</button>
+                <div class="dropdown-content">
+                    <a href="education.html">🎓 Education Hub</a>
+                    <a href="teaching.html">📚 Teaching Notes</a>
+                    <a href="tutoring.html">💻 Online Tutoring</a>
+                    <a href="class.html">🏫 Virtual Class</a>
+                </div>
+            </div>
+
             <a href="booking.html">📅 Book</a>
             <a href="contact.html">📞 Contact</a>
             <a href="team.html">⭐ Team</a>
+            <a href="testimonials.html">⭐ Testimonials</a>
             <a href="register.html">📝 Register</a>
             <a href="login.html">🔐 Login</a>
             <a href="dashboard.html">👤 Dashboard</a>
             <a href="admin.html">🔒 Admin</a>
-            <a href="testimonials.html">⭐ Testimonials</a>
         </div>
     </div>
 </nav>
 
-<!-- HERO SECTION -->
 <div class="hero">
     <h1>About Ernest Embassy Digital Solutions</h1>
     <p>Travel • Film Production • Education Consulting • Online Tutoring • Web Development</p>
@@ -330,17 +381,14 @@
 
 <div class="container">
     <div class="about-content">
-        <!-- COMPANY OVERVIEW -->
         <h2>Who We Are</h2>
         <p>Ernest Embassy Digital Solutions is a multi-service brand operated by <strong>Damian Anielozie Okafor</strong>, a teacher, visa consultant, film producer, online tutor, and web developer.</p>
         <p>We are not a large agency with anonymous staff. We are a hands-on service provider where you deal directly with the founder.</p>
 
-        <!-- MOTTO -->
         <div class="motto-box">
             <p>🎬 "Creating stories that live beyond the screen."</p>
         </div>
 
-        <!-- FULL BIOGRAPHY WITH IMAGE -->
         <h2>Full Biography of Damian Anielozie Okafor</h2>
         
         <div class="bio-image">
@@ -366,7 +414,6 @@
 
         <p>Today, Damian continues to expand his creative and business endeavors, seeking collaborations with investors, artists, and production partners across Nigeria, Zimbabwe, Malawi, and beyond.</p>
 
-        <!-- DIRECTOR'S STATEMENT / CEO MESSAGE -->
         <h2>🎬 Director's Statement / CEO Message</h2>
         <h3>A Message from Damian Anielozie Okafor</h3>
 
@@ -386,19 +433,16 @@
             Founder, Ernest Embassy Digital Solutions</p>
         </div>
 
-        <!-- OUR STORY (continued) -->
         <h2>Our Story</h2>
         <p>Everything started in the classroom in <strong>2007</strong>. As a teacher, Damian saw how many students and families struggled with study abroad applications and visa processes. That led to the birth of Ernest Embassy Travels.</p>
         <p>At the same time, Damian's passion for storytelling and movies grew into <strong>Infinity Movie Star Production</strong>, registered with the CAC on <strong>June 21, 2017 (Certificate No: BN2517233)</strong>, dedicated to producing quality films and training aspiring filmmakers.</p>
         <p>Today, Ernest Embassy Digital Solutions has evolved to include website development services, helping businesses and individuals establish a professional online presence.</p>
 
-        <!-- CAC REGISTRATION -->
         <div class="cac-badge">
             ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
             📍 6 Ezinifite Close, New Haven, Enugu, Enugu State, Nigeria
         </div>
 
-        <!-- OUR DIVISIONS -->
         <h2>Our Divisions</h2>
 
         <h3>💻 Ernest Embassy Digital Solutions</h3>
@@ -416,7 +460,6 @@
         <h3>💻 Online Tutoring</h3>
         <p>Damian personally teaches English Language, Digital Technology, Igbo for diaspora students, and coordinates science exam preparation (Chemistry, Physics, Mathematics for WAEC, NECO, JAMB) via WhatsApp platform. Adult literacy also available.</p>
 
-        <!-- INTERNATIONAL PARTNERSHIPS SECTION WITH ASHANTI LOGO -->
         <h2>🤝 International Partnerships</h2>
         <p>Infinity Movie Star Production proudly collaborates with international partners to bring quality storytelling to global audiences.</p>
         
@@ -431,7 +474,6 @@
         <h3>🇲🇼 Zomba Film Production</h3>
         <p><strong>Never Matewere</strong> of Zomba Film Production supports local production, talent coordination, and film training in Malawi, expanding training opportunities across Africa.</p>
 
-        <!-- PROFESSIONAL MEMBERSHIPS -->
         <h2>Professional Memberships & Affiliations</h2>
         <p>Damian and Infinity Movie Star Production are recognized across multiple international platforms:</p>
         <ul style="margin-left: 30px; margin-top: 15px;">
@@ -444,7 +486,6 @@
             <li>Gigs</li>
         </ul>
 
-        <!-- MISSION & VALUES -->
         <h2>Our Mission</h2>
         <p>To connect people to global opportunities through travel, education, creative entertainment, and digital solutions — while providing honest, direct access to the founder.</p>
 
@@ -457,7 +498,6 @@
     </div>
 </div>
 
-<!-- CAC BADGE FOOTER -->
 <div style="text-align: center; padding: 20px;">
     <div class="cac-badge-footer">
         ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
@@ -465,7 +505,6 @@
     </div>
 </div>
 
-<!-- FOOTER -->
 <footer>
     <div class="container">
         <p><strong>Ernest Embassy Digital Solutions</strong> | Travel • Film • Education • Web Development</p>
@@ -476,7 +515,6 @@
     </div>
 </footer>
 
-<!-- WHATSAPP BUTTON -->
 <a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
     <span>💬</span>
     <span>Chat with Damian on WhatsApp</span>

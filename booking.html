@@ -17,7 +17,7 @@
             color: #333;
         }
 
-        /* Navigation */
+        /* Unified Global Navigation */
         nav {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             padding: 1rem 0;
@@ -69,22 +69,63 @@
         .nav-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 15px;
+            align-items: center;
         }
 
-        .nav-links a {
+        .nav-links a, .dropbtn {
             color: white;
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
             padding: 8px 0;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
         }
 
-        .nav-links a:hover {
+        .nav-links a:hover, .dropdown:hover .dropbtn {
             color: #ffd700;
         }
 
+        /* Dropdown Navigation Structure */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: #16213e;
+            min-width: 180px;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            overflow: hidden;
+            top: 100%;
+            left: 0;
+            z-index: 1001;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 10px 15px;
+            color: white;
+            width: 100%;
+            text-align: left;
+        }
+
+        .dropdown-content a:hover {
+            background: #1a1a2e;
+            color: #ffd700;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Content Area Layout */
         .hero {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -226,11 +267,17 @@
             }
             .nav-links {
                 justify-content: center;
-                gap: 8px;
-                flex-wrap: wrap;
+                gap: 12px;
             }
-            .nav-links a {
-                font-size: 0.65rem;
+            .nav-links a, .dropbtn {
+                font-size: 0.75rem;
+            }
+            .dropdown-content {
+                position: absolute;
+                background: #16213e;
+                left: 50%;
+                transform: translateX(-50%);
+                box-shadow: 0 8px 16px rgba(0,0,0,0.3);
             }
             .hero h1 {
                 font-size: 1.8rem;
@@ -269,18 +316,24 @@
             <a href="visa.html">✈️ Visa</a>
             <a href="movie.html">🎬 Movie Studio</a>
             <a href="portfolio.html">🎨 Portfolio</a>
-            <a href="teaching.html">📚 Teaching</a>
-            <a href="tutoring.html">💻 Tutoring</a>
-            <a href="education.html">🎓 Education</a>
-            <a href="class.html">🎓 Class</a>
-            <a href="booking.html">📅 Book</a>
+            
+            <div class="dropdown">
+                <button class="dropbtn">🎓 Education ▼</button>
+                <div class="dropdown-content">
+                    <a href="education.html">🎓 Education Hub</a>
+                    <a href="teaching.html">📚 Teaching Notes</a>
+                    <a href="tutoring.html">💻 Online Tutoring</a>
+                    <a href="class.html">🏫 Virtual Class</a>
+                </div>
+            </div>
+
+            <a href="booking.html" style="color:#ffd700;">📅 Book</a>
             <a href="contact.html">📞 Contact</a>
-            <a href="team.html">⭐ Team</a>
+            <a href="testimonials.html">⭐ Testimonials</a>
             <a href="register.html">📝 Register</a>
             <a href="login.html">🔐 Login</a>
             <a href="dashboard.html">👤 Dashboard</a>
             <a href="admin.html">🔒 Admin</a>
-            <a href="testimonials.html">⭐ Testimonials</a>
         </div>
     </div>
 </nav>
@@ -293,7 +346,6 @@
 <div class="container">
     <div class="booking-grid">
         
-        <!-- Education Consulting -->
         <div class="booking-card">
             <div class="booking-header">
                 <div class="booking-icon">🎓</div>
@@ -305,7 +357,6 @@
             <div id="cal-education" class="cal-embed-container"></div>
         </div>
 
-        <!-- Tutoring Session -->
         <div class="booking-card">
             <div class="booking-header">
                 <div class="booking-icon">📚</div>
@@ -317,7 +368,6 @@
             <div id="cal-tutoring" class="cal-embed-container"></div>
         </div>
 
-        <!-- Website Development Consultation -->
         <div class="booking-card">
             <div class="booking-header">
                 <div class="booking-icon">💻</div>
@@ -329,7 +379,6 @@
             <div id="cal-webdev" class="cal-embed-container"></div>
         </div>
 
-        <!-- Visa Consultation -->
         <div class="booking-card">
             <div class="booking-header">
                 <div class="booking-icon">✈️</div>
@@ -341,7 +390,6 @@
             <div id="cal-visa" class="cal-embed-container"></div>
         </div>
 
-        <!-- Free Discovery Call -->
         <div class="booking-card">
             <div class="booking-header">
                 <div class="booking-icon">☎️</div>
@@ -353,7 +401,6 @@
             <div id="cal-discovery" class="cal-embed-container"></div>
         </div>
 
-        <!-- Film Training Session -->
         <div class="booking-card">
             <div class="booking-header">
                 <div class="booking-icon">🎬</div>
@@ -379,7 +426,6 @@
     </div>
 </div>
 
-<!-- CAC BADGE -->
 <div style="text-align: center; padding: 20px;">
     <div class="cac-badge">
         ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
@@ -387,7 +433,6 @@
     </div>
 </div>
 
-<!-- FOOTER -->
 <footer>
     <div class="container">
         <p><strong>Ernest Embassy Digital Solutions</strong> | Travel • Film • Education • Web Development</p>
@@ -398,13 +443,11 @@
     </div>
 </footer>
 
-<!-- WHATSAPP BUTTON -->
 <a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
     <span>💬</span>
     <span>Chat with Damian on WhatsApp</span>
 </a>
 
-<!-- Cal.com Embed Scripts -->
 <script type="text/javascript">
     (function (C, A, L) { 
         let p = function (a, ar) { a.q.push(ar); }; 

@@ -1,3 +1,6 @@
+Here is the updated `about.html` file with the new, responsive navigation layout matching your studio page. It incorporates a clean grid-based wrapping structure for maximum compatibility across both mobile screens and desktop monitors.
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,6 +24,7 @@
         /* Navigation */
         nav {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 1rem 0;
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -30,7 +34,7 @@
         .nav-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 15px 20px;
+            padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -69,7 +73,7 @@
         .nav-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 15px;
             align-items: center;
         }
 
@@ -79,7 +83,7 @@
             font-weight: 500;
             transition: color 0.3s;
             padding: 8px 0;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             background: none;
             border: none;
             cursor: pointer;
@@ -105,6 +109,7 @@
             overflow: hidden;
             top: 100%;
             left: 0;
+            z-index: 1001;
         }
 
         .dropdown-content a {
@@ -297,19 +302,17 @@
             }
             .nav-links {
                 justify-content: center;
-                gap: 8px;
-                flex-wrap: wrap;
+                gap: 12px;
             }
             .nav-links a, .dropbtn {
-                font-size: 0.65rem;
+                font-size: 0.75rem;
             }
             .dropdown-content {
-                position: static;
-                box-shadow: none;
-                background: rgba(22, 33, 62, 0.5);
-            }
-            .dropdown:hover .dropdown-content {
-                display: block;
+                position: absolute;
+                background: #16213e;
+                left: 50%;
+                transform: translateX(-50%);
+                box-shadow: 0 8px 16px rgba(0,0,0,0.3);
             }
             .hero h1 {
                 font-size: 1.8rem;
@@ -522,3 +525,5 @@
 
 </body>
 </html>
+
+```

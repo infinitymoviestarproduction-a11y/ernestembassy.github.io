@@ -11,44 +11,273 @@
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0a0a0a; color: #fff; min-height: 100vh; }
         
-        nav { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 1rem 0; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid #ffd700; }
-        .nav-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
-        .logo { font-size: 1.3rem; font-weight: bold; color: #ffd700; text-decoration: none; }
+        body { 
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #2d3748;
+        }
+        
+        /* Animated gradient background */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        nav { 
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .nav-container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 0 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            flex-wrap: wrap; 
+        }
+        
+        .logo { 
+            font-size: 1.4rem; 
+            font-weight: bold; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+        
         .nav-links { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; }
-        .nav-links a { color: white; text-decoration: none; font-weight: 500; font-size: 0.85rem; padding: 8px 0; }
-        .nav-links a:hover { color: #ffd700; }
+        .nav-links a { 
+            color: #4a5568; 
+            text-decoration: none; 
+            font-weight: 500; 
+            font-size: 0.9rem; 
+            padding: 8px 0;
+            transition: all 0.3s ease;
+        }
+        .nav-links a:hover { color: #667eea; transform: translateY(-2px); }
         
-        .hero { background: linear-gradient(135deg, #111 0%, #1c1a12 100%); border-bottom: 1px solid #222; text-align: center; padding: 50px 20px; }
-        .hero h1 { font-size: 2rem; color: #ffd700; margin-bottom: 15px; }
-        .hero p { color: #aaa; font-size: 1rem; }
+        .hero { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            text-align: center; 
+            padding: 60px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x bottom;
+            opacity: 0.3;
+        }
+        
+        .hero h1 { 
+            font-size: 2.5rem; 
+            color: white; 
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        
+        .hero p { 
+            color: rgba(255,255,255,0.95); 
+            font-size: 1.1rem; 
+            position: relative;
+        }
+        
         .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
         
-        .quiz-section { background: #111; border: 1px solid #222; padding: 30px; border-radius: 15px; }
-        .btn { padding: 12px 20px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1rem; margin: 5px; }
-        .btn-success { background: #28a745; color: white; }
-        .btn-primary { background: #ffd700; color: #000; }
-        .btn-secondary { background: #444; color: white; }
-        .btn-danger { background: #dc3545; color: white; }
+        .quiz-section { 
+            background: white; 
+            border-radius: 20px; 
+            padding: 35px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
+        }
         
-        .status-message { text-align: center; font-size: 1.2rem; color: #aaa; padding: 40px 0; }
-        .loading-spinner { border: 4px solid rgba(255,215,0,0.1); border-top: 4px solid #ffd700; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .quiz-section:hover {
+            transform: translateY(-5px);
+        }
         
-        .option-item { background: #1a1a1a; border: 1px solid #333; padding: 15px; margin: 10px 0; border-radius: 8px; cursor: pointer; width: 100%; text-align: left; color: #ddd; font-size: 1rem; }
-        .option-item:hover:not([disabled]) { background: #222; border-color: #ffd700; }
-        .option-item.correct { background: rgba(40, 167, 69, 0.3); border-color: #28a745; color: #28a745; }
-        .option-item.incorrect { background: rgba(220, 53, 69, 0.3); border-color: #dc3545; color: #dc3545; }
-        .option-item:disabled { cursor: not-allowed; opacity: 0.7; }
+        .btn { 
+            padding: 12px 25px; 
+            border: none; 
+            border-radius: 50px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            font-size: 1rem; 
+            margin: 5px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
         
-        .question-text { font-size: 1.25rem; margin: 20px 0; color: #fff; line-height: 1.5; }
-        .quiz-meta { display: flex; justify-content: space-between; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #222; color: #888; }
+        .btn-success { 
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white; 
+            box-shadow: 0 4px 15px rgba(56, 239, 125, 0.3);
+        }
         
-        .error-box { background: rgba(220, 53, 69, 0.2); border: 1px solid #dc3545; padding: 15px; border-radius: 8px; margin: 20px 0; color: #dc3545; }
-        .success-box { background: rgba(40, 167, 69, 0.2); border: 1px solid #28a745; padding: 15px; border-radius: 8px; margin: 20px 0; color: #28a745; }
+        .btn-success:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(56, 239, 125, 0.4);
+        }
         
-        .debug-panel { background: #0a0a0a; border-top: 1px solid #333; padding: 10px; margin-top: 20px; font-size: 11px; color: #666; max-height: 150px; overflow-y: auto; }
+        .btn-primary { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-primary:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary { 
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .btn-secondary:hover { 
+            background: #cbd5e0;
+            transform: translateY(-2px);
+        }
+        
+        .status-message { 
+            text-align: center; 
+            font-size: 1.1rem; 
+            color: #718096; 
+            padding: 40px 0; 
+        }
+        
+        .loading-spinner { 
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid #667eea;
+            border-radius: 50%; 
+            width: 50px; 
+            height: 50px; 
+            animation: spin 1s linear infinite; 
+            margin: 20px auto; 
+        }
+        
+        @keyframes spin { 
+            0% { transform: rotate(0deg); } 
+            100% { transform: rotate(360deg); } 
+        }
+        
+        .option-item { 
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            padding: 15px 20px;
+            margin: 12px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            color: #2d3748;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        .option-item:hover:not([disabled]) { 
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+        
+        .option-item.correct { 
+            background: linear-gradient(135deg, #11998e20 0%, #38ef7d20 100%);
+            border-color: #11998e;
+            color: #11998e;
+            font-weight: bold;
+        }
+        
+        .option-item.incorrect { 
+            background: linear-gradient(135deg, #eb334920 0%, #f45c4320 100%);
+            border-color: #eb3349;
+            color: #eb3349;
+        }
+        
+        .option-item:disabled { 
+            cursor: not-allowed; 
+            opacity: 0.8;
+        }
+        
+        .question-text { 
+            font-size: 1.35rem;
+            margin: 25px 0;
+            color: #2d3748;
+            line-height: 1.6;
+            font-weight: 600;
+        }
+        
+        .quiz-meta { 
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+            color: #718096;
+            font-weight: 500;
+        }
+        
+        .error-box { 
+            background: linear-gradient(135deg, #eb334910 0%, #f45c4310 100%);
+            border: 2px solid #eb3349;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            color: #eb3349;
+        }
+        
+        .success-box { 
+            background: linear-gradient(135deg, #11998e10 0%, #38ef7d10 100%);
+            border: 2px solid #11998e;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            color: #11998e;
+        }
+        
+        .debug-panel { 
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 25px;
+            font-size: 11px;
+            color: #718096;
+            max-height: 150px;
+            overflow-y: auto;
+            font-family: monospace;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .score-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -65,21 +294,21 @@
 </nav>
 
 <div class="hero">
-    <h1 id="quizTitle">Quiz Challenge Arena</h1>
-    <p id="quizSubtitle">Test your knowledge with interactive questions</p>
+    <h1>🎯 Quiz Challenge Arena</h1>
+    <p>Test your knowledge and earn amazing scores! 🌟</p>
 </div>
 
 <div class="container">
     <div class="quiz-section" id="quizInterface">
         <div class="status-message">
             <div class="loading-spinner"></div>
-            Initializing Quiz System...
+            <p style="margin-top: 20px;">🎮 Loading your quiz adventure...</p>
         </div>
     </div>
 </div>
 
 <script>
-    // Your Firebase configuration (using COMPAT version)
+    // Your Firebase configuration
     const firebaseConfig = {
         apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
         authDomain: "ernest-embassy-lms.firebaseapp.com",
@@ -103,42 +332,37 @@
         debugLogs.unshift(logEntry);
         console.log(`[DEBUG] ${message}`);
         
-        // Keep only last 20 logs
         if (debugLogs.length > 20) debugLogs.pop();
         
-        // Update debug panel if it exists
         const debugPanel = document.getElementById("debugPanel");
         if (debugPanel) {
-            debugPanel.innerHTML = debugLogs.map(log => `<div>${log}</div>`).join('');
+            debugPanel.innerHTML = debugLogs.map(log => `<div>✨ ${log}</div>`).join('');
         }
     }
     
     // Initialize Firebase
     async function initFirebase() {
-        debug("Initializing Firebase with COMPAT SDK...");
+        debug("🎯 Initializing Quiz Arena...");
         try {
-            // Initialize Firebase using compat version
             firebase.initializeApp(firebaseConfig);
             db = firebase.firestore();
-            debug("✅ Firebase initialized successfully!");
+            debug("✅ Connected to Quiz Database!");
             return true;
         } catch (error) {
-            debug("❌ Firebase initialization error: " + error.message);
-            console.error("Firebase init error:", error);
+            debug("❌ Connection error: " + error.message);
             return false;
         }
     }
     
-    // Create sample questions in Firestore
+    // Create sample questions
     async function createSampleQuestions() {
-        debug("Creating sample questions in Firestore...");
+        debug("📝 Creating awesome quiz questions...");
         
         const interfaceDiv = document.getElementById("quizInterface");
         interfaceDiv.innerHTML = `
             <div class="status-message">
                 <div class="loading-spinner"></div>
-                Creating sample questions in Firebase...
-                <div style="margin-top: 20px; font-size: 12px; color: #666;">Please wait...</div>
+                <p style="margin-top: 20px;">🎨 Crafting your quiz questions...</p>
             </div>
         `;
         
@@ -161,100 +385,68 @@
                 totalQuestions: sampleQuestions.length,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
-            debug("✅ Sample questions created successfully!");
-            alert("Success! 10 sample questions have been added to your database.\nClick OK to refresh and start the quiz.");
+            debug("✅ 10 questions created successfully!");
+            alert("🎉 Success! 10 quiz questions have been added!\nClick OK to start your quiz adventure!");
             location.reload();
         } catch (error) {
-            debug("❌ Error creating questions: " + error.message);
+            debug("❌ Error: " + error.message);
             interfaceDiv.innerHTML = `
                 <div class="error-box">
-                    <strong>Error:</strong> ${error.message}<br><br>
-                    <button class="btn btn-primary" onclick="location.reload()">Retry</button>
+                    <strong>⚠️ Oops! Something went wrong</strong><br>
+                    ${error.message}<br><br>
+                    <button class="btn btn-primary" onclick="location.reload()">🔄 Try Again</button>
                 </div>
                 <div class="debug-panel" id="debugPanel"></div>
             `;
-            const debugPanel = document.getElementById("debugPanel");
-            if (debugPanel) {
-                debugPanel.innerHTML = debugLogs.map(log => `<div>${log}</div>`).join('');
-            }
         }
     }
     
-    // Load questions from Firestore
+    // Load questions
     async function loadQuestions() {
-        debug("Loading questions from Firestore...");
+        debug("📚 Loading your quiz questions...");
         const interfaceDiv = document.getElementById("quizInterface");
         
         try {
             const docRef = db.collection("questions").doc("mathematics-ss1");
             const docSnap = await docRef.get();
-            debug(`Document exists: ${docSnap.exists}`);
             
             if (!docSnap.exists) {
-                debug("No document found, showing create button");
                 interfaceDiv.innerHTML = `
                     <div style="text-align: center;">
-                        <h2>📚 No Questions Found</h2>
-                        <p style="margin: 20px 0; color: #aaa;">Your Firestore database is empty.</p>
-                        <button class="btn btn-success" onclick="createSampleQuestions()">
-                            📝 Create Sample Questions (10)
+                        <div style="font-size: 4rem; margin: 20px;">📚</div>
+                        <h2 style="color: #667eea;">Ready for a Challenge?</h2>
+                        <p style="margin: 20px 0; color: #718096;">Your quiz database is empty. Let's create some questions!</p>
+                        <button class="btn btn-success" onclick="createSampleQuestions()" style="font-size: 1.1rem; padding: 15px 30px;">
+                            🚀 Create Quiz Questions (10)
                         </button>
-                        <p style="margin-top: 20px; font-size: 12px; color: #666;">
-                            This will add sample math questions to your database.
+                        <p style="margin-top: 20px; font-size: 12px; color: #a0aec0;">
+                            Click to generate exciting math questions automatically
                         </p>
                     </div>
                     <div class="debug-panel" id="debugPanel"></div>
                 `;
-                const debugPanel = document.getElementById("debugPanel");
-                if (debugPanel) {
-                    debugPanel.innerHTML = debugLogs.map(log => `<div>${log}</div>`).join('');
-                }
                 return false;
             }
             
             const data = docSnap.data();
             loadedQuestions = data.questions || [];
             debug(`✅ Loaded ${loadedQuestions.length} questions`);
-            
-            if (loadedQuestions.length === 0) {
-                interfaceDiv.innerHTML = `
-                    <div style="text-align: center;">
-                        <h2>Empty Questions Array</h2>
-                        <button class="btn btn-primary" onclick="createSampleQuestions()">Create Sample Questions</button>
-                    </div>
-                    <div class="debug-panel" id="debugPanel"></div>
-                `;
-                return false;
-            }
-            
             return true;
         } catch (error) {
-            debug("❌ Error loading: " + error.message);
-            interfaceDiv.innerHTML = `
-                <div class="error-box">
-                    <strong>Connection Error:</strong><br>
-                    ${error.message}<br><br>
-                    <button class="btn btn-primary" onclick="location.reload()">Retry Connection</button>
-                </div>
-                <div class="debug-panel" id="debugPanel"></div>
-            `;
-            const debugPanel = document.getElementById("debugPanel");
-            if (debugPanel) {
-                debugPanel.innerHTML = debugLogs.map(log => `<div>${log}</div>`).join('');
-            }
+            debug("❌ Error: " + error.message);
             return false;
         }
     }
     
-    // Start the quiz
+    // Start quiz
     function startQuiz() {
-        debug("Starting quiz...");
+        debug("🎮 Starting quiz adventure!");
         currentIndex = 0;
         score = 0;
         showQuestion();
     }
     
-    // Display current question
+    // Display question
     function showQuestion() {
         const q = loadedQuestions[currentIndex];
         const interfaceDiv = document.getElementById("quizInterface");
@@ -262,7 +454,7 @@
         interfaceDiv.innerHTML = `
             <div class="quiz-meta">
                 <span>📖 Mathematics SS1</span>
-                <span>❓ ${currentIndex + 1} of ${loadedQuestions.length}</span>
+                <span class="score-badge">⭐ Question ${currentIndex + 1}/${loadedQuestions.length}</span>
             </div>
             <div class="question-text">${q.question}</div>
             <div class="options-list">
@@ -271,7 +463,7 @@
                 <button class="option-item" onclick="checkAnswer('C')"><strong>C.</strong> ${q.optionC}</button>
                 <button class="option-item" onclick="checkAnswer('D')"><strong>D.</strong> ${q.optionD}</button>
             </div>
-            <div id="nextBtn" style="display:none; margin-top: 20px;">
+            <div id="nextBtn" style="display:none; margin-top: 20px; text-align: center;">
                 <button class="btn btn-primary" onclick="nextQuestion()">Next Question →</button>
             </div>
             <div class="debug-panel" id="debugPanel"></div>
@@ -279,11 +471,11 @@
         
         const debugPanel = document.getElementById("debugPanel");
         if (debugPanel) {
-            debugPanel.innerHTML = debugLogs.map(log => `<div>${log}</div>`).join('');
+            debugPanel.innerHTML = debugLogs.map(log => `<div>✨ ${log}</div>`).join('');
         }
     }
     
-    // Check user's answer
+    // Check answer
     function checkAnswer(selected) {
         const q = loadedQuestions[currentIndex];
         const correct = q.answer;
@@ -291,33 +483,31 @@
         const buttons = document.querySelectorAll('.option-item');
         buttons.forEach(btn => btn.disabled = true);
         
-        // Highlight correct answer
         buttons.forEach(btn => {
             if (btn.getAttribute('onclick').includes(`'${correct}'`)) {
                 btn.classList.add('correct');
             }
         });
         
-        // Check if selected is correct
         if (selected === correct) {
             const selectedBtn = Array.from(buttons).find(btn => 
                 btn.getAttribute('onclick').includes(`'${selected}'`)
             );
             if (selectedBtn) selectedBtn.classList.add('correct');
             score++;
-            debug(`✓ Correct! Score: ${score}/${currentIndex + 1}`);
+            debug(`🎉 Correct! Score: ${score}/${currentIndex + 1}`);
         } else {
             const selectedBtn = Array.from(buttons).find(btn => 
                 btn.getAttribute('onclick').includes(`'${selected}'`)
             );
             if (selectedBtn) selectedBtn.classList.add('incorrect');
-            debug(`✗ Incorrect. Correct answer was ${correct}`);
+            debug(`💡 The correct answer was ${correct}`);
         }
         
         document.getElementById('nextBtn').style.display = 'block';
     }
     
-    // Move to next question
+    // Next question
     function nextQuestion() {
         currentIndex++;
         if (currentIndex < loadedQuestions.length) {
@@ -327,37 +517,47 @@
         }
     }
     
-    // Show final results
+    // Show results
     function showResults() {
         const percent = Math.round((score / loadedQuestions.length) * 100);
         let gradeMessage = "";
         let gradeColor = "";
+        let emoji = "";
         
         if (percent >= 80) {
-            gradeMessage = "🎉 Excellent! Outstanding performance!";
-            gradeColor = "#28a745";
+            gradeMessage = "Outstanding Performance! You're a Star! 🌟";
+            gradeColor = "#11998e";
+            emoji = "🏆";
         } else if (percent >= 60) {
-            gradeMessage = "👍 Good job! Keep it up!";
-            gradeColor = "#ffd700";
+            gradeMessage = "Great Job! Keep Shining! ⭐";
+            gradeColor = "#667eea";
+            emoji = "🎉";
         } else if (percent >= 40) {
-            gradeMessage = "📚 Nice try! Review and try again.";
-            gradeColor = "#ff9800";
+            gradeMessage = "Good Effort! Practice Makes Perfect! 💪";
+            gradeColor = "#f39c12";
+            emoji = "📚";
         } else {
-            gradeMessage = "💪 Keep practicing! You'll do better next time.";
-            gradeColor = "#dc3545";
+            gradeMessage = "Keep Learning! You'll Crush It Next Time! 🚀";
+            gradeColor = "#eb3349";
+            emoji = "💪";
         }
         
         const interfaceDiv = document.getElementById("quizInterface");
         interfaceDiv.innerHTML = `
             <div style="text-align: center; padding: 20px;">
-                <h2 style="color: #ffd700;">🏁 Quiz Complete!</h2>
+                <div style="font-size: 5rem;">${emoji}</div>
+                <h2 style="color: #667eea; margin: 20px 0;">Quiz Complete!</h2>
                 <div style="font-size: 4rem; color: ${gradeColor}; margin: 20px; font-weight: bold;">
                     ${percent}%
                 </div>
-                <p style="font-size: 1.2rem;">Score: ${score} out of ${loadedQuestions.length}</p>
-                <p style="margin: 20px 0; color: #aaa;">${gradeMessage}</p>
-                <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
-                    <button class="btn btn-success" onclick="startQuiz()">🔄 Restart Quiz</button>
+                <p style="font-size: 1.3rem; margin: 10px 0;">
+                    Score: ${score} out of ${loadedQuestions.length}
+                </p>
+                <p style="margin: 20px 0; color: #718096; font-size: 1.1rem;">${gradeMessage}</p>
+                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
+                    <button class="btn btn-success" onclick="startQuiz()" style="font-size: 1.1rem;">
+                        🔄 Play Again
+                    </button>
                 </div>
             </div>
             <div class="debug-panel" id="debugPanel"></div>
@@ -365,58 +565,41 @@
         
         const debugPanel = document.getElementById("debugPanel");
         if (debugPanel) {
-            debugPanel.innerHTML = debugLogs.map(log => `<div>${log}</div>`).join('');
+            debugPanel.innerHTML = debugLogs.map(log => `<div>✨ ${log}</div>`).join('');
         }
         
-        debug(`Quiz completed! Final score: ${score}/${loadedQuestions.length} (${percent}%)`);
+        debug(`🏁 Quiz completed! Final score: ${score}/${loadedQuestions.length} (${percent}%)`);
     }
     
-    // Main initialization
+    // Initialize
     async function init() {
-        debug("🚀 App starting...");
+        debug("🎯 Welcome to Quiz Arena!");
         const initialized = await initFirebase();
         
         if (initialized) {
-            debug("Firebase ready, loading questions...");
             const hasQuestions = await loadQuestions();
-            
             if (hasQuestions && loadedQuestions.length > 0) {
-                debug(`✅ Ready! ${loadedQuestions.length} questions available`);
                 const interfaceDiv = document.getElementById("quizInterface");
                 interfaceDiv.innerHTML = `
                     <div style="text-align: center;">
-                        <h2>📝 Ready to Test Your Knowledge?</h2>
-                        <p style="margin: 20px 0; color: #aaa;">${loadedQuestions.length} questions available</p>
-                        <button class="btn btn-success" onclick="startQuiz()" style="font-size: 1.2rem; padding: 15px 40px;">
-                            🚀 Start Quiz
+                        <div style="font-size: 4rem; margin: 20px;">🎯</div>
+                        <h2 style="color: #667eea; margin: 20px 0;">Ready to Challenge Yourself?</h2>
+                        <p style="margin: 15px 0; color: #718096; font-size: 1.1rem;">
+                            📚 ${loadedQuestions.length} exciting questions await!
+                        </p>
+                        <button class="btn btn-success" onclick="startQuiz()" style="font-size: 1.2rem; padding: 15px 40px; margin-top: 20px;">
+                            🚀 Start Quiz Now
                         </button>
+                        <p style="margin-top: 20px; font-size: 12px; color: #a0aec0;">
+                            ✨ Test your knowledge and earn amazing scores ✨
+                        </p>
                     </div>
                     <div class="debug-panel" id="debugPanel"></div>
                 `;
-                const debugPanel = document.getElementById("debugPanel");
-                if (debugPanel) {
-                    debugPanel.innerHTML = debugLogs.map(log => `<div>${log}</div>`).join('');
-                }
-            }
-        } else {
-            debug("❌ Failed to initialize Firebase");
-            const interfaceDiv = document.getElementById("quizInterface");
-            interfaceDiv.innerHTML = `
-                <div class="error-box">
-                    <strong>Firebase Connection Failed</strong><br>
-                    Please check your internet connection and Firebase configuration.<br><br>
-                    <button class="btn btn-primary" onclick="location.reload()">Retry</button>
-                </div>
-                <div class="debug-panel" id="debugPanel"></div>
-            `;
-            const debugPanel = document.getElementById("debugPanel");
-            if (debugPanel) {
-                debugPanel.innerHTML = debugLogs.map(log => `<div>${log}</div>`).join('');
             }
         }
     }
     
-    // Start the app when page loads
     window.addEventListener('DOMContentLoaded', init);
 </script>
 </body>

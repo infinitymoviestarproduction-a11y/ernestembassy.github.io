@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Arena - Ernest Embassy LMS</title>
 
-    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+    <!-- Use Modular Firebase SDK (CDN version) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js"></script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0a0a0a; color: #fff; min-height: 100vh; }
         
-        /* Global Navigation Dropdown Overrides */
         nav { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 1rem 0; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid #ffd700; }
         .nav-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
         .logo { font-size: 1.3rem; font-weight: bold; color: #ffd700; text-decoration: none; letter-spacing: 1px; }
@@ -27,13 +27,11 @@
         .dropdown-content a:hover { background: #1a1a2e; color: #ffd700; }
         .dropdown:hover .dropdown-content { display: block; }
 
-        /* Page Frame */
         .hero { background: linear-gradient(135deg, #111 0%, #1c1a12 100%); border-bottom: 1px solid #222; text-align: center; padding: 50px 20px; }
         .hero h1 { font-size: 2rem; color: #ffd700; margin-bottom: 15px; }
         .hero p { color: #aaa; font-size: 1rem; }
         .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
         
-        /* Challenge Workspace & Questions Engine */
         .quiz-section { background: #111; border: 1px solid #222; padding: 30px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
         .quiz-header h2 { font-size: 1.6rem; color: #ffd700; margin-bottom: 10px; }
         
@@ -44,11 +42,9 @@
         .option-item { background: #1a1a1a; border: 1px solid #333; padding: 15px 20px; border-radius: 8px; cursor: pointer; text-align: left; font-size: 1rem; color: #ddd; transition: all 0.2s ease; width: 100%; font-family: inherit; }
         .option-item:hover:not([disabled]) { background: #222; border-color: #ffd700; color: #fff; }
         
-        /* Runtime Evaluation Colors */
         .option-item.correct { background: rgba(40, 167, 69, 0.2) !important; border-color: #28a745 !important; color: #28a745 !important; font-weight: bold; }
         .option-item.incorrect { background: rgba(220, 53, 69, 0.2) !important; border-color: #dc3545 !important; color: #dc3545 !important; }
         
-        /* Forms Control & Structural Badges */
         .btn { padding: 12px 20px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; margin-bottom: 10px; font-size: 1rem; transition: 0.2s; font-family: inherit; }
         .btn-success { background: #28a745; color: white; }
         .btn-success:hover { background: #218838; }
@@ -57,7 +53,6 @@
         .btn-secondary { background: #444; color: white; }
         .btn-secondary:hover { background: #555; }
         
-        /* Modals and States */
         .payment-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 2000; }
         .payment-content { background: #151515; border: 2px solid #ffd700; padding: 30px; border-radius: 15px; text-align: center; max-width: 400px; width: 90%; }
         .payment-amount { font-size: 2.5rem; color: #28a745; margin: 15px 0; font-weight: bold; }
@@ -113,24 +108,50 @@
 </div>
 
 <script>
-    // ========== FIREBASE CONFIGURATION ==========
-    // IMPORTANT: Replace this with your actual Firebase project configuration
+    // ========== YOUR FIREBASE CONFIGURATION ==========
     const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_PROJECT_ID.appspot.com",
-        messagingSenderId: "YOUR_SENDER_ID",
-        appId: "YOUR_APP_ID"
+        apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+        authDomain: "ernest-embassy-lms.firebaseapp.com",
+        projectId: "ernest-embassy-lms",
+        storageBucket: "ernest-embassy-lms.firebasestorage.app",
+        messagingSenderId: "204896421221",
+        appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
     };
     
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+    // Initialize Firebase (Modular SDK)
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore(app);
     
-    // ========== SAMPLE DATA GENERATOR (Run once to populate) ==========
-    // Uncomment and run this function ONCE to create sample data
-    async function populateSampleData() {
+    // Payment details
+    const PAYMENT_DETAILS = {
+        opayNumber: "08032607809",
+        bankName: "First Bank Plc",
+        bankAccountNumber: "3113254386",
+        accountName: "Damian Anielozie Okafor"
+    };
+
+    // Global variables
+    let currentSubjectId = "";
+    let currentQuizMode = "free";
+    let loadedQuestions = [];
+    let activeQuestionIndex = 0;
+    let usersAccumulatedScore = 0;
+
+    // Parse URL parameters
+    function getUrlParameters() {
+        const params = new URLSearchParams(window.location.search);
+        currentSubjectId = params.get('subject') || 'mathematics-ss1';
+        currentQuizMode = params.get('mode') || 'free';
+    }
+
+    function formatSubjectTitle(id) {
+        return id.split('-')
+                 .map(word => word.toUpperCase() === 'SS1' ? 'SS1' : word.charAt(0).toUpperCase() + word.slice(1))
+                 .join(' ');
+    }
+
+    // ========== CREATE SAMPLE QUESTIONS IN FIRESTORE ==========
+    async function createSampleQuestions() {
         const sampleQuestions = [
             {
                 question: "What is the value of x in the equation 2x + 5 = 15?",
@@ -171,59 +192,70 @@
                 optionC: "75",
                 optionD: "100",
                 answer: "B"
+            },
+            {
+                question: "Solve for y: 2y - 7 = 11",
+                optionA: "7",
+                optionB: "8",
+                optionC: "9",
+                optionD: "10",
+                answer: "C"
+            },
+            {
+                question: "What is the square root of 144?",
+                optionA: "10",
+                optionB: "11",
+                optionC: "12",
+                optionD: "13",
+                answer: "C"
+            },
+            {
+                question: "If x = 5, what is 3x²?",
+                optionA: "15",
+                optionB: "45",
+                optionC: "75",
+                optionD: "225",
+                answer: "C"
+            },
+            {
+                question: "What is 7 × 8?",
+                optionA: "48",
+                optionB: "54",
+                optionC: "56",
+                optionD: "64",
+                answer: "C"
+            },
+            {
+                question: "Simplify: (x + 2)(x + 3)",
+                optionA: "x² + 5x + 6",
+                optionB: "x² + 6x + 5",
+                optionC: "x² + 5x + 5",
+                optionD: "x² + 6x + 6",
+                answer: "A"
             }
         ];
         
         try {
-            await db.collection("questions").doc("mathematics-ss1").set({
+            await db.collection("questions").doc(currentSubjectId).set({
                 questions: sampleQuestions,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                totalQuestions: sampleQuestions.length
             });
-            console.log("✅ Sample data created successfully!");
-            alert("Sample data created! Refresh the page to see the quiz.");
+            console.log("✅ Sample questions created successfully!");
+            alert("Sample questions have been added to your database! Click OK to refresh and start the quiz.");
+            location.reload();
         } catch (error) {
-            console.error("Error creating sample data:", error);
+            console.error("Error creating sample questions:", error);
+            alert("Error: " + error.message + "\n\nMake sure Firestore is enabled in your Firebase console and security rules allow write access.");
         }
     }
-    
-    // Payment verified info mapping 
-    const PAYMENT_DETAILS = {
-        opayNumber: "08032607809",
-        bankName: "First Bank Plc",
-        bankAccountNumber: "3113254386",
-        accountName: "Damian Anielozie Okafor"
-    };
 
-    // Global engine properties to hold interactive runtime validation states
-    let currentSubjectId = "";
-    let currentQuizMode = "free";
-    let loadedQuestions = [];
-    let activeQuestionIndex = 0;
-    let usersAccumulatedScore = 0;
-
-    // Parse URL values
-    function getUrlParameters() {
-        const params = new URLSearchParams(window.location.search);
-        currentSubjectId = params.get('subject') || 'mathematics-ss1';
-        currentQuizMode = params.get('mode') || 'free';
-    }
-
-    // Convert database string structures to clean header labels
-    function formatSubjectTitle(id) {
-        return id.split('-')
-                 .map(word => word.toUpperCase() === 'SS1' ? 'SS1' : word.charAt(0).toUpperCase() + word.slice(1))
-                 .join(' ');
-    }
-
-    // Initialize Page Flow Setup
+    // Initialize quiz
     async function initQuizArena() {
         getUrlParameters();
         
         const titleText = formatSubjectTitle(currentSubjectId);
         document.getElementById("quizTitle").innerText = `${titleText} Challenge Arena`;
-        
-        // Check if data exists, if not offer to create sample
-        await checkAndOfferSampleData();
         
         if (currentQuizMode === "paid") {
             showPremiumGate(titleText);
@@ -231,49 +263,8 @@
             await fetchQuestionsFromFirestore();
         }
     }
-    
-    // Check if data exists and offer to create sample
-    async function checkAndOfferSampleData() {
-        try {
-            const docRef = db.collection("questions").doc(currentSubjectId);
-            const docSnap = await docRef.get();
-            
-            if (!docSnap.exists) {
-                const interfaceDiv = document.getElementById("quizInterface");
-                interfaceDiv.innerHTML = `
-                    <div class="status-message" style="text-align: center;">
-                        <h2>📚 No Questions Found</h2>
-                        <p style="margin: 20px 0; color: #aaa;">The database for "${formatSubjectTitle(currentSubjectId)}" is empty.</p>
-                        <button class="btn btn-primary" onclick="populateSampleData()" style="width: auto; padding: 12px 25px;">
-                            📝 Create Sample Questions
-                        </button>
-                        <p style="margin-top: 15px; font-size: 0.8rem; color: #666;">
-                            Click to generate 5 sample math questions automatically.
-                        </p>
-                    </div>
-                `;
-                return false;
-            }
-            return true;
-        } catch (error) {
-            console.error("Error checking data:", error);
-            return false;
-        }
-    }
 
-    // Render Gate for Paid Quizzes
-    function showPremiumGate(title) {
-        const interfaceDiv = document.getElementById("quizInterface");
-        interfaceDiv.innerHTML = `
-            <div class="quiz-header" style="text-align: center;">
-                <h2>🔒 Premium ${title} Entry</h2>
-                <p style="margin-top:10px; color:#aaa; margin-bottom: 25px;">This premium assessment syncs and records score parameters updates directly to your live grade book.</p>
-                <button class="btn btn-success" style="font-size:1.1rem; padding:15px; width: auto;" onclick="showPaymentModal()">🎟️ Unlock Quiz Arena (₦100)</button>
-            </div>
-        `;
-    }
-
-    // Fetch curriculum JSON assets from Firestore
+    // Fetch questions from Firestore
     async function fetchQuestionsFromFirestore() {
         const interfaceDiv = document.getElementById("quizInterface");
         
@@ -282,7 +273,18 @@
             const docSnap = await docRef.get();
 
             if (!docSnap.exists) {
-                showComingSoon();
+                interfaceDiv.innerHTML = `
+                    <div class="status-message" style="text-align: center;">
+                        <h2>📚 Database Empty</h2>
+                        <p style="margin: 20px 0; color: #aaa;">No questions found for "${formatSubjectTitle(currentSubjectId)}".</p>
+                        <button class="btn btn-success" onclick="createSampleQuestions()" style="width: auto; padding: 12px 25px; margin: 10px;">
+                            📝 Create Sample Questions (10)
+                        </button>
+                        <p style="margin-top: 20px; font-size: 0.8rem; color: #666;">
+                            Click the button above to automatically add sample math questions to your Firestore database.
+                        </p>
+                    </div>
+                `;
                 return;
             }
 
@@ -290,191 +292,152 @@
             loadedQuestions = data.questions || [];
 
             if (loadedQuestions.length === 0) {
-                showComingSoon();
+                interfaceDiv.innerHTML = `
+                    <div class="status-message">
+                        <h2>📖 No Questions Available</h2>
+                        <button class="btn btn-primary" onclick="createSampleQuestions()" style="width: auto; margin-top: 20px;">Add Sample Questions</button>
+                    </div>
+                `;
                 return;
             }
 
-            // Interface Terminal display for preparation confirmation
             interfaceDiv.innerHTML = `
                 <div class="quiz-header" style="text-align: center;">
                     <h2>📝 Practice Framework Ready</h2>
                     <p style="margin-top:15px; color:#aaa; margin-bottom: 25px;">
-                        Subject cluster context contains <strong>${loadedQuestions.length}</strong> dynamic validation entries.
+                        Subject contains <strong>${loadedQuestions.length}</strong> questions ready for assessment.
                     </p>
-                    <button class="btn btn-success" style="width: auto; padding: 12px 30px;" onclick="startQuizEngine()">🚀 Start Challenge Loop</button>
+                    <button class="btn btn-success" style="width: auto; padding: 12px 30px;" onclick="startQuizEngine()">🚀 Start Challenge</button>
                 </div>
             `;
 
         } catch (error) {
-            console.error("Firestore retrieval error: ", error);
+            console.error("Firestore error:", error);
             interfaceDiv.innerHTML = `
                 <div class="status-message" style="color: #ff4d4d;">
                     <strong>⚠️ Connection Error</strong><br>
                     ${error.message}<br><br>
-                    <button class="btn btn-secondary" onclick="location.reload()" style="width: auto;">Retry Connection</button>
+                    <button class="btn btn-secondary" onclick="location.reload()" style="width: auto;">Retry</button>
                 </div>
             `;
         }
     }
 
-    function showComingSoon() {
-        document.getElementById("quizInterface").innerHTML = `
-            <div class="status-message">
-                <h2>📖 Questions Processing</h2>
-                <p style="font-size: 0.95rem; margin-top: 10px; color: #777;">The academic materials for this specific curriculum timeline are being compiled by the administrator.</p>
-                <button class="btn btn-primary" onclick="populateSampleData()" style="display: inline-block; width: auto; margin-top: 20px;">
-                    📝 Create Sample Data
-                </button>
-                <a href="dashboard.html" class="btn btn-secondary" style="display: inline-block; width: auto; margin-top: 20px; text-decoration: none; text-align: center;">Back to Dashboard</a>
+    function showPremiumGate(title) {
+        const interfaceDiv = document.getElementById("quizInterface");
+        interfaceDiv.innerHTML = `
+            <div class="quiz-header" style="text-align: center;">
+                <h2>🔒 Premium ${title} Entry</h2>
+                <p style="margin-top:10px; color:#aaa; margin-bottom: 25px;">Unlock full access to premium assessment content.</p>
+                <button class="btn btn-success" style="font-size:1.1rem; padding:15px; width: auto;" onclick="showPaymentModal()">🎟️ Unlock (₦100)</button>
             </div>
         `;
     }
 
-    /* ====================================
-        INTERACTIVE ENGINE LOOP RUNNER
-    ==================================== */
     function startQuizEngine() {
         activeQuestionIndex = 0;
         usersAccumulatedScore = 0;
-        renderActiveEngineQuestion();
+        renderQuestion();
     }
 
-    function renderActiveEngineQuestion() {
+    function renderQuestion() {
         const interfaceDiv = document.getElementById("quizInterface");
-        const activeQuestion = loadedQuestions[activeQuestionIndex];
-        
-        // Loop choices safely out of arrays or alphanumeric configurations
-        const optionA = activeQuestion.optionA || activeQuestion.a || "";
-        const optionB = activeQuestion.optionB || activeQuestion.b || "";
-        const optionC = activeQuestion.optionC || activeQuestion.c || "";
-        const optionD = activeQuestion.optionD || activeQuestion.d || "";
+        const q = loadedQuestions[activeQuestionIndex];
         
         interfaceDiv.innerHTML = `
             <div class="quiz-meta">
-                <span>Subject Key: <strong>${currentSubjectId.toUpperCase()}</strong></span>
-                <span>Question <strong>${activeQuestionIndex + 1}</strong> of <strong>${loadedQuestions.length}</strong></span>
+                <span>${currentSubjectId.toUpperCase()}</span>
+                <span>${activeQuestionIndex + 1} / ${loadedQuestions.length}</span>
             </div>
-            <div class="question-text">
-                ${activeQuestion.question}
-            </div>
+            <div class="question-text">${q.question}</div>
             <div class="options-list">
-                <button class="option-item" onclick="evaluateSelection(this, 'A')"><strong>A.</strong> ${optionA}</button>
-                <button class="option-item" onclick="evaluateSelection(this, 'B')"><strong>B.</strong> ${optionB}</button>
-                <button class="option-item" onclick="evaluateSelection(this, 'C')"><strong>C.</strong> ${optionC}</button>
-                <button class="option-item" onclick="evaluateSelection(this, 'D')"><strong>D.</strong> ${optionD}</button>
+                <button class="option-item" onclick="checkAnswer(this, 'A')"><strong>A.</strong> ${q.optionA}</button>
+                <button class="option-item" onclick="checkAnswer(this, 'B')"><strong>B.</strong> ${q.optionB}</button>
+                <button class="option-item" onclick="checkAnswer(this, 'C')"><strong>C.</strong> ${q.optionC}</button>
+                <button class="option-item" onclick="checkAnswer(this, 'D')"><strong>D.</strong> ${q.optionD}</button>
             </div>
-            <div id="engineControlPanel" style="display: none; margin-top: 20px;">
-                <button class="btn btn-primary" onclick="advanceEngineNextStep()">Next Question ➡️</button>
+            <div id="nextBtn" style="display:none; margin-top:20px;">
+                <button class="btn btn-primary" onclick="nextQuestion()">Next →</button>
             </div>
         `;
     }
 
-    function evaluateSelection(selectedButtonElement, selectedLetter) {
-        const activeQuestion = loadedQuestions[activeQuestionIndex];
-        const correctAnswersKey = (activeQuestion.answer || activeQuestion.correctOption || "").toUpperCase().trim();
+    function checkAnswer(btn, selected) {
+        const q = loadedQuestions[activeQuestionIndex];
+        const correct = q.answer;
         
-        const alternatives = document.querySelectorAll(".option-item");
-        alternatives.forEach(btn => btn.setAttribute("disabled", "true"));
+        const allBtns = document.querySelectorAll('.option-item');
+        allBtns.forEach(b => b.disabled = true);
         
-        if (selectedLetter === correctAnswersKey) {
-            selectedButtonElement.classList.add("correct");
+        if (selected === correct) {
+            btn.classList.add('correct');
             usersAccumulatedScore++;
         } else {
-            selectedButtonElement.classList.add("incorrect");
-            // Highlight the correct answer alternative loop
-            alternatives.forEach(btn => {
-                const onclickAttr = btn.getAttribute("onclick") || "";
-                if (onclickAttr.includes(`'${correctAnswersKey}'`)) {
-                    btn.classList.add("correct");
+            btn.classList.add('incorrect');
+            allBtns.forEach(b => {
+                if (b.getAttribute('onclick')?.includes(`'${correct}'`)) {
+                    b.classList.add('correct');
                 }
             });
         }
         
-        document.getElementById("engineControlPanel").style.display = "block";
+        document.getElementById('nextBtn').style.display = 'block';
     }
 
-    function advanceEngineNextStep() {
+    function nextQuestion() {
         activeQuestionIndex++;
         if (activeQuestionIndex < loadedQuestions.length) {
-            renderActiveEngineQuestion();
+            renderQuestion();
         } else {
-            renderPerformanceReport();
+            showResults();
         }
     }
 
-    function renderPerformanceReport() {
-        const interfaceDiv = document.getElementById("quizInterface");
-        const calculatedPercentage = Math.round((usersAccumulatedScore / loadedQuestions.length) * 100);
+    function showResults() {
+        const percent = Math.round((usersAccumulatedScore / loadedQuestions.length) * 100);
+        let grade = percent >= 75 ? 'Excellent!' : percent >= 50 ? 'Good!' : 'Keep Practicing!';
+        let color = percent >= 75 ? '#28a745' : percent >= 50 ? '#ffd700' : '#dc3545';
         
-        let visualBadgeColor = "#dc3545";
-        let assessmentFeedback = "Review structural guidelines notes and attempt the challenge loop again.";
-        
-        if (calculatedPercentage >= 75) {
-            visualBadgeColor = "#28a745";
-            assessmentFeedback = "Excellent performance framework metrics! Dynamic parameters match WAEC grading expectations.";
-        } else if (calculatedPercentage >= 50) {
-            visualBadgeColor = "#ffd700";
-            assessmentFeedback = "Good milestone progress. Refine underlying theory clusters for optimal ratings.";
-        }
-
-        interfaceDiv.innerHTML = `
-            <div style="text-align: center; padding: 20px 0;">
-                <h2 style="color: #ffd700; margin-bottom: 15px;">🏁 Session Terminated Successfully</h2>
-                <p style="color: #aaa; margin-bottom: 25px;">Your dynamic computational score framework metrics processing result:</p>
-                
-                <div style="font-size: 4rem; font-weight: bold; color: ${visualBadgeColor}; margin-bottom: 15px;">
-                    ${calculatedPercentage}%
-                </div>
-                
-                <p style="font-size: 1.1rem; color: #fff; margin-bottom: 30px; line-height: 1.6;">
-                    Answered <strong>${usersAccumulatedScore}</strong> out of <strong>${loadedQuestions.length}</strong> questions correctly.
-                    <br><span style="color: #aaa; font-size: 0.95rem;">${assessmentFeedback}</span>
-                </p>
-
-                <div style="display: flex; gap: 15px; justify-content: center;">
-                    <button class="btn btn-success" style="width: auto; padding: 12px 25px;" onclick="startQuizEngine()">🔄 Restart Arena</button>
-                    <a href="dashboard.html" class="btn btn-secondary" style="width: auto; padding: 12px 25px; text-decoration: none; text-align: center;">Exit Workspace</a>
-                </div>
+        document.getElementById("quizInterface").innerHTML = `
+            <div style="text-align:center; padding:20px;">
+                <h2 style="color:#ffd700;">🏁 Quiz Complete!</h2>
+                <div style="font-size:4rem; color:${color}; margin:20px;">${percent}%</div>
+                <p>Score: ${usersAccumulatedScore}/${loadedQuestions.length}</p>
+                <p style="margin:20px 0; color:#aaa;">${grade}</p>
+                <button class="btn btn-success" onclick="startQuizEngine()">Restart</button>
+                <a href="dashboard.html" class="btn btn-secondary" style="display:inline-block; margin-top:10px; text-decoration:none;">Exit</a>
             </div>
         `;
     }
 
-    /* ====================================
-        PAYMENT ENGINE MODAL MODIFIER
-    ==================================== */
     function showPaymentModal() {
         const modal = document.createElement('div');
         modal.className = 'payment-modal';
         modal.innerHTML = `
             <div class="payment-content">
-                <h2>💰 Challenge Quiz Payment</h2>
+                <h2>💰 Payment Required</h2>
                 <div class="payment-amount">₦100</div>
                 <div class="payment-details">
-                    <p><strong>📱 Opay / Palmpay</strong><br>Number: <strong>${PAYMENT_DETAILS.opayNumber}</strong></p>
-                    <p><strong>🏦 ${PAYMENT_DETAILS.bankName}</strong><br>Account: <strong>${PAYMENT_DETAILS.bankAccountNumber}</strong></p>
+                    <p><strong>Opay/Palmpay:</strong> ${PAYMENT_DETAILS.opayNumber}</p>
+                    <p><strong>Bank:</strong> ${PAYMENT_DETAILS.bankName}</p>
+                    <p><strong>Account:</strong> ${PAYMENT_DETAILS.bankAccountNumber}</p>
                     <p><strong>Name:</strong> ${PAYMENT_DETAILS.accountName}</p>
                 </div>
-                <button class="btn btn-success" onclick="processPayment()">✅ I Have Paid</button>
+                <button class="btn btn-success" onclick="confirmPayment()">✅ I Have Paid</button>
                 <button class="btn btn-secondary" onclick="this.closest('.payment-modal').remove()">Cancel</button>
-                <p style="margin-top: 15px; font-size: 0.75rem; color: #aaa;">After transfer, click "I Have Paid" to broadcast verification verification.</p>
             </div>
         `;
         document.body.appendChild(modal);
     }
 
-    function processPayment() {
-        alert("Thank you! Your payment verification notification has been sent to processing.");
+    function confirmPayment() {
+        alert("Payment verification submitted. Access granted!");
         document.querySelector('.payment-modal')?.remove();
-        // Reload to start quiz after payment
-        location.reload();
+        fetchQuestionsFromFirestore();
     }
 
-    // Run when DOM structure binds safely
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", initQuizArena);
-    } else {
-        initQuizArena();
-    }
+    // Start the app
+    initQuizArena();
 </script>
 </body>
 </html>

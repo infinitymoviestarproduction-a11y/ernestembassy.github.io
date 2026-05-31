@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Arena - Ernest Embassy LMS</title>
     
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js"></script>
+    <!-- Use the COMPAT version of Firebase (no modules needed) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -30,21 +30,25 @@
         .btn-success { background: #28a745; color: white; }
         .btn-primary { background: #ffd700; color: #000; }
         .btn-secondary { background: #444; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
         
         .status-message { text-align: center; font-size: 1.2rem; color: #aaa; padding: 40px 0; }
         .loading-spinner { border: 4px solid rgba(255,215,0,0.1); border-top: 4px solid #ffd700; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        .option-item { background: #1a1a1a; border: 1px solid #333; padding: 15px; margin: 10px 0; border-radius: 8px; cursor: pointer; width: 100%; text-align: left; color: #ddd; }
-        .option-item:hover { background: #222; border-color: #ffd700; }
+        .option-item { background: #1a1a1a; border: 1px solid #333; padding: 15px; margin: 10px 0; border-radius: 8px; cursor: pointer; width: 100%; text-align: left; color: #ddd; font-size: 1rem; }
+        .option-item:hover:not([disabled]) { background: #222; border-color: #ffd700; }
         .option-item.correct { background: rgba(40, 167, 69, 0.3); border-color: #28a745; color: #28a745; }
         .option-item.incorrect { background: rgba(220, 53, 69, 0.3); border-color: #dc3545; color: #dc3545; }
+        .option-item:disabled { cursor: not-allowed; opacity: 0.7; }
         
-        .question-text { font-size: 1.25rem; margin: 20px 0; color: #fff; }
+        .question-text { font-size: 1.25rem; margin: 20px 0; color: #fff; line-height: 1.5; }
         .quiz-meta { display: flex; justify-content: space-between; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #222; color: #888; }
         
         .error-box { background: rgba(220, 53, 69, 0.2); border: 1px solid #dc3545; padding: 15px; border-radius: 8px; margin: 20px 0; color: #dc3545; }
         .success-box { background: rgba(40, 167, 69, 0.2); border: 1px solid #28a745; padding: 15px; border-radius: 8px; margin: 20px 0; color: #28a745; }
+        
+        .debug-panel { background: #0a0a0a; border-top: 1px solid #333; padding: 10px; margin-top: 20px; font-size: 11px; color: #666; max-height: 150px; overflow-y: auto; }
     </style>
 </head>
 <body>
@@ -62,21 +66,20 @@
 
 <div class="hero">
     <h1 id="quizTitle">Quiz Challenge Arena</h1>
-    <p id="quizSubtitle">Test your knowledge</p>
+    <p id="quizSubtitle">Test your knowledge with interactive questions</p>
 </div>
 
 <div class="container">
     <div class="quiz-section" id="quizInterface">
         <div class="status-message">
             <div class="loading-spinner"></div>
-            Connecting to Firebase...
-            <div id="debugInfo" style="font-size: 12px; margin-top: 20px; color: #666;"></div>
+            Initializing Quiz System...
         </div>
     </div>
 </div>
 
 <script>
-    // Your Firebase configuration
+    // Your Firebase configuration (using COMPAT version)
     const firebaseConfig = {
         apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
         authDomain: "ernest-embassy-lms.firebaseapp.com",
@@ -86,72 +89,94 @@
         appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
     };
     
+    // Global variables
     let db;
     let loadedQuestions = [];
     let currentIndex = 0;
     let score = 0;
+    let debugLogs = [];
     
     // Debug function
-    function debug(message) {
-        console.log("[DEBUG]", message);
-        const debugDiv = document.getElementById("debugInfo");
-        if (debugDiv) {
-            debugDiv.innerHTML += `<div>${new Date().toLocaleTimeString()}: ${message}</div>`;
+    function debug(message, type = "info") {
+        const timestamp = new Date().toLocaleTimeString();
+        const logEntry = `[${timestamp}] ${message}`;
+        debugLogs.unshift(logEntry);
+        console.log(`[DEBUG] ${message}`);
+        
+        // Keep only last 20 logs
+        if (debugLogs.length > 20) debugLogs.pop();
+        
+        // Update debug panel if it exists
+        const debugPanel = document.getElementById("debugPanel");
+        if (debugPanel) {
+            debugPanel.innerHTML = debugLogs.map(log => `<div>${log}</div>`).join('');
         }
     }
     
     // Initialize Firebase
     async function initFirebase() {
-        debug("Initializing Firebase...");
+        debug("Initializing Firebase with COMPAT SDK...");
         try {
-            // Initialize Firebase
-            const app = firebase.initializeApp(firebaseConfig);
-            db = firebase.firestore(app);
-            debug("Firebase initialized successfully!");
+            // Initialize Firebase using compat version
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+            debug("✅ Firebase initialized successfully!");
             return true;
         } catch (error) {
-            debug("Firebase initialization error: " + error.message);
+            debug("❌ Firebase initialization error: " + error.message);
             console.error("Firebase init error:", error);
             return false;
         }
     }
     
-    // Create sample questions
+    // Create sample questions in Firestore
     async function createSampleQuestions() {
-        debug("Creating sample questions...");
+        debug("Creating sample questions in Firestore...");
+        
         const interfaceDiv = document.getElementById("quizInterface");
         interfaceDiv.innerHTML = `
             <div class="status-message">
                 <div class="loading-spinner"></div>
                 Creating sample questions in Firebase...
-                <div id="debugInfo" style="font-size: 12px; margin-top: 20px; color: #666;"></div>
+                <div style="margin-top: 20px; font-size: 12px; color: #666;">Please wait...</div>
             </div>
         `;
         
         const sampleQuestions = [
-            { question: "What is 2 + 2?", optionA: "3", optionB: "4", optionC: "5", optionD: "6", answer: "B" },
-            { question: "What is 5 × 6?", optionA: "30", optionB: "35", optionC: "40", optionD: "25", answer: "A" },
-            { question: "What is 10 ÷ 2?", optionA: "2", optionB: "3", optionC: "4", optionD: "5", answer: "D" },
+            { question: "What is the value of 2 + 2?", optionA: "3", optionB: "4", optionC: "5", optionD: "6", answer: "B" },
+            { question: "What is 5 × 6?", optionA: "30", optionB: "35", optionC: "40", optionD: "45", answer: "A" },
+            { question: "Solve: 10 ÷ 2 = ?", optionA: "2", optionB: "3", optionC: "4", optionD: "5", answer: "D" },
             { question: "What is 9 - 4?", optionA: "3", optionB: "4", optionC: "5", optionD: "6", answer: "C" },
-            { question: "What is 8 + 7?", optionA: "13", optionB: "14", optionC: "15", optionD: "16", answer: "C" }
+            { question: "What is 8 + 7?", optionA: "13", optionB: "14", optionC: "15", optionD: "16", answer: "C" },
+            { question: "What is 12 × 12?", optionA: "144", optionB: "124", optionC: "134", optionD: "154", answer: "A" },
+            { question: "Simplify: 15 - 7", optionA: "6", optionB: "7", optionC: "8", optionD: "9", answer: "C" },
+            { question: "What is 100 ÷ 4?", optionA: "20", optionB: "25", optionC: "30", optionD: "35", answer: "B" },
+            { question: "What is 3 + 5 × 2?", optionA: "13", optionB: "16", optionC: "10", optionD: "11", answer: "A" },
+            { question: "What is the square root of 81?", optionA: "7", optionB: "8", optionC: "9", optionD: "10", answer: "C" }
         ];
         
         try {
             await db.collection("questions").doc("mathematics-ss1").set({
                 questions: sampleQuestions,
+                totalQuestions: sampleQuestions.length,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
-            debug("Sample questions created successfully!");
-            alert("Success! 5 sample questions added. Click OK to refresh.");
+            debug("✅ Sample questions created successfully!");
+            alert("Success! 10 sample questions have been added to your database.\nClick OK to refresh and start the quiz.");
             location.reload();
         } catch (error) {
-            debug("Error creating questions: " + error.message);
+            debug("❌ Error creating questions: " + error.message);
             interfaceDiv.innerHTML = `
                 <div class="error-box">
                     <strong>Error:</strong> ${error.message}<br><br>
                     <button class="btn btn-primary" onclick="location.reload()">Retry</button>
                 </div>
+                <div class="debug-panel" id="debugPanel"></div>
             `;
+            const debugPanel = document.getElementById("debugPanel");
+            if (debugPanel) {
+                debugPanel.innerHTML = debugLogs.map(log => `<div>${log}</div>`).join('');
+            }
         }
     }
     
@@ -163,55 +188,67 @@
         try {
             const docRef = db.collection("questions").doc("mathematics-ss1");
             const docSnap = await docRef.get();
-            debug("Document exists: " + docSnap.exists);
+            debug(`Document exists: ${docSnap.exists}`);
             
             if (!docSnap.exists) {
+                debug("No document found, showing create button");
                 interfaceDiv.innerHTML = `
-                    <div class="status-message">
+                    <div style="text-align: center;">
                         <h2>📚 No Questions Found</h2>
-                        <p style="margin: 20px 0;">No quiz data found in your database.</p>
+                        <p style="margin: 20px 0; color: #aaa;">Your Firestore database is empty.</p>
                         <button class="btn btn-success" onclick="createSampleQuestions()">
-                            📝 Create Sample Questions
+                            📝 Create Sample Questions (10)
                         </button>
                         <p style="margin-top: 20px; font-size: 12px; color: #666;">
-                            This will add 5 sample math questions to your Firestore database.
+                            This will add sample math questions to your database.
                         </p>
-                        <div id="debugInfo" style="font-size: 12px; margin-top: 20px;"></div>
                     </div>
+                    <div class="debug-panel" id="debugPanel"></div>
                 `;
+                const debugPanel = document.getElementById("debugPanel");
+                if (debugPanel) {
+                    debugPanel.innerHTML = debugLogs.map(log => `<div>${log}</div>`).join('');
+                }
                 return false;
             }
             
             const data = docSnap.data();
             loadedQuestions = data.questions || [];
-            debug(`Loaded ${loadedQuestions.length} questions`);
+            debug(`✅ Loaded ${loadedQuestions.length} questions`);
             
             if (loadedQuestions.length === 0) {
                 interfaceDiv.innerHTML = `
-                    <div class="status-message">
+                    <div style="text-align: center;">
                         <h2>Empty Questions Array</h2>
                         <button class="btn btn-primary" onclick="createSampleQuestions()">Create Sample Questions</button>
                     </div>
+                    <div class="debug-panel" id="debugPanel"></div>
                 `;
                 return false;
             }
             
             return true;
         } catch (error) {
-            debug("Error loading: " + error.message);
+            debug("❌ Error loading: " + error.message);
             interfaceDiv.innerHTML = `
                 <div class="error-box">
                     <strong>Connection Error:</strong><br>
                     ${error.message}<br><br>
-                    <button class="btn btn-primary" onclick="location.reload()">Retry</button>
+                    <button class="btn btn-primary" onclick="location.reload()">Retry Connection</button>
                 </div>
+                <div class="debug-panel" id="debugPanel"></div>
             `;
+            const debugPanel = document.getElementById("debugPanel");
+            if (debugPanel) {
+                debugPanel.innerHTML = debugLogs.map(log => `<div>${log}</div>`).join('');
+            }
             return false;
         }
     }
     
     // Start the quiz
     function startQuiz() {
+        debug("Starting quiz...");
         currentIndex = 0;
         score = 0;
         showQuestion();
@@ -224,8 +261,8 @@
         
         interfaceDiv.innerHTML = `
             <div class="quiz-meta">
-                <span>Mathematics SS1</span>
-                <span>Question ${currentIndex + 1} of ${loadedQuestions.length}</span>
+                <span>📖 Mathematics SS1</span>
+                <span>❓ ${currentIndex + 1} of ${loadedQuestions.length}</span>
             </div>
             <div class="question-text">${q.question}</div>
             <div class="options-list">
@@ -237,7 +274,13 @@
             <div id="nextBtn" style="display:none; margin-top: 20px;">
                 <button class="btn btn-primary" onclick="nextQuestion()">Next Question →</button>
             </div>
+            <div class="debug-panel" id="debugPanel"></div>
         `;
+        
+        const debugPanel = document.getElementById("debugPanel");
+        if (debugPanel) {
+            debugPanel.innerHTML = debugLogs.map(log => `<div>${log}</div>`).join('');
+        }
     }
     
     // Check user's answer
@@ -248,25 +291,27 @@
         const buttons = document.querySelectorAll('.option-item');
         buttons.forEach(btn => btn.disabled = true);
         
+        // Highlight correct answer
         buttons.forEach(btn => {
             if (btn.getAttribute('onclick').includes(`'${correct}'`)) {
                 btn.classList.add('correct');
             }
         });
         
+        // Check if selected is correct
         if (selected === correct) {
-            buttons.forEach(btn => {
-                if (btn.getAttribute('onclick').includes(`'${selected}'`)) {
-                    btn.classList.add('correct');
-                }
-            });
+            const selectedBtn = Array.from(buttons).find(btn => 
+                btn.getAttribute('onclick').includes(`'${selected}'`)
+            );
+            if (selectedBtn) selectedBtn.classList.add('correct');
             score++;
+            debug(`✓ Correct! Score: ${score}/${currentIndex + 1}`);
         } else {
-            buttons.forEach(btn => {
-                if (btn.getAttribute('onclick').includes(`'${selected}'`)) {
-                    btn.classList.add('incorrect');
-                }
-            });
+            const selectedBtn = Array.from(buttons).find(btn => 
+                btn.getAttribute('onclick').includes(`'${selected}'`)
+            );
+            if (selectedBtn) selectedBtn.classList.add('incorrect');
+            debug(`✗ Incorrect. Correct answer was ${correct}`);
         }
         
         document.getElementById('nextBtn').style.display = 'block';
@@ -285,46 +330,94 @@
     // Show final results
     function showResults() {
         const percent = Math.round((score / loadedQuestions.length) * 100);
-        const interfaceDiv = document.getElementById("quizInterface");
+        let gradeMessage = "";
+        let gradeColor = "";
         
+        if (percent >= 80) {
+            gradeMessage = "🎉 Excellent! Outstanding performance!";
+            gradeColor = "#28a745";
+        } else if (percent >= 60) {
+            gradeMessage = "👍 Good job! Keep it up!";
+            gradeColor = "#ffd700";
+        } else if (percent >= 40) {
+            gradeMessage = "📚 Nice try! Review and try again.";
+            gradeColor = "#ff9800";
+        } else {
+            gradeMessage = "💪 Keep practicing! You'll do better next time.";
+            gradeColor = "#dc3545";
+        }
+        
+        const interfaceDiv = document.getElementById("quizInterface");
         interfaceDiv.innerHTML = `
             <div style="text-align: center; padding: 20px;">
                 <h2 style="color: #ffd700;">🏁 Quiz Complete!</h2>
-                <div style="font-size: 4rem; color: ${percent >= 60 ? '#28a745' : '#ffd700'}; margin: 20px;">
+                <div style="font-size: 4rem; color: ${gradeColor}; margin: 20px; font-weight: bold;">
                     ${percent}%
                 </div>
-                <p style="font-size: 1.2rem;">Score: ${score}/${loadedQuestions.length}</p>
-                <p style="margin: 20px 0;">${percent >= 70 ? 'Excellent! 🎉' : percent >= 50 ? 'Good job! 👍' : 'Keep practicing! 💪'}</p>
-                <button class="btn btn-success" onclick="startQuiz()">Restart Quiz</button>
+                <p style="font-size: 1.2rem;">Score: ${score} out of ${loadedQuestions.length}</p>
+                <p style="margin: 20px 0; color: #aaa;">${gradeMessage}</p>
+                <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                    <button class="btn btn-success" onclick="startQuiz()">🔄 Restart Quiz</button>
+                </div>
             </div>
+            <div class="debug-panel" id="debugPanel"></div>
         `;
+        
+        const debugPanel = document.getElementById("debugPanel");
+        if (debugPanel) {
+            debugPanel.innerHTML = debugLogs.map(log => `<div>${log}</div>`).join('');
+        }
+        
+        debug(`Quiz completed! Final score: ${score}/${loadedQuestions.length} (${percent}%)`);
     }
     
     // Main initialization
     async function init() {
-        debug("App starting...");
+        debug("🚀 App starting...");
         const initialized = await initFirebase();
+        
         if (initialized) {
             debug("Firebase ready, loading questions...");
             const hasQuestions = await loadQuestions();
-            if (hasQuestions) {
-                debug("Questions loaded, showing start button");
+            
+            if (hasQuestions && loadedQuestions.length > 0) {
+                debug(`✅ Ready! ${loadedQuestions.length} questions available`);
                 const interfaceDiv = document.getElementById("quizInterface");
                 interfaceDiv.innerHTML = `
                     <div style="text-align: center;">
                         <h2>📝 Ready to Test Your Knowledge?</h2>
-                        <p style="margin: 20px 0;">${loadedQuestions.length} questions available</p>
-                        <button class="btn btn-success" onclick="startQuiz()">🚀 Start Quiz</button>
+                        <p style="margin: 20px 0; color: #aaa;">${loadedQuestions.length} questions available</p>
+                        <button class="btn btn-success" onclick="startQuiz()" style="font-size: 1.2rem; padding: 15px 40px;">
+                            🚀 Start Quiz
+                        </button>
                     </div>
+                    <div class="debug-panel" id="debugPanel"></div>
                 `;
+                const debugPanel = document.getElementById("debugPanel");
+                if (debugPanel) {
+                    debugPanel.innerHTML = debugLogs.map(log => `<div>${log}</div>`).join('');
+                }
             }
         } else {
-            debug("Failed to initialize Firebase");
+            debug("❌ Failed to initialize Firebase");
+            const interfaceDiv = document.getElementById("quizInterface");
+            interfaceDiv.innerHTML = `
+                <div class="error-box">
+                    <strong>Firebase Connection Failed</strong><br>
+                    Please check your internet connection and Firebase configuration.<br><br>
+                    <button class="btn btn-primary" onclick="location.reload()">Retry</button>
+                </div>
+                <div class="debug-panel" id="debugPanel"></div>
+            `;
+            const debugPanel = document.getElementById("debugPanel");
+            if (debugPanel) {
+                debugPanel.innerHTML = debugLogs.map(log => `<div>${log}</div>`).join('');
+            }
         }
     }
     
-    // Start the app
-    init();
+    // Start the app when page loads
+    window.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>

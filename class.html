@@ -19,13 +19,6 @@
             color: #2d3748;
         }
         
-        /* Animated gradient background */
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
         nav { 
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -54,18 +47,25 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             text-decoration: none;
+            cursor: pointer;
         }
         
         .nav-links { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; }
-        .nav-links a { 
+        .nav-links a, .nav-link { 
             color: #4a5568; 
             text-decoration: none; 
             font-weight: 500; 
             font-size: 0.9rem; 
-            padding: 8px 0;
+            padding: 8px 12px;
             transition: all 0.3s ease;
+            cursor: pointer;
+            border-radius: 8px;
         }
-        .nav-links a:hover { color: #667eea; transform: translateY(-2px); }
+        .nav-links a:hover, .nav-link:hover { 
+            color: #667eea; 
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
         
         .hero { 
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -125,6 +125,9 @@
             margin: 5px;
             transition: all 0.3s ease;
             font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .btn-success { 
@@ -157,6 +160,16 @@
         .btn-secondary:hover { 
             background: #cbd5e0;
             transform: translateY(-2px);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
         }
         
         .status-message { 
@@ -278,17 +291,68 @@
             font-size: 0.9rem;
             font-weight: bold;
         }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .home-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-size: 24px;
+            border: none;
+        }
+        
+        .home-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .action-buttons {
+                flex-direction: column;
+            }
+            .home-button {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+        }
     </style>
 </head>
 <body>
 
 <nav>
     <div class="nav-container">
-        <a href="#" class="logo">⚡ Ernest Embassy LMS</a>
+        <div class="logo" onclick="goToPage('index.html')">⚡ Ernest Embassy LMS</div>
         <div class="nav-links">
-            <a href="#">Dashboard</a>
-            <a href="#">Courses</a>
-            <a href="#">Resources</a>
+            <a href="#" onclick="goToPage('dashboard.html')">Dashboard</a>
+            <a href="#" onclick="goToPage('courses.html')">Courses</a>
+            <a href="#" onclick="goToPage('resources.html')">Resources</a>
+            <a href="#" onclick="goToPage('education.html')" class="nav-link">🎓 Education Hub</a>
         </div>
     </div>
 </nav>
@@ -307,7 +371,18 @@
     </div>
 </div>
 
+<!-- Floating Home Button -->
+<button class="home-button" onclick="goToPage('index.html')" title="Go to Home">
+    🏠
+</button>
+
 <script>
+    // Navigation function
+    function goToPage(page) {
+        debug(`Navigating to ${page}...`);
+        window.location.href = page;
+    }
+    
     // Your Firebase configuration
     const firebaseConfig = {
         apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
@@ -423,6 +498,10 @@
                             Click to generate exciting math questions automatically
                         </p>
                     </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Back to Education Hub</button>
+                        <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Back to Home</button>
+                    </div>
                     <div class="debug-panel" id="debugPanel"></div>
                 `;
                 return false;
@@ -465,6 +544,10 @@
             </div>
             <div id="nextBtn" style="display:none; margin-top: 20px; text-align: center;">
                 <button class="btn btn-primary" onclick="nextQuestion()">Next Question →</button>
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Back to Education Hub</button>
+                <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Back to Home</button>
             </div>
             <div class="debug-panel" id="debugPanel"></div>
         `;
@@ -554,10 +637,14 @@
                     Score: ${score} out of ${loadedQuestions.length}
                 </p>
                 <p style="margin: 20px 0; color: #718096; font-size: 1.1rem;">${gradeMessage}</p>
-                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
+                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px; flex-wrap: wrap;">
                     <button class="btn btn-success" onclick="startQuiz()" style="font-size: 1.1rem;">
                         🔄 Play Again
                     </button>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Back to Education Hub</button>
+                    <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Back to Home</button>
                 </div>
             </div>
             <div class="debug-panel" id="debugPanel"></div>
@@ -593,6 +680,10 @@
                         <p style="margin-top: 20px; font-size: 12px; color: #a0aec0;">
                             ✨ Test your knowledge and earn amazing scores ✨
                         </p>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Back to Education Hub</button>
+                        <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Back to Home</button>
                     </div>
                     <div class="debug-panel" id="debugPanel"></div>
                 `;

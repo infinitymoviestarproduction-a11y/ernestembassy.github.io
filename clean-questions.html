@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clean Questions - Ernest Embassy LMS</title>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+        h1 { color: #667eea; margin-bottom: 20px; }
+        h2 { color: #4a5568; margin: 20px 0 10px; }
+        button {
+            padding: 15px 30px;
+            font-size: 16px;
+            margin: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .btn-danger { background: #eb3349; color: white; }
+        .btn-success { background: #11998e; color: white; }
+        .btn-info { background: #3498db; color: white; }
+        .btn-warning { background: #f39c12; color: white; }
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            max-height: 500px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 13px;
+        }
+        .stats {
+            background: #e2e8f0;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .success { color: #11998e; font-weight: bold; }
+        .error { color: #eb3349; font-weight: bold; }
+        .warning { color: #f39c12; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧹 Firebase Questions Cleaner</h1>
+        <p>Clean up your questions collection - remove individual question documents</p>
+        
+        <div class="stats" id="stats">
+            Click a button below to manage your questions.
+        </div>
+        
+        <div>
+            <button class="btn-info" onclick="viewStructure()">👁️ View Current Structure</button>
+            <button class="btn-warning" onclick="deleteIndividualQuestions()">🗑️ Delete Individual Questions Only</button>
+            <button class="btn-danger" onclick="deleteEverything()">⚠️ Delete EVERYTHING</button>
+        </div>
+        
+        <div>
+            <h2>📋 Recommended Steps:</h2>
+            <ol style="margin-left: 20px; color: #4a5568;">
+                <li>Click <strong>"View Current Structure"</strong> to see what's in your database</li>
+                <li>Click <strong>"Delete Individual Questions Only"</strong> to remove the bad documents</li>
+                <li>Then use the Bulk Uploader to upload subjects correctly</li>
+            </ol>
+        </div>
+        
+        <div id="result" class="result">
+            Ready. Click a button above...
+        </div>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+            authDomain: "ernest-embassy-lms.firebaseapp.com",
+            projectId: "ernest-embassy-lms",
+            storageBucket: "ernest-embassy-lms.firebasestorage.app",
+            messagingSenderId: "204896421221",
+            appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        
+        const resultDiv = document.getElementById('result');
+        const statsDiv = document.getElementById('stats');
+        
+        function showMessage(msg, type) {
+            const color = type === 'error' ? '#eb3349' : (type === 'warning' ? '#f39c12' : '#11998e');
+            statsDiv.innerHTML = `<div style="color: ${color}; padding: 10px;">${msg}</div>`;
+        }
+        
+        async function viewStructure() {
+            resultDiv.innerHTML = "🔄 Loading...";
+            
+            try {
+                const snapshot = await db.collection("questions").get();
+                
+                if (snapshot.size === 0) {
+                    resultDiv.innerHTML = "✅ No documents found in 'questions' collection. It's empty!";
+                    showMessage("Collection is empty. Ready for upload!", "success");
+                    return;
+                }
+                
+                let html = `<strong>📊 Found ${snapshot.size} document(s) in 'questions' collection:</strong><br><br>`;
+                
+                const subjectDocs = [];
+                const individualDocs = [];
+                
+                for (const doc of snapshot.docs) {
+                    const data = doc.data();
+                    const docId = doc.id;
+                    
+                    if (data.questions && Array.isArray(data.questions)) {
+                        subjectDocs.push({
+                            id: docId,
+                            count: data.questions.length,
+                            updated: data.lastUpdated
+                        });
+                    } else {
+                        individualDocs.push(docId);
+                    }
+                }
+                
+                if (subjectDocs.length > 0) {
+                    html += `<div style="color: #11998e; margin-bottom: 15px;">
+                        <strong>✅ GOOD DOCUMENTS (Keep these):</strong><br>
+                        ${subjectDocs.map(d => `📁 ${d.id} - contains ${d.count} questions`).join('<br>')}
+                    </div>`;
+                }
+                
+                if (individualDocs.length > 0) {
+                    html += `<div style="color: #eb3349;">
+                        <strong>⚠️ BAD DOCUMENTS (Delete these - they are individual questions):</strong><br>
+                        ${individualDocs.slice(0, 30).map(id => `📄 ${id}`).join('<br>')}
+                    </div>`;
+                    
+                    if (individualDocs.length > 30) {
+                        html += `<br><em>... and ${individualDocs.length - 30} more individual question documents</em>`;
+                    }
+                    
+                    html += `<br><br><strong>Total bad documents to delete: ${individualDocs.length}</strong>`;
+                }
+                
+                if (subjectDocs.length === 0 && individualDocs.length > 0) {
+                    html += `<br><br><span style="color: #f39c12;">💡 Tip: Click "Delete Individual Questions Only" to clean these up.</span>`;
+                }
+                
+                resultDiv.innerHTML = html;
+                showMessage(`Found ${subjectDocs.length} good docs, ${individualDocs.length} bad docs`, individualDocs.length > 0 ? "warning" : "success");
+                
+            } catch (error) {
+                resultDiv.innerHTML = `❌ Error: ${error.message}`;
+                showMessage("Error loading data", "error");
+            }
+        }
+        
+        async function deleteIndividualQuestions() {
+            if (!confirm("⚠️ This will delete ALL individual question documents.\n\nDocuments that contain 'questions' arrays will be KEPT.\n\nContinue?")) {
+                resultDiv.innerHTML = "Deletion cancelled.";
+                return;
+            }
+            
+            resultDiv.innerHTML = "🔄 Scanning and deleting individual questions...";
+            
+            try {
+                const snapshot = await db.collection("questions").get();
+                const batch = db.batch();
+                let deleteCount = 0;
+                let keptCount = 0;
+                
+                for (const doc of snapshot.docs) {
+                    const data = doc.data();
+                    // Delete if it's NOT a proper subject document (doesn't have questions array)
+                    if (!data.questions || !Array.isArray(data.questions)) {
+                        batch.delete(doc.ref);
+                        deleteCount++;
+                    } else {
+                        keptCount++;
+                    }
+                }
+                
+                if (deleteCount === 0) {
+                    resultDiv.innerHTML = "✅ No individual question documents found to delete. Your collection looks clean!";
+                    showMessage("No bad documents found!", "success");
+                    return;
+                }
+                
+                await batch.commit();
+                resultDiv.innerHTML = `✅ Success!<br><br>
+                    🗑️ Deleted: ${deleteCount} individual question documents<br>
+                    📁 Kept: ${keptCount} subject documents<br><br>
+                    Refresh Firebase Console to see the clean structure.`;
+                    
+                showMessage(`Deleted ${deleteCount} bad documents`, "success");
+                await viewStructure();
+                
+            } catch (error) {
+                resultDiv.innerHTML = `❌ Error: ${error.message}`;
+                showMessage("Error during deletion", "error");
+            }
+        }
+        
+        async function deleteEverything() {
+            if (!confirm("⚠️⚠️⚠️ DANGER: This will delete EVERYTHING in 'questions' collection!\n\nThis includes both individual questions AND your subject documents.\n\nOnly do this if you want to start completely fresh.\n\nContinue?")) {
+                resultDiv.innerHTML = "Deletion cancelled.";
+                return;
+            }
+            
+            const confirmText = prompt("Type 'DELETE ALL' to confirm deletion:");
+            if (confirmText !== "DELETE ALL") {
+                resultDiv.innerHTML = "Deletion cancelled - incorrect confirmation.";
+                return;
+            }
+            
+            resultDiv.innerHTML = "🔄 Deleting everything...";
+            
+            try {
+                const snapshot = await db.collection("questions").get();
+                const batch = db.batch();
+                
+                snapshot.docs.forEach(doc => {
+                    batch.delete(doc.ref);
+                });
+                
+                await batch.commit();
+                resultDiv.innerHTML = `✅ Deleted ${snapshot.size} documents!<br><br>Your 'questions' collection is now completely empty.<br><br>You can now upload subjects correctly using the Bulk Uploader.`;
+                showMessage(`Deleted everything - ${snapshot.size} documents removed`, "warning");
+                await viewStructure();
+                
+            } catch (error) {
+                resultDiv.innerHTML = `❌ Error: ${error.message}`;
+                showMessage("Error during deletion", "error");
+            }
+        }
+        
+        // Auto-view when page loads
+        viewStructure();
+    </script>
+</body>
+</html>

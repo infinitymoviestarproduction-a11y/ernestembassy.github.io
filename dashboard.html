@@ -1,448 +1,385 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard - Ernest Embassy LMS</title>
-
-<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
-
-<style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-
-    body { 
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh; 
-        display: flex; 
-        flex-direction: column; 
-    }
-
-    nav {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        padding: 1rem 0;
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-
-    .nav-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 15px;
-    }
-
-    .logo-group {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        text-decoration: none;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        font-weight: bold;
-        font-size: 22px;
-    }
-
-    .nav-links { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
-
-    .nav-link { 
-        color: #4a5568; 
-        text-decoration: none; 
-        font-size: 14px; 
-        font-weight: 500; 
-        padding: 8px 12px;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-    }
-    .nav-link:hover, .nav-link.active { 
-        color: #667eea; 
-        background: rgba(102, 126, 234, 0.1);
-    }
-
-    .dev-badge {
-        background: #f97316;
-        color: white;
-        font-size: 11px;
-        padding: 3px 8px;
-        border-radius: 10px;
-        font-weight: bold;
-    }
-
-    .btn-logout {
-        background: transparent;
-        color: #eb3349;
-        border: 1px solid #eb3349;
-        padding: 6px 14px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: bold;
-        font-size: 13px;
-        transition: 0.2s;
-    }
-
-    .btn-logout:hover { background: #eb3349; color: #fff; }
-
-    .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; width: 100%; flex: 1; }
-
-    .welcome-banner {
-        background: white;
-        border-radius: 20px;
-        padding: 30px;
-        margin-bottom: 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 20px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-    }
-
-    .welcome-text h1 { 
-        font-size: 28px; 
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin-bottom: 5px;
-    }
-    .welcome-text p  { color: #718096; font-size: 15px; }
-
-    .profile-metrics { display: flex; gap: 15px; flex-wrap: wrap; }
-
-    .metric-badge {
-        background: #f7fafc;
-        border: 1px solid #e2e8f0;
-        padding: 10px 18px;
-        border-radius: 12px;
-        font-size: 14px;
-        font-weight: 600;
-        color: #2d3748;
-    }
-
-    .metric-badge span { color: #718096; display: block; font-size: 12px; font-weight: normal; margin-bottom: 2px; }
-
-    .task-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 25px;
-        margin-bottom: 40px;
-    }
-
-    @media(max-width: 768px) { .task-grid { grid-template-columns: 1fr; } }
-
-    .task-card {
-        background: white;
-        border-radius: 20px;
-        padding: 25px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        transition: transform 0.3s ease;
-    }
-
-    .task-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-    }
-
-    .task-header h2 { 
-        font-size: 20px; 
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin-bottom: 10px;
-    }
-    .task-header p  { color: #718096; font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
-
-    .btn-action {
-        width: 100%;
-        padding: 14px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border: none;
-        border-radius: 12px;
-        font-weight: bold;
-        font-size: 15px;
-        cursor: pointer;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 8px;
-        text-decoration: none;
-        transition: all 0.3s ease;
-    }
-
-    .btn-action:hover { 
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-    }
-
-    .btn-secondary-action { 
-        background: #f7fafc; 
-        color: #4a5568; 
-        border: 1px solid #e2e8f0;
-    }
-    .btn-secondary-action:hover { 
-        background: #edf2f7; 
-        box-shadow: none;
-    }
-
-    .section-title {
-        font-size: 22px;
-        color: white;
-        margin-bottom: 20px;
-        border-left: 4px solid #ffd700;
-        padding-left: 12px;
-    }
-
-    .subject-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 25px;
-        margin-top: 20px;
-    }
-
-    .subject-card {
-        background: white;
-        border-radius: 20px;
-        padding: 25px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        transition: all 0.3s ease;
-    }
-
-    .subject-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        border: 1px solid #667eea;
-    }
-
-    .subject-info h3 { 
-        font-size: 18px; 
-        color: #2d3748; 
-        margin-bottom: 8px;
-        font-weight: 600;
-    }
-    .subject-info p  { color: #718096; font-size: 13px; line-height: 1.5; margin-bottom: 20px; }
-
-    .course-link {
-        color: #667eea;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: bold;
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        padding: 8px 0;
-        transition: gap 0.3s;
-    }
-
-    .course-link:hover { 
-        gap: 10px;
-        text-decoration: underline;
-    }
-
-    footer {
-        background: rgba(255, 255, 255, 0.95);
-        border-top: 1px solid #e2e8f0;
-        padding: 20px;
-        text-align: center;
-        color: #718096;
-        font-size: 13px;
-        margin-top: 40px;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Ernest Embassy LMS</title>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; 
+        }
+        
+        /* Floating Home Button */
+        .home-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-size: 24px;
+            border: none;
+            text-decoration: none;
+        }
+        .home-button:hover { transform: scale(1.1); }
+        
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .logo-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .logo-sub { font-size: 0.7rem; color: #718096; }
+        .nav-links { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+        .nav-links a, .dropbtn {
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        .nav-links a:hover, .dropdown:hover .dropbtn { color: #667eea; background: rgba(102, 126, 234, 0.1); }
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            z-index: 1000;
+            top: 100%;
+            left: 0;
+            overflow: hidden;
+        }
+        .dropdown-content a {
+            display: block;
+            padding: 10px 20px;
+            color: #4a5568;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .dropdown-content a:last-child { border-bottom: none; }
+        .dropdown-content a:hover { background: #f7fafc; color: #667eea; }
+        .dropdown:hover .dropdown-content { display: block; }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
+        .welcome-banner {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+        .welcome-text h1 { 
+            font-size: 28px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .welcome-text p { color: #718096; }
+        .metric-badge {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        .metric-badge span { color: #718096; display: block; font-size: 12px; font-weight: normal; }
+        
+        .task-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .task-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .task-card:hover { transform: translateY(-5px); }
+        .task-header h2 { 
+            font-size: 20px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        .task-header p { color: #718096; font-size: 14px; margin-bottom: 20px; }
+        .btn-action {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+        .btn-action:hover { transform: translateY(-2px); }
+        .btn-secondary-action { background: #f7fafc; color: #4a5568; border: 1px solid #e2e8f0; }
+        
+        .section-title { font-size: 22px; color: white; margin-bottom: 20px; border-left: 4px solid #ffd700; padding-left: 12px; }
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        .subject-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .subject-card:hover { transform: translateY(-5px); border: 1px solid #667eea; }
+        .subject-card h3 { color: #2d3748; margin-bottom: 8px; }
+        .subject-card p { color: #718096; font-size: 13px; }
+        .course-link { color: #667eea; text-decoration: none; font-size: 14px; font-weight: bold; display: inline-block; margin-top: 15px; }
+        
+        footer {
+            background: #1a1a2e;
+            color: #a0aec0;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 40px;
+        }
+        .btn-logout {
+            background: #eb3349;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .home-button { width: 50px; height: 50px; font-size: 20px; bottom: 20px; right: 20px; }
+        }
+    </style>
 </head>
-
 <body>
+
+<!-- Floating Home Button -->
+<a href="index.html" class="home-button" title="Go to Home">🏠</a>
 
 <nav>
     <div class="nav-container">
-        <a href="dashboard.html" class="logo-group">⚡ Ernest Embassy LMS</a>
+        <a href="index.html" class="logo">
+            <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+            <div>
+                <div class="logo-text">Ernest Embassy</div>
+                <div class="logo-sub">Digital Solutions</div>
+            </div>
+        </a>
         <div class="nav-links">
-            <span id="devIndicator" style="display:none;" class="dev-badge">🛠️ Dev Mode</span>
-            <a href="dashboard.html" class="nav-link active">📊 Dashboard</a>
-            <a href="courses.html" class="nav-link">📚 Courses</a>
-            <a href="resources.html" class="nav-link">📄 Resources</a>
-            <a href="education.html" class="nav-link">🎓 Education Hub</a>
-            <button class="btn-logout" onclick="triggerSessionLogout()">🚪 Logout</button>
+            <a href="index.html">🏠 Home</a>
+            <a href="about.html">📖 About</a>
+            <div class="dropdown">
+                <button class="dropbtn">🎬 Movie Studio ▼</button>
+                <div class="dropdown-content">
+                    <a href="movie-studio.html">🎬 Studio Home</a>
+                    <a href="portfolio.html">🎨 Portfolio</a>
+                    <a href="gallery.html">📸 Gallery</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">🎓 Education ▼</button>
+                <div class="dropdown-content">
+                    <a href="education.html">🎓 Education Hub</a>
+                    <a href="class.html">🎓 Class</a>
+                    <a href="resources.html">📄 Resources</a>
+                </div>
+            </div>
+            <a href="dashboard.html">👤 Dashboard</a>
+            <button class="btn-logout" onclick="logout()">🚪 Logout</button>
         </div>
     </div>
 </nav>
 
 <div class="container">
-
     <div class="welcome-banner">
         <div class="welcome-text">
             <h1 id="welcomeUser">Welcome, Student! 👋</h1>
             <p>Keep advancing your educational milestones 🚀</p>
         </div>
-        <div class="profile-metrics">
-            <div class="metric-badge">
-                <span>Class Rank</span>
-                Active Learner
-            </div>
+        <div class="profile-metrics" style="display: flex; gap: 15px;">
             <div class="metric-badge">
                 <span>Best Score</span>
-                <span id="userScoreDisplay" style="display:inline; font-size:14px; font-weight:600;">0%</span>
-            </div>
-            <div class="metric-badge">
-                <span>Current Stage</span>
-                Senior Class
+                <span id="userScoreDisplay" style="font-size: 14px; font-weight: 600;">0%</span>
             </div>
         </div>
     </div>
 
     <h2 class="section-title">⚡ Quick Learning Tasks</h2>
     <div class="task-grid">
-
         <div class="task-card">
             <div class="task-header">
                 <h2>💰 Challenge Quiz (Paid)</h2>
-                <p>Timed tournament quiz — multiple stages, ₦100 entry fee. Score high to win amazing prizes!</p>
+                <p>Timed tournament quiz — multiple stages, ₦100 entry fee. Score high to win prizes!</p>
             </div>
             <a href="class.html?mode=paid&subject=physics" class="btn-action">🏆 Enter Challenge Quiz</a>
         </div>
-
         <div class="task-card">
             <div class="task-header">
                 <h2>📂 Study Materials Library</h2>
-                <p>Access digital textbooks, study summaries, curriculum guidelines, and shared workspace materials.</p>
+                <p>Access digital textbooks, study summaries, and curriculum guidelines.</p>
             </div>
             <a href="resources.html" class="btn-action btn-secondary-action">📚 Open Study Notes</a>
         </div>
-
     </div>
 
     <h2 class="section-title">📘 Your Academic Subjects</h2>
     <div class="subject-grid">
-
-        <div class="subject-card">
-            <div class="subject-info">
-                <h3>💻 Digital Technology</h3>
-                <p>Computer fundamentals, networking, ICT, internet tech, and foundational software engineering.</p>
-            </div>
-            <a href="class.html?mode=free&subject=digital-technology" class="course-link">Start Learning →</a>
+        <div class="subject-card" onclick="location.href='class.html?subject=digital-technology'">
+            <div class="subject-icon" style="font-size: 2rem;">💻</div>
+            <h3>Digital Technology</h3>
+            <p>Computer fundamentals, networking, ICT concepts</p>
+            <span class="course-link">Start Learning →</span>
         </div>
-
-        <div class="subject-card">
-            <div class="subject-info">
-                <h3>📐 Mathematics</h3>
-                <p>Algebra, coordinate geometry, quadratic equations, and WAEC/JAMB preparation.</p>
-            </div>
-            <a href="class.html?mode=free&subject=mathematics" class="course-link">Start Learning →</a>
+        <div class="subject-card" onclick="location.href='class.html?subject=mathematics'">
+            <div class="subject-icon" style="font-size: 2rem;">📐</div>
+            <h3>Mathematics</h3>
+            <p>Algebra, geometry, calculus, statistics</p>
+            <span class="course-link">Start Learning →</span>
         </div>
-
-        <div class="subject-card">
-            <div class="subject-info">
-                <h3>📖 English Language</h3>
-                <p>Grammar, essay writing, comprehension, and communication skills.</p>
-            </div>
-            <a href="class.html?mode=free&subject=english" class="course-link">Start Learning →</a>
+        <div class="subject-card" onclick="location.href='class.html?subject=english'">
+            <div class="subject-icon" style="font-size: 2rem;">📖</div>
+            <h3>English Language</h3>
+            <p>Grammar, comprehension, essay writing</p>
+            <span class="course-link">Start Learning →</span>
         </div>
-
-        <div class="subject-card">
-            <div class="subject-info">
-                <h3>⚛️ Physics</h3>
-                <p>Laws of motion, energy, waves, electricity, and modern physics concepts.</p>
-            </div>
-            <a href="class.html?mode=free&subject=physics" class="course-link">Start Learning →</a>
+        <div class="subject-card" onclick="location.href='class.html?subject=physics'">
+            <div class="subject-icon" style="font-size: 2rem;">⚛️</div>
+            <h3>Physics</h3>
+            <p>Mechanics, waves, electricity, magnetism</p>
+            <span class="course-link">Start Learning →</span>
         </div>
-
-        <div class="subject-card">
-            <div class="subject-info">
-                <h3>🗣️ Igbo Language</h3>
-                <p>Grammar, vocabulary, cultural translation, and indigenous speech patterns.</p>
-            </div>
-            <a href="class.html?mode=free&subject=igbo" class="course-link">Start Learning →</a>
+        <div class="subject-card" onclick="location.href='class.html?subject=igbo'">
+            <div class="subject-icon" style="font-size: 2rem;">🗣️</div>
+            <h3>Igbo Language</h3>
+            <p>Grammar, literature, cultural studies</p>
+            <span class="course-link">Start Learning →</span>
         </div>
-
     </div>
-
 </div>
 
 <footer>
-    © 2026 Ernest Embassy Digital Solutions | Professional Online Learning Platform
+    <p>© 2026 Ernest Embassy Digital Solutions | Empowering Education Through Technology</p>
 </footer>
 
 <script>
-// Firebase Configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
-    authDomain: "ernest-embassy-lms.firebaseapp.com",
-    projectId: "ernest-embassy-lms",
-    storageBucket: "ernest-embassy-lms.firebasestorage.app",
-    messagingSenderId: "204896421221",
-    appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
-};
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-let currentUser = null;
-
-function showMessage(msg, type) {
-    console.log(`${type}: ${msg}`);
-}
-
-async function initAuth(redirectOnFail = true) {
-    return new Promise((resolve) => {
-        auth.onAuthStateChanged(async (user) => {
-            if (user) {
-                currentUser = user;
-                
-                // Get student data from Firestore
-                const studentDoc = await db.collection('students').doc(user.uid).get();
-                const studentData = studentDoc.data();
-                
-                const userName = studentData?.fullName || user.email?.split('@')[0] || 'Student';
-                document.getElementById("welcomeUser").innerHTML = `Welcome, ${userName}! 👋`;
-                
-                // Get best score
-                const scores = studentData?.quizScores || {};
-                const bestScore = Object.values(scores).length > 0 ? Math.max(...Object.values(scores)) : 0;
-                document.getElementById("userScoreDisplay").innerText = `${bestScore}%`;
-                
-                resolve(true);
-            } else {
-                if (redirectOnFail) {
-                    window.location.href = "login.html";
-                }
-                resolve(false);
-            }
-        });
-    });
-}
-
-async function triggerSessionLogout() {
-    try {
-        await auth.signOut();
-        window.location.href = "login.html";
-    } catch (e) {
-        console.error("Logout error:", e);
-        window.location.href = "login.html";
+    const firebaseConfig = {
+        apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+        authDomain: "ernest-embassy-lms.firebaseapp.com",
+        projectId: "ernest-embassy-lms",
+        storageBucket: "ernest-embassy-lms.firebasestorage.app",
+        messagingSenderId: "204896421221",
+        appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
+    };
+    
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    
+    async function loadDashboard() {
+        const user = auth.currentUser;
+        if (!user) {
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        const studentDoc = await db.collection('students').doc(user.uid).get();
+        const studentData = studentDoc.data();
+        const userName = studentData?.fullName || user.email?.split('@')[0] || 'Student';
+        document.getElementById('welcomeUser').innerHTML = `Welcome, ${userName}! 👋`;
+        
+        const scores = studentData?.quizScores || {};
+        const bestScore = Object.values(scores).length > 0 ? Math.max(...Object.values(scores)) : 0;
+        document.getElementById('userScoreDisplay').innerText = `${bestScore}%`;
     }
-}
-
-// Initialize
-initAuth(true);
+    
+    async function logout() {
+        await auth.signOut();
+        window.location.href = 'index.html';
+    }
+    
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            loadDashboard();
+        } else {
+            window.location.href = 'login.html';
+        }
+    });
 </script>
-
 </body>
 </html>

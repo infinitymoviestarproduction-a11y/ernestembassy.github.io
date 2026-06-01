@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Login - Ernest Embassy LMS</title>
+    <title>Login - Ernest Embassy LMS</title>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
@@ -14,11 +14,8 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
-            position: relative;
         }
-        
-        /* Home Button - Floating */
-        .home-button {
+        .floating-home {
             position: fixed;
             bottom: 30px;
             right: 30px;
@@ -38,11 +35,7 @@
             border: none;
             text-decoration: none;
         }
-        .home-button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        }
-        
+        .floating-home:hover { transform: scale(1.1); }
         .container {
             max-width: 500px;
             margin: 50px auto;
@@ -51,22 +44,9 @@
             padding: 40px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
-        .logo {
-            text-align: center;
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
-        h1 {
-            color: #667eea;
-            text-align: center;
-            margin-bottom: 10px;
-            font-size: 1.8rem;
-        }
-        .subtitle {
-            text-align: center;
-            color: #718096;
-            margin-bottom: 30px;
-        }
+        .logo { text-align: center; font-size: 3rem; margin-bottom: 10px; }
+        h1 { color: #667eea; text-align: center; margin-bottom: 10px; font-size: 1.8rem; }
+        .subtitle { text-align: center; color: #718096; margin-bottom: 30px; }
         input {
             width: 100%;
             padding: 15px;
@@ -74,12 +54,8 @@
             border: 2px solid #e2e8f0;
             border-radius: 10px;
             font-size: 1rem;
-            transition: border-color 0.3s;
         }
-        input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
+        input:focus { outline: none; border-color: #667eea; }
         .btn {
             width: 100%;
             padding: 15px;
@@ -91,45 +67,15 @@
             font-weight: bold;
             cursor: pointer;
             margin-top: 20px;
-            transition: transform 0.2s;
         }
-        .btn:hover {
-            transform: scale(1.02);
-        }
-        .btn-google {
-            background: #db4437;
-            margin-top: 10px;
-        }
-        .btn-dev {
-            background: #f39c12;
-            margin-top: 10px;
-        }
-        .message {
-            margin-top: 20px;
-            padding: 12px;
-            border-radius: 8px;
-            text-align: center;
-            display: none;
-        }
+        .btn-google { background: #db4437; margin-top: 10px; }
+        .message { margin-top: 20px; padding: 12px; border-radius: 8px; text-align: center; display: none; }
         .error { background: #fee; color: #eb3349; display: block; }
         .success { background: #e8f5e9; color: #11998e; display: block; }
-        .nav-links {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .nav-links a {
-            color: #667eea;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-        .divider {
-            text-align: center;
-            margin: 20px 0;
-            color: #718096;
-            position: relative;
-        }
-        .divider::before,
-        .divider::after {
+        .nav-links { text-align: center; margin-top: 20px; }
+        .nav-links a { color: #667eea; text-decoration: none; margin: 0 10px; }
+        .divider { text-align: center; margin: 20px 0; color: #718096; position: relative; }
+        .divider::before, .divider::after {
             content: "";
             position: absolute;
             top: 50%;
@@ -139,35 +85,22 @@
         }
         .divider::before { left: 0; }
         .divider::after { right: 0; }
-        .warning-badge {
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            color: #856404;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            text-align: center;
-            margin-top: 20px;
-        }
-        
         @media (max-width: 768px) {
-            .home-button { width: 50px; height: 50px; font-size: 20px; bottom: 20px; right: 20px; }
-            .container { margin: 20px auto; padding: 25px; }
+            .floating-home { width: 50px; height: 50px; font-size: 20px; bottom: 20px; right: 20px; }
         }
     </style>
 </head>
 <body>
 
-<!-- Floating Home Button -->
-<a href="index.html" class="home-button" title="Go to Home">🏠</a>
+<a href="index.html" class="floating-home" title="Go to Home">🏠</a>
 
 <div class="container">
     <div class="logo">🎓</div>
     <h1>Ernest Embassy LMS</h1>
     <p class="subtitle">Sign in to continue learning</p>
     
-    <input type="email" id="email" placeholder="Email Address" autocomplete="email">
-    <input type="password" id="password" placeholder="Password" autocomplete="current-password">
+    <input type="email" id="email" placeholder="Email Address">
+    <input type="password" id="password" placeholder="Password">
     
     <button class="btn" onclick="loginStudent()">🔐 Login</button>
     
@@ -179,13 +112,6 @@
     <div class="divider">or</div>
     
     <button class="btn btn-google" onclick="loginWithGoogle()">G Continue with Google</button>
-    
-    <!-- Developer Quick Login -->
-    <div class="warning-badge">
-        ⚠️ Developer Mode Active ⚠️<br>
-        <small>Click below for quick access (testing only)</small>
-    </div>
-    <button class="btn btn-dev" onclick="devLogin()">🛠️ Developer Quick Login (All Quizzes Unlocked)</button>
     
     <div id="message"></div>
 </div>
@@ -228,7 +154,6 @@
             const user = userCredential.user;
             
             const studentDoc = await db.collection('students').doc(user.uid).get();
-            
             if (!studentDoc.exists) {
                 await db.collection('students').doc(user.uid).set({
                     email: email,
@@ -239,10 +164,13 @@
                 });
             }
             
-            showMessage('✅ Login successful! Redirecting...', 'success');
-            setTimeout(() => {
+            // Check if user is admin or teacher
+            const adminDoc = await db.collection('admins').doc(user.uid).get();
+            if (adminDoc.exists && adminDoc.data().isAdmin === true) {
+                window.location.href = 'admin.html';
+            } else {
                 window.location.href = 'dashboard.html';
-            }, 1500);
+            }
             
         } catch (error) {
             if (error.code === 'auth/user-not-found') {
@@ -262,70 +190,19 @@
             const user = result.user;
             
             const studentDoc = await db.collection('students').doc(user.uid).get();
-            
             if (!studentDoc.exists) {
                 await db.collection('students').doc(user.uid).set({
                     email: user.email,
                     fullName: user.displayName || user.email.split('@')[0],
-                    photoURL: user.photoURL || null,
                     registeredAt: firebase.firestore.FieldValue.serverTimestamp(),
                     paidQuizzes: [],
                     quizScores: {}
                 });
             }
             
-            showMessage('✅ Login successful! Redirecting...', 'success');
-            setTimeout(() => {
-                window.location.href = 'dashboard.html';
-            }, 1500);
-            
+            window.location.href = 'dashboard.html';
         } catch (error) {
             showMessage(error.message, 'error');
-        }
-    }
-    
-    async function devLogin() {
-        const devEmail = 'dev@ernestlms.com';
-        const devPassword = 'dev123456';
-        
-        try {
-            // Try to sign in first
-            try {
-                await auth.signInWithEmailAndPassword(devEmail, devPassword);
-            } catch (signInError) {
-                if (signInError.code === 'auth/user-not-found') {
-                    await auth.createUserWithEmailAndPassword(devEmail, devPassword);
-                    await auth.signInWithEmailAndPassword(devEmail, devPassword);
-                } else {
-                    throw signInError;
-                }
-            }
-            
-            const user = auth.currentUser;
-            
-            const studentDoc = await db.collection('students').doc(user.uid).get();
-            
-            if (!studentDoc.exists) {
-                await db.collection('students').doc(user.uid).set({
-                    email: devEmail,
-                    fullName: 'Developer Test User',
-                    registeredAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    paidQuizzes: ['physics', 'mathematics', 'english', 'digital-technology', 'igbo'],
-                    quizScores: {}
-                });
-            } else {
-                await db.collection('students').doc(user.uid).update({
-                    paidQuizzes: ['physics', 'mathematics', 'english', 'digital-technology', 'igbo']
-                });
-            }
-            
-            showMessage('✅ Developer Login Successful! All quizzes unlocked.', 'success');
-            setTimeout(() => {
-                window.location.href = 'dashboard.html';
-            }, 1500);
-            
-        } catch (error) {
-            showMessage('Dev Login Error: ' + error.message, 'error');
         }
     }
     

@@ -11,7 +11,7 @@
             background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
             min-height: 100vh;
         }
-        
+
         /* Navigation */
         nav {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
@@ -40,11 +40,11 @@
         .logo-text { font-size: 1.3rem; font-weight: bold; color: #ffd700; }
         .logo-sub { font-size: 0.65rem; color: rgba(255, 215, 0, 0.8); display: block; }
         .nav-links { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
-        .nav-links a { color: white; text-decoration: none; font-weight: 500; transition: color 0.3s; padding: 8px 0; font-size: 0.8rem; }
+        .nav-links a { color: white; text-decoration: none; font-weight: 500; padding: 8px 0; font-size: 0.8rem; }
         .nav-links a:hover { color: #ffd700; }
-        
+
         .dropdown { position: relative; display: inline-flex; align-items: center; }
-        .dropbtn { background: transparent; border: none; color: #fff; font-size: 0.8rem; font-weight: 500; cursor: pointer; padding: 8px 12px; border-radius: 8px; transition: all 0.3s ease; font-family: inherit; display: flex; align-items: center; gap: 6px; }
+        .dropbtn { background: transparent; border: none; color: #fff; font-size: 0.8rem; font-weight: 500; cursor: pointer; padding: 8px 12px; border-radius: 8px; display: flex; align-items: center; gap: 6px; }
         .dropbtn:hover { color: #ffd700; background: rgba(255,255,255,0.05); }
         .dropdown-content {
             position: absolute;
@@ -54,8 +54,6 @@
             background: #16213e;
             border: 1px solid rgba(255, 215, 0, 0.3);
             border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.45);
             opacity: 0;
             visibility: hidden;
             transform: translateY(10px);
@@ -63,10 +61,10 @@
             z-index: 9999;
         }
         .dropdown:hover .dropdown-content { opacity: 1; visibility: visible; transform: translateY(0); }
-        .dropdown-content a { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; padding: 14px 18px; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+        .dropdown-content a { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.08); }
         .dropdown-content a:hover { background: rgba(255,215,0,0.12); color: #ffd700; padding-left: 24px; }
-        .dropdown-header { padding: 12px 18px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255, 215, 0, 0.7); background: #12192c; font-weight: bold; }
-        
+        .dropdown-header { padding: 12px 18px; font-size: 11px; text-transform: uppercase; color: rgba(255, 215, 0, 0.7); background: #12192c; font-weight: bold; }
+
         .hero {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: white;
@@ -76,11 +74,11 @@
         .hero h1 { font-size: 2.5rem; margin-bottom: 10px; }
         .hero h1 span { color: #ffd700; }
         .hero p { font-size: 1.1rem; opacity: 0.9; }
-        
+
         .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
         .section-title { text-align: center; font-size: 2rem; margin-bottom: 40px; color: #1a1a2e; }
         .section-title span { border-bottom: 3px solid #ffd700; padding-bottom: 10px; }
-        
+
         /* Projects Grid */
         .projects-grid {
             display: grid;
@@ -116,9 +114,10 @@
             margin-bottom: 15px;
         }
         .status-completed { background: #11998e; color: white; }
+        .status-development { background: #f39c12; color: white; }
         .project-description { color: #666; line-height: 1.6; }
-        
-        /* Music Grid */
+
+        /* Music Section */
         .music-section {
             background: white;
             border-radius: 20px;
@@ -142,7 +141,7 @@
         .music-icon { font-size: 2rem; margin-bottom: 10px; }
         .music-title { font-weight: bold; font-size: 1.1rem; margin: 10px 0; color: #1a1a2e; }
         audio { width: 100%; margin-top: 10px; border-radius: 30px; }
-        
+
         /* Screenplays Grid */
         .screenplays-section {
             background: white;
@@ -164,7 +163,7 @@
         }
         .script-title { font-weight: bold; color: #1a1a2e; margin-bottom: 5px; }
         .script-genre { font-size: 0.8rem; color: #666; }
-        
+
         .whatsapp-float {
             position: fixed;
             bottom: 20px;
@@ -180,12 +179,20 @@
             z-index: 1000;
             font-weight: bold;
         }
-        
+
+        footer {
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+
         @media (max-width: 768px) {
-            .hero h1 { font-size: 1.8rem; }
-            .projects-grid, .music-grid, .screenplays-grid { grid-template-columns: 1fr; }
             .nav-container { flex-direction: column; }
             .nav-links { justify-content: center; }
+            .hero h1 { font-size: 1.8rem; }
+            .projects-grid, .music-grid, .screenplays-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -243,15 +250,15 @@
 </div>
 
 <div class="container">
-    <!-- Film Projects Section -->
-    <div class="section-title"><span>🎥 Film Projects</span></div>
+    <!-- Featured Productions -->
+    <div class="section-title"><span>🎥 Featured Productions</span></div>
     <div class="projects-grid">
         <div class="project-card">
             <div class="project-image">🎭</div>
             <div class="project-content">
                 <div class="project-status status-completed">Completed</div>
                 <h3 class="project-title">Drama NTA Production</h3>
-                <p class="project-description">A compelling television drama produced for Nigerian Television Authority, showcasing local talent and storytelling.</p>
+                <p class="project-description">A professionally produced television drama project developed for Nigerian Television Authority (NTA), showcasing local storytelling, cultural values, and emerging talents.</p>
             </div>
         </div>
         
@@ -259,8 +266,8 @@
             <div class="project-image">🎭</div>
             <div class="project-content">
                 <div class="project-status status-completed">Completed</div>
-                <h3 class="project-title">ESCET Drama</h3>
-                <p class="project-description">Theatrical production at Enugu State College of Education Technical, training young actors in stage performance.</p>
+                <h3 class="project-title">ESCET Drama Production</h3>
+                <p class="project-description">A theatrical and performance project conducted at Enugu State College of Education Technical (ESCET), designed to train young actors, writers, and directors in practical storytelling.</p>
             </div>
         </div>
         
@@ -268,8 +275,17 @@
             <div class="project-image">🌍</div>
             <div class="project-content">
                 <div class="project-status status-completed">Completed</div>
-                <h3 class="project-title">Training in Malawi</h3>
-                <p class="project-description">International film training program conducted in Malawi in partnership with Zomba Film Production.</p>
+                <h3 class="project-title">International Film Training – Malawi</h3>
+                <p class="project-description">A hands-on filmmaking and actor development initiative conducted in Malawi in collaboration with Zomba Film Production.</p>
+            </div>
+        </div>
+        
+        <div class="project-card">
+            <div class="project-image">🎬</div>
+            <div class="project-content">
+                <div class="project-status status-development">Proof of Concept</div>
+                <h3 class="project-title">Official Card Proof of Concept</h3>
+                <p class="project-description">A proof-of-concept production developed to demonstrate the cinematic potential of the feature film Official Card.</p>
             </div>
         </div>
     </div>
@@ -340,19 +356,64 @@
                 <div class="music-title">2026</div>
                 <audio controls preload="none"><source src="music/2026.mp3" type="audio/mpeg"></audio>
             </div>
+            <div class="music-card">
+                <div class="music-icon">🎤</div>
+                <div class="music-title">Beautiful Black World (BBW)</div>
+                <audio controls preload="none"><source src="music/BBW.mp3" type="audio/mpeg"></audio>
+            </div>
+            <div class="music-card">
+                <div class="music-icon">🎤</div>
+                <div class="music-title">Ghetto Spirit</div>
+                <audio controls preload="none"><source src="music/Ghetto Spirit.mp3" type="audio/mpeg"></audio>
+            </div>
+            <div class="music-card">
+                <div class="music-icon">🎤</div>
+                <div class="music-title">For Me</div>
+                <audio controls preload="none"><source src="music/For Me.mp3" type="audio/mpeg"></audio>
+            </div>
+            <div class="music-card">
+                <div class="music-icon">🎤</div>
+                <div class="music-title">Round Da Corner</div>
+                <audio controls preload="none"><source src="music/Round Da Corner.mp3" type="audio/mpeg"></audio>
+            </div>
+            <div class="music-card">
+                <div class="music-icon">🎤</div>
+                <div class="music-title">Betta DayZ</div>
+                <audio controls preload="none"><source src="music/Betta DayZ.mp3" type="audio/mpeg"></audio>
+            </div>
+            <div class="music-card">
+                <div class="music-icon">🎤</div>
+                <div class="music-title">This Love We Found</div>
+                <audio controls preload="none"><source src="music/This Love We Found.mp3" type="audio/mpeg"></audio>
+            </div>
+            <div class="music-card">
+                <div class="music-icon">🎤</div>
+                <div class="music-title">Hit Me Up</div>
+                <audio controls preload="none"><source src="music/Hit Me Up.mp3" type="audio/mpeg"></audio>
+            </div>
+            <div class="music-card">
+                <div class="music-icon">🎤</div>
+                <div class="music-title">CSD Lullaby</div>
+                <audio controls preload="none"><source src="music/CSD Lullaby.mp3" type="audio/mpeg"></audio>
+            </div>
+            <div class="music-card">
+                <div class="music-icon">🎤</div>
+                <div class="music-title">The Game We Play</div>
+                <audio controls preload="none"><source src="music/The Game We Play.mp3" type="audio/mpeg"></audio>
+            </div>
         </div>
     </div>
 
-    <!-- Original Screenplays Section -->
+    <!-- Original Screenplays -->
     <div class="screenplays-section">
-        <div class="section-title"><span>📖 Original Screenplays</span></div>
-        <p style="text-align: center; color: #666; margin-bottom: 20px;">A growing catalog of production-ready feature screenplays</p>
+        <div class="section-title"><span>📖 Original Feature Screenplays</span></div>
+        <p style="text-align: center; color: #666; margin-bottom: 20px;">A growing collection of production-ready feature screenplays available for development, co-production, and international collaboration</p>
         
         <div class="screenplays-grid">
             <div class="script-card"><div class="script-title">Official Card</div><div class="script-genre">Political Conspiracy Thriller</div></div>
-            <div class="script-card"><div class="script-title">Round Table</div><div class="script-genre">Anti-Corruption Political Thriller</div></div>
-            <div class="script-card"><div class="script-title">Thuglord</div><div class="script-genre">Crime, Redemption, Justice Drama</div></div>
-            <div class="script-card"><div class="script-title">Alex: Friend of Sorrow</div><div class="script-genre">Emotional Family Drama</div></div>
+            <div class="script-card"><div class="script-title">Round Table</div><div class="script-genre">Political Thriller / Action Drama</div></div>
+            <div class="script-card"><div class="script-title">Thuglord</div><div class="script-genre">Crime, Redemption & Justice Drama</div></div>
+            <div class="script-card"><div class="script-title">Alex: Friend of Sorrow</div><div class="script-genre">Family & Human Interest Drama</div></div>
             <div class="script-card"><div class="script-title">Jerry</div><div class="script-genre">Inspirational Drama</div></div>
             <div class="script-card"><div class="script-title">SOHK</div><div class="script-genre">Suspense Thriller</div></div>
             <div class="script-card"><div class="script-title">Playground</div><div class="script-genre">Youth-Centered Drama</div></div>
@@ -370,9 +431,10 @@
     <span>Chat on WhatsApp</span>
 </a>
 
-<footer style="background: #1a1a2e; color: white; text-align: center; padding: 40px 20px; margin-top: 60px;">
+<footer>
     <p>© 2026 Infinity Movie Star Production | Ernest Embassy Digital Solutions</p>
+    <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
+    <p>🎬 "Creating stories that live beyond the screen"</p>
 </footer>
-
 </body>
 </html>

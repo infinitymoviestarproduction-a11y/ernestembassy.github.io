@@ -13,6 +13,32 @@
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',sans-serif; }
         body { background:#eef2f7; }
         
+        /* Floating Home Button */
+        .floating-home {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-size: 24px;
+            border: none;
+            text-decoration: none;
+        }
+        .floating-home:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
         /* Navigation */
         nav {
             background: rgba(255, 255, 255, 0.95);
@@ -217,10 +243,14 @@
             .nav-container { flex-direction: column; }
             .nav-links { justify-content: center; }
             .tabs { justify-content: center; }
+            .floating-home { width: 50px; height: 50px; font-size: 20px; bottom: 20px; right: 20px; }
         }
     </style>
 </head>
 <body>
+
+<!-- Floating Home Button -->
+<a href="index.html" class="floating-home" title="Go to Home">🏠</a>
 
 <nav>
     <div class="nav-container">
@@ -393,15 +423,13 @@
                     return;
                 }
                 
-                // Check if user is admin (you can set this in Firestore)
                 try {
                     const adminDoc = await db.collection("admins").doc(user.uid).get();
                     if (adminDoc.exists && adminDoc.data().isAdmin === true) {
                         currentAdmin = user;
                         resolve(true);
                     } else {
-                        // For development - allow specific email as admin
-                        const adminEmails = ['damian@ernestembassy.com', 'admin@ernestembassy.com'];
+                        const adminEmails = ['damian@ernestembassy.com', 'admin@ernestembassy.com', 'dev@ernestlms.com'];
                         if (adminEmails.includes(user.email)) {
                             currentAdmin = user;
                             resolve(true);
@@ -452,7 +480,6 @@
         }
         
         try {
-            // Get existing questions for this subject
             const docRef = db.collection("questions").doc(subject);
             const docSnap = await docRef.get();
             
@@ -461,7 +488,6 @@
                 existingQuestions = docSnap.data().questions || [];
             }
             
-            // Add new question
             const newQuestion = {
                 question: q,
                 optionA: o1,
@@ -476,14 +502,12 @@
             
             existingQuestions.push(newQuestion);
             
-            // Save back to Firestore
             await docRef.set({
                 questions: existingQuestions,
                 totalQuestions: existingQuestions.length,
                 lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
             });
             
-            // Clear form
             document.getElementById("q").value = "";
             document.getElementById("o1").value = "";
             document.getElementById("o2").value = "";
@@ -528,11 +552,11 @@
                     </div>
                 `;
                 
-                // Show first 3 questions as preview
                 questions.slice(0, 3).forEach((q, idx) => {
+                    let qText = q.question ? q.question.substring(0, 80) : "No question text";
                     html += `
                         <div style="margin-left: 20px; padding: 8px; border-left: 2px solid #ddd;">
-                            <small>Q${idx + 1}: ${q.question.substring(0, 80)}...</small>
+                            <small>Q${idx + 1}: ${qText}...</small>
                         </div>
                     `;
                 });
@@ -609,16 +633,6 @@
             document.getElementById("lessonsTab").classList.add("active");
             btns[2].classList.add("active");
         }
-    }
-    
-    function escapeHtml(str) {
-        if (!str) return "";
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === "&") return "&amp;";
-            if (m === "<") return "&lt;";
-            if (m === ">") return "&gt;";
-            return m;
-        });
     }
     
     function goHome() { window.location.href = "dashboard.html"; }

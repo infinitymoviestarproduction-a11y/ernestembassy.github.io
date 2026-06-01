@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ernest Embassy LMS - Premier Learning Platform</title>
+    <title>Ernest Embassy - Creative Arts, Travels & Web Solutions</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 
@@ -24,38 +24,48 @@
         }
 
         .nav-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
         }
 
-        .logo {
-            font-size: 1.4rem;
+        .logo-section {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
             font-weight: bold;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-decoration: none;
+        }
+
+        .logo-sub {
+            font-size: 0.8rem;
+            color: #718096;
         }
 
         .nav-links {
             display: flex;
-            gap: 20px;
-            align-items: center;
+            justify-content: center;
             flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
         }
 
         .nav-links a {
             color: #4a5568;
             text-decoration: none;
             font-weight: 500;
-            padding: 8px 12px;
+            font-size: 0.85rem;
+            padding: 6px 12px;
             border-radius: 8px;
             transition: all 0.3s ease;
         }
@@ -65,19 +75,7 @@
             background: rgba(102, 126, 234, 0.1);
         }
 
-        .btn-login {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white !important;
-            padding: 8px 20px !important;
-            border-radius: 25px !important;
-        }
-
-        .btn-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        /* Hero Section with Background Image */
+        /* Hero Section */
         .hero {
             position: relative;
             min-height: 85vh;
@@ -112,56 +110,42 @@
         .hero-content {
             position: relative;
             z-index: 2;
-            max-width: 800px;
+            max-width: 900px;
             padding: 60px 20px;
             color: white;
         }
 
         .hero h1 {
             font-size: 3rem;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             font-weight: 700;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
-        .hero p {
+        .hero-tagline {
             font-size: 1.2rem;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
             opacity: 0.95;
         }
 
-        .btn-hero {
-            display: inline-block;
-            padding: 15px 35px;
-            background: white;
-            color: #667eea;
-            text-decoration: none;
+        .hero-badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .hero-badge {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(5px);
+            padding: 8px 20px;
             border-radius: 50px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            margin: 0 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-size: 0.9rem;
         }
 
-        .btn-hero:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        }
-
-        .btn-hero-outline {
-            background: transparent;
-            border: 2px solid white;
-            color: white;
-        }
-
-        .btn-hero-outline:hover {
-            background: white;
-            color: #667eea;
-        }
-
-        /* Features Section */
-        .features {
+        /* Services Section */
+        .services {
             background: white;
             padding: 80px 20px;
         }
@@ -185,13 +169,13 @@
             background-clip: text;
         }
 
-        .features-grid {
+        .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
         }
 
-        .feature-card {
+        .service-card {
             background: white;
             padding: 30px;
             border-radius: 20px;
@@ -201,24 +185,24 @@
             border: 1px solid #e2e8f0;
         }
 
-        .feature-card:hover {
+        .service-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 40px rgba(0,0,0,0.15);
             border-color: #667eea;
         }
 
-        .feature-icon {
+        .service-icon {
             font-size: 3rem;
             margin-bottom: 20px;
         }
 
-        .feature-card h3 {
+        .service-card h3 {
             font-size: 1.3rem;
             color: #2d3748;
             margin-bottom: 10px;
         }
 
-        .feature-card p {
+        .service-card p {
             color: #718096;
             line-height: 1.6;
         }
@@ -243,67 +227,11 @@
             margin-bottom: 10px;
         }
 
-        .stat-label {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-
-        /* Subjects Section */
-        .subjects {
-            background: #f7fafc;
-            padding: 80px 20px;
-        }
-
-        .subjects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-        }
-
-        .subject-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            border: 1px solid #e2e8f0;
-        }
-
-        .subject-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
-            border-color: #667eea;
-        }
-
-        .subject-icon {
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-        }
-
-        .subject-card h3 {
-            font-size: 1.2rem;
-            color: #2d3748;
-            margin-bottom: 5px;
-        }
-
-        .subject-card p {
-            color: #718096;
-            font-size: 0.85rem;
-        }
-
         /* CTA Section */
         .cta {
-            background: white;
+            background: #f7fafc;
             padding: 60px 20px;
             text-align: center;
-        }
-
-        .cta h2 {
-            font-size: 2rem;
-            color: #2d3748;
-            margin-bottom: 20px;
         }
 
         .btn-cta {
@@ -335,7 +263,7 @@
         .footer-links {
             display: flex;
             justify-content: center;
-            gap: 30px;
+            gap: 20px;
             flex-wrap: wrap;
             margin-bottom: 20px;
         }
@@ -352,9 +280,8 @@
 
         @media (max-width: 768px) {
             .hero h1 { font-size: 2rem; }
-            .hero p { font-size: 1rem; }
-            .nav-container { flex-direction: column; }
-            .btn-hero { display: block; margin: 10px auto; width: 80%; }
+            .nav-links a { font-size: 0.7rem; padding: 4px 8px; }
+            .hero-badge { font-size: 0.7rem; padding: 4px 12px; }
         }
     </style>
 </head>
@@ -362,55 +289,87 @@
 
 <nav>
     <div class="nav-container">
-        <a href="index.html" class="logo">⚡ Ernest Embassy LMS</a>
+        <div class="logo-section">
+            <div class="logo-icon">🎭</div>
+            <div class="logo-text">Damian Okafor</div>
+            <div class="logo-sub">Creative Artist & Filmmaker</div>
+        </div>
         <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="courses.html">Courses</a>
-            <a href="resources.html">Resources</a>
-            <a href="education.html">Education Hub</a>
-            <a href="login.html" class="btn-login">🔐 Login</a>
+            <a href="index.html">🏠 Home</a>
+            <a href="about.html">📖 About</a>
+            <a href="services.html">⚙️ Services</a>
+            <a href="webdev.html">💻 Web Dev</a>
+            <a href="visa.html">✈️ Visa</a>
+            <a href="movie-studio.html">🎬 Movie Studio</a>
+            <a href="portfolio.html">🎨 Portfolio</a>
+            <a href="teaching.html">📚 Teaching</a>
+            <a href="tutoring.html">💻 Tutoring</a>
+            <a href="education.html">🎓 Education</a>
+            <a href="class.html">🎓 Class</a>
+            <a href="booking.html">📅 Book</a>
+            <a href="contact.html">📞 Contact</a>
+            <a href="gallery.html">📸 Gallery</a>
+            <a href="faq.html">❓ FAQ</a>
+            <a href="testimonials.html">⭐ Testimonials</a>
+            <a href="register.html">📝 Register</a>
+            <a href="login.html">🔐 Login</a>
+            <a href="dashboard.html">👤 Dashboard</a>
+            <a href="admin.html">🔒 Admin</a>
         </div>
     </div>
 </nav>
 
-<!-- Hero Section with Background Image -->
+<!-- Hero Section -->
 <section class="hero">
-    <img src="tea time infi.jpg" alt="Background" class="hero-background">
+    <img src="tea time infi.jpg" alt="Damian Okafor - Creative Artist" class="hero-background">
     <div class="hero-overlay"></div>
     <div class="hero-content">
-        <h1>🎓 Welcome to Ernest Embassy LMS</h1>
-        <p>Your Premier Online Learning Platform for WAEC, JAMB, and SSCE Excellence</p>
-        <div>
-            <a href="register.html" class="btn-hero">🚀 Get Started Free</a>
-            <a href="login.html" class="btn-hero btn-hero-outline">🔐 Login</a>
+        <h1>Damian Okafor</h1>
+        <div class="hero-tagline">Creative Artist | Filmmaker | Web Developer | Travel Consultant</div>
+        <p>Bringing visions to life through film, code, and global connections</p>
+        <div class="hero-badges">
+            <span class="hero-badge">🎬 Award-Winning Filmmaker</span>
+            <span class="hero-badge">💻 Web Solutions Expert</span>
+            <span class="hero-badge">✈️ Visa & Travel Specialist</span>
+            <span class="hero-badge">📚 Educator & Tutor</span>
         </div>
     </div>
 </section>
 
-<!-- Features Section -->
-<section class="features">
+<!-- Services Section -->
+<section class="services">
     <div class="container">
-        <h2 class="section-title">Why Choose <span>Ernest Embassy LMS</span>?</h2>
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">📚</div>
-                <h3>Comprehensive Curriculum</h3>
-                <p>Full coverage of WAEC, JAMB, and SSCE syllabus across all major subjects.</p>
+        <h2 class="section-title">What <span>I Offer</span></h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">🎬</div>
+                <h3>Movie Production</h3>
+                <p>Professional filmmaking, video production, editing, and storytelling services.</p>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">📝</div>
-                <h3>Interactive Quizzes</h3>
-                <p>Practice with hundreds of questions and get instant feedback with explanations.</p>
+            <div class="service-card">
+                <div class="service-icon">💻</div>
+                <h3>Web Development</h3>
+                <p>Custom websites, LMS platforms, e-commerce solutions, and web applications.</p>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">🏆</div>
-                <h3>Challenge Mode</h3>
-                <p>Compete in paid quizzes and win amazing cash prizes!</p>
+            <div class="service-card">
+                <div class="service-icon">✈️</div>
+                <h3>Visa & Travel</h3>
+                <p>Ernest Embassy Travels - Your trusted partner for visa processing and travel arrangements.</p>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">📖</div>
-                <h3>Study Resources</h3>
-                <p>Access notes, past questions, and comprehensive study materials.</p>
+            <div class="service-card">
+                <div class="service-icon">🎓</div>
+                <h3>Education & Tutoring</h3>
+                <p>WAEC/JAMB preparation, online tutoring, and educational resources.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🎨</div>
+                <h3>Creative Arts</h3>
+                <p>Portrait drawing, painting, digital art, and creative design services.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">📸</div>
+                <h3>Photography</h3>
+                <p>Professional photography for events, portraits, and commercial projects.</p>
             </div>
         </div>
     </div>
@@ -421,54 +380,20 @@
     <div class="container">
         <div class="stats-grid">
             <div class="stat-item">
-                <div class="stat-number">1,200+</div>
-                <div class="stat-label">Practice Questions</div>
+                <div class="stat-number">10+</div>
+                <div class="stat-label">Years Experience</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">5</div>
-                <div class="stat-label">Core Subjects</div>
+                <div class="stat-number">200+</div>
+                <div class="stat-label">Projects Completed</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">24/7</div>
-                <div class="stat-label">Access Available</div>
+                <div class="stat-number">500+</div>
+                <div class="stat-label">Happy Clients</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">₦100</div>
-                <div class="stat-label">Challenge Entry</div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Subjects Section -->
-<section class="subjects">
-    <div class="container">
-        <h2 class="section-title">📘 <span>Available Subjects</span></h2>
-        <div class="subjects-grid">
-            <div class="subject-card" onclick="window.location.href='class.html?subject=mathematics'">
-                <div class="subject-icon">📐</div>
-                <h3>Mathematics</h3>
-                <p>Algebra, Calculus, Statistics & More</p>
-            </div>
-            <div class="subject-card" onclick="window.location.href='class.html?subject=physics'">
-                <div class="subject-icon">⚛️</div>
-                <h3>Physics</h3>
-                <p>Mechanics, Waves, Electricity & Magnetism</p>
-            </div>
-            <div class="subject-card" onclick="window.location.href='class.html?subject=english'">
-                <div class="subject-icon">📖</div>
-                <h3>English Language</h3>
-                <p>Grammar, Comprehension, Essay Writing</p>
-            </div>
-            <div class="subject-card" onclick="window.location.href='class.html?subject=digital-technology'">
-                <div class="subject-icon">💻</div>
-                <h3>Digital Technology</h3>
-                <p>ICT, Networking, Computer Fundamentals</p>
-            </div>
-            <div class="subject-card" onclick="window.location.href='class.html?subject=igbo'">
-                <div class="subject-icon">🗣️</div>
-                <h3>Igbo Language</h3>
-                <p>Grammar, Literature, Cultural Studies</p>
+                <div class="stat-number">15+</div>
+                <div class="stat-label">Countries Served</div>
             </div>
         </div>
     </div>
@@ -477,10 +402,10 @@
 <!-- CTA Section -->
 <section class="cta">
     <div class="container">
-        <h2>Ready to Start Your Learning Journey?</h2>
-        <div style="margin-top: 30px;">
-            <a href="register.html" class="btn-cta">📝 Create Free Account</a>
-            <a href="login.html" class="btn-cta" style="background: #e2e8f0; color: #4a5568;">🔐 Login</a>
+        <h2 style="color: #2d3748; margin-bottom: 20px;">Ready to Work Together?</h2>
+        <div>
+            <a href="booking.html" class="btn-cta">📅 Book a Consultation</a>
+            <a href="contact.html" class="btn-cta" style="background: #e2e8f0; color: #4a5568;">📞 Contact Me</a>
         </div>
     </div>
 </section>
@@ -488,18 +413,19 @@
 <footer>
     <div class="footer-links">
         <a href="index.html">Home</a>
-        <a href="courses.html">Courses</a>
-        <a href="resources.html">Resources</a>
-        <a href="education.html">Education Hub</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="contact.html">Contact</a>
+        <a href="faq.html">FAQ</a>
         <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms of Service</a>
     </div>
-    <p>© 2026 Ernest Embassy Digital Solutions | Professional Online Learning Platform</p>
-    <p style="margin-top: 10px; font-size: 12px;">🌍 Empowering Students for WAEC, JAMB & SSCE Success</p>
+    <p>© 2026 Damian Okafor | Ernest Embassy Creative Studios & Travels</p>
+    <p style="margin-top: 10px; font-size: 12px;">🎬 Creative Artist | 💻 Web Developer | ✈️ Travel Consultant | 📚 Educator</p>
 </footer>
 
 <script>
-    // Check if user is already logged in and redirect to dashboard
+    // Firebase Config (keep your existing one)
     const firebaseConfig = {
         apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
         authDomain: "ernest-embassy-lms.firebaseapp.com",
@@ -514,11 +440,10 @@
     
     auth.onAuthStateChanged(user => {
         if (user) {
-            // User is logged in, update login button to dashboard
-            const loginBtn = document.querySelector('.btn-login');
-            if (loginBtn) {
-                loginBtn.textContent = '📊 Dashboard';
-                loginBtn.href = 'dashboard.html';
+            const loginLink = document.querySelector('a[href="login.html"]');
+            if (loginLink) {
+                loginLink.textContent = '👤 Dashboard';
+                loginLink.href = 'dashboard.html';
             }
         }
     });

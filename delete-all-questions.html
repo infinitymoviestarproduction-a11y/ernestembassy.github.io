@@ -3,28 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delete All Questions - Batch Mode</title>
+    <title>Delete All Questions - Fixed</title>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            padding: 50px;
+            padding: 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
         }
         .container {
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
             padding: 30px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
-        h1 { color: #eb3349; margin-bottom: 20px; }
+        h1 { color: #eb3349; }
         button {
-            padding: 15px 30px;
+            padding: 15px 25px;
             font-size: 16px;
             margin: 10px;
             border: none;
@@ -35,32 +35,39 @@
         .btn-danger { background: #eb3349; color: white; }
         .btn-success { background: #11998e; color: white; }
         .btn-info { background: #3498db; color: white; }
-        .btn-warning { background: #f39c12; color: white; }
         .result {
             margin-top: 20px;
             padding: 20px;
-            background: #f0f0f0;
+            background: #1a1a2e;
+            color: #00ff88;
             border-radius: 10px;
             text-align: left;
             max-height: 500px;
             overflow-y: auto;
             font-family: monospace;
-            font-size: 13px;
+            font-size: 12px;
         }
         .progress-bar {
             width: 100%;
-            height: 20px;
-            background: #e0e0e0;
-            border-radius: 10px;
+            height: 25px;
+            background: #333;
+            border-radius: 12px;
             overflow: hidden;
-            margin: 10px 0;
+            margin: 15px 0;
         }
         .progress-fill {
             height: 100%;
             background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
             width: 0%;
             transition: width 0.3s;
+            border-radius: 12px;
+        }
+        .stats {
+            background: #f0f0f0;
+            padding: 15px;
             border-radius: 10px;
+            margin: 15px 0;
+            text-align: left;
         }
         .loading {
             display: inline-block;
@@ -75,30 +82,30 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .status { margin: 10px 0; padding: 10px; border-radius: 8px; }
-        .status-info { background: #3498db20; color: #3498db; }
-        .status-success { background: #11998e20; color: #11998e; }
-        .status-error { background: #eb334920; color: #eb3349; }
-        .status-warning { background: #f39c1220; color: #f39c12; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🗑️ Delete All Questions - Batch Mode</h1>
-        <p>Deletes in small batches to avoid "Transaction too big" errors</p>
+        <h1>🗑️ Delete 9,262 Documents</h1>
+        <p>This will delete ALL individual question documents (9,261 of them)</p>
         
-        <div>
-            <button class="btn-info" onclick="countQuestions()">📊 Count Questions</button>
-            <button class="btn-warning" onclick="deleteIndividualOnly()">🗑️ Delete Individual Questions Only</button>
-            <button class="btn-danger" onclick="deleteAllBatch()">⚠️ Delete EVERYTHING (Batch Mode)</button>
+        <div class="stats" id="stats">
+            <strong>📊 Current Status:</strong><br>
+            Click "Start Deletion" to begin...
         </div>
         
-        <div class="progress-bar" id="progressBar" style="display: none;">
+        <div class="progress-bar" id="progressBar">
             <div class="progress-fill" id="progressFill"></div>
         </div>
         
+        <div>
+            <button class="btn-info" onclick="countOnly()">📊 Count Only</button>
+            <button class="btn-danger" onclick="startDeletion()">🗑️ START DELETION (9,261 docs)</button>
+            <button class="btn-success" onclick="keepOnlySubject()">📁 Keep Only Subject Docs</button>
+        </div>
+        
         <div id="result" class="result">
-            Click a button above to begin...
+            Ready. Click "Start Deletion" to delete 9,261 individual question documents.
         </div>
     </div>
 
@@ -114,177 +121,167 @@
         
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
+        
         const resultDiv = document.getElementById('result');
-        const progressBar = document.getElementById('progressBar');
+        const statsDiv = document.getElementById('stats');
         const progressFill = document.getElementById('progressFill');
         
-        function showMessage(msg, type) {
-            const statusClass = type === 'error' ? 'status-error' : (type === 'warning' ? 'status-warning' : 'status-success');
-            resultDiv.innerHTML += `<div class="status ${statusClass}">${msg}</div>`;
+        let isDeleting = false;
+        
+        function log(msg) {
+            const timestamp = new Date().toLocaleTimeString();
+            resultDiv.innerHTML += `<div>[${timestamp}] ${msg}</div>`;
             resultDiv.scrollTop = resultDiv.scrollHeight;
+            console.log(msg);
         }
         
-        function clearResult() {
+        function clearLog() {
             resultDiv.innerHTML = '';
         }
         
-        async function countQuestions() {
-            clearResult();
-            showMessage("📊 Counting documents...", "info");
+        async function countOnly() {
+            clearLog();
+            log("📊 Counting documents...");
             
             try {
                 const snapshot = await db.collection("questions").get();
-                
-                if (snapshot.size === 0) {
-                    showMessage("✅ Your 'questions' collection is EMPTY!", "success");
-                    return;
-                }
-                
-                let subjectDocs = 0;
-                let individualDocs = 0;
-                let totalQuestions = 0;
+                let subjectCount = 0;
+                let individualCount = 0;
+                let subjectIds = [];
                 
                 for (const doc of snapshot.docs) {
                     const data = doc.data();
                     if (data.questions && Array.isArray(data.questions)) {
-                        subjectDocs++;
-                        totalQuestions += data.questions.length;
+                        subjectCount++;
+                        subjectIds.push(doc.id);
                     } else {
-                        individualDocs++;
+                        individualCount++;
                     }
                 }
                 
-                showMessage(`📊 SUMMARY:`, "info");
-                showMessage(`   Total Documents: ${snapshot.size}`, "info");
-                showMessage(`   ✅ Subject Documents: ${subjectDocs} (contains ${totalQuestions} questions total)`, "success");
-                showMessage(`   ⚠️ Individual Question Docs: ${individualDocs}`, "warning");
+                log(`✅ Total documents: ${snapshot.size}`);
+                log(`📁 Subject documents (KEEP): ${subjectCount} - ${subjectIds.join(', ')}`);
+                log(`⚠️ Individual question docs (DELETE): ${individualCount}`);
                 
-                if (individualDocs > 0) {
-                    showMessage(`💡 Tip: Click "Delete Individual Questions Only" first to remove the ${individualDocs} individual question documents.`, "warning");
-                }
+                statsDiv.innerHTML = `
+                    <strong>📊 Current Status:</strong><br>
+                    Total: ${snapshot.size} documents<br>
+                    ✅ Keep: ${subjectCount} subject document(s)<br>
+                    🗑️ Delete: ${individualCount} individual questions<br>
+                    ${individualCount > 0 ? `⚠️ Need to delete ${individualCount} documents` : '✅ Database is clean!'}
+                `;
                 
             } catch (error) {
-                showMessage(`❌ Error: ${error.message}`, "error");
+                log(`❌ Error: ${error.message}`);
             }
         }
         
-        async function deleteIndividualOnly() {
-            clearResult();
-            
-            if (!confirm("⚠️ This will delete ONLY individual question documents (not the subject documents).\n\nContinue?")) {
-                showMessage("Deletion cancelled.", "warning");
+        async function keepOnlySubject() {
+            if (isDeleting) {
+                log("⚠️ Deletion already in progress. Please wait.");
                 return;
             }
             
-            showMessage("🔍 Finding individual question documents...", "info");
+            clearLog();
+            log("🎯 Starting deletion of individual question documents only...");
+            log("📁 Subject documents will be KEPT.");
             
             try {
                 const snapshot = await db.collection("questions").get();
+                
+                // Collect individual question docs
                 const individualDocs = [];
+                let subjectDocs = [];
                 
                 for (const doc of snapshot.docs) {
                     const data = doc.data();
-                    if (!data.questions || !Array.isArray(data.questions)) {
+                    if (data.questions && Array.isArray(data.questions)) {
+                        subjectDocs.push(doc.id);
+                    } else {
                         individualDocs.push(doc);
                     }
                 }
                 
+                log(`📊 Found ${individualDocs.length} individual question documents to delete.`);
+                log(`📁 Keeping ${subjectDocs.length} subject document(s): ${subjectDocs.join(', ')}`);
+                
                 if (individualDocs.length === 0) {
-                    showMessage("✅ No individual question documents found!", "success");
+                    log("✅ No individual documents found! Database is clean.");
                     return;
                 }
                 
-                showMessage(`📊 Found ${individualDocs.length} individual question documents to delete.`, "info");
-                
-                // Delete in batches of 50
-                const BATCH_SIZE = 50;
-                let deleted = 0;
-                
-                for (let i = 0; i < individualDocs.length; i += BATCH_SIZE) {
-                    const batch = db.batch();
-                    const batchDocs = individualDocs.slice(i, i + BATCH_SIZE);
-                    
-                    batchDocs.forEach(doc => {
-                        batch.delete(doc.ref);
-                    });
-                    
-                    await batch.commit();
-                    deleted += batchDocs.length;
-                    showMessage(`   ✅ Deleted batch ${Math.floor(i/BATCH_SIZE) + 1}: ${batchDocs.length} documents (Total: ${deleted}/${individualDocs.length})`, "success");
-                }
-                
-                showMessage(`✅ SUCCESS! Deleted ${deleted} individual question documents!`, "success");
-                showMessage(`💡 Your subject documents (with questions arrays) are still there.`, "info");
-                
-                await countQuestions();
+                await deleteInBatches(individualDocs, "individual question documents");
                 
             } catch (error) {
-                showMessage(`❌ Error: ${error.message}`, "error");
+                log(`❌ Error: ${error.message}`);
             }
         }
         
-        async function deleteAllBatch() {
-            clearResult();
-            
-            if (!confirm("⚠️⚠️⚠️ DANGER: This will delete EVERYTHING in your 'questions' collection!\n\nContinue?")) {
-                showMessage("Deletion cancelled.", "warning");
+        async function startDeletion() {
+            if (isDeleting) {
+                log("⚠️ Deletion already in progress. Please wait.");
                 return;
             }
             
-            const confirmText = prompt("Type 'DELETE ALL' to confirm deletion:");
-            if (confirmText !== "DELETE ALL") {
-                showMessage("Deletion cancelled - incorrect confirmation.", "warning");
+            if (!confirm("⚠️⚠️⚠️ DANGER: This will delete ALL 9,261 individual question documents!\n\nThe subject document 'mathematics-ss1' will be KEPT.\n\nContinue?")) {
+                log("Deletion cancelled.");
                 return;
             }
             
-            showMessage("🔍 Fetching all documents...", "info");
+            clearLog();
+            await keepOnlySubject();
+        }
+        
+        async function deleteInBatches(docsToDelete, type) {
+            isDeleting = true;
+            const BATCH_SIZE = 100; // Delete 100 at a time
+            const totalDocs = docsToDelete.length;
+            let deleted = 0;
+            let failedBatches = 0;
             
-            try {
-                const snapshot = await db.collection("questions").get();
+            progressFill.style.width = '0%';
+            log(`🔄 Starting deletion of ${totalDocs} ${type}...`);
+            log(`📦 Batch size: ${BATCH_SIZE} documents per batch`);
+            log(`⏱️ This may take a few minutes...`);
+            
+            for (let i = 0; i < totalDocs; i += BATCH_SIZE) {
+                const batch = db.batch();
+                const batchDocs = docsToDelete.slice(i, i + BATCH_SIZE);
                 
-                if (snapshot.size === 0) {
-                    showMessage("✅ No documents found. Collection is already empty!", "success");
-                    return;
-                }
+                batchDocs.forEach(doc => {
+                    batch.delete(doc.ref);
+                });
                 
-                const allDocs = snapshot.docs;
-                const totalDocs = allDocs.length;
-                const BATCH_SIZE = 50;
-                let deleted = 0;
-                
-                progressBar.style.display = "block";
-                
-                showMessage(`📊 Found ${totalDocs} documents to delete.`, "info");
-                showMessage(`🔄 Deleting in batches of ${BATCH_SIZE}...`, "info");
-                
-                for (let i = 0; i < allDocs.length; i += BATCH_SIZE) {
-                    const batch = db.batch();
-                    const batchDocs = allDocs.slice(i, i + BATCH_SIZE);
-                    
-                    batchDocs.forEach(doc => {
-                        batch.delete(doc.ref);
-                    });
-                    
+                try {
                     await batch.commit();
                     deleted += batchDocs.length;
-                    
                     const percent = (deleted / totalDocs) * 100;
                     progressFill.style.width = `${percent}%`;
-                    
-                    showMessage(`   ✅ Batch ${Math.floor(i/BATCH_SIZE) + 1}: Deleted ${batchDocs.length} documents (Total: ${deleted}/${totalDocs})`, "success");
+                    log(`✅ Batch ${Math.floor(i/BATCH_SIZE) + 1}: Deleted ${batchDocs.length} docs (Total: ${deleted}/${totalDocs} - ${Math.round(percent)}%)`);
+                } catch (error) {
+                    failedBatches++;
+                    log(`❌ Batch ${Math.floor(i/BATCH_SIZE) + 1} failed: ${error.message} - retrying...`);
+                    // Retry this batch
+                    i -= BATCH_SIZE;
+                    await new Promise(resolve => setTimeout(resolve, 1000));
                 }
-                
-                progressBar.style.display = "none";
-                showMessage(`✅✅✅ COMPLETE! Deleted ${deleted} documents from your "questions" collection!`, "success");
-                showMessage(`💡 Your database is now clean. Use the Bulk Uploader to add subjects correctly.`, "info");
-                
-                await countQuestions();
-                
-            } catch (error) {
-                progressBar.style.display = "none";
-                showMessage(`❌ Error: ${error.message}`, "error");
             }
+            
+            isDeleting = false;
+            
+            if (failedBatches === 0) {
+                log(`✅✅✅ COMPLETE! Successfully deleted ${deleted} ${type}!`);
+                log(`💡 Your database is now clean!`);
+            } else {
+                log(`⚠️ Completed with ${failedBatches} failed batches. Some documents may remain.`);
+            }
+            
+            // Final count
+            await countOnly();
         }
+        
+        // Auto-run count on page load
+        countOnly();
     </script>
 </body>
 </html>

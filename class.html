@@ -7,6 +7,7 @@
     
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -244,11 +245,45 @@
         .quiz-meta { 
             display: flex;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: 25px;
             padding-bottom: 15px;
             border-bottom: 2px solid #e2e8f0;
             color: #718096;
             font-weight: 500;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .timer-container {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 8px 16px;
+            border-radius: 40px;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .timer-number {
+            font-size: 1.3rem;
+            font-weight: bold;
+            background: white;
+            color: #667eea;
+            padding: 4px 12px;
+            border-radius: 30px;
+            min-width: 60px;
+            text-align: center;
+        }
+        
+        .timer-warning {
+            animation: pulse 0.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
         }
         
         .error-box { 
@@ -311,6 +346,50 @@
             cursor: pointer;
         }
         
+        /* Payment Modal Styles */
+        .payment-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .payment-content {
+            background: white;
+            max-width: 450px;
+            width: 90%;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            animation: modalPop 0.3s ease;
+        }
+        @keyframes modalPop {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .payment-amount {
+            font-size: 2.5rem;
+            color: #11998e;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        .payment-details {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .payment-details p {
+            margin: 8px 0;
+            font-size: 0.9rem;
+        }
+        
         @media (max-width: 768px) {
             .nav-container {
                 flex-direction: column;
@@ -325,6 +404,10 @@
                 width: 50px;
                 height: 50px;
                 font-size: 20px;
+            }
+            .quiz-meta {
+                flex-direction: column;
+                align-items: stretch;
             }
         }
     </style>
@@ -353,9 +436,9 @@
     <div class="subject-selector">
         <label style="font-weight: 600; color: #4a5568;">📚 Select Subject: </label>
         <select id="subjectSelect" onchange="changeSubject()">
-            <option value="physics">📐 Physics</option>
-            <option value="mathematics">📖 Mathematics</option>
-            <option value="english">🌍 English Language</option>
+            <option value="physics">⚛️ Physics</option>
+            <option value="mathematics">📐 Mathematics</option>
+            <option value="english">📖 English Language</option>
             <option value="digital-technology">💻 Digital Technology</option>
             <option value="igbo">🗣️ Igbo Language</option>
         </select>
@@ -375,18 +458,6 @@
 </button>
 
 <script>
-    // Navigation function
-    function goToPage(page) {
-        window.location.href = page;
-    }
-    
-    function changeSubject() {
-        const select = document.getElementById('subjectSelect');
-        const subject = select.value;
-        localStorage.setItem('selectedSubject', subject);
-        window.location.href = `class.html?subject=${subject}`;
-    }
-    
     // Firebase Configuration
     const firebaseConfig = {
         apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
@@ -398,46 +469,245 @@
     };
     
     firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
     const db = firebase.firestore();
     
     let loadedQuestions = [];
+    let randomizedQuestions = [];
     let currentIndex = 0;
     let score = 0;
     let currentSubject = 'physics';
+    let currentUser = null;
+    let isQuizStarted = false;
+    let timerInterval = null;
+    let timeLeft = 10; // 10 seconds per question
+    let isAnswered = false;
     
-    function debug(message) {
-        console.log(message);
+    // Quiz settings
+    const TIME_PER_QUESTION = 10; // seconds
+    const TOTAL_QUESTIONS_TO_SHOW = 20; // Show 20 random questions per session
+    
+    // Premium subjects that require payment
+    const premiumSubjects = ['physics', 'mathematics', 'english'];
+    // Free subjects (always accessible)
+    const freeSubjects = ['digital-technology', 'igbo'];
+    
+    // Subject display names
+    const subjectNames = {
+        'physics': 'Physics',
+        'mathematics': 'Mathematics',
+        'english': 'English Language',
+        'digital-technology': 'Digital Technology',
+        'igbo': 'Igbo Language'
+    };
+    
+    function goToPage(page) {
+        window.location.href = page;
+    }
+    
+    function changeSubject() {
+        const select = document.getElementById('subjectSelect');
+        const subject = select.value;
+        localStorage.setItem('selectedSubject', subject);
+        window.location.href = `class.html?subject=${subject}`;
     }
     
     function getSubjectFromURL() {
         const params = new URLSearchParams(window.location.search);
         const subject = params.get('subject');
-        if (subject) {
-            return subject;
-        }
+        if (subject) return subject;
         const saved = localStorage.getItem('selectedSubject');
         return saved || 'physics';
     }
     
     function formatSubjectName(subjectId) {
-        const names = {
-            'physics': 'Physics',
-            'mathematics': 'Mathematics',
-            'english': 'English Language',
-            'digital-technology': 'Digital Technology',
-            'igbo': 'Igbo Language'
-        };
-        return names[subjectId] || subjectId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        return subjectNames[subjectId] || subjectId;
+    }
+    
+    // Shuffle array (Fisher-Yates algorithm)
+    function shuffleArray(array) {
+        const shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+    }
+    
+    // Get random questions without repetition
+    function getRandomQuestions(allQuestions, count) {
+        const shuffled = shuffleArray(allQuestions);
+        return shuffled.slice(0, Math.min(count, shuffled.length));
+    }
+    
+    // Start timer for current question
+    function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        
+        timeLeft = TIME_PER_QUESTION;
+        isAnswered = false;
+        
+        const timerElement = document.getElementById('timerDisplay');
+        const timerCircle = document.getElementById('timerCircle');
+        
+        timerInterval = setInterval(() => {
+            if (isAnswered) return; // Don't count down if already answered
+            
+            timeLeft--;
+            
+            if (timerElement) {
+                timerElement.textContent = `${timeLeft}s`;
+            }
+            
+            // Add warning effect when time is low
+            if (timeLeft <= 3 && timerCircle) {
+                timerCircle.classList.add('timer-warning');
+            } else if (timerCircle) {
+                timerCircle.classList.remove('timer-warning');
+            }
+            
+            // Time's up!
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                if (!isAnswered) {
+                    handleTimeOut();
+                }
+            }
+        }, 1000);
+    }
+    
+    // Handle timeout (no answer selected)
+    function handleTimeOut() {
+        isAnswered = true;
+        
+        // Disable all option buttons
+        const buttons = document.querySelectorAll('.option-item');
+        buttons.forEach(btn => btn.disabled = true);
+        
+        // Highlight the correct answer
+        const q = randomizedQuestions[currentIndex];
+        const correct = q.answer;
+        
+        buttons.forEach(btn => {
+            if (btn.getAttribute('onclick').includes(`'${correct}'`)) {
+                btn.classList.add('correct');
+            }
+        });
+        
+        // Show timeout message
+        const explanationBox = document.getElementById('explanationBox');
+        const explanationText = document.getElementById('explanationText');
+        if (explanationBox && explanationText) {
+            explanationBox.style.display = 'block';
+            explanationText.innerHTML = `⏰ Time's up! The correct answer was ${correct}. ${q.explanation || ''}`;
+            explanationBox.style.background = '#fff3cd';
+            explanationBox.style.borderLeftColor = '#f39c12';
+        }
+        
+        // Show next button
+        document.getElementById('nextBtn').style.display = 'block';
+    }
+    
+    // Payment Modal
+    function showPaymentModal(subject) {
+        const modal = document.createElement('div');
+        modal.className = 'payment-modal';
+        modal.innerHTML = `
+            <div class="payment-content">
+                <div style="font-size: 3rem;">💰</div>
+                <h2 style="color: #667eea; margin: 15px 0;">Unlock ${formatSubjectName(subject)}</h2>
+                <p style="color: #718096;">Get full access to all questions and explanations</p>
+                <div class="payment-amount">₦100</div>
+                <div class="payment-details">
+                    <h4 style="margin-bottom: 10px;">📱 Payment Details:</h4>
+                    <p><strong>Opay / Palmpay:</strong> 08032607809</p>
+                    <p><strong>First Bank:</strong> 3113254386</p>
+                    <p><strong>Account Name:</strong> Damian Anielozie Okafor</p>
+                    <p style="margin-top: 10px; font-size: 0.75rem; color: #666;">After payment, click "I Have Paid" to unlock instantly</p>
+                </div>
+                <button onclick="confirmPayment('${subject}')" style="background: linear-gradient(135deg, #11998e, #38ef7d); color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 10px;">✅ I Have Paid</button>
+                <button onclick="this.parentElement.parentElement.remove()" style="background: #e2e8f0; color: #4a5568; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; width: 100%;">Cancel</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+    
+    async function confirmPayment(subject) {
+        if (!currentUser) {
+            alert("Please login to unlock quizzes");
+            window.location.href = "login.html";
+            return;
+        }
+        
+        const studentRef = db.collection('students').doc(currentUser.uid);
+        const studentDoc = await studentRef.get();
+        const paidQuizzes = studentDoc.data()?.paidQuizzes || [];
+        
+        if (!paidQuizzes.includes(subject)) {
+            paidQuizzes.push(subject);
+            await studentRef.update({ paidQuizzes: paidQuizzes });
+            alert(`✅ ${formatSubjectName(subject)} unlocked! You can now take the quiz.`);
+        }
+        
+        document.querySelectorAll('.payment-modal').forEach(m => m.remove());
+        startQuiz();
+    }
+    
+    // Check if user can access the quiz
+    async function canAccessQuiz(subject) {
+        if (!currentUser) {
+            const userChoice = confirm("You need to login or register to take quizzes.\n\nClick OK to login, Cancel to continue as guest (free subjects only)");
+            if (userChoice) {
+                window.location.href = "login.html";
+                return false;
+            }
+            if (premiumSubjects.includes(subject)) {
+                alert(`${formatSubjectName(subject)} is a premium subject. Please login/register and pay ₦100 to access.`);
+                return false;
+            }
+            return true;
+        }
+        
+        if (premiumSubjects.includes(subject)) {
+            const studentDoc = await db.collection('students').doc(currentUser.uid).get();
+            const paidQuizzes = studentDoc.data()?.paidQuizzes || [];
+            
+            if (!paidQuizzes.includes(subject)) {
+                showPaymentModal(subject);
+                return false;
+            }
+        }
+        
+        return true;
     }
     
     async function loadQuestions() {
         currentSubject = getSubjectFromURL();
-        debug(`Loading questions for: ${currentSubject}`);
+        console.log(`Loading questions for: ${currentSubject}`);
         
         const select = document.getElementById('subjectSelect');
         if (select) select.value = currentSubject;
         
         const interfaceDiv = document.getElementById("quizInterface");
+        
+        const canAccess = await canAccessQuiz(currentSubject);
+        if (!canAccess) {
+            interfaceDiv.innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 4rem; margin: 20px;">🔒</div>
+                    <h2 style="color: #667eea;">Access Restricted</h2>
+                    <p style="margin: 20px 0; color: #718096;">
+                        ${premiumSubjects.includes(currentSubject) ? `${formatSubjectName(currentSubject)} is a premium subject.` : 'Please login to continue.'}
+                    </p>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" onclick="goToPage('login.html')">🔐 Login</button>
+                        <button class="btn btn-success" onclick="goToPage('register.html')">📝 Register</button>
+                        <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Home</button>
+                    </div>
+                </div>
+            `;
+            return false;
+        }
         
         try {
             const docRef = db.collection("questions").doc(currentSubject);
@@ -462,10 +732,10 @@
             }
             
             const data = docSnap.data();
-            loadedQuestions = data.questions || [];
-            debug(`Loaded ${loadedQuestions.length} questions`);
+            const allQuestions = data.questions || [];
+            console.log(`Total questions available: ${allQuestions.length}`);
             
-            if (loadedQuestions.length === 0) {
+            if (allQuestions.length === 0) {
                 interfaceDiv.innerHTML = `
                     <div style="text-align: center;">
                         <h2>Empty Question Set</h2>
@@ -475,6 +745,10 @@
                 return false;
             }
             
+            // Randomize questions - select random set without repetition
+            randomizedQuestions = getRandomQuestions(allQuestions, TOTAL_QUESTIONS_TO_SHOW);
+            console.log(`Selected ${randomizedQuestions.length} random questions for this session`);
+            
             document.querySelector('.hero h1').innerHTML = `🎯 ${formatSubjectName(currentSubject)} Quiz`;
             
             interfaceDiv.innerHTML = `
@@ -482,8 +756,12 @@
                     <div style="font-size: 4rem; margin: 20px;">🎯</div>
                     <h2 style="color: #667eea; margin: 20px 0;">Ready to Challenge Yourself?</h2>
                     <p style="margin: 15px 0; color: #718096; font-size: 1.1rem;">
-                        📚 ${loadedQuestions.length} questions available
+                        📚 ${randomizedQuestions.length} random questions selected from ${allQuestions.length} total
                     </p>
+                    <p style="margin: 10px 0; color: #f39c12; font-size: 0.9rem;">
+                        ⏱️ ${TIME_PER_QUESTION} seconds per question
+                    </p>
+                    ${premiumSubjects.includes(currentSubject) ? `<p style="margin: 10px 0; color: #11998e; font-size: 0.9rem;">💰 Premium Subject - Already Unlocked ✓</p>` : ''}
                     <button class="btn btn-success" onclick="startQuiz()" style="font-size: 1.2rem; padding: 15px 40px;">
                         🚀 Start Quiz
                     </button>
@@ -495,7 +773,7 @@
             `;
             return true;
         } catch (error) {
-            debug(`Error: ${error.message}`);
+            console.error(`Error: ${error.message}`);
             interfaceDiv.innerHTML = `
                 <div class="error-box">
                     <strong>Error loading questions:</strong><br>
@@ -507,26 +785,40 @@
     }
     
     function startQuiz() {
+        if (randomizedQuestions.length === 0) return;
         currentIndex = 0;
         score = 0;
+        isQuizStarted = true;
         showQuestion();
     }
     
+    function stopTimer() {
+        if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+    }
+    
     function showQuestion() {
-        const q = loadedQuestions[currentIndex];
+        stopTimer();
+        
+        const q = randomizedQuestions[currentIndex];
         const interfaceDiv = document.getElementById("quizInterface");
         
         interfaceDiv.innerHTML = `
             <div class="quiz-meta">
                 <span>📖 ${formatSubjectName(currentSubject)}</span>
-                <span class="score-badge">⭐ ${currentIndex + 1}/${loadedQuestions.length}</span>
+                <div class="timer-container" id="timerCircle">
+                    ⏱️ Time Left: <span class="timer-number" id="timerDisplay">${TIME_PER_QUESTION}s</span>
+                </div>
+                <span style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 5px 12px; border-radius: 20px;">⭐ ${currentIndex + 1}/${randomizedQuestions.length}</span>
             </div>
-            <div class="question-text">${q.question}</div>
+            <div class="question-text">${escapeHtml(q.question)}</div>
             <div class="options-list">
-                <button class="option-item" onclick="checkAnswer('A')"><strong>A.</strong> ${q.optionA}</button>
-                <button class="option-item" onclick="checkAnswer('B')"><strong>B.</strong> ${q.optionB}</button>
-                <button class="option-item" onclick="checkAnswer('C')"><strong>C.</strong> ${q.optionC}</button>
-                <button class="option-item" onclick="checkAnswer('D')"><strong>D.</strong> ${q.optionD}</button>
+                <button class="option-item" onclick="checkAnswer('A')"><strong>A.</strong> ${escapeHtml(q.optionA)}</button>
+                <button class="option-item" onclick="checkAnswer('B')"><strong>B.</strong> ${escapeHtml(q.optionB)}</button>
+                <button class="option-item" onclick="checkAnswer('C')"><strong>C.</strong> ${escapeHtml(q.optionC)}</button>
+                <button class="option-item" onclick="checkAnswer('D')"><strong>D.</strong> ${escapeHtml(q.optionD)}</button>
             </div>
             <div id="nextBtn" style="display:none; margin-top: 20px; text-align: center;">
                 <button class="btn btn-primary" onclick="nextQuestion()">Next Question →</button>
@@ -539,14 +831,24 @@
                 <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Home</button>
             </div>
         `;
+        
+        // Start timer for this question
+        startTimer();
     }
     
     function checkAnswer(selected) {
-        const q = loadedQuestions[currentIndex];
+        if (isAnswered) return; // Prevent double answering
+        
+        isAnswered = true;
+        stopTimer();
+        
+        const q = randomizedQuestions[currentIndex];
         const correct = q.answer;
         
         const buttons = document.querySelectorAll('.option-item');
         buttons.forEach(btn => btn.disabled = true);
+        
+        let isCorrect = false;
         
         buttons.forEach(btn => {
             if (btn.getAttribute('onclick').includes(`'${correct}'`)) {
@@ -560,6 +862,7 @@
             );
             if (selectedBtn) selectedBtn.classList.add('correct');
             score++;
+            isCorrect = true;
         } else {
             const selectedBtn = Array.from(buttons).find(btn => 
                 btn.getAttribute('onclick').includes(`'${selected}'`)
@@ -567,13 +870,16 @@
             if (selectedBtn) selectedBtn.classList.add('incorrect');
         }
         
-        // Show explanation if available
-        if (q.explanation && q.explanation.length > 0) {
-            const explanationBox = document.getElementById('explanationBox');
-            const explanationText = document.getElementById('explanationText');
-            if (explanationBox && explanationText) {
-                explanationBox.style.display = 'block';
-                explanationText.innerHTML = q.explanation;
+        // Show explanation
+        const explanationBox = document.getElementById('explanationBox');
+        const explanationText = document.getElementById('explanationText');
+        if (explanationBox && explanationText) {
+            explanationBox.style.display = 'block';
+            const resultText = isCorrect ? '✅ Correct! ' : '❌ Incorrect. ';
+            explanationText.innerHTML = resultText + (q.explanation || `The correct answer is ${correct}.`);
+            if (!isCorrect) {
+                explanationBox.style.background = '#fef2f2';
+                explanationBox.style.borderLeftColor = '#eb3349';
             }
         }
         
@@ -582,7 +888,8 @@
     
     function nextQuestion() {
         currentIndex++;
-        if (currentIndex < loadedQuestions.length) {
+        if (currentIndex < randomizedQuestions.length) {
+            isAnswered = false;
             showQuestion();
         } else {
             showResults();
@@ -590,22 +897,37 @@
     }
     
     function showResults() {
-        const percent = Math.round((score / loadedQuestions.length) * 100);
+        stopTimer();
+        
+        const percent = Math.round((score / randomizedQuestions.length) * 100);
         let gradeMessage = "";
         let emoji = "";
+        let gradeColor = "";
         
         if (percent >= 80) {
             gradeMessage = "Outstanding! You're a Star! 🌟";
             emoji = "🏆";
+            gradeColor = "#11998e";
         } else if (percent >= 60) {
             gradeMessage = "Great Job! Keep Shining! ⭐";
             emoji = "🎉";
+            gradeColor = "#f39c12";
         } else if (percent >= 40) {
             gradeMessage = "Good Effort! Practice Makes Perfect! 💪";
             emoji = "📚";
+            gradeColor = "#667eea";
         } else {
             gradeMessage = "Keep Learning! You'll Crush It Next Time! 🚀";
             emoji = "💪";
+            gradeColor = "#eb3349";
+        }
+        
+        // Save score to database if user is logged in
+        if (currentUser) {
+            const studentRef = db.collection('students').doc(currentUser.uid);
+            studentRef.update({
+                [`quizScores.${currentSubject}`]: percent
+            }).catch(() => {});
         }
         
         const interfaceDiv = document.getElementById("quizInterface");
@@ -613,13 +935,13 @@
             <div style="text-align: center; padding: 20px;">
                 <div style="font-size: 5rem;">${emoji}</div>
                 <h2 style="color: #667eea; margin: 20px 0;">Quiz Complete!</h2>
-                <div style="font-size: 4rem; font-weight: bold; margin: 20px;">
+                <div style="font-size: 4rem; font-weight: bold; margin: 20px; color: ${gradeColor}">
                     ${percent}%
                 </div>
-                <p style="font-size: 1.3rem;">Score: ${score}/${loadedQuestions.length}</p>
+                <p style="font-size: 1.3rem;">Score: ${score}/${randomizedQuestions.length}</p>
                 <p style="margin: 20px 0; color: #718096;">${gradeMessage}</p>
                 <div class="action-buttons">
-                    <button class="btn btn-success" onclick="startQuiz()">🔄 Play Again</button>
+                    <button class="btn btn-success" onclick="startQuiz()">🔄 Play Again (New Random Questions)</button>
                     <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Education Hub</button>
                     <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Home</button>
                 </div>
@@ -627,7 +949,21 @@
         `;
     }
     
-    loadQuestions();
+    function escapeHtml(str) {
+        if (!str) return "";
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === "&") return "&amp;";
+            if (m === "<") return "&lt;";
+            if (m === ">") return "&gt;";
+            return m;
+        });
+    }
+    
+    // Check authentication state
+    auth.onAuthStateChanged(async (user) => {
+        currentUser = user;
+        await loadQuestions();
+    });
 </script>
 </body>
 </html>

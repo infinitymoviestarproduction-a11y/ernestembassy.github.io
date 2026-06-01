@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete All Questions</title>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { color: #eb3349; margin-bottom: 20px; }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            margin: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-danger { background: #eb3349; color: white; }
+        .btn-success { background: #11998e; color: white; }
+        .btn-info { background: #3498db; color: white; }
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            text-align: left;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗑️ Delete All Questions</h1>
+        <p>This tool will delete EVERYTHING in your "questions" collection</p>
+        
+        <button class="btn-info" onclick="countQuestions()">1️⃣ First: Count Questions</button>
+        <button class="btn-danger" onclick="deleteAll()">2️⃣ Then: Delete All Questions</button>
+        
+        <div id="result" class="result">
+            Click "Count Questions" to see what's in your database...
+        </div>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+            authDomain: "ernest-embassy-lms.firebaseapp.com",
+            projectId: "ernest-embassy-lms",
+            storageBucket: "ernest-embassy-lms.firebasestorage.app",
+            messagingSenderId: "204896421221",
+            appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        
+        const resultDiv = document.getElementById('result');
+        
+        async function countQuestions() {
+            resultDiv.innerHTML = '<div class="loading"></div> Counting questions...';
+            
+            try {
+                const snapshot = await db.collection("questions").get();
+                
+                if (snapshot.size === 0) {
+                    resultDiv.innerHTML = "✅ Your 'questions' collection is EMPTY. Nothing to delete!";
+                    return;
+                }
+                
+                // Categorize documents
+                let subjectDocs = [];
+                let individualDocs = [];
+                
+                for (const doc of snapshot.docs) {
+                    const data = doc.data();
+                    if (data.questions && Array.isArray(data.questions)) {
+                        subjectDocs.push({
+                            id: doc.id,
+                            count: data.questions.length
+                        });
+                    } else {
+                        individualDocs.push(doc.id);
+                    }
+                }
+                
+                let html = `<strong>📊 Found ${snapshot.size} document(s):</strong><br><br>`;
+                
+                if (subjectDocs.length > 0) {
+                    html += `✅ <span style="color: #11998e;">Good Documents (${subjectDocs.length}):</span><br>`;
+                    subjectDocs.forEach(d => {
+                        html += `   📁 ${d.id} - ${d.count} questions<br>`;
+                    });
+                    html += `<br>`;
+                }
+                
+                if (individualDocs.length > 0) {
+                    html += `⚠️ <span style="color: #eb3349;">Individual Question Documents (${individualDocs.length}):</span><br>`;
+                    individualDocs.slice(0, 20).forEach(id => {
+                        html += `   📄 ${id}<br>`;
+                    });
+                    if (individualDocs.length > 20) {
+                        html += `   ... and ${individualDocs.length - 20} more<br>`;
+                    }
+                    html += `<br>`;
+                }
+                
+                html += `<strong>Total to delete: ${snapshot.size} documents</strong><br><br>`;
+                html += `Click "Delete All Questions" to remove everything.`;
+                
+                resultDiv.innerHTML = html;
+                
+            } catch (error) {
+                resultDiv.innerHTML = `❌ Error: ${error.message}`;
+            }
+        }
+        
+        async function deleteAll() {
+            // First confirmation
+            if (!confirm("⚠️⚠️⚠️ WARNING: This will delete ALL questions in your database!\n\nAre you absolutely sure?")) {
+                resultDiv.innerHTML = "Deletion cancelled.";
+                return;
+            }
+            
+            // Second confirmation with typing
+            const confirmText = prompt("Type 'DELETE ALL' to confirm deletion:");
+            if (confirmText !== "DELETE ALL") {
+                resultDiv.innerHTML = "Deletion cancelled - incorrect confirmation text.";
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="loading"></div> Deleting all questions... Please wait...';
+            
+            try {
+                const snapshot = await db.collection("questions").get();
+                
+                if (snapshot.size === 0) {
+                    resultDiv.innerHTML = "✅ No documents found to delete. Collection is already empty!";
+                    return;
+                }
+                
+                const batch = db.batch();
+                let deleteCount = 0;
+                
+                snapshot.docs.forEach(doc => {
+                    batch.delete(doc.ref);
+                    deleteCount++;
+                });
+                
+                await batch.commit();
+                
+                resultDiv.innerHTML = `✅ SUCCESS!<br><br>
+                    Deleted ${deleteCount} document(s) from your "questions" collection.<br><br>
+                    Your database is now clean.<br><br>
+                    <strong>Next step:</strong> Use the Bulk Uploader to add your subjects correctly.`;
+                
+                // Refresh the count display
+                setTimeout(() => {
+                    countQuestions();
+                }, 2000);
+                
+            } catch (error) {
+                resultDiv.innerHTML = `❌ Error: ${error.message}<br><br>Check your internet connection and try again.`;
+            }
+        }
+    </script>
+</body>
+</html>

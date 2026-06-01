@@ -1,250 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Register - Ernest Embassy LMS</title>
-
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI', sans-serif;
-}
-
-body{
-    background:linear-gradient(135deg,#f5f7fa,#e9ecef);
-}
-
-/* NAV */
-nav{
-    background:#1a1a2e;
-    color:white;
-    padding:15px 20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-}
-
-.nav-left{
-    display:flex;
-    gap:10px;
-}
-
-.btn{
-    padding:8px 14px;
-    border-radius:8px;
-    text-decoration:none;
-    font-weight:bold;
-    color:white;
-}
-
-.home{ background:#667eea; }
-.login{ background:#28a745; }
-
-/* REGISTER CARD */
-.container{
-    max-width:500px;
-    margin:70px auto;
-    background:white;
-    padding:30px;
-    border-radius:15px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.1);
-}
-
-h1{
-    text-align:center;
-    color:#1a1a2e;
-}
-
-p{
-    text-align:center;
-    color:#666;
-    margin-bottom:20px;
-}
-
-input{
-    width:100%;
-    padding:12px;
-    margin:10px 0;
-    border-radius:8px;
-    border:1px solid #ccc;
-}
-
-button{
-    width:100%;
-    padding:12px;
-    background:#667eea;
-    color:white;
-    border:none;
-    border-radius:8px;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#5a67d8;
-}
-
-.error{
-    display:none;
-    background:#ffdddd;
-    color:red;
-    padding:10px;
-    border-radius:8px;
-    margin-bottom:10px;
-}
-
-.success{
-    display:none;
-    background:#ddffdd;
-    color:green;
-    padding:10px;
-    border-radius:8px;
-    margin-bottom:10px;
-}
-
-.footer-text{
-    text-align:center;
-    margin-top:15px;
-}
-
-.footer-text a{
-    color:#667eea;
-    text-decoration:none;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration - Ernest Embassy LMS</title>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .logo { text-align: center; font-size: 3rem; margin-bottom: 10px; }
+        h1 { color: #667eea; text-align: center; margin-bottom: 10px; }
+        .subtitle { text-align: center; color: #718096; margin-bottom: 30px; }
+        input {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+        input:focus { outline: none; border-color: #667eea; }
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+        }
+        .error { background: #fee; color: #eb3349; display: block; }
+        .success { background: #e8f5e9; color: #11998e; display: block; }
+        .nav-links { text-align: center; margin-top: 20px; }
+        .nav-links a { color: #667eea; text-decoration: none; margin: 0 10px; }
+    </style>
 </head>
-
 <body>
-
-<!-- NAV -->
-<nav>
-    <div class="nav-left">
-        <a class="btn home" href="index.html">🏠 Home</a>
-        <a class="btn login" href="login.html">🔐 Login</a>
-    </div>
-
-    <div>
-        🎓 Ernest Embassy LMS
-    </div>
-</nav>
-
-<!-- REGISTER -->
-<div class="container">
-
-    <h1>Create Account</h1>
-    <p>Join the learning platform today</p>
-
-    <div id="errorBox" class="error"></div>
-    <div id="successBox" class="success"></div>
-
-    <form id="registerForm">
-
+    <div class="container">
+        <div class="logo">🎓</div>
+        <h1>Create Account</h1>
+        <p class="subtitle">Join the learning platform today</p>
+        
         <input type="text" id="fullName" placeholder="Full Name" required>
-
         <input type="email" id="email" placeholder="Email Address" required>
-
-        <input type="tel" id="phone" placeholder="Phone Number">
-
+        <input type="tel" id="phone" placeholder="Phone Number (optional)">
         <input type="password" id="password" placeholder="Password (min 6 chars)" required>
-
         <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
-
-        <button type="submit">Create Account</button>
-
-    </form>
-
-    <div class="footer-text">
-        Already have an account?
-        <a href="login.html">Login here</a>
+        
+        <button class="btn" onclick="registerStudent()">📝 Create Account</button>
+        
+        <div class="nav-links">
+            <a href="#" onclick="goToLogin()">Already have an account? Login here</a>
+            <a href="index.html">🏠 Home</a>
+        </div>
+        
+        <div id="message"></div>
     </div>
 
-</div>
-
-<!-- FIREBASE -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-
-<script>
-/* =========================
-   FIREBASE INIT
-========================= */
-const firebaseConfig = {
-    apiKey: "YOUR_KEY",
-    authDomain: "YOUR_DOMAIN",
-    projectId: "YOUR_PROJECT"
-};
-
-firebase.initializeApp(firebaseConfig);
-
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-/* =========================
-   REGISTER HANDLER
-========================= */
-document.getElementById("registerForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const fullName = document.getElementById("fullName").value;
-    const email = document.getElementById("email").value;
-    const phone = document.getElementById("phone").value;
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
-
-    const errorBox = document.getElementById("errorBox");
-    const successBox = document.getElementById("successBox");
-
-    errorBox.style.display = "none";
-    successBox.style.display = "none";
-
-    if (password !== confirmPassword) {
-        errorBox.innerText = "Passwords do not match!";
-        errorBox.style.display = "block";
-        return;
-    }
-
-    if (password.length < 6) {
-        errorBox.innerText = "Password must be at least 6 characters!";
-        errorBox.style.display = "block";
-        return;
-    }
-
-    try {
-        const result = await auth.createUserWithEmailAndPassword(email, password);
-        const user = result.user;
-
-        await user.updateProfile({
-            displayName: fullName
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+            authDomain: "ernest-embassy-lms.firebaseapp.com",
+            projectId: "ernest-embassy-lms",
+            storageBucket: "ernest-embassy-lms.firebasestorage.app",
+            messagingSenderId: "204896421221",
+            appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        
+        function showMessage(msg, type) {
+            const msgDiv = document.getElementById('message');
+            msgDiv.innerHTML = msg;
+            msgDiv.className = `message ${type}`;
+            setTimeout(() => {
+                msgDiv.style.display = 'none';
+                msgDiv.className = 'message';
+            }, 4000);
+        }
+        
+        async function registerStudent() {
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!fullName || !email || !password) {
+                showMessage('Please fill all required fields', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showMessage('Passwords do not match', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showMessage('Password must be at least 6 characters', 'error');
+                return;
+            }
+            
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                await db.collection('students').doc(user.uid).set({
+                    fullName: fullName,
+                    email: email,
+                    phone: phone || '',
+                    registeredAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    paidQuizzes: [],
+                    quizScores: {},
+                    isActive: true
+                });
+                
+                showMessage('✅ Registration successful! Redirecting to dashboard...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'student-dashboard.html';
+                }, 2000);
+                
+            } catch (error) {
+                if (error.code === 'auth/email-already-in-use') {
+                    showMessage('Email already registered. Please login instead.', 'error');
+                } else {
+                    showMessage(error.message, 'error');
+                }
+            }
+        }
+        
+        function goToLogin() {
+            window.location.href = 'login.html';
+        }
+        
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                window.location.href = 'student-dashboard.html';
+            }
         });
-
-        await db.collection("users").doc(user.uid).set({
-            fullName,
-            email,
-            phone,
-            role: "student",
-            createdAt: new Date()
-        });
-
-        await user.sendEmailVerification();
-
-        successBox.innerText = "Account created successfully! Please verify your email.";
-        successBox.style.display = "block";
-
-        setTimeout(() => {
-            window.location.href = "login.html";
-        }, 3000);
-
-    } catch (error) {
-        errorBox.innerText = error.message;
-        errorBox.style.display = "block";
-    }
-});
-</script>
-
+    </script>
 </body>
 </html>

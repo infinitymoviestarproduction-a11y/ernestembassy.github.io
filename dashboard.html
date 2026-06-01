@@ -9,20 +9,24 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
 
-<script src="auth.js"></script>
-
 <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 
-    body { background: #0a0a0a; color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
+    body { 
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh; 
+        display: flex; 
+        flex-direction: column; 
+    }
 
     nav {
-        background: #000;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
         padding: 1rem 0;
         position: sticky;
         top: 0;
         z-index: 1000;
-        border-bottom: 2px solid #ffd700;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
     .nav-container {
@@ -32,6 +36,8 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
     }
 
     .logo-group {
@@ -39,17 +45,30 @@
         align-items: center;
         gap: 10px;
         text-decoration: none;
-        color: #ffd700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
         font-weight: bold;
         font-size: 22px;
     }
 
-    .nav-links { display: flex; align-items: center; gap: 20px; }
+    .nav-links { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
 
-    .nav-link { color: #aaa; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
-    .nav-link:hover, .nav-link.active { color: #ffd700; }
+    .nav-link { 
+        color: #4a5568; 
+        text-decoration: none; 
+        font-size: 14px; 
+        font-weight: 500; 
+        padding: 8px 12px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    .nav-link:hover, .nav-link.active { 
+        color: #667eea; 
+        background: rgba(102, 126, 234, 0.1);
+    }
 
-    /* Dev badge */
     .dev-badge {
         background: #f97316;
         color: white;
@@ -61,8 +80,8 @@
 
     .btn-logout {
         background: transparent;
-        color: #ff4d4d;
-        border: 1px solid #ff4d4d;
+        color: #eb3349;
+        border: 1px solid #eb3349;
         padding: 6px 14px;
         border-radius: 6px;
         cursor: pointer;
@@ -71,14 +90,13 @@
         transition: 0.2s;
     }
 
-    .btn-logout:hover { background: #ff4d4d; color: #fff; }
+    .btn-logout:hover { background: #eb3349; color: #fff; }
 
     .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; width: 100%; flex: 1; }
 
     .welcome-banner {
-        background: linear-gradient(135deg, #111 0%, #1c1a12 100%);
-        border: 1px solid #222;
-        border-radius: 16px;
+        background: white;
+        border-radius: 20px;
         padding: 30px;
         margin-bottom: 30px;
         display: flex;
@@ -86,55 +104,75 @@
         align-items: center;
         flex-wrap: wrap;
         gap: 20px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
     }
 
-    .welcome-text h1 { font-size: 28px; color: #ffd700; margin-bottom: 5px; }
-    .welcome-text p  { color: #aaa; font-size: 15px; }
+    .welcome-text h1 { 
+        font-size: 28px; 
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 5px;
+    }
+    .welcome-text p  { color: #718096; font-size: 15px; }
 
     .profile-metrics { display: flex; gap: 15px; flex-wrap: wrap; }
 
     .metric-badge {
-        background: #161616;
-        border: 1px solid #333;
+        background: #f7fafc;
+        border: 1px solid #e2e8f0;
         padding: 10px 18px;
-        border-radius: 10px;
+        border-radius: 12px;
         font-size: 14px;
         font-weight: 600;
+        color: #2d3748;
     }
 
-    .metric-badge span { color: #888; display: block; font-size: 12px; font-weight: normal; margin-bottom: 2px; }
+    .metric-badge span { color: #718096; display: block; font-size: 12px; font-weight: normal; margin-bottom: 2px; }
 
     .task-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
         gap: 25px;
         margin-bottom: 40px;
     }
 
-    @media(max-width: 500px) { .task-grid { grid-template-columns: 1fr; } }
+    @media(max-width: 768px) { .task-grid { grid-template-columns: 1fr; } }
 
     .task-card {
-        background: #111;
-        border: 1px solid #222;
-        border-radius: 16px;
+        background: white;
+        border-radius: 20px;
         padding: 25px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
     }
 
-    .task-header h2 { font-size: 20px; color: #ffd700; margin-bottom: 10px; }
-    .task-header p  { color: #aaa; font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
+    .task-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+
+    .task-header h2 { 
+        font-size: 20px; 
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 10px;
+    }
+    .task-header p  { color: #718096; font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
 
     .btn-action {
         width: 100%;
         padding: 14px;
-        background: #ffd700;
-        color: #000;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
         border: none;
-        border-radius: 10px;
+        border-radius: 12px;
         font-weight: bold;
         font-size: 15px;
         cursor: pointer;
@@ -143,17 +181,27 @@
         align-items: center;
         gap: 8px;
         text-decoration: none;
-        transition: 0.2s;
+        transition: all 0.3s ease;
     }
 
-    .btn-action:hover { background: #ffea70; }
+    .btn-action:hover { 
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
 
-    .btn-secondary-action { background: #222; color: #fff; border: 1px solid #444; }
-    .btn-secondary-action:hover { background: #333; }
+    .btn-secondary-action { 
+        background: #f7fafc; 
+        color: #4a5568; 
+        border: 1px solid #e2e8f0;
+    }
+    .btn-secondary-action:hover { 
+        background: #edf2f7; 
+        box-shadow: none;
+    }
 
     .section-title {
         font-size: 22px;
-        color: #ffd700;
+        color: white;
         margin-bottom: 20px;
         border-left: 4px solid #ffd700;
         padding-left: 12px;
@@ -161,45 +209,59 @@
 
     .subject-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+        margin-top: 20px;
     }
 
     .subject-card {
-        background: #111;
-        border: 1px solid #222;
-        border-radius: 14px;
-        padding: 20px;
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        transition: transform 0.2s;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
     }
 
-    .subject-card:hover { transform: translateY(-3px); border-color: #ffd700; }
+    .subject-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        border: 1px solid #667eea;
+    }
 
-    .subject-info h3 { font-size: 17px; color: #fff; margin-bottom: 8px; }
-    .subject-info p  { color: #888; font-size: 13px; line-height: 1.5; margin-bottom: 20px; }
+    .subject-info h3 { 
+        font-size: 18px; 
+        color: #2d3748; 
+        margin-bottom: 8px;
+        font-weight: 600;
+    }
+    .subject-info p  { color: #718096; font-size: 13px; line-height: 1.5; margin-bottom: 20px; }
 
     .course-link {
-        color: #ffd700;
+        color: #667eea;
         text-decoration: none;
         font-size: 14px;
         font-weight: bold;
-        display: flex;
+        display: inline-flex;
         align-items: center;
         gap: 5px;
+        padding: 8px 0;
+        transition: gap 0.3s;
     }
 
-    .course-link:hover { text-decoration: underline; }
+    .course-link:hover { 
+        gap: 10px;
+        text-decoration: underline;
+    }
 
     footer {
-        background: #000;
-        border-top: 1px solid #222;
+        background: rgba(255, 255, 255, 0.95);
+        border-top: 1px solid #e2e8f0;
         padding: 20px;
         text-align: center;
-        color: #666;
+        color: #718096;
         font-size: 13px;
         margin-top: 40px;
     }
@@ -210,11 +272,13 @@
 
 <nav>
     <div class="nav-container">
-        <a href="dashboard.html" class="logo-group">🎓 Ernest Embassy LMS</a>
+        <a href="dashboard.html" class="logo-group">⚡ Ernest Embassy LMS</a>
         <div class="nav-links">
             <span id="devIndicator" style="display:none;" class="dev-badge">🛠️ Dev Mode</span>
             <a href="dashboard.html" class="nav-link active">📊 Dashboard</a>
-            <a href="winners.html" class="nav-link">🏆 Hall of Fame</a>
+            <a href="courses.html" class="nav-link">📚 Courses</a>
+            <a href="resources.html" class="nav-link">📄 Resources</a>
+            <a href="education.html" class="nav-link">🎓 Education Hub</a>
             <button class="btn-logout" onclick="triggerSessionLogout()">🚪 Logout</button>
         </div>
     </div>
@@ -224,7 +288,7 @@
 
     <div class="welcome-banner">
         <div class="welcome-text">
-            <h1 id="welcomeUser">Welcome, Student!</h1>
+            <h1 id="welcomeUser">Welcome, Student! 👋</h1>
             <p>Keep advancing your educational milestones 🚀</p>
         </div>
         <div class="profile-metrics">
@@ -234,11 +298,11 @@
             </div>
             <div class="metric-badge">
                 <span>Best Score</span>
-                <span id="userScoreDisplay" style="display:inline; font-size:14px; color:#ffd700; font-weight:600;">0%</span>
+                <span id="userScoreDisplay" style="display:inline; font-size:14px; font-weight:600;">0%</span>
             </div>
             <div class="metric-badge">
                 <span>Current Stage</span>
-                SS1 Academic Tier
+                Senior Class
             </div>
         </div>
     </div>
@@ -249,17 +313,17 @@
         <div class="task-card">
             <div class="task-header">
                 <h2>💰 Challenge Quiz (Paid)</h2>
-                <p>Timed tournament quiz — 10 stages, ₦100 entry fee. Score 80%+ to win ₦1000 cash or enter the monthly ₦10,000 draw!</p>
+                <p>Timed tournament quiz — multiple stages, ₦100 entry fee. Score high to win amazing prizes!</p>
             </div>
-            <a href="class.html?mode=paid" class="btn-action">🏆 Enter Challenge Quiz</a>
+            <a href="class.html?mode=paid&subject=physics" class="btn-action">🏆 Enter Challenge Quiz</a>
         </div>
 
         <div class="task-card">
             <div class="task-header">
-                <h2>📂 Class Study Library</h2>
-                <p>Access your digital classroom textbooks, study summaries, curriculum guidelines, and shared workspace materials any time.</p>
+                <h2>📂 Study Materials Library</h2>
+                <p>Access digital textbooks, study summaries, curriculum guidelines, and shared workspace materials.</p>
             </div>
-            <a href="library.html" class="btn-action btn-secondary-action">📚 Open Study Notes</a>
+            <a href="resources.html" class="btn-action btn-secondary-action">📚 Open Study Notes</a>
         </div>
 
     </div>
@@ -269,38 +333,42 @@
 
         <div class="subject-card">
             <div class="subject-info">
-                <h3>💻 Digital Technology SS1</h3>
+                <h3>💻 Digital Technology</h3>
                 <p>Computer fundamentals, networking, ICT, internet tech, and foundational software engineering.</p>
             </div>
-            <!-- KEY: digital-technology-ss1 (matches Firestore) -->
-            <a href="class.html?mode=free&subject=digital-technology-ss1" class="course-link">Go to Course ➔</a>
+            <a href="class.html?mode=free&subject=digital-technology" class="course-link">Start Learning →</a>
         </div>
 
         <div class="subject-card">
             <div class="subject-info">
-                <h3>📐 Mathematics SS1</h3>
+                <h3>📐 Mathematics</h3>
                 <p>Algebra, coordinate geometry, quadratic equations, and WAEC/JAMB preparation.</p>
             </div>
-            <!-- KEY: mathematics-ss1 (matches Firestore) -->
-            <a href="class.html?mode=free&subject=mathematics-ss1" class="course-link">Go to Course ➔</a>
+            <a href="class.html?mode=free&subject=mathematics" class="course-link">Start Learning →</a>
         </div>
 
         <div class="subject-card">
             <div class="subject-info">
-                <h3>📖 English Language SS1</h3>
+                <h3>📖 English Language</h3>
                 <p>Grammar, essay writing, comprehension, and communication skills.</p>
             </div>
-            <!-- KEY: english-ss1 (matches Firestore) -->
-            <a href="class.html?mode=free&subject=english-ss1" class="course-link">Go to Course ➔</a>
+            <a href="class.html?mode=free&subject=english" class="course-link">Start Learning →</a>
         </div>
 
         <div class="subject-card">
             <div class="subject-info">
-                <h3>🌍 Igbo Language SS1</h3>
+                <h3>⚛️ Physics</h3>
+                <p>Laws of motion, energy, waves, electricity, and modern physics concepts.</p>
+            </div>
+            <a href="class.html?mode=free&subject=physics" class="course-link">Start Learning →</a>
+        </div>
+
+        <div class="subject-card">
+            <div class="subject-info">
+                <h3>🗣️ Igbo Language</h3>
                 <p>Grammar, vocabulary, cultural translation, and indigenous speech patterns.</p>
             </div>
-            <!-- KEY: igbo-ss1 (matches Firestore) -->
-            <a href="class.html?mode=free&subject=igbo-ss1" class="course-link">Go to Course ➔</a>
+            <a href="class.html?mode=free&subject=igbo" class="course-link">Start Learning →</a>
         </div>
 
     </div>
@@ -312,51 +380,59 @@
 </footer>
 
 <script>
-/* ====================================
-   INIT DASHBOARD
-==================================== */
-async function runDashboardInitialization() {
-    const devBypass = localStorage.getItem("devBypass") === "true";
+// Firebase Configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+    authDomain: "ernest-embassy-lms.firebaseapp.com",
+    projectId: "ernest-embassy-lms",
+    storageBucket: "ernest-embassy-lms.firebasestorage.app",
+    messagingSenderId: "204896421221",
+    appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
+};
 
-    if (devBypass) {
-        // Show dev mode indicator
-        document.getElementById("devIndicator").style.display = "inline";
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
 
-        const stored = localStorage.getItem("currentUser");
-        if (stored) {
-            const u = JSON.parse(stored);
-            document.getElementById("welcomeUser").innerText = `Welcome, ${u.name || "Dev Admin"}! 🛠️`;
-            if (u.score !== undefined) {
-                document.getElementById("userScoreDisplay").innerText = `${u.score}%`;
-            }
-        }
-        return;
-    }
+let currentUser = null;
 
-    // Normal flow
-    await initAuth(true);
-
-    if (typeof currentUser !== "undefined" && currentUser) {
-        document.getElementById("welcomeUser").innerText = `Welcome, ${getUserName()}!`;
-        if (currentUser.score !== undefined) {
-            document.getElementById("userScoreDisplay").innerText = `${currentUser.score}%`;
-        }
-    }
+function showMessage(msg, type) {
+    console.log(`${type}: ${msg}`);
 }
 
-/* ====================================
-   LOGOUT — clears dev bypass too
-==================================== */
+async function initAuth(redirectOnFail = true) {
+    return new Promise((resolve) => {
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+                
+                // Get student data from Firestore
+                const studentDoc = await db.collection('students').doc(user.uid).get();
+                const studentData = studentDoc.data();
+                
+                const userName = studentData?.fullName || user.email?.split('@')[0] || 'Student';
+                document.getElementById("welcomeUser").innerHTML = `Welcome, ${userName}! 👋`;
+                
+                // Get best score
+                const scores = studentData?.quizScores || {};
+                const bestScore = Object.values(scores).length > 0 ? Math.max(...Object.values(scores)) : 0;
+                document.getElementById("userScoreDisplay").innerText = `${bestScore}%`;
+                
+                resolve(true);
+            } else {
+                if (redirectOnFail) {
+                    window.location.href = "login.html";
+                }
+                resolve(false);
+            }
+        });
+    });
+}
+
 async function triggerSessionLogout() {
     try {
-        localStorage.removeItem("currentUser");
-        localStorage.removeItem("devBypass");
-
-        // Only call Firebase signOut if not in dev mode
-        if (typeof auth !== "undefined") {
-            await auth.signOut().catch(() => {});
-        }
-
+        await auth.signOut();
         window.location.href = "login.html";
     } catch (e) {
         console.error("Logout error:", e);
@@ -364,11 +440,8 @@ async function triggerSessionLogout() {
     }
 }
 
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", runDashboardInitialization);
-} else {
-    runDashboardInitialization();
-}
+// Initialize
+initAuth(true);
 </script>
 
 </body>

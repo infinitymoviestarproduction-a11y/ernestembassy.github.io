@@ -3,16 +3,359 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Infinity Movie Star Production - Film Studio</title>
-    <!-- COPY YOUR EXISTING movie.html CONTENT HERE -->
-    <!-- This page should focus on: -->
-    <!-- - Studio overview and mission -->
-    <!-- - Services offered -->
-    <!-- - International partnerships -->
-    <!-- - Training programs -->
-    <!-- - Contact and inquiry -->
+    <title>Infinity Movie Star Production - Film Studio & Training</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+        }
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon { font-size: 2rem; background: linear-gradient(135deg, #ffd700, #ffaa00); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .logo-text { font-size: 1.3rem; font-weight: bold; color: #ffd700; letter-spacing: 1px; }
+        .logo-sub { font-size: 0.65rem; color: rgba(255, 215, 0, 0.8); display: block; margin-top: 2px; }
+
+        .nav-links { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+        .nav-links a { color: white; text-decoration: none; font-weight: 500; transition: color 0.3s; padding: 8px 0; font-size: 0.8rem; }
+        .nav-links a:hover { color: #ffd700; }
+
+        .dropdown { position: relative; display: inline-flex; align-items: center; }
+        .dropbtn { background: transparent; border: none; color: #fff; font-size: 0.8rem; font-weight: 500; cursor: pointer; padding: 8px 12px; border-radius: 8px; transition: all 0.3s ease; font-family: inherit; display: flex; align-items: center; gap: 6px; }
+        .dropbtn:hover { color: #ffd700; background: rgba(255,255,255,0.05); }
+        .dropdown-content {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            min-width: 240px;
+            background: #16213e;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.45);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.25s ease;
+            z-index: 9999;
+        }
+        .dropdown:hover .dropdown-content { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-content a { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; padding: 14px 18px; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+        .dropdown-content a:hover { background: rgba(255,215,0,0.12); color: #ffd700; padding-left: 24px; }
+        .dropdown-header { padding: 12px 18px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255, 215, 0, 0.7); background: #12192c; font-weight: bold; text-align: left; }
+
+        /* Hero Section with Background Image */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/infi door.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            text-align: center;
+            padding: 120px 20px;
+            position: relative;
+        }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 20px; }
+        .hero h1 span { color: #ffd700; }
+        .hero p { font-size: 1.2rem; max-width: 800px; margin: 0 auto; }
+        .hero-subtitle { font-size: 1rem; margin-top: 20px; color: #ffd700; font-weight: bold; }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        .section-title { text-align: center; font-size: 2rem; margin-bottom: 15px; color: #1a1a2e; margin-top: 60px; }
+        .section-title span { border-bottom: 3px solid #ffd700; padding-bottom: 10px; }
+        .section-subtitle { text-align: center; color: #666; margin-bottom: 40px; font-size: 1.1rem; }
+
+        .mission-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 50px;
+            border-radius: 20px;
+            margin: 40px 0;
+        }
+        .mission-box h2 { font-size: 2rem; margin-bottom: 20px; }
+        .mission-box p { font-size: 1.3rem; font-style: italic; }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        .service-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+        .service-card:hover { transform: translateY(-5px); }
+        .service-header {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        .service-icon { font-size: 2.5rem; margin-bottom: 10px; }
+        .service-header h2 { font-size: 1.3rem; }
+        .service-body { padding: 25px; }
+        .service-body p { color: #555; margin-bottom: 15px; }
+        .service-list { list-style: none; margin: 15px 0; }
+        .service-list li { padding: 8px 0; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #eee; }
+        .service-list li:before { content: "🎬"; color: #ffd700; }
+
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        .partner-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+        }
+        .partner-card h3 { color: #ffd700; margin-bottom: 10px; }
+        .partner-card h4 { color: #1a1a2e; margin-bottom: 15px; }
+        .partner-card p { color: #555; font-size: 0.9rem; }
+
+        .cac-badge {
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .email-section {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            margin: 40px 0;
+        }
+        .email-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 35px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s;
+            margin: 10px 0;
+        }
+        .email-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4); }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            font-weight: bold;
+        }
+        .whatsapp-float:hover { transform: scale(1.05); background-color: #20b859; }
+
+        footer {
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container { flex-direction: column; gap: 15px; text-align: center; }
+            .nav-links { justify-content: center; }
+            .hero { padding: 80px 20px; background-attachment: scroll; }
+            .hero h1 { font-size: 1.8rem; }
+            .mission-box p { font-size: 1rem; }
+            .services-grid { grid-template-columns: 1fr; }
+            .whatsapp-float { padding: 8px 15px; bottom: 15px; right: 15px; font-size: 12px; }
+        }
+    </style>
 </head>
 <body>
-<!-- Keep your existing movie.html content as is - it's already well structured! -->
+
+<nav>
+    <div class="nav-container">
+        <div class="logo">
+            <span class="logo-icon">🎬</span>
+            <div>
+                <span class="logo-text">Ernest Embassy</span>
+                <span class="logo-sub">Digital Solutions</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="about.html">📖 About</a>
+            <a href="services.html">⚙️ Services</a>
+            <a href="webdev.html">💻 Web Dev</a>
+            <a href="visa.html">✈️ Visa</a>
+            
+            <div class="dropdown">
+                <button class="dropbtn">🎬 Movie Studio ▾</button>
+                <div class="dropdown-content">
+                    <div class="dropdown-header">Infinity Productions</div>
+                    <a href="movie.html">🏠 Studio Home</a>
+                    <a href="portfolio.html">🎨 Portfolio</a>
+                    <a href="gallery.html">📸 Gallery</a>
+                    <a href="team.html">👥 Our Team</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="dropbtn">🎓 Education ▾</button>
+                <div class="dropdown-content">
+                    <div class="dropdown-header">Academic Portals</div>
+                    <a href="teaching.html">📚 Teaching</a>
+                    <a href="tutoring.html">💻 Tutoring</a>
+                    <a href="education.html">📜 Education</a>
+                    <a href="class.html">🏫 Class</a>
+                </div>
+            </div>
+
+            <a href="booking.html">📅 Book</a>
+            <a href="contact.html">📞 Contact</a>
+            <a href="register.html">📝 Register</a>
+            <a href="login.html">🔐 Login</a>
+            <a href="dashboard.html">👤 Dashboard</a>
+        </div>
+    </div>
+</nav>
+
+<div class="hero">
+    <h1>🎬 <span>Infinity Movie Star Production</span></h1>
+    <p>Professional Film Production, International Collaboration & Hands-On Training</p>
+    <div class="hero-subtitle">Infinity Movie Star – Where Every Story Begins With You.</div>
+</div>
+
+<div class="container">
+    <div class="mission-box">
+        <h2>Our Mission</h2>
+        <p>"Creating stories that live beyond the screen."</p>
+    </div>
+
+    <div style="background: white; padding: 35px; border-radius: 20px; margin-bottom: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+        <p style="font-size: 1.1rem; line-height: 1.8;">Infinity Movie Star Production is a full-service film production company founded by <strong>Damian Anielozie Okafor</strong>, a Nigerian screenwriter, director, producer, and film trainer. We create compelling stories that inspire, entertain, and address real social issues while building global partnerships across Africa, Europe, and the United States.</p>
+        <p style="margin-top: 20px;">Through strategic collaborations with <strong>Never Matewere</strong> of Zomba Film Production and <strong>Emmanuel Fragrance Francisque</strong> of Ashanti Media Logistics, we provide international production support, talent sourcing, logistics, and training for projects intended for global audiences.</p>
+    </div>
+
+    <div class="section-title"><span>🎥 Our Professional Services</span></div>
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="service-header"><div class="service-icon">📜</div><h2>Movie Script Writing</h2></div>
+            <div class="service-body"><p>At the heart of every great film is a powerful story.</p>
+            <ul class="service-list"><li>Original screenplay development</li><li>Script doctoring and rewrites</li><li>Dialogue polishing</li><li>Pitch decks and synopsis creation</li></ul></div>
+        </div>
+        <div class="service-card">
+            <div class="service-header"><div class="service-icon">🎬</div><h2>Film Directing</h2></div>
+            <div class="service-body"><p>Vision transforms words into unforgettable cinematic experiences.</p>
+            <ul class="service-list"><li>Shot planning and storyboarding</li><li>Actor coaching and rehearsals</li><li>Scene blocking</li><li>Cinemographic storytelling</li></ul></div>
+        </div>
+        <div class="service-card">
+            <div class="service-header"><div class="service-icon">✂️</div><h2>Production & Editing</h2></div>
+            <div class="service-body"><p>From concept to final delivery, we manage every stage of production.</p>
+            <ul class="service-list"><li>Feature film production</li><li>Short films and documentaries</li><li>Commercials and branded content</li><li>Color correction & sound design</li></ul></div>
+        </div>
+        <div class="service-card">
+            <div class="service-header"><div class="service-icon">⭐</div><h2>Actor Casting & Coordination</h2></div>
+            <div class="service-body"><p>Great stories deserve the right faces and performances.</p>
+            <ul class="service-list"><li>Auditions and screen tests</li><li>Character matching</li><li>Talent negotiation</li><li>On-set scheduling</li></ul></div>
+        </div>
+        <div class="service-card">
+            <div class="service-header"><div class="service-icon">🎓</div><h2>Hands-On Film Training</h2></div>
+            <div class="service-body"><p>Empowering the next generation of filmmakers through practical experience.</p>
+            <ul class="service-list"><li>Screenwriting</li><li>Directing & Acting for film</li><li>Camera operation</li><li>Editing & Production management</li></ul></div>
+        </div>
+        <div class="service-card">
+            <div class="service-header"><div class="service-icon">🎵</div><h2>Music Video Production</h2></div>
+            <div class="service-body"><p>Music deserves visuals that amplify its emotion and message.</p>
+            <ul class="service-list"><li>Creative concept development</li><li>Story-based music videos</li><li>Performance shoots</li><li>Editing and visual effects</li></ul></div>
+        </div>
+    </div>
+
+    <div class="section-title"><span>🤝 International Partnerships</span></div>
+    <div class="partners-grid">
+        <div class="partner-card"><h3>🇲🇼 Zomba Film Production</h3><h4>Never Matewere</h4><p>Local production, talent coordination, and film training in Malawi.</p></div>
+        <div class="partner-card"><h3>🌍 Ashanti Media Logistics</h3><h4>Emmanuel Fragrance Francisque</h4><p>International production support, media logistics, and global creative collaboration.</p></div>
+    </div>
+
+    <div class="section-title"><span>🌟 Why Partner With Us?</span></div>
+    <div class="partners-grid">
+        <div class="partner-card"><h3>📜 Original Scripts</h3><p>Production-ready, compelling screenplays</p></div>
+        <div class="partner-card"><h3>🎬 Experienced Leadership</h3><p>Expert writing and directing since 2014</p></div>
+        <div class="partner-card"><h3>🌍 Global Partnerships</h3><p>International production network</p></div>
+        <div class="partner-card"><h3>⭐ Diverse Casting</h3><p>Access to international talent</p></div>
+        <div class="partner-card"><h3>🎓 Practical Training</h3><p>Hands-on film education</p></div>
+        <div class="partner-card"><h3>🌐 Global Distribution</h3><p>Festival and international market potential</p></div>
+    </div>
+
+    <div style="text-align: center; margin: 40px 0;">
+        <div class="cac-badge">✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</div>
+    </div>
+
+    <div class="email-section">
+        <h2>📝 Film Production & Training Inquiry</h2>
+        <p>Click the button below to send us an email about film training, production services, or collaboration opportunities.</p>
+        <a href="mailto:infinitymoviestarproduction@gmail.com?subject=Film%20Production%20%26%20Training%20Inquiry&body=Hello%20Damian,%0A%0AI%20am%20interested%20in%20film%20production%20or%20training%20services." class="email-btn">🎬 Send Film Inquiry via Email</a>
+        <p class="note-text">🔒 Your email client will open. Fill in your details and send. We will respond within 48 hours.</p>
+    </div>
+</div>
+
+<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank"><span>💬</span><span>Chat with Damian on WhatsApp</span></a>
+
+<footer>
+    <div class="container"><p><strong>Infinity Movie Star Production & Ernest Embassy Digital Solutions</strong></p>
+    <p>📧 infinitymoviestarproduction@gmail.com | ernestembassytravels@gmail.com | Danoka33@gmail.com</p>
+    <p>📞 +2348032607809 | +2349050205053</p>
+    <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
+    <p style="margin-top: 20px;">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p></div>
+</footer>
 </body>
 </html>

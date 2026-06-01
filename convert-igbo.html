@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convert Igbo Questions to JSON</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+        h1 { color: #667eea; }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 13px;
+            margin: 10px 0;
+            background: #f7fafc;
+        }
+        button {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .result {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+            max-height: 500px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .success { color: #11998e; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Igbo Language Converter (Auto-extracts Answers)</h1>
+        <p>Paste your Igbo questions below. The converter will automatically extract questions, options, answers, and explanations.</p>
+        
+        <textarea id="input" rows="15" placeholder="Paste Igbo questions here..."></textarea>
+        
+        <button onclick="convertToJSON()">🔄 Convert to JSON</button>
+        <button onclick="copyJSON()" id="copyBtn" style="display:none;">📋 Copy JSON</button>
+        
+        <h2>JSON Output (Ready to Upload):</h2>
+        <div class="result" id="output"></div>
+    </div>
+
+    <script>
+        function convertToJSON() {
+            const text = document.getElementById('input').value;
+            const lines = text.split('\n');
+            const questions = [];
+            
+            let currentQuestion = null;
+            let currentOptions = [];
+            let currentAnswer = '';
+            let currentExplanation = '';
+            let waitingForOptions = false;
+            
+            for (let i = 0; i < lines.length; i++) {
+                let line = lines[i].trim();
+                if (!line) continue;
+                
+                // Match question number: "1." or "**1.**" or "1."
+                let qMatch = line.match(/^(\d+)\.\s+(.+)/);
+                if (!qMatch) qMatch = line.match(/^\*\*(\d+)\.\*\*\s+(.+)/);
+                if (!qMatch) qMatch = line.match(/^(\d+)\)\s+(.+)/);
+                
+                if (qMatch) {
+                    // Save previous question
+                    if (currentQuestion && currentOptions.length === 4) {
+                        questions.push({
+                            question: currentQuestion,
+                            optionA: currentOptions[0] || "",
+                            optionB: currentOptions[1] || "",
+                            optionC: currentOptions[2] || "",
+                            optionD: currentOptions[3] || "",
+                            answer: currentAnswer,
+                            explanation: currentExplanation
+                        });
+                    }
+                    currentQuestion = qMatch[2];
+                    currentOptions = [];
+                    currentAnswer = '';
+                    currentExplanation = '';
+                    waitingForOptions = true;
+                }
+                
+                // Match options: A) Text or A. Text or A) Text or **A) Text**
+                let optMatch = line.match(/^([A-D])[\.\)]\s+(.+)/);
+                if (!optMatch) optMatch = line.match(/^\*\*([A-D])[\.\)]\*\*\s+(.+)/);
+                if (!optMatch) optMatch = line.match(/^([A-D])\s+(.+)/);
+                
+                if (optMatch && currentOptions.length < 4) {
+                    currentOptions.push(optMatch[2]);
+                }
+                
+                // Match answer: **Answer: X** or Answer: X or **Answer: X. Text**
+                let ansMatch = line.match(/\*\*Answer:\s*([A-D])/i);
+                if (!ansMatch) ansMatch = line.match(/Answer:\s*([A-D])/i);
+                if (!ansMatch) ansMatch = line.match(/\*\*Answer:\s*([A-D])\./i);
+                if (ansMatch) {
+                    currentAnswer = ansMatch[1].toUpperCase();
+                }
+                
+                // Match explanation (everything after Answer line or Explanation:)
+                let expMatch = line.match(/\*\*Explanation:\*\*\s*(.+)/i);
+                if (!expMatch) expMatch = line.match(/Explanation:\s*(.+)/i);
+                if (expMatch) {
+                    currentExplanation = expMatch[1];
+                }
+                
+                // Also capture explanation that might be on same line as answer
+                if (line.includes('**Answer:') && line.includes('**Explanation:**')) {
+                    const parts = line.split('**Explanation:**');
+                    if (parts[1]) {
+                        currentExplanation = parts[1].trim();
+                    }
+                }
+            }
+            
+            // Save last question
+            if (currentQuestion && currentOptions.length === 4) {
+                questions.push({
+                    question: currentQuestion,
+                    optionA: currentOptions[0] || "",
+                    optionB: currentOptions[1] || "",
+                    optionC: currentOptions[2] || "",
+                    optionD: currentOptions[3] || "",
+                    answer: currentAnswer,
+                    explanation: currentExplanation
+                });
+            }
+            
+            if (questions.length === 0) {
+                document.getElementById('output').innerHTML = '<span style="color: red;">❌ No questions found! Please check your format.</span>';
+                return;
+            }
+            
+            const jsonOutput = JSON.stringify(questions, null, 2);
+            document.getElementById('output').innerHTML = `<pre style="white-space:pre-wrap; word-wrap:break-word;">${jsonOutput}</pre>`;
+            document.getElementById('copyBtn').style.display = 'inline-block';
+            window.currentJSON = jsonOutput;
+            document.getElementById('output').innerHTML += `<br><span class="success">✅ Successfully converted ${questions.length} questions with answers and explanations!</span>`;
+        }
+        
+        function copyJSON() {
+            if (window.currentJSON) {
+                navigator.clipboard.writeText(window.currentJSON);
+                alert("✅ JSON copied to clipboard! Now go to Bulk Uploader, select 'Igbo Language', paste and upload.");
+            }
+        }
+    </script>
+</body>
+</html>

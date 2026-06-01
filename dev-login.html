@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Login - Testing Only</title>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .dev-badge {
+            background: #f39c12;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-size: 0.8rem;
+        }
+        h1 { color: #667eea; margin-bottom: 10px; }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            color: #856404;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 0.9rem;
+        }
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .btn-dev { background: #f39c12; }
+        .btn-admin { background: #dc3545; }
+        .btn-teacher { background: #28a745; }
+        .message {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            display: none;
+        }
+        .success { background: #e8f5e9; color: #11998e; display: block; }
+        .error { background: #fee; color: #eb3349; display: block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="dev-badge">🔧 DEVELOPER TESTING MODE</div>
+        <h1>Developer Login Portal</h1>
+        <p style="color: #718096; margin-bottom: 20px;">⚠️ For testing purposes only - Remove before production</p>
+        
+        <div class="warning">
+            <strong>⚠️ WARNING</strong><br>
+            This page is for development and testing only.<br>
+            Do not expose this to regular users.
+        </div>
+        
+        <button class="btn btn-dev" onclick="devLogin('student')">🎓 Developer Login (Student)</button>
+        <button class="btn btn-teacher" onclick="devLogin('teacher')">👨‍🏫 Developer Login (Teacher)</button>
+        <button class="btn btn-admin" onclick="devLogin('admin')">🔒 Developer Login (Admin)</button>
+        <button class="btn" onclick="window.location.href='login.html'">🔐 Regular Login</button>
+        
+        <div id="message"></div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+            authDomain: "ernest-embassy-lms.firebaseapp.com",
+            projectId: "ernest-embassy-lms",
+            storageBucket: "ernest-embassy-lms.firebasestorage.app",
+            messagingSenderId: "204896421221",
+            appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        
+        function showMessage(msg, type) {
+            const msgDiv = document.getElementById('message');
+            msgDiv.innerHTML = msg;
+            msgDiv.className = `message ${type}`;
+            setTimeout(() => {
+                msgDiv.style.display = 'none';
+            }, 3000);
+        }
+        
+        async function devLogin(role) {
+            const devEmail = `dev_${role}@ernestlms.com`;
+            const devPassword = 'dev123456';
+            
+            try {
+                try {
+                    await auth.signInWithEmailAndPassword(devEmail, devPassword);
+                } catch (signInError) {
+                    if (signInError.code === 'auth/user-not-found') {
+                        await auth.createUserWithEmailAndPassword(devEmail, devPassword);
+                        await auth.signInWithEmailAndPassword(devEmail, devPassword);
+                    } else {
+                        throw signInError;
+                    }
+                }
+                
+                const user = auth.currentUser;
+                
+                if (role === 'admin') {
+                    await db.collection('admins').doc(user.uid).set({
+                        isAdmin: true,
+                        email: devEmail,
+                        role: 'admin'
+                    });
+                    window.location.href = 'admin.html';
+                } else if (role === 'teacher') {
+                    await db.collection('teachers').doc(user.uid).set({
+                        isTeacher: true,
+                        email: devEmail,
+                        role: 'teacher'
+                    });
+                    window.location.href = 'teacher.html';
+                } else {
+                    await db.collection('students').doc(user.uid).set({
+                        email: devEmail,
+                        fullName: `Developer ${role.charAt(0).toUpperCase() + role.slice(1)}`,
+                        registeredAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        paidQuizzes: ['physics', 'mathematics', 'english', 'digital-technology', 'igbo'],
+                        quizScores: {}
+                    });
+                    window.location.href = 'dashboard.html';
+                }
+                
+            } catch (error) {
+                showMessage('Dev Login Error: ' + error.message, 'error');
+            }
+        }
+    </script>
+</body>
+</html>

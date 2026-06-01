@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convert Igbo Questions with Explanations</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+        h1 { color: #667eea; }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 13px;
+            margin: 10px 0;
+            background: #f7fafc;
+        }
+        button {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .result {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+            max-height: 500px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .success { color: #11998e; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Igbo Language Converter (With Explanations)</h1>
+        <p>Paste your Igbo questions below. The converter will extract questions, options, answers, AND explanations.</p>
+        
+        <textarea id="input" rows="20" placeholder="Paste Igbo questions with explanations here..."></textarea>
+        
+        <button onclick="convertToJSON()">🔄 Convert to JSON</button>
+        <button onclick="copyJSON()" id="copyBtn" style="display:none;">📋 Copy JSON</button>
+        
+        <h2>JSON Output (Ready to Upload):</h2>
+        <div class="result" id="output"></div>
+    </div>
+
+    <script>
+        // Manual explanations based on your Igbo document
+        const explanations = {
+            1: "Mkpụrụedemede Igbo na-amalite site na A, B, C, D, E... B bụ nke abụọ",
+            2: "E bụ ụdaume; ndị ọzọ bụ mgbochiume",
+            3: "a, e, i, o, u, ị, ọ, ụ – asatọ",
+            4: "´ na-anọchi anya ụdaolu elu",
+            5: "Ụdaolu elu na abụọ pụtara ịkwa ákwá - ibe ákwá",
+            6: "àkwà – ụdaolu ala na ala",
+            7: "36: ụdaume 8 + mgbochiume 28",
+            8: "Ụdaolu na-agbanwe ihe okwu pụtara, dịka ákwá vs àkwà",
+            9: "Mkpụrụokwu 'na' na-egosi oge na-aga n'ihu",
+            10: "Ọ na-akọ ihe mere n'oge gara aga",
+            11: "Nnanna pụtara nna nwoke",
+            12: "Nkechinyere - nke Chineke nyere, aha nwanyị",
+            13: "Nne ka nna - Nne ka mkpa karịa nna",
+            14: "A na-ekele ụtụtụ dịka 'Ịbọọla chi?'",
+            15: "Ụmụnna pụtara ụmụ otu nna - kindred",
+            16: "Mkpọaha nnọchi na-anọchi aha",
+            17: "Ngwaa bụ okwu egosipụta omume - 'abịa'",
+            18: "'Ga-' bụ ihe nrịbama oge Ọdịnihu",
+            19: "Akwụkwọ ozi na-amalite site n'adreesị onye dere ya",
+            20: "A na-akpọ nke a ekele mmalite ma ọ bụ 'salutation'",
+            21: "Gbaa ọsọ na-egosi omume - verb",
+            22: "'Ha' bụ mkpọaha nnọchi nke atọ",
+            23: "'Ka ọ dị' ma ọ bụ 'Ka ọ dị ugbu a' bụ ekele mmechi",
+            24: "Eji asụsụ a na-ekwu n'ọnụ na nke enyi na enyi",
+            25: "Anyị = I + you + them - onye mbụ ọtụtụ",
+            26: "N'Igbo, m, ị, ọ, anyị, unu, ha bụ nnọchiaha",
+            27: "'Na-' na-egosi oge na-aga n'ihu, 'agba' bụ ngwaa",
+            28: "A na-ejikarị 'N'otu ụbọchị' malite akụkọ ifo",
+            29: "Agwụgwa bụ ajụjụ a na-ajụ nke nwere azịza - riddle",
+            30: "Ngwaa 'ju anya' pụtara ịtụnanya - surprise",
+            31: "Ọ bụ iwu - command",
+            32: "Ọ nwere naanị otu isiokwu na otu ngwaa",
+            33: "E nwere ahịrịokwu abụọ jikọtara ọnụ - 'ọ bịara' na 'ọ hụghị ya'",
+            34: "Akara ajụjụ bụ '?'",
+            35: "Akara mkpu '!' na-egosi ihe ịtụnanya ma ọ bụ iwu siri ike",
+            36: "Aṅụ na-anọchi anya aghụghọ na akụkọ ifo",
+            37: "Ọ bụ ego ma ọ bụ ihe a na-enye ezinụlọ nwanyị",
+            38: "Ihe omume nke dibịa na-eme iji chọpụta ihe na-akpata nsogbu",
+            39: "Nwaanyi pụtara nwanyị - woman",
+            40: "Ọ bụ ihe ezinụlọ abụọ na-emekọ ọnụ",
+            41: "N'Igbo, ụdaume gbara (a, i, ụ) apụghị isoro ụdaume agbara (e, o, u, ị, ọ) n'otu okwu",
+            42: "a, i, ụ bụ ụdaume gbara - heavy vowels",
+            43: "A na-asị 'gbaa egwu' ọ bụghị 'gbọọ egwu'",
+            44: "'A na-' bụ ụdị mkpụrụ nke ngwaa",
+            45: "Juo Obinna na-akọ banyere nwata nwere nsogbu n'ụlọ akwụkwọ",
+            46: "Ọ bụ Tony Ubesie dere akwụkwọ a",
+            47: "Nwankwo bụ enyi Obinna na-akwado ya",
+            48: "Aha akwụkwọ ahụ pụtara 'Jụọ Obinna Ajụjụ'",
+            49: "b, d, g na-akpọ ha n'olu mgbe ị na-akpọ ha",
+            50: "'ja' na 'za' bụ ụda dị iche",
+            51: "'ch' bụ mkpụrụ abụọ na-akpọ otu ụda",
+            52: "Nkọwa na-enye nkọwa zuru ezu banyere otu ihe",
+            53: "Ị na-akọwa site na iji okwu nkọwa",
+            54: "Ọ na-akọwa agba - red",
+            55: "Ilu bụ okwu amamihe dị mkpụmkpụ nke na-enye nkụzi",
+            56: "Onye ji ihe na-arụ ụka anaghị ahapụ ya",
+            57: "Ihe na-emegide onwe ya - ironic",
+            58: "Ụmụ nwanyị na-eji mkpọ gaa ugbo",
+            59: "Ọ bụ ụdọ aha nsọ nke ndị nwoke nwere ọkwa",
+            60: "'Were were' bụ abụ ụmụaka - nursery rhyme",
+            61: "M ga-abịa → na ọ ga-abịa",
+            62: "'Taa' na-agbanwe gaa 'ụnyaahụ' n'okwu ndidi",
+            63: "'Ka' bụ okwu eji agbanwe iwu n'okwu ndidi",
+            64: "Ọ bụ ịkọwapụta echiche gị maka otu isiokwu",
+            65: "Ị chọrọ ihe akaebe iji kwado arụmụka gị",
+            66: "Ọ bụ isiokwu nke e nwere ike ịrụ ụka banyere ya",
+            67: "Ọ bụ ilu na-egosi na onye na-adịghị enye enweghịkwa ike ịnata",
+            68: "Ọ na-egosi na ịdị n'otu na-enye ume",
+            69: "Akwụkwọ a na-egosi ịdị n'otu na nghọtahie",
+            70: "J. C. Maduekwe dere Otu Mkpisi Aka",
+            71: "'Ọ bụrụ na' na-egosi ọnọdụ - if",
+            72: "A na-eji mkpụrụedemede ukwu malite ahịrịokwu na aha ndị mmadụ",
+            73: "Akara ajụjụ na-egosi na ọ bụ ajụjụ",
+            74: "Nkịtị na-egosi nkwụsị n'etiti okwu",
+            75: "'mm' na-anọchi anya imi tupu ụdaume",
+            76: "Ọ na-egosi ọnọdụ - conditional",
+            77: "Ọfọ bụ ihe dị nsọ nke na-egosi ikike na eziokwu",
+            78: "Ọ bụ emume ekele maka ihe ubi ọhụrụ - New Yam Festival",
+            79: "Mmanwu bụ ndị na-anọchi anya mụọ n'emume Igbo",
+            80: "Ọ bụ nkwa e kwere n'oge agbamakwụkwọ",
+            81: "Nchịkọta na-ewepụta naanị isi ihe",
+            82: "Nchịkọta achọghị ihe atụ ma ọ bụ nkọwa na-enweghị isi",
+            83: "Nchịkọta kwesịrị ịdị ihe dịka 1/3 nke ogologo izizi",
+            84: "Nkebiokwu enweghị ngwaa zuru oke",
+            85: "Ọ nweghị ngwaa, ya mere ọ bụ nkebiokwu",
+            86: "A na-ejikarị 'e nwere' malite akụkọ ifo",
+            87: "Ihe mgbakwunye - prefix ma ọ bụ suffix",
+            88: "N'Igbo, 'ọ' nwere ike ịbụ ihe mgbakwunye n'ihu nke ngwaa",
+            89: "Ịkọwa ihe, mmadụ, ma ọ bụ ebe",
+            90: "'dịka' na-egosi ọgbụgba - simile",
+            91: "Ọ bụ Inno Uzoma Nwadike dere akwụkwọ uri a",
+            92: "Uri a na-ekwu banyere ọchịchị na otu o si emetụta ndị mmadụ",
+            93: "Ụda olu na-egosi mmetụta onye dere ihe",
+            94: "Mmetụta nke akwụkwọ na-akpali n'obi onye na-agụ ya",
+            95: "Metaphor bụ ntụnyere na-enweghị 'dịka' ma ọ bụ 'ka'",
+            96: "Ọ na-atụnyere oge na onye ohi n'ezoghị ọnụ",
+            97: "Ịnye ihe ndị na-adịghị ndụ àgwà mmadụ",
+            98: "Enweghị obi ụtọ nwere anya mmiri - àgwà mmadụ",
+            99: "Ọ bụ abụ banyere ịhụnanya - love poem",
+            100: "Ọ na-egosi ịhụnanya maka ala nna ya",
+            101: "Aha uri ahụ pụtara 'Ezi Nne' - na-eto nne",
+            102: "A na-akpọ ìgwè ahịrị n'uri stanza",
+            103: "Ụda abụ bụ usoro ụda na-ekwughachi",
+            104: "'Were were' bụ uri ụmụaka",
+            105: "Otu ahịrị n'uri",
+            106: "Ụda olu dị nro - gentle tone",
+            107: "Ọ bụ akụkọ ifo, abụ, ilu a na-ekwu n'ọnụ",
+            108: "Ọ bụ akụkọ a na-akọ n'ọnụ site n'otu ọgbọ gaa n'ọzọ",
+            109: "Legends bụ akụkọ banyere ezigbo mmadụ mere n'oge gara aga",
+            110: "'Ọ bụrụ na' na-egosi ọnọdụ",
+            111: "Ị ga-agụ ihe ọgụgụ ahụ nke ọma tupu ịza ajụjụ",
+            112: "Edemede bụ akụkụ A n'ọtụtụ afọ",
+            113: "JAMB bụ ajụjụ otu nhọrọ na ọtụtụ nhọrọ",
+            114: "Paraphrasing - ikwugharị okwu n'ụzọ gị",
+            115: "Ịkọwapụta isi ihe dị mkpụmkpụ"
+        };
+        
+        function convertToJSON() {
+            const text = document.getElementById('input').value;
+            const lines = text.split('\n');
+            const questions = [];
+            
+            let currentQuestion = null;
+            let currentOptions = [];
+            let currentAnswer = '';
+            let currentNumber = 0;
+            
+            for (let i = 0; i < lines.length; i++) {
+                let line = lines[i].trim();
+                if (!line) continue;
+                
+                // Match question number: "1." or "1."
+                const qMatch = line.match(/^(\d+)\.\s+(.+)/);
+                if (qMatch) {
+                    // Save previous question
+                    if (currentQuestion && currentOptions.length === 4) {
+                        questions.push({
+                            question: currentQuestion,
+                            optionA: currentOptions[0] || "",
+                            optionB: currentOptions[1] || "",
+                            optionC: currentOptions[2] || "",
+                            optionD: currentOptions[3] || "",
+                            answer: currentAnswer,
+                            explanation: explanations[currentNumber] || ""
+                        });
+                    }
+                    currentNumber = parseInt(qMatch[1]);
+                    currentQuestion = qMatch[2];
+                    currentOptions = [];
+                    currentAnswer = '';
+                }
+                
+                // Match options: A) Text or A. Text
+                const optMatch = line.match(/^([A-D])[\.\)]\s+(.+)/);
+                if (optMatch && currentOptions.length < 4) {
+                    currentOptions.push(optMatch[2]);
+                }
+                
+                // Match answer: **Answer: X** or Answer: X
+                let ansMatch = line.match(/\*\*Answer:\s*([A-D])/i);
+                if (!ansMatch) ansMatch = line.match(/Answer:\s*([A-D])/i);
+                if (ansMatch) {
+                    currentAnswer = ansMatch[1].toUpperCase();
+                }
+            }
+            
+            // Save last question
+            if (currentQuestion && currentOptions.length === 4) {
+                questions.push({
+                    question: currentQuestion,
+                    optionA: currentOptions[0] || "",
+                    optionB: currentOptions[1] || "",
+                    optionC: currentOptions[2] || "",
+                    optionD: currentOptions[3] || "",
+                    answer: currentAnswer,
+                    explanation: explanations[currentNumber] || ""
+                });
+            }
+            
+            if (questions.length === 0) {
+                document.getElementById('output').innerHTML = '<span style="color: red;">❌ No questions found!</span>';
+                return;
+            }
+            
+            const jsonOutput = JSON.stringify(questions, null, 2);
+            document.getElementById('output').innerHTML = `<pre style="white-space:pre-wrap; word-wrap:break-word;">${jsonOutput}</pre>`;
+            document.getElementById('copyBtn').style.display = 'inline-block';
+            window.currentJSON = jsonOutput;
+            
+            let hasExplanations = questions.filter(q => q.explanation).length;
+            document.getElementById('output').innerHTML += `<br><span class="success">✅ Converted ${questions.length} questions! (${hasExplanations} have explanations)</span>`;
+        }
+        
+        function copyJSON() {
+            if (window.currentJSON) {
+                navigator.clipboard.writeText(window.currentJSON);
+                alert("✅ JSON copied! Now paste into Bulk Uploader.");
+            }
+        }
+    </script>
+</body>
+</html>

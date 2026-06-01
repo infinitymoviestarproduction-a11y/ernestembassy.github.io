@@ -3,27 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ernest Embassy Digital Solutions</title>
+    <title>Ernest Embassy LMS - Premier Learning Platform</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #0e0e1a;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
         }
 
-        /* ===================== NAV ===================== */
+        /* Navigation */
         nav {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            padding: 0.9rem 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 2px solid rgba(255, 215, 0, 0.25);
-            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
+
         .nav-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -32,638 +31,498 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 15px;
         }
+
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             text-decoration: none;
-            flex-shrink: 0;
         }
-        .logo-icon { font-size: 1.8rem; }
-        .logo-text {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #ffd700;
-            letter-spacing: 0.5px;
-            line-height: 1.2;
-        }
-        .logo-sub {
-            font-size: 0.6rem;
-            color: rgba(255, 215, 0, 0.65);
-            display: block;
-        }
-        .nav-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 4px;
-        }
-        .nav-toggle span {
-            display: block;
-            width: 24px;
-            height: 2px;
-            background: #ffd700;
-            border-radius: 2px;
-        }
+
         .nav-links {
             display: flex;
+            gap: 20px;
+            align-items: center;
             flex-wrap: wrap;
-            align-items: center;
-            gap: 4px;
-        }
-        .nav-links > a {
-            color: rgba(255,255,255,0.85);
-            text-decoration: none;
-            font-size: 0.75rem;
-            font-weight: 500;
-            padding: 6px 9px;
-            border-radius: 6px;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-        .nav-links > a:hover { color: #ffd700; background: rgba(255,215,0,0.08); }
-        .dropdown { position: relative; display: inline-flex; align-items: center; }
-        .dropbtn {
-            background: rgba(255,215,0,0.1);
-            border: 1px solid rgba(255,215,0,0.25);
-            color: #ffd700;
-            font-size: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-            padding: 6px 11px;
-            border-radius: 6px;
-            font-family: inherit;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-        .dropbtn:hover { background: rgba(255,215,0,0.2); }
-        .dropbtn .arrow { font-size: 0.65rem; transition: transform 0.25s; }
-        .dropdown.open .dropbtn .arrow { transform: rotate(180deg); }
-        .dropdown-content {
-            position: absolute;
-            top: calc(100% + 6px);
-            left: 0;
-            min-width: 210px;
-            background: #16213e;
-            border: 1px solid rgba(255,215,0,0.2);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 12px 35px rgba(0,0,0,0.5);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(8px);
-            transition: all 0.22s ease;
-            z-index: 9999;
-        }
-        .dropdown:hover .dropdown-content,
-        .dropdown.open .dropdown-content {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        .dropdown-header {
-            padding: 9px 14px;
-            font-size: 0.6rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: rgba(255,215,0,0.6);
-            background: #12192c;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            font-weight: 700;
-        }
-        .dropdown-content a {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-            color: rgba(255,255,255,0.85);
-            text-decoration: none;
-            padding: 11px 14px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            transition: all 0.2s;
-        }
-        .dropdown-content a:last-child { border-bottom: none; }
-        .dropdown-content a:hover {
-            background: rgba(255,215,0,0.1);
-            color: #ffd700;
-            padding-left: 20px;
         }
 
-        /* ===================== HERO ===================== */
+        .nav-links a {
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white !important;
+            padding: 8px 20px !important;
+            border-radius: 25px !important;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Hero Section with Background Image */
         .hero {
-            text-align: center;
-            padding: 90px 20px 70px;
             position: relative;
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
             overflow: hidden;
         }
-        .hero::before {
-            content: '';
+
+        .hero-background {
             position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse at 50% 0%, rgba(255,215,0,0.08) 0%, transparent 65%);
-            pointer-events: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            opacity: 0.85;
         }
-        .hero-eyebrow {
-            display: inline-block;
-            background: rgba(255,215,0,0.12);
-            border: 1px solid rgba(255,215,0,0.3);
-            color: #ffd700;
-            font-size: 0.72rem;
-            font-weight: 600;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            padding: 6px 18px;
-            border-radius: 30px;
-            margin-bottom: 22px;
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.85) 0%, rgba(118, 75, 162, 0.85) 100%);
+            z-index: 1;
         }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 60px 20px;
+            color: white;
+        }
+
         .hero h1 {
-            font-size: clamp(2rem, 5vw, 3.2rem);
-            font-weight: 800;
-            color: #ffffff;
-            line-height: 1.15;
+            font-size: 3rem;
             margin-bottom: 20px;
-            letter-spacing: -0.5px;
-        }
-        .hero h1 span { color: #ffd700; }
-        .hero p {
-            font-size: 1.1rem;
-            color: rgba(255,255,255,0.6);
-            max-width: 560px;
-            margin: 0 auto 35px;
-            line-height: 1.7;
-        }
-        .hero-cta {
-            display: inline-flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .btn-primary {
-            background: #ffd700;
-            color: #1a1a2e;
-            padding: 13px 30px;
-            border-radius: 40px;
-            text-decoration: none;
             font-weight: 700;
-            font-size: 0.92rem;
-            transition: all 0.3s;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
-        .btn-primary:hover { background: #ffe033; transform: translateY(-2px); }
-        .btn-outline {
-            border: 1px solid rgba(255,215,0,0.4);
-            color: #ffd700;
-            padding: 13px 30px;
-            border-radius: 40px;
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+
+        .btn-hero {
+            display: inline-block;
+            padding: 15px 35px;
+            background: white;
+            color: #667eea;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 0.92rem;
-            transition: all 0.3s;
-        }
-        .btn-outline:hover { background: rgba(255,215,0,0.08); transform: translateY(-2px); }
-
-        /* ===================== STATS BAR ===================== */
-        .stats-bar {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 0;
-            border-top: 1px solid rgba(255,215,0,0.1);
-            border-bottom: 1px solid rgba(255,215,0,0.1);
-            background: rgba(255,215,0,0.03);
-            padding: 20px 0;
-        }
-        .stat-item {
-            text-align: center;
-            padding: 12px 35px;
-            border-right: 1px solid rgba(255,255,255,0.07);
-        }
-        .stat-item:last-child { border-right: none; }
-        .stat-num {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: #ffd700;
-            display: block;
-            line-height: 1;
-            margin-bottom: 4px;
-        }
-        .stat-label {
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.5);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
-        /* ===================== HUB GRID ===================== */
+        .btn-hero:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .btn-hero-outline {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn-hero-outline:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        /* Features Section */
+        .features {
+            background: white;
+            padding: 80px 20px;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 60px 20px;
         }
-        .section-label {
-            text-align: center;
-            font-size: 0.72rem;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: rgba(255,215,0,0.6);
-            font-weight: 700;
-            margin-bottom: 14px;
-        }
+
         .section-title {
             text-align: center;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 10px;
-        }
-        .section-sub {
-            text-align: center;
-            color: rgba(255,255,255,0.45);
-            font-size: 0.95rem;
-            margin-bottom: 45px;
+            font-size: 2rem;
+            color: #2d3748;
+            margin-bottom: 50px;
         }
 
-        .hub-grid {
+        .section-title span {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-            gap: 22px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
         }
 
-        .hub-card {
-            background: #13131f;
-            border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 18px;
-            padding: 30px 26px;
-            text-decoration: none;
-            display: block;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
         }
-        .hub-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            background: var(--accent);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .hub-card:hover {
-            border-color: rgba(255,255,255,0.14);
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-        .hub-card:hover::before { opacity: 1; }
 
-        .hub-card.travel  { --accent: #29b6f6; }
-        .hub-card.film    { --accent: #ffd700; }
-        .hub-card.tech    { --accent: #ba68c8; }
-        .hub-card.edu     { --accent: #66bb6a; }
-
-        .card-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 18px;
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: #667eea;
         }
-        .travel .card-icon  { background: rgba(41,182,246,0.12); }
-        .film   .card-icon  { background: rgba(255,215,0,0.12); }
-        .tech   .card-icon  { background: rgba(186,104,200,0.12); }
-        .edu    .card-icon  { background: rgba(102,187,106,0.12); }
 
-        .card-title {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: #ffffff;
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            color: #2d3748;
             margin-bottom: 10px;
         }
-        .card-desc {
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.5);
-            line-height: 1.65;
-            margin-bottom: 20px;
-        }
-        .card-tag-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 22px;
-        }
-        .card-tag {
-            font-size: 0.68rem;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-weight: 600;
-            border: 1px solid;
-        }
-        .travel .card-tag  { color: #29b6f6; border-color: rgba(41,182,246,0.3); background: rgba(41,182,246,0.07); }
-        .film   .card-tag  { color: #ffd700; border-color: rgba(255,215,0,0.3);  background: rgba(255,215,0,0.07); }
-        .tech   .card-tag  { color: #ba68c8; border-color: rgba(186,104,200,0.3); background: rgba(186,104,200,0.07); }
-        .edu    .card-tag  { color: #66bb6a; border-color: rgba(102,187,106,0.3); background: rgba(102,187,106,0.07); }
 
-        .card-arrow {
-            font-size: 0.8rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .travel .card-arrow { color: #29b6f6; }
-        .film   .card-arrow { color: #ffd700; }
-        .tech   .card-arrow { color: #ba68c8; }
-        .edu    .card-arrow { color: #66bb6a; }
-
-        /* ===================== CAC ===================== */
-        .cac-section {
-            text-align: center;
-            padding: 20px;
-            margin-top: -20px;
-            margin-bottom: 20px;
-        }
-        .cac-badge {
-            background: #ffd700;
-            color: #1a1a2e;
-            padding: 10px 22px;
-            border-radius: 30px;
-            display: inline-block;
-            font-size: 0.82rem;
-            font-weight: 700;
+        .feature-card p {
+            color: #718096;
             line-height: 1.6;
         }
 
-        /* ===================== FOOTER ===================== */
-        footer {
-            background: #0a0a14;
+        /* Stats Section */
+        .stats {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 20px;
             color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
             text-align: center;
-            padding: 45px 20px;
-            border-top: 2px solid rgba(255,215,0,0.1);
         }
-        footer p {
-            margin-bottom: 6px;
-            font-size: 0.88rem;
-            color: rgba(255,255,255,0.6);
-            line-height: 1.7;
-        }
-        footer p strong { color: #ffd700; }
 
-        .whatsapp-float {
-            position: fixed;
-            bottom: 22px;
-            right: 22px;
-            background-color: #25D366;
-            color: white;
-            border-radius: 50px;
-            padding: 11px 18px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 9px;
-            z-index: 1000;
-            font-weight: 700;
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Subjects Section */
+        .subjects {
+            background: #f7fafc;
+            padding: 80px 20px;
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .subject-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+            border-color: #667eea;
+        }
+
+        .subject-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .subject-card h3 {
+            font-size: 1.2rem;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .subject-card p {
+            color: #718096;
             font-size: 0.85rem;
-            box-shadow: 0 4px 15px rgba(37,211,102,0.4);
-            transition: all 0.3s;
         }
-        .whatsapp-float:hover { transform: scale(1.05); background-color: #20b859; }
 
-        @media (max-width: 860px) {
-            .nav-toggle { display: flex; }
-            .nav-links {
-                display: none;
-                flex-direction: column;
-                align-items: flex-start;
-                width: 100%;
-                padding: 10px 0 6px;
-                gap: 2px;
-                border-top: 1px solid rgba(255,215,0,0.15);
-                margin-top: 8px;
-            }
-            .nav-links.open { display: flex; }
-            .nav-links > a { width: 100%; padding: 9px 12px; border-radius: 6px; }
-            .dropdown { width: 100%; flex-direction: column; align-items: flex-start; }
-            .dropbtn { width: 100%; justify-content: space-between; padding: 9px 12px; border-radius: 6px; }
-            .dropdown-content {
-                position: static;
-                opacity: 1; visibility: visible; transform: none;
-                box-shadow: none; border: none;
-                background: #12192c;
-                display: none;
-                width: 100%;
-                margin-top: 2px;
-                border-radius: 6px;
-                overflow: hidden;
-            }
-            .dropdown.open .dropdown-content { display: block; }
-            .stat-item { padding: 12px 18px; }
-            .hub-grid { grid-template-columns: 1fr; }
-            .whatsapp-float span:last-child { display: none; }
-            .whatsapp-float { padding: 12px; border-radius: 50%; }
+        /* CTA Section */
+        .cta {
+            background: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 2rem;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+
+        .btn-cta {
+            display: inline-block;
+            padding: 15px 35px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: #1a1a2e;
+            color: #a0aec0;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: #a0aec0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #ffd700;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1rem; }
+            .nav-container { flex-direction: column; }
+            .btn-hero { display: block; margin: 10px auto; width: 80%; }
         }
     </style>
 </head>
 <body>
 
-<!-- ==================== NAV ==================== -->
 <nav>
     <div class="nav-container">
-        <a href="index.html" class="logo">
-            <span class="logo-icon">🎬</span>
-            <div>
-                <span class="logo-text">Ernest Embassy</span>
-                <span class="logo-sub">Digital Solutions</span>
-            </div>
-        </a>
-        <button class="nav-toggle" onclick="toggleMobileNav()" aria-label="Toggle navigation">
-            <span></span><span></span><span></span>
-        </button>
-        <div class="nav-links" id="navLinks">
-            <a href="index.html">🏠 Home</a>
-            <a href="about.html">📖 About</a>
-            <a href="services.html">⚙️ Services</a>
-            <a href="webdev.html">💻 Web Dev</a>
-            <a href="visa.html">✈️ Visa</a>
-
-            <div class="dropdown">
-                <button class="dropbtn" onclick="toggleDropdown(this)">🎬 Movie Studio <span class="arrow">▾</span></button>
-                <div class="dropdown-content">
-                    <div class="dropdown-header">Infinity Productions</div>
-                    <a href="movie.html">📽️ Movie Studio Home</a>
-                    <a href="portfolio.html">🖼️ Portfolio</a>
-                    <a href="gallery.html">📸 Gallery</a>
-                    <a href="team.html">👥 Our Team</a>
-                </div>
-            </div>
-
-            <div class="dropdown">
-                <button class="dropbtn" onclick="toggleDropdown(this)">🎓 Education <span class="arrow">▾</span></button>
-                <div class="dropdown-content">
-                    <div class="dropdown-header">Academic Portals</div>
-                    <a href="teaching.html">📚 Teaching</a>
-                    <a href="tutoring.html">💻 Tutoring</a>
-                    <a href="education.html">📜 Education</a>
-                    <a href="class.html">🏫 Class</a>
-                </div>
-            </div>
-
-            <a href="booking.html">📅 Book</a>
-            <a href="contact.html">📞 Contact</a>
-            <a href="testimonials.html">⭐ Reviews</a>
-            <a href="faq.html">❓ FAQ</a>
-            <a href="register.html">📝 Register</a>
-            <a href="login.html">🔐 Login</a>
-            <a href="dashboard.html">👤 Dashboard</a>
-            <a href="admin.html">🔒 Admin</a>
+        <a href="index.html" class="logo">⚡ Ernest Embassy LMS</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="courses.html">Courses</a>
+            <a href="resources.html">Resources</a>
+            <a href="education.html">Education Hub</a>
+            <a href="login.html" class="btn-login">🔐 Login</a>
         </div>
     </div>
 </nav>
 
-<!-- ==================== HERO ==================== -->
-<div class="hero">
-    <div class="hero-eyebrow">✅ CAC Registered · BN2517233 · Est. 2017</div>
-    <h1>Ernest Embassy<br><span>Digital Solutions</span></h1>
-    <p>Travel services, film production, web development & education — all under one roof in Enugu, Nigeria.</p>
-    <div class="hero-cta">
-        <a href="contact.html" class="btn-primary">📞 Get in Touch</a>
-        <a href="about.html" class="btn-outline">📖 About Damian</a>
+<!-- Hero Section with Background Image -->
+<section class="hero">
+    <img src="tea time infi.jpg" alt="Background" class="hero-background">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1>🎓 Welcome to Ernest Embassy LMS</h1>
+        <p>Your Premier Online Learning Platform for WAEC, JAMB, and SSCE Excellence</p>
+        <div>
+            <a href="register.html" class="btn-hero">🚀 Get Started Free</a>
+            <a href="login.html" class="btn-hero btn-hero-outline">🔐 Login</a>
+        </div>
     </div>
-</div>
+</section>
 
-<!-- ==================== STATS ==================== -->
-<div class="stats-bar">
-    <div class="stat-item">
-        <span class="stat-num">20+</span>
-        <span class="stat-label">Original Screenplays</span>
-    </div>
-    <div class="stat-item">
-        <span class="stat-num">24+</span>
-        <span class="stat-label">Music Tracks</span>
-    </div>
-    <div class="stat-item">
-        <span class="stat-num">2017</span>
-        <span class="stat-label">Founded</span>
-    </div>
-    <div class="stat-item">
-        <span class="stat-num">4</span>
-        <span class="stat-label">Countries Reached</span>
-    </div>
-</div>
-
-<!-- ==================== HUB CARDS ==================== -->
-<div class="container">
-    <div class="section-label">Our Business Ecosystem</div>
-    <div class="section-title">What We Do</div>
-    <div class="section-sub">Click any card to explore that section of our work</div>
-
-    <div class="hub-grid">
-
-        <a href="visa.html" class="hub-card travel">
-            <div class="card-icon">✈️</div>
-            <div class="card-title">Ernest Embassy Travels</div>
-            <div class="card-desc">Professional visa assistance, work permits, study abroad placements, and complete documentation for cross-border migration.</div>
-            <div class="card-tag-list">
-                <span class="card-tag">Visa Processing</span>
-                <span class="card-tag">Work Permits</span>
-                <span class="card-tag">Admissions</span>
+<!-- Features Section -->
+<section class="features">
+    <div class="container">
+        <h2 class="section-title">Why Choose <span>Ernest Embassy LMS</span>?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📚</div>
+                <h3>Comprehensive Curriculum</h3>
+                <p>Full coverage of WAEC, JAMB, and SSCE syllabus across all major subjects.</p>
             </div>
-            <div class="card-arrow">Explore Visa Services →</div>
-        </a>
-
-        <a href="movie.html" class="hub-card film">
-            <div class="card-icon">🎬</div>
-            <div class="card-title">Infinity Movie Star Production</div>
-            <div class="card-desc">Full-service film production, screenwriting, directing, casting, film training & original music — CAC registered since 2017.</div>
-            <div class="card-tag-list">
-                <span class="card-tag">Film Production</span>
-                <span class="card-tag">Screenwriting</span>
-                <span class="card-tag">Training</span>
-                <span class="card-tag">Music</span>
+            <div class="feature-card">
+                <div class="feature-icon">📝</div>
+                <h3>Interactive Quizzes</h3>
+                <p>Practice with hundreds of questions and get instant feedback with explanations.</p>
             </div>
-            <div class="card-arrow">Enter the Studio →</div>
-        </a>
-
-        <a href="webdev.html" class="hub-card tech">
-            <div class="card-icon">💻</div>
-            <div class="card-title">Web Development</div>
-            <div class="card-desc">Bespoke websites, e-commerce stores, digital marketing solutions, and complete tech setups for businesses and individuals.</div>
-            <div class="card-tag-list">
-                <span class="card-tag">Web Design</span>
-                <span class="card-tag">E-Commerce</span>
-                <span class="card-tag">Digital Marketing</span>
+            <div class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <h3>Challenge Mode</h3>
+                <p>Compete in paid quizzes and win amazing cash prizes!</p>
             </div>
-            <div class="card-arrow">Request a Website →</div>
-        </a>
-
-        <a href="teaching.html" class="hub-card edu">
-            <div class="card-icon">🎓</div>
-            <div class="card-title">Education Hub</div>
-            <div class="card-desc">Teaching, tutoring, virtual classrooms, exam prep, and academic programmes for students at every level.</div>
-            <div class="card-tag-list">
-                <span class="card-tag">Teaching</span>
-                <span class="card-tag">Tutoring</span>
-                <span class="card-tag">Online Classes</span>
+            <div class="feature-card">
+                <div class="feature-icon">📖</div>
+                <h3>Study Resources</h3>
+                <p>Access notes, past questions, and comprehensive study materials.</p>
             </div>
-            <div class="card-arrow">Access Classes →</div>
-        </a>
-
+        </div>
     </div>
-</div>
+</section>
 
-<!-- ==================== CAC ==================== -->
-<div class="cac-section">
-    <div class="cac-badge">
-        ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
-        📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
+<!-- Stats Section -->
+<section class="stats">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">1,200+</div>
+                <div class="stat-label">Practice Questions</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">5</div>
+                <div class="stat-label">Core Subjects</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Access Available</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">₦100</div>
+                <div class="stat-label">Challenge Entry</div>
+            </div>
+        </div>
     </div>
-</div>
+</section>
 
-<!-- ==================== FOOTER ==================== -->
+<!-- Subjects Section -->
+<section class="subjects">
+    <div class="container">
+        <h2 class="section-title">📘 <span>Available Subjects</span></h2>
+        <div class="subjects-grid">
+            <div class="subject-card" onclick="window.location.href='class.html?subject=mathematics'">
+                <div class="subject-icon">📐</div>
+                <h3>Mathematics</h3>
+                <p>Algebra, Calculus, Statistics & More</p>
+            </div>
+            <div class="subject-card" onclick="window.location.href='class.html?subject=physics'">
+                <div class="subject-icon">⚛️</div>
+                <h3>Physics</h3>
+                <p>Mechanics, Waves, Electricity & Magnetism</p>
+            </div>
+            <div class="subject-card" onclick="window.location.href='class.html?subject=english'">
+                <div class="subject-icon">📖</div>
+                <h3>English Language</h3>
+                <p>Grammar, Comprehension, Essay Writing</p>
+            </div>
+            <div class="subject-card" onclick="window.location.href='class.html?subject=digital-technology'">
+                <div class="subject-icon">💻</div>
+                <h3>Digital Technology</h3>
+                <p>ICT, Networking, Computer Fundamentals</p>
+            </div>
+            <div class="subject-card" onclick="window.location.href='class.html?subject=igbo'">
+                <div class="subject-icon">🗣️</div>
+                <h3>Igbo Language</h3>
+                <p>Grammar, Literature, Cultural Studies</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta">
+    <div class="container">
+        <h2>Ready to Start Your Learning Journey?</h2>
+        <div style="margin-top: 30px;">
+            <a href="register.html" class="btn-cta">📝 Create Free Account</a>
+            <a href="login.html" class="btn-cta" style="background: #e2e8f0; color: #4a5568;">🔐 Login</a>
+        </div>
+    </div>
+</section>
+
 <footer>
-    <div style="max-width:800px;margin:0 auto;">
-        <p><strong>Infinity Movie Star Production & Ernest Embassy Digital Solutions</strong></p>
-        <p>📧 infinitymoviestarproduction@gmail.com | ernestembassytravels@gmail.com | Danoka33@gmail.com</p>
-        <p>📞 +2348032607809 | +2349050205053</p>
-        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
-        <p style="margin-top:18px;font-size:0.78rem;color:rgba(255,255,255,0.35);">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
+    <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="courses.html">Courses</a>
+        <a href="resources.html">Resources</a>
+        <a href="education.html">Education Hub</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
     </div>
+    <p>© 2026 Ernest Embassy Digital Solutions | Professional Online Learning Platform</p>
+    <p style="margin-top: 10px; font-size: 12px;">🌍 Empowering Students for WAEC, JAMB & SSCE Success</p>
 </footer>
 
-<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
-    <span>💬</span>
-    <span>Chat on WhatsApp</span>
-</a>
-
 <script>
-    function toggleMobileNav() {
-        document.getElementById('navLinks').classList.toggle('open');
-    }
-    function toggleDropdown(btn) {
-        const parent = btn.parentElement;
-        if (window.innerWidth <= 860) {
-            document.querySelectorAll('.dropdown').forEach(d => {
-                if (d !== parent) d.classList.remove('open');
-            });
-            parent.classList.toggle('open');
+    // Check if user is already logged in and redirect to dashboard
+    const firebaseConfig = {
+        apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+        authDomain: "ernest-embassy-lms.firebaseapp.com",
+        projectId: "ernest-embassy-lms",
+        storageBucket: "ernest-embassy-lms.firebasestorage.app",
+        messagingSenderId: "204896421221",
+        appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
+    };
+    
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            // User is logged in, update login button to dashboard
+            const loginBtn = document.querySelector('.btn-login');
+            if (loginBtn) {
+                loginBtn.textContent = '📊 Dashboard';
+                loginBtn.href = 'dashboard.html';
+            }
         }
-    }
-    document.querySelectorAll('.dropdown-content a, .nav-links > a').forEach(link => {
-        link.addEventListener('click', () => {
-            document.getElementById('navLinks').classList.remove('open');
-        });
     });
 </script>
+
 </body>
 </html>

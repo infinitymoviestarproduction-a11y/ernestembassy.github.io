@@ -3,845 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creative Media Portfolio - Damian Anielozie Okafor</title>
+    <title>Film Portfolio - Infinity Movie Star Production</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #0a0a0a;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            min-height: 100vh;
         }
-
-        /* Navigation */
-        nav {
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid #ffd700;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            font-size: 2rem;
-            background: linear-gradient(135deg, #ffd700, #ffaa00);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .logo-text {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: #ffd700;
-            letter-spacing: 1px;
-        }
-
-        .logo-sub {
-            font-size: 0.65rem;
-            color: rgba(255, 215, 0, 0.8);
-            display: block;
-            margin-top: 2px;
-        }
-
-        .nav-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-            padding: 8px 0;
-            font-size: 0.8rem;
-        }
-
-        .nav-links a:hover {
-            color: #ffd700;
-        }
-
+        
+        /* Copy your navigation styles from movie.html here */
+        
         .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: white;
             text-align: center;
             padding: 80px 20px;
         }
-
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
+        .hero h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .hero h1 span { color: #ffd700; }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
         .section-title {
             text-align: center;
             font-size: 2rem;
-            margin-bottom: 15px;
-            color: white;
-            margin-top: 60px;
-        }
-
-        .section-title span {
-            border-bottom: 3px solid #ffd700;
-            padding-bottom: 10px;
-        }
-
-        .section-subtitle {
-            text-align: center;
-            color: #aaa;
             margin-bottom: 40px;
-            font-size: 1.1rem;
+            color: #1a1a2e;
         }
-
-        /* Music Grid */
-        .music-grid {
+        .section-title span { border-bottom: 3px solid #ffd700; padding-bottom: 10px; }
+        
+        /* Projects Grid */
+        .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 30px;
-            margin: 40px 0;
+            margin-bottom: 60px;
         }
-
-        .music-card {
-            background: #111;
-            border-radius: 15px;
-            padding: 25px;
-            border: 1px solid #333;
-            transition: transform 0.3s;
-        }
-
-        .music-card:hover {
-            transform: translateY(-5px);
-            border-color: #ffd700;
-        }
-
-        .music-card h3 {
-            color: #ffd700;
-            margin-bottom: 15px;
-        }
-
-        .music-card p {
-            color: #ccc;
-            margin-bottom: 15px;
-            font-size: 0.9rem;
-        }
-
-        audio {
-            width: 100%;
-            margin: 15px 0;
-            border-radius: 8px;
-        }
-
-        /* Video Grid */
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
-        }
-
-        .video-card {
-            background: #111;
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid #333;
-            transition: transform 0.3s;
-        }
-
-        .video-card:hover {
-            transform: translateY(-5px);
-            border-color: #ffd700;
-        }
-
-        .video-card h3 {
-            color: #ffd700;
-            margin-bottom: 15px;
-        }
-
-        .video-card p {
-            color: #ccc;
-            margin-bottom: 15px;
-            font-size: 0.9rem;
-        }
-
-        video {
-            width: 100%;
-            border-radius: 10px;
-        }
-
-        /* Image Grid */
-        .image-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin: 40px 0;
-        }
-
-        .image-card {
-            background: #111;
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid #333;
-            transition: transform 0.3s;
-            text-align: center;
-        }
-
-        .image-card:hover {
-            transform: translateY(-5px);
-            border-color: #ffd700;
-        }
-
-        .image-card img {
-            width: 100%;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
-
-        .image-card h3 {
-            color: #ffd700;
-            margin-bottom: 10px;
-        }
-
-        .image-card p {
-            color: #ccc;
-            font-size: 0.85rem;
-        }
-
-        /* Writings Grid */
-        .writings-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
-        }
-
-        .writing-card {
-            background: #111;
-            border-radius: 15px;
-            padding: 25px;
-            border: 1px solid #333;
-            transition: transform 0.3s;
-            text-align: center;
-        }
-
-        .writing-card:hover {
-            transform: translateY(-5px);
-            border-color: #ffd700;
-        }
-
-        .writing-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-        }
-
-        .writing-card h3 {
-            color: #ffd700;
-            margin-bottom: 10px;
-        }
-
-        .writing-card p {
-            color: #ccc;
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            display: inline-block;
-            background: #ffd700;
-            color: #1a1a2e;
-            padding: 10px 25px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .btn:hover {
-            background: #e6c200;
-            transform: translateY(-2px);
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: #ffd700;
-            border: 1px solid #ffd700;
-        }
-
-        .btn-outline:hover {
-            background: #ffd700;
-            color: #1a1a2e;
-        }
-
-        .artist-bio {
-            background: linear-gradient(135deg, #1a1a2e 0%, #0a0a0a 100%);
-            padding: 50px;
+        .project-card {
+            background: white;
             border-radius: 20px;
-            margin: 60px 0;
-            text-align: center;
-            border: 1px solid #ffd700;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
         }
-
-        .artist-bio h3 {
-            color: #ffd700;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-        }
-
-        .artist-bio p {
-            color: #ddd;
-            font-size: 1.1rem;
-            max-width: 700px;
-            margin: 0 auto;
-            font-style: italic;
-        }
-
-        .artist-signature {
-            margin-top: 20px;
-            color: #ffd700;
-        }
-
-        .streaming-section {
-            background: #111;
-            padding: 40px;
-            border-radius: 20px;
-            margin: 60px 0;
-            text-align: center;
-        }
-
-        .streaming-icons {
+        .project-card:hover { transform: translateY(-5px); }
+        .project-image {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             display: flex;
+            align-items: center;
             justify-content: center;
-            flex-wrap: wrap;
+            font-size: 4rem;
+        }
+        .project-content { padding: 25px; }
+        .project-title { font-size: 1.3rem; color: #1a1a2e; margin-bottom: 10px; }
+        .project-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .status-completed { background: #11998e; color: white; }
+        .status-development { background: #f39c12; color: white; }
+        .status-available { background: #667eea; color: white; }
+        .project-description { color: #666; line-height: 1.6; margin-bottom: 15px; }
+        
+        .screenplays-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 40px;
+        }
+        .screenplays-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             margin-top: 30px;
         }
-
-        .streaming-link {
-            display: inline-block;
-            background: #222;
-            color: white;
-            padding: 12px 25px;
-            border-radius: 40px;
-            text-decoration: none;
-            transition: all 0.3s;
-            border: 1px solid #333;
+        .script-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #ffd700;
         }
-
-        .streaming-link:hover {
-            background: #ffd700;
-            color: #1a1a2e;
-            transform: translateY(-3px);
-        }
-
-        .upload-instructions {
-            background: #1a1a2e;
-            border: 1px solid #ffd700;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 30px 0;
-            text-align: center;
-        }
-
-        .upload-instructions h3 {
-            color: #ffd700;
-            margin-bottom: 15px;
-        }
-
-        .upload-instructions p {
-            color: #ccc;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-        }
-
-        .upload-instructions code {
-            background: #333;
-            padding: 4px 8px;
-            border-radius: 5px;
-            font-family: monospace;
-            color: #ffd700;
-            font-size: 0.85rem;
-        }
-
-        footer {
-            background: #0a0a0a;
-            color: white;
-            text-align: center;
-            padding: 40px 20px;
-            margin-top: 60px;
-            border-top: 1px solid #333;
-        }
-
-        .cac-badge {
-            background: #ffd700;
-            color: #1a1a2e;
-            padding: 10px 20px;
-            border-radius: 30px;
-            display: inline-block;
-            font-size: 0.9rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .whatsapp-float {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #25D366;
-            color: white;
-            border-radius: 50px;
-            padding: 12px 20px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 1000;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .whatsapp-float:hover {
-            transform: scale(1.05);
-            background-color: #20b859;
-        }
-
+        .script-title { font-weight: bold; color: #1a1a2e; margin-bottom: 5px; }
+        .script-genre { font-size: 0.8rem; color: #666; }
+        
         @media (max-width: 768px) {
-            .nav-container {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            .nav-links {
-                justify-content: center;
-                gap: 8px;
-                flex-wrap: wrap;
-            }
-            .nav-links a {
-                font-size: 0.65rem;
-            }
-            .hero h1 {
-                font-size: 1.8rem;
-            }
-            .music-grid {
-                grid-template-columns: 1fr;
-            }
-            .video-grid {
-                grid-template-columns: 1fr;
-            }
-            .image-grid {
-                grid-template-columns: 1fr;
-            }
-            .artist-bio {
-                padding: 30px;
-            }
-            .whatsapp-float {
-                padding: 8px 15px;
-                bottom: 15px;
-                right: 15px;
-                font-size: 12px;
-            }
+            .hero h1 { font-size: 1.8rem; }
+            .projects-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
+    <!-- Copy navigation from movie.html here -->
 
-<!-- PROFESSIONAL NAVIGATION WITH ALL LINKS -->
-<nav>
-    <div class="nav-container">
-        <div class="logo">
-            <span class="logo-icon">🎭</span>
-            <div>
-                <span class="logo-text">Damian Okafor</span>
-                <span class="logo-sub">Creative Artist & Filmmaker</span>
+    <div class="hero">
+        <h1>🎬 <span>Film Portfolio</span></h1>
+        <p>Showcasing our completed projects and original screenplays</p>
+    </div>
+
+    <div class="container">
+        <div class="section-title"><span>🎥 Featured Projects</span></div>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-image">🎭</div>
+                <div class="project-content">
+                    <div class="project-status status-completed">Completed</div>
+                    <h3 class="project-title">Drama NTA Production</h3>
+                    <p class="project-description">A compelling television drama produced for Nigerian Television Authority, showcasing local talent and storytelling.</p>
+                </div>
+            </div>
+            
+            <div class="project-card">
+                <div class="project-image">🌍</div>
+                <div class="project-content">
+                    <div class="project-status status-completed">Completed</div>
+                    <h3 class="project-title">ESCET Drama</h3>
+                    <p class="project-description">Theatrical production at Enugu State College of Education Technical, training young actors in stage performance.</p>
+                </div>
+            </div>
+            
+            <div class="project-card">
+                <div class="project-image">🇲🇼</div>
+                <div class="project-content">
+                    <div class="project-status status-completed">Completed</div>
+                    <h3 class="project-title">Training in Malawi</h3>
+                    <p class="project-description">International film training program conducted in Malawi in partnership with Zomba Film Production.</p>
+                </div>
             </div>
         </div>
-        <div class="nav-links">
-            <a href="index.html">🏠 Home</a>
-            <a href="about.html">📖 About</a>
-            <a href="services.html">⚙️ Services</a>
-            <a href="webdev.html">💻 Web Dev</a>
-            <a href="visa.html">✈️ Visa</a>
-            <a href="movie.html">🎬 Movie Studio</a>
-            <a href="portfolio.html">🎨 Portfolio</a>
-            <a href="teaching.html">📚 Teaching</a>
-            <a href="tutoring.html">💻 Tutoring</a>
-            <a href="education.html">🎓 Education</a>
-            <a href="class.html">🎓 Class</a>
-            <a href="booking.html">📅 Book</a>
-            <a href="contact.html">📞 Contact</a>
-            <a href="gallery.html">📸 Gallery</a>
-            <a href="faq.html">❓ FAQ</a>
-            <a href="testimonials.html">⭐ Testimonials</a>
-            <a href="register.html">📝 Register</a>
-            <a href="login.html">🔐 Login</a>
-            <a href="dashboard.html">👤 Dashboard</a>
-            <a href="admin.html">🔒 Admin</a>
-        </div>
-    </div>
-</nav>
 
-<!-- HERO SECTION -->
-<div class="hero">
-    <h1>🎨 Creative Media Portfolio</h1>
-    <p>Music • Films • Images • Writings</p>
-</div>
-
-<div class="container">
-    <!-- UPLOAD INSTRUCTIONS -->
-    <div class="upload-instructions">
-        <h3>📤 HOW TO ADD YOUR MEDIA</h3>
-        <p>📁 <strong>Music:</strong> Upload MP3, WAV, or FLAC files to <code>/music/</code> folder</p>
-        <p>🎬 <strong>Videos:</strong> Upload MP4, WebM, or OGG files to <code>/videos/</code> folder</p>
-        <p>📷 <strong>Images:</strong> Upload JPG or PNG files to <code>/images/</code> folder</p>
-        <p>📄 <strong>Documents:</strong> Upload PDF files to <code>/docs/</code> folder</p>
-        <p>⚠️ <strong>Note:</strong> Filenames are case-sensitive. Update the HTML after uploading.</p>
-    </div>
-
-    <!-- ARTIST BIO SECTION -->
-    <div class="artist-bio">
-        <h3>🎤 The Artist's Statement</h3>
-        <p>"I write from the black world. Pain, prayer, struggle, love. My lyrics are my confession. Hip-hop is my church. Listen and feel. Nma war."</p>
-        <div class="artist-signature">— Damian Anielozie Okafor</div>
-    </div>
-
-    <!-- MUSIC GALLERY SECTION - COMPLETE 24+ TRACKS -->
-    <div class="section-title"><span>🎵 Music Gallery</span></div>
-    <div class="section-subtitle">Listen to my latest tracks and musical works</div>
-
-    <div class="music-grid">
-        <div class="music-card">
-            <h3>🎤 I Gotta Make It</h3>
-            <p>Original track from Infinity Movie Star Production</p>
-            <audio controls preload="metadata"><source src="music/I Gotta Make It.mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 Who Am I 2</h3>
-            <p>Original track from Infinity Movie Star Production</p>
-            <audio controls preload="metadata"><source src="music/Who Am I 2 (1).mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 House Boy</h3>
-            <p>Original track from Infinity Movie Star Production</p>
-            <audio controls preload="metadata"><source src="music/House boy (1).mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 Stressed 3</h3>
-            <p>Original track from Infinity Movie Star Production</p>
-            <audio controls preload="metadata"><source src="music/stressed 3 (1).mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 Ogini</h3>
-            <p>Original track from Infinity Movie Star Production</p>
-            <audio controls preload="metadata"><source src="music/Ogini.mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 Judge Me</h3>
-            <p>Original track from Infinity Movie Star Production</p>
-            <audio controls preload="metadata"><source src="music/Judge me (1).mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 Whatcha Gon Do</h3>
-            <p>Original track from Infinity Movie Star Production</p>
-            <audio controls preload="metadata"><source src="music/whatcha gon do.mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 Igbakigba</h3>
-            <p>Original track from Infinity Movie Star Production</p>
-            <audio controls preload="metadata"><source src="music/Igbakigba (1).mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 Peace 3</h3>
-            <p>Original track from Infinity Movie Star Production</p>
-            <audio controls preload="metadata"><source src="music/Peace 3 (1).mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 Making Luv 2</h3>
-            <p>Original track from Infinity Movie Star Production</p>
-            <audio controls preload="metadata"><source src="music/Making Luv 2 (1).mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 Champ</h3>
-            <p>Original track from Infinity Movie Star Production</p>
-            <audio controls preload="metadata"><source src="music/champ.mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 2026</h3>
-            <p>Original track from Infinity Movie Star Production</p>
-            <audio controls preload="metadata"><source src="music/2026.mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 4 Me</h3>
-            <p>A personal dedication track</p>
-            <audio controls preload="metadata"><source src="music/4 Me.mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 Beautiful Black World</h3>
-            <p>Celebration of Black culture and identity</p>
-            <audio controls preload="metadata"><source src="music/Beautiful Black World.mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 Beta Place</h3>
-            <p>Aspirational track about better opportunities</p>
-            <audio controls preload="metadata"><source src="music/Beta place .mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 Better Dayz</h3>
-            <p>Hopeful song about brighter future</p>
-            <audio controls preload="metadata"><source src="music/Better dayz .mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 Black Man's Game</h3>
-            <p>Commentary on challenges and resilience</p>
-            <audio controls preload="metadata"><source src="music/Black Man's Game.mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 Letter to my Unborn</h3>
-            <p>Original track from Infinity Movie Star Production</p>
-            <audio controls preload="metadata"><source src="music/Letter to my Unborn.mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 Love it or Hate it</h3>
-            <p>Original track from Infinity Movie Star Production</p>
-            <audio controls preload="metadata"><source src="music/Love it or Hate it.mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 Rap War</h3>
-            <p>Original track from Infinity Movie Star Production</p>
-            <audio controls preload="metadata"><source src="music/Rap War.mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 Round D Corner</h3>
-            <p>Original track from Infinity Movie Star Production</p>
-            <audio controls preload="metadata"><source src="music/Round D Corner.mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 Rules</h3>
-            <p>Original track from Infinity Movie Star Production</p>
-            <audio controls preload="metadata"><source src="music/Rules (1).mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 Spade</h3>
-            <p>Original track</p>
-            <audio controls preload="metadata"><source src="music/spade.mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 Stacked Lies 22</h3>
-            <p>Original track from Infinity Movie Star Production</p>
-            <audio controls preload="metadata"><source src="music/Stacked Lies22.mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 UKP</h3>
-            <p>Original track from Infinity Movie Star Production</p>
-            <audio controls preload="metadata"><source src="music/UKP.mp3" type="audio/mpeg"></audio>
-        </div>
-        <div class="music-card">
-            <h3>🎤 Vote for me 2</h3>
-            <p>Political awareness track</p>
-            <audio controls preload="metadata"><source src="music/Vote for me 2.mp3" type="audio/mpeg"></audio>
+        <div class="screenplays-section">
+            <div class="section-title"><span>📖 Original Screenplays</span></div>
+            <p style="text-align: center; color: #666; margin-bottom: 20px;">A growing catalog of production-ready feature screenplays available for collaboration</p>
+            
+            <div class="screenplays-grid">
+                <div class="script-card"><div class="script-title">Official Card</div><div class="script-genre">Political Conspiracy Thriller</div></div>
+                <div class="script-card"><div class="script-title">Round Table</div><div class="script-genre">Anti-Corruption Political Thriller</div></div>
+                <div class="script-card"><div class="script-title">Thuglord</div><div class="script-genre">Crime, Redemption, Justice Drama</div></div>
+                <div class="script-card"><div class="script-title">Alex: Friend of Sorrow</div><div class="script-genre">Emotional Family Drama</div></div>
+                <div class="script-card"><div class="script-title">Jerry</div><div class="script-genre">Inspirational Drama</div></div>
+                <div class="script-card"><div class="script-title">SOHK</div><div class="script-genre">Suspense Thriller</div></div>
+                <div class="script-card"><div class="script-title">Playground</div><div class="script-genre">Youth-Centered Drama</div></div>
+                <div class="script-card"><div class="script-title">Land of Edomita</div><div class="script-genre">Epic Adventure & Cultural Drama</div></div>
+                <div class="script-card"><div class="script-title">Heaven's Gate</div><div class="script-genre">Spiritual & Inspirational Drama</div></div>
+                <div class="script-card"><div class="script-title">Twins Blood</div><div class="script-genre">Mystery & Family Thriller</div></div>
+                <div class="script-card"><div class="script-title">Girls Go Wild</div><div class="script-genre">Contemporary Social Drama</div></div>
+                <div class="script-card"><div class="script-title">Rupert</div><div class="script-genre">Inspirational Drama</div></div>
+            </div>
         </div>
     </div>
 
-    <!-- STREAMING PLATFORMS -->
-    <div class="streaming-section">
-        <h3 style="color: #ffd700;">🌊 Stream My Music Online</h3>
-        <p style="color: #ccc; margin-top: 10px;">Available on all major streaming platforms</p>
-        <div class="streaming-icons">
-            <a href="https://on.soundcloud.com/2uhZKraveAXA1zVtJx" target="_blank" class="streaming-link">🎧 SoundCloud</a>
-            <a href="https://audiomack.com/infinitymoviestarproduction579" target="_blank" class="streaming-link">🔊 Audiomack</a>
-            <a href="https://tunami.com/@infinitymoviestarproduction579" target="_blank" class="streaming-link">🌊 Tunami</a>
-            <a href="https://youtube.com/@infinitymoviestarproductio6222" target="_blank" class="streaming-link">▶️ YouTube</a>
-        </div>
-    </div>
-
-    <!-- VIDEO GALLERY SECTION -->
-    <div class="section-title"><span>🎬 Film Productions</span></div>
-    <div class="section-subtitle">Movie trailers, short films, and behind-the-scenes</div>
-
-    <div class="video-grid">
-        <div class="video-card">
-            <h3>🎬 Official Card Video Thriller</h3>
-            <p>An edge-of-your-seat thriller production | Watch in full HD</p>
-            <video controls width="100%" poster="">
-                <source src="videos/official-card-video-thriller.mp4" type="video/mp4">
-                <source src="videos/official-card-video-thriller.webm" type="video/webm">
-                <source src="videos/official-card-video-thriller.ogg" type="video/ogg">
-                <p>Video not loading. File path: videos/official-card-video-thriller.mp4</p>
-            </video>
-        </div>
-    </div>
-
-    <!-- IMAGE GALLERY SECTION -->
-    <div class="section-title"><span>📷 Photo Gallery</span></div>
-    <div class="section-subtitle">Behind the scenes, movie stills, and creative shots</div>
-
-    <div class="image-grid">
-        <div class="image-card">
-            <img src="images/infinity%20logo.jpg" alt="Infinity Movie Star Logo">
-            <h3>Infinity Movie Star Logo</h3>
-            <p>Official company logo</p>
-        </div>
-
-        <div class="image-card">
-            <img src="images/ashsnti%20logo.jpg" alt="Ashanti Media Logistics Logo">
-            <h3>Ashanti Media Logistics</h3>
-            <p>International partner logo</p>
-        </div>
-
-        <div class="image-card">
-            <img src="images/combination%20logo.jpg" alt="Combined Brand Logo">
-            <h3>Combined Brand Logo</h3>
-            <p>Ernest Embassy & Infinity Movie Star</p>
-        </div>
-
-        <div class="image-card">
-            <img src="images/cover.jpg" alt="Cover Image">
-            <h3>Cover Art</h3>
-            <p>Promotional cover image</p>
-        </div>
-
-        <div class="image-card">
-            <img src="images/cover%202.jpg" alt="Cover Image 2">
-            <h3>Cover Art 2</h3>
-            <p>Alternative promotional cover</p>
-        </div>
-
-        <div class="image-card">
-            <img src="images/eating%20on%20suit.jpg" alt="Behind the Scenes">
-            <h3>Behind the Scenes</h3>
-            <p>On-set moments from production</p>
-        </div>
-
-        <div class="image-card">
-            <img src="images/tea%20time%20infi.jpg" alt="Team Photo">
-            <h3>Tea Time at Infinity</h3>
-            <p>Team culture and behind-the-scenes</p>
-        </div>
-
-        <div class="image-card">
-            <img src="images/infi%20door.jpg" alt="Studio Door">
-            <h3>Infinity Studio Door</h3>
-            <p>Office and studio location</p>
-        </div>
-
-        <div class="image-card">
-            <img src="images/IMG_0220.JPG" alt="Promotional Image">
-            <h3>Promotional Shot</h3>
-            <p>Creative promotional photography</p>
-        </div>
-    </div>
-
-    <!-- WRITINGS & DOCUMENTS SECTION -->
-    <div class="section-title"><span>📄 Writings & Documents</span></div>
-    <div class="section-subtitle">Download my creative works, scripts, and proposals</div>
-
-    <div class="writings-grid">
-        <div class="writing-card">
-            <div class="writing-icon">🎬</div>
-            <h3>Official Card - Scenes</h3>
-            <p>Chuks and Mary scenes from the Official Card screenplay.</p>
-            <a href="docs/Chuks_and_Mary_Scenes_Official_Card.pdf" class="btn">Download PDF →</a>
-        </div>
-
-        <div class="writing-card">
-            <div class="writing-icon">📊</div>
-            <h3>Comparative Project Summary</h3>
-            <p>Project comparison and analysis document.</p>
-            <a href="docs/Comparative%20Project%20Summary.pdf" class="btn">Download PDF →</a>
-        </div>
-
-        <div class="writing-card">
-            <div class="writing-icon">📋</div>
-            <h3>Embassy Lagos Proposal</h3>
-            <p>Official proposal for Embassy Lagos project.</p>
-            <a href="docs/Embassy%20Lagos%20Proposal.pdf" class="btn">Download PDF →</a>
-        </div>
-
-        <div class="writing-card">
-            <div class="writing-icon">🏢</div>
-            <h3>Company Profile</h3>
-            <p>Infinity Movie Star Production official company profile.</p>
-            <a href="docs/Infinity%20Movie%20Star%20Production%20Profile.pdf" class="btn">Download PDF →</a>
-        </div>
-
-        <div class="writing-card">
-            <div class="writing-icon">🎨</div>
-            <h3>Round Table - Mood Board</h3>
-            <p>Visual mood board for the Round Table film project.</p>
-            <a href="docs/MOOD%20BOARD%20FOR%20Round%20Table.pdf" class="btn">Download PDF →</a>
-        </div>
-
-        <div class="writing-card">
-            <div class="writing-icon">📜</div>
-            <h3>Lyrics Collection</h3>
-            <p>Complete lyrics from all released tracks.</p>
-            <a href="docs/lyrics.pdf" class="btn">Download PDF →</a>
-        </div>
-    </div>
-
-    <!-- CALL TO ACTION -->
-    <div style="text-align: center; margin: 60px 0;">
-        <a href="booking.html" class="btn btn-outline" style="padding: 15px 40px; font-size: 1.1rem;">📅 Book a Consultation →</a>
-    </div>
-</div>
-
-<!-- CAC BADGE -->
-<div style="text-align: center; padding: 20px;">
-    <div class="cac-badge">
-        ✅ Infinity Movie Star Production — CAC Registered since June 21, 2017 | BN2517233<br>
-        📍 6 Ezinifite Close, New Haven, Enugu, Nigeria
-    </div>
-</div>
-
-<!-- FOOTER -->
-<footer>
-    <div class="container">
-        <p><strong>Damian Anielozie Okafor</strong> | Creative Artist • Filmmaker • Writer</p>
-        <p>📧 Danoka33@gmail.com | infinitymoviestarproduction@gmail.com | ernestembassytravels@gmail.com</p>
-        <p>📞 +2348032607809 | +2349050205053</p>
-        <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
-        <p style="margin-top: 20px;">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>
-    </div>
-</footer>
-
-<!-- WHATSAPP BUTTON -->
-<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
-    <span>💬</span>
-    <span>Chat with Damian on WhatsApp</span>
-</a>
-
+    <footer style="background: #1a1a2e; color: white; text-align: center; padding: 40px 20px; margin-top: 60px;">
+        <p>© 2026 Infinity Movie Star Production | Ernest Embassy Digital Solutions</p>
+    </footer>
 </body>
 </html>

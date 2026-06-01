@@ -75,13 +75,13 @@
         .hero h1 span { color: #ffd700; }
         .hero p { font-size: 1.1rem; opacity: 0.9; }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 40px 20px; }
         .section-title { text-align: center; font-size: 2rem; margin-bottom: 40px; color: #1a1a2e; }
         .section-title span { border-bottom: 3px solid #ffd700; padding-bottom: 10px; }
 
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 25px;
         }
         .gallery-item {
@@ -216,9 +216,10 @@
 </div>
 
 <div class="container">
-    <div class="section-title"><span>🎬 Production & Training Gallery</span></div>
+    <div class="section-title"><span>🎬 Production Gallery</span></div>
     <div class="gallery-grid">
         
+        <!-- Production Photos -->
         <div class="gallery-item" onclick="openLightbox('images/young n up doing.jpg')">
             <img src="images/young n up doing.jpg" alt="Young N Up Doing" onerror="this.parentElement.style.display='none'">
             <div class="gallery-caption">🎬 Young N Up Doing</div>
@@ -264,9 +265,78 @@
             <div class="gallery-caption">🎭 ESCET Drama</div>
         </div>
         
+        <div class="gallery-item" onclick="openLightbox('images/escet.jpg')">
+            <img src="images/escet.jpg" alt="ESCET" onerror="this.parentElement.style.display='none'">
+            <div class="gallery-caption">🎓 ESCET Training</div>
+        </div>
+        
         <div class="gallery-item" onclick="openLightbox('images/zomba.jpg')">
             <img src="images/zomba.jpg" alt="Zomba" onerror="this.parentElement.style.display='none'">
             <div class="gallery-caption">📍 Zomba Production</div>
+        </div>
+        
+        <div class="gallery-item" onclick="openLightbox('images/eating on suit.jpg')">
+            <img src="images/eating on suit.jpg" alt="Eating on Suit" onerror="this.parentElement.style.display='none'">
+            <div class="gallery-caption">🍽️ Behind the Scenes</div>
+        </div>
+        
+        <!-- Team Member Photos -->
+        <div class="gallery-item" onclick="openLightbox('images/director infinity.jpeg')">
+            <img src="images/director infinity.jpeg" alt="Director Infinity" onerror="this.parentElement.style.display='none'">
+            <div class="gallery-caption">🎬 Director Infinity</div>
+        </div>
+        
+        <div class="gallery-item" onclick="openLightbox('images/orji assistant dir.jpg')">
+            <img src="images/orji assistant dir.jpg" alt="Orji Assistant Director" onerror="this.parentElement.style.display='none'">
+            <div class="gallery-caption">🎭 Assistant Director Orji</div>
+        </div>
+        
+        <div class="gallery-item" onclick="openLightbox('images/stsix.jpeg')">
+            <img src="images/stsix.jpeg" alt="StSix" onerror="this.parentElement.style.display='none'">
+            <div class="gallery-caption">⭐ Uchenna Sixtus (StSix)</div>
+        </div>
+        
+        <div class="gallery-item" onclick="openLightbox('images/never matewere.jpg')">
+            <img src="images/never matewere.jpg" alt="Never Matewere" onerror="this.parentElement.style.display='none'">
+            <div class="gallery-caption">🤝 Never Matewere - Zomba Films</div>
+        </div>
+        
+        <div class="gallery-item" onclick="openLightbox('images/never.jpg')">
+            <img src="images/never.jpg" alt="Never" onerror="this.parentElement.style.display='none'">
+            <div class="gallery-caption">🌍 Never Matewere</div>
+        </div>
+        
+        <!-- Logos & Branding -->
+        <div class="gallery-item" onclick="openLightbox('images/ashanti logo.jpg')">
+            <img src="images/ashanti logo.jpg" alt="Ashanti Logo" onerror="this.parentElement.style.display='none'">
+            <div class="gallery-caption">🏢 Ashanti Media Logo</div>
+        </div>
+        
+        <div class="gallery-item" onclick="openLightbox('images/infinity logo.jpg')">
+            <img src="images/infinity logo.jpg" alt="Infinity Logo" onerror="this.parentElement.style.display='none'">
+            <div class="gallery-caption">🎬 Infinity Movie Star Logo</div>
+        </div>
+        
+        <div class="gallery-item" onclick="openLightbox('images/combination logo.jpg')">
+            <img src="images/combination logo.jpg" alt="Combination Logo" onerror="this.parentElement.style.display='none'">
+            <div class="gallery-caption">✨ Ernest Embassy Logo</div>
+        </div>
+        
+        <!-- Covers -->
+        <div class="gallery-item" onclick="openLightbox('images/cover.jpg')">
+            <img src="images/cover.jpg" alt="Cover" onerror="this.parentElement.style.display='none'">
+            <div class="gallery-caption">📸 Cover Photo</div>
+        </div>
+        
+        <div class="gallery-item" onclick="openLightbox('images/cover 2.jpg')">
+            <img src="images/cover 2.jpg" alt="Cover 2" onerror="this.parentElement.style.display='none'">
+            <div class="gallery-caption">📸 Cover Photo 2</div>
+        </div>
+        
+        <!-- Official Card Poster -->
+        <div class="gallery-item" onclick="openLightbox('images/official card poster')">
+            <img src="images/official card poster" alt="Official Card Poster" onerror="this.parentElement.style.display='none'">
+            <div class="gallery-caption">🎬 Official Card Poster</div>
         </div>
         
     </div>

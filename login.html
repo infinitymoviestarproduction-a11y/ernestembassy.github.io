@@ -14,7 +14,35 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+            position: relative;
         }
+        
+        /* Home Button - Floating */
+        .home-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-size: 24px;
+            border: none;
+            text-decoration: none;
+        }
+        .home-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
         .container {
             max-width: 500px;
             margin: 50px auto;
@@ -121,197 +149,195 @@
             text-align: center;
             margin-top: 20px;
         }
+        
+        @media (max-width: 768px) {
+            .home-button { width: 50px; height: 50px; font-size: 20px; bottom: 20px; right: 20px; }
+            .container { margin: 20px auto; padding: 25px; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="logo">🎓</div>
-        <h1>Ernest Embassy LMS</h1>
-        <p class="subtitle">Sign in to continue learning</p>
-        
-        <input type="email" id="email" placeholder="Email Address" autocomplete="email">
-        <input type="password" id="password" placeholder="Password" autocomplete="current-password">
-        
-        <button class="btn" onclick="loginStudent()">🔐 Login</button>
-        
-        <div class="nav-links">
-            <a href="#" onclick="goToRegister()">📝 Create New Account</a>
-        </div>
-        
-        <div class="divider">or</div>
-        
-        <button class="btn btn-google" onclick="loginWithGoogle()">G Continue with Google</button>
-        
-        <!-- Developer Quick Login - Remove before going public! -->
-        <div class="warning-badge">
-            ⚠️ Developer Mode Active ⚠️<br>
-            <small>Remove these buttons before public launch</small>
-        </div>
-        <button class="btn btn-dev" onclick="devLogin()">🛠️ Developer Quick Login (Skip Auth)</button>
-        
-        <div id="message"></div>
-    </div>
 
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
-            authDomain: "ernest-embassy-lms.firebaseapp.com",
-            projectId: "ernest-embassy-lms",
-            storageBucket: "ernest-embassy-lms.firebasestorage.app",
-            messagingSenderId: "204896421221",
-            appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
-        };
+<!-- Floating Home Button -->
+<a href="index.html" class="home-button" title="Go to Home">🏠</a>
+
+<div class="container">
+    <div class="logo">🎓</div>
+    <h1>Ernest Embassy LMS</h1>
+    <p class="subtitle">Sign in to continue learning</p>
+    
+    <input type="email" id="email" placeholder="Email Address" autocomplete="email">
+    <input type="password" id="password" placeholder="Password" autocomplete="current-password">
+    
+    <button class="btn" onclick="loginStudent()">🔐 Login</button>
+    
+    <div class="nav-links">
+        <a href="#" onclick="goToRegister()">📝 Create New Account</a>
+        <a href="index.html">🏠 Home</a>
+    </div>
+    
+    <div class="divider">or</div>
+    
+    <button class="btn btn-google" onclick="loginWithGoogle()">G Continue with Google</button>
+    
+    <!-- Developer Quick Login -->
+    <div class="warning-badge">
+        ⚠️ Developer Mode Active ⚠️<br>
+        <small>Click below for quick access (testing only)</small>
+    </div>
+    <button class="btn btn-dev" onclick="devLogin()">🛠️ Developer Quick Login (All Quizzes Unlocked)</button>
+    
+    <div id="message"></div>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+        authDomain: "ernest-embassy-lms.firebaseapp.com",
+        projectId: "ernest-embassy-lms",
+        storageBucket: "ernest-embassy-lms.firebasestorage.app",
+        messagingSenderId: "204896421221",
+        appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
+    };
+    
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    
+    function showMessage(msg, type) {
+        const msgDiv = document.getElementById('message');
+        msgDiv.innerHTML = msg;
+        msgDiv.className = `message ${type}`;
+        setTimeout(() => {
+            msgDiv.style.display = 'none';
+            msgDiv.className = 'message';
+        }, 4000);
+    }
+    
+    async function loginStudent() {
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
         
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
+        if (!email || !password) {
+            showMessage('Please enter email and password', 'error');
+            return;
+        }
         
-        function showMessage(msg, type) {
-            const msgDiv = document.getElementById('message');
-            msgDiv.innerHTML = msg;
-            msgDiv.className = `message ${type}`;
+        try {
+            const userCredential = await auth.signInWithEmailAndPassword(email, password);
+            const user = userCredential.user;
+            
+            const studentDoc = await db.collection('students').doc(user.uid).get();
+            
+            if (!studentDoc.exists) {
+                await db.collection('students').doc(user.uid).set({
+                    email: email,
+                    fullName: email.split('@')[0],
+                    registeredAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    paidQuizzes: [],
+                    quizScores: {}
+                });
+            }
+            
+            showMessage('✅ Login successful! Redirecting...', 'success');
             setTimeout(() => {
-                msgDiv.style.display = 'none';
-                msgDiv.className = 'message';
-            }, 4000);
-        }
-        
-        async function loginStudent() {
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
+                window.location.href = 'dashboard.html';
+            }, 1500);
             
-            if (!email || !password) {
-                showMessage('Please enter email and password', 'error');
-                return;
-            }
-            
-            try {
-                const userCredential = await auth.signInWithEmailAndPassword(email, password);
-                const user = userCredential.user;
-                
-                // Check if student exists in Firestore
-                const studentDoc = await db.collection('students').doc(user.uid).get();
-                
-                if (!studentDoc.exists) {
-                    // Create student record if doesn't exist
-                    await db.collection('students').doc(user.uid).set({
-                        email: email,
-                        fullName: email.split('@')[0],
-                        registeredAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        paidQuizzes: [],
-                        quizScores: {}
-                    });
-                }
-                
-                showMessage('✅ Login successful! Redirecting...', 'success');
-                setTimeout(() => {
-                    window.location.href = 'student-dashboard.html';
-                }, 1500);
-                
-            } catch (error) {
-                if (error.code === 'auth/user-not-found') {
-                    showMessage('No account found with this email. Please register.', 'error');
-                } else if (error.code === 'auth/wrong-password') {
-                    showMessage('Incorrect password. Please try again.', 'error');
-                } else if (error.code === 'auth/invalid-email') {
-                    showMessage('Please enter a valid email address.', 'error');
-                } else {
-                    showMessage(error.message, 'error');
-                }
-            }
-        }
-        
-        async function loginWithGoogle() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            try {
-                const result = await auth.signInWithPopup(provider);
-                const user = result.user;
-                
-                // Check if student exists in Firestore
-                const studentDoc = await db.collection('students').doc(user.uid).get();
-                
-                if (!studentDoc.exists) {
-                    await db.collection('students').doc(user.uid).set({
-                        email: user.email,
-                        fullName: user.displayName || user.email.split('@')[0],
-                        photoURL: user.photoURL || null,
-                        registeredAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        paidQuizzes: [],
-                        quizScores: {}
-                    });
-                }
-                
-                showMessage('✅ Login successful! Redirecting...', 'success');
-                setTimeout(() => {
-                    window.location.href = 'student-dashboard.html';
-                }, 1500);
-                
-            } catch (error) {
+        } catch (error) {
+            if (error.code === 'auth/user-not-found') {
+                showMessage('No account found. Please register.', 'error');
+            } else if (error.code === 'auth/wrong-password') {
+                showMessage('Incorrect password.', 'error');
+            } else {
                 showMessage(error.message, 'error');
             }
         }
-        
-        // Developer Quick Login - Creates a test account automatically
-        async function devLogin() {
-            const devEmail = 'dev@ernestlms.com';
-            const devPassword = 'dev123456';
+    }
+    
+    async function loginWithGoogle() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        try {
+            const result = await auth.signInWithPopup(provider);
+            const user = result.user;
             
+            const studentDoc = await db.collection('students').doc(user.uid).get();
+            
+            if (!studentDoc.exists) {
+                await db.collection('students').doc(user.uid).set({
+                    email: user.email,
+                    fullName: user.displayName || user.email.split('@')[0],
+                    photoURL: user.photoURL || null,
+                    registeredAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    paidQuizzes: [],
+                    quizScores: {}
+                });
+            }
+            
+            showMessage('✅ Login successful! Redirecting...', 'success');
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1500);
+            
+        } catch (error) {
+            showMessage(error.message, 'error');
+        }
+    }
+    
+    async function devLogin() {
+        const devEmail = 'dev@ernestlms.com';
+        const devPassword = 'dev123456';
+        
+        try {
+            // Try to sign in first
             try {
-                // Try to sign in first
-                try {
+                await auth.signInWithEmailAndPassword(devEmail, devPassword);
+            } catch (signInError) {
+                if (signInError.code === 'auth/user-not-found') {
+                    await auth.createUserWithEmailAndPassword(devEmail, devPassword);
                     await auth.signInWithEmailAndPassword(devEmail, devPassword);
-                } catch (signInError) {
-                    // If account doesn't exist, create it
-                    if (signInError.code === 'auth/user-not-found') {
-                        await auth.createUserWithEmailAndPassword(devEmail, devPassword);
-                        await auth.signInWithEmailAndPassword(devEmail, devPassword);
-                    } else {
-                        throw signInError;
-                    }
-                }
-                
-                const user = auth.currentUser;
-                
-                // Create/update student record
-                const studentDoc = await db.collection('students').doc(user.uid).get();
-                
-                if (!studentDoc.exists) {
-                    await db.collection('students').doc(user.uid).set({
-                        email: devEmail,
-                        fullName: 'Developer Test User',
-                        registeredAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        paidQuizzes: ['physics', 'mathematics', 'english', 'digital-technology', 'igbo'],
-                        quizScores: {}
-                    });
                 } else {
-                    // Update to unlock all quizzes for dev
-                    await db.collection('students').doc(user.uid).update({
-                        paidQuizzes: ['physics', 'mathematics', 'english', 'digital-technology', 'igbo']
-                    });
+                    throw signInError;
                 }
-                
-                showMessage('✅ Developer Login Successful! All quizzes unlocked.', 'success');
-                setTimeout(() => {
-                    window.location.href = 'student-dashboard.html';
-                }, 1500);
-                
-            } catch (error) {
-                showMessage('Dev Login Error: ' + error.message, 'error');
             }
-        }
-        
-        function goToRegister() {
-            window.location.href = 'register.html';
-        }
-        
-        // Check if user is already logged in
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                // User is already logged in, redirect to dashboard
-                window.location.href = 'student-dashboard.html';
+            
+            const user = auth.currentUser;
+            
+            const studentDoc = await db.collection('students').doc(user.uid).get();
+            
+            if (!studentDoc.exists) {
+                await db.collection('students').doc(user.uid).set({
+                    email: devEmail,
+                    fullName: 'Developer Test User',
+                    registeredAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    paidQuizzes: ['physics', 'mathematics', 'english', 'digital-technology', 'igbo'],
+                    quizScores: {}
+                });
+            } else {
+                await db.collection('students').doc(user.uid).update({
+                    paidQuizzes: ['physics', 'mathematics', 'english', 'digital-technology', 'igbo']
+                });
             }
-        });
-    </script>
+            
+            showMessage('✅ Developer Login Successful! All quizzes unlocked.', 'success');
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1500);
+            
+        } catch (error) {
+            showMessage('Dev Login Error: ' + error.message, 'error');
+        }
+    }
+    
+    function goToRegister() {
+        window.location.href = 'register.html';
+    }
+    
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            window.location.href = 'dashboard.html';
+        }
+    });
+</script>
 </body>
 </html>

@@ -286,6 +286,63 @@
             50% { opacity: 0.7; transform: scale(1.05); }
         }
         
+        /* Payment Modal Styles */
+        .payment-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .payment-content {
+            background: white;
+            max-width: 450px;
+            width: 90%;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            animation: modalPop 0.3s ease;
+        }
+        @keyframes modalPop {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .payment-icon { font-size: 3rem; margin-bottom: 10px; }
+        .payment-amount {
+            font-size: 2.5rem;
+            color: #11998e;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        .payment-details {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .payment-details p {
+            margin: 8px 0;
+            font-size: 0.9rem;
+        }
+        .payment-benefits {
+            background: #e8f5e9;
+            padding: 12px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: left;
+        }
+        .payment-benefits p {
+            margin: 5px 0;
+            font-size: 0.85rem;
+            color: #11998e;
+        }
+        
         .error-box { 
             background: linear-gradient(135deg, #eb334910 0%, #f45c4310 100%);
             border: 2px solid #eb3349;
@@ -346,48 +403,24 @@
             cursor: pointer;
         }
         
-        /* Payment Modal Styles */
-        .payment-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-        .payment-content {
-            background: white;
-            max-width: 450px;
-            width: 90%;
-            padding: 30px;
+        .badge-paid {
+            display: inline-block;
+            background: #11998e;
+            color: white;
+            padding: 4px 12px;
             border-radius: 20px;
-            text-align: center;
-            animation: modalPop 0.3s ease;
+            font-size: 0.7rem;
+            margin-left: 10px;
         }
-        @keyframes modalPop {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-        .payment-amount {
-            font-size: 2.5rem;
-            color: #11998e;
-            font-weight: bold;
-            margin: 15px 0;
-        }
-        .payment-details {
-            background: #f7fafc;
-            padding: 15px;
-            border-radius: 12px;
-            margin: 20px 0;
-            text-align: left;
-        }
-        .payment-details p {
-            margin: 8px 0;
-            font-size: 0.9rem;
+        
+        .badge-locked {
+            display: inline-block;
+            background: #f39c12;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            margin-left: 10px;
         }
         
         @media (max-width: 768px) {
@@ -480,19 +513,18 @@
     let currentUser = null;
     let isQuizStarted = false;
     let timerInterval = null;
-    let timeLeft = 10; // 10 seconds per question
+    let timeLeft = 10;
     let isAnswered = false;
+    let userPaidStatus = {};
     
     // Quiz settings
-    const TIME_PER_QUESTION = 10; // seconds
-    const TOTAL_QUESTIONS_TO_SHOW = 20; // Show 20 random questions per session
+    const TIME_PER_QUESTION = 10;
+    const TOTAL_QUESTIONS_TO_SHOW = 20;
     
     // Premium subjects that require payment
     const premiumSubjects = ['physics', 'mathematics', 'english'];
-    // Free subjects (always accessible)
     const freeSubjects = ['digital-technology', 'igbo'];
     
-    // Subject display names
     const subjectNames = {
         'physics': 'Physics',
         'mathematics': 'Mathematics',
@@ -524,7 +556,6 @@
         return subjectNames[subjectId] || subjectId;
     }
     
-    // Shuffle array (Fisher-Yates algorithm)
     function shuffleArray(array) {
         const shuffled = [...array];
         for (let i = shuffled.length - 1; i > 0; i--) {
@@ -534,13 +565,11 @@
         return shuffled;
     }
     
-    // Get random questions without repetition
     function getRandomQuestions(allQuestions, count) {
         const shuffled = shuffleArray(allQuestions);
         return shuffled.slice(0, Math.min(count, shuffled.length));
     }
     
-    // Start timer for current question
     function startTimer() {
         if (timerInterval) clearInterval(timerInterval);
         
@@ -551,7 +580,7 @@
         const timerCircle = document.getElementById('timerCircle');
         
         timerInterval = setInterval(() => {
-            if (isAnswered) return; // Don't count down if already answered
+            if (isAnswered) return;
             
             timeLeft--;
             
@@ -559,14 +588,12 @@
                 timerElement.textContent = `${timeLeft}s`;
             }
             
-            // Add warning effect when time is low
             if (timeLeft <= 3 && timerCircle) {
                 timerCircle.classList.add('timer-warning');
             } else if (timerCircle) {
                 timerCircle.classList.remove('timer-warning');
             }
             
-            // Time's up!
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
                 if (!isAnswered) {
@@ -576,15 +603,19 @@
         }, 1000);
     }
     
-    // Handle timeout (no answer selected)
+    function stopTimer() {
+        if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+    }
+    
     function handleTimeOut() {
         isAnswered = true;
         
-        // Disable all option buttons
         const buttons = document.querySelectorAll('.option-item');
         buttons.forEach(btn => btn.disabled = true);
         
-        // Highlight the correct answer
         const q = randomizedQuestions[currentIndex];
         const correct = q.answer;
         
@@ -594,7 +625,6 @@
             }
         });
         
-        // Show timeout message
         const explanationBox = document.getElementById('explanationBox');
         const explanationText = document.getElementById('explanationText');
         if (explanationBox && explanationText) {
@@ -604,20 +634,31 @@
             explanationBox.style.borderLeftColor = '#f39c12';
         }
         
-        // Show next button
         document.getElementById('nextBtn').style.display = 'block';
     }
     
-    // Payment Modal
+    // Payment Modal - Shows when user tries to access premium subject without paying
     function showPaymentModal(subject) {
+        const subjectName = formatSubjectName(subject);
+        
         const modal = document.createElement('div');
         modal.className = 'payment-modal';
         modal.innerHTML = `
             <div class="payment-content">
-                <div style="font-size: 3rem;">💰</div>
-                <h2 style="color: #667eea; margin: 15px 0;">Unlock ${formatSubjectName(subject)}</h2>
+                <div class="payment-icon">💰</div>
+                <h2 style="color: #667eea; margin: 15px 0;">Unlock ${subjectName}</h2>
                 <p style="color: #718096;">Get full access to all questions and explanations</p>
                 <div class="payment-amount">₦100</div>
+                
+                <div class="payment-benefits">
+                    <p>✅ <strong>${subjectName} Full Question Bank</strong></p>
+                    <p>✅ <strong>Detailed Explanations</strong> for every answer</p>
+                    <p>✅ <strong>Timed Quiz Mode</strong> with 10 seconds per question</p>
+                    <p>✅ <strong>Randomized Questions</strong> - No repeats</p>
+                    <p>✅ <strong>Track Your Progress</strong> and see scores</p>
+                    <p>✅ <strong>Lifetime Access</strong> - Pay once, unlock forever</p>
+                </div>
+                
                 <div class="payment-details">
                     <h4 style="margin-bottom: 10px;">📱 Payment Details:</h4>
                     <p><strong>Opay / Palmpay:</strong> 08032607809</p>
@@ -625,8 +666,9 @@
                     <p><strong>Account Name:</strong> Damian Anielozie Okafor</p>
                     <p style="margin-top: 10px; font-size: 0.75rem; color: #666;">After payment, click "I Have Paid" to unlock instantly</p>
                 </div>
+                
                 <button onclick="confirmPayment('${subject}')" style="background: linear-gradient(135deg, #11998e, #38ef7d); color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 10px;">✅ I Have Paid</button>
-                <button onclick="this.parentElement.parentElement.remove()" style="background: #e2e8f0; color: #4a5568; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; width: 100%;">Cancel</button>
+                <button onclick="this.parentElement.parentElement.remove(); window.location.href='index.html'" style="background: #e2e8f0; color: #4a5568; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; width: 100%;">🏠 Go to Home</button>
             </div>
         `;
         document.body.appendChild(modal);
@@ -634,45 +676,73 @@
     
     async function confirmPayment(subject) {
         if (!currentUser) {
-            alert("Please login to unlock quizzes");
+            alert("Please login first to unlock quizzes");
             window.location.href = "login.html";
             return;
         }
         
-        const studentRef = db.collection('students').doc(currentUser.uid);
-        const studentDoc = await studentRef.get();
-        const paidQuizzes = studentDoc.data()?.paidQuizzes || [];
-        
-        if (!paidQuizzes.includes(subject)) {
-            paidQuizzes.push(subject);
-            await studentRef.update({ paidQuizzes: paidQuizzes });
-            alert(`✅ ${formatSubjectName(subject)} unlocked! You can now take the quiz.`);
+        try {
+            const studentRef = db.collection('students').doc(currentUser.uid);
+            const studentDoc = await studentRef.get();
+            const studentData = studentDoc.data();
+            const paidQuizzes = studentData?.paidQuizzes || [];
+            
+            if (!paidQuizzes.includes(subject)) {
+                paidQuizzes.push(subject);
+                await studentRef.update({ 
+                    paidQuizzes: paidQuizzes,
+                    lastPaymentDate: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                alert(`✅ ${formatSubjectName(subject)} unlocked successfully! You can now take the quiz.`);
+                userPaidStatus[subject] = true;
+            }
+            
+            document.querySelectorAll('.payment-modal').forEach(m => m.remove());
+            // Reload the page to start quiz
+            location.reload();
+        } catch (error) {
+            console.error("Payment confirmation error:", error);
+            alert("Error processing payment confirmation. Please contact support.");
         }
-        
-        document.querySelectorAll('.payment-modal').forEach(m => m.remove());
-        startQuiz();
     }
     
-    // Check if user can access the quiz
-    async function canAccessQuiz(subject) {
-        if (!currentUser) {
-            const userChoice = confirm("You need to login or register to take quizzes.\n\nClick OK to login, Cancel to continue as guest (free subjects only)");
-            if (userChoice) {
-                window.location.href = "login.html";
-                return false;
-            }
-            if (premiumSubjects.includes(subject)) {
-                alert(`${formatSubjectName(subject)} is a premium subject. Please login/register and pay ₦100 to access.`);
-                return false;
-            }
+    // Check if user has paid for a subject
+    async function checkPaymentStatus(subject) {
+        if (!currentUser) return false;
+        
+        try {
+            const studentDoc = await db.collection('students').doc(currentUser.uid).get();
+            const paidQuizzes = studentDoc.data()?.paidQuizzes || [];
+            return paidQuizzes.includes(subject);
+        } catch (error) {
+            console.error("Error checking payment status:", error);
+            return false;
+        }
+    }
+    
+    // Main access check - shows payment modal for premium subjects without payment
+    async function checkAndHandleAccess(subject) {
+        // Free subjects - always accessible
+        if (freeSubjects.includes(subject)) {
             return true;
         }
         
+        // Premium subjects - require login and payment
         if (premiumSubjects.includes(subject)) {
-            const studentDoc = await db.collection('students').doc(currentUser.uid).get();
-            const paidQuizzes = studentDoc.data()?.paidQuizzes || [];
+            // Check if user is logged in
+            if (!currentUser) {
+                const loginChoice = confirm(`${formatSubjectName(subject)} is a premium subject (₦100).\n\nYou need to login or register to access this subject.\n\nClick OK to login, Cancel to go back.`);
+                if (loginChoice) {
+                    window.location.href = "login.html";
+                } else {
+                    window.location.href = "index.html";
+                }
+                return false;
+            }
             
-            if (!paidQuizzes.includes(subject)) {
+            // Check payment status
+            const hasPaid = await checkPaymentStatus(subject);
+            if (!hasPaid) {
                 showPaymentModal(subject);
                 return false;
             }
@@ -690,17 +760,18 @@
         
         const interfaceDiv = document.getElementById("quizInterface");
         
-        const canAccess = await canAccessQuiz(currentSubject);
+        // First check if user can access this subject
+        const canAccess = await checkAndHandleAccess(currentSubject);
         if (!canAccess) {
             interfaceDiv.innerHTML = `
                 <div style="text-align: center;">
                     <div style="font-size: 4rem; margin: 20px;">🔒</div>
                     <h2 style="color: #667eea;">Access Restricted</h2>
                     <p style="margin: 20px 0; color: #718096;">
-                        ${premiumSubjects.includes(currentSubject) ? `${formatSubjectName(currentSubject)} is a premium subject.` : 'Please login to continue.'}
+                        ${formatSubjectName(currentSubject)} is a <strong>premium subject</strong> (₦100).
                     </p>
                     <div class="action-buttons">
-                        <button class="btn btn-primary" onclick="goToPage('login.html')">🔐 Login</button>
+                        <button class="btn btn-primary" onclick="goToPage('login.html')">🔐 Login to Unlock</button>
                         <button class="btn btn-success" onclick="goToPage('register.html')">📝 Register</button>
                         <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Home</button>
                     </div>
@@ -745,9 +816,11 @@
                 return false;
             }
             
-            // Randomize questions - select random set without repetition
             randomizedQuestions = getRandomQuestions(allQuestions, TOTAL_QUESTIONS_TO_SHOW);
             console.log(`Selected ${randomizedQuestions.length} random questions for this session`);
+            
+            const hasPaid = await checkPaymentStatus(currentSubject);
+            const isFree = freeSubjects.includes(currentSubject);
             
             document.querySelector('.hero h1').innerHTML = `🎯 ${formatSubjectName(currentSubject)} Quiz`;
             
@@ -756,12 +829,15 @@
                     <div style="font-size: 4rem; margin: 20px;">🎯</div>
                     <h2 style="color: #667eea; margin: 20px 0;">Ready to Challenge Yourself?</h2>
                     <p style="margin: 15px 0; color: #718096; font-size: 1.1rem;">
-                        📚 ${randomizedQuestions.length} random questions selected from ${allQuestions.length} total
+                        📚 ${randomizedQuestions.length} random questions from ${allQuestions.length} total
                     </p>
                     <p style="margin: 10px 0; color: #f39c12; font-size: 0.9rem;">
                         ⏱️ ${TIME_PER_QUESTION} seconds per question
                     </p>
-                    ${premiumSubjects.includes(currentSubject) ? `<p style="margin: 10px 0; color: #11998e; font-size: 0.9rem;">💰 Premium Subject - Already Unlocked ✓</p>` : ''}
+                    ${premiumSubjects.includes(currentSubject) ? 
+                        `<p style="margin: 10px 0; font-size: 0.9rem;"><span class="badge-paid">✓ Premium Unlocked</span> You have full access to this subject</p>` : 
+                        `<p style="margin: 10px 0; font-size: 0.9rem;"><span class="badge-paid">✓ Free Subject</span> Enjoy unlimited access</p>`
+                    }
                     <button class="btn btn-success" onclick="startQuiz()" style="font-size: 1.2rem; padding: 15px 40px;">
                         🚀 Start Quiz
                     </button>
@@ -790,13 +866,6 @@
         score = 0;
         isQuizStarted = true;
         showQuestion();
-    }
-    
-    function stopTimer() {
-        if (timerInterval) {
-            clearInterval(timerInterval);
-            timerInterval = null;
-        }
     }
     
     function showQuestion() {
@@ -832,12 +901,11 @@
             </div>
         `;
         
-        // Start timer for this question
         startTimer();
     }
     
     function checkAnswer(selected) {
-        if (isAnswered) return; // Prevent double answering
+        if (isAnswered) return;
         
         isAnswered = true;
         stopTimer();
@@ -870,7 +938,6 @@
             if (selectedBtn) selectedBtn.classList.add('incorrect');
         }
         
-        // Show explanation
         const explanationBox = document.getElementById('explanationBox');
         const explanationText = document.getElementById('explanationText');
         if (explanationBox && explanationText) {
@@ -922,7 +989,6 @@
             gradeColor = "#eb3349";
         }
         
-        // Save score to database if user is logged in
         if (currentUser) {
             const studentRef = db.collection('students').doc(currentUser.uid);
             studentRef.update({
@@ -959,7 +1025,7 @@
         });
     }
     
-    // Check authentication state
+    // Check authentication state and load
     auth.onAuthStateChanged(async (user) => {
         currentUser = user;
         await loadQuestions();

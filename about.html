@@ -14,27 +14,31 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            color: #2d3748;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
         }
 
-        /* Unified Navigation Bar */
+        /* Navigation */
         nav {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
             padding: 1rem 0;
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .nav-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
         }
 
         .logo {
@@ -44,48 +48,106 @@
             text-decoration: none;
         }
 
-        .logo-icon {
-            font-size: 2rem;
-            background: linear-gradient(135deg, #ffd700, #ffaa00);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
         }
 
         .logo-text {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: bold;
-            color: #ffd700;
-            letter-spacing: 1px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .logo-sub {
-            font-size: 0.65rem;
-            color: rgba(255, 215, 0, 0.8);
-            display: block;
-            margin-top: 2px;
+            font-size: 0.7rem;
+            color: #718096;
         }
 
         .nav-links {
             display: flex;
-            gap: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .nav-links a {
-            color: white;
+            color: #4a5568;
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s;
-            padding: 8px 0;
-            font-size: 0.8rem;
-            white-space: nowrap;
+            font-size: 0.85rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
         }
 
         .nav-links a:hover {
-            color: #ffd700;
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
         }
 
-        /* Hero Header Section */
+        /* Dropdown */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-btn {
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-btn:hover {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            z-index: 1000;
+            top: 100%;
+            left: 0;
+            overflow: hidden;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 10px 20px;
+            color: #4a5568;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-content a:hover {
+            background: #f7fafc;
+            color: #667eea;
+        }
+
+        /* Hero Section */
         .about-hero {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: white;
@@ -100,91 +162,212 @@
             margin-bottom: 10px;
         }
 
-        /* Main Story Layout */
+        .about-hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Main Container */
         .container {
             max-width: 1000px;
             margin: 0 auto;
             padding: 50px 20px;
         }
 
+        /* Profile Cards */
         .profile-section {
             background: white;
             border-radius: 20px;
             padding: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             margin-bottom: 40px;
             border: 1px solid rgba(0,0,0,0.05);
         }
 
         .profile-section h2 {
-            color: #1a1a2e;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             font-size: 1.8rem;
             margin-bottom: 20px;
             border-left: 4px solid #ffd700;
             padding-left: 15px;
         }
 
+        .profile-section h3 {
+            color: #2d3748;
+            font-size: 1.3rem;
+            margin: 20px 0 10px;
+        }
+
         .profile-section p {
-            color: #555;
+            color: #4a5568;
             font-size: 1.05rem;
             line-height: 1.8;
             margin-bottom: 20px;
         }
 
-        /* Core Values/Branches Matrix */
+        /* Founder Section */
+        .founder-section {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .founder-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        /* Core Values Grid */
         .branches-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
             margin-top: 30px;
         }
 
         .branch-item {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 12px;
-            border-top: 3px solid #16213e;
+            background: linear-gradient(135deg, #f7fafc 0%, #ffffff 100%);
+            padding: 25px;
+            border-radius: 16px;
+            border-left: 4px solid #ffd700;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .branch-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
 
         .branch-item strong {
-            color: #1a1a2e;
+            color: #667eea;
             display: block;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
         }
 
         .branch-item p {
             font-size: 0.95rem;
-            color: #666;
-            margin-bottom: 0;
+            color: #4a5568;
             line-height: 1.6;
         }
 
-        /* Footer Layout */
+        /* Mission Vision Grid */
+        .mission-vision {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .mv-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .mv-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .mv-card p {
+            color: #4a5568;
+            line-height: 1.7;
+        }
+
+        /* Why Choose Us Grid */
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .why-item {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 500;
+            color: #667eea;
+        }
+
+        /* Quote Section */
+        .quote-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 50px 30px;
+            border-radius: 20px;
+            margin: 40px 0;
+        }
+
+        .quote-section h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .quote-section p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+
+        /* Footer */
         footer {
             background: #1a1a2e;
-            color: white;
+            color: #a0aec0;
             text-align: center;
             padding: 40px 20px;
             margin-top: 60px;
         }
 
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: #a0aec0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #ffd700;
+        }
+
         @media (max-width: 768px) {
             .nav-container {
                 flex-direction: column;
-                gap: 15px;
             }
             .nav-links {
-                width: 100%;
-                overflow-x: auto;
-                padding-bottom: 5px;
-                gap: 15px;
-            }
-            .branches-grid {
-                grid-template-columns: 1fr;
+                justify-content: center;
             }
             .about-hero h1 {
                 font-size: 2rem;
+            }
+            .mission-vision {
+                grid-template-columns: 1fr;
+            }
+            .profile-section {
+                padding: 25px;
             }
         }
     </style>
@@ -194,10 +377,10 @@
 <nav>
     <div class="nav-container">
         <a href="index.html" class="logo">
-            <span class="logo-icon">🌐</span>
+            <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
             <div>
-                <span class="logo-text">Ernest Embassy</span>
-                <span class="logo-sub">Digital Solutions</span>
+                <div class="logo-text">Ernest Embassy</div>
+                <div class="logo-sub">Digital Solutions</div>
             </div>
         </a>
         <div class="nav-links">
@@ -206,27 +389,62 @@
             <a href="services.html">⚙️ Services</a>
             <a href="webdev.html">💻 Web Dev</a>
             <a href="visa.html">✈️ Visa</a>
-            <a href="movie.html">🎬 Movie Studio</a>
-            <a href="portfolio.html">🎨 Portfolio</a>
-            <a href="class.html">🎓 Class</a>
+            
+            <div class="dropdown">
+                <span class="dropdown-btn">🎬 Movie Studio ▼</span>
+                <div class="dropdown-content">
+                    <a href="movie-studio.html">🎬 Studio Home</a>
+                    <a href="portfolio.html">🎨 Portfolio</a>
+                    <a href="gallery.html">📸 Gallery</a>
+                    <a href="team.html">👥 Our Team</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <span class="dropdown-btn">🎓 Education ▼</span>
+                <div class="dropdown-content">
+                    <a href="education.html">🎓 Education Hub</a>
+                    <a href="teaching.html">📚 Teaching Notes</a>
+                    <a href="tutoring.html">💻 Tutoring</a>
+                    <a href="class.html">🎓 Class</a>
+                    <a href="resources.html">📄 Resources</a>
+                </div>
+            </div>
+
             <a href="contact.html">📞 Contact</a>
+            <a href="login.html">🔐 Login</a>
+            <a href="register.html">📝 Register</a>
         </div>
     </div>
 </nav>
 
 <div class="about-hero">
-    <h1>📖 About Our Enterprise</h1>
-    <p>Discover the journey, drive, and vision behind Ernest Embassy Digital Solutions</p>
+    <h1>📖 About Ernest Embassy Digital Solutions</h1>
+    <p>Discover the journey, drive, and vision behind our multi-niche corporate ecosystem</p>
 </div>
 
 <div class="container">
     
+    <!-- Who We Are -->
     <div class="profile-section">
         <h2>Who We Are</h2>
         <p>Ernest Embassy Digital Solutions is a versatile, dynamic multi-niche corporate ecosystem designed to solve complex challenges across diverse global fields. We provide operational structures that balance technical innovation, media production excellence, global immigration pathways, and modern educational services.</p>
         <p>By blending our specialized branches together, we give clients, students, and creative partners a centralized platform to launch websites, navigate international travel borders, produce cinematic content, or access cutting-edge cloud-based learning infrastructure seamlessly.</p>
     </div>
 
+    <!-- Meet the Founder -->
+    <div class="founder-section">
+        <h2>Meet the Founder</h2>
+        <div class="founder-name">Damian Anielozie Okafor</div>
+        <p>Educator • Entrepreneur • Filmmaker • Travel Consultant • Digital Solutions Specialist</p>
+        <p style="margin-top: 15px;">Ernest Embassy Digital Solutions was founded by <strong>Damian Anielozie Okafor</strong>, an educator, entrepreneur, filmmaker, travel consultant, and digital solutions specialist with a passion for helping people unlock opportunities locally and internationally.</p>
+        <p>Damian began his professional journey as a teacher and educational facilitator, earning his Nigeria Certificate in Education (NCE) from Enugu State College of Education Technical and becoming registered with the Teachers Registration Council of Nigeria (TRCN).</p>
+        <p>Over the years, he has worked across multiple industries including education, logistics, security services, manufacturing, business development, travel consulting, and film production. These experiences helped shape his vision of building a company capable of solving diverse challenges through a single trusted platform.</p>
+        <p>His commitment to innovation led to the creation of <strong>Infinity Movie Star Production</strong> in 2013, which was officially registered in 2017. Through this platform, he has developed scripts, trained aspiring creatives, and pursued film projects designed to tell impactful African stories.</p>
+        <p>Today, Damian combines his educational expertise, entrepreneurial experience, and technological skills to provide clients with practical solutions across travel, education, media, and digital technology.</p>
+    </div>
+
+    <!-- Core Pillars -->
     <div class="profile-section">
         <h2>Our Core Pillars & Subsidiaries</h2>
         <p>We do not just perform a single task; we offer a unified framework built on years of verified operational expertise:</p>
@@ -251,12 +469,54 @@
         </div>
     </div>
 
+    <!-- Mission & Vision -->
+    <div class="mission-vision">
+        <div class="mv-card">
+            <h3>🎯 Our Mission</h3>
+            <p>To empower individuals, businesses, students, and creatives by providing innovative solutions that bridge education, technology, travel, and entertainment.</p>
+        </div>
+        <div class="mv-card">
+            <h3>👁️ Our Vision</h3>
+            <p>To become a globally recognized African solutions ecosystem that transforms lives through education, creativity, digital innovation, and international opportunities.</p>
+        </div>
+    </div>
+
+    <!-- Why Choose Us -->
+    <div class="profile-section">
+        <h2>Why Choose Us?</h2>
+        <div class="why-grid">
+            <div class="why-item">✅ Multi-industry expertise</div>
+            <div class="why-item">✅ Teaching experience since 2014</div>
+            <div class="why-item">✅ Registered business operations</div>
+            <div class="why-item">✅ Client-focused service delivery</div>
+            <div class="why-item">✅ Technology-driven solutions</div>
+            <div class="why-item">✅ Creative & professional excellence</div>
+            <div class="why-item">✅ Global outlook with local understanding</div>
+        </div>
+    </div>
+
+    <!-- Quote Section -->
+    <div class="quote-section">
+        <h3>🎬 Our Motto</h3>
+        <p>"Creating stories that live beyond the screen."</p>
+        <h3 style="margin-top: 20px;">📢 Our Slogan</h3>
+        <p>"Infinity Movie Star – Where Every Story Begins With You."</p>
+    </div>
+
 </div>
 
 <footer>
+    <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="movie-studio.html">Movie Studio</a>
+        <a href="education.html">Education</a>
+        <a href="contact.html">Contact</a>
+    </div>
     <p><strong>Ernest Embassy Digital Solutions</strong> | Travel • Film • Education • Web Development</p>
     <p>📍 Enugu, Nigeria</p>
-    <p style="margin-top: 15px; font-size: 0.85rem; color: #aaa;">&copy; 2026 Ernest Embassy Digital Solutions. All rights reserved.</p>
+    <p style="margin-top: 15px; font-size: 0.85rem;">&copy; 2026 Damian Okafor | Ernest Embassy Digital Solutions. All rights reserved.</p>
 </footer>
 
 </body>

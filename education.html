@@ -21,41 +21,92 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         .nav-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            gap: 20px;
         }
         .logo {
-            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .logo-text {
+            font-size: 1.2rem;
             font-weight: bold;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-decoration: none;
-            cursor: pointer;
+        }
+        .logo-sub {
+            font-size: 0.7rem;
+            color: #718096;
         }
         .nav-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 8px;
             align-items: center;
         }
-        .nav-links a {
+        .nav-links a, .dropbtn {
             color: #4a5568;
             text-decoration: none;
             font-weight: 500;
+            font-size: 0.85rem;
             padding: 8px 12px;
             border-radius: 8px;
             transition: all 0.3s ease;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
         }
-        .nav-links a:hover {
+        .nav-links a:hover, .dropdown:hover .dropbtn {
             color: #667eea;
             background: rgba(102, 126, 234, 0.1);
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            z-index: 1000;
+            top: 100%;
+            left: 0;
+            overflow: hidden;
+        }
+        .dropdown-content a {
+            display: block;
+            padding: 10px 20px;
+            color: #4a5568;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .dropdown-content a:last-child { border-bottom: none; }
+        .dropdown-content a:hover {
+            background: #f7fafc;
+            color: #667eea;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
         }
         .hero {
             text-align: center;
@@ -64,14 +115,265 @@
         }
         .hero h1 { font-size: 2.5rem; margin-bottom: 15px; }
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 25px;
             margin-top: 20px;
         }
-        .
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        .feature-icon { font-size: 3rem; margin-bottom: 15px; }
+        .feature-title { 
+            font-size: 1.3rem; 
+            font-weight: bold; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        .feature-desc { color: #718096; font-size: 0.9rem; line-height: 1.6; }
+        .subjects-section {
+            margin-top: 50px;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffd700;
+            padding-left: 15px;
+        }
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .subject-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .subject-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border-left: 3px solid #ffd700;
+        }
+        .subject-icon { font-size: 2rem; margin-bottom: 10px; }
+        .subject-name { font-size: 1.1rem; font-weight: bold; color: #2d3748; margin-bottom: 5px; }
+        .subject-desc { font-size: 0.8rem; color: #718096; }
+        .home-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-size: 24px;
+            border: none;
+        }
+        .home-button:hover { transform: scale(1.1); }
+        footer {
+            background: #1a1a2e;
+            color: #a0aec0;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .footer-links a {
+            color: #a0aec0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-links a:hover { color: #ffd700; }
+        @media (max-width: 768px) {
+            .nav-container { flex-direction: column; }
+            .hero h1 { font-size: 1.8rem; }
+            .home-button { width: 50px; height: 50px; font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-container">
+        <a href="index.html" class="logo">
+            <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+            <div>
+                <div class="logo-text">Ernest Embassy</div>
+                <div class="logo-sub">Digital Solutions</div>
+            </div>
+        </a>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="about.html">📖 About</a>
+            <a href="services.html">⚙️ Services</a>
+            <a href="webdev.html">💻 Web Dev</a>
+            <a href="visa.html">✈️ Visa</a>
+            
+            <div class="dropdown">
+                <button class="dropbtn">🎬 Movie Studio ▼</button>
+                <div class="dropdown-content">
+                    <a href="movie-studio.html">🎬 Studio Home</a>
+                    <a href="portfolio.html">🎨 Portfolio</a>
+                    <a href="gallery.html">📸 Gallery</a>
+                    <a href="team.html">👥 Our Team</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="dropbtn">🎓 Education ▼</button>
+                <div class="dropdown-content">
+                    <a href="education.html">🎓 Education Hub</a>
+                    <a href="teaching.html">📚 Teaching Notes</a>
+                    <a href="tutoring.html">💻 Tutoring</a>
+                    <a href="class.html">🎓 Class</a>
+                    <a href="resources.html">📄 Resources</a>
+                </div>
+            </div>
+
+            <a href="booking.html">📅 Book</a>
+            <a href="contact.html">📞 Contact</a>
+            <a href="login.html">🔐 Login</a>
+            <a href="register.html">📝 Register</a>
+        </div>
+    </div>
+</nav>
+
+<div class="hero">
+    <h1>🎓 Education Hub</h1>
+    <p>Your complete learning resource center for academic excellence</p>
+</div>
+
+<div class="container">
+    <div class="features-grid">
+        <div class="feature-card" onclick="window.location.href='class.html'">
+            <div class="feature-icon">📝</div>
+            <div class="feature-title">Interactive Quizzes</div>
+            <div class="feature-desc">Test your knowledge with hundreds of practice questions across all subjects with instant feedback.</div>
+        </div>
+        <div class="feature-card" onclick="window.location.href='teaching.html'">
+            <div class="feature-icon">📚</div>
+            <div class="feature-title">Teaching Notes</div>
+            <div class="feature-desc">Access comprehensive lesson notes, study guides, and curriculum-aligned materials.</div>
+        </div>
+        <div class="feature-card" onclick="window.location.href='tutoring.html'">
+            <div class="feature-icon">💻</div>
+            <div class="feature-title">Online Tutoring</div>
+            <div class="feature-desc">Get personalized one-on-one tutoring sessions from experienced educators.</div>
+        </div>
+        <div class="feature-card" onclick="window.location.href='resources.html'">
+            <div class="feature-icon">📄</div>
+            <div class="feature-title">Study Resources</div>
+            <div class="feature-desc">Download past questions, worksheets, and educational materials.</div>
+        </div>
+    </div>
+
+    <div class="subjects-section">
+        <h2 class="section-title">📚 Available Subjects</h2>
+        <div class="subjects-grid">
+            <div class="subject-card" onclick="window.location.href='class.html?subject=mathematics'">
+                <div class="subject-icon">📐</div>
+                <div class="subject-name">Mathematics</div>
+                <div class="subject-desc">Algebra, Calculus, Geometry & Statistics</div>
+            </div>
+            <div class="subject-card" onclick="window.location.href='class.html?subject=physics'">
+                <div class="subject-icon">⚛️</div>
+                <div class="subject-name">Physics</div>
+                <div class="subject-desc">Mechanics, Waves, Electricity & Magnetism</div>
+            </div>
+            <div class="subject-card" onclick="window.location.href='class.html?subject=english'">
+                <div class="subject-icon">📖</div>
+                <div class="subject-name">English Language</div>
+                <div class="subject-desc">Grammar, Comprehension, Essay Writing</div>
+            </div>
+            <div class="subject-card" onclick="window.location.href='class.html?subject=digital-technology'">
+                <div class="subject-icon">💻</div>
+                <div class="subject-name">Digital Technology</div>
+                <div class="subject-desc">ICT, Networking, Computer Fundamentals</div>
+            </div>
+            <div class="subject-card" onclick="window.location.href='class.html?subject=igbo'">
+                <div class="subject-icon">🗣️</div>
+                <div class="subject-name">Igbo Language</div>
+                <div class="subject-desc">Grammar, Literature, Cultural Studies</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button class="home-button" onclick="window.location.href='index.html'">🏠</button>
+
+<footer>
+    <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="contact.html">Contact</a>
+        <a href="privacy.html">Privacy Policy</a>
+    </div>
+    <p>© 2026 Ernest Embassy Digital Solutions | Empowering Education Through Technology</p>
+    <p style="margin-top: 10px; font-size: 12px;">📚 WAEC • JAMB • SSCE Preparation</p>
+</footer>
+
+<script>
+    // Firebase Config for auth state
+    const firebaseConfig = {
+        apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+        authDomain: "ernest-embassy-lms.firebaseapp.com",
+        projectId: "ernest-embassy-lms",
+        storageBucket: "ernest-embassy-lms.firebasestorage.app",
+        messagingSenderId: "204896421221",
+        appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
+    };
+    
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            const loginLink = document.querySelector('a[href="login.html"]');
+            if (loginLink) {
+                loginLink.textContent = '👤 Dashboard';
+                loginLink.href = 'dashboard.html';
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

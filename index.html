@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ernest Embassy - Creative Arts, Travels & Web Solutions</title>
+    <title>Ernest Embassy - Damian Okafor | Creative Arts, Travels & Web Solutions</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 
@@ -27,19 +27,30 @@
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
         }
 
-        .logo-section {
-            text-align: center;
-            margin-bottom: 15px;
+        /* Logo */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
         }
 
-        .logo-icon {
-            font-size: 2.5rem;
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
         }
 
         .logo-text {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: bold;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
@@ -48,16 +59,16 @@
         }
 
         .logo-sub {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             color: #718096;
         }
 
+        /* Navigation Links */
         .nav-links {
             display: flex;
-            justify-content: center;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
+            gap: 5px;
+            align-items: center;
         }
 
         .nav-links a {
@@ -65,7 +76,7 @@
             text-decoration: none;
             font-weight: 500;
             font-size: 0.85rem;
-            padding: 6px 12px;
+            padding: 8px 12px;
             border-radius: 8px;
             transition: all 0.3s ease;
         }
@@ -75,7 +86,64 @@
             background: rgba(102, 126, 234, 0.1);
         }
 
-        /* Hero Section */
+        /* Dropdown Menu */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-btn {
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-btn:hover {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            z-index: 1000;
+            top: 100%;
+            left: 0;
+            overflow: hidden;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 10px 20px;
+            color: #4a5568;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-content a:hover {
+            background: #f7fafc;
+            color: #667eea;
+        }
+
+        /* Hero Section with Name as prominent text and logo as background */
         .hero {
             position: relative;
             min-height: 85vh;
@@ -94,7 +162,20 @@
             height: 100%;
             object-fit: cover;
             z-index: 0;
-            opacity: 0.85;
+            opacity: 0.3;
+        }
+
+        /* Combination Logo Pattern Background */
+        .hero-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.15"><text x="10" y="30" font-size="20">🎭</text><text x="50" y="60" font-size="25">🎬</text><text x="20" y="80" font-size="18">💻</text><text x="70" y="40" font-size="22">✈️</text><text x="40" y="20" font-size="16">🎓</text><text x="80" y="80" font-size="20">📸</text><text x="5" y="50" font-size="15">🎨</text><text x="60" y="90" font-size="18">📚</text></svg>');
+            background-repeat: repeat;
+            z-index: 0;
+            opacity: 0.2;
         }
 
         .hero-overlay {
@@ -103,7 +184,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.85) 0%, rgba(118, 75, 162, 0.85) 100%);
+            background: linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.6) 100%);
             z-index: 1;
         }
 
@@ -116,16 +197,24 @@
         }
 
         .hero h1 {
-            font-size: 3rem;
+            font-size: 4.5rem;
             margin-bottom: 15px;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            font-weight: 800;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            letter-spacing: 2px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            opacity: 0.95;
+            font-weight: 500;
         }
 
         .hero-tagline {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin-bottom: 15px;
-            opacity: 0.95;
+            opacity: 0.9;
         }
 
         .hero-badges {
@@ -183,6 +272,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
             border: 1px solid #e2e8f0;
+            cursor: pointer;
         }
 
         .service-card:hover {
@@ -227,13 +317,7 @@
             margin-bottom: 10px;
         }
 
-        /* CTA Section */
-        .cta {
-            background: #f7fafc;
-            padding: 60px 20px;
-            text-align: center;
-        }
-
+        /* CTA Buttons */
         .btn-cta {
             display: inline-block;
             padding: 15px 35px;
@@ -247,9 +331,15 @@
             margin: 0 10px;
         }
 
-        .btn-cta:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        .btn-cta-outline {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+
+        .btn-cta-outline:hover {
+            background: #667eea;
+            color: white;
         }
 
         /* Footer */
@@ -279,8 +369,10 @@
         }
 
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2rem; }
-            .nav-links a { font-size: 0.7rem; padding: 4px 8px; }
+            .hero h1 { font-size: 2.5rem; }
+            .hero-subtitle { font-size: 1.1rem; }
+            .nav-container { flex-direction: column; }
+            .nav-links { justify-content: center; }
             .hero-badge { font-size: 0.7rem; padding: 4px 12px; }
         }
     </style>
@@ -289,26 +381,46 @@
 
 <nav>
     <div class="nav-container">
-        <div class="logo-section">
-            <div class="logo-icon">🎭</div>
-            <div class="logo-text">Damian Okafor</div>
-            <div class="logo-sub">Creative Artist & Filmmaker</div>
-        </div>
+        <a href="index.html" class="logo">
+            <img src="logo.png" alt="Ernest Embassy" class="logo-img" onerror="this.style.display='none'">
+            <div>
+                <div class="logo-text">Ernest Embassy</div>
+                <div class="logo-sub">Damian Okafor</div>
+            </div>
+        </a>
         <div class="nav-links">
             <a href="index.html">🏠 Home</a>
             <a href="about.html">📖 About</a>
             <a href="services.html">⚙️ Services</a>
             <a href="webdev.html">💻 Web Dev</a>
             <a href="visa.html">✈️ Visa</a>
-            <a href="movie-studio.html">🎬 Movie Studio</a>
-            <a href="portfolio.html">🎨 Portfolio</a>
-            <a href="teaching.html">📚 Teaching</a>
-            <a href="tutoring.html">💻 Tutoring</a>
-            <a href="education.html">🎓 Education</a>
-            <a href="class.html">🎓 Class</a>
+            
+            <!-- Movie Studio Dropdown -->
+            <div class="dropdown">
+                <span class="dropdown-btn">🎬 Movie Studio ▼</span>
+                <div class="dropdown-content">
+                    <a href="movie-studio.html">🎬 Studio Home</a>
+                    <a href="portfolio.html">🎨 Portfolio</a>
+                    <a href="gallery.html">📸 Gallery</a>
+                    <a href="team.html">👥 Our Team</a>
+                </div>
+            </div>
+
+            <!-- Education Dropdown -->
+            <div class="dropdown">
+                <span class="dropdown-btn">🎓 Education ▼</span>
+                <div class="dropdown-content">
+                    <a href="education.html">🎓 Education Hub</a>
+                    <a href="teaching.html">📚 Teaching Notes</a>
+                    <a href="tutoring.html">💻 Online Tutoring</a>
+                    <a href="class.html">🎓 Class/Quiz</a>
+                    <a href="resources.html">📄 Resources</a>
+                    <a href="courses.html">📚 Courses</a>
+                </div>
+            </div>
+
             <a href="booking.html">📅 Book</a>
             <a href="contact.html">📞 Contact</a>
-            <a href="gallery.html">📸 Gallery</a>
             <a href="faq.html">❓ FAQ</a>
             <a href="testimonials.html">⭐ Testimonials</a>
             <a href="register.html">📝 Register</a>
@@ -319,17 +431,18 @@
     </div>
 </nav>
 
-<!-- Hero Section -->
+<!-- Hero Section with Name as prominent text -->
 <section class="hero">
-    <img src="tea time infi.jpg" alt="Damian Okafor - Creative Artist" class="hero-background">
+    <img src="tea time infi.jpg" alt="Background" class="hero-background" onerror="this.style.display='none'">
+    <div class="hero-pattern"></div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
-        <h1>Damian Okafor</h1>
-        <div class="hero-tagline">Creative Artist | Filmmaker | Web Developer | Travel Consultant</div>
-        <p>Bringing visions to life through film, code, and global connections</p>
+        <h1>OKAFOR DAMIAN</h1>
+        <div class="hero-subtitle">Creative Artist & Filmmaker</div>
+        <div class="hero-tagline">Bringing visions to life through film, code, and global connections</div>
         <div class="hero-badges">
             <span class="hero-badge">🎬 Award-Winning Filmmaker</span>
-            <span class="hero-badge">💻 Web Solutions Expert</span>
+            <span class="hero-badge">💻 Web Development Expert</span>
             <span class="hero-badge">✈️ Visa & Travel Specialist</span>
             <span class="hero-badge">📚 Educator & Tutor</span>
         </div>
@@ -341,32 +454,32 @@
     <div class="container">
         <h2 class="section-title">What <span>I Offer</span></h2>
         <div class="services-grid">
-            <div class="service-card">
+            <div class="service-card" onclick="location.href='movie-studio.html'">
                 <div class="service-icon">🎬</div>
                 <h3>Movie Production</h3>
                 <p>Professional filmmaking, video production, editing, and storytelling services.</p>
             </div>
-            <div class="service-card">
+            <div class="service-card" onclick="location.href='webdev.html'">
                 <div class="service-icon">💻</div>
                 <h3>Web Development</h3>
                 <p>Custom websites, LMS platforms, e-commerce solutions, and web applications.</p>
             </div>
-            <div class="service-card">
+            <div class="service-card" onclick="location.href='visa.html'">
                 <div class="service-icon">✈️</div>
                 <h3>Visa & Travel</h3>
                 <p>Ernest Embassy Travels - Your trusted partner for visa processing and travel arrangements.</p>
             </div>
-            <div class="service-card">
+            <div class="service-card" onclick="location.href='education.html'">
                 <div class="service-icon">🎓</div>
                 <h3>Education & Tutoring</h3>
                 <p>WAEC/JAMB preparation, online tutoring, and educational resources.</p>
             </div>
-            <div class="service-card">
+            <div class="service-card" onclick="location.href='portfolio.html'">
                 <div class="service-icon">🎨</div>
                 <h3>Creative Arts</h3>
                 <p>Portrait drawing, painting, digital art, and creative design services.</p>
             </div>
-            <div class="service-card">
+            <div class="service-card" onclick="location.href='gallery.html'">
                 <div class="service-icon">📸</div>
                 <h3>Photography</h3>
                 <p>Professional photography for events, portraits, and commercial projects.</p>
@@ -400,12 +513,12 @@
 </section>
 
 <!-- CTA Section -->
-<section class="cta">
-    <div class="container">
+<section class="services" style="background: #f7fafc;">
+    <div class="container" style="text-align: center;">
         <h2 style="color: #2d3748; margin-bottom: 20px;">Ready to Work Together?</h2>
         <div>
             <a href="booking.html" class="btn-cta">📅 Book a Consultation</a>
-            <a href="contact.html" class="btn-cta" style="background: #e2e8f0; color: #4a5568;">📞 Contact Me</a>
+            <a href="contact.html" class="btn-cta btn-cta-outline">📞 Contact Me</a>
         </div>
     </div>
 </section>
@@ -415,17 +528,19 @@
         <a href="index.html">Home</a>
         <a href="about.html">About</a>
         <a href="services.html">Services</a>
+        <a href="movie-studio.html">Movie Studio</a>
+        <a href="education.html">Education</a>
         <a href="portfolio.html">Portfolio</a>
         <a href="contact.html">Contact</a>
         <a href="faq.html">FAQ</a>
         <a href="privacy.html">Privacy Policy</a>
     </div>
     <p>© 2026 Damian Okafor | Ernest Embassy Creative Studios & Travels</p>
-    <p style="margin-top: 10px; font-size: 12px;">🎬 Creative Artist | 💻 Web Developer | ✈️ Travel Consultant | 📚 Educator</p>
+    <p style="margin-top: 10px; font-size: 12px;">🎬 Film Production | 💻 Web Development | ✈️ Visa & Travel | 📚 Education</p>
 </footer>
 
 <script>
-    // Firebase Config (keep your existing one)
+    // Firebase Config
     const firebaseConfig = {
         apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
         authDomain: "ernest-embassy-lms.firebaseapp.com",

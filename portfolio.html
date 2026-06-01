@@ -114,7 +114,57 @@
             margin-bottom: 15px;
         }
         .status-completed { background: #11998e; color: white; }
+        .status-development { background: #f39c12; color: white; }
         .project-description { color: #666; line-height: 1.6; }
+
+        /* Video Section */
+        .video-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .video-card {
+            background: #1a1a2e;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .video-card:hover { transform: translateY(-5px); }
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            background: #000;
+        }
+        .video-wrapper video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .video-info {
+            padding: 15px;
+            color: white;
+        }
+        .video-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #ffd700;
+        }
+        .video-description {
+            font-size: 0.8rem;
+            color: #ccc;
+        }
 
         /* Music Section */
         .music-section {
@@ -140,6 +190,38 @@
         .music-icon { font-size: 2rem; margin-bottom: 10px; }
         .music-title { font-weight: bold; font-size: 1rem; margin: 10px 0; color: #1a1a2e; }
         audio { width: 100%; margin-top: 10px; border-radius: 30px; }
+
+        /* Documents Section */
+        .documents-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .document-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s;
+            border: 1px solid #e2e8f0;
+            text-decoration: none;
+            display: block;
+        }
+        .document-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: #ffd700;
+        }
+        .document-icon { font-size: 2.5rem; margin-bottom: 10px; }
+        .document-title { font-weight: bold; color: #1a1a2e; margin-bottom: 8px; }
+        .document-type { font-size: 0.7rem; color: #667eea; font-weight: bold; margin-top: 10px; }
 
         /* Screenplays Grid */
         .screenplays-section {
@@ -191,7 +273,7 @@
             .nav-container { flex-direction: column; }
             .nav-links { justify-content: center; }
             .hero h1 { font-size: 1.8rem; }
-            .projects-grid, .music-grid, .screenplays-grid { grid-template-columns: 1fr; }
+            .projects-grid, .video-grid, .music-grid, .documents-grid, .screenplays-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -245,7 +327,7 @@
 
 <div class="hero">
     <h1>🎨 <span>Creative Portfolio</span></h1>
-    <p>Film projects, original screenplays, and original music</p>
+    <p>Film productions, video showcases, original screenplays, music, and project documents</p>
 </div>
 
 <div class="container">
@@ -289,17 +371,96 @@
         </div>
     </div>
 
+    <!-- Video Showcase Section -->
+    <div class="video-section">
+        <div class="section-title"><span>🎬 Video Showcase</span></div>
+        <p style="text-align: center; color: #666; margin-bottom: 20px;">Film trailers, behind-the-scenes, and production showcases</p>
+        
+        <div class="video-grid">
+            <!-- Movie 1 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <video controls preload="metadata" poster="images/movie1-poster.jpg">
+                        <source src="movie1.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">🎬 Official Card - Teaser</div>
+                    <div class="video-description">Political conspiracy thriller - Official Card proof of concept</div>
+                </div>
+            </div>
+            
+            <!-- Video 1 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <video controls preload="metadata" poster="images/video1-poster.jpg">
+                        <source src="video1.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="video-info">
+                    <div class="video-title">🎬 Production Showreel</div>
+                    <div class="video-description">Behind the scenes and production highlights from Infinity Movie Star</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Documents / Resources -->
+    <div class="documents-section">
+        <div class="section-title"><span>📄 Project Documents & Resources</span></div>
+        <p style="text-align: center; color: #666; margin-bottom: 20px;">Download project proposals, scripts, profiles, and other resources</p>
+        
+        <div class="documents-grid">
+            <a href="docs/Infinity Movie Star Production Profile.pdf" class="document-card" target="_blank">
+                <div class="document-icon">📁</div>
+                <div class="document-title">Company Profile</div>
+                <div class="document-type">PDF - Download</div>
+            </a>
+            
+            <a href="docs/Chuks_and_Mary_Scenes_Official_Card.pdf" class="document-card" target="_blank">
+                <div class="document-icon">🎬</div>
+                <div class="document-title">Official Card - Chuks & Mary Scenes</div>
+                <div class="document-type">PDF - Download</div>
+            </a>
+            
+            <a href="docs/Comparative Project Summary.pdf" class="document-card" target="_blank">
+                <div class="document-icon">📊</div>
+                <div class="document-title">Comparative Project Summary</div>
+                <div class="document-type">PDF - Download</div>
+            </a>
+            
+            <a href="docs/Embassy Lagos Proposal.pdf" class="document-card" target="_blank">
+                <div class="document-icon">🏢</div>
+                <div class="document-title">Embassy Lagos Proposal</div>
+                <div class="document-type">PDF - Download</div>
+            </a>
+            
+            <a href="docs/MOOD BOARD FOR Round Table.pdf" class="document-card" target="_blank">
+                <div class="document-icon">🎨</div>
+                <div class="document-title">Round Table - Mood Board</div>
+                <div class="document-type">PDF - Download</div>
+            </a>
+            
+            <a href="docs/lyrics.pdf" class="document-card" target="_blank">
+                <div class="document-icon">🎵</div>
+                <div class="document-title">Song Lyrics Collection</div>
+                <div class="document-type">PDF - Download</div>
+            </a>
+        </div>
+    </div>
+
     <!-- Original Music Section -->
     <div class="music-section">
         <div class="section-title"><span>🎵 Original Music</span></div>
         <p style="text-align: center; color: #666; margin-bottom: 20px;">Original tracks from Infinity Movie Star Productions</p>
         
         <div class="music-grid">
-            <!-- Songs in music/ folder -->
             <div class="music-card">
                 <div class="music-icon">🎤</div>
                 <div class="music-title">I Gotta Make It</div>
-                <audio controls preload="none"><source src="music/I Gotta Make It.mp3" type="audio/mpeg">Your browser does not support audio.</audio>
+                <audio controls preload="none"><source src="music/I Gotta Make It.mp3" type="audio/mpeg"></audio>
             </div>
             
             <div class="music-card">
@@ -368,7 +529,6 @@
                 <audio controls preload="none"><source src="music/2026.mp3" type="audio/mpeg"></audio>
             </div>
             
-            <!-- Songs recently moved to music/ folder -->
             <div class="music-card">
                 <div class="music-icon">🎤</div>
                 <div class="music-title">Stacked Lies 22</div>
@@ -386,18 +546,7 @@
                 <div class="music-title">Vote for me 2</div>
                 <audio controls preload="none"><source src="music/Vote for me 2.mp3" type="audio/mpeg"></audio>
             </div>
-            
-            <!-- Songs in root directory (need to be moved or keep here) -->
-            <div class="music-card">
-                <div class="music-icon">🎤</div>
-                <div class="music-title">Song 1</div>
-                <audio controls preload="none"><source src="song1.mp3" type="audio/mpeg"></audio>
-            </div>
         </div>
-        
-        <p style="text-align: center; color: #888; font-size: 0.8rem; margin-top: 20px;">
-            🎵 More tracks coming soon. Original music produced by Infinity Movie Star Production.
-        </p>
     </div>
 
     <!-- Original Screenplays -->

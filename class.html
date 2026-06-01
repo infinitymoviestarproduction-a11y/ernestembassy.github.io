@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Arena - Ernest Embassy LMS</title>
     
-    <!-- Use the COMPAT version of Firebase (no modules needed) -->
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
 
@@ -261,37 +260,6 @@
             color: #eb3349;
         }
         
-        .success-box { 
-            background: linear-gradient(135deg, #11998e10 0%, #38ef7d10 100%);
-            border: 2px solid #11998e;
-            padding: 20px;
-            border-radius: 12px;
-            margin: 20px 0;
-            color: #11998e;
-        }
-        
-        .debug-panel { 
-            background: #f7fafc;
-            border-radius: 12px;
-            padding: 12px;
-            margin-top: 25px;
-            font-size: 11px;
-            color: #718096;
-            max-height: 150px;
-            overflow-y: auto;
-            font-family: monospace;
-            border: 1px solid #e2e8f0;
-        }
-        
-        .score-badge {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: bold;
-        }
-        
         .action-buttons {
             display: flex;
             gap: 15px;
@@ -325,6 +293,24 @@
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
         
+        .subject-selector {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .subject-selector select {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            font-size: 1rem;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        
         @media (max-width: 768px) {
             .nav-container {
                 flex-direction: column;
@@ -353,6 +339,7 @@
             <a href="#" onclick="goToPage('courses.html')">Courses</a>
             <a href="#" onclick="goToPage('resources.html')">Resources</a>
             <a href="#" onclick="goToPage('education.html')" class="nav-link">🎓 Education Hub</a>
+            <a href="#" onclick="goToPage('bulk-upload.html')" class="nav-link">📤 Bulk Upload</a>
         </div>
     </div>
 </nav>
@@ -363,6 +350,17 @@
 </div>
 
 <div class="container">
+    <div class="subject-selector">
+        <label style="font-weight: 600; color: #4a5568;">📚 Select Subject: </label>
+        <select id="subjectSelect" onchange="changeSubject()">
+            <option value="physics">📐 Physics</option>
+            <option value="mathematics">📖 Mathematics</option>
+            <option value="english">🌍 English Language</option>
+            <option value="digital-technology">💻 Digital Technology</option>
+            <option value="igbo">🗣️ Igbo Language</option>
+        </select>
+    </div>
+    
     <div class="quiz-section" id="quizInterface">
         <div class="status-message">
             <div class="loading-spinner"></div>
@@ -379,11 +377,17 @@
 <script>
     // Navigation function
     function goToPage(page) {
-        debug(`Navigating to ${page}...`);
         window.location.href = page;
     }
     
-    // Your Firebase configuration
+    function changeSubject() {
+        const select = document.getElementById('subjectSelect');
+        const subject = select.value;
+        localStorage.setItem('selectedSubject', subject);
+        window.location.href = `class.html?subject=${subject}`;
+    }
+    
+    // Firebase Configuration
     const firebaseConfig = {
         apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
         authDomain: "ernest-embassy-lms.firebaseapp.com",
@@ -393,147 +397,129 @@
         appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
     };
     
-    // Global variables
-    let db;
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    
     let loadedQuestions = [];
     let currentIndex = 0;
     let score = 0;
-    let debugLogs = [];
+    let currentSubject = 'physics';
     
-    // Debug function
-    function debug(message, type = "info") {
-        const timestamp = new Date().toLocaleTimeString();
-        const logEntry = `[${timestamp}] ${message}`;
-        debugLogs.unshift(logEntry);
-        console.log(`[DEBUG] ${message}`);
-        
-        if (debugLogs.length > 20) debugLogs.pop();
-        
-        const debugPanel = document.getElementById("debugPanel");
-        if (debugPanel) {
-            debugPanel.innerHTML = debugLogs.map(log => `<div>✨ ${log}</div>`).join('');
-        }
+    function debug(message) {
+        console.log(message);
     }
     
-    // Initialize Firebase
-    async function initFirebase() {
-        debug("🎯 Initializing Quiz Arena...");
-        try {
-            firebase.initializeApp(firebaseConfig);
-            db = firebase.firestore();
-            debug("✅ Connected to Quiz Database!");
-            return true;
-        } catch (error) {
-            debug("❌ Connection error: " + error.message);
-            return false;
+    function getSubjectFromURL() {
+        const params = new URLSearchParams(window.location.search);
+        const subject = params.get('subject');
+        if (subject) {
+            return subject;
         }
+        const saved = localStorage.getItem('selectedSubject');
+        return saved || 'physics';
     }
     
-    // Create sample questions
-    async function createSampleQuestions() {
-        debug("📝 Creating awesome quiz questions...");
-        
-        const interfaceDiv = document.getElementById("quizInterface");
-        interfaceDiv.innerHTML = `
-            <div class="status-message">
-                <div class="loading-spinner"></div>
-                <p style="margin-top: 20px;">🎨 Crafting your quiz questions...</p>
-            </div>
-        `;
-        
-        const sampleQuestions = [
-            { question: "What is the value of 2 + 2?", optionA: "3", optionB: "4", optionC: "5", optionD: "6", answer: "B" },
-            { question: "What is 5 × 6?", optionA: "30", optionB: "35", optionC: "40", optionD: "45", answer: "A" },
-            { question: "Solve: 10 ÷ 2 = ?", optionA: "2", optionB: "3", optionC: "4", optionD: "5", answer: "D" },
-            { question: "What is 9 - 4?", optionA: "3", optionB: "4", optionC: "5", optionD: "6", answer: "C" },
-            { question: "What is 8 + 7?", optionA: "13", optionB: "14", optionC: "15", optionD: "16", answer: "C" },
-            { question: "What is 12 × 12?", optionA: "144", optionB: "124", optionC: "134", optionD: "154", answer: "A" },
-            { question: "Simplify: 15 - 7", optionA: "6", optionB: "7", optionC: "8", optionD: "9", answer: "C" },
-            { question: "What is 100 ÷ 4?", optionA: "20", optionB: "25", optionC: "30", optionD: "35", answer: "B" },
-            { question: "What is 3 + 5 × 2?", optionA: "13", optionB: "16", optionC: "10", optionD: "11", answer: "A" },
-            { question: "What is the square root of 81?", optionA: "7", optionB: "8", optionC: "9", optionD: "10", answer: "C" }
-        ];
-        
-        try {
-            await db.collection("questions").doc("mathematics-ss1").set({
-                questions: sampleQuestions,
-                totalQuestions: sampleQuestions.length,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            debug("✅ 10 questions created successfully!");
-            alert("🎉 Success! 10 quiz questions have been added!\nClick OK to start your quiz adventure!");
-            location.reload();
-        } catch (error) {
-            debug("❌ Error: " + error.message);
-            interfaceDiv.innerHTML = `
-                <div class="error-box">
-                    <strong>⚠️ Oops! Something went wrong</strong><br>
-                    ${error.message}<br><br>
-                    <button class="btn btn-primary" onclick="location.reload()">🔄 Try Again</button>
-                </div>
-                <div class="debug-panel" id="debugPanel"></div>
-            `;
-        }
+    function formatSubjectName(subjectId) {
+        const names = {
+            'physics': 'Physics',
+            'mathematics': 'Mathematics',
+            'english': 'English Language',
+            'digital-technology': 'Digital Technology',
+            'igbo': 'Igbo Language'
+        };
+        return names[subjectId] || subjectId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     }
     
-    // Load questions
     async function loadQuestions() {
-        debug("📚 Loading your quiz questions...");
+        currentSubject = getSubjectFromURL();
+        debug(`Loading questions for: ${currentSubject}`);
+        
+        const select = document.getElementById('subjectSelect');
+        if (select) select.value = currentSubject;
+        
         const interfaceDiv = document.getElementById("quizInterface");
         
         try {
-            const docRef = db.collection("questions").doc("mathematics-ss1");
+            const docRef = db.collection("questions").doc(currentSubject);
             const docSnap = await docRef.get();
             
             if (!docSnap.exists) {
                 interfaceDiv.innerHTML = `
                     <div style="text-align: center;">
                         <div style="font-size: 4rem; margin: 20px;">📚</div>
-                        <h2 style="color: #667eea;">Ready for a Challenge?</h2>
-                        <p style="margin: 20px 0; color: #718096;">Your quiz database is empty. Let's create some questions!</p>
-                        <button class="btn btn-success" onclick="createSampleQuestions()" style="font-size: 1.1rem; padding: 15px 30px;">
-                            🚀 Create Quiz Questions (10)
-                        </button>
-                        <p style="margin-top: 20px; font-size: 12px; color: #a0aec0;">
-                            Click to generate exciting math questions automatically
+                        <h2 style="color: #667eea;">No Questions Found</h2>
+                        <p style="margin: 20px 0; color: #718096;">
+                            No questions available for ${formatSubjectName(currentSubject)}.
                         </p>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" onclick="goToPage('bulk-upload.html')">📤 Go to Bulk Upload</button>
+                            <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Education Hub</button>
+                            <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Home</button>
+                        </div>
                     </div>
-                    <div class="action-buttons">
-                        <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Back to Education Hub</button>
-                        <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Back to Home</button>
-                    </div>
-                    <div class="debug-panel" id="debugPanel"></div>
                 `;
                 return false;
             }
             
             const data = docSnap.data();
             loadedQuestions = data.questions || [];
-            debug(`✅ Loaded ${loadedQuestions.length} questions`);
+            debug(`Loaded ${loadedQuestions.length} questions`);
+            
+            if (loadedQuestions.length === 0) {
+                interfaceDiv.innerHTML = `
+                    <div style="text-align: center;">
+                        <h2>Empty Question Set</h2>
+                        <button class="btn btn-primary" onclick="goToPage('bulk-upload.html')">Upload Questions</button>
+                    </div>
+                `;
+                return false;
+            }
+            
+            document.querySelector('.hero h1').innerHTML = `🎯 ${formatSubjectName(currentSubject)} Quiz`;
+            
+            interfaceDiv.innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 4rem; margin: 20px;">🎯</div>
+                    <h2 style="color: #667eea; margin: 20px 0;">Ready to Challenge Yourself?</h2>
+                    <p style="margin: 15px 0; color: #718096; font-size: 1.1rem;">
+                        📚 ${loadedQuestions.length} questions available
+                    </p>
+                    <button class="btn btn-success" onclick="startQuiz()" style="font-size: 1.2rem; padding: 15px 40px;">
+                        🚀 Start Quiz
+                    </button>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Education Hub</button>
+                    <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Home</button>
+                </div>
+            `;
             return true;
         } catch (error) {
-            debug("❌ Error: " + error.message);
+            debug(`Error: ${error.message}`);
+            interfaceDiv.innerHTML = `
+                <div class="error-box">
+                    <strong>Error loading questions:</strong><br>
+                    ${error.message}
+                </div>
+            `;
             return false;
         }
     }
     
-    // Start quiz
     function startQuiz() {
-        debug("🎮 Starting quiz adventure!");
         currentIndex = 0;
         score = 0;
         showQuestion();
     }
     
-    // Display question
     function showQuestion() {
         const q = loadedQuestions[currentIndex];
         const interfaceDiv = document.getElementById("quizInterface");
         
         interfaceDiv.innerHTML = `
             <div class="quiz-meta">
-                <span>📖 Mathematics SS1</span>
-                <span class="score-badge">⭐ Question ${currentIndex + 1}/${loadedQuestions.length}</span>
+                <span>📖 ${formatSubjectName(currentSubject)}</span>
+                <span class="score-badge">⭐ ${currentIndex + 1}/${loadedQuestions.length}</span>
             </div>
             <div class="question-text">${q.question}</div>
             <div class="options-list">
@@ -545,20 +531,16 @@
             <div id="nextBtn" style="display:none; margin-top: 20px; text-align: center;">
                 <button class="btn btn-primary" onclick="nextQuestion()">Next Question →</button>
             </div>
-            <div class="action-buttons">
-                <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Back to Education Hub</button>
-                <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Back to Home</button>
+            <div id="explanationBox" style="display:none; margin-top: 20px; padding: 15px; background: #e8f5e9; border-radius: 10px; border-left: 4px solid #4caf50;">
+                <strong>📖 Explanation:</strong> <span id="explanationText"></span>
             </div>
-            <div class="debug-panel" id="debugPanel"></div>
+            <div class="action-buttons">
+                <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Education Hub</button>
+                <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Home</button>
+            </div>
         `;
-        
-        const debugPanel = document.getElementById("debugPanel");
-        if (debugPanel) {
-            debugPanel.innerHTML = debugLogs.map(log => `<div>✨ ${log}</div>`).join('');
-        }
     }
     
-    // Check answer
     function checkAnswer(selected) {
         const q = loadedQuestions[currentIndex];
         const correct = q.answer;
@@ -578,19 +560,26 @@
             );
             if (selectedBtn) selectedBtn.classList.add('correct');
             score++;
-            debug(`🎉 Correct! Score: ${score}/${currentIndex + 1}`);
         } else {
             const selectedBtn = Array.from(buttons).find(btn => 
                 btn.getAttribute('onclick').includes(`'${selected}'`)
             );
             if (selectedBtn) selectedBtn.classList.add('incorrect');
-            debug(`💡 The correct answer was ${correct}`);
+        }
+        
+        // Show explanation if available
+        if (q.explanation && q.explanation.length > 0) {
+            const explanationBox = document.getElementById('explanationBox');
+            const explanationText = document.getElementById('explanationText');
+            if (explanationBox && explanationText) {
+                explanationBox.style.display = 'block';
+                explanationText.innerHTML = q.explanation;
+            }
         }
         
         document.getElementById('nextBtn').style.display = 'block';
     }
     
-    // Next question
     function nextQuestion() {
         currentIndex++;
         if (currentIndex < loadedQuestions.length) {
@@ -600,28 +589,22 @@
         }
     }
     
-    // Show results
     function showResults() {
         const percent = Math.round((score / loadedQuestions.length) * 100);
         let gradeMessage = "";
-        let gradeColor = "";
         let emoji = "";
         
         if (percent >= 80) {
-            gradeMessage = "Outstanding Performance! You're a Star! 🌟";
-            gradeColor = "#11998e";
+            gradeMessage = "Outstanding! You're a Star! 🌟";
             emoji = "🏆";
         } else if (percent >= 60) {
             gradeMessage = "Great Job! Keep Shining! ⭐";
-            gradeColor = "#667eea";
             emoji = "🎉";
         } else if (percent >= 40) {
             gradeMessage = "Good Effort! Practice Makes Perfect! 💪";
-            gradeColor = "#f39c12";
             emoji = "📚";
         } else {
             gradeMessage = "Keep Learning! You'll Crush It Next Time! 🚀";
-            gradeColor = "#eb3349";
             emoji = "💪";
         }
         
@@ -630,68 +613,21 @@
             <div style="text-align: center; padding: 20px;">
                 <div style="font-size: 5rem;">${emoji}</div>
                 <h2 style="color: #667eea; margin: 20px 0;">Quiz Complete!</h2>
-                <div style="font-size: 4rem; color: ${gradeColor}; margin: 20px; font-weight: bold;">
+                <div style="font-size: 4rem; font-weight: bold; margin: 20px;">
                     ${percent}%
                 </div>
-                <p style="font-size: 1.3rem; margin: 10px 0;">
-                    Score: ${score} out of ${loadedQuestions.length}
-                </p>
-                <p style="margin: 20px 0; color: #718096; font-size: 1.1rem;">${gradeMessage}</p>
-                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px; flex-wrap: wrap;">
-                    <button class="btn btn-success" onclick="startQuiz()" style="font-size: 1.1rem;">
-                        🔄 Play Again
-                    </button>
-                </div>
+                <p style="font-size: 1.3rem;">Score: ${score}/${loadedQuestions.length}</p>
+                <p style="margin: 20px 0; color: #718096;">${gradeMessage}</p>
                 <div class="action-buttons">
-                    <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Back to Education Hub</button>
-                    <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Back to Home</button>
+                    <button class="btn btn-success" onclick="startQuiz()">🔄 Play Again</button>
+                    <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Education Hub</button>
+                    <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Home</button>
                 </div>
             </div>
-            <div class="debug-panel" id="debugPanel"></div>
         `;
-        
-        const debugPanel = document.getElementById("debugPanel");
-        if (debugPanel) {
-            debugPanel.innerHTML = debugLogs.map(log => `<div>✨ ${log}</div>`).join('');
-        }
-        
-        debug(`🏁 Quiz completed! Final score: ${score}/${loadedQuestions.length} (${percent}%)`);
     }
     
-    // Initialize
-    async function init() {
-        debug("🎯 Welcome to Quiz Arena!");
-        const initialized = await initFirebase();
-        
-        if (initialized) {
-            const hasQuestions = await loadQuestions();
-            if (hasQuestions && loadedQuestions.length > 0) {
-                const interfaceDiv = document.getElementById("quizInterface");
-                interfaceDiv.innerHTML = `
-                    <div style="text-align: center;">
-                        <div style="font-size: 4rem; margin: 20px;">🎯</div>
-                        <h2 style="color: #667eea; margin: 20px 0;">Ready to Challenge Yourself?</h2>
-                        <p style="margin: 15px 0; color: #718096; font-size: 1.1rem;">
-                            📚 ${loadedQuestions.length} exciting questions await!
-                        </p>
-                        <button class="btn btn-success" onclick="startQuiz()" style="font-size: 1.2rem; padding: 15px 40px; margin-top: 20px;">
-                            🚀 Start Quiz Now
-                        </button>
-                        <p style="margin-top: 20px; font-size: 12px; color: #a0aec0;">
-                            ✨ Test your knowledge and earn amazing scores ✨
-                        </p>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Back to Education Hub</button>
-                        <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Back to Home</button>
-                    </div>
-                    <div class="debug-panel" id="debugPanel"></div>
-                `;
-            }
-        }
-    }
-    
-    window.addEventListener('DOMContentLoaded', init);
+    loadQuestions();
 </script>
 </body>
 </html>

@@ -9,31 +9,79 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            min-height: 100vh;
         }
-        
-        /* Copy navigation styles from movie.html */
-        
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .logo-icon { font-size: 2rem; background: linear-gradient(135deg, #ffd700, #ffaa00); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .logo-text { font-size: 1.3rem; font-weight: bold; color: #ffd700; }
+        .logo-sub { font-size: 0.65rem; color: rgba(255, 215, 0, 0.8); display: block; }
+        .nav-links { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+        .nav-links a { color: white; text-decoration: none; font-weight: 500; padding: 8px 0; font-size: 0.8rem; }
+        .nav-links a:hover { color: #ffd700; }
+
+        .dropdown { position: relative; display: inline-flex; align-items: center; }
+        .dropbtn { background: transparent; border: none; color: #fff; font-size: 0.8rem; font-weight: 500; cursor: pointer; padding: 8px 12px; border-radius: 8px; display: flex; align-items: center; gap: 6px; }
+        .dropbtn:hover { color: #ffd700; background: rgba(255,255,255,0.05); }
+        .dropdown-content {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            min-width: 240px;
+            background: #16213e;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.25s ease;
+            z-index: 9999;
+        }
+        .dropdown:hover .dropdown-content { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-content a { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+        .dropdown-content a:hover { background: rgba(255,215,0,0.12); color: #ffd700; padding-left: 24px; }
+        .dropdown-header { padding: 12px 18px; font-size: 11px; text-transform: uppercase; color: rgba(255, 215, 0, 0.7); background: #12192c; font-weight: bold; }
+
         .hero {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: white;
             text-align: center;
             padding: 80px 20px;
         }
-        .hero h1 { font-size: 2.5rem; }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 10px; }
         .hero h1 span { color: #ffd700; }
-        
+        .hero p { font-size: 1.1rem; opacity: 0.9; }
+
         .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
-        .section-title {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 40px;
-            color: #1a1a2e;
-        }
+        .section-title { text-align: center; font-size: 2rem; margin-bottom: 40px; color: #1a1a2e; }
         .section-title span { border-bottom: 3px solid #ffd700; padding-bottom: 10px; }
-        
+
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 25px;
         }
         .gallery-item {
@@ -56,7 +104,7 @@
             font-weight: 500;
             color: #1a1a2e;
         }
-        
+
         .lightbox {
             display: none;
             position: fixed;
@@ -80,52 +128,178 @@
             color: white;
             cursor: pointer;
         }
-        
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            font-weight: bold;
+        }
+
+        footer {
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+
         @media (max-width: 768px) {
+            .nav-container { flex-direction: column; }
+            .nav-links { justify-content: center; }
             .hero h1 { font-size: 1.8rem; }
             .gallery-grid { grid-template-columns: 1fr; }
+            .close-lightbox { top: 10px; right: 20px; font-size: 30px; }
         }
     </style>
 </head>
 <body>
-    <!-- Copy navigation from movie.html -->
 
-    <div class="hero">
-        <h1>📸 <span>Behind the Scenes Gallery</span></h1>
-        <p>Exclusive photos from Infinity Movie Star Productions</p>
-    </div>
+<nav>
+    <div class="nav-container">
+        <div class="logo">
+            <span class="logo-icon">🎬</span>
+            <div>
+                <span class="logo-text">Ernest Embassy</span>
+                <span class="logo-sub">Digital Solutions</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="about.html">📖 About</a>
+            <a href="services.html">⚙️ Services</a>
+            <a href="webdev.html">💻 Web Dev</a>
+            <a href="visa.html">✈️ Visa</a>
+            
+            <div class="dropdown">
+                <button class="dropbtn">🎬 Movie Studio ▾</button>
+                <div class="dropdown-content">
+                    <div class="dropdown-header">Infinity Productions</div>
+                    <a href="movie.html">🏠 Studio Home</a>
+                    <a href="portfolio.html">🎨 Portfolio</a>
+                    <a href="gallery.html">📸 Gallery</a>
+                    <a href="team.html">👥 Our Team</a>
+                </div>
+            </div>
 
-    <div class="container">
-        <div class="section-title"><span>🎬 Production Photos</span></div>
-        <div class="gallery-grid">
-            <!-- All your gallery images here -->
-            <div class="gallery-item" onclick="openLightbox('images/young n up doing.jpg')">
-                <img src="images/young n up doing.jpg" alt="Young N Up Doing" onerror="this.style.display='none'">
-                <div class="gallery-caption">🎬 Young N Up Doing</div>
+            <div class="dropdown">
+                <button class="dropbtn">🎓 Education ▾</button>
+                <div class="dropdown-content">
+                    <div class="dropdown-header">Academic Portals</div>
+                    <a href="teaching.html">📚 Teaching</a>
+                    <a href="tutoring.html">💻 Tutoring</a>
+                    <a href="education.html">📜 Education</a>
+                    <a href="class.html">🏫 Class</a>
+                </div>
             </div>
-            <div class="gallery-item" onclick="openLightbox('images/2014 then.jpg')">
-                <img src="images/2014 then.jpg" alt="2014 Then" onerror="this.style.display='none'">
-                <div class="gallery-caption">📸 2014 Then</div>
-            </div>
-            <!-- Add all other gallery images here -->
+
+            <a href="booking.html">📅 Book</a>
+            <a href="contact.html">📞 Contact</a>
+            <a href="login.html">🔐 Login</a>
+            <a href="dashboard.html">👤 Dashboard</a>
         </div>
     </div>
+</nav>
 
-    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
-        <span class="close-lightbox">&times;</span>
-        <img id="lightboxImg" src="">
+<div class="hero">
+    <h1>📸 <span>Behind the Scenes Gallery</span></h1>
+    <p>Exclusive photos from Infinity Movie Star Productions</p>
+</div>
+
+<div class="container">
+    <div class="section-title"><span>🎬 Production & Training Gallery</span></div>
+    <div class="gallery-grid">
+        
+        <div class="gallery-item" onclick="openLightbox('images/young n up doing.jpg')">
+            <img src="images/young n up doing.jpg" alt="Young N Up Doing" onerror="this.parentElement.style.display='none'">
+            <div class="gallery-caption">🎬 Young N Up Doing</div>
+        </div>
+        
+        <div class="gallery-item" onclick="openLightbox('images/2014 then.jpg')">
+            <img src="images/2014 then.jpg" alt="2014 Then" onerror="this.parentElement.style.display='none'">
+            <div class="gallery-caption">📸 2014 Then</div>
+        </div>
+        
+        <div class="gallery-item" onclick="openLightbox('images/abuba forest.jpg')">
+            <img src="images/abuba forest.jpg" alt="Abuba Forest" onerror="this.parentElement.style.display='none'">
+            <div class="gallery-caption">🌳 Abuba Forest Shoot</div>
+        </div>
+        
+        <div class="gallery-item" onclick="openLightbox('images/infinity team.jpg')">
+            <img src="images/infinity team.jpg" alt="Infinity Team" onerror="this.parentElement.style.display='none'">
+            <div class="gallery-caption">👥 Infinity Movie Star Team</div>
+        </div>
+        
+        <div class="gallery-item" onclick="openLightbox('images/me and zubby.jpg')">
+            <img src="images/me and zubby.jpg" alt="Me and Zubby" onerror="this.parentElement.style.display='none'">
+            <div class="gallery-caption">⭐ Damian with Zubby</div>
+        </div>
+        
+        <div class="gallery-item" onclick="openLightbox('images/scout reloaded training.jpg')">
+            <img src="images/scout reloaded training.jpg" alt="Scout Reloaded Training" onerror="this.parentElement.style.display='none'">
+            <div class="gallery-caption">📚 Scout Reloaded Training</div>
+        </div>
+        
+        <div class="gallery-item" onclick="openLightbox('images/training malawi.jpg')">
+            <img src="images/training malawi.jpg" alt="Training Malawi" onerror="this.parentElement.style.display='none'">
+            <div class="gallery-caption">🌍 Training in Malawi</div>
+        </div>
+        
+        <div class="gallery-item" onclick="openLightbox('images/drama nta.jpg')">
+            <img src="images/drama nta.jpg" alt="Drama NTA" onerror="this.parentElement.style.display='none'">
+            <div class="gallery-caption">📺 Drama NTA Production</div>
+        </div>
+        
+        <div class="gallery-item" onclick="openLightbox('images/escet drama.jpg')">
+            <img src="images/escet drama.jpg" alt="ESCET Drama" onerror="this.parentElement.style.display='none'">
+            <div class="gallery-caption">🎭 ESCET Drama</div>
+        </div>
+        
+        <div class="gallery-item" onclick="openLightbox('images/zomba.jpg')">
+            <img src="images/zomba.jpg" alt="Zomba" onerror="this.parentElement.style.display='none'">
+            <div class="gallery-caption">📍 Zomba Production</div>
+        </div>
+        
     </div>
+</div>
 
-    <script>
-        function openLightbox(imgSrc) {
-            document.getElementById('lightboxImg').src = imgSrc;
-            document.getElementById('lightbox').classList.add('show');
-            document.body.style.overflow = 'hidden';
-        }
-        function closeLightbox() {
-            document.getElementById('lightbox').classList.remove('show');
-            document.body.style.overflow = 'auto';
-        }
-    </script>
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <span class="close-lightbox">&times;</span>
+    <img id="lightboxImg" src="">
+</div>
+
+<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
+    <span>💬</span>
+    <span>Chat on WhatsApp</span>
+</a>
+
+<footer>
+    <p>© 2026 Infinity Movie Star Production | Ernest Embassy Digital Solutions</p>
+    <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
+</footer>
+
+<script>
+    function openLightbox(imgSrc) {
+        document.getElementById('lightboxImg').src = imgSrc;
+        document.getElementById('lightbox').classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.remove('show');
+        document.body.style.overflow = 'auto';
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeLightbox();
+    });
+</script>
 </body>
 </html>

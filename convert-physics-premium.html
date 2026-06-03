@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Physics Quiz Converter - Premium Edition</title>
+    <title>Physics Quiz Converter - 550 Questions</title>
     <style>
         * {
             margin: 0;
@@ -73,19 +73,15 @@
             gap: 10px;
         }
 
-        .card h2 i {
-            font-size: 1.2em;
-        }
-
         textarea {
             width: 100%;
-            height: 400px;
+            height: 500px;
             background: #0f0f1a;
             border: 1px solid #00d4ff;
             border-radius: 10px;
             color: #0f0;
             font-family: 'Courier New', monospace;
-            font-size: 13px;
+            font-size: 12px;
             padding: 15px;
             resize: vertical;
         }
@@ -130,10 +126,10 @@
             background: #0f0f1a;
             border-radius: 10px;
             padding: 15px;
-            max-height: 400px;
+            max-height: 500px;
             overflow-y: auto;
             font-family: 'Courier New', monospace;
-            font-size: 12px;
+            font-size: 11px;
             white-space: pre-wrap;
             word-break: break-word;
         }
@@ -164,17 +160,10 @@
             display: block;
         }
 
-        .template-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-
-        .template-btn {
-            background: #2a2a4a;
-            padding: 8px 16px;
+        .warning {
+            color: #ffaa00;
             font-size: 12px;
+            margin-top: 10px;
         }
 
         .toast {
@@ -196,23 +185,28 @@
             opacity: 1;
         }
 
-        .warning {
-            color: #ffaa00;
-            font-size: 12px;
+        progress {
+            width: 100%;
+            height: 20px;
             margin-top: 10px;
+            border-radius: 10px;
+            overflow: hidden;
         }
 
-        hr {
-            border-color: #333;
-            margin: 20px 0;
+        progress::-webkit-progress-bar {
+            background-color: #333;
+            border-radius: 10px;
         }
 
-        .section-tag {
-            background: #00d4ff20;
-            padding: 5px 10px;
-            border-radius: 5px;
+        progress::-webkit-progress-value {
+            background-color: #00d4ff;
+            border-radius: 10px;
+        }
+
+        .progress-text {
             font-size: 12px;
-            color: #00d4ff;
+            margin-top: 5px;
+            text-align: center;
         }
 
         footer {
@@ -226,48 +220,43 @@
 <body>
     <div class="container">
         <header>
-            <h1>⚛️ Physics Quiz Converter</h1>
-            <p>Convert plain text physics questions to structured JSON format</p>
+            <h1>⚛️ Physics Quiz Converter - 550 Questions</h1>
+            <p>Convert 550 physics questions to structured JSON format</p>
         </header>
 
         <div class="main-grid">
-            <!-- Left Panel: Input -->
             <div class="card">
-                <h2>📝 1. Paste Physics Questions</h2>
-                <textarea id="inputText" placeholder='Paste your physics questions here in format:
+                <h2>📝 1. Paste Physics Questions (550 Qs)</h2>
+                <textarea id="inputText" placeholder='Paste your 550 questions here. Format accepted:
 
-1. What is Newton\'s first law?
+Question 1: What is Newton\'s first law?
 A. Law of inertia
 B. F = ma
 C. Action-reaction
 D. Energy conservation
-Answer: A
+Correct Answer: A
 Explanation: Newton\'s first law is the law of inertia.
 
-2. Unit of force is?
+Question 2: Unit of force is?
 A. Joule
 B. Newton
 C. Watt
 D. Pascal
-Answer: B
+Correct Answer: B
 Explanation: Force is measured in Newtons (N).'></textarea>
                 
-                <div class="template-buttons">
-                    <button class="template-btn" onclick="loadSample()">📋 Load Sample</button>
-                    <button class="template-btn" onclick="clearInput()">🗑️ Clear</button>
-                </div>
-
                 <div class="btn-group">
+                    <button onclick="loadSample()">📋 Load Sample</button>
+                    <button onclick="clearInput()">🗑️ Clear</button>
                     <button onclick="convertToJson()">🔄 Convert to JSON</button>
                     <button class="success" onclick="copyToClipboard()">📋 Copy JSON</button>
                     <button class="secondary" onclick="downloadJson()">💾 Download JSON</button>
                 </div>
                 <div class="warning">
-                    ⚡ <strong>Format Guide:</strong> Each question should have: number, question text, options (A, B, C, D), "Answer: X", and optional "Explanation: ..."
+                    ⚡ <strong>Format Guide:</strong> Each question: "Question X:", options (A., B., C., D.), "Correct Answer: X", "Explanation: ..."
                 </div>
             </div>
 
-            <!-- Right Panel: Output -->
             <div class="card">
                 <h2>📦 2. JSON Output</h2>
                 <div class="stats">
@@ -280,17 +269,18 @@ Explanation: Force is measured in Newtons (N).'></textarea>
                         <label>KB</label>
                     </div>
                     <div class="stat-box">
-                        <span id="sectionsCount">0</span>
+                        <span id="sectionsCount">1</span>
                         <label>Sections</label>
                     </div>
                 </div>
                 <div class="preview" id="jsonPreview">
                     <span style="color:#aaa;">Click "Convert to JSON" to see output here...</span>
                 </div>
+                <progress id="convertProgress" value="0" max="100" style="display:none;"></progress>
+                <div id="progressText" class="progress-text" style="display:none;"></div>
             </div>
         </div>
 
-        <!-- Premium Questions Section -->
         <div class="card" style="margin-top: 25px;">
             <h2>⭐ 3. Premium Questions Library</h2>
             <p style="margin-bottom: 15px;">Add these high-quality physics questions to your collection:</p>
@@ -307,7 +297,7 @@ Explanation: Force is measured in Newtons (N).'></textarea>
         </div>
 
         <footer>
-            Physics Quiz Converter Premium | Supports multi-section JSON output
+            Physics Quiz Converter | Supports 550+ questions | Handles "Correct Answer:" format
         </footer>
     </div>
 
@@ -329,32 +319,32 @@ Explanation: Force is measured in Newtons (N).'></textarea>
             let currentQ = null;
             let currentOptions = [];
             let readingOptions = false;
+            let questionCounter = 1;
 
             for (let i = 0; i < lines.length; i++) {
                 let line = lines[i].trim();
                 if (line === '') continue;
 
-                // Match question number pattern: "1.", "1)", "1. ", "1) "
-                const qMatch = line.match(/^(\d+)[\.\)]\s*(.*)/);
-                if (qMatch && !line.match(/^[A-D]\)/) && !line.match(/^Answer:/i) && !line.match(/^Explanation:/i)) {
+                // Match "Question X:" or "Question X." or "Q1." or just "1."
+                let qMatch = line.match(/^(?:Question\s*(\d+)[:.\]]\s*|Q(\d+)[:.\]]\s*|(\d+)[:.\]]\s*)(.*)/i);
+                
+                if (qMatch) {
                     // Save previous question
-                    if (currentQ) {
-                        if (currentQ.options.length === 0 && currentOptions.length > 0) {
-                            currentQ.options = [...currentOptions];
-                        }
-                        if (currentQ.answer && currentQ.text) {
-                            questions.push({ ...currentQ });
-                        }
-                        currentOptions = [];
+                    if (currentQ && currentQ.text && currentQ.options.length > 0 && currentQ.answer) {
+                        questions.push({ ...currentQ });
                     }
                     
+                    const qNum = qMatch[1] || qMatch[2] || qMatch[3];
+                    const qText = qMatch[4] || qMatch[3] || '';
+                    
                     currentQ = {
-                        id: parseInt(qMatch[1]),
-                        text: qMatch[2],
+                        id: parseInt(qNum) || questionCounter++,
+                        text: qText,
                         options: [],
                         answer: '',
                         explanation: ''
                     };
+                    currentOptions = [];
                     readingOptions = true;
                     continue;
                 }
@@ -369,51 +359,48 @@ Explanation: Force is measured in Newtons (N).'></textarea>
                     continue;
                 }
 
-                // Match Answer
-                const ansMatch = line.match(/^Answer:\s*([A-D])/i);
+                // Match "Correct Answer: X" or "Answer: X"
+                let ansMatch = line.match(/^(?:Correct\s+)?Answer:\s*([A-D])/i);
                 if (ansMatch && currentQ) {
                     currentQ.answer = ansMatch[1].toUpperCase();
                     continue;
                 }
 
-                // Match Explanation
+                // Match "Explanation: ..."
                 const expMatch = line.match(/^Explanation:\s*(.*)/i);
                 if (expMatch && currentQ) {
                     currentQ.explanation = expMatch[1];
                     continue;
                 }
 
-                // If line starts with number but not matched as question (maybe continuation)
-                if (currentQ && line.length > 0 && !line.match(/^\d+[\.\)]/)) {
-                    // Could be multi-line question text
-                    if (!currentQ.options.length && !currentQ.answer) {
+                // If we have a current question and line doesn't match above, could be continuation
+                if (currentQ && !currentQ.answer && line.length > 0 && !line.match(/^[A-D][\.\)]/i)) {
+                    if (currentOptions.length === 0 && !currentQ.answer) {
                         currentQ.text += ' ' + line;
                     }
                 }
             }
 
             // Push last question
-            if (currentQ) {
-                if (currentQ.options.length === 0 && currentOptions.length > 0) {
-                    currentQ.options = [...currentOptions];
-                }
-                if (currentQ.answer && currentQ.text) {
-                    questions.push({ ...currentQ });
-                }
+            if (currentQ && currentQ.text && currentQ.options.length > 0 && currentQ.answer) {
+                questions.push({ ...currentQ });
             }
 
             // Clean up: ensure options are properly formatted
             questions.forEach(q => {
                 if (q.options && q.options.length === 4) {
-                    // Already good
+                    // Good
                 } else if (q.options.length === 0) {
-                    // Default options
                     q.options = [
                         { letter: 'A', text: 'Option A' },
                         { letter: 'B', text: 'Option B' },
                         { letter: 'C', text: 'Option C' },
                         { letter: 'D', text: 'Option D' }
                     ];
+                }
+                // Ensure explanation exists
+                if (!q.explanation) {
+                    q.explanation = "No explanation provided.";
                 }
             });
 
@@ -427,41 +414,70 @@ Explanation: Force is measured in Newtons (N).'></textarea>
                 return;
             }
 
-            const questions = parseQuestions(inputText);
-            
-            // Group into sections (simple: all in one section)
-            const sections = [{
-                id: "converted_questions",
-                title: "Physics Questions",
-                questions: questions.map(q => ({
-                    id: q.id,
-                    text: q.text,
-                    options: q.options.map(opt => opt.text),
-                    answer: q.answer,
-                    explanation: q.explanation || "No explanation provided."
-                }))
-            }];
+            // Show progress
+            const progressBar = document.getElementById('convertProgress');
+            const progressTextDiv = document.getElementById('progressText');
+            progressBar.style.display = 'block';
+            progressTextDiv.style.display = 'block';
+            progressBar.value = 0;
+            progressTextDiv.innerText = 'Parsing questions...';
 
-            const output = {
-                title: "Physics Quiz Collection",
-                generated: new Date().toISOString(),
-                totalQuestions: questions.length,
-                sections: sections
-            };
+            // Use setTimeout to allow UI to update
+            setTimeout(() => {
+                try {
+                    const questions = parseQuestions(inputText);
+                    
+                    progressBar.value = 50;
+                    progressTextDiv.innerText = `Found ${questions.length} questions. Building JSON...`;
 
-            currentJsonData = output;
-            
-            // Update preview
-            const jsonStr = JSON.stringify(output, null, 2);
-            document.getElementById('jsonPreview').innerHTML = `<pre style="margin:0;color:#0f0;">${escapeHtml(jsonStr)}</pre>`;
-            
-            // Update stats
-            document.getElementById('questionCount').innerText = questions.length;
-            document.getElementById('sectionsCount').innerText = sections.length;
-            const sizeKB = (new Blob([jsonStr]).size / 1024).toFixed(2);
-            document.getElementById('fileSize').innerText = sizeKB;
-            
-            showToast('✓ Converted successfully!');
+                    // Group into sections (simple: all in one section)
+                    const sections = [{
+                        id: "converted_questions",
+                        title: "Physics Questions (550 Bank)",
+                        questions: questions.map(q => ({
+                            id: q.id,
+                            text: q.text,
+                            options: q.options.map(opt => opt.text),
+                            answer: q.answer,
+                            explanation: q.explanation || "No explanation provided."
+                        }))
+                    }];
+
+                    const output = {
+                        title: "Physics Quiz Collection - 550 Questions",
+                        generated: new Date().toISOString(),
+                        totalQuestions: questions.length,
+                        sections: sections
+                    };
+
+                    currentJsonData = output;
+                    
+                    // Update preview
+                    const jsonStr = JSON.stringify(output, null, 2);
+                    document.getElementById('jsonPreview').innerHTML = `<pre style="margin:0;color:#0f0;white-space:pre-wrap;">${escapeHtml(jsonStr)}</pre>`;
+                    
+                    // Update stats
+                    document.getElementById('questionCount').innerText = questions.length;
+                    document.getElementById('sectionsCount').innerText = sections.length;
+                    const sizeKB = (new Blob([jsonStr]).size / 1024).toFixed(2);
+                    document.getElementById('fileSize').innerText = sizeKB;
+
+                    progressBar.value = 100;
+                    progressTextDiv.innerText = `Done! ${questions.length} questions converted.`;
+                    
+                    setTimeout(() => {
+                        progressBar.style.display = 'none';
+                        progressTextDiv.style.display = 'none';
+                    }, 2000);
+
+                    showToast(`✓ Converted ${questions.length} questions successfully!`);
+                } catch (err) {
+                    console.error(err);
+                    alert('Error parsing questions: ' + err.message);
+                    progressBar.style.display = 'none';
+                    progressTextDiv.style.display = 'none';
+                }
+            }, 100);
         }
 
         function escapeHtml(str) {
@@ -496,7 +512,7 @@ Explanation: Force is measured in Newtons (N).'></textarea>
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `physics_questions_${new Date().toISOString().slice(0,19)}.json`;
+            a.download = `physics_questions_${currentJsonData.totalQuestions}_${new Date().toISOString().slice(0,19)}.json`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -505,45 +521,45 @@ Explanation: Force is measured in Newtons (N).'></textarea>
         }
 
         function loadSample() {
-            const sample = `1. A particle moves in a circular path with constant speed. What can be said about its acceleration?
-A. Zero
-B. Constant in magnitude but changing direction
-C. Constant in both magnitude and direction
-D. Increasing with time
-Answer: B
-Explanation: In uniform circular motion, acceleration (centripetal) has constant magnitude but always points toward the center.
+            const sample = `Question 1: A body moves with uniform velocity. This means its acceleration is
+A. increasing
+B. zero
+C. decreasing
+D. constant but not zero
+Correct Answer: B
+Explanation: Uniform velocity means no change in speed or direction → acceleration = 0.
 
-2. The SI unit of electric resistance is:
-A. Volt
-B. Ampere
-C. Ohm
-D. Watt
-Answer: C
-Explanation: Resistance is measured in Ohms (Ω), named after Georg Simon Ohm.
+Question 2: Speed is defined as
+A. distance × time
+B. displacement/time
+C. distance/time
+D. force/time
+Correct Answer: C
+Explanation: Speed = distance ÷ time.
 
-3. According to Newton's third law, action and reaction forces:
-A. Act on the same body
-B. Act on different bodies
-C. Cancel each other out
-D. Are always equal and in the same direction
-Answer: B
-Explanation: Action and reaction forces act on two different objects.
+Question 3: The S.I unit of acceleration is
+A. m/s
+B. m/s²
+C. N
+D. kg m/s
+Correct Answer: B
+Explanation: Acceleration = change in velocity per time.
 
-4. The wavelength of a wave is 2 m and its frequency is 50 Hz. The wave speed is:
-A. 25 m/s
-B. 52 m/s
-C. 100 m/s
-D. 0.04 m/s
-Answer: C
-Explanation: v = fλ = 50 × 2 = 100 m/s
+Question 4: A car accelerates from 10 m/s to 30 m/s in 5 s. Acceleration is
+A. 2 m/s²
+B. 4 m/s²
+C. 5 m/s²
+D. 10 m/s²
+Correct Answer: B
+Explanation: a = (30−10)/5 = 4 m/s²
 
-5. Which of the following is a scalar quantity?
-A. Velocity
-B. Force
-C. Displacement
-D. Mass
-Answer: D
-Explanation: Mass has magnitude only; velocity, force, and displacement have direction.`;
+Question 5: The slope of a distance-time graph represents
+A. acceleration
+B. velocity
+C. force
+D. momentum
+Correct Answer: B
+Explanation: The gradient of distance over time defines speed/velocity.`;
             document.getElementById('inputText').value = sample;
             showToast('✓ Sample loaded! Click Convert to JSON');
         }
@@ -553,131 +569,92 @@ Explanation: Mass has magnitude only; velocity, force, and displacement have dir
             showToast('✓ Input cleared');
         }
 
-        // Premium question generators
+        // Premium question generators (simplified versions)
         function addPremiumMechanics() {
-            const premium = `1. A block of mass m slides down a frictionless hemispherical bowl of radius R from rest at the top. What is the normal force when the block is at angle θ from the vertical?
+            const premium = `Question 101: A block of mass m slides down a frictionless hemispherical bowl of radius R from rest at the top. What is the normal force when the block is at angle θ from the vertical?
 A. mg(3cosθ - 2)
 B. mg(3cosθ - 1)
 C. mg(2cosθ - 1)
 D. mg(2 - 3cosθ)
-Answer: A
+Correct Answer: A
 Explanation: Using energy conservation: mgR(1-cosθ) = ½mv². Radial force: N - mgcosθ = mv²/R. Substituting v² = 2gR(1-cosθ) gives N = 3mgcosθ - 2mg.
 
-2. A uniform rod of length L and mass M is hinged at one end and released from horizontal position. Find angular acceleration just after release.
+Question 102: A uniform rod of length L and mass M is hinged at one end and released from horizontal position. Find angular acceleration just after release.
 A. 3g/(2L)
 B. 2g/(3L)
 C. g/L
 D. 3g/L
-Answer: A
+Correct Answer: A
 Explanation: Torque = Mg(L/2), I = ML²/3. τ = Iα → MgL/2 = (ML²/3)α → α = 3g/(2L).
 
-3. A particle of mass m moves in a central force field F = -kr². What is the effective potential for radial motion?
+Question 103: A particle of mass m moves in a central force field F = -kr². What is the effective potential for radial motion?
 A. L²/(2mr²) + kr³/3
 B. L²/(2mr²) - kr³/3
 C. L²/(2mr²) + kr²/2
 D. L²/(2mr²) - kr²/2
-Answer: A
-Explanation: Effective potential = centrifugal term + actual potential. V(r) = ∫F dr = -∫kr² dr = -kr³/3? Wait, correction: F = -kr² means V = +kr³/3. So V_eff = L²/(2mr²) + kr³/3.
+Correct Answer: A
+Explanation: Effective potential = centrifugal term + actual potential. V(r) = ∫F dr = -∫kr² dr = -kr³/3. Wait correction: F = -kr² means V = +kr³/3. So V_eff = L²/(2mr²) + kr³/3.
 
-4. A solid sphere rolls without slipping down an incline of angle θ. Find minimum μ_s required to prevent slipping.
+Question 104: A solid sphere rolls without slipping down an incline of angle θ. Find minimum μ_s required to prevent slipping.
 A. (2/5)tanθ
 B. (2/7)tanθ
 C. (5/7)tanθ
 D. tanθ
-Answer: B
+Correct Answer: B
 Explanation: For rolling without slipping, friction f = (2/7)Mgsinθ. Normal N = Mgcosθ. μ_s ≥ f/N = (2/7)tanθ.
 
-5. A particle is projected vertically upward from Earth's surface with speed equal to half escape velocity. Maximum height reached is:
+Question 105: A particle is projected vertically upward from Earth's surface with speed equal to half escape velocity. Maximum height reached is:
 A. R/2
 B. R/3
 C. R/4
 D. R
-Answer: B
-Explanation: v² = GM/(2R). Energy conservation: ½mv² - GMm/R = -GMm/(R+h) → solving gives h = R/3.
-
-6. A simple pendulum of length L has a bob of mass m. Find tension at the lowest point when released from θ = 90°.
-A. mg
-B. 2mg
-C. 3mg
-D. 4mg
-Answer: C
-Explanation: Energy: mgL = ½mv² → v² = 2gL. At bottom: T - mg = mv²/L = 2mg → T = 3mg.
-
-7. Two masses m₁ and m₂ are connected by a light string over a pulley of mass M and radius R. Find acceleration (no slipping).
-A. (m₁-m₂)g/(m₁+m₂+M)
-B. 2(m₁-m₂)g/(2m₁+2m₂+M)
-C. (m₁-m₂)g/(m₁+m₂+2M)
-D. (m₁-m₂)g/(2m₁+2m₂+M)
-Answer: B
-Explanation: Using torque equation: (T₁-T₂)R = Iα = (½MR²)(a/R) → T₁-T₂ = ½Ma. Add force equations: m₁g - T₁ = m₁a, T₂ - m₂g = m₂a → (m₁-m₂)g = (m₁+m₂+½M)a → a = 2(m₁-m₂)g/(2m₁+2m₂+M).
-
-8. A particle moves under potential V(x) = αx⁴. Period of oscillation T scales with energy E as:
-A. T ∝ E⁻¹/²
-B. T ∝ E⁻¹/⁴
-C. T ∝ E¹/⁴
-D. T ∝ E¹/²
-Answer: B
-Explanation: For V ∝ xⁿ, T ∝ E^(1/n - 1/2). Here n=4 → T ∝ E^(1/4 - 1/2) = E⁻¹/⁴.
-
-9. A Foucault pendulum at latitude λ has plane rotation period:
-A. 24 hours / sinλ
-B. 24 hours × sinλ
-C. 12 hours / sinλ
-D. 24 hours / cosλ
-Answer: A
-Explanation: The precession rate is Ω_Earth sinλ, so period = 2π/(Ω_Earth sinλ) = 24 hours / sinλ.
-
-10. A satellite orbits Earth at radius R. If its speed is reduced by 10%, find new orbit semi-major axis.
-A. 0.90R
-B. 0.81R
-C. 0.62R
-D. 0.53R
-Answer: C
-Explanation: v₀ = √(GM/R), new v = 0.9v₀. Vis-viva: v² = GM(2/R - 1/a) → 0.81GM/R = GM(2/R - 1/a) → 1/a = 1.19/R → a ≈ 0.62R.`;
+Correct Answer: B
+Explanation: v² = GM/(2R). Energy conservation: ½mv² - GMm/R = -GMm/(R+h) → solving gives h = R/3.`;
             
-            document.getElementById('inputText').value = premium;
-            showToast('✓ 10 Premium Mechanics questions added! Click Convert to JSON');
+            const current = document.getElementById('inputText').value;
+            document.getElementById('inputText').value = current + (current ? '\n\n' : '') + premium;
+            showToast('✓ Added 5 Premium Mechanics questions!');
         }
 
         function addPremiumThermo() {
-            const thermo = `1. A Carnot engine operates between 600 K and 300 K. If it absorbs 1000 J per cycle, work done is:
+            const thermo = `Question 201: A Carnot engine operates between 600 K and 300 K. If it absorbs 1000 J per cycle, work done is:
 A. 500 J
 B. 1000 J
 C. 750 J
 D. 250 J
-Answer: A
+Correct Answer: A
 Explanation: η = 1 - T_C/T_H = 1 - 300/600 = 0.5. W = ηQ_H = 0.5 × 1000 = 500 J.
 
-2. One mole of ideal gas undergoes isothermal expansion from V₁ to V₂. Work done is:
+Question 202: One mole of ideal gas undergoes isothermal expansion from V₁ to V₂. Work done is:
 A. RT ln(V₂/V₁)
 B. RT ln(V₁/V₂)
 C. R(T₂-T₁)
 D. 0
-Answer: A
+Correct Answer: A
 Explanation: W = ∫PdV = ∫(RT/V)dV = RT ln(V₂/V₁).
 
-3. The mean free path of a gas molecule depends on:
+Question 203: The mean free path of a gas molecule depends on:
 A. Temperature only
 B. Pressure only
 C. Number density and molecular diameter
 D. Volume only
-Answer: C
+Correct Answer: C
 Explanation: λ = 1/(√2 π d² n), where n = N/V.
 
-4. For an adiabatic process, PV^γ = constant. For monatomic gas, γ =:
+Question 204: For an adiabatic process, PV^γ = constant. For monatomic gas, γ =:
 A. 1.4
 B. 1.67
 C. 1.33
 D. 1.0
-Answer: B
+Correct Answer: B
 Explanation: γ = C_p/C_v = (5/2 R)/(3/2 R) = 5/3 ≈ 1.67.
 
-5. The entropy change when 1 kg ice melts at 0°C (L_f = 334 kJ/kg) is:
+Question 205: The entropy change when 1 kg ice melts at 0°C (L_f = 334 kJ/kg) is:
 A. 1223 J/K
 B. 0 J/K
 C. 334 J/K
 D. 1223 kJ/K
-Answer: A
+Correct Answer: A
 Explanation: ΔS = Q/T = (1×334000)/(273.15) ≈ 1223 J/K.`;
             
             const current = document.getElementById('inputText').value;
@@ -686,44 +663,44 @@ Explanation: ΔS = Q/T = (1×334000)/(273.15) ≈ 1223 J/K.`;
         }
 
         function addPremiumEM() {
-            const em = `1. A parallel plate capacitor has area A, separation d. Dielectric constant K fills half the space. Capacitance is:
+            const em = `Question 301: A parallel plate capacitor has area A, separation d. Dielectric constant K fills half the space. Capacitance is:
 A. (Kε₀A)/(d/2)
 B. (2Kε₀A)/(d(K+1))
 C. (Kε₀A)/d
 D. (ε₀A)/(d(1-1/K))
-Answer: B
+Correct Answer: B
 Explanation: Two capacitors in series: C₁ = Kε₀A/(d/2), C₂ = ε₀A/(d/2). 1/C = 1/C₁ + 1/C₂ → C = (2Kε₀A)/(d(K+1)).
 
-2. A charged particle enters uniform magnetic field B perpendicularly with speed v. Radius of circular path is:
+Question 302: A charged particle enters uniform magnetic field B perpendicularly with speed v. Radius of circular path is:
 A. mv/(qB)
 B. qB/(mv)
 C. mv²/(qB)
 D. 2mv/(qB)
-Answer: A
+Correct Answer: A
 Explanation: qvB = mv²/r → r = mv/(qB).
 
-3. The Poynting vector S represents:
+Question 303: The Poynting vector S represents:
 A. Energy density
 B. Power per unit area
 C. Force per unit charge
 D. Magnetic flux density
-Answer: B
+Correct Answer: B
 Explanation: S = (1/μ₀)(E × B) gives power flow per unit area.
 
-4. An AC circuit has V = V₀ sin(ωt), I = I₀ sin(ωt-φ). Average power is:
+Question 304: An AC circuit has V = V₀ sin(ωt), I = I₀ sin(ωt-φ). Average power is:
 A. V₀I₀/2
 B. V₀I₀ cosφ/2
 C. V₀I₀ sinφ/2
 D. V₀I₀/√2
-Answer: B
+Correct Answer: B
 Explanation: P_avg = V_rms I_rms cosφ = (V₀/√2)(I₀/√2)cosφ = V₀I₀ cosφ/2.
 
-5. The skin depth δ in a good conductor is proportional to:
+Question 305: The skin depth δ in a good conductor is proportional to:
 A. 1/√f
 B. √f
 C. f
 D. 1/f
-Answer: A
+Correct Answer: A
 Explanation: δ = √(2/(ωμσ)) ∝ 1/√f.`;
             
             const current = document.getElementById('inputText').value;
@@ -732,44 +709,44 @@ Explanation: δ = √(2/(ωμσ)) ∝ 1/√f.`;
         }
 
         function addPremiumModern() {
-            const modern = `1. The de Broglie wavelength of an electron accelerated through 100 V is approximately:
+            const modern = `Question 401: The de Broglie wavelength of an electron accelerated through 100 V is approximately:
 A. 0.123 nm
 B. 1.23 nm
 C. 0.0123 nm
 D. 12.3 nm
-Answer: A
+Correct Answer: A
 Explanation: λ = h/√(2meV) = 6.63×10⁻³⁴/√(2×9.1×10⁻³¹×1.6×10⁻¹⁹×100) ≈ 0.123 nm.
 
-2. In photoelectric effect, stopping potential V₀ vs frequency f graph slope gives:
+Question 402: In photoelectric effect, stopping potential V₀ vs frequency f graph slope gives:
 A. h/e
 B. e/h
 C. h
 D. φ/e
-Answer: A
+Correct Answer: A
 Explanation: eV₀ = hf - φ → V₀ = (h/e)f - φ/e, slope = h/e.
 
-3. The half-life of a radioactive sample is 10 days. After 30 days, fraction remaining:
+Question 403: The half-life of a radioactive sample is 10 days. After 30 days, fraction remaining:
 A. 1/8
 B. 1/4
 C. 1/2
 D. 1/16
-Answer: A
+Correct Answer: A
 Explanation: Number of half-lives = 30/10 = 3 → (1/2)³ = 1/8.
 
-4. The energy of a photon with wavelength 500 nm is:
+Question 404: The energy of a photon with wavelength 500 nm is:
 A. 3.98 × 10⁻¹⁹ J
 B. 3.98 × 10⁻¹⁶ J
 C. 3.98 × 10⁻²² J
 D. 3.98 × 10⁻¹³ J
-Answer: A
+Correct Answer: A
 Explanation: E = hc/λ = (6.63×10⁻³⁴ × 3×10⁸)/(500×10⁻⁹) = 3.98×10⁻¹⁹ J.
 
-5. According to Bohr model, radius of nth orbit in hydrogen is proportional to:
+Question 405: According to Bohr model, radius of nth orbit in hydrogen is proportional to:
 A. n
 B. n²
 C. 1/n
 D. 1/n²
-Answer: B
+Correct Answer: B
 Explanation: r_n = n²h²ε₀/(πme²) ∝ n².`;
             
             const current = document.getElementById('inputText').value;
@@ -780,12 +757,11 @@ Explanation: r_n = n²h²ε₀/(πme²) ∝ n².`;
         function addAllPremium() {
             addPremiumMechanics();
             setTimeout(() => {
-                const afterMech = document.getElementById('inputText').value;
                 addPremiumThermo();
                 setTimeout(() => addPremiumEM(), 100);
                 setTimeout(() => addPremiumModern(), 200);
             }, 100);
-            showToast('✨ Adding all 25 premium questions... Click Convert when done');
+            showToast('✨ Adding premium questions... Click Convert when done');
         }
     </script>
 </body>

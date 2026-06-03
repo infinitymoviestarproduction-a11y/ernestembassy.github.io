@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemistry 500+ Questions Converter - Fixed</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+        h1 { color: #667eea; }
+        .mode-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .mode-btn {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .mode-btn.free { background: #11998e; color: white; }
+        .mode-btn.premium { background: #f39c12; color: white; }
+        .mode-btn.active { transform: scale(1.02); }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 13px;
+            margin: 10px 0;
+            background: #f7fafc;
+            height: 400px;
+        }
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .btn-primary { background: #667eea; color: white; }
+        .btn-success { background: #11998e; color: white; }
+        .btn-warning { background: #f39c12; color: white; }
+        .btn-danger { background: #eb3349; color: white; }
+        .result {
+            background: #1a1a2e;
+            padding: 20px;
+            border-radius: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            color: #00ff88;
+        }
+        .stats-box {
+            background: #e2e8f0;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .progress {
+            margin: 15px 0;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 20px;
+            background: #11998e;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        .warning { color: #f39c12; }
+        .error { color: #eb3349; }
+        .success { color: #11998e; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Chemistry 500+ Questions Converter (Fixed)</h1>
+        <p>Handles 500+ questions with proper detection</p>
+        
+        <div class="mode-selector">
+            <div class="mode-btn free" onclick="setMode('free')">📝 Free Test Mode</div>
+            <div class="mode-btn premium active" onclick="setMode('premium')">🏆 Premium Quiz Mode (5 sec timer)</div>
+        </div>
+        
+        <div class="stats-box">
+            <strong>📋 Accepted Question Formats:</strong><br>
+            ✅ <code>1. Question text?</code><br>
+            ✅ <code>A) Option</code> or <code>A. Option</code><br>
+            ✅ <code>Answer: X</code> or <code>**Answer: X**</code><br>
+            ✅ <code>Explanation: text</code> or <code>**Explanation:** text</code><br>
+            <br>
+            <strong>⚠️ Important:</strong> Make sure each question has a number followed by a period.
+        </div>
+        
+        <textarea id="input" placeholder="Paste ALL your Chemistry questions (1 to 500+) here..."></textarea>
+        
+        <div>
+            <button class="btn-primary" onclick="convertToJSON()">🔄 Convert All Questions</button>
+            <button class="btn-success" onclick="copyJSON()" id="copyBtn" style="display:none;">📋 Copy JSON</button>
+            <button class="btn-warning" onclick="downloadJSON()">💾 Download JSON File</button>
+            <button class="btn-danger" onclick="clearAll()">🗑️ Clear</button>
+        </div>
+        
+        <div class="progress" id="progressContainer" style="display:none;">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <h2>Conversion Results:</h2>
+        <div id="conversionStats" class="stats-box" style="display:none;"></div>
+        
+        <h2>JSON Output:</h2>
+        <div class="result" id="output"></div>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        let currentMode = 'premium';
+        let currentJSON = null;
+        
+        function setMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            if (mode === 'free') {
+                document.querySelector('.mode-btn.free').classList.add('active');
+            } else {
+                document.querySelector('.mode-btn.premium').classList.add('active');
+            }
+        }
+        
+        function showMessage(msg, type = 'success') {
+            const msgDiv = document.getElementById('message');
+            const color = type === 'error' ? '#eb3349' : (type === 'warning' ? '#f39c12' : '#11998e');
+            msgDiv.innerHTML = `<div style="padding: 10px; border-radius: 8px; background: ${color}20; color: ${color}">${msg}</div>`;
+            setTimeout(() => { msgDiv.innerHTML = ''; }, 5000);
+        }
+        
+        function convertToJSON() {
+            const text = document.getElementById('input').value;
+            if (!text.trim()) {
+                showMessage('Please paste your questions first!', 'error');
+                return;
+            }
+            
+            const lines = text.split('\n');
+            const questions = [];
+            let currentQuestion = null;
+            let currentOptions = ['', '', '', ''];
+            let currentAnswer = '';
+            let currentExplanation = '';
+            let questionCount = 0;
+            let skippedLines = 0;
+            
+            for (let i = 0; i < lines.length; i++) {
+                let line = lines[i].trim();
+                if (!line) continue;
+                
+                // Match question with number: "1." or "1. " or "1. Question"
+                const questionMatch = line.match(/^(\d+)\.\s+(.+)/);
+                if (questionMatch) {
+                    // Save previous question
+                    if (currentQuestion && currentOptions[0] && currentOptions[1] && currentOptions[2] && currentOptions[3]) {
+                        const questionObj = {
+                            question: currentQuestion,
+                            optionA: currentOptions[0],
+                            optionB: currentOptions[1],
+                            optionC: currentOptions[2],
+                            optionD: currentOptions[3],
+                            answer: currentAnswer,
+                            explanation: currentExplanation
+                        };
+                        
+                        if (currentMode === 'premium') {
+                            questionObj.difficulty = "hard";
+                            questionObj.timeLimit = 5;
+                            questionObj.competition = true;
+                        } else {
+                            questionObj.difficulty = "medium";
+                        }
+                        
+                        questions.push(questionObj);
+                        questionCount++;
+                    } else if (currentQuestion) {
+                        skippedLines++;
+                        console.log(`Skipped incomplete question: ${currentQuestion.substring(0, 50)}...`);
+                    }
+                    
+                    // Start new question
+                    currentQuestion = questionMatch[2];
+                    currentOptions = ['', '', '', ''];
+                    currentAnswer = '';
+                    currentExplanation = '';
+                }
+                
+                // Match options: A) Text, A. Text, A Text
+                const optionMatch = line.match(/^([A-D])[\.\)]?\s+(.+)/);
+                if (optionMatch && currentQuestion) {
+                    const letter = optionMatch[1];
+                    const optionText = optionMatch[2];
+                    const index = letter.charCodeAt(0) - 65;
+                    if (index >= 0 && index < 4) {
+                        currentOptions[index] = optionText;
+                    }
+                }
+                
+                // Match answer: Answer: X, **Answer: X**, Ans: X
+                let answerMatch = line.match(/Answer:\s*([A-D])/i);
+                if (!answerMatch) answerMatch = line.match(/\*\*Answer:\s*([A-D])\*\*/i);
+                if (!answerMatch) answerMatch = line.match(/Ans:\s*([A-D])/i);
+                if (answerMatch && currentQuestion) {
+                    currentAnswer = answerMatch[1].toUpperCase();
+                }
+                
+                // Match explanation: Explanation: text, **Explanation:** text
+                let explanationMatch = line.match(/Explanation:\s*(.+)/i);
+                if (!explanationMatch) explanationMatch = line.match(/\*\*Explanation:\*\*\s*(.+)/i);
+                if (explanationMatch && currentQuestion) {
+                    currentExplanation = explanationMatch[1];
+                }
+            }
+            
+            // Save the last question
+            if (currentQuestion && currentOptions[0] && currentOptions[1] && currentOptions[2] && currentOptions[3]) {
+                const questionObj = {
+                    question: currentQuestion,
+                    optionA: currentOptions[0],
+                    optionB: currentOptions[1],
+                    optionC: currentOptions[2],
+                    optionD: currentOptions[3],
+                    answer: currentAnswer,
+                    explanation: currentExplanation
+                };
+                
+                if (currentMode === 'premium') {
+                    questionObj.difficulty = "hard";
+                    questionObj.timeLimit = 5;
+                    questionObj.competition = true;
+                } else {
+                    questionObj.difficulty = "medium";
+                }
+                
+                questions.push(questionObj);
+                questionCount++;
+            }
+            
+            if (questions.length === 0) {
+                document.getElementById('output').innerHTML = '<span style="color: #ff6b6b;">❌ No questions found! Please check your format.</span>';
+                showMessage('No questions found! Make sure each question starts with a number followed by a period (e.g., "1. What is...")', 'error');
+                return;
+            }
+            
+            // Show progress bar
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            progressContainer.style.display = 'block';
+            progressBar.style.width = '100%';
+            setTimeout(() => {
+                progressContainer.style.display = 'none';
+            }, 1000);
+            
+            // Display stats
+            const statsDiv = document.getElementById('conversionStats');
+            statsDiv.style.display = 'block';
+            statsDiv.innerHTML = `
+                <strong>📊 Conversion Statistics:</strong><br>
+                ✅ Total Questions Converted: ${questions.length}<br>
+                📝 Total Lines Processed: ${lines.length}<br>
+                ${skippedLines > 0 ? `⚠️ Skipped: ${skippedLines} incomplete questions<br>` : ''}
+                ${questions.length < 500 ? '<span class="warning">⚠️ Note: Expected 500+ questions, found ' + questions.length + '</span>' : '<span class="success">🎉 Great! All 500+ questions converted!</span>'}
+            `;
+            
+            const jsonOutput = JSON.stringify(questions, null, 2);
+            document.getElementById('output').innerHTML = `<pre style="white-space:pre-wrap; word-wrap:break-word;">${jsonOutput}</pre>`;
+            document.getElementById('copyBtn').style.display = 'inline-block';
+            currentJSON = jsonOutput;
+            
+            const modeText = currentMode === 'premium' ? 'PREMIUM (5 sec timer)' : 'FREE TEST';
+            document.getElementById('output').innerHTML += `<br><span class="success">✅ Successfully converted ${questions.length} Chemistry questions in ${modeText} mode!</span>`;
+            
+            showMessage(`✅ ${questions.length} Chemistry questions converted! Ready for upload.`);
+            
+            // Show where the conversion might have stopped
+            if (questions.length < 500) {
+                showMessage(`⚠️ Only ${questions.length} of 500+ questions found. Check the formatting around question ${questions.length + 1}.`, 'warning');
+            }
+        }
+        
+        function copyJSON() {
+            if (currentJSON) {
+                navigator.clipboard.writeText(currentJSON);
+                showMessage(`✅ JSON copied! Go to bulk-upload-premium.html, select Chemistry, and upload.`);
+            } else {
+                showMessage('No JSON to copy. Convert your questions first.', 'error');
+            }
+        }
+        
+        function downloadJSON() {
+            if (currentJSON) {
+                const blob = new Blob([currentJSON], {type: 'application/json'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `chemistry_${currentMode}_${new Date().toISOString().slice(0,19)}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showMessage('✅ JSON file downloaded!');
+            } else {
+                showMessage('No JSON to download. Convert your questions first.', 'error');
+            }
+        }
+        
+        function clearAll() {
+            document.getElementById('input').value = '';
+            document.getElementById('output').innerHTML = '';
+            document.getElementById('copyBtn').style.display = 'none';
+            document.getElementById('conversionStats').style.display = 'none';
+            currentJSON = null;
+            showMessage('Cleared! Paste your Chemistry questions to convert.');
+        }
+    </script>
+</body>
+</html>

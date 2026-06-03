@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Physics 550 Questions - JSON Converter (Array Format)</title>
+    <title>Physics 550 Questions - Safe JSON Converter</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -72,6 +72,7 @@
         .stat-box span { font-size: 24px; font-weight: bold; color: #00d4ff; }
         .stat-box label { font-size: 12px; color: #aaa; display: block; }
         .warning { color: #ffaa00; font-size: 12px; margin-top: 10px; }
+        .error { color: #ff6b6b; font-size: 12px; margin-top: 10px; }
         .toast {
             position: fixed;
             bottom: 30px;
@@ -87,6 +88,7 @@
             z-index: 1000;
         }
         .toast.show { opacity: 1; }
+        .toast.error { background: #ff6b6b; }
         progress { width: 100%; height: 20px; margin-top: 10px; border-radius: 10px; overflow: hidden; }
         progress::-webkit-progress-bar { background-color: #333; border-radius: 10px; }
         progress::-webkit-progress-value { background-color: #00d4ff; border-radius: 10px; }
@@ -96,8 +98,8 @@
 <body>
     <div class="container">
         <header>
-            <h1>⚛️ Physics 550 Questions - JSON Converter</h1>
-            <p>Output format: JSON Array (ready for upload)</p>
+            <h1>⚛️ Physics 550 Questions - Safe JSON Converter</h1>
+            <p>Output: Validated JSON Array | Auto-escapes special characters</p>
         </header>
 
         <div class="main-grid">
@@ -110,34 +112,51 @@
                     <button class="secondary" onclick="downloadJson()">💾 Download JSON</button>
                 </div>
                 <div class="warning">
-                    ⚡ Output is a JSON ARRAY — each question has: id, text, options, answer, explanation
+                    ⚡ Output is a validated JSON ARRAY — ready for upload
                 </div>
+                <div id="errorMsg" class="error" style="display:none;"></div>
             </div>
 
             <div class="card">
-                <h2>📦 2. JSON Output (Array Format)</h2>
+                <h2>📦 2. JSON Output (Validated Array)</h2>
                 <div class="stats">
                     <div class="stat-box"><span id="questionCount">0</span><label>Questions</label></div>
                     <div class="stat-box"><span id="fileSize">0</span><label>KB</label></div>
+                    <div class="stat-box"><span id="validStatus">✓</span><label>Valid JSON</label></div>
                 </div>
                 <div class="preview" id="jsonPreview"><span style="color:#aaa;">Click "Convert to JSON Array" to see output...</span></div>
                 <progress id="convertProgress" value="0" max="100" style="display:none;"></progress>
             </div>
         </div>
 
-        <footer>Physics Quiz Converter | Output: JSON Array — Ready for upload to quiz platforms</footer>
+        <footer>Physics Quiz Converter | Output: Validated JSON Array — Auto-escapes quotes and special chars</footer>
     </div>
 
     <div id="toast" class="toast">✓ Copied!</div>
 
     <script>
         let currentJsonArray = null;
+        let currentJsonString = null;
 
-        function showToast(msg) {
+        function showToast(msg, isError = false) {
             const toast = document.getElementById('toast');
             toast.textContent = msg || '✓ Copied!';
+            toast.classList.remove('error');
+            if (isError) toast.classList.add('error');
             toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2000);
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function escapeJsonString(str) {
+            if (!str) return '';
+            // Escape backslashes first, then quotes, then control characters
+            return str
+                .replace(/\\/g, '\\\\')   // backslash
+                .replace(/"/g, '\\"')     // double quote
+                .replace(/\n/g, '\\n')    // newline
+                .replace(/\r/g, '\\r')    // carriage return
+                .replace(/\t/g, '\\t')    // tab
+                .replace(/\f/g, '\\f');   // form feed
         }
 
         function parseQuestions(text) {
@@ -146,6 +165,7 @@
             let currentQ = null;
             let currentOptions = [];
             let globalId = 1;
+            let errorLines = [];
             
             for (let i = 0; i < lines.length; i++) {
                 let line = lines[i].trim();
@@ -214,13 +234,49 @@
                 questions.push({ ...currentQ });
             }
             
-            // Clean up
-            questions.forEach(q => {
-                while (q.options.length < 4) q.options.push('Option ' + String.fromCharCode(65 + q.options.length));
+            // Clean up and ensure proper escaping
+            questions.forEach((q, idx) => {
+                // Ensure 4 options
+                while (q.options.length < 4) {
+                    q.options.push('Option ' + String.fromCharCode(65 + q.options.length));
+                }
                 if (!q.explanation) q.explanation = "No explanation provided.";
+                
+                // Store escaped versions for JSON
+                q._escapedText = escapeJsonString(q.text);
+                q._escapedOptions = q.options.map(opt => escapeJsonString(opt));
+                q._escapedExplanation = escapeJsonString(q.explanation);
             });
             
             return questions;
+        }
+
+        function buildJsonArray(questions) {
+            // Build JSON manually to ensure validity
+            const items = [];
+            
+            for (const q of questions) {
+                const optionsJson = q._escapedOptions.map(opt => `"${opt}"`).join(',');
+                const item = `{
+  "id": ${q.id},
+  "text": "${q._escapedText}",
+  "options": [${optionsJson}],
+  "answer": "${q.answer}",
+  "explanation": "${q._escapedExplanation}"
+}`;
+                items.push(item);
+            }
+            
+            return `[\n${items.join(',\n')}\n]`;
+        }
+
+        function validateJson(jsonStr) {
+            try {
+                const parsed = JSON.parse(jsonStr);
+                return { valid: true, data: parsed };
+            } catch (e) {
+                return { valid: false, error: e.message };
+            }
         }
 
         function convertToJson() {
@@ -230,6 +286,9 @@
                 return;
             }
             
+            const errorDiv = document.getElementById('errorMsg');
+            errorDiv.style.display = 'none';
+            
             const progressBar = document.getElementById('convertProgress');
             progressBar.style.display = 'block';
             progressBar.value = 0;
@@ -238,31 +297,43 @@
                 try {
                     progressBar.value = 30;
                     const questions = parseQuestions(inputText);
-                    progressBar.value = 70;
+                    progressBar.value = 60;
                     
-                    // Output as a simple ARRAY (not an object with sections)
-                    const jsonArray = questions.map(q => ({
-                        id: q.id,
-                        text: q.text,
-                        options: q.options,
-                        answer: q.answer,
-                        explanation: q.explanation
-                    }));
+                    // Build JSON array string
+                    const jsonStr = buildJsonArray(questions);
+                    progressBar.value = 80;
                     
-                    currentJsonArray = jsonArray;
+                    // Validate the JSON
+                    const validation = validateJson(jsonStr);
                     
-                    const jsonStr = JSON.stringify(jsonArray, null, 2);
-                    document.getElementById('jsonPreview').innerHTML = `<pre style="margin:0;color:#0f0;white-space:pre-wrap;">${escapeHtml(jsonStr)}</pre>`;
-                    document.getElementById('questionCount').innerText = jsonArray.length;
+                    if (!validation.valid) {
+                        errorDiv.style.display = 'block';
+                        errorDiv.innerHTML = `❌ JSON Validation Error: ${validation.error}<br>Please check for special characters in questions.`;
+                        showToast('JSON validation failed!', true);
+                        progressBar.style.display = 'none';
+                        return;
+                    }
+                    
+                    currentJsonArray = validation.data;
+                    currentJsonString = jsonStr;
+                    
+                    // Display formatted JSON
+                    document.getElementById('jsonPreview').innerHTML = `<pre style="margin:0;color:#0f0;white-space:pre-wrap;">${escapeHtml(jsonStr.substring(0, 5000))}${jsonStr.length > 5000 ? '\n\n... (truncated, download full file)' : ''}</pre>`;
+                    document.getElementById('questionCount').innerText = questions.length;
                     const sizeKB = (new Blob([jsonStr]).size / 1024).toFixed(2);
                     document.getElementById('fileSize').innerText = sizeKB;
+                    document.getElementById('validStatus').innerHTML = '✓ Valid';
+                    document.getElementById('validStatus').style.color = '#51cf66';
                     
                     progressBar.value = 100;
                     setTimeout(() => { progressBar.style.display = 'none'; }, 1500);
-                    showToast(`✓ Converted ${jsonArray.length} questions to JSON array!`);
+                    showToast(`✓ Converted ${questions.length} questions to valid JSON array!`);
+                    
                 } catch(err) {
                     console.error(err);
-                    alert('Error parsing: ' + err.message);
+                    errorDiv.style.display = 'block';
+                    errorDiv.innerHTML = `❌ Parsing Error: ${err.message}`;
+                    showToast('Error parsing questions!', true);
                     progressBar.style.display = 'none';
                 }
             }, 100);
@@ -278,22 +349,39 @@
         }
         
         function copyToClipboard() {
-            if (!currentJsonArray) { alert('No JSON to copy. Convert first!'); return; }
-            const jsonStr = JSON.stringify(currentJsonArray, null, 2);
-            navigator.clipboard.writeText(jsonStr).then(() => showToast('✓ JSON array copied!')).catch(() => alert('Copy failed'));
+            if (!currentJsonString) { 
+                showToast('No JSON to copy. Convert first!', true);
+                return; 
+            }
+            navigator.clipboard.writeText(currentJsonString).then(() => {
+                showToast('✓ JSON array copied!');
+            }).catch(() => {
+                // Fallback
+                const textarea = document.createElement('textarea');
+                textarea.value = currentJsonString;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('✓ JSON copied (fallback)!');
+            });
         }
         
         function downloadJson() {
-            if (!currentJsonArray) { alert('No JSON to download. Convert first!'); return; }
-            const jsonStr = JSON.stringify(currentJsonArray, null, 2);
-            const blob = new Blob([jsonStr], { type: 'application/json' });
+            if (!currentJsonString) { 
+                showToast('No JSON to download. Convert first!', true);
+                return; 
+            }
+            const blob = new Blob([currentJsonString], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `physics_questions_array_${new Date().toISOString().slice(0,19)}.json`;
+            a.download = `physics_questions_validated_${new Date().toISOString().slice(0,19)}.json`;
+            document.body.appendChild(a);
             a.click();
+            document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            showToast('✓ JSON array downloaded!');
+            showToast('✓ JSON downloaded!');
         }
     </script>
 </body>

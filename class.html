@@ -22,10 +22,10 @@
         nav { 
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            padding: 1rem 0; 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000; 
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         
@@ -75,44 +75,84 @@
             overflow: hidden;
         }
         
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x bottom;
-            opacity: 0.3;
-        }
-        
         .hero h1 { 
             font-size: 2.5rem; 
             color: white; 
             margin-bottom: 15px;
             font-weight: 700;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-            position: relative;
         }
         
-        .hero p { 
-            color: rgba(255,255,255,0.95); 
-            font-size: 1.1rem; 
-            position: relative;
+        .hero p { color: rgba(255,255,255,0.95); font-size: 1.1rem; }
+        
+        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+        
+        /* Mode Selector Cards */
+        .mode-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
         }
         
-        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        .mode-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+        }
+        
+        .mode-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .mode-card.free {
+            border-top: 4px solid #11998e;
+        }
+        
+        .mode-card.premium {
+            border-top: 4px solid #f39c12;
+        }
+        
+        .mode-icon { font-size: 3rem; margin-bottom: 15px; }
+        .mode-title { font-size: 1.5rem; font-weight: bold; margin-bottom: 10px; }
+        .mode-price { font-size: 1.2rem; color: #11998e; font-weight: bold; margin: 10px 0; }
+        .mode-features { list-style: none; margin: 15px 0; text-align: left; }
+        .mode-features li { padding: 5px 0; display: flex; align-items: center; gap: 8px; color: #666; }
+        .mode-features li:before { content: "✓"; color: #11998e; font-weight: bold; }
+        .btn-select { 
+            background: linear-gradient(135deg, #667eea, #764ba2); 
+            color: white; 
+            border: none; 
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        
+        /* Prize Banner */
+        .prize-banner {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            color: white;
+            text-align: center;
+        }
+        .prize-amount { font-size: 2rem; font-weight: bold; }
+        .leaderboard-link { color: white; margin-top: 10px; display: inline-block; }
         
         .quiz-section { 
             background: white; 
             border-radius: 20px; 
             padding: 35px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-            transition: transform 0.3s ease;
-        }
-        
-        .quiz-section:hover {
-            transform: translateY(-5px);
         }
         
         .btn { 
@@ -130,55 +170,12 @@
             gap: 8px;
         }
         
-        .btn-success { 
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            color: white; 
-            box-shadow: 0 4px 15px rgba(56, 239, 125, 0.3);
-        }
+        .btn-success { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-warning { background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%); color: white; }
+        .btn-secondary { background: #e2e8f0; color: #4a5568; }
         
-        .btn-success:hover { 
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(56, 239, 125, 0.4);
-        }
-        
-        .btn-primary { 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        }
-        
-        .btn-primary:hover { 
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        }
-        
-        .btn-secondary { 
-            background: #e2e8f0;
-            color: #4a5568;
-        }
-        
-        .btn-secondary:hover { 
-            background: #cbd5e0;
-            transform: translateY(-2px);
-        }
-        
-        .btn-warning {
-            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-            color: white;
-        }
-        
-        .btn-warning:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
-        }
-        
-        .status-message { 
-            text-align: center; 
-            font-size: 1.1rem; 
-            color: #718096; 
-            padding: 40px 0; 
-        }
-        
+        .status-message { text-align: center; font-size: 1.1rem; color: #718096; padding: 40px 0; }
         .loading-spinner { 
             border: 4px solid #e2e8f0;
             border-top: 4px solid #667eea;
@@ -188,11 +185,7 @@
             animation: spin 1s linear infinite; 
             margin: 20px auto; 
         }
-        
-        @keyframes spin { 
-            0% { transform: rotate(0deg); } 
-            100% { transform: rotate(360deg); } 
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
         .option-item { 
             background: #f7fafc;
@@ -207,7 +200,6 @@
             font-size: 1rem;
             font-weight: 500;
             transition: all 0.3s ease;
-            font-family: inherit;
         }
         
         .option-item:hover:not([disabled]) { 
@@ -229,18 +221,9 @@
             color: #eb3349;
         }
         
-        .option-item:disabled { 
-            cursor: not-allowed; 
-            opacity: 0.8;
-        }
+        .option-item:disabled { cursor: not-allowed; opacity: 0.8; }
         
-        .question-text { 
-            font-size: 1.35rem;
-            margin: 25px 0;
-            color: #2d3748;
-            line-height: 1.6;
-            font-weight: 600;
-        }
+        .question-text { font-size: 1.35rem; margin: 25px 0; color: #2d3748; line-height: 1.6; font-weight: 600; }
         
         .quiz-meta { 
             display: flex;
@@ -249,8 +232,6 @@
             margin-bottom: 25px;
             padding-bottom: 15px;
             border-bottom: 2px solid #e2e8f0;
-            color: #718096;
-            font-weight: 500;
             flex-wrap: wrap;
             gap: 15px;
         }
@@ -266,99 +247,9 @@
             gap: 8px;
         }
         
-        .timer-number {
-            font-size: 1.3rem;
-            font-weight: bold;
-            background: white;
-            color: #667eea;
-            padding: 4px 12px;
-            border-radius: 30px;
-            min-width: 60px;
-            text-align: center;
-        }
-        
-        .timer-warning {
-            animation: pulse 0.5s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.05); }
-        }
-        
-        /* Payment Modal Styles */
-        .payment-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-        .payment-content {
-            background: white;
-            max-width: 450px;
-            width: 90%;
-            padding: 30px;
-            border-radius: 20px;
-            text-align: center;
-            animation: modalPop 0.3s ease;
-        }
-        @keyframes modalPop {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-        .payment-icon { font-size: 3rem; margin-bottom: 10px; }
-        .payment-amount {
-            font-size: 2.5rem;
-            color: #11998e;
-            font-weight: bold;
-            margin: 15px 0;
-        }
-        .payment-details {
-            background: #f7fafc;
-            padding: 15px;
-            border-radius: 12px;
-            margin: 20px 0;
-            text-align: left;
-        }
-        .payment-details p {
-            margin: 8px 0;
-            font-size: 0.9rem;
-        }
-        .payment-benefits {
-            background: #e8f5e9;
-            padding: 12px;
-            border-radius: 10px;
-            margin: 15px 0;
-            text-align: left;
-        }
-        .payment-benefits p {
-            margin: 5px 0;
-            font-size: 0.85rem;
-            color: #11998e;
-        }
-        
-        .error-box { 
-            background: linear-gradient(135deg, #eb334910 0%, #f45c4310 100%);
-            border: 2px solid #eb3349;
-            padding: 20px;
-            border-radius: 12px;
-            margin: 20px 0;
-            color: #eb3349;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
+        .timer-number { font-size: 1.3rem; font-weight: bold; background: white; color: #667eea; padding: 4px 12px; border-radius: 30px; min-width: 60px; text-align: center; }
+        .timer-warning { animation: pulse 0.5s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
         
         .home-button {
             position: fixed;
@@ -379,11 +270,7 @@
             font-size: 24px;
             border: none;
         }
-        
-        .home-button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        }
+        .home-button:hover { transform: scale(1.1); }
         
         .subject-selector {
             background: white;
@@ -403,45 +290,41 @@
             cursor: pointer;
         }
         
-        .badge-paid {
-            display: inline-block;
-            background: #11998e;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            margin-left: 10px;
+        /* Payment Modal */
+        .payment-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
         }
-        
-        .badge-locked {
-            display: inline-block;
-            background: #f39c12;
-            color: white;
-            padding: 4px 12px;
+        .payment-content {
+            background: white;
+            max-width: 500px;
+            width: 90%;
+            padding: 30px;
             border-radius: 20px;
-            font-size: 0.7rem;
-            margin-left: 10px;
+            text-align: center;
+            animation: modalPop 0.3s ease;
         }
+        @keyframes modalPop {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .payment-amount { font-size: 2.5rem; color: #11998e; font-weight: bold; margin: 15px 0; }
+        .payment-details { background: #f7fafc; padding: 15px; border-radius: 12px; margin: 20px 0; text-align: left; }
+        .prize-info { background: #fff3cd; padding: 15px; border-radius: 12px; margin: 15px 0; text-align: left; }
+        .prize-info h4 { color: #f39c12; margin-bottom: 10px; }
         
         @media (max-width: 768px) {
-            .nav-container {
-                flex-direction: column;
-                gap: 15px;
-            }
-            .action-buttons {
-                flex-direction: column;
-            }
-            .home-button {
-                bottom: 20px;
-                right: 20px;
-                width: 50px;
-                height: 50px;
-                font-size: 20px;
-            }
-            .quiz-meta {
-                flex-direction: column;
-                align-items: stretch;
-            }
+            .nav-container { flex-direction: column; gap: 15px; }
+            .home-button { bottom: 20px; right: 20px; width: 50px; height: 50px; font-size: 20px; }
+            .mode-selector { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -455,43 +338,79 @@
             <a href="#" onclick="goToPage('courses.html')">Courses</a>
             <a href="#" onclick="goToPage('resources.html')">Resources</a>
             <a href="#" onclick="goToPage('education.html')" class="nav-link">🎓 Education Hub</a>
-            <a href="#" onclick="goToPage('bulk-upload.html')" class="nav-link">📤 Bulk Upload</a>
         </div>
     </div>
 </nav>
 
 <div class="hero">
     <h1>🎯 Quiz Challenge Arena</h1>
-    <p>Test your knowledge and earn amazing scores! 🌟</p>
+    <p>Practice for free or compete for ₦10,000 monthly prize! 🏆</p>
 </div>
 
 <div class="container">
+    <!-- Prize Banner -->
+    <div class="prize-banner">
+        <div class="prize-amount">🏆 ₦10,000 Monthly Draw 🏆</div>
+        <p>Top performers in Premium Quiz qualify for monthly prize draw!</p>
+        <p style="font-size: 0.9rem; margin-top: 5px;">Plus: Certificate of Recognition for all premium participants</p>
+        <a href="#" class="leaderboard-link" onclick="showLeaderboard()">📊 View Leaderboard →</a>
+    </div>
+    
     <div class="subject-selector">
         <label style="font-weight: 600; color: #4a5568;">📚 Select Subject: </label>
         <select id="subjectSelect" onchange="changeSubject()">
-            <option value="physics">⚛️ Physics</option>
             <option value="mathematics">📐 Mathematics</option>
+            <option value="physics">⚛️ Physics</option>
             <option value="english">📖 English Language</option>
             <option value="digital-technology">💻 Digital Technology</option>
             <option value="igbo">🗣️ Igbo Language</option>
         </select>
     </div>
     
+    <!-- Mode Selection Cards -->
+    <div class="mode-selector" id="modeSelector">
+        <div class="mode-card free" onclick="selectMode('free')">
+            <div class="mode-icon">📝</div>
+            <div class="mode-title">Free Test</div>
+            <div class="mode-price">FREE</div>
+            <ul class="mode-features">
+                <li>Unlimited time per question</li>
+                <li>Practice questions (50 per subject)</li>
+                <li>Learn at your own pace</li>
+                <li>Instant explanations</li>
+                <li>Certificate of completion</li>
+            </ul>
+            <button class="btn-select">Start Free Test →</button>
+        </div>
+        
+        <div class="mode-card premium" onclick="selectMode('premium')">
+            <div class="mode-icon">🏆</div>
+            <div class="mode-title">Premium Quiz</div>
+            <div class="mode-price">₦100</div>
+            <ul class="mode-features">
+                <li>5 seconds per question ⏱️</li>
+                <li>500+ advanced questions</li>
+                <li>Compete for ₦10,000 monthly prize</li>
+                <li>Certificate of Recognition</li>
+                <li>Leaderboard ranking</li>
+                <li>Bragging rights! 🏆</li>
+            </ul>
+            <button class="btn-select">Enter Competition →</button>
+        </div>
+    </div>
+    
     <div class="quiz-section" id="quizInterface">
         <div class="status-message">
             <div class="loading-spinner"></div>
-            <p style="margin-top: 20px;">🎮 Loading your quiz adventure...</p>
+            <p style="margin-top: 20px;">🎮 Select a mode above to begin...</p>
         </div>
     </div>
 </div>
 
 <!-- Floating Home Button -->
-<button class="home-button" onclick="goToPage('index.html')" title="Go to Home">
-    🏠
-</button>
+<button class="home-button" onclick="goToPage('index.html')" title="Go to Home">🏠</button>
 
 <script>
-    // Firebase Configuration
     const firebaseConfig = {
         apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
         authDomain: "ernest-embassy-lms.firebaseapp.com",
@@ -505,55 +424,185 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
     
+    let currentMode = null;
     let loadedQuestions = [];
     let randomizedQuestions = [];
     let currentIndex = 0;
     let score = 0;
-    let currentSubject = 'physics';
+    let currentSubject = 'mathematics';
     let currentUser = null;
-    let isQuizStarted = false;
     let timerInterval = null;
-    let timeLeft = 10;
+    let timeLeft = 0;
     let isAnswered = false;
-    let userPaidStatus = {};
-    
-    // Quiz settings
-    const TIME_PER_QUESTION = 10;
-    const TOTAL_QUESTIONS_TO_SHOW = 20;
-    
-    // Premium subjects that require payment
-    const premiumSubjects = ['physics', 'mathematics', 'english'];
-    const freeSubjects = ['digital-technology', 'igbo'];
+    let TIME_PER_QUESTION = 0;
     
     const subjectNames = {
-        'physics': 'Physics',
         'mathematics': 'Mathematics',
+        'physics': 'Physics',
         'english': 'English Language',
         'digital-technology': 'Digital Technology',
         'igbo': 'Igbo Language'
     };
     
-    function goToPage(page) {
-        window.location.href = page;
-    }
+    function goToPage(page) { window.location.href = page; }
     
     function changeSubject() {
         const select = document.getElementById('subjectSelect');
-        const subject = select.value;
-        localStorage.setItem('selectedSubject', subject);
-        window.location.href = `class.html?subject=${subject}`;
-    }
-    
-    function getSubjectFromURL() {
-        const params = new URLSearchParams(window.location.search);
-        const subject = params.get('subject');
-        if (subject) return subject;
-        const saved = localStorage.getItem('selectedSubject');
-        return saved || 'physics';
+        currentSubject = select.value;
+        document.getElementById('modeSelector').style.display = 'grid';
+        document.getElementById('quizInterface').innerHTML = `
+            <div class="status-message">
+                <p style="margin-top: 20px;">🎮 Select a mode above to begin...</p>
+            </div>
+        `;
+        currentMode = null;
     }
     
     function formatSubjectName(subjectId) {
         return subjectNames[subjectId] || subjectId;
+    }
+    
+    function selectMode(mode) {
+        currentMode = mode;
+        if (mode === 'free') {
+            TIME_PER_QUESTION = 0; // No time limit
+            loadFreeQuestions();
+        } else {
+            checkPremiumAccess();
+        }
+    }
+    
+    async function checkPremiumAccess() {
+        if (!currentUser) {
+            const loginChoice = confirm("Premium Quiz requires login. Click OK to login or Cancel to go back.");
+            if (loginChoice) {
+                window.location.href = "login.html";
+            } else {
+                currentMode = null;
+            }
+            return;
+        }
+        
+        const studentDoc = await db.collection('students').doc(currentUser.uid).get();
+        const paidQuizzes = studentDoc.data()?.paidQuizzes || [];
+        
+        if (paidQuizzes.includes(currentSubject)) {
+            TIME_PER_QUESTION = 5;
+            loadPremiumQuestions();
+        } else {
+            showPremiumPaymentModal();
+        }
+    }
+    
+    function showPremiumPaymentModal() {
+        const modal = document.createElement('div');
+        modal.className = 'payment-modal';
+        modal.innerHTML = `
+            <div class="payment-content">
+                <div style="font-size: 3rem;">🏆</div>
+                <h2 style="color: #667eea;">Unlock Premium Quiz</h2>
+                <div class="payment-amount">₦100</div>
+                
+                <div class="prize-info">
+                    <h4>🏆 What You Get:</h4>
+                    <p>✓ Compete for ₦10,000 monthly prize draw</p>
+                    <p>✓ Certificate of Recognition</p>
+                    <p>✓ 500+ advanced questions</p>
+                    <p>✓ 5-second timer challenge</p>
+                    <p>✓ Leaderboard ranking</p>
+                </div>
+                
+                <div class="payment-details">
+                    <h4>📱 Payment Details:</h4>
+                    <p><strong>Opay / Palmpay:</strong> 08032607809</p>
+                    <p><strong>First Bank:</strong> 3113254386</p>
+                    <p><strong>Account Name:</strong> Damian Anielozie Okafor</p>
+                </div>
+                
+                <button onclick="confirmPremiumPayment('${currentSubject}')" style="background: linear-gradient(135deg, #11998e, #38ef7d); color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 10px;">✅ I Have Paid</button>
+                <button onclick="this.parentElement.parentElement.remove(); currentMode=null; document.getElementById('modeSelector').style.display='grid';" style="background: #e2e8f0; color: #4a5568; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; width: 100%;">Cancel</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+    
+    async function confirmPremiumPayment(subject) {
+        const studentRef = db.collection('students').doc(currentUser.uid);
+        const studentDoc = await studentRef.get();
+        const paidQuizzes = studentDoc.data()?.paidQuizzes || [];
+        
+        if (!paidQuizzes.includes(subject)) {
+            paidQuizzes.push(subject);
+            await studentRef.update({ 
+                paidQuizzes: paidQuizzes,
+                lastPaymentDate: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            alert(`✅ Premium Quiz unlocked for ${formatSubjectName(subject)}!`);
+        }
+        
+        document.querySelectorAll('.payment-modal').forEach(m => m.remove());
+        TIME_PER_QUESTION = 5;
+        loadPremiumQuestions();
+    }
+    
+    async function loadFreeQuestions() {
+        const interfaceDiv = document.getElementById("quizInterface");
+        interfaceDiv.innerHTML = `<div class="status-message"><div class="loading-spinner"></div><p>Loading free practice questions...</p></div>`;
+        
+        try {
+            const docRef = db.collection("questions_free").doc(currentSubject);
+            let docSnap = await docRef.get();
+            
+            if (!docSnap.exists) {
+                // Fallback to main questions collection
+                const mainRef = db.collection("questions").doc(currentSubject);
+                docSnap = await mainRef.get();
+            }
+            
+            if (!docSnap.exists) {
+                interfaceDiv.innerHTML = `<div class="status-message"><h2>No Questions Found</h2><p>Practice questions coming soon!</p></div>`;
+                return;
+            }
+            
+            const data = docSnap.data();
+            const allQuestions = data.questions || [];
+            randomizedQuestions = shuffleArray(allQuestions).slice(0, 30);
+            
+            document.getElementById('modeSelector').style.display = 'none';
+            startQuiz();
+        } catch (error) {
+            interfaceDiv.innerHTML = `<div class="status-message error-box">Error loading questions: ${error.message}</div>`;
+        }
+    }
+    
+    async function loadPremiumQuestions() {
+        const interfaceDiv = document.getElementById("quizInterface");
+        interfaceDiv.innerHTML = `<div class="status-message"><div class="loading-spinner"></div><p>Loading premium competition questions...</p></div>`;
+        
+        try {
+            const docRef = db.collection("questions_premium").doc(currentSubject);
+            let docSnap = await docRef.get();
+            
+            if (!docSnap.exists) {
+                // Fallback to main questions
+                const mainRef = db.collection("questions").doc(currentSubject);
+                docSnap = await mainRef.get();
+            }
+            
+            if (!docSnap.exists) {
+                interfaceDiv.innerHTML = `<div class="status-message"><h2>No Premium Questions Found</h2><p>More questions being added!</p></div>`;
+                return;
+            }
+            
+            const data = docSnap.data();
+            const allQuestions = data.questions || [];
+            randomizedQuestions = shuffleArray(allQuestions).slice(0, 50);
+            
+            document.getElementById('modeSelector').style.display = 'none';
+            startQuiz();
+        } catch (error) {
+            interfaceDiv.innerHTML = `<div class="status-message error-box">Error loading questions: ${error.message}</div>`;
+        }
     }
     
     function shuffleArray(array) {
@@ -565,42 +614,10 @@
         return shuffled;
     }
     
-    function getRandomQuestions(allQuestions, count) {
-        const shuffled = shuffleArray(allQuestions);
-        return shuffled.slice(0, Math.min(count, shuffled.length));
-    }
-    
-    function startTimer() {
-        if (timerInterval) clearInterval(timerInterval);
-        
-        timeLeft = TIME_PER_QUESTION;
-        isAnswered = false;
-        
-        const timerElement = document.getElementById('timerDisplay');
-        const timerCircle = document.getElementById('timerCircle');
-        
-        timerInterval = setInterval(() => {
-            if (isAnswered) return;
-            
-            timeLeft--;
-            
-            if (timerElement) {
-                timerElement.textContent = `${timeLeft}s`;
-            }
-            
-            if (timeLeft <= 3 && timerCircle) {
-                timerCircle.classList.add('timer-warning');
-            } else if (timerCircle) {
-                timerCircle.classList.remove('timer-warning');
-            }
-            
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                if (!isAnswered) {
-                    handleTimeOut();
-                }
-            }
-        }, 1000);
+    function startQuiz() {
+        currentIndex = 0;
+        score = 0;
+        showQuestion();
     }
     
     function stopTimer() {
@@ -610,19 +627,37 @@
         }
     }
     
+    function startTimer() {
+        if (TIME_PER_QUESTION === 0) return; // No timer for free mode
+        
+        if (timerInterval) clearInterval(timerInterval);
+        timeLeft = TIME_PER_QUESTION;
+        isAnswered = false;
+        
+        const timerElement = document.getElementById('timerDisplay');
+        const timerCircle = document.getElementById('timerCircle');
+        
+        timerInterval = setInterval(() => {
+            if (isAnswered) return;
+            timeLeft--;
+            if (timerElement) timerElement.textContent = `${timeLeft}s`;
+            if (timeLeft <= 2 && timerCircle) timerCircle.classList.add('timer-warning');
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                if (!isAnswered) handleTimeOut();
+            }
+        }, 1000);
+    }
+    
     function handleTimeOut() {
         isAnswered = true;
-        
-        const buttons = document.querySelectorAll('.option-item');
-        buttons.forEach(btn => btn.disabled = true);
-        
         const q = randomizedQuestions[currentIndex];
         const correct = q.answer;
         
+        const buttons = document.querySelectorAll('.option-item');
+        buttons.forEach(btn => btn.disabled = true);
         buttons.forEach(btn => {
-            if (btn.getAttribute('onclick').includes(`'${correct}'`)) {
-                btn.classList.add('correct');
-            }
+            if (btn.getAttribute('onclick').includes(`'${correct}'`)) btn.classList.add('correct');
         });
         
         const explanationBox = document.getElementById('explanationBox');
@@ -633,253 +668,24 @@
             explanationBox.style.background = '#fff3cd';
             explanationBox.style.borderLeftColor = '#f39c12';
         }
-        
         document.getElementById('nextBtn').style.display = 'block';
-    }
-    
-    // Payment Modal - Shows when user tries to access premium subject without paying
-    function showPaymentModal(subject) {
-        const subjectName = formatSubjectName(subject);
-        
-        const modal = document.createElement('div');
-        modal.className = 'payment-modal';
-        modal.innerHTML = `
-            <div class="payment-content">
-                <div class="payment-icon">💰</div>
-                <h2 style="color: #667eea; margin: 15px 0;">Unlock ${subjectName}</h2>
-                <p style="color: #718096;">Get full access to all questions and explanations</p>
-                <div class="payment-amount">₦100</div>
-                
-                <div class="payment-benefits">
-                    <p>✅ <strong>${subjectName} Full Question Bank</strong></p>
-                    <p>✅ <strong>Detailed Explanations</strong> for every answer</p>
-                    <p>✅ <strong>Timed Quiz Mode</strong> with 10 seconds per question</p>
-                    <p>✅ <strong>Randomized Questions</strong> - No repeats</p>
-                    <p>✅ <strong>Track Your Progress</strong> and see scores</p>
-                    <p>✅ <strong>Lifetime Access</strong> - Pay once, unlock forever</p>
-                </div>
-                
-                <div class="payment-details">
-                    <h4 style="margin-bottom: 10px;">📱 Payment Details:</h4>
-                    <p><strong>Opay / Palmpay:</strong> 08032607809</p>
-                    <p><strong>First Bank:</strong> 3113254386</p>
-                    <p><strong>Account Name:</strong> Damian Anielozie Okafor</p>
-                    <p style="margin-top: 10px; font-size: 0.75rem; color: #666;">After payment, click "I Have Paid" to unlock instantly</p>
-                </div>
-                
-                <button onclick="confirmPayment('${subject}')" style="background: linear-gradient(135deg, #11998e, #38ef7d); color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 10px;">✅ I Have Paid</button>
-                <button onclick="this.parentElement.parentElement.remove(); window.location.href='index.html'" style="background: #e2e8f0; color: #4a5568; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; width: 100%;">🏠 Go to Home</button>
-            </div>
-        `;
-        document.body.appendChild(modal);
-    }
-    
-    async function confirmPayment(subject) {
-        if (!currentUser) {
-            alert("Please login first to unlock quizzes");
-            window.location.href = "login.html";
-            return;
-        }
-        
-        try {
-            const studentRef = db.collection('students').doc(currentUser.uid);
-            const studentDoc = await studentRef.get();
-            const studentData = studentDoc.data();
-            const paidQuizzes = studentData?.paidQuizzes || [];
-            
-            if (!paidQuizzes.includes(subject)) {
-                paidQuizzes.push(subject);
-                await studentRef.update({ 
-                    paidQuizzes: paidQuizzes,
-                    lastPaymentDate: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                alert(`✅ ${formatSubjectName(subject)} unlocked successfully! You can now take the quiz.`);
-                userPaidStatus[subject] = true;
-            }
-            
-            document.querySelectorAll('.payment-modal').forEach(m => m.remove());
-            // Reload the page to start quiz
-            location.reload();
-        } catch (error) {
-            console.error("Payment confirmation error:", error);
-            alert("Error processing payment confirmation. Please contact support.");
-        }
-    }
-    
-    // Check if user has paid for a subject
-    async function checkPaymentStatus(subject) {
-        if (!currentUser) return false;
-        
-        try {
-            const studentDoc = await db.collection('students').doc(currentUser.uid).get();
-            const paidQuizzes = studentDoc.data()?.paidQuizzes || [];
-            return paidQuizzes.includes(subject);
-        } catch (error) {
-            console.error("Error checking payment status:", error);
-            return false;
-        }
-    }
-    
-    // Main access check - shows payment modal for premium subjects without payment
-    async function checkAndHandleAccess(subject) {
-        // Free subjects - always accessible
-        if (freeSubjects.includes(subject)) {
-            return true;
-        }
-        
-        // Premium subjects - require login and payment
-        if (premiumSubjects.includes(subject)) {
-            // Check if user is logged in
-            if (!currentUser) {
-                const loginChoice = confirm(`${formatSubjectName(subject)} is a premium subject (₦100).\n\nYou need to login or register to access this subject.\n\nClick OK to login, Cancel to go back.`);
-                if (loginChoice) {
-                    window.location.href = "login.html";
-                } else {
-                    window.location.href = "index.html";
-                }
-                return false;
-            }
-            
-            // Check payment status
-            const hasPaid = await checkPaymentStatus(subject);
-            if (!hasPaid) {
-                showPaymentModal(subject);
-                return false;
-            }
-        }
-        
-        return true;
-    }
-    
-    async function loadQuestions() {
-        currentSubject = getSubjectFromURL();
-        console.log(`Loading questions for: ${currentSubject}`);
-        
-        const select = document.getElementById('subjectSelect');
-        if (select) select.value = currentSubject;
-        
-        const interfaceDiv = document.getElementById("quizInterface");
-        
-        // First check if user can access this subject
-        const canAccess = await checkAndHandleAccess(currentSubject);
-        if (!canAccess) {
-            interfaceDiv.innerHTML = `
-                <div style="text-align: center;">
-                    <div style="font-size: 4rem; margin: 20px;">🔒</div>
-                    <h2 style="color: #667eea;">Access Restricted</h2>
-                    <p style="margin: 20px 0; color: #718096;">
-                        ${formatSubjectName(currentSubject)} is a <strong>premium subject</strong> (₦100).
-                    </p>
-                    <div class="action-buttons">
-                        <button class="btn btn-primary" onclick="goToPage('login.html')">🔐 Login to Unlock</button>
-                        <button class="btn btn-success" onclick="goToPage('register.html')">📝 Register</button>
-                        <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Home</button>
-                    </div>
-                </div>
-            `;
-            return false;
-        }
-        
-        try {
-            const docRef = db.collection("questions").doc(currentSubject);
-            const docSnap = await docRef.get();
-            
-            if (!docSnap.exists) {
-                interfaceDiv.innerHTML = `
-                    <div style="text-align: center;">
-                        <div style="font-size: 4rem; margin: 20px;">📚</div>
-                        <h2 style="color: #667eea;">No Questions Found</h2>
-                        <p style="margin: 20px 0; color: #718096;">
-                            No questions available for ${formatSubjectName(currentSubject)}.
-                        </p>
-                        <div class="action-buttons">
-                            <button class="btn btn-primary" onclick="goToPage('bulk-upload.html')">📤 Go to Bulk Upload</button>
-                            <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Education Hub</button>
-                            <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Home</button>
-                        </div>
-                    </div>
-                `;
-                return false;
-            }
-            
-            const data = docSnap.data();
-            const allQuestions = data.questions || [];
-            console.log(`Total questions available: ${allQuestions.length}`);
-            
-            if (allQuestions.length === 0) {
-                interfaceDiv.innerHTML = `
-                    <div style="text-align: center;">
-                        <h2>Empty Question Set</h2>
-                        <button class="btn btn-primary" onclick="goToPage('bulk-upload.html')">Upload Questions</button>
-                    </div>
-                `;
-                return false;
-            }
-            
-            randomizedQuestions = getRandomQuestions(allQuestions, TOTAL_QUESTIONS_TO_SHOW);
-            console.log(`Selected ${randomizedQuestions.length} random questions for this session`);
-            
-            const hasPaid = await checkPaymentStatus(currentSubject);
-            const isFree = freeSubjects.includes(currentSubject);
-            
-            document.querySelector('.hero h1').innerHTML = `🎯 ${formatSubjectName(currentSubject)} Quiz`;
-            
-            interfaceDiv.innerHTML = `
-                <div style="text-align: center;">
-                    <div style="font-size: 4rem; margin: 20px;">🎯</div>
-                    <h2 style="color: #667eea; margin: 20px 0;">Ready to Challenge Yourself?</h2>
-                    <p style="margin: 15px 0; color: #718096; font-size: 1.1rem;">
-                        📚 ${randomizedQuestions.length} random questions from ${allQuestions.length} total
-                    </p>
-                    <p style="margin: 10px 0; color: #f39c12; font-size: 0.9rem;">
-                        ⏱️ ${TIME_PER_QUESTION} seconds per question
-                    </p>
-                    ${premiumSubjects.includes(currentSubject) ? 
-                        `<p style="margin: 10px 0; font-size: 0.9rem;"><span class="badge-paid">✓ Premium Unlocked</span> You have full access to this subject</p>` : 
-                        `<p style="margin: 10px 0; font-size: 0.9rem;"><span class="badge-paid">✓ Free Subject</span> Enjoy unlimited access</p>`
-                    }
-                    <button class="btn btn-success" onclick="startQuiz()" style="font-size: 1.2rem; padding: 15px 40px;">
-                        🚀 Start Quiz
-                    </button>
-                </div>
-                <div class="action-buttons">
-                    <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Education Hub</button>
-                    <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Home</button>
-                </div>
-            `;
-            return true;
-        } catch (error) {
-            console.error(`Error: ${error.message}`);
-            interfaceDiv.innerHTML = `
-                <div class="error-box">
-                    <strong>Error loading questions:</strong><br>
-                    ${error.message}
-                </div>
-            `;
-            return false;
-        }
-    }
-    
-    function startQuiz() {
-        if (randomizedQuestions.length === 0) return;
-        currentIndex = 0;
-        score = 0;
-        isQuizStarted = true;
-        showQuestion();
     }
     
     function showQuestion() {
         stopTimer();
-        
         const q = randomizedQuestions[currentIndex];
         const interfaceDiv = document.getElementById("quizInterface");
+        
+        const timerHtml = TIME_PER_QUESTION > 0 ? `
+            <div class="timer-container" id="timerCircle">
+                ⏱️ Time Left: <span class="timer-number" id="timerDisplay">${TIME_PER_QUESTION}s</span>
+            </div>
+        ` : `<div class="timer-container" style="background: #11998e;">📖 Unlimited Time</div>`;
         
         interfaceDiv.innerHTML = `
             <div class="quiz-meta">
                 <span>📖 ${formatSubjectName(currentSubject)}</span>
-                <div class="timer-container" id="timerCircle">
-                    ⏱️ Time Left: <span class="timer-number" id="timerDisplay">${TIME_PER_QUESTION}s</span>
-                </div>
+                ${timerHtml}
                 <span style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 5px 12px; border-radius: 20px;">⭐ ${currentIndex + 1}/${randomizedQuestions.length}</span>
             </div>
             <div class="question-text">${escapeHtml(q.question)}</div>
@@ -895,46 +701,37 @@
             <div id="explanationBox" style="display:none; margin-top: 20px; padding: 15px; background: #e8f5e9; border-radius: 10px; border-left: 4px solid #4caf50;">
                 <strong>📖 Explanation:</strong> <span id="explanationText"></span>
             </div>
-            <div class="action-buttons">
+            <div class="action-buttons" style="margin-top: 20px; text-align: center;">
                 <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Education Hub</button>
                 <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Home</button>
             </div>
         `;
         
-        startTimer();
+        if (TIME_PER_QUESTION > 0) startTimer();
     }
     
     function checkAnswer(selected) {
         if (isAnswered) return;
-        
         isAnswered = true;
         stopTimer();
         
         const q = randomizedQuestions[currentIndex];
         const correct = q.answer;
-        
         const buttons = document.querySelectorAll('.option-item');
         buttons.forEach(btn => btn.disabled = true);
         
         let isCorrect = false;
-        
         buttons.forEach(btn => {
-            if (btn.getAttribute('onclick').includes(`'${correct}'`)) {
-                btn.classList.add('correct');
-            }
+            if (btn.getAttribute('onclick').includes(`'${correct}'`)) btn.classList.add('correct');
         });
         
         if (selected === correct) {
-            const selectedBtn = Array.from(buttons).find(btn => 
-                btn.getAttribute('onclick').includes(`'${selected}'`)
-            );
+            const selectedBtn = Array.from(buttons).find(btn => btn.getAttribute('onclick').includes(`'${selected}'`));
             if (selectedBtn) selectedBtn.classList.add('correct');
             score++;
             isCorrect = true;
         } else {
-            const selectedBtn = Array.from(buttons).find(btn => 
-                btn.getAttribute('onclick').includes(`'${selected}'`)
-            );
+            const selectedBtn = Array.from(buttons).find(btn => btn.getAttribute('onclick').includes(`'${selected}'`));
             if (selectedBtn) selectedBtn.classList.add('incorrect');
         }
         
@@ -949,7 +746,6 @@
                 explanationBox.style.borderLeftColor = '#eb3349';
             }
         }
-        
         document.getElementById('nextBtn').style.display = 'block';
     }
     
@@ -965,7 +761,6 @@
     
     function showResults() {
         stopTimer();
-        
         const percent = Math.round((score / randomizedQuestions.length) * 100);
         let gradeMessage = "";
         let emoji = "";
@@ -989,11 +784,8 @@
             gradeColor = "#eb3349";
         }
         
-        if (currentUser) {
-            const studentRef = db.collection('students').doc(currentUser.uid);
-            studentRef.update({
-                [`quizScores.${currentSubject}`]: percent
-            }).catch(() => {});
+        if (currentUser && currentMode === 'premium') {
+            savePremiumScore(percent);
         }
         
         const interfaceDiv = document.getElementById("quizInterface");
@@ -1006,13 +798,33 @@
                 </div>
                 <p style="font-size: 1.3rem;">Score: ${score}/${randomizedQuestions.length}</p>
                 <p style="margin: 20px 0; color: #718096;">${gradeMessage}</p>
+                ${currentMode === 'premium' ? `<div style="background: #fff3cd; padding: 15px; border-radius: 10px; margin: 20px 0;">
+                    <p>🏆 You've qualified for the monthly ₦10,000 draw!</p>
+                    <p>📜 A certificate will be sent to your email.</p>
+                </div>` : ''}
                 <div class="action-buttons">
-                    <button class="btn btn-success" onclick="startQuiz()">🔄 Play Again (New Random Questions)</button>
+                    <button class="btn btn-success" onclick="location.reload()">🔄 Play Again</button>
                     <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Education Hub</button>
-                    <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Home</button>
                 </div>
             </div>
         `;
+    }
+    
+    async function savePremiumScore(percent) {
+        if (!currentUser) return;
+        const currentMonth = new Date().toISOString().slice(0, 7);
+        const leaderboardRef = db.collection('monthly_leaderboard').doc(currentMonth).collection(currentSubject);
+        
+        await leaderboardRef.doc(currentUser.uid).set({
+            userId: currentUser.uid,
+            userName: currentUser.email?.split('@')[0] || 'Anonymous',
+            score: percent,
+            date: firebase.firestore.FieldValue.serverTimestamp()
+        });
+    }
+    
+    function showLeaderboard() {
+        alert("Leaderboard feature coming soon! Top scores will be displayed monthly.");
     }
     
     function escapeHtml(str) {
@@ -1025,11 +837,7 @@
         });
     }
     
-    // Check authentication state and load
-    auth.onAuthStateChanged(async (user) => {
-        currentUser = user;
-        await loadQuestions();
-    });
+    auth.onAuthStateChanged(user => { currentUser = user; });
 </script>
 </body>
 </html>

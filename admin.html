@@ -267,7 +267,6 @@
                     <a href="tutoring.html">💻 Tutoring</a>
                     <a href="class.html">🎓 Class</a>
                     <a href="resources.html">📄 Resources</a>
-                    <a href="admin-payments.html">💰 Payment Requests</a>
                 </div>
             </div>
 
@@ -306,6 +305,7 @@
         <button class="tab-btn active" onclick="showTab('add')">➕ Add Question</button>
         <button class="tab-btn" onclick="showTab('list')">📋 Manage Questions</button>
         <button class="tab-btn" onclick="showTab('lessons')">📚 Add Lesson</button>
+        <button class="tab-btn" onclick="showTab('payments')">💰 Payment Requests</button>
         <button class="tab-btn" onclick="showTab('devtools')">🔧 Dev Tools</button>
     </div>
 
@@ -376,6 +376,37 @@
             <textarea id="lessonContent" placeholder="Lesson Content / Study Notes (HTML supported)"></textarea>
             <button class="action-btn" onclick="saveLesson()">💾 Save Lesson</button>
             <div id="lMsg"></div>
+        </div>
+    </div>
+
+    <!-- Payment Requests Tab -->
+    <div id="paymentsTab" class="tab-pane">
+        <div class="card">
+            <h2>💰 Payment Verification Dashboard</h2>
+            <p style="color: #718096; margin-bottom: 15px;">Review and verify student payment requests</p>
+            
+            <div class="stats" style="margin-bottom: 20px;" id="paymentStats">
+                Loading statistics...
+            </div>
+            
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+                            <th style="padding: 12px; text-align: left;">Date</th>
+                            <th style="padding: 12px; text-align: left;">Student</th>
+                            <th style="padding: 12px; text-align: left;">Email</th>
+                            <th style="padding: 12px; text-align: left;">Subject</th>
+                            <th style="padding: 12px; text-align: left;">Amount</th>
+                            <th style="padding: 12px; text-align: left;">Status</th>
+                            <th style="padding: 12px; text-align: left;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paymentsList">
+                        <tr><td colspan="7" style="text-align: center; padding: 40px;">Loading payments...</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -497,6 +528,109 @@
             document.getElementById('activeUsers').innerText = uSnap.size;
         } catch (err) {
             console.error("Error loading stats:", err);
+        }
+    }
+    
+    // ========== PAYMENT FUNCTIONS ==========
+    async function loadPayments() {
+        const tbody = document.getElementById('paymentsList');
+        const statsDiv = document.getElementById('paymentStats');
+        
+        try {
+            const snapshot = await db.collection('payments')
+                .orderBy('paymentDate', 'desc')
+                .get();
+            
+            let pendingCount = 0;
+            let verifiedCount = 0;
+            let totalAmount = 0;
+            
+            if (snapshot.empty) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px;">No payment requests found</td></tr>';
+                statsDiv.innerHTML = '<strong>📊 Payment Statistics:</strong><br>⏳ Pending: 0 | ✅ Verified: 0 | 💰 Total Revenue: ₦0';
+                return;
+            }
+            
+            let html = '';
+            snapshot.forEach(doc => {
+                const payment = doc.data();
+                const id = doc.id;
+                const date = payment.paymentDate ? new Date(payment.paymentDate.toDate()).toLocaleString() : 'Unknown';
+                const status = payment.status || 'pending';
+                
+                if (status === 'pending') pendingCount++;
+                if (status === 'verified') verifiedCount++;
+                if (status === 'verified') totalAmount += (payment.amount || 100);
+                
+                const statusClass = status === 'verified' ? 'status-verified' : 'status-pending';
+                const statusText = status === 'verified' ? '✅ Verified' : '⏳ Pending';
+                
+                html += `
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 12px;">${date}</td>
+                        <td style="padding: 12px;">${payment.userName || 'N/A'}</td>
+                        <td style="padding: 12px;">${payment.userEmail || 'N/A'}</td>
+                        <td style="padding: 12px;">${payment.subject || 'N/A'}</td>
+                        <td style="padding: 12px;">₦${payment.amount || 100}</td>
+                        <td style="padding: 12px;"><span style="background: ${status === 'verified' ? '#11998e' : '#f39c12'}; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px;">${statusText}</span></td>
+                        <td style="padding: 12px;">
+                            ${status === 'pending' ? 
+                                `<button class="btn-small" onclick="verifyPayment('${id}', '${payment.userId}', '${payment.subject}')" style="background: #28a745; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer;">✅ Verify & Unlock</button>` : 
+                                '<span style="color: #11998e;">✓ Verified</span>'
+                            }
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            tbody.innerHTML = html;
+            statsDiv.innerHTML = `<strong>📊 Payment Statistics:</strong><br>⏳ Pending: ${pendingCount} | ✅ Verified: ${verifiedCount} | 💰 Total Revenue: ₦${totalAmount}`;
+            
+        } catch (error) {
+            console.error("Error loading payments:", error);
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 40px; color: red;">Error loading payments: ${error.message}</td></tr>`;
+        }
+    }
+    
+    async function verifyPayment(paymentId, userId, subject) {
+        if (!confirm(`Unlock ${subject} for this student?\n\nClick OK to confirm payment and grant access.`)) {
+            return;
+        }
+        
+        try {
+            // 1. Update the payment status to 'verified'
+            await db.collection('payments').doc(paymentId).update({
+                status: 'verified',
+                verifiedBy: auth.currentUser.email,
+                verificationDate: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            
+            // 2. Add the subject to student's paidQuizzes array
+            const studentRef = db.collection('students').doc(userId);
+            const studentDoc = await studentRef.get();
+            
+            if (studentDoc.exists) {
+                const paidQuizzes = studentDoc.data().paidQuizzes || [];
+                if (!paidQuizzes.includes(subject)) {
+                    paidQuizzes.push(subject);
+                    await studentRef.update({
+                        paidQuizzes: paidQuizzes
+                    });
+                }
+            } else {
+                await studentRef.set({
+                    email: auth.currentUser.email,
+                    paidQuizzes: [subject],
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            }
+            
+            alert(`✅ Payment verified and ${subject} unlocked for the student!`);
+            await loadPayments();
+            
+        } catch (error) {
+            console.error("Verification error:", error);
+            alert("Error verifying payment: " + error.message);
         }
     }
     
@@ -747,6 +881,7 @@
         document.getElementById("addTab").classList.remove("active");
         document.getElementById("listTab").classList.remove("active");
         document.getElementById("lessonsTab").classList.remove("active");
+        document.getElementById("paymentsTab").classList.remove("active");
         document.getElementById("devtoolsTab").classList.remove("active");
         const btns = document.querySelectorAll(".tab-btn");
         btns.forEach(btn => btn.classList.remove("active"));
@@ -761,9 +896,13 @@
         } else if (tabName === "lessons") {
             document.getElementById("lessonsTab").classList.add("active");
             btns[2].classList.add("active");
+        } else if (tabName === "payments") {
+            document.getElementById("paymentsTab").classList.add("active");
+            btns[3].classList.add("active");
+            loadPayments();
         } else if (tabName === "devtools") {
             document.getElementById("devtoolsTab").classList.add("active");
-            btns[3].classList.add("active");
+            btns[4].classList.add("active");
         }
     }
     

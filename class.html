@@ -525,6 +525,7 @@
         document.body.appendChild(modal);
     }
     
+    // UPDATED: Enhanced payment confirmation with unique ID
     async function confirmPremiumPayment(subject) {
         // Check if user is logged in
         if (!currentUser) {
@@ -533,13 +534,17 @@
             return;
         }
 
-        // Get the student's name from the database
-        const studentDoc = await db.collection('students').doc(currentUser.uid).get();
-        const studentName = studentDoc.data()?.fullName || currentUser.email?.split('@')[0] || 'User';
-
-        // Save payment request to Firestore
         try {
-            await db.collection('payments').add({
+            // Get the student's name from the database
+            const studentDoc = await db.collection('students').doc(currentUser.uid).get();
+            const studentName = studentDoc.data()?.fullName || currentUser.email?.split('@')[0] || 'User';
+            
+            // Create a unique payment ID
+            const paymentId = `PAY_${Date.now()}_${currentUser.uid.substring(0, 8)}`;
+            
+            // Save payment request to Firestore
+            await db.collection('payments').doc(paymentId).set({
+                paymentId: paymentId,
                 userId: currentUser.uid,
                 userEmail: currentUser.email,
                 userName: studentName,
@@ -547,20 +552,26 @@
                 amount: 100,
                 status: 'pending',
                 paymentDate: firebase.firestore.FieldValue.serverTimestamp(),
-                paymentMethod: 'manual_bank_transfer'
+                paymentMethod: 'manual_bank_transfer',
+                notes: 'Student confirmed payment via bank transfer'
             });
-
-            alert(`✅ Payment request submitted for ${formatSubjectName(subject)}!\n\nOur team will verify and unlock your access within 24 hours.`);
+            
+            console.log("✅ Payment saved successfully with ID:", paymentId);
+            
+            alert(`✅ Payment request submitted for ${formatSubjectName(subject)}!\n\nPayment ID: ${paymentId}\n\nOur team will verify and unlock your access within 24 hours.`);
+            
+            // Close modal
+            document.querySelectorAll('.payment-modal').forEach(m => m.remove());
+            
+            // Reload to update status
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
+            
         } catch (error) {
-            console.error("Payment submission error:", error);
-            alert("Error submitting payment request. Please contact support.");
+            console.error("❌ Payment submission error:", error);
+            alert("Error submitting payment request. Please contact support.\n\nError: " + error.message);
         }
-        
-        // Close modal
-        document.querySelectorAll('.payment-modal').forEach(m => m.remove());
-        
-        // Reload to update status
-        location.reload();
     }
     
     async function loadFreeQuestions() {

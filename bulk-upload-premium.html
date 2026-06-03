@@ -133,10 +133,27 @@
             color: #666;
             margin-top: 10px;
         }
+        /* Admin Status Banner */
+        .admin-status {
+            background: #11998e;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .admin-status.error {
+            background: #eb3349;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="admin-status" id="adminStatus">
+            🔐 Checking admin status...
+        </div>
+
         <div class="nav-links">
             <a href="class.html">📝 Take Quiz</a>
             <a href="resources.html">📚 Resources</a>
@@ -218,6 +235,80 @@
         const db = firebase.firestore();
         
         let currentMode = 'premium';
+        let currentUser = null;
+        
+        // Admin emails list
+        const adminEmails = [
+            'ernestembassydigitalsolutions@gmail.com',
+            'damian@ernestembassy.com',
+            'admin@ernestembassy.com',
+            'dev@ernestlms.com'
+        ];
+        
+        async function checkAdminAndAutoLogin() {
+            const adminStatus = document.getElementById('adminStatus');
+            
+            try {
+                // Check if already logged in
+                currentUser = auth.currentUser;
+                
+                if (currentUser) {
+                    // Check if user email is in admin list
+                    if (adminEmails.includes(currentUser.email)) {
+                        adminStatus.innerHTML = `✅ Admin logged in: ${currentUser.email}`;
+                        adminStatus.classList.remove('error');
+                        return;
+                    } else {
+                        adminStatus.innerHTML = `⚠️ Logged in as ${currentUser.email} but not admin. Please use admin account.`;
+                        adminStatus.classList.add('error');
+                        return;
+                    }
+                }
+                
+                // Not logged in, try auto-login with dev account
+                try {
+                    await auth.signInWithEmailAndPassword('dev@ernestlms.com', 'dev123456');
+                    currentUser = auth.currentUser;
+                    adminStatus.innerHTML = `✅ Auto-login successful! Admin: ${currentUser.email}`;
+                    adminStatus.classList.remove('error');
+                    
+                    // Add to admins collection
+                    await db.collection('admins').doc(currentUser.uid).set({
+                        isAdmin: true,
+                        email: currentUser.email,
+                        role: 'admin',
+                        createdAt: new Date()
+                    }, { merge: true });
+                    
+                } catch (loginError) {
+                    if (loginError.code === 'auth/user-not-found') {
+                        // Create dev account
+                        await auth.createUserWithEmailAndPassword('dev@ernestlms.com', 'dev123456');
+                        await auth.signInWithEmailAndPassword('dev@ernestlms.com', 'dev123456');
+                        currentUser = auth.currentUser;
+                        adminStatus.innerHTML = `✅ Admin account created and logged in!`;
+                        adminStatus.classList.remove('error');
+                        
+                        await db.collection('admins').doc(currentUser.uid).set({
+                            isAdmin: true,
+                            email: currentUser.email,
+                            role: 'admin',
+                            createdAt: new Date()
+                        });
+                    } else {
+                        throw loginError;
+                    }
+                }
+                
+            } catch (error) {
+                adminStatus.innerHTML = `⚠️ Please login with admin account: ernestembassydigitalsolutions@gmail.com`;
+                adminStatus.classList.add('error');
+                console.error('Admin check error:', error);
+                
+                // Add login button
+                adminStatus.innerHTML += `<br><button onclick="window.location.href='login.html'" style="margin-top: 10px; padding: 5px 15px; background: white; color: #667eea; border: none; border-radius: 5px; cursor: pointer;">🔐 Go to Login</button>`;
+            }
+        }
         
         function selectMode(mode) {
             currentMode = mode;
@@ -237,7 +328,7 @@
         
         function showMessage(msg, type) {
             const msgDiv = document.getElementById('message');
-            msgDiv.innerHTML = `<div class="${type}" style="padding: 10px; margin: 10px 0; border-radius: 8px; background: ${type === 'error' ? '#eb334910' : type === 'warning' ? '#f39c1210' : '#11998e10'}">${msg}</div>`;
+            msgDiv.innerHTML = `<div style="padding: 10px; margin: 10px 0; border-radius: 8px; background: ${type === 'error' ? '#eb334920' : type === 'warning' ? '#f39c1210' : '#11998e10'}; color: ${type === 'error' ? '#eb3349' : '#11998e'}">${msg}</div>`;
             setTimeout(() => { msgDiv.innerHTML = ''; }, 4000);
         }
         
@@ -323,6 +414,12 @@
         }
         
         async function uploadQuestions() {
+            // Check if user is admin before uploading
+            if (!currentUser || !adminEmails.includes(currentUser.email)) {
+                showMessage('⚠️ Admin access required! Please login with admin account: ernestembassydigitalsolutions@gmail.com', 'error');
+                return;
+            }
+            
             const subject = document.getElementById('subjectSelect').value;
             const jsonInput = document.getElementById('jsonInput').value;
             const collectionName = getCollectionName();
@@ -360,11 +457,9 @@
                     existingQuestions = docSnap.data().questions || [];
                 }
                 
-                const totalQuestions = existingQuestions.length + newQuestions.length;
-                const BATCH_SIZE = 100; // Firestore can handle up to 500, but 100 is safe
+                const BATCH_SIZE = 100;
                 let uploadedCount = 0;
                 
-                // Process in batches to avoid timeout
                 for (let i = 0; i < newQuestions.length; i += BATCH_SIZE) {
                     const batch = newQuestions.slice(i, i + BATCH_SIZE);
                     const processedBatch = batch.map(q => ({
@@ -375,18 +470,15 @@
                     
                     existingQuestions.push(...processedBatch);
                     
-                    // Update progress
                     uploadedCount += batch.length;
                     const percent = Math.round((uploadedCount / newQuestions.length) * 100);
                     progressFill.style.width = `${percent}%`;
                     progressFill.textContent = `${percent}%`;
                     batchStatus.textContent = `Processing batch ${Math.floor(i / BATCH_SIZE) + 1}/${Math.ceil(newQuestions.length / BATCH_SIZE)} - ${uploadedCount}/${newQuestions.length} questions`;
                     
-                    // Small delay to prevent rate limiting
                     await new Promise(resolve => setTimeout(resolve, 100));
                 }
                 
-                // Final save
                 await docRef.set({
                     questions: existingQuestions,
                     totalQuestions: existingQuestions.length,
@@ -437,9 +529,17 @@
             }
         }
         
+        // Listen to auth state changes
+        auth.onAuthStateChanged(async (user) => {
+            currentUser = user;
+            await checkAdminAndAutoLogin();
+            if (currentUser && adminEmails.includes(currentUser.email)) {
+                loadExistingQuestions();
+            }
+        });
+        
         // Initialize
         selectMode('premium');
-        loadExistingQuestions();
     </script>
 </body>
 </html>

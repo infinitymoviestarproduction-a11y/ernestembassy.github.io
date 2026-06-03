@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Physics 550 Questions - JSON Converter</title>
+    <title>Physics 550 Questions - JSON Converter (Array Format)</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -97,7 +97,7 @@
     <div class="container">
         <header>
             <h1>⚛️ Physics 550 Questions - JSON Converter</h1>
-            <p>Convert 550 physics questions (with duplicate numbering) to structured JSON</p>
+            <p>Output format: JSON Array (ready for upload)</p>
         </header>
 
         <div class="main-grid">
@@ -105,39 +105,33 @@
                 <h2>📝 1. Paste Your 550 Questions</h2>
                 <textarea id="inputText" placeholder="Paste all 550 questions here..."></textarea>
                 <div class="btn-group">
-                    <button onclick="convertToJson()">🔄 Convert to JSON</button>
+                    <button onclick="convertToJson()">🔄 Convert to JSON Array</button>
                     <button class="success" onclick="copyToClipboard()">📋 Copy JSON</button>
                     <button class="secondary" onclick="downloadJson()">💾 Download JSON</button>
                 </div>
                 <div class="warning">
-                    ⚡ Supports "Question X:", "Q X:", or just "X." format | Handles "Correct Answer:" and "Answer:"
+                    ⚡ Output is a JSON ARRAY — each question has: id, text, options, answer, explanation
                 </div>
             </div>
 
             <div class="card">
-                <h2>📦 2. JSON Output</h2>
+                <h2>📦 2. JSON Output (Array Format)</h2>
                 <div class="stats">
                     <div class="stat-box"><span id="questionCount">0</span><label>Questions</label></div>
                     <div class="stat-box"><span id="fileSize">0</span><label>KB</label></div>
-                    <div class="stat-box"><span id="sectionsCount">1</span><label>Sections</label></div>
                 </div>
-                <div class="preview" id="jsonPreview"><span style="color:#aaa;">Click "Convert to JSON" to see output...</span></div>
+                <div class="preview" id="jsonPreview"><span style="color:#aaa;">Click "Convert to JSON Array" to see output...</span></div>
                 <progress id="convertProgress" value="0" max="100" style="display:none;"></progress>
             </div>
         </div>
 
-        <div class="card" style="margin-top: 25px;">
-            <h2>⭐ Quick Tip</h2>
-            <p>Your 550 questions use "Question X:" format with "Correct Answer:" and "Explanation:". The converter handles this correctly. The duplicate numbers (multiple Question 1, Question 2, etc.) are automatically renumbered sequentially (1-550).</p>
-        </div>
-
-        <footer>Physics Quiz Converter | Handles 550+ questions with duplicate numbering</footer>
+        <footer>Physics Quiz Converter | Output: JSON Array — Ready for upload to quiz platforms</footer>
     </div>
 
     <div id="toast" class="toast">✓ Copied!</div>
 
     <script>
-        let currentJsonData = null;
+        let currentJsonArray = null;
 
         function showToast(msg) {
             const toast = document.getElementById('toast');
@@ -153,13 +147,11 @@
             let currentOptions = [];
             let globalId = 1;
             
-            // First pass: extract all question blocks
             for (let i = 0; i < lines.length; i++) {
                 let line = lines[i].trim();
                 if (line === '') continue;
                 
                 // Match "Question X:" or "Question X." or "Q X:" or just "X."
-                // Also handle "Question X: QX." pattern (like "Question 101: Q101.")
                 let qMatch = line.match(/^(?:Question\s*(\d+)[:.\]]?\s*(?:Q\1[:.\]]?\s*)?)(.*)/i);
                 if (!qMatch) {
                     qMatch = line.match(/^Q(\d+)[:.\]]\s*(.*)/i);
@@ -175,7 +167,6 @@
                         questions.push({ ...currentQ });
                     }
                     
-                    // Start new question with sequential ID (ignoring original number)
                     const qText = (qMatch[2] || '').trim();
                     currentQ = {
                         id: globalId++,
@@ -209,7 +200,7 @@
                     continue;
                 }
                 
-                // If we have a current question and line doesn't match above, append to text
+                // Append to question text if needed
                 if (currentQ && !currentQ.answer && currentOptions.length === 0 && line.length > 0 && !line.match(/^[A-D][\.\)]/i)) {
                     if (!line.match(/^\d+[\.\)]/) && !line.match(/^Question/i)) {
                         currentQ.text += ' ' + line;
@@ -223,12 +214,9 @@
                 questions.push({ ...currentQ });
             }
             
-            // Clean up and ensure options are properly set
+            // Clean up
             questions.forEach(q => {
-                if (q.options.length !== 4) {
-                    // Pad with default options if needed
-                    while (q.options.length < 4) q.options.push('Option ' + String.fromCharCode(65 + q.options.length));
-                }
+                while (q.options.length < 4) q.options.push('Option ' + String.fromCharCode(65 + q.options.length));
                 if (!q.explanation) q.explanation = "No explanation provided.";
             });
             
@@ -252,36 +240,26 @@
                     const questions = parseQuestions(inputText);
                     progressBar.value = 70;
                     
-                    const sections = [{
-                        id: "physics_550_questions",
-                        title: "Physics Question Bank (550 Questions)",
-                        questions: questions.map(q => ({
-                            id: q.id,
-                            text: q.text,
-                            options: q.options,
-                            answer: q.answer,
-                            explanation: q.explanation
-                        }))
-                    }];
+                    // Output as a simple ARRAY (not an object with sections)
+                    const jsonArray = questions.map(q => ({
+                        id: q.id,
+                        text: q.text,
+                        options: q.options,
+                        answer: q.answer,
+                        explanation: q.explanation
+                    }));
                     
-                    const output = {
-                        title: "Physics Quiz Collection - 550 Questions",
-                        generated: new Date().toISOString(),
-                        totalQuestions: questions.length,
-                        sections: sections
-                    };
+                    currentJsonArray = jsonArray;
                     
-                    currentJsonData = output;
-                    
-                    const jsonStr = JSON.stringify(output, null, 2);
+                    const jsonStr = JSON.stringify(jsonArray, null, 2);
                     document.getElementById('jsonPreview').innerHTML = `<pre style="margin:0;color:#0f0;white-space:pre-wrap;">${escapeHtml(jsonStr)}</pre>`;
-                    document.getElementById('questionCount').innerText = questions.length;
+                    document.getElementById('questionCount').innerText = jsonArray.length;
                     const sizeKB = (new Blob([jsonStr]).size / 1024).toFixed(2);
                     document.getElementById('fileSize').innerText = sizeKB;
                     
                     progressBar.value = 100;
                     setTimeout(() => { progressBar.style.display = 'none'; }, 1500);
-                    showToast(`✓ Converted ${questions.length} questions!`);
+                    showToast(`✓ Converted ${jsonArray.length} questions to JSON array!`);
                 } catch(err) {
                     console.error(err);
                     alert('Error parsing: ' + err.message);
@@ -300,22 +278,22 @@
         }
         
         function copyToClipboard() {
-            if (!currentJsonData) { alert('No JSON to copy. Convert first!'); return; }
-            const jsonStr = JSON.stringify(currentJsonData, null, 2);
-            navigator.clipboard.writeText(jsonStr).then(() => showToast('✓ JSON copied!')).catch(() => alert('Copy failed'));
+            if (!currentJsonArray) { alert('No JSON to copy. Convert first!'); return; }
+            const jsonStr = JSON.stringify(currentJsonArray, null, 2);
+            navigator.clipboard.writeText(jsonStr).then(() => showToast('✓ JSON array copied!')).catch(() => alert('Copy failed'));
         }
         
         function downloadJson() {
-            if (!currentJsonData) { alert('No JSON to download. Convert first!'); return; }
-            const jsonStr = JSON.stringify(currentJsonData, null, 2);
+            if (!currentJsonArray) { alert('No JSON to download. Convert first!'); return; }
+            const jsonStr = JSON.stringify(currentJsonArray, null, 2);
             const blob = new Blob([jsonStr], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `physics_550_questions_${new Date().toISOString().slice(0,19)}.json`;
+            a.download = `physics_questions_array_${new Date().toISOString().slice(0,19)}.json`;
             a.click();
             URL.revokeObjectURL(url);
-            showToast('✓ JSON downloaded!');
+            showToast('✓ JSON array downloaded!');
         }
     </script>
 </body>

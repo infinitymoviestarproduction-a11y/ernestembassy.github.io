@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Payment Verification</title>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        h1 { color: #667eea; margin-bottom: 10px; }
+        .stats {
+            background: #e2e8f0;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        tr:hover { background-color: #f5f5f5; }
+        .status-pending {
+            background: #f39c12;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+        }
+        .status-verified {
+            background: #11998e;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+        }
+        .btn-verify {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-verify:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .btn-logout {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .refresh-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h1>💰 Payment Verification Dashboard</h1>
+            <div>
+                <button class="refresh-btn" onclick="loadPayments()">🔄 Refresh</button>
+                <button class="btn-logout" onclick="logout()">🚪 Logout</button>
+            </div>
+        </div>
+        <p>Approve student payments to unlock premium quizzes</p>
+        
+        <div class="stats" id="stats">
+            Loading statistics...
+        </div>
+        
+        <h2>📋 Pending Payment Requests</h2>
+        <div style="overflow-x: auto;">
+            <table id="paymentsTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Student Name</th>
+                        <th>Email</th>
+                        <th>Subject</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="paymentsList">
+                    <tr><td colspan="7" style="text-align: center;">Loading payments...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+            authDomain: "ernest-embassy-lms.firebaseapp.com",
+            projectId: "ernest-embassy-lms",
+            storageBucket: "ernest-embassy-lms.firebasestorage.app",
+            messagingSenderId: "204896421221",
+            appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        
+        // List of admin emails - only these can view this page
+        const adminEmails = ['ernestembassydigitalsolutions@gmail.com', 'damian@ernestembassy.com', 'dev@ernestlms.com'];
+        
+        async function checkAdmin() {
+            const user = auth.currentUser;
+            if (!user || !adminEmails.includes(user.email)) {
+                alert("Access Denied. Admin privileges required.");
+                window.location.href = "login.html";
+                return false;
+            }
+            return true;
+        }
+        
+        async function loadPayments() {
+            if (!await checkAdmin()) return;
+            
+            const statsDiv = document.getElementById('stats');
+            const tbody = document.getElementById('paymentsList');
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Loading payments...</td></tr>';
+            
+            try {
+                const snapshot = await db.collection('payments')
+                    .orderBy('paymentDate', 'desc')
+                    .get();
+                
+                let pendingCount = 0;
+                let verifiedCount = 0;
+                let totalAmount = 0;
+                
+                let html = '';
+                
+                snapshot.forEach(doc => {
+                    const payment = doc.data();
+                    const id = doc.id;
+                    const date = payment.paymentDate ? new Date(payment.paymentDate.toDate()).toLocaleString() : 'Unknown';
+                    const status = payment.status || 'pending';
+                    
+                    if (status === 'pending') pendingCount++;
+                    if (status === 'verified') verifiedCount++;
+                    if (status === 'verified') totalAmount += (payment.amount || 100);
+                    
+                    const statusClass = status === 'verified' ? 'status-verified' : 'status-pending';
+                    const statusText = status === 'verified' ? '✅ Verified' : '⏳ Pending';
+                    
+                    html += `
+                        <tr>
+                            <td>${date}</td>
+                            <td>${payment.userName || 'N/A'}</td>
+                            <td>${payment.userEmail || 'N/A'}</td>
+                            <td>${payment.subject || 'N/A'}</td>
+                            <td>₦${payment.amount || 100}</td>
+                            <td><span class="${statusClass}">${statusText}</span></td>
+                            <td>
+                                ${status === 'pending' ? 
+                                    `<button class="btn-verify" onclick="verifyPayment('${id}', '${payment.userId}', '${payment.subject}')">✅ Verify & Unlock</button>` : 
+                                    '<span style="color: #11998e;">✓ Verified</span>'
+                                }
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                if (snapshot.size === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">No payment requests found.</td></tr>';
+                } else {
+                    tbody.innerHTML = html;
+                }
+                
+                statsDiv.innerHTML = `
+                    <strong>📊 Payment Statistics:</strong><br>
+                    ⏳ Pending: ${pendingCount} | ✅ Verified: ${verifiedCount}<br>
+                    💰 Total Revenue: ₦${totalAmount}
+                `;
+                
+            } catch (error) {
+                console.error("Error loading payments:", error);
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: red;">Error loading payments: ${error.message}</td></tr>`;
+            }
+        }
+        
+        async function verifyPayment(paymentId, userId, subject) {
+            if (!await checkAdmin()) return;
+            
+            if (!confirm(`Unlock ${subject} for this student?\n\nClick OK to confirm payment and grant access.`)) {
+                return;
+            }
+            
+            try {
+                // 1. Update the payment status to 'verified'
+                await db.collection('payments').doc(paymentId).update({
+                    status: 'verified',
+                    verifiedBy: auth.currentUser.email,
+                    verificationDate: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                // 2. Add the subject to student's paidQuizzes array
+                const studentRef = db.collection('students').doc(userId);
+                const studentDoc = await studentRef.get();
+                
+                if (studentDoc.exists) {
+                    const paidQuizzes = studentDoc.data().paidQuizzes || [];
+                    if (!paidQuizzes.includes(subject)) {
+                        paidQuizzes.push(subject);
+                        await studentRef.update({
+                            paidQuizzes: paidQuizzes
+                        });
+                    }
+                } else {
+                    await studentRef.set({
+                        email: auth.currentUser.email,
+                        paidQuizzes: [subject],
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+                
+                alert(`✅ Payment verified and ${subject} unlocked for the student!`);
+                await loadPayments();
+                
+            } catch (error) {
+                console.error("Verification error:", error);
+                alert("Error verifying payment: " + error.message);
+            }
+        }
+        
+        async function logout() {
+            await auth.signOut();
+            window.location.href = "login.html";
+        }
+        
+        // Check auth on page load
+        auth.onAuthStateChanged(user => {
+            if (user && adminEmails.includes(user.email)) {
+                loadPayments();
+            } else if (user) {
+                alert("Access Denied. You are not an admin.");
+                window.location.href = "dashboard.html";
+            } else {
+                window.location.href = "login.html";
+            }
+        });
+    </script>
+</body>
+</html>

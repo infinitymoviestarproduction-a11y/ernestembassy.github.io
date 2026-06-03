@@ -8,7 +8,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
-<script src="auth.js"></script>
 
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Tahoma,sans-serif; }
@@ -320,76 +319,94 @@ footer {
 <div class="subject-selector">
     <div class="selector-title">📘 Choose a Subject</div>
     <div class="subject-tabs" id="subjectTabs">
-        <button class="subject-tab" onclick="showSubject('mathematics-ss1')"       data-subject="mathematics-ss1">📐 Mathematics SS1</button>
-        <button class="subject-tab" onclick="showSubject('english-ss1')"           data-subject="english-ss1">📖 English Language SS1</button>
-        <button class="subject-tab" onclick="showSubject('digital-technology-ss1')" data-subject="digital-technology-ss1">💻 Digital Technology SS1</button>
-        <button class="subject-tab" onclick="showSubject('igbo-ss1')"              data-subject="igbo-ss1">🌍 Igbo Language SS1</button>
-        <button class="subject-tab" onclick="showSubject('data-processing-ss1')"   data-subject="data-processing-ss1">📊 Data Processing SS1</button>
+        <button class="subject-tab" onclick="showSubject('physics')"       data-subject="physics">⚛️ Physics</button>
+        <button class="subject-tab" onclick="showSubject('chemistry')"     data-subject="chemistry">🧪 Chemistry</button>
+        <button class="subject-tab" onclick="showSubject('mathematics')"   data-subject="mathematics">📐 Mathematics</button>
+        <button class="subject-tab" onclick="showSubject('english')"       data-subject="english">📖 English Language</button>
+        <button class="subject-tab" onclick="showSubject('digital-technology')" data-subject="digital-technology">💻 Digital Technology</button>
+        <button class="subject-tab" onclick="showSubject('igbo')"          data-subject="igbo">🌍 Igbo Language</button>
     </div>
 </div>
 
 <!-- CONTENT AREA -->
 <div class="content-area">
 
-    <!-- Each subject panel -->
-    <div id="panel-mathematics-ss1" class="notes-panel">
+    <!-- Physics Panel -->
+    <div id="panel-physics" class="notes-panel">
         <div class="notes-header">
-            <h2>📐 Mathematics SS1</h2>
+            <h2>⚛️ Physics</h2>
             <div class="action-btns">
-                <a href="courses.html?subject=mathematics-ss1" class="btn-quiz-launch">✍️ Take Quiz</a>
+                <a href="class.html?subject=physics" class="btn-quiz-launch">✍️ Take Quiz</a>
             </div>
         </div>
-        <div class="reading-progress"><div class="reading-progress-fill" id="prog-mathematics-ss1"></div></div>
-        <div class="topic-nav" id="topics-mathematics-ss1"></div>
-        <div class="notes-body" id="notes-mathematics-ss1"><div class="notes-loading">📖 Loading notes...</div></div>
+        <div class="reading-progress"><div class="reading-progress-fill" id="prog-physics"></div></div>
+        <div class="topic-nav" id="topics-physics"></div>
+        <div class="notes-body" id="notes-physics"><div class="notes-loading">📖 Loading notes...</div></div>
     </div>
 
-    <div id="panel-english-ss1" class="notes-panel">
+    <!-- Chemistry Panel -->
+    <div id="panel-chemistry" class="notes-panel">
         <div class="notes-header">
-            <h2>📖 English Language SS1</h2>
+            <h2>🧪 Chemistry</h2>
             <div class="action-btns">
-                <a href="courses.html?subject=english-ss1" class="btn-quiz-launch">✍️ Take Quiz</a>
+                <a href="class.html?subject=chemistry" class="btn-quiz-launch">✍️ Take Quiz</a>
             </div>
         </div>
-        <div class="reading-progress"><div class="reading-progress-fill" id="prog-english-ss1"></div></div>
-        <div class="topic-nav" id="topics-english-ss1"></div>
-        <div class="notes-body" id="notes-english-ss1"><div class="notes-loading">📖 Loading notes...</div></div>
+        <div class="reading-progress"><div class="reading-progress-fill" id="prog-chemistry"></div></div>
+        <div class="topic-nav" id="topics-chemistry"></div>
+        <div class="notes-body" id="notes-chemistry"><div class="notes-loading">📖 Loading notes...</div></div>
     </div>
 
-    <div id="panel-digital-technology-ss1" class="notes-panel">
+    <!-- Mathematics Panel -->
+    <div id="panel-mathematics" class="notes-panel">
         <div class="notes-header">
-            <h2>💻 Digital Technology SS1</h2>
+            <h2>📐 Mathematics</h2>
             <div class="action-btns">
-                <a href="courses.html?subject=digital-technology-ss1" class="btn-quiz-launch">✍️ Take Quiz</a>
+                <a href="class.html?subject=mathematics" class="btn-quiz-launch">✍️ Take Quiz</a>
             </div>
         </div>
-        <div class="reading-progress"><div class="reading-progress-fill" id="prog-digital-technology-ss1"></div></div>
-        <div class="topic-nav" id="topics-digital-technology-ss1"></div>
-        <div class="notes-body" id="notes-digital-technology-ss1"><div class="notes-loading">📖 Loading notes...</div></div>
+        <div class="reading-progress"><div class="reading-progress-fill" id="prog-mathematics"></div></div>
+        <div class="topic-nav" id="topics-mathematics"></div>
+        <div class="notes-body" id="notes-mathematics"><div class="notes-loading">📖 Loading notes...</div></div>
     </div>
 
-    <div id="panel-igbo-ss1" class="notes-panel">
+    <!-- English Panel -->
+    <div id="panel-english" class="notes-panel">
         <div class="notes-header">
-            <h2>🌍 Igbo Language SS1</h2>
+            <h2>📖 English Language</h2>
             <div class="action-btns">
-                <a href="courses.html?subject=igbo-ss1" class="btn-quiz-launch">✍️ Take Quiz</a>
+                <a href="class.html?subject=english" class="btn-quiz-launch">✍️ Take Quiz</a>
             </div>
         </div>
-        <div class="reading-progress"><div class="reading-progress-fill" id="prog-igbo-ss1"></div></div>
-        <div class="topic-nav" id="topics-igbo-ss1"></div>
-        <div class="notes-body" id="notes-igbo-ss1"><div class="notes-loading">📖 Loading notes...</div></div>
+        <div class="reading-progress"><div class="reading-progress-fill" id="prog-english"></div></div>
+        <div class="topic-nav" id="topics-english"></div>
+        <div class="notes-body" id="notes-english"><div class="notes-loading">📖 Loading notes...</div></div>
     </div>
 
-    <div id="panel-data-processing-ss1" class="notes-panel">
+    <!-- Digital Technology Panel -->
+    <div id="panel-digital-technology" class="notes-panel">
         <div class="notes-header">
-            <h2>📊 Data Processing SS1</h2>
+            <h2>💻 Digital Technology</h2>
             <div class="action-btns">
-                <a href="courses.html?subject=data-processing-ss1" class="btn-quiz-launch">✍️ Take Quiz</a>
+                <a href="class.html?subject=digital-technology" class="btn-quiz-launch">✍️ Take Quiz</a>
             </div>
         </div>
-        <div class="reading-progress"><div class="reading-progress-fill" id="prog-data-processing-ss1"></div></div>
-        <div class="topic-nav" id="topics-data-processing-ss1"></div>
-        <div class="notes-body" id="notes-data-processing-ss1"><div class="notes-loading">📖 Loading notes...</div></div>
+        <div class="reading-progress"><div class="reading-progress-fill" id="prog-digital-technology"></div></div>
+        <div class="topic-nav" id="topics-digital-technology"></div>
+        <div class="notes-body" id="notes-digital-technology"><div class="notes-loading">📖 Loading notes...</div></div>
+    </div>
+
+    <!-- Igbo Panel -->
+    <div id="panel-igbo" class="notes-panel">
+        <div class="notes-header">
+            <h2>🌍 Igbo Language</h2>
+            <div class="action-btns">
+                <a href="class.html?subject=igbo" class="btn-quiz-launch">✍️ Take Quiz</a>
+            </div>
+        </div>
+        <div class="reading-progress"><div class="reading-progress-fill" id="prog-igbo"></div></div>
+        <div class="topic-nav" id="topics-igbo"></div>
+        <div class="notes-body" id="notes-igbo"><div class="notes-loading">📖 Loading notes...</div></div>
     </div>
 
 </div>
@@ -399,628 +416,187 @@ footer {
 <script>
 /* ============================================================
    NOTES CONTENT — Add your full notes here per subject.
-   Each subject has an array of topics. Each topic has
-   a title and HTML content.
-   To add more content: just add more topic objects to the array.
 ============================================================ */
 const NOTES = {
 
-    "mathematics-ss1": [
+    "physics": [
         {
-            title: "Number & Numeration",
+            title: "Motion",
             content: `
-                <h2>📐 Number & Numeration</h2>
-                <h3>1. Number Bases</h3>
-                <p>A number base (or radix) is the number of unique digits used in a positional numeral system.</p>
+                <h2>⚛️ Motion</h2>
+                <h3>Speed & Velocity</h3>
                 <div class="highlight-box">
-                    <strong>Key Bases:</strong><br>
-                    • <strong>Base 2 (Binary)</strong> — digits: 0, 1<br>
-                    • <strong>Base 8 (Octal)</strong> — digits: 0–7<br>
-                    • <strong>Base 10 (Denary)</strong> — digits: 0–9<br>
-                    • <strong>Base 16 (Hexadecimal)</strong> — digits: 0–9, A–F
-                </div>
-                <h4>Converting Base 10 to Base 2</h4>
-                <p>Divide the number repeatedly by 2 and read remainders from bottom to top.</p>
-                <div class="example-box">
-                    <strong>Example:</strong> Convert 13 to binary<br>
-                    13 ÷ 2 = 6 remainder <strong>1</strong><br>
-                    6 ÷ 2 = 3 remainder <strong>0</strong><br>
-                    3 ÷ 2 = 1 remainder <strong>1</strong><br>
-                    1 ÷ 2 = 0 remainder <strong>1</strong><br>
-                    Answer: <strong>1101₂</strong>
-                </div>
-
-                <h3>2. Fractions, Decimals & Percentages</h3>
-                <p>These three forms are interchangeable ways to express parts of a whole.</p>
-                <table>
-                    <tr><th>Fraction</th><th>Decimal</th><th>Percentage</th></tr>
-                    <tr><td>1/2</td><td>0.5</td><td>50%</td></tr>
-                    <tr><td>1/4</td><td>0.25</td><td>25%</td></tr>
-                    <tr><td>3/4</td><td>0.75</td><td>75%</td></tr>
-                    <tr><td>1/5</td><td>0.2</td><td>20%</td></tr>
-                </table>
-
-                <h3>3. Indices (Laws of Indices)</h3>
-                <div class="highlight-box">
-                    <strong>Laws:</strong><br>
-                    • aᵐ × aⁿ = aᵐ⁺ⁿ<br>
-                    • aᵐ ÷ aⁿ = aᵐ⁻ⁿ<br>
-                    • (aᵐ)ⁿ = aᵐⁿ<br>
-                    • a⁰ = 1<br>
-                    • a⁻ⁿ = 1/aⁿ
+                    <strong>Speed</strong> = Distance ÷ Time (scalar quantity)<br>
+                    <strong>Velocity</strong> = Displacement ÷ Time (vector quantity)
                 </div>
                 <div class="example-box">
-                    <strong>Example:</strong> Simplify 2³ × 2⁴ = 2³⁺⁴ = 2⁷ = 128
+                    Example: A car travels 100 km in 2 hours.<br>
+                    Speed = 100 ÷ 2 = 50 km/h
+                </div>
+                <h3>Acceleration</h3>
+                <div class="highlight-box">
+                    Acceleration = (Final velocity − Initial velocity) ÷ Time<br>
+                    a = (v − u) ÷ t
                 </div>
             `
         },
         {
-            title: "Algebra",
+            title: "Forces",
             content: `
-                <h2>📐 Algebra</h2>
-                <h3>1. Simple Equations</h3>
-                <p>To solve an equation, isolate the unknown variable on one side.</p>
-                <div class="example-box">
-                    <strong>Example:</strong> Solve 3x + 5 = 20<br>
-                    3x = 20 - 5 = 15<br>
-                    x = 15 ÷ 3 = <strong>5</strong>
-                </div>
-
-                <h3>2. Quadratic Equations</h3>
-                <p>Standard form: <code>ax² + bx + c = 0</code></p>
-                <p>Solve by factorisation, completing the square, or the quadratic formula:</p>
+                <h2>⚛️ Forces</h2>
+                <h3>Newton's Laws</h3>
                 <div class="highlight-box">
-                    x = (−b ± √(b² − 4ac)) ÷ 2a
+                    <strong>First Law:</strong> A body remains at rest or in uniform motion unless acted upon by an external force.<br><br>
+                    <strong>Second Law:</strong> F = m × a (Force = mass × acceleration)<br><br>
+                    <strong>Third Law:</strong> For every action, there is an equal and opposite reaction.
                 </div>
-                <div class="example-box">
-                    <strong>Example:</strong> Solve x² + 5x + 6 = 0<br>
-                    Factorise: (x + 2)(x + 3) = 0<br>
-                    x = −2 or x = −3
-                </div>
+            `
+        }
+    ],
 
-                <h3>3. Simultaneous Equations</h3>
-                <p>Two equations with two unknowns, solved together.</p>
-                <div class="example-box">
-                    <strong>Example:</strong><br>
-                    2x + y = 7 ... (i)<br>
-                    x − y = 1  ... (ii)<br>
-                    Add: 3x = 8 → x = 8/3... or use substitution method
+    "chemistry": [
+        {
+            title: "Atomic Structure",
+            content: `
+                <h2>🧪 Atomic Structure</h2>
+                <h3>Subatomic Particles</h3>
+                <table>
+                    <tr><th>Particle</th><th>Charge</th><th>Mass (amu)</th><th>Location</th></tr>
+                    <tr><td>Proton</td><td>+1</td><td>1</td><td>Nucleus</td></tr>
+                    <tr><td>Neutron</td><td>0</td><td>1</td><td>Nucleus</td></tr>
+                    <tr><td>Electron</td><td>−1</td><td>~0</td><td>Electron cloud</td></tr>
+                </table>
+                <div class="highlight-box">
+                    <strong>Atomic Number (Z)</strong> = Number of protons<br>
+                    <strong>Mass Number (A)</strong> = Protons + Neutrons
                 </div>
+            `
+        },
+        {
+            title: "Chemical Bonding",
+            content: `
+                <h2>🧪 Chemical Bonding</h2>
+                <h3>Types of Bonds</h3>
+                <ul>
+                    <li><strong>Ionic Bond:</strong> Transfer of electrons (metal + non-metal)</li>
+                    <li><strong>Covalent Bond:</strong> Sharing of electrons (non-metal + non-metal)</li>
+                    <li><strong>Metallic Bond:</strong> Sea of delocalized electrons</li>
+                </ul>
+            `
+        }
+    ],
 
-                <h3>4. Inequalities</h3>
-                <div class="warning-box">
-                    When you multiply or divide both sides by a <strong>negative number</strong>, reverse the inequality sign!
-                </div>
-                <div class="example-box">
-                    <strong>Example:</strong> Solve −2x > 6<br>
-                    x &lt; −3 (sign flips because dividing by −2)
+    "mathematics": [
+        {
+            title: "Number & Algebra",
+            content: `
+                <h2>📐 Number & Algebra</h2>
+                <h3>Laws of Indices</h3>
+                <div class="highlight-box">
+                    aᵐ × aⁿ = aᵐ⁺ⁿ<br>
+                    aᵐ ÷ aⁿ = aᵐ⁻ⁿ<br>
+                    (aᵐ)ⁿ = aᵐⁿ<br>
+                    a⁰ = 1
                 </div>
             `
         },
         {
             title: "Geometry",
             content: `
-                <h2>📐 Geometry & Mensuration</h2>
-                <h3>Angles</h3>
-                <ul>
-                    <li><strong>Acute angle:</strong> less than 90°</li>
-                    <li><strong>Right angle:</strong> exactly 90°</li>
-                    <li><strong>Obtuse angle:</strong> between 90° and 180°</li>
-                    <li><strong>Reflex angle:</strong> greater than 180°</li>
-                </ul>
+                <h2>📐 Geometry</h2>
                 <div class="highlight-box">
-                    Angles on a straight line = 180°<br>
-                    Angles at a point = 360°<br>
-                    Vertically opposite angles are equal
-                </div>
-
-                <h3>Triangles</h3>
-                <table>
-                    <tr><th>Type</th><th>Property</th></tr>
-                    <tr><td>Equilateral</td><td>All 3 sides equal, all angles = 60°</td></tr>
-                    <tr><td>Isosceles</td><td>2 sides equal, 2 base angles equal</td></tr>
-                    <tr><td>Scalene</td><td>No sides or angles equal</td></tr>
-                    <tr><td>Right-angled</td><td>One angle = 90°</td></tr>
-                </table>
-
-                <h3>Area Formulas</h3>
-                <table>
-                    <tr><th>Shape</th><th>Formula</th></tr>
-                    <tr><td>Rectangle</td><td>Length × Width</td></tr>
-                    <tr><td>Triangle</td><td>½ × Base × Height</td></tr>
-                    <tr><td>Circle</td><td>πr²</td></tr>
-                    <tr><td>Trapezium</td><td>½(a + b)h</td></tr>
-                    <tr><td>Parallelogram</td><td>Base × Height</td></tr>
-                </table>
-
-                <h3>Pythagoras Theorem</h3>
-                <div class="highlight-box">
-                    In a right-angled triangle: <strong>a² + b² = c²</strong><br>
-                    where c is the hypotenuse (longest side)
-                </div>
-                <div class="example-box">
-                    <strong>Example:</strong> a = 3, b = 4 → c² = 9 + 16 = 25 → c = 5
-                </div>
-            `
-        },
-        {
-            title: "Statistics",
-            content: `
-                <h2>📐 Statistics & Probability</h2>
-                <h3>Measures of Central Tendency</h3>
-                <div class="highlight-box">
-                    <strong>Mean</strong> = Sum of all values ÷ Number of values<br>
-                    <strong>Median</strong> = Middle value when data is arranged in order<br>
-                    <strong>Mode</strong> = Most frequently occurring value
-                </div>
-                <div class="example-box">
-                    Data: 4, 7, 7, 9, 12<br>
-                    Mean = (4+7+7+9+12) ÷ 5 = 39 ÷ 5 = <strong>7.8</strong><br>
-                    Median = <strong>7</strong> (middle value)<br>
-                    Mode = <strong>7</strong> (appears twice)
-                </div>
-
-                <h3>Probability</h3>
-                <div class="highlight-box">
-                    P(event) = Number of favourable outcomes ÷ Total possible outcomes<br>
-                    P ranges from 0 (impossible) to 1 (certain)
-                </div>
-                <div class="example-box">
-                    <strong>Example:</strong> Probability of rolling a 4 on a die = 1/6
-                </div>
-
-                <h3>Bar Charts & Pie Charts</h3>
-                <p>Bar charts use rectangular bars to show frequency. Pie charts show parts of a whole as sectors of a circle.</p>
-                <div class="highlight-box">
-                    Angle of sector = (Frequency ÷ Total) × 360°
+                    <strong>Pythagoras' Theorem:</strong> a² + b² = c²<br>
+                    <strong>Area of triangle:</strong> ½ × base × height<br>
+                    <strong>Area of circle:</strong> πr²
                 </div>
             `
         }
     ],
 
-    "english-ss1": [
+    "english": [
         {
             title: "Parts of Speech",
             content: `
                 <h2>📖 Parts of Speech</h2>
-                <p>Every word in English belongs to a category called a <strong>part of speech</strong>, which tells us how that word is used in a sentence.</p>
                 <table>
-                    <tr><th>Part of Speech</th><th>Function</th><th>Example</th></tr>
-                    <tr><td>Noun</td><td>Names a person, place, thing, or idea</td><td>Ernest, Lagos, book</td></tr>
-                    <tr><td>Pronoun</td><td>Replaces a noun</td><td>he, she, they, it</td></tr>
-                    <tr><td>Verb</td><td>Shows action or state of being</td><td>run, is, wrote</td></tr>
-                    <tr><td>Adjective</td><td>Describes a noun</td><td>tall, beautiful, cold</td></tr>
-                    <tr><td>Adverb</td><td>Modifies a verb, adjective, or adverb</td><td>quickly, very, often</td></tr>
-                    <tr><td>Preposition</td><td>Shows relationship between words</td><td>in, on, under, beside</td></tr>
-                    <tr><td>Conjunction</td><td>Joins words or clauses</td><td>and, but, because, or</td></tr>
-                    <tr><td>Interjection</td><td>Expresses emotion</td><td>Oh! Wow! Ouch!</td></tr>
+                    <tr><th>Part</th><th>Example</th></tr>
+                    <tr><td>Noun</td><td>Lagos, book, John</td></tr>
+                    <tr><td>Pronoun</td><td>he, she, they, it</td></tr>
+                    <tr><td>Verb</td><td>run, eat, write</td></tr>
+                    <tr><td>Adjective</td><td>tall, beautiful</td></tr>
+                    <tr><td>Adverb</td><td>quickly, very</td></tr>
                 </table>
-
-                <h3>Types of Nouns</h3>
-                <ul>
-                    <li><strong>Proper noun</strong> — specific name: Nigeria, John</li>
-                    <li><strong>Common noun</strong> — general name: country, boy</li>
-                    <li><strong>Abstract noun</strong> — idea/feeling: love, freedom</li>
-                    <li><strong>Collective noun</strong> — group: flock, herd, class</li>
-                    <li><strong>Concrete noun</strong> — physical object: table, car</li>
-                </ul>
-            `
-        },
-        {
-            title: "Tenses",
-            content: `
-                <h2>📖 Verb Tenses</h2>
-                <p>Tenses tell us <em>when</em> an action takes place.</p>
-                <table>
-                    <tr><th>Tense</th><th>Structure</th><th>Example</th></tr>
-                    <tr><td>Simple Present</td><td>verb / verb+s</td><td>She reads every day.</td></tr>
-                    <tr><td>Present Continuous</td><td>am/is/are + verb+ing</td><td>She is reading now.</td></tr>
-                    <tr><td>Simple Past</td><td>verb+ed / irregular</td><td>She read yesterday.</td></tr>
-                    <tr><td>Past Continuous</td><td>was/were + verb+ing</td><td>She was reading when I called.</td></tr>
-                    <tr><td>Simple Future</td><td>will + verb</td><td>She will read tomorrow.</td></tr>
-                    <tr><td>Present Perfect</td><td>have/has + past participle</td><td>She has read the book.</td></tr>
-                    <tr><td>Past Perfect</td><td>had + past participle</td><td>She had read it before.</td></tr>
-                </table>
-                <div class="warning-box">
-                    <strong>Common mistakes:</strong><br>
-                    ❌ "I have went to school" → ✅ "I have gone to school"<br>
-                    ❌ "She don't know" → ✅ "She doesn't know"
-                </div>
-            `
-        },
-        {
-            title: "Comprehension",
-            content: `
-                <h2>📖 Reading Comprehension</h2>
-                <h3>How to Answer Comprehension Questions</h3>
-                <ol>
-                    <li>Read the passage carefully — at least twice</li>
-                    <li>Identify the main idea of each paragraph</li>
-                    <li>Read the questions before your second reading</li>
-                    <li>Find where the answer is located in the passage</li>
-                    <li>Answer in complete sentences where required</li>
-                    <li>Use your own words unless asked to quote</li>
-                </ol>
-                <div class="highlight-box">
-                    <strong>Types of questions:</strong><br>
-                    • <strong>Literal</strong> — answer directly stated in passage<br>
-                    • <strong>Inferential</strong> — answer implied, requires reasoning<br>
-                    • <strong>Vocabulary</strong> — meaning of words in context<br>
-                    • <strong>Summary</strong> — condense the main points
-                </div>
             `
         },
         {
             title: "Essay Writing",
             content: `
                 <h2>📖 Essay Writing</h2>
-                <h3>Types of Essay</h3>
-                <ul>
-                    <li><strong>Narrative</strong> — tells a story (use past tense, first person often)</li>
-                    <li><strong>Descriptive</strong> — paints a picture with words</li>
-                    <li><strong>Expository</strong> — explains or informs</li>
-                    <li><strong>Argumentative/Discursive</strong> — presents and argues a point</li>
-                    <li><strong>Formal letter</strong> — letter to an official or organisation</li>
-                    <li><strong>Informal letter</strong> — letter to a friend or family member</li>
-                </ul>
-
-                <h3>Essay Structure</h3>
                 <div class="highlight-box">
-                    <strong>Introduction</strong> — state your topic/purpose clearly<br>
-                    <strong>Body</strong> — develop your points (one paragraph per point)<br>
-                    <strong>Conclusion</strong> — summarise and round off neatly
+                    <strong>Structure:</strong><br>
+                    Introduction → Body (3-4 paragraphs) → Conclusion
                 </div>
-
-                <h3>Formal Letter Format</h3>
                 <div class="example-box">
-                    Your address (top right)<br>
-                    Date<br>
-                    Recipient's address (left)<br>
-                    Salutation: Dear Sir/Madam,<br>
-                    Body paragraphs<br>
-                    Yours faithfully, [if you don't know their name]<br>
-                    Yours sincerely, [if you know their name]<br>
-                    Signature & printed name
+                    Narrative: Tells a story (past tense)<br>
+                    Descriptive: Describes a person, place or thing<br>
+                    Argumentative: Persuades using evidence
                 </div>
             `
         }
     ],
 
-    "digital-technology-ss1": [
+    "digital-technology": [
         {
-            title: "Intro to Computers",
-            content: `
-                <h2>💻 Introduction to Computers</h2>
-                <h3>What is a Computer?</h3>
-                <p>A computer is an electronic device that accepts data as input, processes it according to instructions (a program), and produces output as information.</p>
-                <div class="highlight-box">
-                    <strong>IPO Cycle:</strong> Input → Processing → Output → Storage
-                </div>
-
-                <h3>Types of Computers</h3>
-                <table>
-                    <tr><th>Type</th><th>Description</th><th>Example</th></tr>
-                    <tr><td>Supercomputer</td><td>Most powerful, used for complex calculations</td><td>IBM Summit</td></tr>
-                    <tr><td>Mainframe</td><td>Large, handles many users at once</td><td>Bank servers</td></tr>
-                    <tr><td>Minicomputer</td><td>Medium-sized, departmental use</td><td>PDP-11</td></tr>
-                    <tr><td>Microcomputer</td><td>Personal/desktop computers</td><td>PC, Laptop</td></tr>
-                    <tr><td>Embedded</td><td>Built into devices</td><td>Washing machine, ATM</td></tr>
-                </table>
-
-                <h3>Characteristics of a Computer</h3>
-                <ul>
-                    <li><strong>Speed</strong> — processes millions of instructions per second</li>
-                    <li><strong>Accuracy</strong> — produces correct results if given correct input</li>
-                    <li><strong>Storage</strong> — stores large amounts of data</li>
-                    <li><strong>Diligence</strong> — works without fatigue</li>
-                    <li><strong>Versatility</strong> — can perform many different tasks</li>
-                    <li><strong>Automation</strong> — performs tasks automatically once programmed</li>
-                </ul>
-            `
-        },
-        {
-            title: "Hardware",
+            title: "Computer Hardware",
             content: `
                 <h2>💻 Computer Hardware</h2>
-                <p>Hardware refers to the physical, tangible components of a computer system.</p>
-
                 <h3>Input Devices</h3>
-                <ul>
-                    <li>Keyboard, Mouse, Scanner, Microphone, Webcam, Joystick, Touchscreen</li>
-                </ul>
-
+                <p>Keyboard, Mouse, Scanner, Microphone, Webcam</p>
                 <h3>Output Devices</h3>
-                <ul>
-                    <li>Monitor (VDU), Printer, Speaker, Projector, Plotter</li>
-                </ul>
-
-                <h3>Processing Unit — The CPU</h3>
+                <p>Monitor, Printer, Speaker, Projector</p>
                 <div class="highlight-box">
-                    CPU = Central Processing Unit (the "brain" of the computer)<br><br>
-                    <strong>ALU</strong> (Arithmetic & Logic Unit) — performs calculations and comparisons<br>
-                    <strong>CU</strong> (Control Unit) — directs operations, fetches and decodes instructions<br>
-                    <strong>Registers</strong> — tiny, fast storage inside the CPU
+                    CPU = Central Processing Unit (the brain)<br>
+                    RAM = Random Access Memory (temporary)<br>
+                    ROM = Read Only Memory (permanent)
                 </div>
-
-                <h3>Memory</h3>
-                <table>
-                    <tr><th>Type</th><th>Full Name</th><th>Property</th></tr>
-                    <tr><td>RAM</td><td>Random Access Memory</td><td>Volatile — lost when power off</td></tr>
-                    <tr><td>ROM</td><td>Read Only Memory</td><td>Non-volatile — permanent</td></tr>
-                    <tr><td>Cache</td><td>Cache Memory</td><td>Fastest, closest to CPU</td></tr>
-                </table>
-
-                <h3>Storage Devices</h3>
-                <ul>
-                    <li>Hard Disk Drive (HDD), Solid State Drive (SSD), USB Flash Drive</li>
-                    <li>CD/DVD, Memory Card, Magnetic Tape</li>
-                </ul>
             `
         },
         {
             title: "Software",
             content: `
-                <h2>💻 Computer Software</h2>
-                <p>Software is the set of instructions that tells the hardware what to do. It is intangible (you cannot touch it).</p>
-
-                <h3>Types of Software</h3>
+                <h2>💻 Software</h2>
                 <div class="highlight-box">
-                    <strong>System Software</strong> — manages hardware resources<br>
-                    Examples: Operating Systems (Windows, Linux, macOS), Device Drivers, Utility Programs<br><br>
-                    <strong>Application Software</strong> — performs specific user tasks<br>
-                    Examples: MS Word, Excel, Chrome, VLC Player, WhatsApp
-                </div>
-
-                <h3>Operating System Functions</h3>
-                <ul>
-                    <li>Memory management</li>
-                    <li>Process management (multitasking)</li>
-                    <li>File management</li>
-                    <li>Device management</li>
-                    <li>User interface (GUI or CLI)</li>
-                    <li>Security management</li>
-                </ul>
-
-                <h3>Programming Languages</h3>
-                <table>
-                    <tr><th>Generation</th><th>Type</th><th>Example</th></tr>
-                    <tr><td>1GL</td><td>Machine Language</td><td>0s and 1s</td></tr>
-                    <tr><td>2GL</td><td>Assembly Language</td><td>MOV, ADD</td></tr>
-                    <tr><td>3GL</td><td>High-Level Language</td><td>Python, Java, C++</td></tr>
-                    <tr><td>4GL</td><td>Very High-Level</td><td>SQL, MATLAB</td></tr>
-                    <tr><td>5GL</td><td>AI/Natural Language</td><td>Prolog</td></tr>
-                </table>
-            `
-        },
-        {
-            title: "Internet & Networks",
-            content: `
-                <h2>💻 Internet & Networking</h2>
-                <h3>Types of Networks</h3>
-                <table>
-                    <tr><th>Type</th><th>Full Name</th><th>Coverage</th></tr>
-                    <tr><td>LAN</td><td>Local Area Network</td><td>Single building/campus</td></tr>
-                    <tr><td>MAN</td><td>Metropolitan Area Network</td><td>City/town</td></tr>
-                    <tr><td>WAN</td><td>Wide Area Network</td><td>Country/continent</td></tr>
-                    <tr><td>PAN</td><td>Personal Area Network</td><td>Few metres (Bluetooth)</td></tr>
-                    <tr><td>Internet</td><td>Interconnected Networks</td><td>Global</td></tr>
-                </table>
-
-                <h3>Internet Services</h3>
-                <ul>
-                    <li><strong>WWW</strong> — World Wide Web (web pages)</li>
-                    <li><strong>Email</strong> — Electronic Mail</li>
-                    <li><strong>FTP</strong> — File Transfer Protocol</li>
-                    <li><strong>VoIP</strong> — Voice over Internet Protocol (calls)</li>
-                    <li><strong>Streaming</strong> — audio/video delivery</li>
-                    <li><strong>Social Media</strong> — platforms for communication</li>
-                </ul>
-
-                <div class="highlight-box">
-                    <strong>URL Structure:</strong> protocol://domain.extension/path<br>
-                    Example: https://www.ernestembassy.com/courses
-                </div>
-
-                <div class="warning-box">
-                    <strong>Internet Safety Tips:</strong><br>
-                    • Never share passwords<br>
-                    • Avoid clicking unknown links (phishing)<br>
-                    • Use strong passwords<br>
-                    • Keep software updated
+                    <strong>System Software:</strong> Operating System (Windows, Linux, macOS)<br>
+                    <strong>Application Software:</strong> MS Word, Excel, Chrome
                 </div>
             `
         }
     ],
 
-    "igbo-ss1": [
+    "igbo": [
         {
             title: "Mkpụrụ Edemede",
             content: `
-                <h2>🌍 Mkpụrụ Edemede Igbo (Igbo Alphabet)</h2>
-                <p>The Igbo alphabet contains <strong>36 letters</strong> including digraphs (two-letter combinations that represent one sound).</p>
-
-                <h3>Ụdaume (Vowels)</h3>
+                <h2>🌍 Mkpụrụ Edemede Igbo</h2>
+                <p>The Igbo alphabet has 36 letters.</p>
                 <div class="highlight-box">
-                    a, e, i, ị, o, ọ, u, ụ<br>
-                    (8 vowels — note the dotted variants ị, ọ, ụ which have distinct sounds)
-                </div>
-
-                <h3>Mkpụrụ Edemede Niile (Full Alphabet)</h3>
-                <p>a, b, ch, d, e, f, g, gb, gh, gw, h, i, ị, j, k, kp, kw, l, m, n, nw, ny, o, ọ, p, r, s, sh, t, u, ụ, v, w, y, z</p>
-
-                <h3>Tonal Marks</h3>
-                <div class="highlight-box">
-                    Igbo is a <strong>tonal language</strong> — tone changes meaning.<br>
-                    • High tone: á (acute accent)<br>
-                    • Low tone: à (grave accent)<br>
-                    • Mid tone: a (no mark)
-                </div>
-                <div class="example-box">
-                    ákwá = egg<br>
-                    àkwà = cloth<br>
-                    akwa = cry / bridge
+                    <strong>Ụdaume (Vowels):</strong> a, e, i, ị, o, ọ, u, ụ<br>
+                    <strong>Mgbochiume (Consonants):</strong> b, ch, d, f, g, gb, gh, gw, h, j, k, kp, kw, l, m, n, nw, ny, p, r, s, sh, t, v, w, y, z
                 </div>
             `
         },
         {
-            title: "Nkọwa Asụsụ",
+            title: "Ụtọasụsụ (Grammar)",
             content: `
-                <h2>🌍 Nkọwa Asụsụ (Grammar)</h2>
-                <h3>Aha (Nouns)</h3>
-                <p>Nouns in Igbo name people, places, animals, and things.</p>
-                <table>
-                    <tr><th>Igbo</th><th>English</th></tr>
-                    <tr><td>nwoke</td><td>man</td></tr>
-                    <tr><td>nwanyị</td><td>woman</td></tr>
-                    <tr><td>ulo</td><td>house</td></tr>
-                    <tr><td>ọzọ</td><td>road/path</td></tr>
-                    <tr><td>mmiri</td><td>water</td></tr>
-                    <tr><td>nri</td><td>food</td></tr>
-                </table>
-
-                <h3>Ngwaa (Verbs)</h3>
-                <div class="highlight-box">
-                    Igbo verbs are often modified by tone and suffixes to indicate tense.<br><br>
-                    <strong>Root form:</strong> rie (eat), bia (come), ga (go), dee (write)
-                </div>
-
+                <h2>🌍 Ụtọasụsụ Igbo</h2>
                 <h3>Nnọchitaaha (Pronouns)</h3>
                 <table>
                     <tr><th>Igbo</th><th>English</th></tr>
                     <tr><td>m / mụ</td><td>I / me</td></tr>
-                    <tr><td>gị</td><td>you (singular)</td></tr>
-                    <tr><td>ya</td><td>he / she / it</td></tr>
-                    <tr><td>anyị</td><td>we / us</td></tr>
-                    <tr><td>ụnụ</td><td>you (plural)</td></tr>
-                    <tr><td>ha</td><td>they / them</td></tr>
-                </table>
-            `
-        },
-        {
-            title: "Omenala",
-            content: `
-                <h2>🌍 Omenala Igbo (Igbo Culture)</h2>
-                <h3>Mmemme (Festivals)</h3>
-                <ul>
-                    <li><strong>Iri ji / New Yam Festival</strong> — celebrates the new yam harvest, a major cultural event</li>
-                    <li><strong>Ọfọ na Ogu</strong> — symbol of truth, justice and righteousness</li>
-                    <li><strong>Ọgụ Mmụọ (Masquerade)</strong> — spiritual entertainment representing ancestors</li>
-                </ul>
+                    <tr><td>gị</td><td>you</td></tr>
+                    <tr>.\]
 
-                <h3>Àgụmàgụ (Proverbs)</h3>
-                <div class="example-box">
-                    "Onye wetara oji wetara ndụ" — He who brings kola nut brings life (hospitality)<br><br>
-                    "Egbe bere, ugo bere" — Let the kite perch, let the eagle perch (tolerance & coexistence)
-                </div>
-
-                <h3>Egwu na Nkà (Music & Arts)</h3>
-                <p>Traditional Igbo music uses instruments like:</p>
-                <ul>
-                    <li><strong>Ogene</strong> — metal bell/gong</li>
-                    <li><strong>Ịchaka</strong> — rattle</li>
-                    <li><strong>Igba</strong> — drum</li>
-                    <li><strong>Opi</strong> — flute</li>
-                </ul>
-            `
-        }
-    ],
-
-    "data-processing-ss1": [
-        {
-            title: "Intro to Data",
-            content: `
-                <h2>📊 Introduction to Data Processing</h2>
-                <h3>What is Data?</h3>
-                <p>Data is raw, unprocessed facts and figures that have no meaning on their own.</p>
-                <div class="highlight-box">
-                    <strong>Data</strong> → (Processing) → <strong>Information</strong><br><br>
-                    Example: "25, Lagos, Male" = Data<br>
-                    "A 25-year-old male from Lagos" = Information
-                </div>
-
-                <h3>Types of Data</h3>
-                <table>
-                    <tr><th>Type</th><th>Description</th><th>Example</th></tr>
-                    <tr><td>Numeric</td><td>Numbers only</td><td>45, 3.14</td></tr>
-                    <tr><td>Alphabetic</td><td>Letters only</td><td>John, Lagos</td></tr>
-                    <tr><td>Alphanumeric</td><td>Letters and numbers</td><td>ABC123, P.O.Box</td></tr>
-                    <tr><td>Boolean</td><td>True/False values</td><td>Yes/No, 1/0</td></tr>
-                </table>
-
-                <h3>Data Processing Cycle</h3>
-                <ol>
-                    <li><strong>Data Collection</strong> — gathering raw facts</li>
-                    <li><strong>Data Input</strong> — entering data into the system</li>
-                    <li><strong>Processing</strong> — sorting, calculating, comparing</li>
-                    <li><strong>Output</strong> — producing meaningful information</li>
-                    <li><strong>Storage</strong> — saving data for future use</li>
-                    <li><strong>Feedback</strong> — output used to refine process</li>
-                </ol>
-            `
-        },
-        {
-            title: "Spreadsheets",
-            content: `
-                <h2>📊 Spreadsheet Applications</h2>
-                <p>A spreadsheet is a software application that organises data in rows and columns for analysis and calculation.</p>
-                <div class="highlight-box">
-                    Popular spreadsheet software: <strong>Microsoft Excel</strong>, Google Sheets, LibreOffice Calc
-                </div>
-
-                <h3>Key Terms</h3>
-                <table>
-                    <tr><th>Term</th><th>Meaning</th></tr>
-                    <tr><td>Cell</td><td>Intersection of a row and column (e.g. A1, B3)</td></tr>
-                    <tr><td>Row</td><td>Horizontal line of cells (numbered 1, 2, 3...)</td></tr>
-                    <tr><td>Column</td><td>Vertical line of cells (lettered A, B, C...)</td></tr>
-                    <tr><td>Worksheet</td><td>Single spreadsheet page</td></tr>
-                    <tr><td>Workbook</td><td>File containing multiple worksheets</td></tr>
-                    <tr><td>Formula</td><td>Expression that calculates a value (starts with =)</td></tr>
-                    <tr><td>Function</td><td>Built-in formula (e.g. SUM, AVERAGE)</td></tr>
-                </table>
-
-                <h3>Common Formulas</h3>
-                <div class="example-box">
-                    =SUM(A1:A10) — adds all values from A1 to A10<br>
-                    =AVERAGE(B1:B5) — calculates mean<br>
-                    =MAX(C1:C8) — finds highest value<br>
-                    =MIN(C1:C8) — finds lowest value<br>
-                    =COUNT(D1:D6) — counts number of cells with data<br>
-                    =IF(A1>50,"Pass","Fail") — logical test
-                </div>
-            `
-        },
-        {
-            title: "Word Processing",
-            content: `
-                <h2>📊 Word Processing</h2>
-                <p>Word processing software allows users to create, edit, format, and print text documents.</p>
-                <div class="highlight-box">
-                    Most common: <strong>Microsoft Word</strong>, Google Docs, LibreOffice Writer
-                </div>
-
-                <h3>Features of Word Processors</h3>
-                <ul>
-                    <li>Text entry and editing (insert, delete, copy, paste)</li>
-                    <li>Formatting (font, size, bold, italic, underline)</li>
-                    <li>Spell-check and grammar-check</li>
-                    <li>Tables and columns</li>
-                    <li>Headers, footers, and page numbering</li>
-                    <li>Mail merge</li>
-                    <li>Print preview</li>
-                </ul>
-
-                <h3>Important Keyboard Shortcuts</h3>
-                <table>
-                    <tr><th>Shortcut</th><th>Function</th></tr>
-                    <tr><td>Ctrl + C</td><td>Copy</td></tr>
-                    <tr><td>Ctrl + V</td><td>Paste</td></tr>
-                    <tr><td>Ctrl + X</td><td>Cut</td></tr>
-                    <tr><td>Ctrl + Z</td><td>Undo</td></tr>
-                    <tr><td>Ctrl + B</td><td>Bold</td></tr>
-                    <tr><td>Ctrl + S</td><td>Save</td></tr>
-                    <tr><td>Ctrl + P</td><td>Print</td></tr>
-                    <tr><td>Ctrl + A</td><td>Select All</td></tr>
+<td>ya</td><td>he / she / it</td></tr>
                 </table>
             `
         }
@@ -1115,25 +691,42 @@ function checkUrlSubject() {
 }
 
 /* ============================================================
+   FIREBASE AUTH
+============================================================ */
+const firebaseConfig = {
+    apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+    authDomain: "ernest-embassy-lms.firebaseapp.com",
+    projectId: "ernest-embassy-lms",
+    storageBucket: "ernest-embassy-lms.firebasestorage.app",
+    messagingSenderId: "204896421221",
+    appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+function updateUserName() {
+    const user = auth.currentUser;
+    if (user && user.email) {
+        const name = user.email.split('@')[0];
+        document.getElementById("userNameDisplay").innerText = name.charAt(0).toUpperCase() + name.slice(1);
+    } else {
+        document.getElementById("userNameDisplay").innerText = "Student";
+    }
+}
+
+/* ============================================================
    INIT
 ============================================================ */
 async function initPage() {
-    const devBypass = localStorage.getItem("devBypass") === "true";
-
-    if (devBypass) {
-        const stored = localStorage.getItem("currentUser");
-        if (stored) {
-            const u = JSON.parse(stored);
-            const el = document.getElementById("userNameDisplay");
-            if (el) el.innerText = u.name || "Dev Admin";
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            updateUserName();
+            checkUrlSubject();
+        } else {
+            window.location.href = "login.html";
         }
-    } else {
-        if (typeof initAuth === "function") await initAuth(true);
-        const el = document.getElementById("userNameDisplay");
-        if (el && typeof getUserName === "function") el.innerText = getUserName();
-    }
-
-    checkUrlSubject();
+    });
 }
 
 if (document.readyState === "loading") {

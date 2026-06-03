@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Convert Igbo Questions to JSON</title>
+    <title>Convert Igbo Questions to JSON - Premium Quiz Ready</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -20,6 +20,23 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.15);
         }
         h1 { color: #667eea; }
+        .mode-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .mode-btn {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .mode-btn.free { background: #11998e; color: white; }
+        .mode-btn.premium { background: #f39c12; color: white; }
+        .mode-btn.active { transform: scale(1.02); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         textarea {
             width: 100%;
             padding: 15px;
@@ -39,6 +56,9 @@
             cursor: pointer;
             margin: 10px 5px;
         }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
         .result {
             background: #f7fafc;
             padding: 20px;
@@ -49,23 +69,57 @@
             font-size: 12px;
         }
         .success { color: #11998e; }
+        .info-badge {
+            background: #f39c12;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 12px;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📚 Igbo Language Converter (Auto-extracts Answers)</h1>
-        <p>Paste your Igbo questions below. The converter will automatically extract questions, options, answers, and explanations.</p>
+        <h1>📚 Igbo Language Converter <span class="info-badge">🏆 Premium Quiz Ready</span></h1>
+        <p>Paste your Igbo questions below. Converts to JSON with 5-second timer for premium competition.</p>
+        
+        <div class="mode-selector">
+            <div class="mode-btn free" onclick="setMode('free')">📝 Free Test Mode (No Timer)</div>
+            <div class="mode-btn premium active" onclick="setMode('premium')">🏆 Premium Quiz Mode (5 Seconds Timer)</div>
+        </div>
         
         <textarea id="input" rows="15" placeholder="Paste Igbo questions here..."></textarea>
         
-        <button onclick="convertToJSON()">🔄 Convert to JSON</button>
-        <button onclick="copyJSON()" id="copyBtn" style="display:none;">📋 Copy JSON</button>
+        <div>
+            <button onclick="convertToJSON()">🔄 Convert to JSON</button>
+            <button onclick="copyJSON()" id="copyBtn" style="display:none;">📋 Copy JSON</button>
+            <button onclick="clearAll()" class="btn-primary">🗑️ Clear</button>
+        </div>
         
         <h2>JSON Output (Ready to Upload):</h2>
         <div class="result" id="output"></div>
+        <div id="message"></div>
     </div>
 
     <script>
+        let currentMode = 'premium'; // 'free' or 'premium'
+        
+        function setMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            if (mode === 'free') {
+                document.querySelector('.mode-btn.free').classList.add('active');
+                document.getElementById('message').innerHTML = '<div style="color: #11998e; padding: 10px;">📝 Free Test Mode - No time limit, practice questions</div>';
+                setTimeout(() => { document.getElementById('message').innerHTML = ''; }, 2000);
+            } else {
+                document.querySelector('.mode-btn.premium').classList.add('active');
+                document.getElementById('message').innerHTML = '<div style="color: #f39c12; padding: 10px;">🏆 Premium Quiz Mode - 5 seconds per question, competition ready!</div>';
+                setTimeout(() => { document.getElementById('message').innerHTML = ''; }, 2000);
+            }
+        }
+        
         function convertToJSON() {
             const text = document.getElementById('input').value;
             const lines = text.split('\n');
@@ -89,7 +143,7 @@
                 if (qMatch) {
                     // Save previous question
                     if (currentQuestion && currentOptions.length === 4) {
-                        questions.push({
+                        const questionObj = {
                             question: currentQuestion,
                             optionA: currentOptions[0] || "",
                             optionB: currentOptions[1] || "",
@@ -97,7 +151,18 @@
                             optionD: currentOptions[3] || "",
                             answer: currentAnswer,
                             explanation: currentExplanation
-                        });
+                        };
+                        
+                        // Add premium fields if in premium mode
+                        if (currentMode === 'premium') {
+                            questionObj.difficulty = "hard";
+                            questionObj.timeLimit = 5;
+                            questionObj.competition = true;
+                        } else {
+                            questionObj.difficulty = "easy";
+                        }
+                        
+                        questions.push(questionObj);
                     }
                     currentQuestion = qMatch[2];
                     currentOptions = [];
@@ -141,7 +206,7 @@
             
             // Save last question
             if (currentQuestion && currentOptions.length === 4) {
-                questions.push({
+                const questionObj = {
                     question: currentQuestion,
                     optionA: currentOptions[0] || "",
                     optionB: currentOptions[1] || "",
@@ -149,7 +214,17 @@
                     optionD: currentOptions[3] || "",
                     answer: currentAnswer,
                     explanation: currentExplanation
-                });
+                };
+                
+                if (currentMode === 'premium') {
+                    questionObj.difficulty = "hard";
+                    questionObj.timeLimit = 5;
+                    questionObj.competition = true;
+                } else {
+                    questionObj.difficulty = "easy";
+                }
+                
+                questions.push(questionObj);
             }
             
             if (questions.length === 0) {
@@ -161,14 +236,25 @@
             document.getElementById('output').innerHTML = `<pre style="white-space:pre-wrap; word-wrap:break-word;">${jsonOutput}</pre>`;
             document.getElementById('copyBtn').style.display = 'inline-block';
             window.currentJSON = jsonOutput;
-            document.getElementById('output').innerHTML += `<br><span class="success">✅ Successfully converted ${questions.length} questions with answers and explanations!</span>`;
+            
+            const modeText = currentMode === 'premium' ? 'PREMIUM (5 sec timer)' : 'FREE TEST';
+            document.getElementById('output').innerHTML += `<br><span class="success">✅ Successfully converted ${questions.length} Igbo questions in ${modeText} mode!</span>`;
         }
         
         function copyJSON() {
             if (window.currentJSON) {
                 navigator.clipboard.writeText(window.currentJSON);
-                alert("✅ JSON copied to clipboard! Now go to Bulk Uploader, select 'Igbo Language', paste and upload.");
+                const modeText = currentMode === 'premium' ? 'premium' : 'free';
+                alert(`✅ JSON copied to clipboard! Now go to Bulk Uploader, select 'Igbo Language', make sure ${modeText} mode is selected, paste and upload.`);
             }
+        }
+        
+        function clearAll() {
+            document.getElementById('input').value = '';
+            document.getElementById('output').innerHTML = '';
+            document.getElementById('copyBtn').style.display = 'none';
+            window.currentJSON = null;
+            alert('Cleared! Paste new questions to convert.');
         }
     </script>
 </body>

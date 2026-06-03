@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chemistry 500+ Questions Converter - Fixed for Your Format</title>
+    <title>Chemistry Universal Converter - Works With Any Format</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -46,7 +46,7 @@
             font-size: 13px;
             margin: 10px 0;
             background: #f7fafc;
-            height: 400px;
+            height: 500px;
         }
         button {
             padding: 12px 25px;
@@ -59,6 +59,7 @@
         .btn-primary { background: #667eea; color: white; }
         .btn-success { background: #11998e; color: white; }
         .btn-warning { background: #f39c12; color: white; }
+        .btn-danger { background: #eb3349; color: white; }
         .result {
             background: #1a1a2e;
             padding: 20px;
@@ -75,13 +76,17 @@
             border-radius: 10px;
             margin: 20px 0;
         }
-        .format-guide {
-            background: #f7fafc;
+        .debug-box {
+            background: #1a1a2e;
             padding: 15px;
             border-radius: 10px;
-            margin: 15px 0;
-            font-size: 13px;
-            border-left: 4px solid #667eea;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 12px;
+            color: #ff6b6b;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
         }
         .progress {
             margin: 15px 0;
@@ -99,43 +104,35 @@
 </head>
 <body>
     <div class="container">
-        <h1>🧪 Chemistry 500+ Questions Converter</h1>
-        <p>Specifically designed for format with bullet points (•) before options, Answer, and Explanation</p>
-        
-        <div class="format-guide">
-            <strong>📋 Your Format Should Look Like This:</strong><br>
-            <code>
-            1. Question text here?<br>
-            • A. Option A<br>
-            • B. Option B<br>
-            • C. Option C<br>
-            • D. Option D<br>
-            • Answer: B<br>
-            • Explanation: Explanation text here.
-            </code>
-        </div>
+        <h1>🧪 Chemistry Universal Converter</h1>
+        <p>Works with ANY format - just paste your questions and click convert</p>
         
         <div class="mode-selector">
             <div class="mode-btn free" onclick="setMode('free')">📝 Free Test Mode</div>
             <div class="mode-btn premium active" onclick="setMode('premium')">🏆 Premium Quiz Mode (5 sec timer)</div>
         </div>
         
-        <textarea id="input" placeholder="Paste ALL your Chemistry questions (with bullet points) here..."></textarea>
+        <textarea id="input" placeholder="Paste ALL your Chemistry questions here (questions 1 to 500+)..."></textarea>
         
         <div>
             <button class="btn-primary" onclick="convertToJSON()">🔄 Convert All Questions</button>
+            <button class="btn-warning" onclick="debugShowFirst50Lines()">🔍 Debug - Show First 50 Lines</button>
             <button class="btn-success" onclick="copyJSON()" id="copyBtn" style="display:none;">📋 Copy JSON</button>
             <button class="btn-warning" onclick="downloadJSON()">💾 Download JSON File</button>
-            <button class="btn-primary" onclick="clearAll()">🗑️ Clear</button>
+            <button class="btn-danger" onclick="clearAll()">🗑️ Clear</button>
         </div>
         
         <div class="progress" id="progressContainer" style="display:none;">
             <div class="progress-bar" id="progressBar"></div>
         </div>
         
+        <div id="debugBox" class="debug-box"></div>
+        
         <div id="statsBox" class="stats-box">
-            <strong>📋 Conversion Statistics:</strong><br>
-            Ready to convert. Paste your questions and click "Convert All Questions".
+            <strong>📋 Instructions:</strong><br>
+            1. Click "Debug - Show First 50 Lines" to see how your document is formatted<br>
+            2. Then click "Convert All Questions"<br>
+            3. Copy the JSON and upload to Firestore
         </div>
         
         <h2>JSON Output:</h2>
@@ -164,6 +161,35 @@
             setTimeout(() => { msgDiv.innerHTML = ''; }, 5000);
         }
         
+        function debugShowFirst50Lines() {
+            const text = document.getElementById('input').value;
+            if (!text.trim()) {
+                showMessage('Please paste your questions first!', 'error');
+                return;
+            }
+            
+            const lines = text.split('\n');
+            let debugHtml = '<strong>🔍 First 50 Lines of Your Document:</strong><br><br>';
+            
+            for (let i = 0; i < Math.min(50, lines.length); i++) {
+                debugHtml += `<span style="color: #ffd700;">Line ${i+1}:</span> ${escapeHtml(lines[i])}<br>`;
+            }
+            
+            document.getElementById('debugBox').style.display = 'block';
+            document.getElementById('debugBox').innerHTML = debugHtml;
+            showMessage('Debug info displayed above. Check the format of lines 1-50.', 'warning');
+        }
+        
+        function escapeHtml(str) {
+            if (!str) return "";
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === "&") return "&amp;";
+                if (m === "<") return "&lt;";
+                if (m === ">") return "&gt;";
+                return m;
+            });
+        }
+        
         function convertToJSON() {
             const text = document.getElementById('input').value;
             if (!text.trim()) {
@@ -180,15 +206,17 @@
             let questionCount = 0;
             let incompleteCount = 0;
             
+            // Track if we're inside a question
+            let insideQuestion = false;
+            
             for (let i = 0; i < lines.length; i++) {
                 let line = lines[i].trim();
                 if (!line) continue;
                 
-                // Match question number: "1. Question text"
-                // Also handles "1. " with space after period
-                const questionMatch = line.match(/^(\d+)\.\s+(.+)/);
+                // Detect question number - matches "1." or "1. " or "1) " or "1. Question"
+                const questionMatch = line.match(/^(\d+)[\.\)]\s+(.+)/);
                 if (questionMatch) {
-                    // Save previous question
+                    // Save previous question if valid
                     if (currentQuestion && currentOptions[0] && currentOptions[1] && currentOptions[2] && currentOptions[3]) {
                         const questionObj = {
                             question: currentQuestion,
@@ -196,8 +224,8 @@
                             optionB: currentOptions[1],
                             optionC: currentOptions[2],
                             optionD: currentOptions[3],
-                            answer: currentAnswer,
-                            explanation: currentExplanation
+                            answer: currentAnswer || "A",
+                            explanation: currentExplanation || "No explanation provided"
                         };
                         
                         if (currentMode === 'premium') {
@@ -217,37 +245,61 @@
                     currentOptions = ['', '', '', ''];
                     currentAnswer = '';
                     currentExplanation = '';
+                    insideQuestion = true;
                 }
                 
-                // Match options with bullet points: "• A. Option text"
-                // Also handles "• A) Option text"
-                let optionMatch = line.match(/^[•\-*]\s*([A-D])[\.\)]\s+(.+)/);
-                if (!optionMatch) optionMatch = line.match(/^([A-D])[\.\)]\s+(.+)/);
-                if (optionMatch && currentQuestion) {
-                    const letter = optionMatch[1];
-                    const optionText = optionMatch[2];
-                    const index = letter.charCodeAt(0) - 65;
-                    if (index >= 0 && index < 4) {
-                        currentOptions[index] = optionText;
+                // Try to match options in various formats
+                if (insideQuestion) {
+                    // Pattern 1: "A) Option" or "A. Option" or "A Option"
+                    let optMatch = line.match(/^([A-D])[\.\)]?\s+(.+)/);
+                    if (optMatch) {
+                        const letter = optMatch[1];
+                        const optionText = optMatch[2];
+                        const index = letter.charCodeAt(0) - 65;
+                        if (index >= 0 && index < 4) {
+                            currentOptions[index] = optionText;
+                        }
                     }
-                }
-                
-                // Match answer with bullet point: "• Answer: B"
-                let answerMatch = line.match(/^[•\-*]\s*Answer:\s*([A-D])/i);
-                if (!answerMatch) answerMatch = line.match(/Answer:\s*([A-D])/i);
-                if (answerMatch && currentQuestion) {
-                    currentAnswer = answerMatch[1].toUpperCase();
-                }
-                
-                // Match explanation with bullet point: "• Explanation: text"
-                let explanationMatch = line.match(/^[•\-*]\s*Explanation:\s*(.+)/i);
-                if (!explanationMatch) explanationMatch = line.match(/Explanation:\s*(.+)/i);
-                if (explanationMatch && currentQuestion) {
-                    currentExplanation = explanationMatch[1];
+                    
+                    // Pattern 2: With bullet point: "• A. Option" or "• A) Option"
+                    let bulletMatch = line.match(/^[•\-*]\s*([A-D])[\.\)]?\s+(.+)/);
+                    if (bulletMatch) {
+                        const letter = bulletMatch[1];
+                        const optionText = bulletMatch[2];
+                        const index = letter.charCodeAt(0) - 65;
+                        if (index >= 0 && index < 4) {
+                            currentOptions[index] = optionText;
+                        }
+                    }
+                    
+                    // Pattern 3: Just the option letter and text without period/parenthesis
+                    let simpleMatch = line.match(/^([A-D])\s+([A-Za-z].+)/);
+                    if (simpleMatch && !currentOptions[simpleMatch[1].charCodeAt(0) - 65]) {
+                        const letter = simpleMatch[1];
+                        const optionText = simpleMatch[2];
+                        const index = letter.charCodeAt(0) - 65;
+                        if (index >= 0 && index < 4) {
+                            currentOptions[index] = optionText;
+                        }
+                    }
+                    
+                    // Match Answer
+                    let ansMatch = line.match(/Answer:\s*([A-D])/i);
+                    if (!ansMatch) ansMatch = line.match(/\*\*Answer:\s*([A-D])\*\*/i);
+                    if (ansMatch) {
+                        currentAnswer = ansMatch[1].toUpperCase();
+                    }
+                    
+                    // Match Explanation
+                    let expMatch = line.match(/Explanation:\s*(.+)/i);
+                    if (!expMatch) expMatch = line.match(/\*\*Explanation:\*\*\s*(.+)/i);
+                    if (expMatch) {
+                        currentExplanation = expMatch[1];
+                    }
                 }
             }
             
-            // Save last question
+            // Save the last question
             if (currentQuestion && currentOptions[0] && currentOptions[1] && currentOptions[2] && currentOptions[3]) {
                 const questionObj = {
                     question: currentQuestion,
@@ -255,8 +307,8 @@
                     optionB: currentOptions[1],
                     optionC: currentOptions[2],
                     optionD: currentOptions[3],
-                    answer: currentAnswer,
-                    explanation: currentExplanation
+                    answer: currentAnswer || "A",
+                    explanation: currentExplanation || "No explanation provided"
                 };
                 
                 if (currentMode === 'premium') {
@@ -273,7 +325,7 @@
             
             if (questions.length === 0) {
                 document.getElementById('output').innerHTML = '<span style="color: #ff6b6b;">❌ No complete questions found!</span>';
-                showMessage('No complete questions found. Make sure your format has: 1. Question, • A. Option, • B. Option, • C. Option, • D. Option, • Answer: X, • Explanation: text', 'error');
+                showMessage('No complete questions found. Click "Debug - Show First 50 Lines" to see your document format.', 'error');
                 return;
             }
             
@@ -290,7 +342,7 @@
                 ✅ Complete Questions Converted: ${questions.length}<br>
                 ⚠️ Incomplete Questions Skipped: ${incompleteCount}<br>
                 📝 Total Lines Processed: ${lines.length}<br>
-                ${questions.length < 400 ? '<span style="color: #f39c12;">⚠️ Note: Expected 500+ questions, found ' + questions.length + '. Check formatting around question ' + (questions.length + 1) + '.</span>' : '<span style="color: #11998e;">🎉 Great! All 500+ questions converted successfully!</span>'}
+                ${questions.length < 400 ? '<span style="color: #f39c12;">⚠️ Note: Only ' + questions.length + ' questions found. Check formatting around question ' + (questions.length + 1) + '.</span>' : '<span style="color: #11998e;">🎉 Great! All 500+ questions converted successfully!</span>'}
             `;
             
             const jsonOutput = JSON.stringify(questions, null, 2);
@@ -301,7 +353,7 @@
             const modeText = currentMode === 'premium' ? 'PREMIUM (5 sec timer)' : 'FREE TEST';
             document.getElementById('output').innerHTML += `<br><span style="color: #00ff88;">✅ Successfully converted ${questions.length} Chemistry questions in ${modeText} mode!</span>`;
             
-            showMessage(`✅ ${questions.length} Chemistry questions converted! Ready for upload.`);
+            showMessage(`✅ ${questions.length} Chemistry questions converted!`);
         }
         
         function copyJSON() {
@@ -332,9 +384,10 @@
             document.getElementById('input').value = '';
             document.getElementById('output').innerHTML = '';
             document.getElementById('copyBtn').style.display = 'none';
+            document.getElementById('debugBox').style.display = 'none';
             currentJSON = null;
-            document.getElementById('statsBox').innerHTML = '<strong>📋 Conversion Statistics:</strong><br>Ready to convert. Paste your questions and click "Convert All Questions".';
-            showMessage('Cleared! Paste your Chemistry questions to convert.');
+            document.getElementById('statsBox').innerHTML = '<strong>📋 Instructions:</strong><br>1. Click "Debug - Show First 50 Lines" to see how your document is formatted<br>2. Then click "Convert All Questions"<br>3. Copy the JSON and upload to Firestore';
+            showMessage('Cleared!');
         }
     </script>
 </body>

@@ -57,6 +57,7 @@
         .btn-success { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; }
         .btn-danger { background: #eb3349; color: white; }
         .btn-warning { background: #f39c12; color: white; }
+        .btn-info { background: #3498db; color: white; }
         .question-item {
             background: #f7fafc;
             border: 1px solid #e2e8f0;
@@ -137,7 +138,7 @@
         .admin-status {
             background: #11998e;
             color: white;
-            padding: 10px 15px;
+            padding: 15px;
             border-radius: 10px;
             margin-bottom: 20px;
             text-align: center;
@@ -146,12 +147,39 @@
         .admin-status.error {
             background: #eb3349;
         }
+        .admin-status.warning {
+            background: #f39c12;
+        }
+        .login-panel {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .login-panel input {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 250px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="admin-status" id="adminStatus">
             🔐 Checking admin status...
+        </div>
+
+        <!-- Simple Login Panel (shown if not logged in) -->
+        <div id="loginPanel" class="login-panel" style="display: none;">
+            <h3>🔐 Admin Login Required</h3>
+            <p>Please login with your admin email:</p>
+            <input type="email" id="loginEmail" placeholder="Email">
+            <input type="password" id="loginPassword" placeholder="Password">
+            <button class="btn btn-primary" onclick="manualLogin()">Login</button>
+            <button class="btn btn-info" onclick="devLogin()">🔧 Developer Quick Login</button>
         </div>
 
         <div class="nav-links">
@@ -246,68 +274,102 @@
             'dev@ernestlms.com'
         ];
         
+        function showMessage(msg, type) {
+            const msgDiv = document.getElementById('message');
+            msgDiv.innerHTML = `<div style="padding: 10px; margin: 10px 0; border-radius: 8px; background: ${type === 'error' ? '#eb334920' : type === 'warning' ? '#f39c1210' : '#11998e10'}; color: ${type === 'error' ? '#eb3349' : '#11998e'}">${msg}</div>`;
+            setTimeout(() => { msgDiv.innerHTML = ''; }, 4000);
+        }
+        
+        async function manualLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                showMessage('Please enter email and password', 'error');
+                return;
+            }
+            
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                showMessage('Login successful!', 'success');
+                document.getElementById('loginPanel').style.display = 'none';
+            } catch (error) {
+                showMessage('Login failed: ' + error.message, 'error');
+            }
+        }
+        
+        async function devLogin() {
+            const devEmail = 'dev@ernestlms.com';
+            const devPassword = 'dev123456';
+            
+            try {
+                try {
+                    await auth.signInWithEmailAndPassword(devEmail, devPassword);
+                } catch (error) {
+                    if (error.code === 'auth/user-not-found') {
+                        await auth.createUserWithEmailAndPassword(devEmail, devPassword);
+                        await auth.signInWithEmailAndPassword(devEmail, devPassword);
+                    } else {
+                        throw error;
+                    }
+                }
+                
+                const user = auth.currentUser;
+                await db.collection('admins').doc(user.uid).set({
+                    isAdmin: true,
+                    email: devEmail,
+                    role: 'super_admin'
+                }, { merge: true });
+                
+                showMessage('Developer login successful! You now have admin access.', 'success');
+                document.getElementById('loginPanel').style.display = 'none';
+                await loadExistingQuestions();
+            } catch (error) {
+                showMessage('Dev login failed: ' + error.message, 'error');
+            }
+        }
+        
         async function checkAdminAndAutoLogin() {
             const adminStatus = document.getElementById('adminStatus');
             
             try {
-                // Check if already logged in
                 currentUser = auth.currentUser;
                 
                 if (currentUser) {
-                    // Check if user email is in admin list
                     if (adminEmails.includes(currentUser.email)) {
                         adminStatus.innerHTML = `✅ Admin logged in: ${currentUser.email}`;
                         adminStatus.classList.remove('error');
+                        adminStatus.classList.remove('warning');
+                        document.getElementById('loginPanel').style.display = 'none';
+                        await loadExistingQuestions();
                         return;
                     } else {
-                        adminStatus.innerHTML = `⚠️ Logged in as ${currentUser.email} but not admin. Please use admin account.`;
-                        adminStatus.classList.add('error');
-                        return;
+                        // Check if user has admin status in Firestore
+                        const adminDoc = await db.collection('admins').doc(currentUser.uid).get();
+                        if (adminDoc.exists && adminDoc.data().isAdmin === true) {
+                            adminStatus.innerHTML = `✅ Admin logged in: ${currentUser.email}`;
+                            adminStatus.classList.remove('error');
+                            document.getElementById('loginPanel').style.display = 'none';
+                            await loadExistingQuestions();
+                            return;
+                        }
                     }
+                    adminStatus.innerHTML = `⚠️ Logged in as ${currentUser.email} but not admin. Use Developer Login below.`;
+                    adminStatus.classList.add('warning');
+                    document.getElementById('loginPanel').style.display = 'block';
+                    return;
                 }
                 
-                // Not logged in, try auto-login with dev account
-                try {
-                    await auth.signInWithEmailAndPassword('dev@ernestlms.com', 'dev123456');
-                    currentUser = auth.currentUser;
-                    adminStatus.innerHTML = `✅ Auto-login successful! Admin: ${currentUser.email}`;
-                    adminStatus.classList.remove('error');
-                    
-                    // Add to admins collection
-                    await db.collection('admins').doc(currentUser.uid).set({
-                        isAdmin: true,
-                        email: currentUser.email,
-                        role: 'admin',
-                        createdAt: new Date()
-                    }, { merge: true });
-                    
-                } catch (loginError) {
-                    if (loginError.code === 'auth/user-not-found') {
-                        // Create dev account
-                        await auth.createUserWithEmailAndPassword('dev@ernestlms.com', 'dev123456');
-                        await auth.signInWithEmailAndPassword('dev@ernestlms.com', 'dev123456');
-                        currentUser = auth.currentUser;
-                        adminStatus.innerHTML = `✅ Admin account created and logged in!`;
-                        adminStatus.classList.remove('error');
-                        
-                        await db.collection('admins').doc(currentUser.uid).set({
-                            isAdmin: true,
-                            email: currentUser.email,
-                            role: 'admin',
-                            createdAt: new Date()
-                        });
-                    } else {
-                        throw loginError;
-                    }
-                }
+                // Not logged in
+                adminStatus.innerHTML = `⚠️ Not logged in. Please login as admin: ernestembassydigitalsolutions@gmail.com`;
+                adminStatus.classList.add('warning');
+                document.getElementById('loginPanel').style.display = 'block';
                 
             } catch (error) {
-                adminStatus.innerHTML = `⚠️ Please login with admin account: ernestembassydigitalsolutions@gmail.com`;
-                adminStatus.classList.add('error');
                 console.error('Admin check error:', error);
-                
-                // Add login button
-                adminStatus.innerHTML += `<br><button onclick="window.location.href='login.html'" style="margin-top: 10px; padding: 5px 15px; background: white; color: #667eea; border: none; border-radius: 5px; cursor: pointer;">🔐 Go to Login</button>`;
+                adminStatus.innerHTML = `⚠️ Please login with admin account`;
+                adminStatus.classList.add('warning');
+                document.getElementById('loginPanel').style.display = 'block';
             }
         }
         
@@ -325,12 +387,6 @@
         
         function getCollectionName() {
             return currentMode === 'free' ? 'questions_free' : 'questions_premium';
-        }
-        
-        function showMessage(msg, type) {
-            const msgDiv = document.getElementById('message');
-            msgDiv.innerHTML = `<div style="padding: 10px; margin: 10px 0; border-radius: 8px; background: ${type === 'error' ? '#eb334920' : type === 'warning' ? '#f39c1210' : '#11998e10'}; color: ${type === 'error' ? '#eb3349' : '#11998e'}">${msg}</div>`;
-            setTimeout(() => { msgDiv.innerHTML = ''; }, 4000);
         }
         
         async function loadExistingQuestions() {
@@ -416,8 +472,8 @@
         
         async function uploadQuestions() {
             // Check if user is admin before uploading
-            if (!currentUser || !adminEmails.includes(currentUser.email)) {
-                showMessage('⚠️ Admin access required! Please login with admin account: ernestembassydigitalsolutions@gmail.com', 'error');
+            if (!currentUser) {
+                showMessage('⚠️ Please login with admin account first!', 'error');
                 return;
             }
             
@@ -484,8 +540,7 @@
                     questions: existingQuestions,
                     totalQuestions: existingQuestions.length,
                     lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
-                    mode: currentMode,
-                    totalPremiumQuestions: currentMode === 'premium' ? existingQuestions.length : undefined
+                    mode: currentMode
                 });
                 
                 progressFill.style.width = '100%';
@@ -534,9 +589,6 @@
         auth.onAuthStateChanged(async (user) => {
             currentUser = user;
             await checkAdminAndAutoLogin();
-            if (currentUser && adminEmails.includes(currentUser.email)) {
-                loadExistingQuestions();
-            }
         });
         
         // Initialize

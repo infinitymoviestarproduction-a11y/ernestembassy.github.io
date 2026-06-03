@@ -4,37 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Ernest Embassy LMS</title>
-
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
-
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: #eef2f7; }
-        
-        /* Floating Home Button */
-        .floating-home {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-            z-index: 1000;
-            font-size: 24px;
-            border: none;
-            text-decoration: none;
-        }
-        .floating-home:hover { transform: scale(1.1); }
+        body { background: #1a1a2e; min-height: 100vh; }
         
         /* Navigation */
         nav {
@@ -47,420 +22,189 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         .nav-container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 20px;
         }
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-        }
-        .logo-img {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        .logo-text {
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             font-weight: bold;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
+            text-decoration: none;
         }
-        .logo-sub { font-size: 0.7rem; color: #718096; }
-        .nav-links { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-        .nav-links a, .dropbtn {
+        .nav-links a {
             color: #4a5568;
             text-decoration: none;
-            font-weight: 500;
-            font-size: 0.85rem;
-            padding: 8px 12px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            background: none;
-            border: none;
-            cursor: pointer;
+            margin-left: 20px;
         }
-        .nav-links a:hover, .dropdown:hover .dropbtn { color: #667eea; background: rgba(102, 126, 234, 0.1); }
-        .dropdown { position: relative; display: inline-block; }
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background: white;
-            min-width: 200px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            border-radius: 12px;
-            z-index: 1000;
-            top: 100%;
-            left: 0;
-            overflow: hidden;
-        }
-        .dropdown-content a {
-            display: block;
-            padding: 10px 20px;
-            color: #4a5568;
-            font-size: 0.85rem;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .dropdown-content a:last-child { border-bottom: none; }
-        .dropdown-content a:hover { background: #f7fafc; color: #667eea; }
-        .dropdown:hover .dropdown-content { display: block; }
         
-        /* Header */
-        .header { 
-            background: linear-gradient(135deg, #667eea, #764ba2); 
-            padding: 20px; 
-            color: white; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            flex-wrap: wrap; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
-        }
-        .header-left h1 { font-size: 26px; }
-        .header-left p { font-size: 14px; opacity: 0.9; margin-top: 5px; }
-        .header-right { display: flex; gap: 10px; margin-top: 10px; }
-        .header button { 
-            border: none; 
-            padding: 10px 15px; 
-            border-radius: 10px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            transition: 0.3s; 
-        }
-        .home-btn { background: white; color: #667eea; }
-        .back-btn { background: #222; color: white; }
-        .logout-btn { background: #dc3545; color: white; }
-        .header button:hover { transform: scale(1.05); }
-        
-        /* Layout */
-        .container { max-width: 1200px; margin: auto; padding: 20px; }
-        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px; }
-        .stat-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
-        .stat-card h2 { font-size: 28px; color: #667eea; }
-        .stat-card p { color: #777; margin-top: 5px; }
-        
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; padding-bottom: 10px; flex-wrap: wrap; }
-        .tab-btn { background: #f0f0f0; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; transition: 0.3s; font-weight: bold; }
-        .tab-btn.active { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
-        .tab-pane { display: none; }
-        .tab-pane.active { display: block; }
-        
-        .card { background: white; padding: 25px; border-radius: 18px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); margin-bottom: 20px; }
-        .card h2 { margin-bottom: 15px; color: #1a1a2e; border-bottom: 2px solid #ffd700; padding-bottom: 10px; display: inline-block; }
-        .card h3 { color: #4a5568; margin: 15px 0 10px; font-size: 1.1rem; }
-        
-        input, textarea, select { 
-            width: 100%; 
-            padding: 12px; 
-            margin-top: 8px; 
-            margin-bottom: 15px; 
-            border-radius: 10px; 
-            border: 1px solid #ddd; 
-            font-size: 14px; 
-            outline: none; 
-            transition: 0.3s; 
-        }
-        input:focus, textarea:focus, select:focus { border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
-        textarea { resize: none; height: 120px; }
-        
-        .action-btn { 
-            background: linear-gradient(135deg, #667eea, #764ba2); 
-            color: white; 
-            padding: 13px; 
-            border: none; 
-            border-radius: 10px; 
-            cursor: pointer; 
-            font-size: 15px; 
-            font-weight: bold; 
-            width: 100%; 
-            transition: 0.3s; 
-        }
-        .action-btn:hover { transform: scale(1.02); opacity: 0.95; }
-        .btn-small { width: auto; padding: 8px 16px; font-size: 13px; display: inline-block; margin-right: 10px; }
-        
-        .questions-list { max-height: 400px; overflow-y: auto; }
-        .question-item { background: #f8f9fa; padding: 15px; margin-bottom: 10px; border-radius: 10px; border-left: 4px solid #667eea; }
-        .question-text { font-weight: bold; margin-bottom: 8px; }
-        .question-meta { font-size: 12px; color: #888; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .delete-question { background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; }
-        .delete-question:hover { background: #c82333; }
-        
-        .success { background: #d4edda; color: #155724; padding: 12px; border-radius: 10px; margin-top: 10px; border-left: 4px solid #28a745; }
-        .error { background: #f8d7da; color: #721c24; padding: 12px; border-radius: 10px; margin-top: 10px; border-left: 4px solid #dc3545; }
-        .warning { background: #fff3cd; color: #856404; padding: 12px; border-radius: 10px; margin-top: 10px; border-left: 4px solid #ffc107; }
-        
-        .footer { text-align: center; padding: 20px; color: #666; font-size: 14px; border-top: 1px solid #ddd; margin-top: 30px; }
-        .loading { text-align: center; padding: 20px; color: #667eea; }
-        
-        .dev-tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        .dev-tool-card {
-            background: #f7fafc;
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
+        .admin-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 40px 20px;
             text-align: center;
         }
-        .dev-tool-card h4 {
-            color: #2d3748;
-            margin-bottom: 10px;
+        .admin-header h1 { font-size: 2rem; }
+        .admin-badge {
+            background: #ffd700;
+            color: #1a1a2e;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 0.8rem;
+        }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
+        
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .admin-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .admin-card:hover { transform: translateY(-5px); }
+        .admin-icon { font-size: 3rem; margin-bottom: 15px; }
+        .admin-card h3 { color: #2d3748; margin-bottom: 10px; }
+        .admin-card p { color: #718096; font-size: 0.9rem; }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .stat-number { font-size: 2rem; font-weight: bold; color: #667eea; }
+        .stat-label { color: #718096; margin-top: 5px; }
+        
+        .floating-home {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-size: 24px;
+            border: none;
+            text-decoration: none;
         }
         
         @media (max-width: 768px) {
-            .nav-container { flex-direction: column; }
-            .nav-links { justify-content: center; }
-            .tabs { justify-content: center; }
-            .floating-home { width: 50px; height: 50px; font-size: 20px; bottom: 20px; right: 20px; }
+            .nav-container { flex-direction: column; gap: 15px; text-align: center; }
+            .admin-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-<!-- Floating Home Button -->
-<a href="index.html" class="floating-home" title="Go to Home">🏠</a>
+<a href="index.html" class="floating-home">🏠</a>
 
 <nav>
     <div class="nav-container">
-        <a href="index.html" class="logo">
-            <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
-            <div>
-                <div class="logo-text">Ernest Embassy</div>
-                <div class="logo-sub">Digital Solutions</div>
-            </div>
-        </a>
+        <a href="index.html" class="logo">⚡ Ernest Embassy LMS</a>
         <div class="nav-links">
-            <a href="index.html">🏠 Home</a>
-            <a href="about.html">📖 About</a>
-            <a href="services.html">⚙️ Services</a>
-            <a href="webdev.html">💻 Web Dev</a>
-            <a href="visa.html">✈️ Visa</a>
-            
-            <div class="dropdown">
-                <button class="dropbtn">🎬 Movie Studio ▼</button>
-                <div class="dropdown-content">
-                    <a href="movie-studio.html">🎬 Studio Home</a>
-                    <a href="portfolio.html">🎨 Portfolio</a>
-                    <a href="gallery.html">📸 Gallery</a>
-                    <a href="team.html">👥 Our Team</a>
-                </div>
-            </div>
-
-            <div class="dropdown">
-                <button class="dropbtn">🎓 Education ▼</button>
-                <div class="dropdown-content">
-                    <a href="education.html">🎓 Education Hub</a>
-                    <a href="teaching.html">📚 Teaching Notes</a>
-                    <a href="tutoring.html">💻 Tutoring</a>
-                    <a href="class.html">🎓 Class</a>
-                    <a href="resources.html">📄 Resources</a>
-                </div>
-            </div>
-
-            <a href="booking.html">📅 Book</a>
-            <a href="contact.html">📞 Contact</a>
-            <a href="testimonials.html">⭐ Testimonials</a>
-            <a href="register.html">📝 Register</a>
-            <a href="login.html">🔐 Login</a>
-            <a href="dashboard.html">👤 Dashboard</a>
-            <a href="admin.html" style="color:#667eea; font-weight:bold;">🔒 Admin</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="admin.html" style="color: #667eea; font-weight: bold;">🔒 Admin</a>
+            <a href="logout.html">Logout</a>
         </div>
     </div>
 </nav>
 
-<div class="header">
-    <div class="header-left">
-        <h1>⚙️ Ernest Embassy LMS Admin</h1>
-        <p>Professional Firebase Learning Management System</p>
-    </div>
-    <div class="header-right">
-        <button class="home-btn" onclick="goHome()">🏠 Home</button>
-        <button class="back-btn" onclick="goBack()">⬅ Back</button>
-        <button class="logout-btn" onclick="logout()">🚪 Logout</button>
-    </div>
+<div class="admin-header">
+    <h1>🔒 Admin Control Panel</h1>
+    <p>Manage your LMS platform</p>
+    <div class="admin-badge">Administrator Access Only</div>
 </div>
 
 <div class="container">
-    <div class="stats">
-        <div class="stat-card"><h2 id="questionCount">0</h2><p>Total Questions</p></div>
-        <div class="stat-card"><h2 id="lessonCount">0</h2><p>Total Lessons</p></div>
-        <div class="stat-card"><h2 id="userCount">0</h2><p>Total Users</p></div>
-        <div class="stat-card"><h2>🟢 ONLINE</h2><p>Firebase Connected</p></div>
-    </div>
-
-    <div class="tabs">
-        <button class="tab-btn active" onclick="showTab('add')">➕ Add Question</button>
-        <button class="tab-btn" onclick="showTab('list')">📋 Manage Questions</button>
-        <button class="tab-btn" onclick="showTab('lessons')">📚 Add Lesson</button>
-        <button class="tab-btn" onclick="showTab('payments')">💰 Payment Requests</button>
-        <button class="tab-btn" onclick="showTab('devtools')">🔧 Dev Tools</button>
-    </div>
-
-    <div id="addTab" class="tab-pane active">
-        <div class="card">
-            <h2>➕ Add New Question</h2>
-            <select id="questionSubject">
-                <option value="">Select Subject</option>
-                <option value="physics">⚛️ Physics</option>
-                <option value="chemistry">🧪 Chemistry</option>
-                <option value="mathematics">📐 Mathematics</option>
-                <option value="english">📖 English Language</option>
-                <option value="digital-technology">💻 Digital Technology</option>
-                <option value="igbo">🗣️ Igbo Language</option>
-            </select>
-            <input id="q" placeholder="Enter Question" type="text">
-            <input id="o1" placeholder="Option 1">
-            <input id="o2" placeholder="Option 2">
-            <input id="o3" placeholder="Option 3">
-            <input id="o4" placeholder="Option 4">
-            <select id="ans">
-                <option value="">Select Correct Answer</option>
-                <option value="A">Option A</option>
-                <option value="B">Option B</option>
-                <option value="C">Option C</option>
-                <option value="D">Option D</option>
-            </select>
-            <select id="questionStage">
-                <option value="1">Stage 1 (Easy)</option>
-                <option value="2">Stage 2 (Easy-Medium)</option>
-                <option value="3">Stage 3 (Medium)</option>
-                <option value="4">Stage 4 (Medium-Hard)</option>
-                <option value="5">Stage 5 (Hard)</option>
-                <option value="6">Stage 6 (Hard)</option>
-                <option value="7">Stage 7 (Expert)</option>
-                <option value="8">Stage 8 (Expert)</option>
-                <option value="9">Stage 9 (Master)</option>
-                <option value="10">Stage 10 (Master)</option>
-            </select>
-            <textarea id="exp" placeholder="Answer Explanation (Detailed explanation for students)"></textarea>
-            <button class="action-btn" onclick="saveQuestion()">💾 Save Question</button>
-            <div id="qMsg"></div>
+    <div class="stats-grid" id="statsGrid">
+        <div class="stat-card">
+            <div class="stat-number" id="totalQuestions">0</div>
+            <div class="stat-label">Total Questions</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="totalUsers">0</div>
+            <div class="stat-label">Registered Users</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="totalLessons">0</div>
+            <div class="stat-label">Total Lessons</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="totalRevenue">0</div>
+            <div class="stat-label">Revenue (₦)</div>
         </div>
     </div>
-
-    <div id="listTab" class="tab-pane">
-        <div class="card">
-            <h2>📋 Manage Questions</h2>
-            <div id="questionsList" class="questions-list">
-                <div class="loading">Loading questions...</div>
-            </div>
-        </div>
-    </div>
-
-    <div id="lessonsTab" class="tab-pane">
-        <div class="card">
-            <h2>📚 Add Lesson / Study Note</h2>
-            <select id="lessonSubject">
-                <option value="">Select Subject</option>
-                <option value="physics">⚛️ Physics</option>
-                <option value="chemistry">🧪 Chemistry</option>
-                <option value="mathematics">📐 Mathematics</option>
-                <option value="english">📖 English Language</option>
-                <option value="digital-technology">💻 Digital Technology</option>
-                <option value="igbo">🗣️ Igbo Language</option>
-            </select>
-            <input id="lessonTitle" placeholder="Lesson Title">
-            <textarea id="lessonContent" placeholder="Lesson Content / Study Notes (HTML supported)"></textarea>
-            <button class="action-btn" onclick="saveLesson()">💾 Save Lesson</button>
-            <div id="lMsg"></div>
-        </div>
-    </div>
-
-    <!-- Payment Requests Tab -->
-    <div id="paymentsTab" class="tab-pane">
-        <div class="card">
-            <h2>💰 Payment Verification Dashboard</h2>
-            <p style="color: #718096; margin-bottom: 15px;">Review and verify student payment requests</p>
-            
-            <div class="stats" style="margin-bottom: 20px;" id="paymentStats">
-                Loading statistics...
-            </div>
-            
-            <div style="overflow-x: auto;">
-                <table style="width: 100%; border-collapse: collapse;">
-                    <thead>
-                        <tr style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
-                            <th style="padding: 12px; text-align: left;">Date</th>
-                            <th style="padding: 12px; text-align: left;">Student</th>
-                            <th style="padding: 12px; text-align: left;">Email</th>
-                            <th style="padding: 12px; text-align: left;">Subject</th>
-                            <th style="padding: 12px; text-align: left;">Amount</th>
-                            <th style="padding: 12px; text-align: left;">Status</th>
-                            <th style="padding: 12px; text-align: left;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="paymentsList">
-                        <tr><td colspan="7" style="text-align: center; padding: 40px;">Loading payments...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <div id="devtoolsTab" class="tab-pane">
-        <!-- Developer Testing Tools Card -->
-        <div class="card">
-            <h2>🔧 Developer Testing Tools</h2>
-            <p style="color: #718096; margin-bottom: 15px;">⚠️ These tools are for testing only - Use with caution</p>
-            
-            <div class="dev-tools-grid">
-                <div class="dev-tool-card">
-                    <h4>📝 Test Data Management</h4>
-                    <button class="action-btn btn-small" onclick="createTestData()" style="background: #f39c12; width: auto;">Create Sample Data</button>
-                    <button class="action-btn btn-small" onclick="clearTestData()" style="background: #dc3545; width: auto; margin-top: 10px;">Clear All Data</button>
-                </div>
-                
-                <div class="dev-tool-card">
-                    <h4>👤 User Management</h4>
-                    <button class="action-btn btn-small" onclick="createTestUsers()" style="background: #28a745; width: auto;">Create Test Users</button>
-                    <button class="action-btn btn-small" onclick="listAllUsers()" style="background: #667eea; width: auto; margin-top: 10px;">List All Users</button>
-                </div>
-                
-                <div class="dev-tool-card">
-                    <h4>🚪 Developer Access</h4>
-                    <button class="action-btn btn-small" onclick="window.location.href='dev-login.html'" style="background: #667eea; width: auto;">🔧 Dev Login Portal</button>
-                    <button class="action-btn btn-small" onclick="makeMeAdmin()" style="background: #f39c12; width: auto; margin-top: 10px;">Make Current User Admin</button>
-                </div>
-                
-                <div class="dev-tool-card">
-                    <h4>📊 Database Utilities</h4>
-                    <button class="action-btn btn-small" onclick="backupData()" style="background: #11998e; width: auto;">Export Backup</button>
-                    <button class="action-btn btn-small" onclick="checkDatabaseSize()" style="background: #3498db; width: auto; margin-top: 10px;">Check DB Size</button>
-                </div>
-            </div>
-            
-            <div id="testMsg"></div>
+    
+    <div class="admin-grid">
+        <div class="admin-card" onclick="window.location.href='bulk-upload-premium.html'">
+            <div class="admin-icon">📤</div>
+            <h3>Upload Questions</h3>
+            <p>Bulk upload questions to any subject</p>
         </div>
         
-        <!-- System Status Card -->
-        <div class="card">
-            <h2>📊 System Status</h2>
-            <div id="systemStatus">
-                <p>🟢 Firebase Connection: <strong>Active</strong></p>
-                <p>📅 Server Time: <span id="serverTime"></span></p>
-                <p>👥 Active Users: <span id="activeUsers">Loading...</span></p>
-            </div>
+        <div class="admin-card" onclick="window.location.href='admin-payments.html'">
+            <div class="admin-icon">💰</div>
+            <h3>Payment Requests</h3>
+            <p>Verify and manage student payments</p>
+        </div>
+        
+        <div class="admin-card" onclick="window.location.href='admin-lessons.html'">
+            <div class="admin-icon">📚</div>
+            <h3>Manage Lessons</h3>
+            <p>Add and edit study materials</p>
+        </div>
+        
+        <div class="admin-card" onclick="window.location.href='admin-users.html'">
+            <div class="admin-icon">👥</div>
+            <h3>User Management</h3>
+            <p>View and manage student accounts</p>
+        </div>
+        
+        <div class="admin-card" onclick="window.location.href='admin-analytics.html'">
+            <div class="admin-icon">📊</div>
+            <h3>Analytics</h3>
+            <p>View platform statistics</p>
+        </div>
+        
+        <div class="admin-card" onclick="window.location.href='dev-login.html'">
+            <div class="admin-icon">🔧</div>
+            <h3>Dev Tools</h3>
+            <p>Developer testing tools</p>
         </div>
     </div>
 </div>
 
-<div class="footer">Ernest Embassy LMS Admin Dashboard | Protected Area</div>
-
 <script>
-    // Firebase Configuration
     const firebaseConfig = {
         apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
         authDomain: "ernest-embassy-lms.firebaseapp.com",
@@ -474,467 +218,42 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
     
-    let currentAdmin = null;
+    const adminEmails = ['ernestembassydigitalsolutions@gmail.com', 'damian@ernestembassy.com', 'dev@ernestlms.com'];
     
-    // Update server time
-    function updateServerTime() {
-        document.getElementById('serverTime').innerText = new Date().toLocaleString();
-    }
-    setInterval(updateServerTime, 1000);
-    updateServerTime();
-    
-    async function checkAdminAccess() {
-        return new Promise((resolve) => {
-            auth.onAuthStateChanged(async (user) => {
-                if (!user) {
-                    window.location.href = "login.html";
-                    resolve(false);
-                    return;
-                }
-                
-                try {
-                    const adminDoc = await db.collection('admins').doc(user.uid).get();
-                    if (adminDoc.exists && adminDoc.data().isAdmin === true) {
-                        currentAdmin = user;
-                        resolve(true);
-                    } else {
-                        const adminEmails = ['damian@ernestembassy.com', 'admin@ernestembassy.com', 'dev@ernestlms.com', 'ernestembassydigitalsolutions@gmail.com'];
-                        if (adminEmails.includes(user.email)) {
-                            currentAdmin = user;
-                            resolve(true);
-                        } else {
-                            alert("⚠️ Access Denied. Admin privileges required.");
-                            window.location.href = "dashboard.html";
-                            resolve(false);
-                        }
-                    }
-                } catch (error) {
-                    console.error("Admin check error:", error);
-                    window.location.href = "dashboard.html";
-                    resolve(false);
-                }
-            });
-        });
+    async function checkAdmin() {
+        const user = auth.currentUser;
+        if (!user || !adminEmails.includes(user.email)) {
+            alert("Access Denied. Admin privileges required.");
+            window.location.href = "dashboard.html";
+            return false;
+        }
+        return true;
     }
     
     async function loadStats() {
-        try {
-            const qSnap = await db.collection("questions").get();
-            document.getElementById("questionCount").innerText = qSnap.size;
-            const lSnap = await db.collection("lessons").get();
-            document.getElementById("lessonCount").innerText = lSnap.size;
-            const uSnap = await db.collection("students").get();
-            document.getElementById("userCount").innerText = uSnap.size;
-            document.getElementById('activeUsers').innerText = uSnap.size;
-        } catch (err) {
-            console.error("Error loading stats:", err);
-        }
-    }
-    
-    // ========== PAYMENT FUNCTIONS ==========
-    async function loadPayments() {
-        const tbody = document.getElementById('paymentsList');
-        const statsDiv = document.getElementById('paymentStats');
+        const questionsSnap = await db.collection("questions").get();
+        const studentsSnap = await db.collection("students").get();
+        const lessonsSnap = await db.collection("lessons").get();
+        const paymentsSnap = await db.collection("payments").where("status", "==", "verified").get();
         
-        try {
-            const snapshot = await db.collection('payments')
-                .orderBy('paymentDate', 'desc')
-                .get();
-            
-            let pendingCount = 0;
-            let verifiedCount = 0;
-            let totalAmount = 0;
-            
-            if (snapshot.empty) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px;">No payment requests found</td></tr>';
-                statsDiv.innerHTML = '<strong>📊 Payment Statistics:</strong><br>⏳ Pending: 0 | ✅ Verified: 0 | 💰 Total Revenue: ₦0';
-                return;
-            }
-            
-            let html = '';
-            snapshot.forEach(doc => {
-                const payment = doc.data();
-                const id = doc.id;
-                const date = payment.paymentDate ? new Date(payment.paymentDate.toDate()).toLocaleString() : 'Unknown';
-                const status = payment.status || 'pending';
-                
-                if (status === 'pending') pendingCount++;
-                if (status === 'verified') verifiedCount++;
-                if (status === 'verified') totalAmount += (payment.amount || 100);
-                
-                const statusClass = status === 'verified' ? 'status-verified' : 'status-pending';
-                const statusText = status === 'verified' ? '✅ Verified' : '⏳ Pending';
-                
-                html += `
-                    <tr style="border-bottom: 1px solid #ddd;">
-                        <td style="padding: 12px;">${date}</td>
-                        <td style="padding: 12px;">${payment.userName || 'N/A'}</td>
-                        <td style="padding: 12px;">${payment.userEmail || 'N/A'}</td>
-                        <td style="padding: 12px;">${payment.subject || 'N/A'}</td>
-                        <td style="padding: 12px;">₦${payment.amount || 100}</td>
-                        <td style="padding: 12px;"><span style="background: ${status === 'verified' ? '#11998e' : '#f39c12'}; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px;">${statusText}</span></td>
-                        <td style="padding: 12px;">
-                            ${status === 'pending' ? 
-                                `<button class="btn-small" onclick="verifyPayment('${id}', '${payment.userId}', '${payment.subject}')" style="background: #28a745; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer;">✅ Verify & Unlock</button>` : 
-                                '<span style="color: #11998e;">✓ Verified</span>'
-                            }
-                        </td>
-                    </tr>
-                `;
-            });
-            
-            tbody.innerHTML = html;
-            statsDiv.innerHTML = `<strong>📊 Payment Statistics:</strong><br>⏳ Pending: ${pendingCount} | ✅ Verified: ${verifiedCount} | 💰 Total Revenue: ₦${totalAmount}`;
-            
-        } catch (error) {
-            console.error("Error loading payments:", error);
-            tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 40px; color: red;">Error loading payments: ${error.message}</td></tr>`;
-        }
-    }
-    
-    async function verifyPayment(paymentId, userId, subject) {
-        if (!confirm(`Unlock ${subject} for this student?\n\nClick OK to confirm payment and grant access.`)) {
-            return;
-        }
-        
-        try {
-            // 1. Update the payment status to 'verified'
-            await db.collection('payments').doc(paymentId).update({
-                status: 'verified',
-                verifiedBy: auth.currentUser.email,
-                verificationDate: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            
-            // 2. Add the subject to student's paidQuizzes array
-            const studentRef = db.collection('students').doc(userId);
-            const studentDoc = await studentRef.get();
-            
-            if (studentDoc.exists) {
-                const paidQuizzes = studentDoc.data().paidQuizzes || [];
-                if (!paidQuizzes.includes(subject)) {
-                    paidQuizzes.push(subject);
-                    await studentRef.update({
-                        paidQuizzes: paidQuizzes
-                    });
-                }
-            } else {
-                await studentRef.set({
-                    email: auth.currentUser.email,
-                    paidQuizzes: [subject],
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            }
-            
-            alert(`✅ Payment verified and ${subject} unlocked for the student!`);
-            await loadPayments();
-            
-        } catch (error) {
-            console.error("Verification error:", error);
-            alert("Error verifying payment: " + error.message);
-        }
-    }
-    
-    async function saveQuestion() {
-        let subject = document.getElementById("questionSubject").value;
-        let q = document.getElementById("q").value;
-        let o1 = document.getElementById("o1").value;
-        let o2 = document.getElementById("o2").value;
-        let o3 = document.getElementById("o3").value;
-        let o4 = document.getElementById("o4").value;
-        let answer = document.getElementById("ans").value;
-        let stage = parseInt(document.getElementById("questionStage").value);
-        let exp = document.getElementById("exp").value;
-        
-        if (!subject || !q || !o1 || !o2 || !o3 || !o4 || !answer || !exp) {
-            document.getElementById("qMsg").innerHTML = `<div class="error">⚠️ Please fill all fields</div>`;
-            return;
-        }
-        
-        try {
-            const docRef = db.collection("questions").doc(subject);
-            const docSnap = await docRef.get();
-            let existingQuestions = docSnap.exists ? docSnap.data().questions || [] : [];
-            
-            const newQuestion = {
-                question: q,
-                optionA: o1,
-                optionB: o2,
-                optionC: o3,
-                optionD: o4,
-                answer: answer,
-                stage: stage,
-                explanation: exp,
-                createdAt: new Date()
-            };
-            existingQuestions.push(newQuestion);
-            
-            await docRef.set({
-                questions: existingQuestions,
-                totalQuestions: existingQuestions.length,
-                lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            
-            document.getElementById("q").value = "";
-            document.getElementById("o1").value = "";
-            document.getElementById("o2").value = "";
-            document.getElementById("o3").value = "";
-            document.getElementById("o4").value = "";
-            document.getElementById("exp").value = "";
-            document.getElementById("ans").value = "";
-            
-            document.getElementById("qMsg").innerHTML = `<div class="success">✅ Question saved! Total: ${existingQuestions.length}</div>`;
-            loadStats();
-            setTimeout(() => { document.getElementById("qMsg").innerHTML = ""; }, 3000);
-        } catch (err) {
-            document.getElementById("qMsg").innerHTML = `<div class="error">❌ Error: ${err.message}</div>`;
-        }
-    }
-    
-    async function loadQuestionsList() {
-        const container = document.getElementById("questionsList");
-        if (!container) return;
-        container.innerHTML = '<div class="loading">Loading questions...</div>';
-        
-        try {
-            const querySnapshot = await db.collection("questions").get();
-            if (querySnapshot.empty) {
-                container.innerHTML = '<div class="loading">📭 No questions yet. Add your first question!</div>';
-                return;
-            }
-            
-            let html = "";
-            for (const doc of querySnapshot.docs) {
-                const data = doc.data();
-                const questions = data.questions || [];
-                html += `
-                    <div class="question-item">
-                        <div class="question-text"><strong>📚 ${doc.id.toUpperCase()}</strong> - Total: ${questions.length} questions</div>
-                        <div class="question-meta">
-                            <span>✅ Last updated: ${data.lastUpdated ? new Date(data.lastUpdated.toDate()).toLocaleDateString() : 'Never'}</span>
-                            <button class="delete-question" onclick="deleteSubject('${doc.id}')">🗑 Delete Subject</button>
-                        </div>
-                    </div>
-                `;
-                questions.slice(0, 3).forEach((q, idx) => {
-                    let qText = q.question ? q.question.substring(0, 80) : "No question text";
-                    html += `<div style="margin-left: 20px; padding: 8px; border-left: 2px solid #ddd;"><small>Q${idx + 1}: ${qText}...</small></div>`;
-                });
-                if (questions.length > 3) html += `<div style="margin-left: 20px; color: #888; font-size: 11px;">... and ${questions.length - 3} more</div>`;
-                html += `<hr style="margin: 15px 0;">`;
-            }
-            container.innerHTML = html;
-        } catch (err) {
-            container.innerHTML = `<div class="error">❌ Error loading questions: ${err.message}</div>`;
-        }
-    }
-    
-    async function deleteSubject(subjectId) {
-        if (confirm(`⚠️ Delete ALL questions for ${subjectId}?`)) {
-            try {
-                await db.collection("questions").doc(subjectId).delete();
-                loadQuestionsList();
-                loadStats();
-                document.getElementById("qMsg").innerHTML = `<div class="success">✅ Subject deleted</div>`;
-                setTimeout(() => { document.getElementById("qMsg").innerHTML = ""; }, 2000);
-            } catch (err) {
-                alert("Error: " + err.message);
-            }
-        }
-    }
-    
-    async function saveLesson() {
-        let subject = document.getElementById("lessonSubject").value;
-        let title = document.getElementById("lessonTitle").value;
-        let content = document.getElementById("lessonContent").value;
-        
-        if (!subject || !title || !content) {
-            document.getElementById("lMsg").innerHTML = `<div class="error">⚠️ Fill all lesson fields</div>`;
-            return;
-        }
-        
-        try {
-            await db.collection("lessons").add({
-                subject: subject, title: title, content: content,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            document.getElementById("lessonTitle").value = "";
-            document.getElementById("lessonContent").value = "";
-            document.getElementById("lMsg").innerHTML = `<div class="success">✅ Lesson saved!</div>`;
-            loadStats();
-            setTimeout(() => { document.getElementById("lMsg").innerHTML = ""; }, 3000);
-        } catch (err) {
-            document.getElementById("lMsg").innerHTML = `<div class="error">❌ Error: ${err.message}</div>`;
-        }
-    }
-    
-    // ========== DEV TOOLS FUNCTIONS ==========
-    
-    async function createTestData() {
-        if(!confirm("Create sample test data for all subjects?")) return;
-        const testQuestions = [
-            { question: "What is 2 + 2?", optionA: "3", optionB: "4", optionC: "5", optionD: "6", answer: "B", stage: 1, explanation: "2 + 2 equals 4" },
-            { question: "What is the capital of Nigeria?", optionA: "Lagos", optionB: "Abuja", optionC: "Kano", optionD: "Ibadan", answer: "B", stage: 1, explanation: "Abuja is the capital city of Nigeria" }
-        ];
-        
-        const subjects = ['mathematics', 'english', 'physics', 'chemistry'];
-        for (const subject of subjects) {
-            const docRef = db.collection("questions").doc(subject);
-            await docRef.set({
-                questions: testQuestions,
-                totalQuestions: testQuestions.length,
-                lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-            });
-        }
-        document.getElementById('testMsg').innerHTML = '<div class="success">✅ Test data created for all subjects</div>';
-        setTimeout(() => { document.getElementById('testMsg').innerHTML = ''; }, 3000);
-        loadStats();
-        loadQuestionsList();
-    }
-    
-    async function clearTestData() {
-        if(!confirm("⚠️ Clear ALL test data? This will delete all questions!")) return;
-        const subjects = ['mathematics', 'english', 'physics', 'chemistry', 'digital-technology', 'igbo'];
-        for (const subject of subjects) {
-            try {
-                await db.collection("questions").doc(subject).delete();
-            } catch(e) { console.log(`No data for ${subject}`); }
-        }
-        document.getElementById('testMsg').innerHTML = '<div class="success">✅ Test data cleared</div>';
-        setTimeout(() => { document.getElementById('testMsg').innerHTML = ''; }, 3000);
-        loadStats();
-        loadQuestionsList();
-    }
-    
-    async function createTestUsers() {
-        if(!confirm("Create test student accounts?")) return;
-        const testUsers = [
-            { email: "student1@test.com", name: "Test Student 1" },
-            { email: "student2@test.com", name: "Test Student 2" }
-        ];
-        
-        for (const user of testUsers) {
-            const userQuery = await db.collection('students').where('email', '==', user.email).get();
-            if (userQuery.empty) {
-                await db.collection('students').add({
-                    email: user.email,
-                    fullName: user.name,
-                    registeredAt: new Date(),
-                    paidQuizzes: [],
-                    quizScores: {}
-                });
-            }
-        }
-        document.getElementById('testMsg').innerHTML = '<div class="success">✅ Test users created</div>';
-        setTimeout(() => { document.getElementById('testMsg').innerHTML = ''; }, 3000);
-        loadStats();
-    }
-    
-    async function listAllUsers() {
-        const usersSnap = await db.collection('students').get();
-        let userList = "Users:\n";
-        usersSnap.forEach(doc => {
-            const data = doc.data();
-            userList += `- ${data.email} (${data.fullName})\n`;
+        let totalRevenue = 0;
+        paymentsSnap.forEach(doc => {
+            totalRevenue += doc.data().amount || 100;
         });
-        alert(userList);
-    }
-    
-    async function makeMeAdmin() {
-        const user = auth.currentUser;
-        if (!user) { alert("Not logged in"); return; }
-        await db.collection('admins').doc(user.uid).set({
-            isAdmin: true,
-            email: user.email,
-            role: 'admin',
-            createdAt: new Date()
-        });
-        document.getElementById('testMsg').innerHTML = '<div class="success">✅ You are now an admin! Refresh page.</div>';
-        setTimeout(() => { document.getElementById('testMsg').innerHTML = ''; }, 3000);
-    }
-    
-    async function backupData() {
-        const questions = await db.collection("questions").get();
-        const backup = [];
-        questions.forEach(doc => {
-            backup.push({ id: doc.id, ...doc.data() });
-        });
-        const dataStr = JSON.stringify(backup, null, 2);
-        const blob = new Blob([dataStr], {type: "application/json"});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `backup_${new Date().toISOString()}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-        document.getElementById('testMsg').innerHTML = '<div class="success">✅ Backup exported</div>';
-        setTimeout(() => { document.getElementById('testMsg').innerHTML = ''; }, 2000);
-    }
-    
-    async function checkDatabaseSize() {
-        const questions = await db.collection("questions").get();
-        const lessons = await db.collection("lessons").get();
-        const students = await db.collection("students").get();
-        alert(`📊 Database Stats:\n- Questions: ${questions.size} docs\n- Lessons: ${lessons.size} docs\n- Students: ${students.size} docs`);
-    }
-    
-    function showTab(tabName) {
-        document.getElementById("addTab").classList.remove("active");
-        document.getElementById("listTab").classList.remove("active");
-        document.getElementById("lessonsTab").classList.remove("active");
-        document.getElementById("paymentsTab").classList.remove("active");
-        document.getElementById("devtoolsTab").classList.remove("active");
-        const btns = document.querySelectorAll(".tab-btn");
-        btns.forEach(btn => btn.classList.remove("active"));
         
-        if (tabName === "add") {
-            document.getElementById("addTab").classList.add("active");
-            btns[0].classList.add("active");
-        } else if (tabName === "list") {
-            document.getElementById("listTab").classList.add("active");
-            btns[1].classList.add("active");
-            loadQuestionsList();
-        } else if (tabName === "lessons") {
-            document.getElementById("lessonsTab").classList.add("active");
-            btns[2].classList.add("active");
-        } else if (tabName === "payments") {
-            document.getElementById("paymentsTab").classList.add("active");
-            btns[3].classList.add("active");
-            loadPayments();
-        } else if (tabName === "devtools") {
-            document.getElementById("devtoolsTab").classList.add("active");
-            btns[4].classList.add("active");
+        document.getElementById("totalQuestions").innerText = questionsSnap.size;
+        document.getElementById("totalUsers").innerText = studentsSnap.size;
+        document.getElementById("totalLessons").innerText = lessonsSnap.size;
+        document.getElementById("totalRevenue").innerText = totalRevenue;
+    }
+    
+    auth.onAuthStateChanged(async user => {
+        if (user && adminEmails.includes(user.email)) {
+            await loadStats();
+        } else {
+            window.location.href = "dashboard.html";
         }
-    }
-    
-    function goHome() { window.location.href = "dashboard.html"; }
-    function goBack() { window.history.back(); }
-    
-    async function logout() {
-        try {
-            await auth.signOut();
-            window.location.href = "login.html";
-        } catch (e) {
-            window.location.href = "login.html";
-        }
-    }
-    
-    function initialize() {
-        auth.onAuthStateChanged(async (user) => {
-            if (user) {
-                const hasAccess = await checkAdminAccess();
-                if (!hasAccess) return;
-                loadStats();
-            } else {
-                window.location.href = "login.html";
-            }
-        });
-    }
-    
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", initialize);
-    } else {
-        initialize();
-    }
+    });
 </script>
 </body>
 </html>

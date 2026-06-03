@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Convert Igbo Questions (Special Format) to JSON</title>
+    <title>Convert All 300 Igbo Questions to JSON</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -21,6 +21,44 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.15);
         }
         h1 { color: #667eea; }
+        .stats-box {
+            background: #e2e8f0;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 13px;
+            margin: 10px 0;
+            background: #f7fafc;
+            height: 400px;
+        }
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .btn-primary { background: #667eea; color: white; }
+        .btn-success { background: #11998e; color: white; }
+        .btn-warning { background: #f39c12; color: white; }
+        .result {
+            background: #1a1a2e;
+            padding: 20px;
+            border-radius: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            color: #00ff88;
+        }
         .mode-selector {
             display: flex;
             gap: 15px;
@@ -37,102 +75,83 @@
         .mode-btn.free { background: #11998e; color: white; }
         .mode-btn.premium { background: #f39c12; color: white; }
         .mode-btn.active { transform: scale(1.02); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        textarea {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-family: monospace;
-            font-size: 13px;
-            margin: 10px 0;
-            background: #f7fafc;
-        }
-        button {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            margin: 10px 5px;
-        }
-        .btn-primary { background: #667eea; color: white; }
-        .btn-success { background: #11998e; color: white; }
-        .result {
-            background: #1a1a2e;
-            padding: 20px;
-            border-radius: 10px;
-            max-height: 500px;
-            overflow-y: auto;
-            font-family: monospace;
-            font-size: 12px;
-            color: #00ff88;
-        }
-        .stats {
+        .progress {
+            margin: 15px 0;
             background: #e2e8f0;
-            padding: 15px;
             border-radius: 10px;
-            margin: 20px 0;
+            overflow: hidden;
         }
-        .warning {
-            background: #fff3cd;
-            color: #856404;
-            padding: 10px;
-            border-radius: 8px;
-            margin: 10px 0;
+        .progress-bar {
+            height: 20px;
+            background: #11998e;
+            width: 0%;
+            transition: width 0.3s;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🗣️ Igbo Language Premium Converter</h1>
-        <p>Converts your Igbo questions (with • A., • Azịza:, • Nkọwa: format) to JSON for bulk upload</p>
+        <h1>🗣️ Complete Igbo Questions Converter (300 Questions)</h1>
+        <p>Converts all 300 Igbo questions from your document to JSON format</p>
         
         <div class="mode-selector">
             <div class="mode-btn free" onclick="setMode('free')">📝 Free Test Mode</div>
             <div class="mode-btn premium active" onclick="setMode('premium')">🏆 Premium Quiz Mode (5 sec timer)</div>
         </div>
         
-        <div class="stats" id="stats">
-            <strong>📋 Format Accepted:</strong><br>
-            • Question number with question text<br>
-            • A. Option A<br>
-            • B. Option B<br>
-            • C. Option C<br>
-            • D. Option D<br>
-            • Azịza: X (where X is A, B, C, or D)<br>
-            • Nkọwa: Explanation text
+        <div class="stats-box" id="stats">
+            <strong>📋 Instructions:</strong><br>
+            1. Copy ALL your Igbo questions (1-300) from your document<br>
+            2. Paste them in the textarea below<br>
+            3. Click "Convert All 300 Questions"<br>
+            4. Copy the JSON and upload to Firestore
         </div>
         
-        <textarea id="input" rows="15" placeholder="Paste your Igbo questions here..."></textarea>
+        <textarea id="input" placeholder="Paste ALL your Igbo questions (1-300) here..."></textarea>
         
         <div>
-            <button class="btn-primary" onclick="convertToJSON()">🔄 Convert to JSON</button>
+            <button class="btn-primary" onclick="convertAllQuestions()">🔄 Convert All 300 Questions</button>
             <button class="btn-success" onclick="copyJSON()" id="copyBtn" style="display:none;">📋 Copy JSON</button>
-            <button class="btn-primary" onclick="downloadJSON()">💾 Download JSON</button>
+            <button class="btn-warning" onclick="downloadJSON()">💾 Download JSON File</button>
+            <button class="btn-primary" onclick="clearAll()">🗑️ Clear</button>
         </div>
         
-        <h2>JSON Output (Ready for Bulk Upload):</h2>
+        <div class="progress" id="progressContainer" style="display:none;">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <h2>JSON Output:</h2>
         <div class="result" id="output"></div>
         <div id="message"></div>
     </div>
 
     <script>
         let currentMode = 'premium';
+        let currentJSON = null;
         
         function setMode(mode) {
             currentMode = mode;
             document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
             if (mode === 'free') {
                 document.querySelector('.mode-btn.free').classList.add('active');
-                document.getElementById('stats').innerHTML = '<strong>📝 FREE TEST MODE</strong><br>No time limit, practice questions';
             } else {
                 document.querySelector('.mode-btn.premium').classList.add('active');
-                document.getElementById('stats').innerHTML = '<strong>🏆 PREMIUM QUIZ MODE</strong><br>5 seconds per question, competition mode';
             }
         }
         
-        function convertToJSON() {
+        function showMessage(msg, isError = false) {
+            const msgDiv = document.getElementById('message');
+            msgDiv.innerHTML = `<div style="padding: 10px; border-radius: 8px; background: ${isError ? '#eb334920' : '#11998e20'}; color: ${isError ? '#eb3349' : '#11998e'}">${msg}</div>`;
+            setTimeout(() => { msgDiv.innerHTML = ''; }, 4000);
+        }
+        
+        function convertAllQuestions() {
             const text = document.getElementById('input').value;
+            if (!text.trim()) {
+                showMessage('Please paste your questions first!', true);
+                return;
+            }
+            
             const lines = text.split('\n');
             const questions = [];
             
@@ -140,13 +159,13 @@
             let currentOptions = { A: '', B: '', C: '', D: '' };
             let currentAnswer = '';
             let currentExplanation = '';
-            let inQuestion = false;
+            let questionNumber = 0;
             
             for (let i = 0; i < lines.length; i++) {
                 let line = lines[i].trim();
                 if (!line) continue;
                 
-                // Check for question number pattern: "1. Question text" or "1. Question text?"
+                // Match question number: "1." or "1. " or "1. Question"
                 const questionMatch = line.match(/^(\d+)\.\s+(.+)/);
                 if (questionMatch) {
                     // Save previous question
@@ -165,6 +184,8 @@
                             questionObj.difficulty = "hard";
                             questionObj.timeLimit = 5;
                             questionObj.competition = true;
+                        } else {
+                            questionObj.difficulty = "easy";
                         }
                         
                         questions.push(questionObj);
@@ -175,26 +196,26 @@
                     currentOptions = { A: '', B: '', C: '', D: '' };
                     currentAnswer = '';
                     currentExplanation = '';
-                    inQuestion = true;
+                    questionNumber = parseInt(questionMatch[1]);
                 }
                 
-                // Match options: "• A. Option text" or "A. Option text"
+                // Match options: "• A. Text" or "A. Text" or "- A. Text"
                 let optionMatch = line.match(/^[•\-*]*\s*([A-D])\.\s+(.+)/);
-                if (optionMatch && inQuestion) {
+                if (optionMatch) {
                     const letter = optionMatch[1];
                     const optionText = optionMatch[2];
                     currentOptions[letter] = optionText;
                 }
                 
-                // Match Azịza (Answer): "• Azịza: B" or "Azịza: B"
+                // Match Azịza (Answer)
                 let answerMatch = line.match(/[•\-*]*\s*Azịza:\s*([A-D])/i);
-                if (answerMatch && inQuestion) {
+                if (answerMatch) {
                     currentAnswer = answerMatch[1].toUpperCase();
                 }
                 
-                // Match Nkọwa (Explanation): "• Nkọwa: Explanation text"
+                // Match Nkọwa (Explanation)
                 let explanationMatch = line.match(/[•\-*]*\s*Nkọwa:\s*(.+)/i);
-                if (explanationMatch && inQuestion) {
+                if (explanationMatch) {
                     currentExplanation = explanationMatch[1];
                 }
             }
@@ -215,6 +236,8 @@
                     questionObj.difficulty = "hard";
                     questionObj.timeLimit = 5;
                     questionObj.competition = true;
+                } else {
+                    questionObj.difficulty = "easy";
                 }
                 
                 questions.push(questionObj);
@@ -222,44 +245,68 @@
             
             if (questions.length === 0) {
                 document.getElementById('output').innerHTML = '<span style="color: #ff6b6b;">❌ No questions found! Please check your format.</span>';
-                document.getElementById('output').innerHTML += '<div class="warning">⚠️ Make sure your questions follow this format:<br>1. Question text?<br>• A. Option A<br>• B. Option B<br>• C. Option C<br>• D. Option D<br>• Azịza: A<br>• Nkọwa: Explanation text</div>';
+                showMessage('No questions found! Make sure your format is: 1. Question? • A. Option • B. Option • Azịza: A • Nkọwa: Text', true);
                 return;
             }
+            
+            // Update progress bar
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            progressContainer.style.display = 'block';
+            progressBar.style.width = '100%';
+            
+            setTimeout(() => {
+                progressContainer.style.display = 'none';
+            }, 1000);
             
             const jsonOutput = JSON.stringify(questions, null, 2);
             document.getElementById('output').innerHTML = `<pre style="white-space:pre-wrap; word-wrap:break-word;">${jsonOutput}</pre>`;
             document.getElementById('copyBtn').style.display = 'inline-block';
-            window.currentJSON = jsonOutput;
+            currentJSON = jsonOutput;
             
             const modeText = currentMode === 'premium' ? 'PREMIUM (5 sec timer)' : 'FREE TEST';
             document.getElementById('output').innerHTML += `<br><span style="color: #00ff88;">✅ Successfully converted ${questions.length} Igbo questions in ${modeText} mode!</span>`;
             
-            document.getElementById('message').innerHTML = `<div style="color: #00ff88; padding: 10px;">✅ ${questions.length} questions ready for upload!</div>`;
-            setTimeout(() => { document.getElementById('message').innerHTML = ''; }, 3000);
+            showMessage(`✅ ${questions.length} questions converted! Ready to upload.`);
+            
+            // Check if we got all 300
+            if (questions.length < 300) {
+                showMessage(`⚠️ Only ${questions.length} of 300 questions found. Check formatting near question ${questions.length + 1}.`, true);
+            } else {
+                showMessage(`🎉 Perfect! All 300 Igbo questions converted successfully!`);
+            }
         }
         
         function copyJSON() {
-            if (window.currentJSON) {
-                navigator.clipboard.writeText(window.currentJSON);
-                alert(`✅ JSON copied! Now go to bulk-upload-premium.html, select Igbo Language, and upload.`);
+            if (currentJSON) {
+                navigator.clipboard.writeText(currentJSON);
+                showMessage(`✅ JSON copied! Go to bulk-upload-premium.html, select Igbo Language, and upload.`);
             } else {
-                alert('No JSON to copy. Convert your questions first.');
+                showMessage('No JSON to copy. Convert your questions first.', true);
             }
         }
         
         function downloadJSON() {
-            if (window.currentJSON) {
-                const blob = new Blob([window.currentJSON], {type: 'application/json'});
+            if (currentJSON) {
+                const blob = new Blob([currentJSON], {type: 'application/json'});
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
                 a.download = `igbo_${currentMode}_${new Date().toISOString().slice(0,19)}.json`;
                 a.click();
                 URL.revokeObjectURL(url);
-                alert('✅ JSON file downloaded!');
+                showMessage('✅ JSON file downloaded!');
             } else {
-                alert('No JSON to download. Convert your questions first.');
+                showMessage('No JSON to download. Convert your questions first.', true);
             }
+        }
+        
+        function clearAll() {
+            document.getElementById('input').value = '';
+            document.getElementById('output').innerHTML = '';
+            document.getElementById('copyBtn').style.display = 'none';
+            currentJSON = null;
+            showMessage('Cleared! Paste your questions to convert.');
         }
     </script>
 </body>

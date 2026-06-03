@@ -9,7 +9,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: #eef2f7; padding: 20px; }
+        body { background: #1a1a2e; padding: 20px; }
         
         .container {
             max-width: 1200px;
@@ -21,11 +21,18 @@
         }
         h1 { color: #667eea; margin-bottom: 10px; }
         .stats {
-            background: #e2e8f0;
-            padding: 15px;
-            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
             margin: 20px 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            text-align: center;
         }
+        .stat-item h3 { font-size: 2rem; margin-bottom: 5px; }
+        .stat-item p { opacity: 0.9; }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -34,13 +41,15 @@
         th, td {
             padding: 12px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #e2e8f0;
         }
         th {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            position: sticky;
+            top: 0;
         }
-        tr:hover { background-color: #f5f5f5; }
+        tr:hover { background-color: #f7fafc; }
         .status-pending {
             background: #f39c12;
             color: white;
@@ -61,10 +70,13 @@
             background: #28a745;
             color: white;
             border: none;
-            padding: 6px 12px;
-            border-radius: 5px;
+            padding: 8px 16px;
+            border-radius: 8px;
             cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
         }
+        .btn-verify:hover { transform: scale(1.05); }
         .btn-verify:disabled {
             background: #ccc;
             cursor: not-allowed;
@@ -73,32 +85,38 @@
             margin-bottom: 20px;
             padding-bottom: 20px;
             border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
         }
         .nav-links a {
             color: #667eea;
             text-decoration: none;
-            margin-right: 20px;
             font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: background 0.2s;
         }
         .nav-links a:hover {
-            text-decoration: underline;
+            background: #f7fafc;
         }
         .btn-logout {
             background: #dc3545;
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
+            padding: 8px 20px;
+            border-radius: 8px;
             cursor: pointer;
-            float: right;
+            font-weight: bold;
         }
         .refresh-btn {
             background: #3498db;
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
+            padding: 8px 20px;
+            border-radius: 8px;
             cursor: pointer;
+            font-weight: bold;
             margin-left: 10px;
         }
         .admin-badge {
@@ -109,6 +127,21 @@
             display: inline-block;
             font-size: 12px;
             margin-left: 10px;
+        }
+        .payment-id {
+            font-family: monospace;
+            font-size: 11px;
+            color: #888;
+        }
+        .auto-refresh {
+            font-size: 12px;
+            color: #11998e;
+            margin-top: 10px;
+        }
+        @media (max-width: 768px) {
+            .container { padding: 20px; }
+            th, td { padding: 8px; font-size: 12px; }
+            .stats { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -133,16 +166,32 @@
         </div>
         
         <div class="stats" id="stats">
-            Loading statistics...
+            <div class="stat-item">
+                <h3 id="pendingCount">0</h3>
+                <p>Pending Payments</p>
+            </div>
+            <div class="stat-item">
+                <h3 id="verifiedCount">0</h3>
+                <p>Verified Payments</p>
+            </div>
+            <div class="stat-item">
+                <h3 id="totalRevenue">₦0</h3>
+                <p>Total Revenue</p>
+            </div>
         </div>
         
-        <h2>📋 Payment Requests</h2>
-        <div style="overflow-x: auto;">
-            <table id="paymentsTable">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0;">
+            <h2>📋 Payment Requests</h2>
+            <div class="auto-refresh" id="autoRefreshStatus">🔄 Auto-refreshing every 10 seconds</div>
+        </div>
+        
+        <div style="overflow-x: auto; max-height: 500px; overflow-y: auto;">
+            <table>
                 <thead>
                     <tr>
                         <th>Date</th>
-                        <th>Student Name</th>
+                        <th>Payment ID</th>
+                        <th>Student</th>
                         <th>Email</th>
                         <th>Subject</th>
                         <th>Amount</th>
@@ -151,7 +200,7 @@
                     </tr>
                 </thead>
                 <tbody id="paymentsList">
-                    <tr><td colspan="7" style="text-align: center; padding: 40px;">Loading payments...</td></tr>
+                    <tr><td colspan="8" style="text-align: center; padding: 40px;">Loading payments...</td><tr>
                 </tbody>
             </table>
         </div>
@@ -172,6 +221,7 @@
         const db = firebase.firestore();
         
         const adminEmails = ['ernestembassydigitalsolutions@gmail.com', 'damian@ernestembassy.com', 'dev@ernestlms.com'];
+        let refreshInterval = null;
         
         async function checkAdmin() {
             const user = auth.currentUser;
@@ -186,9 +236,8 @@
         async function loadPayments() {
             if (!await checkAdmin()) return;
             
-            const statsDiv = document.getElementById('stats');
             const tbody = document.getElementById('paymentsList');
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Loading payments...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Loading payments...</td><tr';
             
             try {
                 const snapshot = await db.collection('payments')
@@ -200,8 +249,10 @@
                 let totalAmount = 0;
                 
                 if (snapshot.empty) {
-                    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">No payment requests found</td></tr>';
-                    statsDiv.innerHTML = '<strong>📊 Payment Statistics:</strong><br>⏳ Pending: 0 | ✅ Verified: 0 | 💰 Total Revenue: ₦0';
+                    tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">No payment requests found</td><tr';
+                    document.getElementById('pendingCount').innerText = '0';
+                    document.getElementById('verifiedCount').innerText = '0';
+                    document.getElementById('totalRevenue').innerText = '₦0';
                     return;
                 }
                 
@@ -219,7 +270,8 @@
                     html += `
                         <tr>
                             <td>${date}</td>
-                            <td>${payment.userName || 'N/A'}</td>
+                            <td><span class="payment-id">${payment.paymentId || id.substring(0, 12)}...</span></td>
+                            <td><strong>${payment.userName || 'N/A'}</strong></td>
                             <td>${payment.userEmail || 'N/A'}</td>
                             <td>${payment.subject || 'N/A'}</td>
                             <td>₦${payment.amount || 100}</td>
@@ -235,11 +287,13 @@
                 });
                 
                 tbody.innerHTML = html;
-                statsDiv.innerHTML = `<strong>📊 Payment Statistics:</strong><br>⏳ Pending: ${pendingCount} | ✅ Verified: ${verifiedCount} | 💰 Total Revenue: ₦${totalAmount}`;
+                document.getElementById('pendingCount').innerText = pendingCount;
+                document.getElementById('verifiedCount').innerText = verifiedCount;
+                document.getElementById('totalRevenue').innerText = `₦${totalAmount}`;
                 
             } catch (error) {
                 console.error("Error loading payments:", error);
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: red;">Error loading payments: ${error.message}</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: red;">Error loading payments: ${error.message}</td></tr>`;
             }
         }
         
@@ -249,12 +303,20 @@
             }
             
             try {
+                // Show loading on button
+                const btn = event.target;
+                const originalText = btn.innerText;
+                btn.innerText = "⏳ Processing...";
+                btn.disabled = true;
+                
+                // 1. Update the payment status to 'verified'
                 await db.collection('payments').doc(paymentId).update({
                     status: 'verified',
                     verifiedBy: auth.currentUser.email,
                     verificationDate: firebase.firestore.FieldValue.serverTimestamp()
                 });
                 
+                // 2. Add the subject to student's paidQuizzes array
                 const studentRef = db.collection('students').doc(userId);
                 const studentDoc = await studentRef.get();
                 
@@ -263,7 +325,14 @@
                     if (!paidQuizzes.includes(subject)) {
                         paidQuizzes.push(subject);
                         await studentRef.update({ paidQuizzes: paidQuizzes });
+                        console.log(`Added ${subject} to student's paid quizzes`);
                     }
+                } else {
+                    await studentRef.set({
+                        email: auth.currentUser.email,
+                        paidQuizzes: [subject],
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
                 }
                 
                 alert(`✅ Payment verified and ${subject} unlocked for the student!`);
@@ -276,13 +345,22 @@
         }
         
         async function logout() {
+            if (refreshInterval) clearInterval(refreshInterval);
             await auth.signOut();
             window.location.href = "login.html";
+        }
+        
+        // Auto-refresh every 10 seconds
+        function startAutoRefresh() {
+            refreshInterval = setInterval(() => {
+                loadPayments();
+            }, 10000);
         }
         
         auth.onAuthStateChanged(user => {
             if (user && adminEmails.includes(user.email)) {
                 loadPayments();
+                startAutoRefresh();
             } else if (user) {
                 alert("Access Denied. You are not an admin.");
                 window.location.href = "dashboard.html";

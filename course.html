@@ -9,8 +9,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
 
-<script src="auth.js"></script>
-
 <style>
 *{ margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',sans-serif; }
 
@@ -174,7 +172,7 @@ footer{
         <div class="course-grid">
             <div class="info-box">
                 <h3>Level</h3>
-                <p id="courseLevel">SS1</p>
+                <p id="courseLevel">Senior Secondary</p>
             </div>
             <div class="info-box">
                 <h3>Total Questions</h3>
@@ -208,47 +206,74 @@ footer{
 </footer>
 
 <script>
+const firebaseConfig = {
+    apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+    authDomain: "ernest-embassy-lms.firebaseapp.com",
+    projectId: "ernest-embassy-lms",
+    storageBucket: "ernest-embassy-lms.firebasestorage.app",
+    messagingSenderId: "204896421221",
+    appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
 /* ====================================
    SUBJECT KEY NORMALIZATION
 ==================================== */
 function normalizeSubject(raw) {
     const map = {
-        "english-language-ss1": "english-ss1",
-        "igbo-language-ss1":    "igbo-ss1",
-        "digital-technology-ss1": "digital-technology-ss1",
-        "mathematics-ss1":      "mathematics-ss1"
+        "digital-technology": "digital-technology",
+        "mathematics": "mathematics",
+        "english": "english",
+        "physics": "physics",
+        "chemistry": "chemistry",
+        "igbo": "igbo"
     };
     return map[raw] || raw;
 }
 
-const params     = new URLSearchParams(window.location.search);
+const params = new URLSearchParams(window.location.search);
 const rawSubject = params.get("subject") || "";
-const subject    = normalizeSubject(rawSubject);
+const subject = normalizeSubject(rawSubject);
 
 const subjects = {
-    "digital-technology-ss1": {
-        title:        "💻 Digital Technology SS1",
-        description:  "Learn computer fundamentals, ICT, internet technology and digital skills.",
-        level:        "SS1",
-        resourceLink: "digital-technology-ss1.md"
+    "digital-technology": {
+        title: "💻 Digital Technology",
+        description: "Learn computer fundamentals, ICT, internet technology and digital skills.",
+        level: "Senior Secondary",
+        resourceLink: "educational-resources.html"
     },
-    "mathematics-ss1": {
-        title:        "📐 Mathematics SS1",
-        description:  "Master algebra, equations, geometry and WAEC preparation.",
-        level:        "SS1",
-        resourceLink: "mathematics-ss1.md"
+    "mathematics": {
+        title: "📐 Mathematics",
+        description: "Master algebra, equations, geometry, calculus and WAEC preparation.",
+        level: "Senior Secondary",
+        resourceLink: "educational-resources.html"
     },
-    "english-ss1": {
-        title:        "📖 English Language SS1",
-        description:  "Improve grammar, essay writing, comprehension and communication skills.",
-        level:        "SS1",
-        resourceLink: "english-ss1.md"
+    "english": {
+        title: "📖 English Language",
+        description: "Improve grammar, essay writing, comprehension and communication skills.",
+        level: "Senior Secondary",
+        resourceLink: "educational-resources.html"
     },
-    "igbo-ss1": {
-        title:        "🌍 Igbo Language SS1",
-        description:  "Learn vocabulary, grammar, translation and language practice.",
-        level:        "SS1",
-        resourceLink: "igbo-ss1.md"
+    "physics": {
+        title: "⚛️ Physics",
+        description: "Study mechanics, waves, electricity, magnetism and modern physics concepts.",
+        level: "Senior Secondary",
+        resourceLink: "educational-resources.html"
+    },
+    "chemistry": {
+        title: "🧪 Chemistry",
+        description: "Learn atomic structure, chemical bonding, organic chemistry and reactions.",
+        level: "Senior Secondary",
+        resourceLink: "educational-resources.html"
+    },
+    "igbo": {
+        title: "🗣️ Igbo Language",
+        description: "Learn vocabulary, grammar, translation and Igbo language practice.",
+        level: "Senior Secondary",
+        resourceLink: "educational-resources.html"
     }
 };
 
@@ -257,11 +282,25 @@ const subjects = {
 ==================================== */
 async function loadQuestionCount() {
     try {
-        const snap = await db.collection("questions").where("subject", "==", subject).get();
-        const count = snap.size;
-        document.getElementById("courseQuestions").innerText =
-            count > 0 ? count : "500+ (Coming Soon)";
+        // Check premium collection first
+        const premiumSnap = await db.collection("questions_premium").doc(subject).get();
+        if (premiumSnap.exists && premiumSnap.data().questions) {
+            const count = premiumSnap.data().questions.length;
+            document.getElementById("courseQuestions").innerText = count;
+            return;
+        }
+        
+        // Check regular collection
+        const regSnap = await db.collection("questions").doc(subject).get();
+        if (regSnap.exists && regSnap.data().questions) {
+            const count = regSnap.data().questions.length;
+            document.getElementById("courseQuestions").innerText = count;
+            return;
+        }
+        
+        document.getElementById("courseQuestions").innerText = "Coming Soon";
     } catch (e) {
+        console.error("Error loading question count:", e);
         document.getElementById("courseQuestions").innerText = "500+";
     }
 }
@@ -272,72 +311,68 @@ async function loadQuestionCount() {
 async function loadCourseDetails() {
     if (subjects[subject]) {
         const s = subjects[subject];
-        document.getElementById("courseTitle").innerText       = s.title;
+        document.getElementById("courseTitle").innerText = s.title;
         document.getElementById("courseDescription").innerText = s.description;
-        document.getElementById("courseLevel").innerText       = s.level;
+        document.getElementById("courseLevel").innerText = s.level;
 
         await loadQuestionCount();
 
         document.getElementById("quizBtn").onclick = function() {
-            // Pointing to quiz.html (your subject practice engine file)
-            window.location.href = `quiz.html?subject=${rawSubject || subject}`;
+            window.location.href = `class.html?subject=${rawSubject || subject}`;
         };
 
         const resBtn = document.getElementById("resourcesBtn");
         if (resBtn && s.resourceLink) resBtn.href = s.resourceLink;
 
     } else {
-        document.getElementById("courseTitle").innerHTML       = "⚠️ Course Not Found";
+        document.getElementById("courseTitle").innerHTML = "⚠️ Course Not Found";
         document.getElementById("courseDescription").innerHTML = "The requested course could not be found.";
-        document.getElementById("courseLevel").innerHTML       = "N/A";
-        document.getElementById("courseQuestions").innerHTML   = "0";
+        document.getElementById("courseLevel").innerHTML = "N/A";
+        document.getElementById("courseQuestions").innerHTML = "0";
 
         const quizBtn = document.getElementById("quizBtn");
         quizBtn.disabled = true;
         quizBtn.innerText = "Course Unavailable";
 
         const resBtn = document.getElementById("resourcesBtn");
-        if (resBtn) { resBtn.style.background="#6c757d"; resBtn.onclick = e => e.preventDefault(); }
+        if (resBtn) { 
+            resBtn.style.background = "#6c757d"; 
+            resBtn.onclick = function(e) { e.preventDefault(); }; 
+        }
     }
 }
 
 /* ====================================
    LOGOUT
 ==================================== */
-function doLogout() {
-    localStorage.removeItem("currentUser");
-    localStorage.removeItem("devBypass");
-    if (typeof auth !== "undefined") auth.signOut().catch(() => {});
+async function doLogout() {
+    try {
+        await auth.signOut();
+    } catch(e) {}
     window.location.href = "login.html";
 }
 
 /* ====================================
-   INIT — supports dev bypass
+   INITIALIZE
 ==================================== */
-async function initializePage() {
-    const devBypass = localStorage.getItem("devBypass") === "true";
-
-    if (devBypass) {
-        const stored = localStorage.getItem("currentUser");
-        if (stored) {
-            const u = JSON.parse(stored);
-            document.getElementById("userNameDisplay").innerText = u.name || "Dev Admin";
-        }
+function updateUserName() {
+    const user = auth.currentUser;
+    if (user && user.email) {
+        const name = user.email.split('@')[0];
+        document.getElementById("userNameDisplay").innerText = name.charAt(0).toUpperCase() + name.slice(1);
     } else {
-        await initAuth(true);
-        if (typeof getUserName === "function") {
-            document.getElementById("userNameDisplay").innerText = getUserName();
-        }
+        document.getElementById("userNameDisplay").innerText = "Student";
     }
-
-    await loadCourseDetails();
 }
 
-if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initializePage);
-} else {
-    initializePage();
-}
+auth.onAuthStateChanged(user => {
+    if (user) {
+        updateUserName();
+        loadCourseDetails();
+    } else {
+        window.location.href = "login.html";
+    }
+});
 </script>
 </body>
 </html>

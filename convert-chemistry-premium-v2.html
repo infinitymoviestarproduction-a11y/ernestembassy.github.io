@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Convert Chemistry 500+ Questions to JSON</title>
+    <title>Chemistry 500+ Questions Converter - Fixed Version</title>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -36,7 +39,7 @@
         }
         .mode-btn.free { background: #11998e; color: white; }
         .mode-btn.premium { background: #f39c12; color: white; }
-        .mode-btn.active { transform: scale(1.02); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .mode-btn.active { transform: scale(1.02); }
         textarea {
             width: 100%;
             padding: 15px;
@@ -59,6 +62,7 @@
         .btn-primary { background: #667eea; color: white; }
         .btn-success { background: #11998e; color: white; }
         .btn-warning { background: #f39c12; color: white; }
+        .btn-danger { background: #eb3349; color: white; }
         .result {
             background: #1a1a2e;
             padding: 20px;
@@ -91,38 +95,30 @@
 </head>
 <body>
     <div class="container">
-        <h1>🧪 Chemistry Premium Converter (500+ Questions)</h1>
-        <p>Convert your 500+ Chemistry questions to JSON for premium quiz competition</p>
+        <h1>🧪 Chemistry 500+ Questions Converter</h1>
+        <p>Converts questions 1-500 in the format: Number. Question? A) Option B) Option Answer: X Explanation: text</p>
         
         <div class="mode-selector">
             <div class="mode-btn free" onclick="setMode('free')">📝 Free Test Mode</div>
             <div class="mode-btn premium active" onclick="setMode('premium')">🏆 Premium Quiz Mode (5 sec timer)</div>
         </div>
         
-        <div class="stats-box">
-            <strong>📋 Chemistry Question Format:</strong><br>
-            <code>
-            1. What is the atomic number of Carbon?<br>
-            A) 4<br>
-            B) 5<br>
-            C) 6<br>
-            D) 7<br>
-            Answer: C<br>
-            Explanation: Carbon has 6 protons in its nucleus.
-            </code>
-        </div>
-        
-        <textarea id="input" placeholder="Paste your 500+ Chemistry questions here..."></textarea>
+        <textarea id="input" placeholder="Paste ALL your Chemistry questions (1 to 500+) here..."></textarea>
         
         <div>
-            <button class="btn-primary" onclick="convertToJSON()">🔄 Convert to JSON</button>
+            <button class="btn-primary" onclick="convertToJSON()">🔄 Convert All Questions</button>
             <button class="btn-success" onclick="copyJSON()" id="copyBtn" style="display:none;">📋 Copy JSON</button>
             <button class="btn-warning" onclick="downloadJSON()">💾 Download JSON File</button>
-            <button class="btn-primary" onclick="clearAll()">🗑️ Clear</button>
+            <button class="btn-danger" onclick="clearAll()">🗑️ Clear</button>
         </div>
         
         <div class="progress" id="progressContainer" style="display:none;">
             <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div id="statsBox" class="stats-box">
+            <strong>📋 Conversion Statistics:</strong><br>
+            Ready to convert. Paste your questions and click "Convert All Questions".
         </div>
         
         <h2>JSON Output:</h2>
@@ -144,32 +140,34 @@
             }
         }
         
-        function showMessage(msg, isError = false) {
+        function showMessage(msg, type = 'success') {
             const msgDiv = document.getElementById('message');
-            msgDiv.innerHTML = `<div style="padding: 10px; border-radius: 8px; background: ${isError ? '#eb334920' : '#11998e20'}; color: ${isError ? '#eb3349' : '#11998e'}">${msg}</div>`;
-            setTimeout(() => { msgDiv.innerHTML = ''; }, 4000);
+            const color = type === 'error' ? '#eb3349' : (type === 'warning' ? '#f39c12' : '#11998e');
+            msgDiv.innerHTML = `<div style="padding: 10px; border-radius: 8px; background: ${color}20; color: ${color}">${msg}</div>`;
+            setTimeout(() => { msgDiv.innerHTML = ''; }, 5000);
         }
         
         function convertToJSON() {
             const text = document.getElementById('input').value;
             if (!text.trim()) {
-                showMessage('Please paste your questions first!', true);
+                showMessage('Please paste your questions first!', 'error');
                 return;
             }
             
             const lines = text.split('\n');
             const questions = [];
-            
             let currentQuestion = null;
             let currentOptions = ['', '', '', ''];
             let currentAnswer = '';
             let currentExplanation = '';
+            let questionCount = 0;
+            let incompleteCount = 0;
             
             for (let i = 0; i < lines.length; i++) {
                 let line = lines[i].trim();
                 if (!line) continue;
                 
-                // Match question: "1. Question text"
+                // Match question number: "1." or "1. " or "1. Question"
                 const questionMatch = line.match(/^(\d+)\.\s+(.+)/);
                 if (questionMatch) {
                     // Save previous question
@@ -193,34 +191,41 @@
                         }
                         
                         questions.push(questionObj);
+                        questionCount++;
+                    } else if (currentQuestion) {
+                        incompleteCount++;
                     }
                     
+                    // Start new question
                     currentQuestion = questionMatch[2];
                     currentOptions = ['', '', '', ''];
                     currentAnswer = '';
                     currentExplanation = '';
                 }
                 
-                // Match options: A) Text or A. Text
-                const optionMatch = line.match(/^([A-D])[\.\)]\s+(.+)/);
-                if (optionMatch) {
-                    const index = optionMatch[1].charCodeAt(0) - 65; // A=0, B=1, C=2, D=3
+                // Match options: A) Text, A. Text, A Text
+                const optionMatch = line.match(/^([A-D])[\.\)]?\s+(.+)/);
+                if (optionMatch && currentQuestion) {
+                    const letter = optionMatch[1];
+                    const optionText = optionMatch[2];
+                    const index = letter.charCodeAt(0) - 65;
                     if (index >= 0 && index < 4) {
-                        currentOptions[index] = optionMatch[2];
+                        currentOptions[index] = optionText;
                     }
                 }
                 
-                // Match answer: Answer: X or **Answer: X**
+                // Match answer: Answer: X, **Answer: X**, Ans: X
                 let answerMatch = line.match(/Answer:\s*([A-D])/i);
                 if (!answerMatch) answerMatch = line.match(/\*\*Answer:\s*([A-D])\*\*/i);
-                if (answerMatch) {
+                if (!answerMatch) answerMatch = line.match(/Ans:\s*([A-D])/i);
+                if (answerMatch && currentQuestion) {
                     currentAnswer = answerMatch[1].toUpperCase();
                 }
                 
-                // Match explanation: Explanation: text
+                // Match explanation: Explanation: text, **Explanation:** text
                 let explanationMatch = line.match(/Explanation:\s*(.+)/i);
                 if (!explanationMatch) explanationMatch = line.match(/\*\*Explanation:\*\*\s*(.+)/i);
-                if (explanationMatch) {
+                if (explanationMatch && currentQuestion) {
                     currentExplanation = explanationMatch[1];
                 }
             }
@@ -246,11 +251,14 @@
                 }
                 
                 questions.push(questionObj);
+                questionCount++;
+            } else if (currentQuestion) {
+                incompleteCount++;
             }
             
             if (questions.length === 0) {
-                document.getElementById('output').innerHTML = '<span style="color: #ff6b6b;">❌ No questions found! Please check your format.</span>';
-                showMessage('No questions found! Make sure your format is: 1. Question? A) Option B) Option Answer: X Explanation: text', true);
+                document.getElementById('output').innerHTML = '<span style="color: #ff6b6b;">❌ No complete questions found!</span>';
+                showMessage('No complete questions found. Check format: each question must have a number, four options (A, B, C, D), Answer, and Explanation.', 'error');
                 return;
             }
             
@@ -259,10 +267,16 @@
             const progressBar = document.getElementById('progressBar');
             progressContainer.style.display = 'block';
             progressBar.style.width = '100%';
+            setTimeout(() => { progressContainer.style.display = 'none'; }, 1000);
             
-            setTimeout(() => {
-                progressContainer.style.display = 'none';
-            }, 1000);
+            // Display stats
+            document.getElementById('statsBox').innerHTML = `
+                <strong>📊 Conversion Statistics:</strong><br>
+                ✅ Complete Questions Converted: ${questions.length}<br>
+                ⚠️ Incomplete Questions Skipped: ${incompleteCount}<br>
+                📝 Total Lines Processed: ${lines.length}<br>
+                ${questions.length < 400 ? '<span style="color: #f39c12;">⚠️ Note: Expected 500+ questions, found ' + questions.length + '. Check formatting around question ' + (questions.length + 1) + '.</span>' : '<span style="color: #11998e;">🎉 Great! All questions converted successfully!</span>'}
+            `;
             
             const jsonOutput = JSON.stringify(questions, null, 2);
             document.getElementById('output').innerHTML = `<pre style="white-space:pre-wrap; word-wrap:break-word;">${jsonOutput}</pre>`;
@@ -280,7 +294,7 @@
                 navigator.clipboard.writeText(currentJSON);
                 showMessage(`✅ JSON copied! Go to bulk-upload-premium.html, select Chemistry, and upload.`);
             } else {
-                showMessage('No JSON to copy. Convert your questions first.', true);
+                showMessage('No JSON to copy. Convert your questions first.', 'error');
             }
         }
         
@@ -295,7 +309,7 @@
                 URL.revokeObjectURL(url);
                 showMessage('✅ JSON file downloaded!');
             } else {
-                showMessage('No JSON to download. Convert your questions first.', true);
+                showMessage('No JSON to download. Convert your questions first.', 'error');
             }
         }
         
@@ -304,6 +318,7 @@
             document.getElementById('output').innerHTML = '';
             document.getElementById('copyBtn').style.display = 'none';
             currentJSON = null;
+            document.getElementById('statsBox').innerHTML = '<strong>📋 Conversion Statistics:</strong><br>Ready to convert. Paste your questions and click "Convert All Questions".';
             showMessage('Cleared! Paste your Chemistry questions to convert.');
         }
     </script>

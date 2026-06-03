@@ -3,26 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bulk Upload - Ernest Embassy LMS</title>
+    <title>Free Questions Bulk Uploader</title>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
             min-height: 100vh;
             padding: 20px;
         }
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
             padding: 30px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.15);
         }
-        h1 { color: #667eea; margin-bottom: 10px; }
+        h1 { color: #11998e; }
         h2 { color: #4a5568; margin: 20px 0 10px; }
         textarea {
             width: 100%;
@@ -52,22 +53,10 @@
             margin: 10px 5px;
             transition: all 0.3s ease;
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        .btn-success {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            color: white;
-        }
-        .btn-danger {
-            background: #eb3349;
-            color: white;
-        }
-        .btn-warning {
-            background: #f39c12;
-            color: white;
-        }
+        .btn-primary { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; }
+        .btn-success { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; }
+        .btn-danger { background: #eb3349; color: white; }
+        .btn-warning { background: #f39c12; color: white; }
         .question-item {
             background: #f7fafc;
             border: 1px solid #e2e8f0;
@@ -82,13 +71,10 @@
             border-bottom: 2px solid #e2e8f0;
         }
         .nav-links a {
-            color: #667eea;
+            color: #11998e;
             text-decoration: none;
             margin-right: 20px;
             font-weight: 500;
-        }
-        .nav-links a:hover {
-            text-decoration: underline;
         }
         .stats {
             background: #e2e8f0;
@@ -99,36 +85,73 @@
         .success { color: #11998e; }
         .error { color: #eb3349; }
         .warning { color: #f39c12; }
+        .progress-container {
+            margin: 20px 0;
+            display: none;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background-color: #e2e8f0;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            width: 0%;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .admin-status {
+            background: #11998e;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="admin-status" id="adminStatus">
+            🔐 FREE QUESTIONS UPLOADER - Practice Questions
+        </div>
+
         <div class="nav-links">
             <a href="class.html">📝 Take Quiz</a>
+            <a href="bulk-upload-premium.html">🏆 Premium Uploader</a>
             <a href="resources.html">📚 Resources</a>
-            <a href="education.html">🎓 Education Hub</a>
             <a href="index.html">🏠 Home</a>
         </div>
         
-        <h1>📤 Bulk Question Uploader</h1>
-        <p>Upload ALL questions for ONE subject into a SINGLE document</p>
+        <h1>📤 Free Question Bank Uploader</h1>
+        <p>Upload practice questions to <strong>questions_free</strong> collection (Easy/Medium difficulty)</p>
         
         <div class="stats" id="stats">
-            Ready to upload...
+            Ready to upload free questions...
         </div>
         
         <h2>1. Select Subject</h2>
         <select id="subjectSelect">
-            <option value="physics">📐 Physics</option>
-            <option value="mathematics">📖 Mathematics</option>
-            <option value="english">🌍 English Language</option>
+            <option value="mathematics">📐 Mathematics</option>
+            <option value="physics">⚛️ Physics</option>
+            <option value="chemistry">🧪 Chemistry</option>
+            <option value="english">📖 English Language</option>
             <option value="digital-technology">💻 Digital Technology</option>
             <option value="igbo">🗣️ Igbo Language</option>
         </select>
         
-        <h2>2. Paste Your Questions Array (JSON format)</h2>
-        <p>Your JSON should be an ARRAY of questions like this:</p>
-        <textarea id="jsonInput" rows="10" placeholder='[
+        <h2>2. Add Free Questions (JSON Format)</h2>
+        <p>Example format - Easy/Medium difficulty:</p>
+        <textarea id="jsonInput" rows="12" cols="50">[
   {
     "question": "What is 2 + 2?",
     "optionA": "3",
@@ -136,20 +159,38 @@
     "optionC": "5",
     "optionD": "6",
     "answer": "B",
-    "explanation": "2 + 2 equals 4"
+    "explanation": "2 + 2 = 4",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is 10 × 5?",
+    "optionA": "40",
+    "optionB": "45",
+    "optionC": "50",
+    "optionD": "55",
+    "answer": "C",
+    "explanation": "10 × 5 = 50",
+    "difficulty": "easy"
   }
-]'></textarea>
+]</textarea>
         
         <div>
             <button class="btn btn-primary" onclick="previewQuestions()">👁️ Preview</button>
-            <button class="btn btn-success" onclick="uploadQuestions()">📤 Upload to Firestore</button>
+            <button class="btn btn-success" onclick="uploadQuestions()">📤 Upload to Free Collection</button>
             <button class="btn btn-warning" onclick="loadExistingQuestions()">📖 Load Existing</button>
             <button class="btn btn-danger" onclick="deleteSubject()">🗑️ Delete This Subject</button>
         </div>
         
-        <h2>3. Questions in Database</h2>
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill">0%</div>
+            </div>
+            <div class="batch-status" id="batchStatus"></div>
+        </div>
+        
+        <h2>3. Current Free Questions Preview</h2>
         <div id="questionsList" style="max-height: 400px; overflow-y: auto;">
-            <p>Click "Load Existing" to see questions.</p>
+            <p>Click "Load Existing" to see free questions.</p>
         </div>
         
         <div id="message"></div>
@@ -166,7 +207,23 @@
         };
         
         firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
         const db = firebase.firestore();
+        
+        let currentUser = null;
+        const adminEmails = ['ernestembassydigitalsolutions@gmail.com', 'damian@ernestembassy.com', 'dev@ernestlms.com'];
+        
+        async function checkAdmin() {
+            currentUser = auth.currentUser;
+            if (!currentUser || !adminEmails.includes(currentUser.email)) {
+                document.getElementById('adminStatus').innerHTML = '⚠️ Admin login required to upload questions';
+                document.getElementById('adminStatus').style.background = '#f39c12';
+                return false;
+            }
+            document.getElementById('adminStatus').innerHTML = '✅ Admin logged in - Ready to upload FREE questions';
+            document.getElementById('adminStatus').style.background = '#11998e';
+            return true;
+        }
         
         function showMessage(msg, type) {
             const msgDiv = document.getElementById('message');
@@ -174,109 +231,179 @@
             setTimeout(() => { msgDiv.innerHTML = ''; }, 4000);
         }
         
-        async function previewQuestions() {
-            try {
-                const rawData = JSON.parse(document.getElementById('jsonInput').value);
-                let questionsArray = Array.isArray(rawData) ? rawData : (rawData.questions || []);
-                
-                const previewDiv = document.getElementById('questionsList');
-                let html = `<h3>📋 Preview (${questionsArray.length} questions):</h3>`;
-                questionsArray.slice(0, 5).forEach((q, i) => {
-                    html += `
-                        <div class="question-item">
-                            <strong>Q${i+1}:</strong> ${(q.question || "").substring(0, 100)}<br>
-                            A: ${q.optionA || ""} | B: ${q.optionB || ""} | C: ${q.optionC || ""} | D: ${q.optionD || ""}<br>
-                            <strong>Answer: ${q.answer || "Not set"}</strong>
-                        </div>
-                    `;
-                });
-                if (questionsArray.length > 5) html += `<p><em>... and ${questionsArray.length - 5} more</em></p>`;
-                previewDiv.innerHTML = html;
-                showMessage(`Preview: ${questionsArray.length} questions`, 'success');
-            } catch(e) {
-                showMessage('Invalid JSON: ' + e.message, 'error');
-            }
-        }
-        
-        async function uploadQuestions() {
-            const subject = document.getElementById('subjectSelect').value;
-            const jsonInput = document.getElementById('jsonInput').value;
-            
-            if (!jsonInput.trim()) {
-                showMessage('Please paste your JSON data!', 'error');
-                return;
-            }
-            
-            try {
-                const rawData = JSON.parse(jsonInput);
-                let questionsArray = Array.isArray(rawData) ? rawData : (rawData.questions || []);
-                
-                if (questionsArray.length === 0) {
-                    showMessage('No questions found in JSON!', 'error');
-                    return;
-                }
-                
-                showMessage(`📤 Uploading ${questionsArray.length} questions to ${subject}...`, 'success');
-                
-                await db.collection("questions").doc(subject).set({
-                    questions: questionsArray,
-                    totalQuestions: questionsArray.length,
-                    subject: subject,
-                    lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                
-                showMessage(`✅ Success! ${questionsArray.length} questions uploaded to ${subject}`, 'success');
-                await loadExistingQuestions();
-                
-            } catch(e) {
-                showMessage('Error: ' + e.message, 'error');
-            }
-        }
-        
         async function loadExistingQuestions() {
             const subject = document.getElementById('subjectSelect').value;
             const statsDiv = document.getElementById('stats');
             const questionsList = document.getElementById('questionsList');
             
+            statsDiv.innerHTML = 'Loading...';
+            
             try {
-                const doc = await db.collection("questions").doc(subject).get();
+                const docRef = db.collection("questions_free").doc(subject);
+                const docSnap = await docRef.get();
                 
-                if (doc.exists) {
-                    const data = doc.data();
+                if (docSnap.exists) {
+                    const data = docSnap.data();
                     const questions = data.questions || [];
-                    statsDiv.innerHTML = `<strong>📊 ${subject.toUpperCase()}</strong><br>Total Questions: ${questions.length}<br>Last Updated: ${data.lastUpdated ? new Date(data.lastUpdated.toDate()).toLocaleString() : 'Never'}`;
+                    statsDiv.innerHTML = `
+                        <strong>📊 ${subject.toUpperCase()} - FREE PRACTICE</strong><br>
+                        Total Questions: ${questions.length}<br>
+                        Last Updated: ${data.lastUpdated ? new Date(data.lastUpdated.toDate()).toLocaleString() : 'Never'}
+                    `;
                     
-                    let html = `<h3>📚 Current Questions (${questions.length}):</h3>`;
-                    questions.slice(0, 10).forEach((q, i) => {
-                        html += `
-                            <div class="question-item">
-                                <strong>Q${i+1}:</strong> ${(q.question || "").substring(0, 80)}<br>
-                                <span style="font-size: 12px;">A: ${q.optionA || ""} | B: ${q.optionB || ""} | C: ${q.optionC || ""} | D: ${q.optionD || ""}</span><br>
-                                <strong>Answer: ${q.answer || "Not set"}</strong>
-                            </div>
-                        `;
-                    });
-                    if (questions.length > 10) html += `<p><em>... and ${questions.length - 10} more</em></p>`;
-                    questionsList.innerHTML = html;
+                    if (questions.length > 0) {
+                        let html = '';
+                        questions.slice(0, 20).forEach((q, index) => {
+                            html += `
+                                <div class="question-item">
+                                    <strong>Q${index + 1}:</strong> ${q.question.substring(0, 100)}${q.question.length > 100 ? '...' : ''}<br>
+                                    A: ${q.optionA} | B: ${q.optionB} | C: ${q.optionC} | D: ${q.optionD}<br>
+                                    <strong>Answer: ${q.answer}</strong>
+                                    ${q.difficulty ? `<span style="margin-left: 10px; color: #11998e;">Difficulty: ${q.difficulty}</span>` : ''}
+                                </div>
+                            `;
+                        });
+                        if (questions.length > 20) {
+                            html += `<p><em>... and ${questions.length - 20} more questions</em></p>`;
+                        }
+                        questionsList.innerHTML = html;
+                    } else {
+                        questionsList.innerHTML = '<p>No free questions found for this subject.</p>';
+                    }
                 } else {
-                    statsDiv.innerHTML = `<strong>${subject.toUpperCase()}</strong><br>No questions yet. Upload some!`;
-                    questionsList.innerHTML = '<p>No questions found. Use the uploader above.</p>';
+                    statsDiv.innerHTML = `<strong>${subject.toUpperCase()}</strong><br>No free questions yet. Upload some!`;
+                    questionsList.innerHTML = '<p>No free questions found. Use the uploader above to add free questions.</p>';
                 }
-            } catch(e) {
-                showMessage('Error loading: ' + e.message, 'error');
+            } catch (error) {
+                statsDiv.innerHTML = `Error: ${error.message}`;
+                showMessage('Error loading: ' + error.message, 'error');
+            }
+        }
+        
+        function previewQuestions() {
+            try {
+                const questions = JSON.parse(document.getElementById('jsonInput').value);
+                const previewDiv = document.getElementById('questionsList');
+                
+                if (!Array.isArray(questions)) {
+                    throw new Error('Input must be an array');
+                }
+                
+                let html = '<h3>📋 Preview of FREE questions to add:</h3>';
+                questions.slice(0, 10).forEach((q, i) => {
+                    html += `
+                        <div class="question-item">
+                            <strong>Q${i + 1}:</strong> ${q.question.substring(0, 100)}<br>
+                            A: ${q.optionA} | B: ${q.optionB} | C: ${q.optionC} | D: ${q.optionD}<br>
+                            <strong>Answer: ${q.answer}</strong>
+                            ${q.difficulty ? `<span style="margin-left: 10px; color: #11998e;">Difficulty: ${q.difficulty}</span>` : ''}
+                        </div>
+                    `;
+                });
+                if (questions.length > 10) {
+                    html += `<p><em>... and ${questions.length - 10} more questions</em></p>`;
+                }
+                previewDiv.innerHTML = html;
+                showMessage(`Preview shows first 10 of ${questions.length} FREE questions`, 'success');
+            } catch (error) {
+                showMessage('Invalid JSON: ' + error.message, 'error');
+            }
+        }
+        
+        async function uploadQuestions() {
+            if (!await checkAdmin()) {
+                showMessage('⚠️ Admin access required!', 'error');
+                return;
+            }
+            
+            const subject = document.getElementById('subjectSelect').value;
+            const jsonInput = document.getElementById('jsonInput').value;
+            const collectionName = 'questions_free';  // FREE collection
+            
+            if (!jsonInput.trim()) {
+                showMessage('Please paste your JSON data first!', 'error');
+                return;
+            }
+            
+            let newQuestions;
+            try {
+                newQuestions = JSON.parse(jsonInput);
+                if (!Array.isArray(newQuestions)) {
+                    throw new Error('Input must be an array of questions');
+                }
+            } catch (error) {
+                showMessage('Invalid JSON: ' + error.message, 'error');
+                return;
+            }
+            
+            const progressContainer = document.getElementById('progressContainer');
+            const progressFill = document.getElementById('progressFill');
+            progressContainer.style.display = 'block';
+            
+            showMessage(`📤 Uploading ${newQuestions.length} FREE questions to ${subject}...`, 'success');
+            
+            try {
+                const docRef = db.collection(collectionName).doc(subject);
+                const docSnap = await docRef.get();
+                
+                let existingQuestions = [];
+                if (docSnap.exists) {
+                    existingQuestions = docSnap.data().questions || [];
+                }
+                
+                const allQuestions = [...existingQuestions, ...newQuestions];
+                
+                await docRef.set({
+                    questions: allQuestions,
+                    totalQuestions: allQuestions.length,
+                    lastUpdated: new Date(),
+                    collection: "free"
+                });
+                
+                progressFill.style.width = '100%';
+                progressFill.textContent = '100% Complete!';
+                
+                showMessage(`✅ Success! Added ${newQuestions.length} FREE questions. Total: ${allQuestions.length} questions`, 'success');
+                
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                    progressFill.style.width = '0%';
+                }, 2000);
+                
+                await loadExistingQuestions();
+                
+            } catch (error) {
+                progressContainer.style.display = 'none';
+                showMessage('Error: ' + error.message, 'error');
+                console.error(error);
             }
         }
         
         async function deleteSubject() {
+            if (!await checkAdmin()) {
+                showMessage('⚠️ Admin access required!', 'error');
+                return;
+            }
+            
             const subject = document.getElementById('subjectSelect').value;
-            if (confirm(`Delete ALL questions for ${subject}?`)) {
-                await db.collection("questions").doc(subject).delete();
-                showMessage(`Deleted ${subject}`, 'warning');
-                await loadExistingQuestions();
+            if (confirm(`⚠️ WARNING: This will delete ALL FREE questions for ${subject}!\n\nContinue?`)) {
+                try {
+                    await db.collection("questions_free").doc(subject).delete();
+                    showMessage(`🗑️ All FREE questions for ${subject} have been cleared!`, 'warning');
+                    await loadExistingQuestions();
+                } catch (error) {
+                    showMessage('Error: ' + error.message, 'error');
+                }
             }
         }
         
-        loadExistingQuestions();
+        auth.onAuthStateChanged(async (user) => {
+            currentUser = user;
+            await checkAdmin();
+            if (currentUser && adminEmails.includes(currentUser.email)) {
+                loadExistingQuestions();
+            }
+        });
     </script>
 </body>
 </html>

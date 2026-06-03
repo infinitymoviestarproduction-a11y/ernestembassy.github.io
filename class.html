@@ -526,22 +526,41 @@
     }
     
     async function confirmPremiumPayment(subject) {
-        const studentRef = db.collection('students').doc(currentUser.uid);
-        const studentDoc = await studentRef.get();
-        const paidQuizzes = studentDoc.data()?.paidQuizzes || [];
-        
-        if (!paidQuizzes.includes(subject)) {
-            paidQuizzes.push(subject);
-            await studentRef.update({ 
-                paidQuizzes: paidQuizzes,
-                lastPaymentDate: firebase.firestore.FieldValue.serverTimestamp()
+        // Check if user is logged in
+        if (!currentUser) {
+            alert("Please login first to record your payment.");
+            window.location.href = "login.html";
+            return;
+        }
+
+        // Get the student's name from the database
+        const studentDoc = await db.collection('students').doc(currentUser.uid).get();
+        const studentName = studentDoc.data()?.fullName || currentUser.email?.split('@')[0] || 'User';
+
+        // Save payment request to Firestore
+        try {
+            await db.collection('payments').add({
+                userId: currentUser.uid,
+                userEmail: currentUser.email,
+                userName: studentName,
+                subject: subject,
+                amount: 100,
+                status: 'pending',
+                paymentDate: firebase.firestore.FieldValue.serverTimestamp(),
+                paymentMethod: 'manual_bank_transfer'
             });
-            alert(`✅ Premium Quiz unlocked for ${formatSubjectName(subject)}!`);
+
+            alert(`✅ Payment request submitted for ${formatSubjectName(subject)}!\n\nOur team will verify and unlock your access within 24 hours.`);
+        } catch (error) {
+            console.error("Payment submission error:", error);
+            alert("Error submitting payment request. Please contact support.");
         }
         
+        // Close modal
         document.querySelectorAll('.payment-modal').forEach(m => m.remove());
-        TIME_PER_QUESTION = 5;
-        loadPremiumQuestions();
+        
+        // Reload to update status
+        location.reload();
     }
     
     async function loadFreeQuestions() {

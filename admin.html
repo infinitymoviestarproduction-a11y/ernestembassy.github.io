@@ -267,6 +267,7 @@
                     <a href="tutoring.html">💻 Tutoring</a>
                     <a href="class.html">🎓 Class</a>
                     <a href="resources.html">📄 Resources</a>
+                    <a href="admin-payments.html">💰 Payment Requests</a>
                 </div>
             </div>
 
@@ -314,6 +315,7 @@
             <select id="questionSubject">
                 <option value="">Select Subject</option>
                 <option value="physics">⚛️ Physics</option>
+                <option value="chemistry">🧪 Chemistry</option>
                 <option value="mathematics">📐 Mathematics</option>
                 <option value="english">📖 English Language</option>
                 <option value="digital-technology">💻 Digital Technology</option>
@@ -364,6 +366,7 @@
             <select id="lessonSubject">
                 <option value="">Select Subject</option>
                 <option value="physics">⚛️ Physics</option>
+                <option value="chemistry">🧪 Chemistry</option>
                 <option value="mathematics">📐 Mathematics</option>
                 <option value="english">📖 English Language</option>
                 <option value="digital-technology">💻 Digital Technology</option>
@@ -464,7 +467,7 @@
                         currentAdmin = user;
                         resolve(true);
                     } else {
-                        const adminEmails = ['damian@ernestembassy.com', 'admin@ernestembassy.com', 'dev@ernestlms.com'];
+                        const adminEmails = ['damian@ernestembassy.com', 'admin@ernestembassy.com', 'dev@ernestlms.com', 'ernestembassydigitalsolutions@gmail.com'];
                         if (adminEmails.includes(user.email)) {
                             currentAdmin = user;
                             resolve(true);
@@ -639,7 +642,7 @@
             { question: "What is the capital of Nigeria?", optionA: "Lagos", optionB: "Abuja", optionC: "Kano", optionD: "Ibadan", answer: "B", stage: 1, explanation: "Abuja is the capital city of Nigeria" }
         ];
         
-        const subjects = ['mathematics', 'english', 'physics'];
+        const subjects = ['mathematics', 'english', 'physics', 'chemistry'];
         for (const subject of subjects) {
             const docRef = db.collection("questions").doc(subject);
             await docRef.set({
@@ -656,7 +659,7 @@
     
     async function clearTestData() {
         if(!confirm("⚠️ Clear ALL test data? This will delete all questions!")) return;
-        const subjects = ['mathematics', 'english', 'physics', 'digital-technology', 'igbo'];
+        const subjects = ['mathematics', 'english', 'physics', 'chemistry', 'digital-technology', 'igbo'];
         for (const subject of subjects) {
             try {
                 await db.collection("questions").doc(subject).delete();

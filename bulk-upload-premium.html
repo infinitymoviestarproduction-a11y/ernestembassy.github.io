@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Questions Bulk Uploader - 500+ Questions</title>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+        h1 { color: #667eea; margin-bottom: 10px; }
+        h2 { color: #4a5568; margin: 20px 0 10px; }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 13px;
+            margin: 10px 0;
+            background: #f7fafc;
+        }
+        select {
+            padding: 12px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            margin: 5px;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+        }
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+        }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-success { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; }
+        .btn-danger { background: #eb3349; color: white; }
+        .btn-warning { background: #f39c12; color: white; }
+        .question-item {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        .nav-links {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .nav-links a {
+            color: #667eea;
+            text-decoration: none;
+            margin-right: 20px;
+            font-weight: 500;
+        }
+        .stats {
+            background: #e2e8f0;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .success { color: #11998e; }
+        .error { color: #eb3349; }
+        .warning { color: #f39c12; }
+        .mode-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .mode-btn {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .mode-btn.free { background: #11998e; color: white; }
+        .mode-btn.premium { background: #f39c12; color: white; }
+        .mode-btn.active { transform: scale(1.02); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        
+        /* Progress Bar */
+        .progress-container {
+            margin: 20px 0;
+            display: none;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background-color: #e2e8f0;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            width: 0%;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .batch-status {
+            font-family: monospace;
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav-links">
+            <a href="class.html">📝 Take Quiz</a>
+            <a href="resources.html">📚 Resources</a>
+            <a href="education.html">🎓 Education Hub</a>
+            <a href="index.html">🏠 Home</a>
+        </div>
+        
+        <h1>📤 Premium Question Bank Uploader</h1>
+        <p>Upload up to 500+ questions per subject to Free Test or Premium Quiz collections</p>
+        
+        <div class="mode-selector">
+            <div class="mode-btn free" onclick="selectMode('free')">📝 Free Test Questions (Practice)</div>
+            <div class="mode-btn premium active" onclick="selectMode('premium')">🏆 Premium Quiz Questions (Competition)</div>
+        </div>
+        
+        <div class="stats" id="stats">
+            Select a mode above...
+        </div>
+        
+        <h2>1. Select Subject</h2>
+        <select id="subjectSelect">
+            <option value="mathematics">📐 Mathematics</option>
+            <option value="physics">⚛️ Physics</option>
+            <option value="english">📖 English Language</option>
+            <option value="digital-technology">💻 Digital Technology</option>
+            <option value="igbo">🗣️ Igbo Language</option>
+        </select>
+        
+        <h2>2. Add Questions (JSON Format)</h2>
+        <p>Example format for each question (supports up to 500+ questions):</p>
+        <textarea id="jsonInput" rows="12" cols="50">[
+  {
+    "question": "What is the value of x in 2x + 5 = 15?",
+    "optionA": "3",
+    "optionB": "5",
+    "optionC": "8",
+    "optionD": "10",
+    "answer": "B",
+    "explanation": "2x = 15 - 5 = 10, so x = 5",
+    "difficulty": "medium"
+  }
+]</textarea>
+        
+        <div>
+            <button class="btn btn-primary" onclick="previewQuestions()">👁️ Preview</button>
+            <button class="btn btn-success" onclick="uploadQuestions()">📤 Upload to Firestore</button>
+            <button class="btn btn-warning" onclick="loadExistingQuestions()">📖 Load Existing</button>
+            <button class="btn btn-danger" onclick="deleteSubject()">🗑️ Delete This Subject</button>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill">0%</div>
+            </div>
+            <div class="batch-status" id="batchStatus"></div>
+        </div>
+        
+        <h2>3. Current Questions Preview</h2>
+        <div id="questionsList" style="max-height: 400px; overflow-y: auto;">
+            <p>Select mode and subject, then click "Load Existing" to see questions.</p>
+        </div>
+        
+        <div id="message"></div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+            authDomain: "ernest-embassy-lms.firebaseapp.com",
+            projectId: "ernest-embassy-lms",
+            storageBucket: "ernest-embassy-lms.firebasestorage.app",
+            messagingSenderId: "204896421221",
+            appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        
+        let currentMode = 'premium';
+        
+        function selectMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            if (mode === 'free') {
+                document.querySelector('.mode-btn.free').classList.add('active');
+                document.getElementById('stats').innerHTML = '<strong>📝 FREE TEST MODE</strong><br>Practice questions - No time limit, easier difficulty';
+            } else {
+                document.querySelector('.mode-btn.premium').classList.add('active');
+                document.getElementById('stats').innerHTML = '<strong>🏆 PREMIUM QUIZ MODE</strong><br>Competition questions - 5 second time limit, harder difficulty<br>💰 Monthly ₦10,000 prize draw for top performers';
+            }
+        }
+        
+        function getCollectionName() {
+            return currentMode === 'free' ? 'questions_free' : 'questions_premium';
+        }
+        
+        function showMessage(msg, type) {
+            const msgDiv = document.getElementById('message');
+            msgDiv.innerHTML = `<div class="${type}" style="padding: 10px; margin: 10px 0; border-radius: 8px; background: ${type === 'error' ? '#eb334910' : type === 'warning' ? '#f39c1210' : '#11998e10'}">${msg}</div>`;
+            setTimeout(() => { msgDiv.innerHTML = ''; }, 4000);
+        }
+        
+        async function loadExistingQuestions() {
+            const subject = document.getElementById('subjectSelect').value;
+            const collectionName = getCollectionName();
+            const statsDiv = document.getElementById('stats');
+            const questionsList = document.getElementById('questionsList');
+            
+            statsDiv.innerHTML = 'Loading...';
+            
+            try {
+                const docRef = db.collection(collectionName).doc(subject);
+                const docSnap = await docRef.get();
+                
+                if (docSnap.exists) {
+                    const data = docSnap.data();
+                    const questions = data.questions || [];
+                    statsDiv.innerHTML = `
+                        <strong>📊 ${subject.toUpperCase()} - ${currentMode === 'free' ? 'FREE TEST' : 'PREMIUM QUIZ'}</strong><br>
+                        Total Questions: ${questions.length}<br>
+                        Last Updated: ${data.lastUpdated ? new Date(data.lastUpdated.toDate()).toLocaleString() : 'Never'}
+                        ${currentMode === 'premium' ? '<br>💰 Monthly Prize Pool: ₦10,000' : ''}
+                    `;
+                    
+                    if (questions.length > 0) {
+                        let html = '';
+                        questions.slice(0, 20).forEach((q, index) => {
+                            html += `
+                                <div class="question-item">
+                                    <strong>Q${index + 1}:</strong> ${q.question.substring(0, 100)}${q.question.length > 100 ? '...' : ''}<br>
+                                    A: ${q.optionA} | B: ${q.optionB} | C: ${q.optionC} | D: ${q.optionD}<br>
+                                    <strong>Answer: ${q.answer}</strong>
+                                    ${q.difficulty ? `<span style="margin-left: 10px; color: #f39c12;">Difficulty: ${q.difficulty}</span>` : ''}
+                                </div>
+                            `;
+                        });
+                        if (questions.length > 20) {
+                            html += `<p><em>... and ${questions.length - 20} more questions</em></p>`;
+                        }
+                        questionsList.innerHTML = html;
+                    } else {
+                        questionsList.innerHTML = '<p>No questions found for this subject.</p>';
+                    }
+                } else {
+                    statsDiv.innerHTML = `<strong>${subject.toUpperCase()}</strong><br>No questions yet. Create some!`;
+                    questionsList.innerHTML = '<p>No questions found. Use the uploader above to add questions.</p>';
+                }
+            } catch (error) {
+                statsDiv.innerHTML = `Error: ${error.message}`;
+                showMessage('Error loading: ' + error.message, 'error');
+            }
+        }
+        
+        function previewQuestions() {
+            try {
+                const questions = JSON.parse(document.getElementById('jsonInput').value);
+                const previewDiv = document.getElementById('questionsList');
+                
+                if (!Array.isArray(questions)) {
+                    throw new Error('Input must be an array');
+                }
+                
+                let html = '<h3>📋 Preview of questions to add:</h3>';
+                questions.slice(0, 10).forEach((q, i) => {
+                    html += `
+                        <div class="question-item">
+                            <strong>Q${i + 1}:</strong> ${q.question.substring(0, 100)}<br>
+                            A: ${q.optionA} | B: ${q.optionB} | C: ${q.optionC} | D: ${q.optionD}<br>
+                            <strong>Answer: ${q.answer}</strong>
+                            ${q.difficulty ? `<span style="margin-left: 10px; color: #f39c12;">Difficulty: ${q.difficulty}</span>` : ''}
+                        </div>
+                    `;
+                });
+                if (questions.length > 10) {
+                    html += `<p><em>... and ${questions.length - 10} more questions</em></p>`;
+                }
+                previewDiv.innerHTML = html;
+                showMessage(`Preview shows first 10 of ${questions.length} questions`, 'success');
+            } catch (error) {
+                showMessage('Invalid JSON: ' + error.message, 'error');
+            }
+        }
+        
+        async function uploadQuestions() {
+            const subject = document.getElementById('subjectSelect').value;
+            const jsonInput = document.getElementById('jsonInput').value;
+            const collectionName = getCollectionName();
+            
+            if (!jsonInput.trim()) {
+                showMessage('Please paste your JSON data first!', 'error');
+                return;
+            }
+            
+            let newQuestions;
+            try {
+                newQuestions = JSON.parse(jsonInput);
+                if (!Array.isArray(newQuestions)) {
+                    throw new Error('Input must be an array of questions');
+                }
+            } catch (error) {
+                showMessage('Invalid JSON: ' + error.message, 'error');
+                return;
+            }
+            
+            // Show progress bar
+            const progressContainer = document.getElementById('progressContainer');
+            const progressFill = document.getElementById('progressFill');
+            const batchStatus = document.getElementById('batchStatus');
+            progressContainer.style.display = 'block';
+            
+            showMessage(`📤 Uploading ${newQuestions.length} questions to ${subject}...`, 'success');
+            
+            try {
+                const docRef = db.collection(collectionName).doc(subject);
+                const docSnap = await docRef.get();
+                
+                let existingQuestions = [];
+                if (docSnap.exists) {
+                    existingQuestions = docSnap.data().questions || [];
+                }
+                
+                const totalQuestions = existingQuestions.length + newQuestions.length;
+                const BATCH_SIZE = 100; // Firestore can handle up to 500, but 100 is safe
+                let uploadedCount = 0;
+                
+                // Process in batches to avoid timeout
+                for (let i = 0; i < newQuestions.length; i += BATCH_SIZE) {
+                    const batch = newQuestions.slice(i, i + BATCH_SIZE);
+                    const processedBatch = batch.map(q => ({
+                        ...q,
+                        createdAt: new Date(),
+                        ...(currentMode === 'premium' && { timeLimit: 5, competition: true })
+                    }));
+                    
+                    existingQuestions.push(...processedBatch);
+                    
+                    // Update progress
+                    uploadedCount += batch.length;
+                    const percent = Math.round((uploadedCount / newQuestions.length) * 100);
+                    progressFill.style.width = `${percent}%`;
+                    progressFill.textContent = `${percent}%`;
+                    batchStatus.textContent = `Processing batch ${Math.floor(i / BATCH_SIZE) + 1}/${Math.ceil(newQuestions.length / BATCH_SIZE)} - ${uploadedCount}/${newQuestions.length} questions`;
+                    
+                    // Small delay to prevent rate limiting
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+                
+                // Final save
+                await docRef.set({
+                    questions: existingQuestions,
+                    totalQuestions: existingQuestions.length,
+                    lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
+                    mode: currentMode,
+                    totalPremiumQuestions: currentMode === 'premium' ? existingQuestions.length : undefined
+                });
+                
+                progressFill.style.width = '100%';
+                progressFill.textContent = '100% Complete!';
+                batchStatus.textContent = `✅ Upload complete! Total: ${existingQuestions.length} questions`;
+                
+                showMessage(`✅ Success! Added ${newQuestions.length} questions. Total: ${existingQuestions.length} questions in ${currentMode === 'free' ? 'FREE TEST' : 'PREMIUM QUIZ'}`, 'success');
+                
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                    progressFill.style.width = '0%';
+                }, 3000);
+                
+                await loadExistingQuestions();
+                
+            } catch (error) {
+                progressContainer.style.display = 'none';
+                showMessage('Error: ' + error.message, 'error');
+                console.error(error);
+            }
+        }
+        
+        async function deleteSubject() {
+            const subject = document.getElementById('subjectSelect').value;
+            const collectionName = getCollectionName();
+            const confirmClear = confirm(`⚠️ WARNING: This will delete ALL ${currentMode === 'free' ? 'free test' : 'premium quiz'} questions for ${subject}!\n\nAre you absolutely sure?`);
+            
+            if (confirmClear) {
+                const doubleConfirm = prompt(`Type "${subject}" to confirm deletion:`);
+                if (doubleConfirm === subject) {
+                    try {
+                        const docRef = db.collection(collectionName).doc(subject);
+                        await docRef.delete();
+                        showMessage(`🗑️ All questions for ${subject} have been cleared!`, 'warning');
+                        await loadExistingQuestions();
+                    } catch (error) {
+                        showMessage('Error: ' + error.message, 'error');
+                    }
+                } else {
+                    showMessage('Deletion cancelled - incorrect confirmation', 'warning');
+                }
+            }
+        }
+        
+        // Initialize
+        selectMode('premium');
+        loadExistingQuestions();
+    </script>
+</body>
+</html>

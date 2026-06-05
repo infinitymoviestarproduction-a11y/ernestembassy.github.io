@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Questions Bulk Uploader</title>
+    <title>Free Questions Bulk Uploader - Practice Questions</title>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -23,7 +23,7 @@
             padding: 30px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.15);
         }
-        h1 { color: #11998e; }
+        h1 { color: #667eea; margin-bottom: 10px; }
         h2 { color: #4a5568; margin: 20px 0 10px; }
         textarea {
             width: 100%;
@@ -53,10 +53,11 @@
             margin: 10px 5px;
             transition: all 0.3s ease;
         }
-        .btn-primary { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
         .btn-success { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; }
         .btn-danger { background: #eb3349; color: white; }
         .btn-warning { background: #f39c12; color: white; }
+        .btn-info { background: #3498db; color: white; }
         .question-item {
             background: #f7fafc;
             border: 1px solid #e2e8f0;
@@ -71,7 +72,7 @@
             border-bottom: 2px solid #e2e8f0;
         }
         .nav-links a {
-            color: #11998e;
+            color: #667eea;
             text-decoration: none;
             margin-right: 20px;
             font-weight: 500;
@@ -85,6 +86,24 @@
         .success { color: #11998e; }
         .error { color: #eb3349; }
         .warning { color: #f39c12; }
+        .mode-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .mode-btn {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .mode-btn.free { background: #11998e; color: white; }
+        .mode-btn.premium { background: #f39c12; color: white; }
+        .mode-btn.active { transform: scale(1.02); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        
         .progress-container {
             margin: 20px 0;
             display: none;
@@ -108,35 +127,75 @@
             font-weight: bold;
             font-size: 12px;
         }
+        .batch-status {
+            font-family: monospace;
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
+        }
         .admin-status {
             background: #11998e;
             color: white;
-            padding: 10px 15px;
+            padding: 15px;
             border-radius: 10px;
             margin-bottom: 20px;
             text-align: center;
             font-weight: bold;
+        }
+        .admin-status.error {
+            background: #eb3349;
+        }
+        .admin-status.warning {
+            background: #f39c12;
+        }
+        .login-panel {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .login-panel input {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 250px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="admin-status" id="adminStatus">
-            🔐 FREE QUESTIONS UPLOADER - Practice Questions
+            🔐 Checking admin status...
+        </div>
+
+        <div id="loginPanel" class="login-panel" style="display: none;">
+            <h3>🔐 Admin Login Required</h3>
+            <p>Please login with your admin email:</p>
+            <input type="email" id="loginEmail" placeholder="Email">
+            <input type="password" id="loginPassword" placeholder="Password">
+            <button class="btn btn-primary" onclick="manualLogin()">Login</button>
+            <button class="btn btn-info" onclick="devLogin()">🔧 Developer Quick Login</button>
         </div>
 
         <div class="nav-links">
             <a href="class.html">📝 Take Quiz</a>
-            <a href="bulk-upload-premium.html">🏆 Premium Uploader</a>
             <a href="resources.html">📚 Resources</a>
+            <a href="education.html">🎓 Education Hub</a>
             <a href="index.html">🏠 Home</a>
         </div>
         
         <h1>📤 Free Question Bank Uploader</h1>
-        <p>Upload practice questions to <strong>questions_free</strong> collection (Easy/Medium difficulty)</p>
+        <p>Upload up to 500+ questions per subject to FREE TEST (Realtime Database)</p>
+        
+        <div class="mode-selector">
+            <div class="mode-btn free active" onclick="selectMode('free')">📝 Free Test Questions (Practice)</div>
+            <div class="mode-btn premium" onclick="selectMode('premium')">🏆 Premium Quiz Questions (Competition)</div>
+        </div>
         
         <div class="stats" id="stats">
-            Ready to upload free questions...
+            Select a mode above...
         </div>
         
         <h2>1. Select Subject</h2>
@@ -149,34 +208,24 @@
             <option value="igbo">🗣️ Igbo Language</option>
         </select>
         
-        <h2>2. Add Free Questions (JSON Format)</h2>
-        <p>Example format - Easy/Medium difficulty:</p>
+        <h2>2. Add Questions (JSON Format)</h2>
+        <p>Example format for each question (supports up to 500+ questions):</p>
         <textarea id="jsonInput" rows="12" cols="50">[
   {
-    "question": "What is 2 + 2?",
+    "question": "What is the value of x in 2x + 5 = 15?",
     "optionA": "3",
-    "optionB": "4",
-    "optionC": "5",
-    "optionD": "6",
+    "optionB": "5",
+    "optionC": "8",
+    "optionD": "10",
     "answer": "B",
-    "explanation": "2 + 2 = 4",
-    "difficulty": "easy"
-  },
-  {
-    "question": "What is 10 × 5?",
-    "optionA": "40",
-    "optionB": "45",
-    "optionC": "50",
-    "optionD": "55",
-    "answer": "C",
-    "explanation": "10 × 5 = 50",
-    "difficulty": "easy"
+    "explanation": "2x = 15 - 5 = 10, so x = 5",
+    "difficulty": "medium"
   }
 ]</textarea>
         
         <div>
             <button class="btn btn-primary" onclick="previewQuestions()">👁️ Preview</button>
-            <button class="btn btn-success" onclick="uploadQuestions()">📤 Upload to Free Collection</button>
+            <button class="btn btn-success" onclick="uploadQuestions()">📤 Upload to Realtime DB</button>
             <button class="btn btn-warning" onclick="loadExistingQuestions()">📖 Load Existing</button>
             <button class="btn btn-danger" onclick="deleteSubject()">🗑️ Delete This Subject</button>
         </div>
@@ -188,9 +237,9 @@
             <div class="batch-status" id="batchStatus"></div>
         </div>
         
-        <h2>3. Current Free Questions Preview</h2>
+        <h2>3. Current Questions Preview</h2>
         <div id="questionsList" style="max-height: 400px; overflow-y: auto;">
-            <p>Click "Load Existing" to see free questions.</p>
+            <p>Select mode and subject, then click "Load Existing" to see questions.</p>
         </div>
         
         <div id="message"></div>
@@ -208,71 +257,184 @@
         
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
-        const db = firebase.firestore();
+        const rtdb = firebase.database();
         
+        let currentMode = 'free';
         let currentUser = null;
-        const adminEmails = ['ernestembassydigitalsolutions@gmail.com', 'damian@ernestembassy.com', 'dev@ernestlms.com'];
         
-        async function checkAdmin() {
-            currentUser = auth.currentUser;
-            if (!currentUser || !adminEmails.includes(currentUser.email)) {
-                document.getElementById('adminStatus').innerHTML = '⚠️ Admin login required to upload questions';
-                document.getElementById('adminStatus').style.background = '#f39c12';
-                return false;
-            }
-            document.getElementById('adminStatus').innerHTML = '✅ Admin logged in - Ready to upload FREE questions';
-            document.getElementById('adminStatus').style.background = '#11998e';
-            return true;
-        }
+        const adminEmails = [
+            'ernestembassydigitalsolutions@gmail.com',
+            'damian@ernestembassy.com',
+            'admin@ernestembassy.com',
+            'dev@ernestlms.com'
+        ];
         
         function showMessage(msg, type) {
             const msgDiv = document.getElementById('message');
-            msgDiv.innerHTML = `<div style="padding: 10px; margin: 10px 0; border-radius: 8px; background: ${type === 'error' ? '#eb334920' : '#11998e20'}; color: ${type === 'error' ? '#eb3349' : '#11998e'}">${msg}</div>`;
+            msgDiv.innerHTML = `<div style="padding: 10px; margin: 10px 0; border-radius: 8px; background: ${type === 'error' ? '#eb334920' : type === 'warning' ? '#f39c1210' : '#11998e10'}; color: ${type === 'error' ? '#eb3349' : '#11998e'}">${msg}</div>`;
             setTimeout(() => { msgDiv.innerHTML = ''; }, 4000);
+        }
+        
+        async function manualLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                showMessage('Please enter email and password', 'error');
+                return;
+            }
+            
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                showMessage('Login successful!', 'success');
+                document.getElementById('loginPanel').style.display = 'none';
+            } catch (error) {
+                showMessage('Login failed: ' + error.message, 'error');
+            }
+        }
+        
+        async function devLogin() {
+            const devEmail = 'dev@ernestlms.com';
+            const devPassword = 'dev123456';
+            
+            try {
+                try {
+                    await auth.signInWithEmailAndPassword(devEmail, devPassword);
+                } catch (error) {
+                    if (error.code === 'auth/user-not-found') {
+                        await auth.createUserWithEmailAndPassword(devEmail, devPassword);
+                        await auth.signInWithEmailAndPassword(devEmail, devPassword);
+                    } else {
+                        throw error;
+                    }
+                }
+                
+                const firestore = firebase.firestore();
+                const user = auth.currentUser;
+                await firestore.collection('admins').doc(user.uid).set({
+                    isAdmin: true,
+                    email: devEmail,
+                    role: 'super_admin'
+                }, { merge: true });
+                
+                showMessage('Developer login successful! You now have admin access.', 'success');
+                document.getElementById('loginPanel').style.display = 'none';
+                await loadExistingQuestions();
+            } catch (error) {
+                showMessage('Dev login failed: ' + error.message, 'error');
+            }
+        }
+        
+        async function checkAdminAndAutoLogin() {
+            const adminStatus = document.getElementById('adminStatus');
+            
+            try {
+                currentUser = auth.currentUser;
+                
+                if (currentUser) {
+                    if (adminEmails.includes(currentUser.email)) {
+                        adminStatus.innerHTML = `✅ Admin logged in: ${currentUser.email}`;
+                        adminStatus.classList.remove('error');
+                        adminStatus.classList.remove('warning');
+                        document.getElementById('loginPanel').style.display = 'none';
+                        await loadExistingQuestions();
+                        return;
+                    } else {
+                        const firestore = firebase.firestore();
+                        const adminDoc = await firestore.collection('admins').doc(currentUser.uid).get();
+                        if (adminDoc.exists && adminDoc.data().isAdmin === true) {
+                            adminStatus.innerHTML = `✅ Admin logged in: ${currentUser.email}`;
+                            adminStatus.classList.remove('error');
+                            document.getElementById('loginPanel').style.display = 'none';
+                            await loadExistingQuestions();
+                            return;
+                        }
+                    }
+                    adminStatus.innerHTML = `⚠️ Logged in as ${currentUser.email} but not admin. Use Developer Login below.`;
+                    adminStatus.classList.add('warning');
+                    document.getElementById('loginPanel').style.display = 'block';
+                    return;
+                }
+                
+                adminStatus.innerHTML = `⚠️ Not logged in. Please login as admin`;
+                adminStatus.classList.add('warning');
+                document.getElementById('loginPanel').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Admin check error:', error);
+                adminStatus.innerHTML = `⚠️ Please login with admin account`;
+                adminStatus.classList.add('warning');
+                document.getElementById('loginPanel').style.display = 'block';
+            }
+        }
+        
+        function selectMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            if (mode === 'free') {
+                document.querySelector('.mode-btn.free').classList.add('active');
+                document.getElementById('stats').innerHTML = '<strong>📝 FREE TEST MODE</strong><br>Practice questions - No time limit<br>📁 Saves to: /{subject}/questions';
+            } else {
+                document.querySelector('.mode-btn.premium').classList.add('active');
+                document.getElementById('stats').innerHTML = '<strong>🏆 PREMIUM QUIZ MODE</strong><br>Competition questions - 5 second time limit<br>📁 Saves to: /premium/{subject}/questions';
+            }
+        }
+        
+        function getDatabasePath() {
+            const subject = document.getElementById('subjectSelect').value;
+            if (currentMode === 'free') {
+                return `${subject}/questions`;
+            } else {
+                return `premium/${subject}/questions`;
+            }
         }
         
         async function loadExistingQuestions() {
             const subject = document.getElementById('subjectSelect').value;
+            const dbPath = getDatabasePath();
             const statsDiv = document.getElementById('stats');
             const questionsList = document.getElementById('questionsList');
             
             statsDiv.innerHTML = 'Loading...';
             
             try {
-                const docRef = db.collection("questions_free").doc(subject);
-                const docSnap = await docRef.get();
+                const snapshot = await rtdb.ref(dbPath).once('value');
+                const questionsObj = snapshot.val();
                 
-                if (docSnap.exists) {
-                    const data = docSnap.data();
-                    const questions = data.questions || [];
+                let questions = [];
+                if (questionsObj) {
+                    if (Array.isArray(questionsObj)) {
+                        questions = questionsObj;
+                    } else {
+                        questions = Object.values(questionsObj);
+                    }
+                }
+                
+                if (questions.length > 0) {
                     statsDiv.innerHTML = `
-                        <strong>📊 ${subject.toUpperCase()} - FREE PRACTICE</strong><br>
+                        <strong>📊 ${subject.toUpperCase()} - ${currentMode === 'free' ? 'FREE TEST' : 'PREMIUM QUIZ'}</strong><br>
                         Total Questions: ${questions.length}<br>
-                        Last Updated: ${data.lastUpdated ? new Date(data.lastUpdated.toDate()).toLocaleString() : 'Never'}
+                        Database Path: ${dbPath}
                     `;
                     
-                    if (questions.length > 0) {
-                        let html = '';
-                        questions.slice(0, 20).forEach((q, index) => {
-                            html += `
-                                <div class="question-item">
-                                    <strong>Q${index + 1}:</strong> ${q.question.substring(0, 100)}${q.question.length > 100 ? '...' : ''}<br>
-                                    A: ${q.optionA} | B: ${q.optionB} | C: ${q.optionC} | D: ${q.optionD}<br>
-                                    <strong>Answer: ${q.answer}</strong>
-                                    ${q.difficulty ? `<span style="margin-left: 10px; color: #11998e;">Difficulty: ${q.difficulty}</span>` : ''}
-                                </div>
-                            `;
-                        });
-                        if (questions.length > 20) {
-                            html += `<p><em>... and ${questions.length - 20} more questions</em></p>`;
-                        }
-                        questionsList.innerHTML = html;
-                    } else {
-                        questionsList.innerHTML = '<p>No free questions found for this subject.</p>';
+                    let html = '';
+                    questions.slice(0, 20).forEach((q, index) => {
+                        html += `
+                            <div class="question-item">
+                                <strong>Q${index + 1}:</strong> ${q.question ? q.question.substring(0, 100) : 'No question'}${q.question && q.question.length > 100 ? '...' : ''}<br>
+                                A: ${q.optionA || 'N/A'} | B: ${q.optionB || 'N/A'} | C: ${q.optionC || 'N/A'} | D: ${q.optionD || 'N/A'}<br>
+                                <strong>Answer: ${q.answer || 'N/A'}</strong>
+                                ${q.difficulty ? `<span style="margin-left: 10px; color: #f39c12;">Difficulty: ${q.difficulty}</span>` : ''}
+                            </div>
+                        `;
+                    });
+                    if (questions.length > 20) {
+                        html += `<p><em>... and ${questions.length - 20} more questions</em></p>`;
                     }
+                    questionsList.innerHTML = html;
                 } else {
-                    statsDiv.innerHTML = `<strong>${subject.toUpperCase()}</strong><br>No free questions yet. Upload some!`;
-                    questionsList.innerHTML = '<p>No free questions found. Use the uploader above to add free questions.</p>';
+                    statsDiv.innerHTML = `<strong>${subject.toUpperCase()}</strong><br>No questions yet at path: ${dbPath}<br>Use the uploader above to add questions.`;
+                    questionsList.innerHTML = '<p>No questions found. Use the uploader above to add questions.</p>';
                 }
             } catch (error) {
                 statsDiv.innerHTML = `Error: ${error.message}`;
@@ -289,14 +451,14 @@
                     throw new Error('Input must be an array');
                 }
                 
-                let html = '<h3>📋 Preview of FREE questions to add:</h3>';
+                let html = '<h3>📋 Preview of questions to add:</h3>';
                 questions.slice(0, 10).forEach((q, i) => {
                     html += `
                         <div class="question-item">
                             <strong>Q${i + 1}:</strong> ${q.question.substring(0, 100)}<br>
                             A: ${q.optionA} | B: ${q.optionB} | C: ${q.optionC} | D: ${q.optionD}<br>
                             <strong>Answer: ${q.answer}</strong>
-                            ${q.difficulty ? `<span style="margin-left: 10px; color: #11998e;">Difficulty: ${q.difficulty}</span>` : ''}
+                            ${q.difficulty ? `<span style="margin-left: 10px; color: #f39c12;">Difficulty: ${q.difficulty}</span>` : ''}
                         </div>
                     `;
                 });
@@ -304,21 +466,21 @@
                     html += `<p><em>... and ${questions.length - 10} more questions</em></p>`;
                 }
                 previewDiv.innerHTML = html;
-                showMessage(`Preview shows first 10 of ${questions.length} FREE questions`, 'success');
+                showMessage(`Preview shows first 10 of ${questions.length} questions`, 'success');
             } catch (error) {
                 showMessage('Invalid JSON: ' + error.message, 'error');
             }
         }
         
         async function uploadQuestions() {
-            if (!await checkAdmin()) {
-                showMessage('⚠️ Admin access required!', 'error');
+            if (!currentUser) {
+                showMessage('⚠️ Please login with admin account first!', 'error');
                 return;
             }
             
             const subject = document.getElementById('subjectSelect').value;
             const jsonInput = document.getElementById('jsonInput').value;
-            const collectionName = 'questions_free';  // FREE collection
+            const dbPath = getDatabasePath();
             
             if (!jsonInput.trim()) {
                 showMessage('Please paste your JSON data first!', 'error');
@@ -338,37 +500,44 @@
             
             const progressContainer = document.getElementById('progressContainer');
             const progressFill = document.getElementById('progressFill');
+            const batchStatus = document.getElementById('batchStatus');
             progressContainer.style.display = 'block';
             
-            showMessage(`📤 Uploading ${newQuestions.length} FREE questions to ${subject}...`, 'success');
+            showMessage(`📤 Uploading ${newQuestions.length} questions to ${dbPath}...`, 'success');
             
             try {
-                const docRef = db.collection(collectionName).doc(subject);
-                const docSnap = await docRef.get();
-                
+                const snapshot = await rtdb.ref(dbPath).once('value');
                 let existingQuestions = [];
-                if (docSnap.exists) {
-                    existingQuestions = docSnap.data().questions || [];
+                const existingData = snapshot.val();
+                
+                if (existingData) {
+                    if (Array.isArray(existingData)) {
+                        existingQuestions = existingData;
+                    } else {
+                        existingQuestions = Object.values(existingData);
+                    }
                 }
                 
-                const allQuestions = [...existingQuestions, ...newQuestions];
+                const processedQuestions = newQuestions.map((q, index) => ({
+                    id: Date.now() + index,
+                    ...q,
+                    createdAt: new Date().toISOString()
+                }));
                 
-                await docRef.set({
-                    questions: allQuestions,
-                    totalQuestions: allQuestions.length,
-                    lastUpdated: new Date(),
-                    collection: "free"
-                });
+                const allQuestions = [...existingQuestions, ...processedQuestions];
+                
+                await rtdb.ref(dbPath).set(allQuestions);
                 
                 progressFill.style.width = '100%';
                 progressFill.textContent = '100% Complete!';
+                batchStatus.textContent = `✅ Upload complete! Total: ${allQuestions.length} questions to ${dbPath}`;
                 
-                showMessage(`✅ Success! Added ${newQuestions.length} FREE questions. Total: ${allQuestions.length} questions`, 'success');
+                showMessage(`✅ Success! Added ${newQuestions.length} questions. Total: ${allQuestions.length} questions at path: ${dbPath}`, 'success');
                 
                 setTimeout(() => {
                     progressContainer.style.display = 'none';
                     progressFill.style.width = '0%';
-                }, 2000);
+                }, 3000);
                 
                 await loadExistingQuestions();
                 
@@ -380,30 +549,32 @@
         }
         
         async function deleteSubject() {
-            if (!await checkAdmin()) {
-                showMessage('⚠️ Admin access required!', 'error');
-                return;
-            }
-            
             const subject = document.getElementById('subjectSelect').value;
-            if (confirm(`⚠️ WARNING: This will delete ALL FREE questions for ${subject}!\n\nContinue?`)) {
-                try {
-                    await db.collection("questions_free").doc(subject).delete();
-                    showMessage(`🗑️ All FREE questions for ${subject} have been cleared!`, 'warning');
-                    await loadExistingQuestions();
-                } catch (error) {
-                    showMessage('Error: ' + error.message, 'error');
+            const dbPath = getDatabasePath();
+            const confirmClear = confirm(`⚠️ WARNING: This will delete ALL ${currentMode === 'free' ? 'free test' : 'premium quiz'} questions for ${subject} at path: ${dbPath}!\n\nAre you absolutely sure?`);
+            
+            if (confirmClear) {
+                const doubleConfirm = prompt(`Type "${subject}" to confirm deletion:`);
+                if (doubleConfirm === subject) {
+                    try {
+                        await rtdb.ref(dbPath).remove();
+                        showMessage(`🗑️ All questions for ${subject} at ${dbPath} have been cleared!`, 'warning');
+                        await loadExistingQuestions();
+                    } catch (error) {
+                        showMessage('Error: ' + error.message, 'error');
+                    }
+                } else {
+                    showMessage('Deletion cancelled - incorrect confirmation', 'warning');
                 }
             }
         }
         
         auth.onAuthStateChanged(async (user) => {
             currentUser = user;
-            await checkAdmin();
-            if (currentUser && adminEmails.includes(currentUser.email)) {
-                loadExistingQuestions();
-            }
+            await checkAdminAndAutoLogin();
         });
+        
+        selectMode('free');
     </script>
 </body>
 </html>

@@ -8,9 +8,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
-    <!-- Paystack script with proper loading -->
-    <script src="https://js.paystack.co/v1/inline.js"></script>
-
+    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -445,9 +443,15 @@
 
 <button class="home-button" onclick="goToPage('index.html')" title="Go to Home">🏠</button>
 
+<!-- Load Paystack script dynamically -->
+<script src="https://js.paystack.co/v1/inline.js"></script>
+
 <script>
     // 🔴 YOUR PAYSTACK PUBLIC KEY 🔴
     const PAYSTACK_PUBLIC_KEY = "pk_live_441686d15976154f119fe56e3f415638b7a649ac";
+    
+    // For testing, you can switch to test key by uncommenting below:
+    // const PAYSTACK_PUBLIC_KEY = "pk_test_13d4cf901bc48bc97c41220ebaacac5a03e9b448";
     
     const firebaseConfig = {
         apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
@@ -543,7 +547,6 @@
     }
     
     function showPaystackPaymentModal() {
-        // Create modal HTML
         const modalHtml = `
             <div class="payment-modal" id="paystackModal">
                 <div class="payment-content">
@@ -568,7 +571,7 @@
                         <div class="payment-method"><span>🧡</span><span>Palmpay</span></div>
                     </div>
                     
-                    <button id="paystackPaymentBtn" class="paystack-btn" onclick="initializePaystackPayment()">
+                    <button class="paystack-btn" onclick="payWithPaystack()">
                         💳 Pay ₦100 Now
                     </button>
                     <button onclick="closePaymentModal()" style="background: #e2e8f0; color: #4a5568; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; width: 100%;">Cancel</button>
@@ -576,11 +579,8 @@
             </div>
         `;
         
-        // Remove any existing modal
         const existingModal = document.getElementById('paystackModal');
         if (existingModal) existingModal.remove();
-        
-        // Add modal to body
         document.body.insertAdjacentHTML('beforeend', modalHtml);
     }
     
@@ -591,69 +591,55 @@
         document.getElementById('modeSelector').style.display = 'grid';
     }
     
-    // Make initializePaystackPayment a global function that can be called from onclick
-    window.initializePaystackPayment = function() {
-        console.log("Paystack payment initiated");
+    // Paystack payment function
+    function payWithPaystack() {
+        console.log("Paystack function called");
         
         if (!currentUser) {
-            alert("Please login first to make payment.");
+            alert("Please login first!");
             window.location.href = "login.html";
             return;
         }
         
-        // Check if Paystack is loaded
+        // Check if Paystack is available
         if (typeof PaystackPop === 'undefined') {
-            console.error("Paystack not loaded. Reloading script...");
-            alert("Payment system is loading. Please try again in a moment.");
-            // Reload Paystack script
+            console.error("Paystack not loaded, loading now...");
+            alert("Loading payment system... Please click again in a moment.");
+            // Reload Paystack
             const script = document.createElement('script');
-            script.src = "https://js.paystack.co/v1/inline.js";
+            script.src = 'https://js.paystack.co/v1/inline.js';
             script.onload = function() {
-                console.log("Paystack reloaded. Try again.");
-                alert("Paystack loaded. Please click the payment button again.");
+                console.log("Paystack loaded, please click the button again.");
+                alert("Paystack loaded! Please click the payment button again.");
             };
             document.head.appendChild(script);
             return;
         }
         
-        const amount = subjectPrices[currentSubject] || 100;
-        const paymentRef = `QUIZ_${currentSubject}_${Date.now()}_${currentUser.uid.substring(0, 8)}`;
+        const amount = 100;
+        const email = currentUser.email;
+        const reference = `QUIZ_${currentSubject}_${Date.now()}_${currentUser.uid.substring(0, 8)}`;
         
-        console.log("Opening Paystack with:", {
-            key: PAYSTACK_PUBLIC_KEY.substring(0, 10) + "...",
-            email: currentUser.email,
-            amount: amount * 100,
-            ref: paymentRef
-        });
+        console.log("Opening Paystack with:", { email, amount, reference });
         
         const handler = PaystackPop.setup({
             key: PAYSTACK_PUBLIC_KEY,
-            email: currentUser.email,
+            email: email,
             amount: amount * 100,
             currency: 'NGN',
-            ref: paymentRef,
+            ref: reference,
             metadata: {
                 custom_fields: [
-                    {
-                        display_name: "Student Name",
-                        variable_name: "student_name",
-                        value: currentUser.displayName || currentUser.email.split('@')[0]
-                    },
                     {
                         display_name: "Subject",
                         variable_name: "subject",
                         value: currentSubject
-                    },
-                    {
-                        display_name: "User ID",
-                        variable_name: "user_id",
-                        value: currentUser.uid
                     }
                 ]
             },
-            callback: async function(response) {
+            callback: function(response) {
                 console.log("Payment successful:", response);
-                await verifyAndUnlockPayment(response.reference, response.transaction);
+                verifyPayment(response.reference);
             },
             onClose: function() {
                 console.log("Payment window closed");
@@ -663,7 +649,7 @@
         handler.openIframe();
     }
     
-    async function verifyAndUnlockPayment(reference, transactionRef) {
+    async function verifyPayment(reference) {
         try {
             const paymentId = `PAY_${reference}`;
             const studentDoc = await db.collection('students').doc(currentUser.uid).get();
@@ -671,15 +657,13 @@
             
             await db.collection('payments').doc(paymentId).set({
                 paymentId: paymentId,
-                transactionRef: transactionRef,
                 userId: currentUser.uid,
                 userEmail: currentUser.email,
                 userName: studentName,
                 subject: currentSubject,
                 amount: 100,
                 status: 'verified',
-                paymentDate: firebase.firestore.FieldValue.serverTimestamp(),
-                paymentMethod: 'paystack',
+                paymentDate: new Date(),
                 reference: reference
             });
             
@@ -690,14 +674,13 @@
                 await studentRef.update({ paidQuizzes: paidQuizzes });
             }
             
-            alert(`✅ Payment successful! ${formatSubjectName(currentSubject)} premium quiz unlocked instantly!`);
-            
+            alert(`✅ Payment successful! ${formatSubjectName(currentSubject)} unlocked!`);
             closePaymentModal();
             location.reload();
             
         } catch (error) {
-            console.error("Error saving payment:", error);
-            alert("Payment was successful but we couldn't update your account. Please contact support.");
+            console.error("Error:", error);
+            alert("Payment successful but account update failed. Please contact support.");
         }
     }
     
@@ -1018,6 +1001,10 @@
     }
     
     auth.onAuthStateChanged(user => { currentUser = user; });
+    
+    // Make functions globally available
+    window.payWithPaystack = payWithPaystack;
+    window.closePaymentModal = closePaymentModal;
 </script>
 </body>
 </html>

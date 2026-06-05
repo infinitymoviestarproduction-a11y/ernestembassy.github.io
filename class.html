@@ -8,6 +8,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -314,7 +315,7 @@
             to { transform: scale(1); opacity: 1; }
         }
         .payment-amount { font-size: 2.5rem; color: #11998e; font-weight: bold; margin: 15px 0; }
-        .payment-details { background: #f7fafc; padding: 15px; border-radius: 12px; margin: 20px 0; text-align: left; }
+        
         .prize-info { background: #fff3cd; padding: 15px; border-radius: 12px; margin: 15px 0; text-align: left; }
         .prize-info h4 { color: #f39c12; margin-bottom: 10px; }
         
@@ -345,7 +346,6 @@
 </div>
 
 <div class="container">
-    <!-- Prize Banner -->
     <div class="prize-banner">
         <div class="prize-amount">🏆 ₦10,000 Monthly Draw 🏆</div>
         <p>Top performers in Premium Quiz qualify for monthly prize draw!</p>
@@ -365,7 +365,6 @@
         </select>
     </div>
     
-    <!-- Mode Selection Cards -->
     <div class="mode-selector" id="modeSelector">
         <div class="mode-card free" onclick="selectMode('free')">
             <div class="mode-icon">📝</div>
@@ -405,10 +404,12 @@
     </div>
 </div>
 
-<!-- Floating Home Button -->
 <button class="home-button" onclick="goToPage('index.html')" title="Go to Home">🏠</button>
 
 <script>
+    // 🔴 YOUR PAYSTACK PUBLIC KEY 🔴
+    const PAYSTACK_PUBLIC_KEY = "pk_live_441686d15976154f119fe56e3f415638b7a649ac";
+    
     const firebaseConfig = {
         apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
         authDomain: "ernest-embassy-lms.firebaseapp.com",
@@ -443,6 +444,15 @@
         'igbo': 'Igbo Language'
     };
     
+    const subjectPrices = {
+        'mathematics': 100,
+        'physics': 100,
+        'chemistry': 100,
+        'english': 100,
+        'digital-technology': 100,
+        'igbo': 100
+    };
+    
     function goToPage(page) { window.location.href = page; }
     
     function changeSubject() {
@@ -464,7 +474,7 @@
     function selectMode(mode) {
         currentMode = mode;
         if (mode === 'free') {
-            TIME_PER_QUESTION = 0; // No time limit
+            TIME_PER_QUESTION = 0;
             loadFreeQuestions();
         } else {
             checkPremiumAccess();
@@ -489,17 +499,17 @@
             TIME_PER_QUESTION = 5;
             loadPremiumQuestions();
         } else {
-            showPremiumPaymentModal();
+            showPaystackPaymentModal();
         }
     }
     
-    function showPremiumPaymentModal() {
+    function showPaystackPaymentModal() {
         const modal = document.createElement('div');
         modal.className = 'payment-modal';
         modal.innerHTML = `
             <div class="payment-content">
-                <div style="font-size: 3rem;">🏆</div>
-                <h2 style="color: #667eea;">Unlock Premium Quiz</h2>
+                <div style="font-size: 3rem;">💰</div>
+                <h2 style="color: #667eea;">Unlock ${formatSubjectName(currentSubject)} Premium Quiz</h2>
                 <div class="payment-amount">₦100</div>
                 
                 <div class="prize-info">
@@ -511,66 +521,97 @@
                     <p>✓ Leaderboard ranking</p>
                 </div>
                 
-                <div class="payment-details">
-                    <h4>📱 Payment Details:</h4>
-                    <p><strong>Opay / Palmpay:</strong> 08032607809</p>
-                    <p><strong>First Bank:</strong> 3113254386</p>
-                    <p><strong>Account Name:</strong> Damian Anielozie Okafor</p>
-                </div>
-                
-                <button onclick="confirmPremiumPayment('${currentSubject}')" style="background: linear-gradient(135deg, #11998e, #38ef7d); color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 10px;">✅ I Have Paid</button>
+                <button onclick="initializePaystackPayment()" style="background: linear-gradient(135deg, #11998e, #38ef7d); color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 10px;">
+                    💳 Pay ₦100 with Card
+                </button>
                 <button onclick="this.parentElement.parentElement.remove(); currentMode=null; document.getElementById('modeSelector').style.display='grid';" style="background: #e2e8f0; color: #4a5568; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; width: 100%;">Cancel</button>
             </div>
         `;
         document.body.appendChild(modal);
     }
     
-    // UPDATED: Enhanced payment confirmation with unique ID
-    async function confirmPremiumPayment(subject) {
-        // Check if user is logged in
+    function initializePaystackPayment() {
         if (!currentUser) {
-            alert("Please login first to record your payment.");
+            alert("Please login first to make payment.");
             window.location.href = "login.html";
             return;
         }
-
+        
+        const amount = subjectPrices[currentSubject] || 100;
+        const paymentRef = `QUIZ_${currentSubject}_${Date.now()}_${currentUser.uid.substring(0, 8)}`;
+        
+        const handler = PaystackPop.setup({
+            key: PAYSTACK_PUBLIC_KEY,
+            email: currentUser.email,
+            amount: amount * 100,
+            currency: 'NGN',
+            ref: paymentRef,
+            metadata: {
+                custom_fields: [
+                    {
+                        display_name: "Student Name",
+                        variable_name: "student_name",
+                        value: currentUser.displayName || currentUser.email.split('@')[0]
+                    },
+                    {
+                        display_name: "Subject",
+                        variable_name: "subject",
+                        value: currentSubject
+                    },
+                    {
+                        display_name: "User ID",
+                        variable_name: "user_id",
+                        value: currentUser.uid
+                    }
+                ]
+            },
+            callback: async function(response) {
+                console.log("Payment successful:", response);
+                await verifyAndUnlockPayment(response.reference, response.transaction);
+            },
+            onClose: function() {
+                alert('Payment window closed. You can try again when ready.');
+            }
+        });
+        
+        handler.openIframe();
+    }
+    
+    async function verifyAndUnlockPayment(reference, transactionRef) {
         try {
-            // Get the student's name from the database
+            const paymentId = `PAY_${reference}`;
             const studentDoc = await db.collection('students').doc(currentUser.uid).get();
             const studentName = studentDoc.data()?.fullName || currentUser.email?.split('@')[0] || 'User';
             
-            // Create a unique payment ID
-            const paymentId = `PAY_${Date.now()}_${currentUser.uid.substring(0, 8)}`;
-            
-            // Save payment request to Firestore
             await db.collection('payments').doc(paymentId).set({
                 paymentId: paymentId,
+                transactionRef: transactionRef,
                 userId: currentUser.uid,
                 userEmail: currentUser.email,
                 userName: studentName,
-                subject: subject,
+                subject: currentSubject,
                 amount: 100,
-                status: 'pending',
+                status: 'verified',
                 paymentDate: firebase.firestore.FieldValue.serverTimestamp(),
-                paymentMethod: 'manual_bank_transfer',
-                notes: 'Student confirmed payment via bank transfer'
+                paymentMethod: 'paystack',
+                reference: reference
             });
             
-            console.log("✅ Payment saved successfully with ID:", paymentId);
+            const studentRef = db.collection('students').doc(currentUser.uid);
+            const paidQuizzes = studentDoc.data()?.paidQuizzes || [];
+            if (!paidQuizzes.includes(currentSubject)) {
+                paidQuizzes.push(currentSubject);
+                await studentRef.update({ paidQuizzes: paidQuizzes });
+            }
             
-            alert(`✅ Payment request submitted for ${formatSubjectName(subject)}!\n\nPayment ID: ${paymentId}\n\nOur team will verify and unlock your access within 24 hours.`);
+            alert(`✅ Payment successful! ${formatSubjectName(currentSubject)} premium quiz unlocked instantly!`);
             
-            // Close modal
             document.querySelectorAll('.payment-modal').forEach(m => m.remove());
-            
-            // Reload to update status
-            setTimeout(() => {
-                location.reload();
-            }, 2000);
+            location.reload();
             
         } catch (error) {
-            console.error("❌ Payment submission error:", error);
-            alert("Error submitting payment request. Please contact support.\n\nError: " + error.message);
+            console.error("Error saving payment:", error);
+            alert("Payment was successful but we couldn't update your account. Please contact support.");
         }
     }
     
@@ -580,27 +621,39 @@
         
         try {
             const docRef = db.collection("questions_free").doc(currentSubject);
-            let docSnap = await docRef.get();
+            const docSnap = await docRef.get();
             
             if (!docSnap.exists) {
-                // Fallback to main questions collection
-                const mainRef = db.collection("questions").doc(currentSubject);
-                docSnap = await mainRef.get();
-            }
-            
-            if (!docSnap.exists) {
-                interfaceDiv.innerHTML = `<div class="status-message"><h2>No Questions Found</h2><p>Practice questions coming soon!</p></div>`;
+                interfaceDiv.innerHTML = `
+                    <div class="status-message">
+                        <div style="font-size: 4rem; margin: 20px;">📚</div>
+                        <h2 style="color: #667eea;">No Free Questions Yet</h2>
+                        <p style="margin: 20px 0; color: #718096;">
+                            Free practice questions for ${formatSubjectName(currentSubject)} are being added.
+                        </p>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" onclick="location.reload()">🔄 Refresh</button>
+                            <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Education Hub</button>
+                        </div>
+                    </div>
+                `;
                 return;
             }
             
             const data = docSnap.data();
             const allQuestions = data.questions || [];
-            randomizedQuestions = shuffleArray(allQuestions).slice(0, 30);
             
+            if (allQuestions.length === 0) {
+                interfaceDiv.innerHTML = `<div class="status-message"><h2>No Questions Available</h2><p>Free practice questions coming soon!</p></div>`;
+                return;
+            }
+            
+            randomizedQuestions = shuffleArray(allQuestions).slice(0, Math.min(30, allQuestions.length));
             document.getElementById('modeSelector').style.display = 'none';
             startQuiz();
         } catch (error) {
-            interfaceDiv.innerHTML = `<div class="status-message error-box">Error loading questions: ${error.message}</div>`;
+            console.error("Error loading free questions:", error);
+            interfaceDiv.innerHTML = `<div class="error-box" style="color: red; padding: 20px;">Error loading questions: ${error.message}</div>`;
         }
     }
     
@@ -610,27 +663,39 @@
         
         try {
             const docRef = db.collection("questions_premium").doc(currentSubject);
-            let docSnap = await docRef.get();
+            const docSnap = await docRef.get();
             
             if (!docSnap.exists) {
-                // Fallback to main questions
-                const mainRef = db.collection("questions").doc(currentSubject);
-                docSnap = await mainRef.get();
-            }
-            
-            if (!docSnap.exists) {
-                interfaceDiv.innerHTML = `<div class="status-message"><h2>No Premium Questions Found</h2><p>More questions being added!</p></div>`;
+                interfaceDiv.innerHTML = `
+                    <div class="status-message">
+                        <div style="font-size: 4rem; margin: 20px;">🏆</div>
+                        <h2 style="color: #667eea;">Premium Questions Coming Soon</h2>
+                        <p style="margin: 20px 0; color: #718096;">
+                            Premium questions for ${formatSubjectName(currentSubject)} are being added.
+                        </p>
+                        <div class="action-buttons">
+                            <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Education Hub</button>
+                            <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Home</button>
+                        </div>
+                    </div>
+                `;
                 return;
             }
             
             const data = docSnap.data();
             const allQuestions = data.questions || [];
-            randomizedQuestions = shuffleArray(allQuestions).slice(0, 50);
             
+            if (allQuestions.length === 0) {
+                interfaceDiv.innerHTML = `<div class="status-message"><h2>No Premium Questions Available</h2><p>Check back soon!</p></div>`;
+                return;
+            }
+            
+            randomizedQuestions = shuffleArray(allQuestions).slice(0, Math.min(50, allQuestions.length));
             document.getElementById('modeSelector').style.display = 'none';
             startQuiz();
         } catch (error) {
-            interfaceDiv.innerHTML = `<div class="status-message error-box">Error loading questions: ${error.message}</div>`;
+            console.error("Error loading premium questions:", error);
+            interfaceDiv.innerHTML = `<div class="error-box" style="color: red; padding: 20px;">Error loading questions: ${error.message}</div>`;
         }
     }
     
@@ -657,7 +722,7 @@
     }
     
     function startTimer() {
-        if (TIME_PER_QUESTION === 0) return; // No timer for free mode
+        if (TIME_PER_QUESTION === 0) return;
         
         if (timerInterval) clearInterval(timerInterval);
         timeLeft = TIME_PER_QUESTION;

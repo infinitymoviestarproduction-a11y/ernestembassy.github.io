@@ -319,6 +319,44 @@
         .prize-info { background: #fff3cd; padding: 15px; border-radius: 12px; margin: 15px 0; text-align: left; }
         .prize-info h4 { color: #f39c12; margin-bottom: 10px; }
         
+        .paystack-btn {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            margin-bottom: 10px;
+            font-size: 16px;
+            transition: transform 0.2s;
+        }
+        .paystack-btn:hover {
+            transform: scale(1.02);
+        }
+        .payment-methods {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 12px;
+        }
+        .payment-method {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: #666;
+        }
+        .payment-method span {
+            font-size: 20px;
+        }
+        
         @media (max-width: 768px) {
             .nav-container { flex-direction: column; gap: 15px; }
             .home-button { bottom: 20px; right: 20px; width: 50px; height: 50px; font-size: 20px; }
@@ -521,13 +559,51 @@
                     <p>✓ Leaderboard ranking</p>
                 </div>
                 
-                <button onclick="initializePaystackPayment()" style="background: linear-gradient(135deg, #11998e, #38ef7d); color: white; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 10px;">
-                    💳 Pay ₦100 with Card
+                <div class="payment-methods">
+                    <div class="payment-method">
+                        <span>💳</span>
+                        <span>Card</span>
+                    </div>
+                    <div class="payment-method">
+                        <span>🏦</span>
+                        <span>Bank Transfer</span>
+                    </div>
+                    <div class="payment-method">
+                        <span>📱</span>
+                        <span>USSD</span>
+                    </div>
+                    <div class="payment-method">
+                        <span>💚</span>
+                        <span>Opay</span>
+                    </div>
+                    <div class="payment-method">
+                        <span>🧡</span>
+                        <span>Palmpay</span>
+                    </div>
+                </div>
+                
+                <button id="paystackPaymentBtn" class="paystack-btn">
+                    💳 Pay ₦100 Now
                 </button>
-                <button onclick="this.parentElement.parentElement.remove(); currentMode=null; document.getElementById('modeSelector').style.display='grid';" style="background: #e2e8f0; color: #4a5568; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; width: 100%;">Cancel</button>
+                <button onclick="closePaymentModal(this)" style="background: #e2e8f0; color: #4a5568; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; width: 100%;">Cancel</button>
             </div>
         `;
         document.body.appendChild(modal);
+        
+        // Add event listener to the button after it's created
+        const payBtn = document.getElementById('paystackPaymentBtn');
+        if (payBtn) {
+            payBtn.addEventListener('click', function() {
+                initializePaystackPayment();
+            });
+        }
+    }
+    
+    function closePaymentModal(btn) {
+        const modal = btn.closest('.payment-modal');
+        if (modal) modal.remove();
+        currentMode = null;
+        document.getElementById('modeSelector').style.display = 'grid';
     }
     
     function initializePaystackPayment() {
@@ -570,7 +646,7 @@
                 await verifyAndUnlockPayment(response.reference, response.transaction);
             },
             onClose: function() {
-                alert('Payment window closed. You can try again when ready.');
+                console.log("Payment window closed");
             }
         });
         

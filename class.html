@@ -3,396 +3,862 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Arena - Ernest Embassy LMS</title>
-    
+    <title>Quiz Arena — Ernest Embassy LMS</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
-    
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body { 
-            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #2d3748;
+        :root {
+            --ink: #0f0e17;
+            --paper: #fffffe;
+            --cream: #f5f0eb;
+            --gold: #e8b94f;
+            --gold-deep: #c8960f;
+            --jade: #1a8c6e;
+            --jade-light: #22b88f;
+            --ruby: #d64045;
+            --sky: #3d7eff;
+            --muted: #6b6a74;
+            --border: #e2ddd8;
+            --shadow: 0 4px 24px rgba(15,14,23,0.08);
+            --shadow-lg: 0 12px 48px rgba(15,14,23,0.14);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-pill: 100px;
         }
-        
-        nav { 
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem 0;
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--cream);
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        /* ── NAV ── */
+        nav {
+            background: var(--paper);
+            border-bottom: 1px solid var(--border);
+            padding: 0 24px;
             position: sticky;
             top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 900;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-        
-        .nav-container { 
-            max-width: 1200px; 
-            margin: 0 auto; 
-            padding: 0 20px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            flex-wrap: wrap; 
-        }
-        
-        .logo { 
-            font-size: 1.4rem; 
-            font-weight: bold; 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1.15rem;
+            color: var(--ink);
             text-decoration: none;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             cursor: pointer;
         }
-        
-        .nav-links { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; }
-        .nav-links a, .nav-link { 
-            color: #4a5568; 
-            text-decoration: none; 
-            font-weight: 500; 
-            font-size: 0.9rem; 
-            padding: 8px 12px;
-            transition: all 0.3s ease;
+        .logo-dot { width: 8px; height: 8px; background: var(--gold); border-radius: 50%; display: inline-block; }
+        .nav-links { display: flex; gap: 4px; align-items: center; }
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: var(--radius-pill);
+            transition: all 0.2s;
+        }
+        .nav-links a:hover { background: var(--cream); color: var(--ink); }
+        .nav-user {
+            background: var(--ink);
+            color: var(--paper);
+            border: none;
+            padding: 7px 16px;
+            border-radius: var(--radius-pill);
+            font-size: 0.825rem;
+            font-weight: 600;
             cursor: pointer;
-            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            transition: opacity 0.2s;
         }
-        .nav-links a:hover, .nav-link:hover { 
-            color: #667eea; 
-            background: rgba(102, 126, 234, 0.1);
-            transform: translateY(-2px);
-        }
-        
-        .hero { 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            text-align: center; 
-            padding: 60px 20px;
+        .nav-user:hover { opacity: 0.85; }
+
+        /* ── HERO ── */
+        .hero {
+            background: var(--ink);
+            padding: 56px 24px 48px;
+            text-align: center;
             position: relative;
             overflow: hidden;
         }
-        
-        .hero h1 { 
-            font-size: 2.5rem; 
-            color: white; 
-            margin-bottom: 15px;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 30% 50%, rgba(232,185,79,0.12) 0%, transparent 60%),
+                        radial-gradient(ellipse at 70% 50%, rgba(61,126,255,0.10) 0%, transparent 60%);
         }
-        
-        .hero p { color: rgba(255,255,255,0.95); font-size: 1.1rem; }
-        
-        .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
-        
-        .mode-selector {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-        
-        .mode-card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border: 2px solid transparent;
-        }
-        
-        .mode-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        }
-        
-        .mode-card.free {
-            border-top: 4px solid #11998e;
-        }
-        
-        .mode-card.premium {
-            border-top: 4px solid #f39c12;
-        }
-        
-        .mode-icon { font-size: 3rem; margin-bottom: 15px; }
-        .mode-title { font-size: 1.5rem; font-weight: bold; margin-bottom: 10px; }
-        .mode-price { font-size: 1.2rem; color: #11998e; font-weight: bold; margin: 10px 0; }
-        .mode-features { list-style: none; margin: 15px 0; text-align: left; }
-        .mode-features li { padding: 5px 0; display: flex; align-items: center; gap: 8px; color: #666; }
-        .mode-features li:before { content: "✓"; color: #11998e; font-weight: bold; }
-        .btn-select { 
-            background: linear-gradient(135deg, #667eea, #764ba2); 
-            color: white; 
-            border: none; 
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 15px;
-        }
-        
-        .prize-banner {
-            background: linear-gradient(135deg, #f39c12, #e67e22);
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 30px;
-            color: white;
-            text-align: center;
-        }
-        .prize-amount { font-size: 2rem; font-weight: bold; }
-        .leaderboard-link { color: white; margin-top: 10px; display: inline-block; }
-        
-        .quiz-section { 
-            background: white; 
-            border-radius: 20px; 
-            padding: 35px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-        }
-        
-        .btn { 
-            padding: 12px 25px; 
-            border: none; 
-            border-radius: 50px; 
-            font-weight: 600; 
-            cursor: pointer; 
-            font-size: 1rem; 
-            margin: 5px;
-            transition: all 0.3s ease;
-            font-family: inherit;
+        .hero-tag {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            background: rgba(232,185,79,0.15);
+            border: 1px solid rgba(232,185,79,0.3);
+            color: var(--gold);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 5px 14px;
+            border-radius: var(--radius-pill);
+            margin-bottom: 20px;
         }
-        
-        .btn-success { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; }
-        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-        .btn-warning { background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%); color: white; }
-        .btn-secondary { background: #e2e8f0; color: #4a5568; }
-        
-        .status-message { text-align: center; font-size: 1.1rem; color: #718096; padding: 40px 0; }
-        .loading-spinner { 
-            border: 4px solid #e2e8f0;
-            border-top: 4px solid #667eea;
-            border-radius: 50%; 
-            width: 50px; 
-            height: 50px; 
-            animation: spin 1s linear infinite; 
-            margin: 20px auto; 
+        .hero h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 800;
+            color: var(--paper);
+            line-height: 1.1;
+            letter-spacing: -1px;
+            position: relative;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        .option-item { 
-            background: #f7fafc;
-            border: 2px solid #e2e8f0;
-            padding: 15px 20px;
-            margin: 12px 0;
-            border-radius: 12px;
-            cursor: pointer;
-            width: 100%;
-            text-align: left;
-            color: #2d3748;
+        .hero-sub {
+            color: rgba(255,255,255,0.55);
             font-size: 1rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
+            margin-top: 12px;
+            position: relative;
         }
-        
-        .option-item:hover:not([disabled]) { 
-            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-            border-color: #667eea;
-            transform: translateX(5px);
-        }
-        
-        .option-item.correct { 
-            background: linear-gradient(135deg, #11998e20 0%, #38ef7d20 100%);
-            border-color: #11998e;
-            color: #11998e;
-            font-weight: bold;
-        }
-        
-        .option-item.incorrect { 
-            background: linear-gradient(135deg, #eb334920 0%, #f45c4320 100%);
-            border-color: #eb3349;
-            color: #eb3349;
-        }
-        
-        .option-item:disabled { cursor: not-allowed; opacity: 0.8; }
-        
-        .question-text { font-size: 1.35rem; margin: 25px 0; color: #2d3748; line-height: 1.6; font-weight: 600; }
-        
-        .quiz-meta { 
+
+        /* ── PRIZE STRIP ── */
+        .prize-strip {
+            background: linear-gradient(90deg, var(--gold-deep), var(--gold), var(--gold-deep));
+            padding: 14px 24px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #e2e8f0;
+            justify-content: center;
+            gap: 20px;
             flex-wrap: wrap;
-            gap: 15px;
         }
-        
-        .timer-container {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            padding: 8px 16px;
-            border-radius: 40px;
-            color: white;
-            font-weight: bold;
+        .prize-strip span { font-weight: 700; font-size: 0.95rem; color: var(--ink); }
+        .prize-strip a {
+            color: var(--ink);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+            background: rgba(0,0,0,0.12);
+            padding: 4px 14px;
+            border-radius: var(--radius-pill);
+            transition: background 0.2s;
+        }
+        .prize-strip a:hover { background: rgba(0,0,0,0.22); }
+
+        /* ── MAIN CONTAINER ── */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+
+        /* ── SUBJECT BAR ── */
+        .subject-bar {
+            background: var(--paper);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow);
+            flex-wrap: wrap;
+        }
+        .subject-bar label {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            white-space: nowrap;
+        }
+        .subject-bar select {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--ink);
+            background: var(--cream);
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .subject-bar select:focus { border-color: var(--gold); }
+
+        /* ── MODE CARDS ── */
+        .mode-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+        @media (max-width: 600px) { .mode-grid { grid-template-columns: 1fr; } }
+
+        .mode-card {
+            background: var(--paper);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+        .mode-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+        }
+        .mode-card.free::after { background: var(--jade); }
+        .mode-card.premium::after { background: linear-gradient(90deg, var(--gold), var(--gold-deep)); }
+        .mode-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: transparent;
+        }
+        .mode-card.free:hover { border-color: var(--jade); }
+        .mode-card.premium:hover { border-color: var(--gold); }
+
+        .mode-icon { font-size: 2.4rem; margin-bottom: 12px; }
+        .mode-label {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-bottom: 4px;
+        }
+        .mode-price {
+            font-size: 1.5rem;
+            font-weight: 800;
+            font-family: 'Syne', sans-serif;
+            margin: 8px 0 16px;
+        }
+        .mode-card.free .mode-price { color: var(--jade); }
+        .mode-card.premium .mode-price { color: var(--gold-deep); }
+
+        .mode-features { list-style: none; margin-bottom: 20px; }
+        .mode-features li {
             display: flex;
             align-items: center;
             gap: 8px;
+            padding: 5px 0;
+            font-size: 0.88rem;
+            color: var(--muted);
         }
-        
-        .timer-number { font-size: 1.3rem; font-weight: bold; background: white; color: #667eea; padding: 4px 12px; border-radius: 30px; min-width: 60px; text-align: center; }
-        .timer-warning { animation: pulse 0.5s ease-in-out infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
-        
-        .home-button {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .mode-features li::before {
+            content: '';
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .mode-card.free .mode-features li::before { background: var(--jade); }
+        .mode-card.premium .mode-features li::before { background: var(--gold); }
+
+        .mode-cta {
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--radius-pill);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .mode-card.free .mode-cta { background: var(--jade); color: white; }
+        .mode-card.free .mode-cta:hover { background: #147a5c; }
+        .mode-card.premium .mode-cta { background: var(--gold); color: var(--ink); }
+        .mode-card.premium .mode-cta:hover { background: var(--gold-deep); color: white; }
+
+        .badge-24h {
+            display: inline-block;
+            background: rgba(232,185,79,0.15);
+            color: var(--gold-deep);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            padding: 2px 8px;
+            border-radius: var(--radius-pill);
+            border: 1px solid rgba(232,185,79,0.4);
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        /* ── QUIZ PANEL ── */
+        .quiz-panel {
+            background: var(--paper);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 36px;
+            box-shadow: var(--shadow);
+            min-height: 200px;
+        }
+
+        /* ── STATUS / LOADING ── */
+        .status-box {
+            text-align: center;
+            padding: 48px 20px;
+            color: var(--muted);
+        }
+        .spinner {
+            width: 44px; height: 44px;
+            border: 3px solid var(--border);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── QUIZ META BAR ── */
+        .quiz-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+        .meta-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: var(--radius-pill);
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+        .meta-subject { background: var(--cream); color: var(--muted); border: 1px solid var(--border); }
+        .meta-progress { background: var(--ink); color: white; }
+
+        /* ── TIMER ── */
+        .timer-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .timer-ring {
+            position: relative;
+            width: 54px;
+            height: 54px;
+        }
+        .timer-ring svg { transform: rotate(-90deg); }
+        .timer-ring circle {
+            fill: none;
+            stroke-width: 4;
+        }
+        .timer-track { stroke: var(--border); }
+        .timer-arc {
+            stroke: var(--gold);
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s linear, stroke 0.3s;
+        }
+        .timer-arc.danger { stroke: var(--ruby); }
+        .timer-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .timer-label { font-size: 0.78rem; color: var(--muted); font-weight: 500; }
+
+        /* ── QUESTION ── */
+        .question-text {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--ink);
+            line-height: 1.55;
+            margin-bottom: 24px;
+        }
+
+        /* ── OPTIONS ── */
+        .options-grid { display: flex; flex-direction: column; gap: 10px; }
+        .option-btn {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            width: 100%;
+            padding: 16px 20px;
+            background: var(--cream);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.97rem;
+            font-weight: 500;
+            color: var(--ink);
+            text-align: left;
+            transition: all 0.2s;
+        }
+        .option-btn:hover:not([disabled]) {
+            border-color: var(--gold);
+            background: rgba(232,185,79,0.06);
+            transform: translateX(4px);
+        }
+        .option-letter {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            background: var(--border);
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+        .option-btn:hover:not([disabled]) .option-letter {
+            background: var(--gold);
+            color: var(--ink);
+        }
+        .option-btn.correct {
+            border-color: var(--jade);
+            background: rgba(26,140,110,0.07);
+            color: var(--jade);
+        }
+        .option-btn.correct .option-letter { background: var(--jade); color: white; }
+        .option-btn.incorrect {
+            border-color: var(--ruby);
+            background: rgba(214,64,69,0.07);
+            color: var(--ruby);
+        }
+        .option-btn.incorrect .option-letter { background: var(--ruby); color: white; }
+        .option-btn:disabled { cursor: not-allowed; }
+
+        /* ── EXPLANATION ── */
+        .explanation-box {
+            margin-top: 20px;
+            padding: 16px 20px;
+            background: #f0faf5;
+            border-left: 3px solid var(--jade);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            display: none;
+        }
+        .explanation-box.wrong {
+            background: #fef5f5;
+            border-left-color: var(--ruby);
+        }
+        .explanation-box.timeout {
+            background: #fffbf0;
+            border-left-color: var(--gold);
+        }
+
+        .next-btn-wrap { margin-top: 24px; text-align: right; display: none; }
+        .btn-next {
+            background: var(--ink);
             color: white;
-            width: 60px;
-            height: 60px;
+            border: none;
+            padding: 12px 28px;
+            border-radius: var(--radius-pill);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn-next:hover { opacity: 0.8; }
+
+        /* ── RESULT SCREEN ── */
+        .result-wrap { text-align: center; padding: 20px; }
+        .result-score {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(3rem, 10vw, 5rem);
+            font-weight: 800;
+            line-height: 1;
+            margin: 16px 0;
+        }
+        .result-label { font-size: 1rem; color: var(--muted); margin-bottom: 8px; }
+        .result-message {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 12px 0 28px;
+        }
+        .result-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .btn-restart, .btn-hub {
+            padding: 12px 26px;
+            border-radius: var(--radius-pill);
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .btn-restart { background: var(--jade); color: white; }
+        .btn-restart:hover { background: #147a5c; }
+        .btn-hub { background: var(--cream); border: 1.5px solid var(--border); color: var(--ink); }
+        .btn-hub:hover { background: var(--border); }
+
+        /* ── PAYMENT MODAL ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15,14,23,0.75);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+            animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal-card {
+            background: var(--paper);
+            border-radius: 24px;
+            max-width: 460px;
+            width: 100%;
+            overflow: hidden;
+            box-shadow: 0 32px 80px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .modal-header {
+            background: var(--ink);
+            padding: 28px 28px 24px;
+            text-align: center;
+            position: relative;
+        }
+        .modal-header h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--paper);
+            margin-top: 8px;
+        }
+        .modal-header p { color: rgba(255,255,255,0.6); font-size: 0.88rem; margin-top: 6px; }
+        .modal-close-x {
+            position: absolute;
+            top: 16px; right: 16px;
+            background: rgba(255,255,255,0.12);
+            border: none;
+            color: white;
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .modal-body { padding: 24px 28px; }
+
+        .price-display {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .price-display .amount {
+            font-family: 'Syne', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--gold-deep);
+        }
+        .price-display .currency { font-size: 1.5rem; vertical-align: super; }
+        .price-display .period {
+            display: block;
+            font-size: 0.82rem;
+            color: var(--muted);
+            margin-top: -4px;
+            font-weight: 500;
+        }
+
+        .perks-list {
+            list-style: none;
+            background: var(--cream);
+            border-radius: var(--radius-sm);
+            padding: 16px 20px;
+            margin-bottom: 20px;
+        }
+        .perks-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 0;
+            font-size: 0.88rem;
+            color: var(--ink);
+        }
+        .perks-list li .perk-icon { font-size: 1rem; }
+
+        .methods-row {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .method-chip {
+            background: var(--cream);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-pill);
+            padding: 6px 12px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .pay-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--gold);
+            color: var(--ink);
+            border: none;
+            border-radius: var(--radius-pill);
+            font-family: 'Syne', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .pay-btn:hover { background: var(--gold-deep); color: white; transform: scale(1.01); }
+        .pay-btn:active { transform: scale(0.99); }
+
+        .cancel-btn {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-pill);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .cancel-btn:hover { background: var(--cream); }
+
+        .security-note {
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-top: 14px;
+        }
+
+        /* ── LEADERBOARD ── */
+        .leaderboard-section {
+            background: var(--paper);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            margin-top: 32px;
+            box-shadow: var(--shadow);
+        }
+        .lb-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .lb-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+        .lb-month {
+            font-size: 0.82rem;
+            color: var(--muted);
+            background: var(--cream);
+            padding: 5px 12px;
+            border-radius: var(--radius-pill);
+        }
+        .lb-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+        .lb-tab {
+            padding: 7px 16px;
+            border-radius: var(--radius-pill);
+            border: 1.5px solid var(--border);
+            background: transparent;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--muted);
+            transition: all 0.2s;
+        }
+        .lb-tab.active {
+            background: var(--ink);
+            color: white;
+            border-color: var(--ink);
+        }
+        .lb-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .lb-row:last-child { border-bottom: none; }
+        .lb-rank {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 1rem;
+            width: 28px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .lb-rank.gold { color: #c8960f; }
+        .lb-rank.silver { color: #8a8a9a; }
+        .lb-rank.bronze { color: #a0522d; }
+        .lb-avatar {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            background: var(--ink);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+        .lb-info { flex: 1; }
+        .lb-name { font-weight: 600; font-size: 0.93rem; }
+        .lb-sub { font-size: 0.78rem; color: var(--muted); margin-top: 1px; }
+        .lb-score {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+        .lb-score.high { color: var(--jade); }
+        .lb-score.mid { color: var(--gold-deep); }
+        .lb-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+        .lb-loading { text-align: center; padding: 40px; }
+
+        /* ── HOME FAB ── */
+        .home-fab {
+            position: fixed;
+            bottom: 28px; right: 28px;
+            width: 52px; height: 52px;
+            background: var(--ink);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-            z-index: 1000;
-            font-size: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
             border: none;
-        }
-        .home-button:hover { transform: scale(1.1); }
-        
-        .subject-selector {
-            background: white;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        .subject-selector select {
-            padding: 10px 20px;
-            border-radius: 8px;
-            border: 2px solid #e2e8f0;
-            font-size: 1rem;
-            margin-left: 10px;
-            cursor: pointer;
-        }
-        
-        .payment-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-        .payment-content {
-            background: white;
-            max-width: 500px;
-            width: 90%;
-            padding: 30px;
-            border-radius: 20px;
-            text-align: center;
-            animation: modalPop 0.3s ease;
-        }
-        @keyframes modalPop {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-        .payment-amount { font-size: 2.5rem; color: #11998e; font-weight: bold; margin: 15px 0; }
-        
-        .prize-info { background: #fff3cd; padding: 15px; border-radius: 12px; margin: 15px 0; text-align: left; }
-        .prize-info h4 { color: #f39c12; margin-bottom: 10px; }
-        
-        .paystack-btn {
-            background: linear-gradient(135deg, #11998e, #38ef7d);
             color: white;
-            border: none;
-            padding: 14px 30px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            width: 100%;
-            margin-bottom: 10px;
-            font-size: 16px;
-            transition: transform 0.2s;
+            font-size: 1.2rem;
+            transition: all 0.25s;
+            z-index: 800;
         }
-        .paystack-btn:hover {
-            transform: scale(1.02);
+        .home-fab:hover { transform: scale(1.1); background: #2a2930; }
+
+        /* ── TOAST ── */
+        .toast {
+            position: fixed;
+            bottom: 90px; right: 28px;
+            background: var(--ink);
+            color: white;
+            padding: 12px 20px;
+            border-radius: var(--radius-sm);
+            font-size: 0.88rem;
+            font-weight: 500;
+            z-index: 9998;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            max-width: 300px;
         }
-        .payment-methods {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            margin: 20px 0;
-            padding: 15px;
-            background: #f7fafc;
-            border-radius: 12px;
-        }
-        .payment-method {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            font-size: 12px;
-            color: #666;
-        }
-        .payment-method span {
-            font-size: 20px;
-        }
-        
-        @media (max-width: 768px) {
-            .nav-container { flex-direction: column; gap: 15px; }
-            .home-button { bottom: 20px; right: 20px; width: 50px; height: 50px; font-size: 20px; }
-            .mode-selector { grid-template-columns: 1fr; }
+        .toast.show { transform: translateX(0); }
+        .toast.success { border-left: 3px solid var(--jade); }
+        .toast.error { border-left: 3px solid var(--ruby); }
+        .toast.warning { border-left: 3px solid var(--gold); }
+
+        @media (max-width: 600px) {
+            nav { flex-wrap: wrap; height: auto; padding: 12px 16px; gap: 10px; }
+            .quiz-panel { padding: 20px; }
+            .modal-body { padding: 20px; }
+            .home-fab { bottom: 20px; right: 20px; width: 46px; height: 46px; }
         }
     </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav>
-    <div class="nav-container">
-        <div class="logo" onclick="goToPage('index.html')">⚡ Ernest Embassy LMS</div>
-        <div class="nav-links">
-            <a href="#" onclick="goToPage('dashboard.html')">Dashboard</a>
-            <a href="#" onclick="goToPage('courses.html')">Courses</a>
-            <a href="#" onclick="goToPage('resources.html')">Resources</a>
-            <a href="#" onclick="goToPage('education.html')" class="nav-link">🎓 Education Hub</a>
-        </div>
+    <div class="logo" onclick="goTo('index.html')">
+        <span class="logo-dot"></span> Ernest Embassy LMS
     </div>
+    <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="courses.html">Courses</a>
+        <a href="education.html">Education Hub</a>
+    </div>
+    <button class="nav-user" id="navUserBtn" onclick="handleNavUser()">Sign In</button>
 </nav>
 
+<!-- HERO -->
 <div class="hero">
-    <h1>🎯 Quiz Challenge Arena</h1>
-    <p>Practice for free or compete for ₦10,000 monthly prize! 🏆</p>
+    <div class="hero-tag">🎯 Quiz Challenge Arena</div>
+    <h1>Test Your Knowledge<br>Win Real Prizes</h1>
+    <p class="hero-sub">Practice for free · Compete for ₦10,000 monthly</p>
 </div>
 
+<!-- PRIZE STRIP -->
+<div class="prize-strip">
+    <span>🏆 ₦10,000 Monthly Prize Draw</span>
+    <span>·</span>
+    <span>Top performers qualify each month</span>
+    <a href="#leaderboard" onclick="scrollToLeaderboard()">View Leaderboard →</a>
+</div>
+
+<!-- MAIN -->
 <div class="container">
-    <div class="prize-banner">
-        <div class="prize-amount">🏆 ₦10,000 Monthly Draw 🏆</div>
-        <p>Top performers in Premium Quiz qualify for monthly prize draw!</p>
-        <p style="font-size: 0.9rem; margin-top: 5px;">Plus: Certificate of Recognition for all premium participants</p>
-        <a href="#" class="leaderboard-link" onclick="showLeaderboard()">📊 View Leaderboard →</a>
-    </div>
-    
-    <div class="subject-selector">
-        <label style="font-weight: 600; color: #4a5568;">📚 Select Subject: </label>
-        <select id="subjectSelect" onchange="changeSubject()">
+
+    <!-- SUBJECT BAR -->
+    <div class="subject-bar">
+        <label>📚 Subject</label>
+        <select id="subjectSelect" onchange="onSubjectChange()">
             <option value="mathematics">📐 Mathematics</option>
             <option value="physics">⚛️ Physics</option>
             <option value="chemistry">🧪 Chemistry</option>
@@ -401,632 +867,731 @@
             <option value="igbo">🗣️ Igbo Language</option>
         </select>
     </div>
-    
-    <div class="mode-selector" id="modeSelector">
+
+    <!-- MODE CARDS -->
+    <div class="mode-grid" id="modeGrid">
+        <!-- FREE -->
         <div class="mode-card free" onclick="selectMode('free')">
             <div class="mode-icon">📝</div>
-            <div class="mode-title">Free Test</div>
+            <div class="mode-label">Free Practice</div>
             <div class="mode-price">FREE</div>
             <ul class="mode-features">
                 <li>Unlimited time per question</li>
-                <li>Practice questions (50 per subject)</li>
-                <li>Learn at your own pace</li>
+                <li>30 randomized questions</li>
                 <li>Instant explanations</li>
-                <li>Certificate of completion</li>
+                <li>Practice at your own pace</li>
+                <li>No registration needed</li>
             </ul>
-            <button class="btn-select">Start Free Test →</button>
+            <button class="mode-cta">Start Free Practice →</button>
         </div>
-        
+
+        <!-- PREMIUM -->
         <div class="mode-card premium" onclick="selectMode('premium')">
             <div class="mode-icon">🏆</div>
-            <div class="mode-title">Premium Quiz</div>
+            <div class="mode-label">Premium Competition <span class="badge-24h">24 HRS</span></div>
             <div class="mode-price">₦100</div>
             <ul class="mode-features">
-                <li>5 seconds per question ⏱️</li>
-                <li>500+ advanced questions</li>
-                <li>Compete for ₦10,000 monthly prize</li>
+                <li>8 seconds per question ⏱️</li>
+                <li>50 advanced competition questions</li>
+                <li>Compete for ₦10,000 monthly</li>
                 <li>Certificate of Recognition</li>
-                <li>Leaderboard ranking</li>
-                <li>Bragging rights! 🏆</li>
+                <li>Live leaderboard ranking</li>
+                <li>Access valid 24 hours from payment</li>
             </ul>
-            <button class="btn-select">Enter Competition →</button>
+            <button class="mode-cta">Enter Competition →</button>
         </div>
     </div>
-    
-    <div class="quiz-section" id="quizInterface">
-        <div class="status-message">
-            <div class="loading-spinner"></div>
-            <p style="margin-top: 20px;">🎮 Select a mode above to begin...</p>
+
+    <!-- QUIZ PANEL -->
+    <div class="quiz-panel" id="quizPanel">
+        <div class="status-box">
+            <div style="font-size: 3rem; margin-bottom: 12px;">🎮</div>
+            <p>Choose a mode above to begin your quiz</p>
         </div>
     </div>
+
+    <!-- LEADERBOARD -->
+    <div class="leaderboard-section" id="leaderboard">
+        <div class="lb-header">
+            <div>
+                <div class="lb-title">🏆 Leaderboard</div>
+                <div style="font-size: 0.82rem; color: var(--muted); margin-top: 4px;" id="lbMonthLabel"></div>
+            </div>
+            <span class="lb-month" id="lbPrizeLabel">₦10,000 Prize Pool</span>
+        </div>
+        <div class="lb-tabs" id="lbTabs"></div>
+        <div id="lbContent">
+            <div class="lb-loading"><div class="spinner"></div></div>
+        </div>
+    </div>
+
 </div>
 
-<button class="home-button" onclick="goToPage('index.html')" title="Go to Home">🏠</button>
+<!-- HOME FAB -->
+<button class="home-fab" onclick="goTo('index.html')" title="Home">🏠</button>
 
-<!-- Load Paystack script dynamically -->
-<script src="https://js.paystack.co/v1/inline.js"></script>
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
 <script>
-    // 🔴 YOUR PAYSTACK PUBLIC KEY 🔴
-    const PAYSTACK_PUBLIC_KEY = "pk_live_441686d15976154f119fe56e3f415638b7a649ac";
-    
-    // For testing, you can switch to test key by uncommenting below:
-    // const PAYSTACK_PUBLIC_KEY = "pk_test_13d4cf901bc48bc97c41220ebaacac5a03e9b448";
-    
-    const firebaseConfig = {
-        apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
-        authDomain: "ernest-embassy-lms.firebaseapp.com",
-        projectId: "ernest-embassy-lms",
-        storageBucket: "ernest-embassy-lms.firebasestorage.app",
-        messagingSenderId: "204896421221",
-        appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
-    };
-    
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    // SWITCHED TO REALTIME DATABASE (since your data is in RTDB, not Firestore)
-    const rtdb = firebase.database();
-    
-    let currentMode = null;
-    let loadedQuestions = [];
-    let randomizedQuestions = [];
-    let currentIndex = 0;
-    let score = 0;
-    let currentSubject = 'mathematics';
-    let currentUser = null;
-    let timerInterval = null;
-    let timeLeft = 0;
-    let isAnswered = false;
-    let TIME_PER_QUESTION = 0;
-    
-    const subjectNames = {
-        'mathematics': 'Mathematics',
-        'physics': 'Physics',
-        'chemistry': 'Chemistry',
-        'english': 'English Language',
-        'digital-technology': 'Digital Technology',
-        'igbo': 'Igbo Language'
-    };
-    
-    const subjectPrices = {
-        'mathematics': 100,
-        'physics': 100,
-        'chemistry': 100,
-        'english': 100,
-        'digital-technology': 100,
-        'igbo': 100
-    };
-    
-    function goToPage(page) { window.location.href = page; }
-    
-    function changeSubject() {
-        const select = document.getElementById('subjectSelect');
-        currentSubject = select.value;
-        document.getElementById('modeSelector').style.display = 'grid';
-        document.getElementById('quizInterface').innerHTML = `
-            <div class="status-message">
-                <p style="margin-top: 20px;">🎮 Select a mode above to begin...</p>
-            </div>
-        `;
-        currentMode = null;
+// ══════════════════════════════════════════════
+//  CONFIG
+// ══════════════════════════════════════════════
+const PAYSTACK_KEY = "pk_live_441686d15976154f119fe56e3f415638b7a649ac";
+const PREMIUM_PRICE = 100;         // ₦100
+const PREMIUM_DURATION_MS = 24 * 60 * 60 * 1000;  // 24 hours
+const TIME_PER_QUESTION_PREMIUM = 8; // seconds
+const TIME_PER_QUESTION_FREE = 0;    // unlimited
+const FREE_Q_LIMIT = 30;
+const PREMIUM_Q_LIMIT = 50;
+
+const SUBJECT_NAMES = {
+    mathematics: '📐 Mathematics',
+    physics: '⚛️ Physics',
+    chemistry: '🧪 Chemistry',
+    english: '📖 English',
+    'digital-technology': '💻 Digital Technology',
+    igbo: '🗣️ Igbo Language'
+};
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+    authDomain: "ernest-embassy-lms.firebaseapp.com",
+    projectId: "ernest-embassy-lms",
+    storageBucket: "ernest-embassy-lms.firebasestorage.app",
+    messagingSenderId: "204896421221",
+    appId: "1:204896421221:web:9407b523da68c3e5b88d8c",
+    databaseURL: "https://ernest-embassy-lms-default-rtdb.firebaseio.com"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth     = firebase.auth();
+const rtdb     = firebase.database();
+const firestore = firebase.firestore();
+
+// ══════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════
+let currentUser      = null;
+let currentMode      = null;
+let currentSubject   = 'mathematics';
+let questions        = [];
+let questionIndex    = 0;
+let score            = 0;
+let isAnswered       = false;
+let timerInterval    = null;
+let timeLeft         = 0;
+let timerMax         = 0;
+const CIRC           = 2 * Math.PI * 23; // SVG circle circumference
+
+// ══════════════════════════════════════════════
+//  UTILS
+// ══════════════════════════════════════════════
+function goTo(p) { window.location.href = p; }
+function esc(s) {
+    if (!s) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
     }
-    
-    function formatSubjectName(subjectId) {
-        return subjectNames[subjectId] || subjectId;
+    return a;
+}
+function showToast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast ${type} show`;
+    setTimeout(() => t.classList.remove('show'), 3500);
+}
+function subjectName(s) { return (SUBJECT_NAMES[s] || s).replace(/^[\S]+\s/, ''); }
+function onSubjectChange() {
+    currentSubject = document.getElementById('subjectSelect').value;
+    resetToModeSelect();
+}
+function resetToModeSelect() {
+    currentMode = null;
+    document.getElementById('modeGrid').style.display = 'grid';
+    document.getElementById('quizPanel').innerHTML = `
+        <div class="status-box">
+            <div style="font-size: 3rem; margin-bottom: 12px;">🎮</div>
+            <p>Choose a mode above to begin your quiz</p>
+        </div>`;
+    stopTimer();
+}
+function handleNavUser() {
+    if (currentUser) { auth.signOut(); } else { goTo('login.html'); }
+}
+function scrollToLeaderboard() {
+    document.getElementById('leaderboard').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ══════════════════════════════════════════════
+//  AUTH
+// ══════════════════════════════════════════════
+auth.onAuthStateChanged(user => {
+    currentUser = user;
+    const btn = document.getElementById('navUserBtn');
+    if (user) {
+        btn.textContent = user.email.split('@')[0];
+    } else {
+        btn.textContent = 'Sign In';
     }
-    
-    function selectMode(mode) {
-        currentMode = mode;
-        if (mode === 'free') {
-            TIME_PER_QUESTION = 0;
-            loadFreeQuestions();
-        } else {
-            checkPremiumAccess();
-        }
+    loadLeaderboard();
+});
+
+// ══════════════════════════════════════════════
+//  MODE SELECTION
+// ══════════════════════════════════════════════
+function selectMode(mode) {
+    currentMode = mode;
+    if (mode === 'free') {
+        loadQuestions('free');
+    } else {
+        checkPremiumThenStart();
     }
-    
-    async function checkPremiumAccess() {
-        if (!currentUser) {
-            const loginChoice = confirm("Premium Quiz requires login. Click OK to login or Cancel to go back.");
-            if (loginChoice) {
-                window.location.href = "login.html";
-            } else {
-                currentMode = null;
+}
+
+async function checkPremiumThenStart() {
+    if (!currentUser) {
+        showPaymentModal(true); // show login-required payment modal
+        return;
+    }
+    // Check if user has valid (within 24h) paid access
+    try {
+        const snap = await firestore.collection('payments')
+            .where('userId', '==', currentUser.uid)
+            .where('subject', '==', currentSubject)
+            .where('status', '==', 'verified')
+            .orderBy('paymentDate', 'desc')
+            .limit(1)
+            .get();
+
+        if (!snap.empty) {
+            const pay = snap.docs[0].data();
+            const payTime = pay.paymentDate?.toDate?.() || new Date(pay.paymentDate);
+            const age = Date.now() - payTime.getTime();
+            if (age < PREMIUM_DURATION_MS) {
+                // Valid within 24 hours
+                const hoursLeft = Math.ceil((PREMIUM_DURATION_MS - age) / 3600000);
+                showToast(`✅ Access valid — ${hoursLeft}h remaining`, 'success');
+                loadQuestions('premium');
+                return;
             }
+        }
+    } catch (e) { console.warn('Payment check error:', e); }
+    showPaymentModal(false);
+}
+
+// ══════════════════════════════════════════════
+//  QUESTION LOADING  (fixed RTDB paths)
+// ══════════════════════════════════════════════
+async function loadQuestions(mode) {
+    const panel = document.getElementById('quizPanel');
+    document.getElementById('modeGrid').style.display = 'none';
+
+    panel.innerHTML = `
+        <div class="status-box">
+            <div class="spinner"></div>
+            <p>Loading ${mode === 'free' ? 'practice' : 'competition'} questions…</p>
+        </div>`;
+
+    const path = mode === 'free'
+        ? `${currentSubject}/questions`
+        : `premium/${currentSubject}/questions`;
+
+    try {
+        const snap = await rtdb.ref(path).once('value');
+        const raw = snap.val();
+
+        if (!raw) {
+            panel.innerHTML = `
+                <div class="status-box">
+                    <div style="font-size:3rem;margin-bottom:12px;">📚</div>
+                    <p style="font-weight:600;font-size:1.05rem;margin-bottom:8px;">No questions yet for ${subjectName(currentSubject)}</p>
+                    <p style="font-size:0.85rem;color:var(--muted);">Questions are being added. Please check back soon!</p>
+                    <button onclick="resetToModeSelect()" style="margin-top:20px;padding:10px 24px;background:var(--ink);color:white;border:none;border-radius:100px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;">← Back</button>
+                </div>`;
             return;
         }
-        
-        // For premium access tracking, we still need Firestore for user data
-        // So we initialize Firestore only for this purpose
-        const firestore = firebase.firestore();
-        const studentDoc = await firestore.collection('students').doc(currentUser.uid).get();
-        const paidQuizzes = studentDoc.data()?.paidQuizzes || [];
-        
-        if (paidQuizzes.includes(currentSubject)) {
-            TIME_PER_QUESTION = 5;
-            loadPremiumQuestions();
-        } else {
-            showPaystackPaymentModal();
-        }
-    }
-    
-    function showPaystackPaymentModal() {
-        const modalHtml = `
-            <div class="payment-modal" id="paystackModal">
-                <div class="payment-content">
-                    <div style="font-size: 3rem;">💰</div>
-                    <h2 style="color: #667eea;">Unlock ${formatSubjectName(currentSubject)} Premium Quiz</h2>
-                    <div class="payment-amount">₦100</div>
-                    
-                    <div class="prize-info">
-                        <h4>🏆 What You Get:</h4>
-                        <p>✓ Compete for ₦10,000 monthly prize draw</p>
-                        <p>✓ Certificate of Recognition</p>
-                        <p>✓ 500+ advanced questions</p>
-                        <p>✓ 5-second timer challenge</p>
-                        <p>✓ Leaderboard ranking</p>
-                    </div>
-                    
-                    <div class="payment-methods">
-                        <div class="payment-method"><span>💳</span><span>Card</span></div>
-                        <div class="payment-method"><span>🏦</span><span>Bank Transfer</span></div>
-                        <div class="payment-method"><span>📱</span><span>USSD</span></div>
-                        <div class="payment-method"><span>💚</span><span>Opay</span></div>
-                        <div class="payment-method"><span>🧡</span><span>Palmpay</span></div>
-                    </div>
-                    
-                    <button class="paystack-btn" onclick="payWithPaystack()">
-                        💳 Pay ₦100 Now
-                    </button>
-                    <button onclick="closePaymentModal()" style="background: #e2e8f0; color: #4a5568; border: none; padding: 12px 30px; border-radius: 25px; cursor: pointer; width: 100%;">Cancel</button>
-                </div>
-            </div>
-        `;
-        
-        const existingModal = document.getElementById('paystackModal');
-        if (existingModal) existingModal.remove();
-        document.body.insertAdjacentHTML('beforeend', modalHtml);
-    }
-    
-    function closePaymentModal() {
-        const modal = document.getElementById('paystackModal');
-        if (modal) modal.remove();
-        currentMode = null;
-        document.getElementById('modeSelector').style.display = 'grid';
-    }
-    
-    // Paystack payment function
-    function payWithPaystack() {
-        console.log("Paystack function called");
-        
-        if (!currentUser) {
-            alert("Please login first!");
-            window.location.href = "login.html";
-            return;
-        }
-        
-        // Check if Paystack is available
-        if (typeof PaystackPop === 'undefined') {
-            console.error("Paystack not loaded, loading now...");
-            alert("Loading payment system... Please click again in a moment.");
-            // Reload Paystack
-            const script = document.createElement('script');
-            script.src = 'https://js.paystack.co/v1/inline.js';
-            script.onload = function() {
-                console.log("Paystack loaded, please click the button again.");
-                alert("Paystack loaded! Please click the payment button again.");
-            };
-            document.head.appendChild(script);
-            return;
-        }
-        
-        const amount = 100;
-        const email = currentUser.email;
-        const reference = `QUIZ_${currentSubject}_${Date.now()}_${currentUser.uid.substring(0, 8)}`;
-        
-        console.log("Opening Paystack with:", { email, amount, reference });
-        
-        const handler = PaystackPop.setup({
-            key: PAYSTACK_PUBLIC_KEY,
-            email: email,
-            amount: amount * 100,
-            currency: 'NGN',
-            ref: reference,
-            metadata: {
-                custom_fields: [
-                    {
-                        display_name: "Subject",
-                        variable_name: "subject",
-                        value: currentSubject
-                    }
-                ]
-            },
-            callback: function(response) {
-                console.log("Payment successful:", response);
-                verifyPayment(response.reference);
-            },
-            onClose: function() {
-                console.log("Payment window closed");
-            }
-        });
-        
-        handler.openIframe();
-    }
-    
-    async function verifyPayment(reference) {
-        try {
-            const paymentId = `PAY_${reference}`;
-            const firestore = firebase.firestore();
-            const studentDoc = await firestore.collection('students').doc(currentUser.uid).get();
-            const studentName = studentDoc.data()?.fullName || currentUser.email?.split('@')[0] || 'User';
-            
-            await firestore.collection('payments').doc(paymentId).set({
-                paymentId: paymentId,
-                userId: currentUser.uid,
-                userEmail: currentUser.email,
-                userName: studentName,
-                subject: currentSubject,
-                amount: 100,
-                status: 'verified',
-                paymentDate: new Date(),
-                reference: reference
-            });
-            
-            const studentRef = firestore.collection('students').doc(currentUser.uid);
-            const paidQuizzes = studentDoc.data()?.paidQuizzes || [];
-            if (!paidQuizzes.includes(currentSubject)) {
-                paidQuizzes.push(currentSubject);
-                await studentRef.update({ paidQuizzes: paidQuizzes });
-            }
-            
-            alert(`✅ Payment successful! ${formatSubjectName(currentSubject)} unlocked!`);
-            closePaymentModal();
-            location.reload();
-            
-        } catch (error) {
-            console.error("Error:", error);
-            alert("Payment successful but account update failed. Please contact support.");
-        }
-    }
-    
-    // ============ FIXED: FREE QUESTIONS FROM REALTIME DATABASE ============
-    async function loadFreeQuestions() {
-        const interfaceDiv = document.getElementById("quizInterface");
-        interfaceDiv.innerHTML = `<div class="status-message"><div class="loading-spinner"></div><p>Loading free practice questions...</p></div>`;
-        
-        try {
-            // Path: /{subject}/questions (e.g., /mathematics/questions)
-            const snapshot = await rtdb.ref(`${currentSubject}/questions`).once('value');
-            const questionsObj = snapshot.val();
-            
-            if (!questionsObj) {
-                interfaceDiv.innerHTML = `
-                    <div class="status-message">
-                        <div style="font-size: 4rem; margin: 20px;">📚</div>
-                        <h2 style="color: #667eea;">No Free Questions Yet</h2>
-                        <p style="margin: 20px 0; color: #718096;">
-                            Free practice questions for ${formatSubjectName(currentSubject)} are being added.
-                        </p>
-                        <p style="margin: 10px 0; color: #f39c12;">📝 Tip: Use the bulk upload tool to add questions to /${currentSubject}/questions</p>
-                        <div class="action-buttons">
-                            <button class="btn btn-primary" onclick="location.reload()">🔄 Refresh</button>
-                            <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Education Hub</button>
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Convert object to array (since Firebase RTDB returns an object with numeric keys)
-            let allQuestions = [];
-            if (Array.isArray(questionsObj)) {
-                allQuestions = questionsObj;
-            } else {
-                allQuestions = Object.values(questionsObj);
-            }
-            
-            if (allQuestions.length === 0) {
-                interfaceDiv.innerHTML = `<div class="status-message"><h2>No Questions Available</h2><p>Free practice questions coming soon!</p></div>`;
-                return;
-            }
-            
-            randomizedQuestions = shuffleArray(allQuestions).slice(0, Math.min(30, allQuestions.length));
-            document.getElementById('modeSelector').style.display = 'none';
-            startQuiz();
-        } catch (error) {
-            console.error("Error loading free questions:", error);
-            interfaceDiv.innerHTML = `<div class="error-box" style="color: red; padding: 20px;">Error loading questions: ${error.message}</div>`;
-        }
-    }
-    
-    // ============ FIXED: PREMIUM QUESTIONS FROM REALTIME DATABASE ============
-    async function loadPremiumQuestions() {
-        const interfaceDiv = document.getElementById("quizInterface");
-        interfaceDiv.innerHTML = `<div class="status-message"><div class="loading-spinner"></div><p>Loading premium competition questions...</p></div>`;
-        
-        try {
-            // Path: /premium/{subject}/questions (e.g., /premium/mathematics/questions)
-            const snapshot = await rtdb.ref(`premium/${currentSubject}/questions`).once('value');
-            const questionsObj = snapshot.val();
-            
-            if (!questionsObj) {
-                interfaceDiv.innerHTML = `
-                    <div class="status-message">
-                        <div style="font-size: 4rem; margin: 20px;">🏆</div>
-                        <h2 style="color: #667eea;">Premium Questions Coming Soon</h2>
-                        <p style="margin: 20px 0; color: #718096;">
-                            Premium questions for ${formatSubjectName(currentSubject)} are being added.
-                        </p>
-                        <p style="margin: 10px 0; color: #f39c12;">📝 Tip: Use the premium bulk upload tool to add questions to /premium/${currentSubject}/questions</p>
-                        <div class="action-buttons">
-                            <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Education Hub</button>
-                            <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Home</button>
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Convert object to array
-            let allQuestions = [];
-            if (Array.isArray(questionsObj)) {
-                allQuestions = questionsObj;
-            } else {
-                allQuestions = Object.values(questionsObj);
-            }
-            
-            if (allQuestions.length === 0) {
-                interfaceDiv.innerHTML = `<div class="status-message"><h2>No Premium Questions Available</h2><p>Check back soon!</p></div>`;
-                return;
-            }
-            
-            randomizedQuestions = shuffleArray(allQuestions).slice(0, Math.min(50, allQuestions.length));
-            document.getElementById('modeSelector').style.display = 'none';
-            startQuiz();
-        } catch (error) {
-            console.error("Error loading premium questions:", error);
-            interfaceDiv.innerHTML = `<div class="error-box" style="color: red; padding: 20px;">Error loading questions: ${error.message}</div>`;
-        }
-    }
-    
-    function shuffleArray(array) {
-        const shuffled = [...array];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-        return shuffled;
-    }
-    
-    function startQuiz() {
-        currentIndex = 0;
+
+        let all = Array.isArray(raw) ? raw.filter(Boolean) : Object.values(raw).filter(Boolean);
+        const limit = mode === 'free' ? FREE_Q_LIMIT : PREMIUM_Q_LIMIT;
+        questions = shuffle(all).slice(0, Math.min(limit, all.length));
+
+        questionIndex = 0;
         score = 0;
         showQuestion();
+
+    } catch (err) {
+        console.error('Load error:', err);
+        panel.innerHTML = `
+            <div class="status-box">
+                <div style="font-size:3rem;margin-bottom:12px;">⚠️</div>
+                <p style="color:var(--ruby);font-weight:600;">Failed to load questions</p>
+                <p style="font-size:0.85rem;color:var(--muted);margin-top:8px;">${esc(err.message)}</p>
+                <button onclick="loadQuestions('${mode}')" style="margin-top:20px;padding:10px 24px;background:var(--jade);color:white;border:none;border-radius:100px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;">🔄 Retry</button>
+                <button onclick="resetToModeSelect()" style="margin-top:10px;margin-left:10px;padding:10px 24px;background:var(--ink);color:white;border:none;border-radius:100px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;">← Back</button>
+            </div>`;
     }
-    
-    function stopTimer() {
-        if (timerInterval) {
-            clearInterval(timerInterval);
-            timerInterval = null;
-        }
-    }
-    
-    function startTimer() {
-        if (TIME_PER_QUESTION === 0) return;
-        
-        if (timerInterval) clearInterval(timerInterval);
-        timeLeft = TIME_PER_QUESTION;
-        isAnswered = false;
-        
-        const timerElement = document.getElementById('timerDisplay');
-        const timerCircle = document.getElementById('timerCircle');
-        
-        timerInterval = setInterval(() => {
-            if (isAnswered) return;
-            timeLeft--;
-            if (timerElement) timerElement.textContent = `${timeLeft}s`;
-            if (timeLeft <= 2 && timerCircle) timerCircle.classList.add('timer-warning');
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                if (!isAnswered) handleTimeOut();
-            }
-        }, 1000);
-    }
-    
-    function handleTimeOut() {
-        isAnswered = true;
-        const q = randomizedQuestions[currentIndex];
-        const correct = q.answer;
-        
-        const buttons = document.querySelectorAll('.option-item');
-        buttons.forEach(btn => btn.disabled = true);
-        buttons.forEach(btn => {
-            if (btn.getAttribute('onclick').includes(`'${correct}'`)) btn.classList.add('correct');
-        });
-        
-        const explanationBox = document.getElementById('explanationBox');
-        const explanationText = document.getElementById('explanationText');
-        if (explanationBox && explanationText) {
-            explanationBox.style.display = 'block';
-            explanationText.innerHTML = `⏰ Time's up! The correct answer was ${correct}. ${q.explanation || ''}`;
-            explanationBox.style.background = '#fff3cd';
-            explanationBox.style.borderLeftColor = '#f39c12';
-        }
-        document.getElementById('nextBtn').style.display = 'block';
-    }
-    
-    function showQuestion() {
-        stopTimer();
-        const q = randomizedQuestions[currentIndex];
-        const interfaceDiv = document.getElementById("quizInterface");
-        
-        const timerHtml = TIME_PER_QUESTION > 0 ? `
-            <div class="timer-container" id="timerCircle">
-                ⏱️ Time Left: <span class="timer-number" id="timerDisplay">${TIME_PER_QUESTION}s</span>
+}
+
+// ══════════════════════════════════════════════
+//  QUIZ RENDERING
+// ══════════════════════════════════════════════
+function showQuestion() {
+    stopTimer();
+    isAnswered = false;
+    const q = questions[questionIndex];
+    const panel = document.getElementById('quizPanel');
+    const isPremium = currentMode === 'premium';
+    const timeLimit = isPremium ? TIME_PER_QUESTION_PREMIUM : TIME_PER_QUESTION_FREE;
+    timeLeft = timeLimit;
+    timerMax = timeLimit;
+
+    const timerHtml = isPremium ? `
+        <div class="timer-wrap">
+            <span class="timer-label">Time</span>
+            <div class="timer-ring">
+                <svg width="54" height="54" viewBox="0 0 54 54">
+                    <circle class="timer-track timer-ring circle" cx="27" cy="27" r="23"/>
+                    <circle class="timer-arc timer-ring circle" id="timerArc"
+                        cx="27" cy="27" r="23"
+                        stroke-dasharray="${CIRC}"
+                        stroke-dashoffset="0"/>
+                </svg>
+                <div class="timer-text" id="timerText">${timeLeft}</div>
             </div>
-        ` : `<div class="timer-container" style="background: #11998e;">📖 Unlimited Time</div>`;
-        
-        interfaceDiv.innerHTML = `
-            <div class="quiz-meta">
-                <span>📖 ${formatSubjectName(currentSubject)}</span>
-                ${timerHtml}
-                <span style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 5px 12px; border-radius: 20px;">⭐ ${currentIndex + 1}/${randomizedQuestions.length}</span>
-            </div>
-            <div class="question-text">${escapeHtml(q.question)}</div>
-            <div class="options-list">
-                <button class="option-item" onclick="checkAnswer('A')"><strong>A.</strong> ${escapeHtml(q.optionA)}</button>
-                <button class="option-item" onclick="checkAnswer('B')"><strong>B.</strong> ${escapeHtml(q.optionB)}</button>
-                <button class="option-item" onclick="checkAnswer('C')"><strong>C.</strong> ${escapeHtml(q.optionC)}</button>
-                <button class="option-item" onclick="checkAnswer('D')"><strong>D.</strong> ${escapeHtml(q.optionD)}</button>
-            </div>
-            <div id="nextBtn" style="display:none; margin-top: 20px; text-align: center;">
-                <button class="btn btn-primary" onclick="nextQuestion()">Next Question →</button>
-            </div>
-            <div id="explanationBox" style="display:none; margin-top: 20px; padding: 15px; background: #e8f5e9; border-radius: 10px; border-left: 4px solid #4caf50;">
-                <strong>📖 Explanation:</strong> <span id="explanationText"></span>
-            </div>
-            <div class="action-buttons" style="margin-top: 20px; text-align: center;">
-                <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Education Hub</button>
-                <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Home</button>
-            </div>
-        `;
-        
-        if (TIME_PER_QUESTION > 0) startTimer();
-    }
-    
-    function checkAnswer(selected) {
+        </div>` : `<div class="meta-pill meta-subject">⏰ Unlimited</div>`;
+
+    panel.innerHTML = `
+        <div class="quiz-meta">
+            <div class="meta-pill meta-subject">${SUBJECT_NAMES[currentSubject] || currentSubject}</div>
+            ${timerHtml}
+            <div class="meta-pill meta-progress">${questionIndex + 1} / ${questions.length}</div>
+        </div>
+        <div class="question-text">${esc(q.question)}</div>
+        <div class="options-grid">
+            ${['A','B','C','D'].map(letter => `
+                <button class="option-btn" onclick="checkAnswer('${letter}')" id="opt${letter}">
+                    <span class="option-letter">${letter}</span>
+                    <span>${esc(q['option' + letter])}</span>
+                </button>`).join('')}
+        </div>
+        <div class="explanation-box" id="expBox"></div>
+        <div class="next-btn-wrap" id="nextWrap">
+            <button class="btn-next" onclick="nextQuestion()">
+                ${questionIndex + 1 < questions.length ? 'Next Question →' : 'See Results →'}
+            </button>
+        </div>`;
+
+    if (isPremium) startTimer();
+}
+
+function startTimer() {
+    const arc  = document.getElementById('timerArc');
+    const text = document.getElementById('timerText');
+    if (!arc || !text) return;
+
+    timerInterval = setInterval(() => {
         if (isAnswered) return;
-        isAnswered = true;
-        stopTimer();
-        
-        const q = randomizedQuestions[currentIndex];
-        const correct = q.answer;
-        const buttons = document.querySelectorAll('.option-item');
-        buttons.forEach(btn => btn.disabled = true);
-        
-        let isCorrect = false;
-        buttons.forEach(btn => {
-            if (btn.getAttribute('onclick').includes(`'${correct}'`)) btn.classList.add('correct');
-        });
-        
-        if (selected === correct) {
-            const selectedBtn = Array.from(buttons).find(btn => btn.getAttribute('onclick').includes(`'${selected}'`));
-            if (selectedBtn) selectedBtn.classList.add('correct');
-            score++;
-            isCorrect = true;
-        } else {
-            const selectedBtn = Array.from(buttons).find(btn => btn.getAttribute('onclick').includes(`'${selected}'`));
-            if (selectedBtn) selectedBtn.classList.add('incorrect');
+        timeLeft--;
+        if (text) text.textContent = timeLeft;
+        if (arc) {
+            const offset = CIRC * (1 - timeLeft / timerMax);
+            arc.style.strokeDashoffset = offset;
+            if (timeLeft <= 3) arc.classList.add('danger');
         }
-        
-        const explanationBox = document.getElementById('explanationBox');
-        const explanationText = document.getElementById('explanationText');
-        if (explanationBox && explanationText) {
-            explanationBox.style.display = 'block';
-            const resultText = isCorrect ? '✅ Correct! ' : '❌ Incorrect. ';
-            explanationText.innerHTML = resultText + (q.explanation || `The correct answer is ${correct}.`);
-            if (!isCorrect) {
-                explanationBox.style.background = '#fef2f2';
-                explanationBox.style.borderLeftColor = '#eb3349';
-            }
+        if (timeLeft <= 0) {
+            stopTimer();
+            handleTimeout();
         }
-        document.getElementById('nextBtn').style.display = 'block';
+    }, 1000);
+}
+
+function stopTimer() {
+    if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+}
+
+function handleTimeout() {
+    isAnswered = true;
+    const q = questions[questionIndex];
+    disableOptions();
+    highlightCorrect(q.answer);
+    const expBox = document.getElementById('expBox');
+    expBox.className = 'explanation-box timeout';
+    expBox.style.display = 'block';
+    expBox.innerHTML = `⏰ <strong>Time's up!</strong> The correct answer was <strong>${q.answer}</strong>. ${esc(q.explanation || '')}`;
+    document.getElementById('nextWrap').style.display = 'block';
+}
+
+function checkAnswer(selected) {
+    if (isAnswered) return;
+    isAnswered = true;
+    stopTimer();
+
+    const q = questions[questionIndex];
+    disableOptions();
+    highlightCorrect(q.answer);
+
+    const selBtn = document.getElementById('opt' + selected);
+    const isCorrect = selected === q.answer;
+
+    if (isCorrect) {
+        score++;
+    } else if (selBtn) {
+        selBtn.classList.add('incorrect');
+        selBtn.querySelector('.option-letter').style.background = 'var(--ruby)';
+        selBtn.querySelector('.option-letter').style.color = 'white';
     }
-    
-    function nextQuestion() {
-        currentIndex++;
-        if (currentIndex < randomizedQuestions.length) {
-            isAnswered = false;
-            showQuestion();
-        } else {
-            showResults();
-        }
+
+    const expBox = document.getElementById('expBox');
+    expBox.className = 'explanation-box' + (isCorrect ? '' : ' wrong');
+    expBox.style.display = 'block';
+    const resultWord = isCorrect ? '✅ Correct!' : '❌ Incorrect.';
+    expBox.innerHTML = `<strong>${resultWord}</strong> ${esc(q.explanation || `The correct answer is ${q.answer}.`)}`;
+    document.getElementById('nextWrap').style.display = 'block';
+}
+
+function highlightCorrect(answer) {
+    const btn = document.getElementById('opt' + answer);
+    if (!btn) return;
+    btn.classList.add('correct');
+}
+
+function disableOptions() {
+    ['A','B','C','D'].forEach(l => {
+        const b = document.getElementById('opt' + l);
+        if (b) b.disabled = true;
+    });
+}
+
+function nextQuestion() {
+    questionIndex++;
+    if (questionIndex < questions.length) {
+        showQuestion();
+    } else {
+        showResults();
     }
-    
-    function showResults() {
-        stopTimer();
-        const percent = Math.round((score / randomizedQuestions.length) * 100);
-        let gradeMessage = "";
-        let emoji = "";
-        let gradeColor = "";
-        
-        if (percent >= 80) {
-            gradeMessage = "Outstanding! You're a Star! 🌟";
-            emoji = "🏆";
-            gradeColor = "#11998e";
-        } else if (percent >= 60) {
-            gradeMessage = "Great Job! Keep Shining! ⭐";
-            emoji = "🎉";
-            gradeColor = "#f39c12";
-        } else if (percent >= 40) {
-            gradeMessage = "Good Effort! Practice Makes Perfect! 💪";
-            emoji = "📚";
-            gradeColor = "#667eea";
-        } else {
-            gradeMessage = "Keep Learning! You'll Crush It Next Time! 🚀";
-            emoji = "💪";
-            gradeColor = "#eb3349";
-        }
-        
-        if (currentUser && currentMode === 'premium') {
-            savePremiumScore(percent);
-        }
-        
-        const interfaceDiv = document.getElementById("quizInterface");
-        interfaceDiv.innerHTML = `
-            <div style="text-align: center; padding: 20px;">
-                <div style="font-size: 5rem;">${emoji}</div>
-                <h2 style="color: #667eea; margin: 20px 0;">Quiz Complete!</h2>
-                <div style="font-size: 4rem; font-weight: bold; margin: 20px; color: ${gradeColor}">
-                    ${percent}%
+}
+
+// ══════════════════════════════════════════════
+//  RESULTS
+// ══════════════════════════════════════════════
+function showResults() {
+    stopTimer();
+    const pct = Math.round((score / questions.length) * 100);
+    let emoji, msg, color;
+    if (pct >= 80)      { emoji = '🏆'; msg = 'Outstanding! You are a Star!'; color = 'var(--jade)'; }
+    else if (pct >= 60) { emoji = '🎉'; msg = 'Great work! Keep shining!'; color = 'var(--gold-deep)'; }
+    else if (pct >= 40) { emoji = '📚'; msg = 'Good effort! Practice makes perfect.'; color = 'var(--sky)'; }
+    else                { emoji = '💪'; msg = "Keep learning — you'll crush it next time!"; color = 'var(--ruby)'; }
+
+    if (currentUser && currentMode === 'premium') savePremiumScore(pct);
+
+    document.getElementById('quizPanel').innerHTML = `
+        <div class="result-wrap">
+            <div style="font-size:4rem;">${emoji}</div>
+            <div class="result-label">Your Score</div>
+            <div class="result-score" style="color:${color}">${pct}%</div>
+            <div class="result-label">${score} correct out of ${questions.length}</div>
+            <div class="result-message">${msg}</div>
+            ${currentMode === 'premium' ? `
+            <div style="background:rgba(232,185,79,0.1);border:1px solid var(--gold);border-radius:12px;padding:14px 20px;margin-bottom:24px;font-size:0.88rem;color:var(--ink);">
+                🏆 You've been entered into this month's ₦10,000 prize draw!<br>
+                📜 Your result has been saved to the leaderboard.
+            </div>` : ''}
+            <div class="result-actions">
+                <button class="btn-restart" onclick="resetAndReload()">🔄 Play Again</button>
+                <button class="btn-hub" onclick="goTo('education.html')">🎓 Education Hub</button>
+            </div>
+        </div>`;
+    document.getElementById('modeGrid').style.display = 'grid';
+    loadLeaderboard();
+}
+
+function resetAndReload() {
+    currentMode = null;
+    document.getElementById('modeGrid').style.display = 'grid';
+    document.getElementById('quizPanel').innerHTML = `
+        <div class="status-box">
+            <div style="font-size:3rem;margin-bottom:12px;">🎮</div>
+            <p>Choose a mode above to begin your quiz</p>
+        </div>`;
+}
+
+// ══════════════════════════════════════════════
+//  SAVE SCORE
+// ══════════════════════════════════════════════
+async function savePremiumScore(pct) {
+    if (!currentUser) return;
+    try {
+        const month = new Date().toISOString().slice(0, 7);
+        const name = currentUser.displayName || currentUser.email.split('@')[0];
+        await firestore
+            .collection('monthly_leaderboard')
+            .doc(month)
+            .collection(currentSubject)
+            .doc(currentUser.uid)
+            .set({
+                userId: currentUser.uid,
+                userName: name,
+                email: currentUser.email,
+                score: pct,
+                subject: currentSubject,
+                date: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+    } catch (e) { console.warn('Score save error:', e); }
+}
+
+// ══════════════════════════════════════════════
+//  PAYMENT MODAL
+// ══════════════════════════════════════════════
+function showPaymentModal(needsLogin) {
+    const existing = document.getElementById('payModal');
+    if (existing) existing.remove();
+
+    if (needsLogin) {
+        document.body.insertAdjacentHTML('beforeend', `
+            <div class="modal-overlay" id="payModal">
+                <div class="modal-card">
+                    <div class="modal-header">
+                        <button class="modal-close-x" onclick="closeModal()">✕</button>
+                        <div style="font-size:2.5rem;">🔐</div>
+                        <h2>Sign in Required</h2>
+                        <p>Premium Quiz requires an account</p>
+                    </div>
+                    <div class="modal-body">
+                        <button class="pay-btn" onclick="goTo('login.html')">
+                            🔑 Sign In / Create Account
+                        </button>
+                        <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+                    </div>
                 </div>
-                <p style="font-size: 1.3rem;">Score: ${score}/${randomizedQuestions.length}</p>
-                <p style="margin: 20px 0; color: #718096;">${gradeMessage}</p>
-                ${currentMode === 'premium' ? `<div style="background: #fff3cd; padding: 15px; border-radius: 10px; margin: 20px 0;">
-                    <p>🏆 You've qualified for the monthly ₦10,000 draw!</p>
-                    <p>📜 A certificate will be sent to your email.</p>
-                </div>` : ''}
-                <div class="action-buttons">
-                    <button class="btn btn-success" onclick="location.reload()">🔄 Play Again</button>
-                    <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Education Hub</button>
+            </div>`);
+        return;
+    }
+
+    document.body.insertAdjacentHTML('beforeend', `
+        <div class="modal-overlay" id="payModal">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <button class="modal-close-x" onclick="closeModal()">✕</button>
+                    <div style="font-size:2.4rem;">🏆</div>
+                    <h2>Unlock Premium Quiz</h2>
+                    <p>${subjectName(currentSubject)} · 24-hour access</p>
+                </div>
+                <div class="modal-body">
+                    <div class="price-display">
+                        <span class="amount"><span class="currency">₦</span>100</span>
+                        <span class="period">One-time · 24 hours access</span>
+                    </div>
+                    <ul class="perks-list">
+                        <li><span class="perk-icon">🏆</span> Enter ₦10,000 monthly prize draw</li>
+                        <li><span class="perk-icon">⏱️</span> 8-second timed challenge mode</li>
+                        <li><span class="perk-icon">📊</span> Live leaderboard ranking</li>
+                        <li><span class="perk-icon">📜</span> Certificate of Recognition</li>
+                        <li><span class="perk-icon">🔓</span> 50 advanced competition questions</li>
+                    </ul>
+                    <div class="methods-row">
+                        <div class="method-chip">💳 Card</div>
+                        <div class="method-chip">🏦 Bank Transfer</div>
+                        <div class="method-chip">📱 USSD</div>
+                        <div class="method-chip">💚 Opay</div>
+                        <div class="method-chip">🧡 Palmpay</div>
+                    </div>
+                    <button class="pay-btn" onclick="initiatePaystack()" id="paystackPayBtn">
+                        💳 Pay ₦100 — Secure Checkout
+                    </button>
+                    <button class="cancel-btn" onclick="closeModal()">Maybe later</button>
+                    <div class="security-note">🔒 Secured by Paystack · Your card details are never stored</div>
                 </div>
             </div>
-        `;
+        </div>`);
+}
+
+function closeModal() {
+    const m = document.getElementById('payModal');
+    if (m) m.remove();
+    if (!currentMode) resetToModeSelect();
+}
+
+// ══════════════════════════════════════════════
+//  PAYSTACK
+// ══════════════════════════════════════════════
+function initiatePaystack() {
+    if (!currentUser) { goTo('login.html'); return; }
+
+    const btn = document.getElementById('paystackPayBtn');
+    if (btn) { btn.textContent = '⏳ Opening payment…'; btn.disabled = true; }
+
+    // Ensure Paystack is loaded
+    if (typeof PaystackPop === 'undefined') {
+        const s = document.createElement('script');
+        s.src = 'https://js.paystack.co/v1/inline.js';
+        s.onload = () => openPaystackIframe();
+        s.onerror = () => {
+            showToast('Payment system unavailable. Check your internet.', 'error');
+            if (btn) { btn.textContent = '💳 Pay ₦100 — Secure Checkout'; btn.disabled = false; }
+        };
+        document.head.appendChild(s);
+        return;
     }
-    
-    async function savePremiumScore(percent) {
-        if (!currentUser) return;
-        const firestore = firebase.firestore();
-        const currentMonth = new Date().toISOString().slice(0, 7);
-        const leaderboardRef = firestore.collection('monthly_leaderboard').doc(currentMonth).collection(currentSubject);
-        
-        await leaderboardRef.doc(currentUser.uid).set({
+    openPaystackIframe();
+}
+
+function openPaystackIframe() {
+    const ref = `EE_${currentSubject}_${Date.now()}_${currentUser.uid.slice(0,8)}`;
+
+    const handler = PaystackPop.setup({
+        key: PAYSTACK_KEY,
+        email: currentUser.email,
+        amount: PREMIUM_PRICE * 100,
+        currency: 'NGN',
+        ref: ref,
+        metadata: {
+            custom_fields: [{
+                display_name: "Subject",
+                variable_name: "subject",
+                value: currentSubject
+            },{
+                display_name: "User ID",
+                variable_name: "user_id",
+                value: currentUser.uid
+            }]
+        },
+        callback: (response) => {
+            closeModal();
+            processPaymentSuccess(response.reference);
+        },
+        onClose: () => {
+            const btn = document.getElementById('paystackPayBtn');
+            if (btn) { btn.textContent = '💳 Pay ₦100 — Secure Checkout'; btn.disabled = false; }
+        }
+    });
+    handler.openIframe();
+}
+
+async function processPaymentSuccess(reference) {
+    showToast('✅ Payment received! Unlocking your quiz…', 'success');
+
+    try {
+        const studentSnap = await firestore.collection('students').doc(currentUser.uid).get();
+        const studentName = studentSnap.exists
+            ? (studentSnap.data().fullName || currentUser.email.split('@')[0])
+            : currentUser.email.split('@')[0];
+
+        const now = new Date();
+        const expiresAt = new Date(now.getTime() + PREMIUM_DURATION_MS);
+
+        await firestore.collection('payments').doc(`PAY_${reference}`).set({
+            paymentId: `PAY_${reference}`,
+            reference,
             userId: currentUser.uid,
-            userName: currentUser.email?.split('@')[0] || 'Anonymous',
-            score: percent,
-            date: firebase.firestore.FieldValue.serverTimestamp()
+            userEmail: currentUser.email,
+            userName: studentName,
+            subject: currentSubject,
+            amount: PREMIUM_PRICE,
+            status: 'verified',
+            paymentDate: firebase.firestore.FieldValue.serverTimestamp(),
+            expiresAt: expiresAt,
+            durationHours: 24
         });
+
+        // Small delay so serverTimestamp resolves, then start quiz
+        setTimeout(() => {
+            showToast('🎉 Access granted! Starting quiz…', 'success');
+            loadQuestions('premium');
+        }, 1200);
+
+    } catch (err) {
+        console.error('Payment save error:', err);
+        showToast('Payment verified but access save failed. Please contact support.', 'error');
     }
-    
-    function showLeaderboard() {
-        alert("Leaderboard feature coming soon! Top scores will be displayed monthly.");
-    }
-    
-    function escapeHtml(str) {
-        if (!str) return "";
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === "&") return "&amp;";
-            if (m === "<") return "&lt;";
-            if (m === ">") return "&gt;";
-            return m;
+}
+
+// ══════════════════════════════════════════════
+//  LEADERBOARD
+// ══════════════════════════════════════════════
+const SUBJECTS_LIST = Object.keys(SUBJECT_NAMES);
+let lbCurrentSubject = 'mathematics';
+
+function buildLbTabs() {
+    const tabs = document.getElementById('lbTabs');
+    tabs.innerHTML = SUBJECTS_LIST.map(s =>
+        `<button class="lb-tab${s === lbCurrentSubject ? ' active' : ''}" onclick="changeLbTab('${s}')">${(SUBJECT_NAMES[s]||s).split(' ')[0]} ${s.split('-').map(w=>w[0].toUpperCase()+w.slice(1)).join(' ')}</button>`
+    ).join('');
+}
+
+function changeLbTab(s) {
+    lbCurrentSubject = s;
+    buildLbTabs();
+    loadLeaderboard();
+}
+
+async function loadLeaderboard() {
+    const content = document.getElementById('lbContent');
+    const monthLabel = document.getElementById('lbMonthLabel');
+    if (!content) return;
+
+    const now = new Date();
+    const month = now.toISOString().slice(0,7);
+    const monthName = now.toLocaleString('default', { month: 'long', year: 'numeric' });
+    if (monthLabel) monthLabel.textContent = `${monthName} rankings`;
+
+    buildLbTabs();
+    content.innerHTML = `<div class="lb-loading"><div class="spinner"></div></div>`;
+
+    try {
+        const snap = await firestore
+            .collection('monthly_leaderboard')
+            .doc(month)
+            .collection(lbCurrentSubject)
+            .orderBy('score', 'desc')
+            .limit(10)
+            .get();
+
+        if (snap.empty) {
+            content.innerHTML = `
+                <div class="lb-empty">
+                    <div style="font-size:2.5rem;margin-bottom:10px;">📊</div>
+                    <p>No entries yet this month for ${subjectName(lbCurrentSubject)}.</p>
+                    <p style="margin-top:6px;font-size:0.83rem;color:var(--muted);">Be the first to compete!</p>
+                </div>`;
+            return;
+        }
+
+        const rankIcons = ['🥇','🥈','🥉'];
+        let html = '';
+        snap.docs.forEach((doc, i) => {
+            const d = doc.data();
+            const name = (d.userName || 'Anonymous').slice(0, 20);
+            const initial = name[0].toUpperCase();
+            const rankClass = i < 3 ? ['gold','silver','bronze'][i] : '';
+            const scoreClass = d.score >= 80 ? 'high' : d.score >= 50 ? 'mid' : '';
+            html += `
+                <div class="lb-row">
+                    <div class="lb-rank ${rankClass}">${i < 3 ? rankIcons[i] : (i+1)}</div>
+                    <div class="lb-avatar">${initial}</div>
+                    <div class="lb-info">
+                        <div class="lb-name">${esc(name)}</div>
+                        <div class="lb-sub">${subjectName(lbCurrentSubject)}</div>
+                    </div>
+                    <div class="lb-score ${scoreClass}">${d.score}%</div>
+                </div>`;
         });
+        content.innerHTML = html;
+
+    } catch (e) {
+        console.warn('Leaderboard error:', e);
+        content.innerHTML = `<div class="lb-empty">⚠️ Leaderboard unavailable right now.</div>`;
     }
-    
-    auth.onAuthStateChanged(user => { currentUser = user; });
-    
-    // Make functions globally available
-    window.payWithPaystack = payWithPaystack;
-    window.closePaymentModal = closePaymentModal;
+}
+
+// Init leaderboard month label
+document.getElementById('lbMonthLabel').textContent = new Date().toLocaleString('default', { month: 'long', year: 'numeric' }) + ' rankings';
 </script>
 </body>
 </html>

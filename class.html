@@ -6,7 +6,7 @@
     <title>Quiz Arena - Ernest Embassy LMS</title>
     
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
     
     <style>
@@ -464,7 +464,8 @@
     
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
-    const db = firebase.firestore();
+    // SWITCHED TO REALTIME DATABASE (since your data is in RTDB, not Firestore)
+    const rtdb = firebase.database();
     
     let currentMode = null;
     let loadedQuestions = [];
@@ -535,7 +536,10 @@
             return;
         }
         
-        const studentDoc = await db.collection('students').doc(currentUser.uid).get();
+        // For premium access tracking, we still need Firestore for user data
+        // So we initialize Firestore only for this purpose
+        const firestore = firebase.firestore();
+        const studentDoc = await firestore.collection('students').doc(currentUser.uid).get();
         const paidQuizzes = studentDoc.data()?.paidQuizzes || [];
         
         if (paidQuizzes.includes(currentSubject)) {
@@ -652,10 +656,11 @@
     async function verifyPayment(reference) {
         try {
             const paymentId = `PAY_${reference}`;
-            const studentDoc = await db.collection('students').doc(currentUser.uid).get();
+            const firestore = firebase.firestore();
+            const studentDoc = await firestore.collection('students').doc(currentUser.uid).get();
             const studentName = studentDoc.data()?.fullName || currentUser.email?.split('@')[0] || 'User';
             
-            await db.collection('payments').doc(paymentId).set({
+            await firestore.collection('payments').doc(paymentId).set({
                 paymentId: paymentId,
                 userId: currentUser.uid,
                 userEmail: currentUser.email,
@@ -667,7 +672,7 @@
                 reference: reference
             });
             
-            const studentRef = db.collection('students').doc(currentUser.uid);
+            const studentRef = firestore.collection('students').doc(currentUser.uid);
             const paidQuizzes = studentDoc.data()?.paidQuizzes || [];
             if (!paidQuizzes.includes(currentSubject)) {
                 paidQuizzes.push(currentSubject);
@@ -684,15 +689,17 @@
         }
     }
     
+    // ============ FIXED: FREE QUESTIONS FROM REALTIME DATABASE ============
     async function loadFreeQuestions() {
         const interfaceDiv = document.getElementById("quizInterface");
         interfaceDiv.innerHTML = `<div class="status-message"><div class="loading-spinner"></div><p>Loading free practice questions...</p></div>`;
         
         try {
-            const docRef = db.collection("questions_free").doc(currentSubject);
-            const docSnap = await docRef.get();
+            // Path: /{subject}/questions (e.g., /mathematics/questions)
+            const snapshot = await rtdb.ref(`${currentSubject}/questions`).once('value');
+            const questionsObj = snapshot.val();
             
-            if (!docSnap.exists) {
+            if (!questionsObj) {
                 interfaceDiv.innerHTML = `
                     <div class="status-message">
                         <div style="font-size: 4rem; margin: 20px;">📚</div>
@@ -700,6 +707,7 @@
                         <p style="margin: 20px 0; color: #718096;">
                             Free practice questions for ${formatSubjectName(currentSubject)} are being added.
                         </p>
+                        <p style="margin: 10px 0; color: #f39c12;">📝 Tip: Use the bulk upload tool to add questions to /${currentSubject}/questions</p>
                         <div class="action-buttons">
                             <button class="btn btn-primary" onclick="location.reload()">🔄 Refresh</button>
                             <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Education Hub</button>
@@ -709,8 +717,13 @@
                 return;
             }
             
-            const data = docSnap.data();
-            const allQuestions = data.questions || [];
+            // Convert object to array (since Firebase RTDB returns an object with numeric keys)
+            let allQuestions = [];
+            if (Array.isArray(questionsObj)) {
+                allQuestions = questionsObj;
+            } else {
+                allQuestions = Object.values(questionsObj);
+            }
             
             if (allQuestions.length === 0) {
                 interfaceDiv.innerHTML = `<div class="status-message"><h2>No Questions Available</h2><p>Free practice questions coming soon!</p></div>`;
@@ -726,15 +739,17 @@
         }
     }
     
+    // ============ FIXED: PREMIUM QUESTIONS FROM REALTIME DATABASE ============
     async function loadPremiumQuestions() {
         const interfaceDiv = document.getElementById("quizInterface");
         interfaceDiv.innerHTML = `<div class="status-message"><div class="loading-spinner"></div><p>Loading premium competition questions...</p></div>`;
         
         try {
-            const docRef = db.collection("questions_premium").doc(currentSubject);
-            const docSnap = await docRef.get();
+            // Path: /premium/{subject}/questions (e.g., /premium/mathematics/questions)
+            const snapshot = await rtdb.ref(`premium/${currentSubject}/questions`).once('value');
+            const questionsObj = snapshot.val();
             
-            if (!docSnap.exists) {
+            if (!questionsObj) {
                 interfaceDiv.innerHTML = `
                     <div class="status-message">
                         <div style="font-size: 4rem; margin: 20px;">🏆</div>
@@ -742,6 +757,7 @@
                         <p style="margin: 20px 0; color: #718096;">
                             Premium questions for ${formatSubjectName(currentSubject)} are being added.
                         </p>
+                        <p style="margin: 10px 0; color: #f39c12;">📝 Tip: Use the premium bulk upload tool to add questions to /premium/${currentSubject}/questions</p>
                         <div class="action-buttons">
                             <button class="btn btn-warning" onclick="goToPage('education.html')">🎓 Education Hub</button>
                             <button class="btn btn-secondary" onclick="goToPage('index.html')">🏠 Home</button>
@@ -751,8 +767,13 @@
                 return;
             }
             
-            const data = docSnap.data();
-            const allQuestions = data.questions || [];
+            // Convert object to array
+            let allQuestions = [];
+            if (Array.isArray(questionsObj)) {
+                allQuestions = questionsObj;
+            } else {
+                allQuestions = Object.values(questionsObj);
+            }
             
             if (allQuestions.length === 0) {
                 interfaceDiv.innerHTML = `<div class="status-message"><h2>No Premium Questions Available</h2><p>Check back soon!</p></div>`;
@@ -975,8 +996,9 @@
     
     async function savePremiumScore(percent) {
         if (!currentUser) return;
+        const firestore = firebase.firestore();
         const currentMonth = new Date().toISOString().slice(0, 7);
-        const leaderboardRef = db.collection('monthly_leaderboard').doc(currentMonth).collection(currentSubject);
+        const leaderboardRef = firestore.collection('monthly_leaderboard').doc(currentMonth).collection(currentSubject);
         
         await leaderboardRef.doc(currentUser.uid).set({
             userId: currentUser.uid,

@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Lessons - Ernest Embassy LMS</title>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-storage-compat.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #1a1a2e; min-height: 100vh; color: #2d3748; }
+
+        nav {
+            background: rgba(255,255,255,0.97);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.4rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        .nav-links a {
+            color: #4a5568;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 0.95rem;
+        }
+        .nav-links a:hover { color: #667eea; }
+
+        .page-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .page-header h1 { font-size: 2rem; }
+        .page-header p { opacity: 0.85; margin-top: 8px; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 30px 20px; }
+
+        /* Upload Card */
+        .upload-card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+        .upload-card h2 {
+            color: #2d3748;
+            margin-bottom: 25px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label {
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+            outline: none;
+            font-family: inherit;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus { border-color: #667eea; }
+        .form-group textarea { resize: vertical; min-height: 80px; }
+
+        .full-width { grid-column: 1 / -1; }
+
+        /* File Drop Zone */
+        .drop-zone {
+            border: 3px dashed #cbd5e0;
+            border-radius: 15px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f7fafc;
+            position: relative;
+        }
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: #667eea;
+            background: #ebf4ff;
+        }
+        .drop-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+        .drop-icon { font-size: 3rem; margin-bottom: 10px; }
+        .drop-zone h3 { color: #4a5568; margin-bottom: 5px; }
+        .drop-zone p { color: #718096; font-size: 0.85rem; }
+        .file-selected {
+            background: #f0fff4;
+            border-color: #48bb78;
+            border-style: solid;
+        }
+        .file-selected h3 { color: #276749; }
+
+        /* Progress */
+        .progress-wrap { display: none; margin-top: 15px; }
+        .progress-bar-bg {
+            background: #e2e8f0;
+            border-radius: 10px;
+            height: 12px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        .progress-label { text-align: center; font-size: 0.85rem; color: #667eea; margin-top: 6px; font-weight: 600; }
+
+        .btn-upload {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .btn-upload:hover { transform: translateY(-2px); }
+        .btn-upload:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: #276749;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            z-index: 9999;
+            display: none;
+            max-width: 320px;
+        }
+        .toast.error { background: #c53030; }
+        .toast.show { display: block; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* Lessons List */
+        .lessons-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+        .lessons-card h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .filter-row select, .filter-row input {
+            padding: 9px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        .filter-row select:focus, .filter-row input:focus { border-color: #667eea; }
+
+        .lesson-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            transition: box-shadow 0.2s;
+        }
+        .lesson-item:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .lesson-type-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+        .type-pdf { background: #fff5f5; }
+        .type-docx { background: #ebf8ff; }
+        .type-video { background: #f0fff4; }
+        .type-text { background: #faf5ff; }
+
+        .lesson-info { flex: 1; min-width: 0; }
+        .lesson-title { font-weight: 600; color: #2d3748; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .lesson-meta { font-size: 0.8rem; color: #718096; }
+        .lesson-subject {
+            background: #ebf4ff;
+            color: #3c5a99;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .lesson-actions { display: flex; gap: 8px; }
+        .btn-action {
+            padding: 7px 14px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+        .btn-view { background: #ebf4ff; color: #3c5a99; }
+        .btn-delete { background: #fff5f5; color: #c53030; }
+        .btn-action:hover { opacity: 0.75; }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #a0aec0;
+        }
+        .empty-state p { font-size: 1rem; margin-top: 10px; }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 30px;
+            color: #a0aec0;
+        }
+
+        .floating-home {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .form-row { grid-template-columns: 1fr; }
+            .lesson-actions { flex-direction: column; }
+            .nav-container { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+<a href="admin.html" class="floating-home">⚙️</a>
+
+<nav>
+    <div class="nav-container">
+        <a href="index.html" class="logo">⚡ Ernest Embassy LMS</a>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="admin.html">Admin</a>
+            <a href="logout.html">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="page-header">
+    <h1>📚 Manage Lessons & Resources</h1>
+    <p>Upload PDF, Word documents, and other study materials for students</p>
+</div>
+
+<div class="container">
+
+    <!-- Upload Form -->
+    <div class="upload-card">
+        <h2>📤 Upload New Resource</h2>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Lesson Title *</label>
+                <input type="text" id="lessonTitle" placeholder="e.g. Introduction to Algebra">
+            </div>
+            <div class="form-group">
+                <label>Subject *</label>
+                <select id="lessonSubject">
+                    <option value="">-- Select Subject --</option>
+                    <option>Mathematics</option>
+                    <option>English Language</option>
+                    <option>Physics</option>
+                    <option>Chemistry</option>
+                    <option>Biology</option>
+                    <option>Economics</option>
+                    <option>Government</option>
+                    <option>Geography</option>
+                    <option>Literature</option>
+                    <option>Commerce</option>
+                    <option>Accounting</option>
+                    <option>Agricultural Science</option>
+                    <option>Further Mathematics</option>
+                    <option>Computer Science</option>
+                    <option>Civic Education</option>
+                    <option>CRS/IRS</option>
+                    <option>General</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Topic / Chapter</label>
+                <input type="text" id="lessonTopic" placeholder="e.g. Chapter 3 - Quadratic Equations">
+            </div>
+            <div class="form-group">
+                <label>Class / Level</label>
+                <select id="lessonLevel">
+                    <option value="">-- All Levels --</option>
+                    <option>SS1</option>
+                    <option>SS2</option>
+                    <option>SS3 / WAEC</option>
+                    <option>SS3 / JAMB</option>
+                    <option>JSS1</option>
+                    <option>JSS2</option>
+                    <option>JSS3</option>
+                    <option>All Students</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group full-width">
+                <label>Description (optional)</label>
+                <textarea id="lessonDesc" placeholder="Brief description of what this resource covers..."></textarea>
+            </div>
+        </div>
+
+        <!-- File Drop Zone -->
+        <div class="form-group">
+            <label>Upload File (PDF or Word Document) *</label>
+            <div class="drop-zone" id="dropZone">
+                <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt" onchange="handleFileSelect(event)">
+                <div class="drop-icon">📂</div>
+                <h3>Click to browse or drag & drop</h3>
+                <p>Supported: PDF, Word (.doc/.docx), PowerPoint, Text files • Max size: 20MB</p>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-wrap" id="progressWrap">
+            <div class="progress-bar-bg">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="progress-label" id="progressLabel">Uploading... 0%</div>
+        </div>
+
+        <button class="btn-upload" id="uploadBtn" onclick="uploadLesson()">
+            📤 Upload Resource
+        </button>
+    </div>
+
+    <!-- Lessons List -->
+    <div class="lessons-card">
+        <h2>📋 All Resources <span style="font-size:0.9rem; color:#718096; font-weight:400;" id="lessonCount"></span></h2>
+
+        <div class="filter-row">
+            <select id="filterSubject" onchange="loadLessons()">
+                <option value="">All Subjects</option>
+                <option>Mathematics</option>
+                <option>English Language</option>
+                <option>Physics</option>
+                <option>Chemistry</option>
+                <option>Biology</option>
+                <option>Economics</option>
+                <option>Government</option>
+                <option>Geography</option>
+                <option>Literature</option>
+                <option>Commerce</option>
+                <option>Accounting</option>
+                <option>Further Mathematics</option>
+                <option>Computer Science</option>
+                <option>General</option>
+            </select>
+            <input type="text" id="searchInput" placeholder="🔍 Search lessons..." oninput="loadLessons()" style="flex:1; min-width:180px;">
+        </div>
+
+        <div id="lessonsList">
+            <div class="loading-spinner">⏳ Loading lessons...</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+        authDomain: "ernest-embassy-lms.firebaseapp.com",
+        projectId: "ernest-embassy-lms",
+        storageBucket: "ernest-embassy-lms.firebasestorage.app",
+        messagingSenderId: "204896421221",
+        appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    const adminEmails = ['ernestembassydigitalsolutions@gmail.com', 'damian@ernestembassy.com', 'dev@ernestlms.com'];
+
+    let selectedFile = null;
+    let allLessons = [];
+
+    function showToast(msg, type = 'success') {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.className = 'toast show' + (type === 'error' ? ' error' : '');
+        setTimeout(() => t.classList.remove('show'), 4000);
+    }
+
+    function handleFileSelect(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > 20 * 1024 * 1024) {
+            showToast('File too large. Maximum size is 20MB.', 'error');
+            return;
+        }
+        selectedFile = file;
+        const dz = document.getElementById('dropZone');
+        dz.classList.add('file-selected');
+        dz.querySelector('h3').textContent = '✅ ' + file.name;
+        dz.querySelector('p').textContent = (file.size / 1024).toFixed(1) + ' KB • ' + file.type;
+    }
+
+    // Drag and drop support
+    const dz = document.getElementById('dropZone');
+    dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
+    dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+    dz.addEventListener('drop', e => {
+        e.preventDefault();
+        dz.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file) {
+            document.getElementById('fileInput').files = e.dataTransfer.files;
+            handleFileSelect({ target: { files: e.dataTransfer.files } });
+        }
+    });
+
+    function getFileIcon(type) {
+        if (!type) return { icon: '📄', cls: 'type-text' };
+        if (type.includes('pdf')) return { icon: '📕', cls: 'type-pdf' };
+        if (type.includes('word') || type.includes('docx') || type.includes('doc')) return { icon: '📘', cls: 'type-docx' };
+        if (type.includes('presentation') || type.includes('ppt')) return { icon: '📊', cls: 'type-video' };
+        if (type.includes('video')) return { icon: '🎬', cls: 'type-video' };
+        return { icon: '📄', cls: 'type-text' };
+    }
+
+    async function uploadLesson() {
+        const title = document.getElementById('lessonTitle').value.trim();
+        const subject = document.getElementById('lessonSubject').value;
+        const topic = document.getElementById('lessonTopic').value.trim();
+        const level = document.getElementById('lessonLevel').value;
+        const desc = document.getElementById('lessonDesc').value.trim();
+
+        if (!title) { showToast('Please enter a lesson title.', 'error'); return; }
+        if (!subject) { showToast('Please select a subject.', 'error'); return; }
+        if (!selectedFile) { showToast('Please select a file to upload.', 'error'); return; }
+
+        const btn = document.getElementById('uploadBtn');
+        btn.disabled = true;
+        btn.textContent = '⏳ Uploading...';
+
+        document.getElementById('progressWrap').style.display = 'block';
+
+        try {
+            // Upload file to Firebase Storage
+            const timestamp = Date.now();
+            const safeName = selectedFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+            const filePath = `lessons/${subject}/${timestamp}_${safeName}`;
+            const storageRef = storage.ref(filePath);
+            const uploadTask = storageRef.put(selectedFile);
+
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const pct = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                    document.getElementById('progressBar').style.width = pct + '%';
+                    document.getElementById('progressLabel').textContent = `Uploading... ${pct}%`;
+                },
+                (error) => {
+                    showToast('Upload failed: ' + error.message, 'error');
+                    btn.disabled = false;
+                    btn.textContent = '📤 Upload Resource';
+                    document.getElementById('progressWrap').style.display = 'none';
+                },
+                async () => {
+                    const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+
+                    // Save metadata to Firestore
+                    await db.collection('lessons').add({
+                        title,
+                        subject,
+                        topic,
+                        level,
+                        description: desc,
+                        fileURL: downloadURL,
+                        fileName: selectedFile.name,
+                        fileType: selectedFile.type,
+                        fileSize: selectedFile.size,
+                        filePath,
+                        uploadedBy: auth.currentUser?.email || 'admin',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    showToast('✅ Resource uploaded successfully!');
+                    btn.disabled = false;
+                    btn.textContent = '📤 Upload Resource';
+                    document.getElementById('progressWrap').style.display = 'none';
+                    document.getElementById('progressBar').style.width = '0%';
+
+                    // Reset form
+                    document.getElementById('lessonTitle').value = '';
+                    document.getElementById('lessonSubject').value = '';
+                    document.getElementById('lessonTopic').value = '';
+                    document.getElementById('lessonLevel').value = '';
+                    document.getElementById('lessonDesc').value = '';
+                    selectedFile = null;
+                    const dz2 = document.getElementById('dropZone');
+                    dz2.classList.remove('file-selected');
+                    dz2.querySelector('h3').textContent = 'Click to browse or drag & drop';
+                    dz2.querySelector('p').textContent = 'Supported: PDF, Word (.doc/.docx), PowerPoint, Text files • Max size: 20MB';
+                    document.getElementById('fileInput').value = '';
+
+                    loadLessons();
+                }
+            );
+        } catch (err) {
+            showToast('Error: ' + err.message, 'error');
+            btn.disabled = false;
+            btn.textContent = '📤 Upload Resource';
+            document.getElementById('progressWrap').style.display = 'none';
+        }
+    }
+
+    async function loadLessons() {
+        const filterSubject = document.getElementById('filterSubject').value;
+        const search = document.getElementById('searchInput').value.toLowerCase();
+
+        try {
+            let query = db.collection('lessons').orderBy('createdAt', 'desc');
+            if (filterSubject) query = query.where('subject', '==', filterSubject);
+
+            const snap = await query.get();
+            allLessons = [];
+            snap.forEach(doc => allLessons.push({ id: doc.id, ...doc.data() }));
+
+            // Client-side search filter
+            const filtered = allLessons.filter(l =>
+                !search ||
+                l.title?.toLowerCase().includes(search) ||
+                l.topic?.toLowerCase().includes(search) ||
+                l.subject?.toLowerCase().includes(search)
+            );
+
+            document.getElementById('lessonCount').textContent = `(${filtered.length} resources)`;
+            renderLessons(filtered);
+        } catch (err) {
+            document.getElementById('lessonsList').innerHTML = `<div class="empty-state"><p>⚠️ Error loading lessons: ${err.message}</p></div>`;
+        }
+    }
+
+    function renderLessons(lessons) {
+        const container = document.getElementById('lessonsList');
+        if (!lessons.length) {
+            container.innerHTML = `<div class="empty-state"><p style="font-size:2rem;">📂</p><p>No resources found. Upload your first lesson above!</p></div>`;
+            return;
+        }
+
+        container.innerHTML = lessons.map(l => {
+            const { icon, cls } = getFileIcon(l.fileType);
+            const date = l.createdAt?.toDate ? l.createdAt.toDate().toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }) : 'Unknown date';
+            const size = l.fileSize ? (l.fileSize / 1024).toFixed(0) + ' KB' : '';
+            return `
+            <div class="lesson-item">
+                <div class="lesson-type-icon ${cls}">${icon}</div>
+                <div class="lesson-info">
+                    <div class="lesson-title">${l.title}</div>
+                    <div class="lesson-meta">${l.topic ? l.topic + ' • ' : ''}${l.level ? l.level + ' • ' : ''}${date}${size ? ' • ' + size : ''}</div>
+                </div>
+                <span class="lesson-subject">${l.subject}</span>
+                <div class="lesson-actions">
+                    <button class="btn-action btn-view" onclick="window.open('${l.fileURL}', '_blank')">👁 View</button>
+                    <button class="btn-action btn-delete" onclick="deleteLesson('${l.id}', '${l.filePath || ''}')">🗑 Delete</button>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    async function deleteLesson(id, filePath) {
+        if (!confirm('Delete this resource? This cannot be undone.')) return;
+        try {
+            await db.collection('lessons').doc(id).delete();
+            if (filePath) {
+                try { await storage.ref(filePath).delete(); } catch(e) { /* file may already be gone */ }
+            }
+            showToast('Resource deleted.');
+            loadLessons();
+        } catch (err) {
+            showToast('Delete failed: ' + err.message, 'error');
+        }
+    }
+
+    auth.onAuthStateChanged(user => {
+        if (user && adminEmails.includes(user.email)) {
+            loadLessons();
+        } else {
+            window.location.href = 'dashboard.html';
+        }
+    });
+</script>
+</body>
+</html>

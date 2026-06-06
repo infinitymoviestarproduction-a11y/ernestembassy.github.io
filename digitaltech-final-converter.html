@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Question Converter - Works for Any Format</title>
+    <title>Digital Tech Converter - Final Version</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -48,6 +48,7 @@
         }
         .mode-btn.active { border-color: #34d399; background: #064e3b; }
         .mode-btn.premium.active { border-color: #f59e0b; }
+        .mode-title { font-weight: bold; font-size: 1.1rem; }
         .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         @media (max-width: 900px) { .main-grid { grid-template-columns: 1fr; } }
         .card {
@@ -126,8 +127,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>📝 Simple Question Converter</h1>
-            <div class="subtitle">Paste ANY formatted questions - I'll extract them automatically</div>
+            <h1>📝 Digital Tech Question Converter</h1>
+            <div class="subtitle">Specifically designed for format: ### Question X + **Answer:** + **Explanation:**</div>
         </div>
 
         <div class="stats-bar">
@@ -136,15 +137,21 @@
         </div>
 
         <div class="mode-selector">
-            <div class="mode-btn" onclick="setMode('free')">📝 Free Practice</div>
-            <div class="mode-btn premium active" onclick="setMode('premium')">🏆 Premium Competition</div>
+            <div class="mode-btn" onclick="setMode('free')">
+                <div class="mode-title">📝 Free Practice</div>
+                <div style="font-size:0.75rem; color:#64748b;">Unlimited time</div>
+            </div>
+            <div class="mode-btn premium active" onclick="setMode('premium')">
+                <div class="mode-title">🏆 Premium Competition</div>
+                <div style="font-size:0.75rem; color:#64748b;">8 seconds per question</div>
+            </div>
         </div>
 
         <div class="main-grid">
             <div class="card">
-                <div class="card-header">📋 Paste Questions Below</div>
+                <div class="card-header">📋 Paste Your Questions (501-600)</div>
                 <div class="card-content">
-                    <textarea id="inputText" rows="25" placeholder="Paste your questions here..."></textarea>
+                    <textarea id="inputText" rows="25" placeholder="Paste questions 501-600 here..."></textarea>
                     <button class="btn btn-primary" onclick="convert()">🔄 Convert to JSON</button>
                     <button class="btn btn-success" onclick="copyJSON()">📋 Copy JSON</button>
                     <button class="btn btn-warning" onclick="downloadJSON()">💾 Download JSON</button>
@@ -188,6 +195,11 @@
             if (currentQuestions.length > 0) updateOutput();
         }
 
+        function cleanText(text) {
+            if (!text) return '';
+            return text.replace(/\*\*/g, '').replace(/###/g, '').replace(/\s+/g, ' ').trim();
+        }
+
         function convert() {
             const text = document.getElementById('inputText').value;
             if (!text.trim()) {
@@ -201,17 +213,16 @@
                 try {
                     const questions = [];
                     
-                    // Split by "Question" pattern (any format)
-                    const blocks = text.split(/\n(?=.*?Question\s+\d+)/i);
+                    // Split by "### Question" pattern
+                    const blocks = text.split(/\n(?=### Question\s+\d+)/i);
                     
                     for (const block of blocks) {
                         if (!block.trim()) continue;
                         
                         const q = {};
                         
-                        // Get the question text - everything after "Question X" until first option
-                        const afterQuestion = block.replace(/^.*?Question\s+\d+\s*/i, '');
-                        const qMatch = afterQuestion.match(/^(.*?)(?=\n[A-Z]\.|\n\d+\.|\n\*)/is);
+                        // Extract question text (between "### Question X" and first option)
+                        const qMatch = block.match(/### Question\s+\d+\s*\n(.*?)(?=\n[A-Z]\.)/is);
                         if (qMatch) {
                             q.question = cleanText(qMatch[1]);
                         } else {
@@ -219,65 +230,46 @@
                         }
                         
                         // Extract A, B, C, D options
-                        const optA = block.match(/A\.\s*(.*?)(?=\nB\.|\n[ \t]*B\.|$)/i);
-                        const optB = block.match(/B\.\s*(.*?)(?=\nC\.|\n[ \t]*C\.|$)/i);
-                        const optC = block.match(/C\.\s*(.*?)(?=\nD\.|\n[ \t]*D\.|$)/i);
-                        const optD = block.match(/D\.\s*(.*?)(?=\nAnswer:|\n\*\*Answer:|\nCorrect Answer:|\n---|$)/i);
+                        const optA = block.match(/A\.\s*(.*?)(?=\nB\.)/i);
+                        const optB = block.match(/B\.\s*(.*?)(?=\nC\.)/i);
+                        const optC = block.match(/C\.\s*(.*?)(?=\nD\.)/i);
+                        const optD = block.match(/D\.\s*(.*?)(?=\n\*\*Answer|\nAnswer|$)/i);
                         
                         if (optA) q.optionA = cleanText(optA[1]);
                         if (optB) q.optionB = cleanText(optB[1]);
                         if (optC) q.optionC = cleanText(optC[1]);
                         if (optD) q.optionD = cleanText(optD[1]);
                         
-                        // Find answer
+                        // Extract answer (supports **Answer:** or Answer:)
                         let answer = null;
-                        const ansPatterns = [
-                            /Answer:\s*([A-D])/i,
-                            /\*\*Answer:\*\*\s*([A-D])/i,
-                            /Correct Answer:\s*([A-D])/i,
-                            /Answer\s*([A-D])/i
-                        ];
-                        for (const pattern of ansPatterns) {
-                            const match = block.match(pattern);
-                            if (match) {
-                                answer = match[1].toUpperCase();
-                                break;
-                            }
+                        const ansMatch = block.match(/\*\*Answer:\*\*\s*([A-D])/i);
+                        if (ansMatch) {
+                            answer = ansMatch[1].toUpperCase();
+                        } else {
+                            const ansMatch2 = block.match(/Answer:\s*([A-D])/i);
+                            if (ansMatch2) answer = ansMatch2[1].toUpperCase();
                         }
                         q.answer = answer;
                         
-                        // Find explanation
+                        // Extract explanation (supports **Explanation:**)
                         let explanation = '';
-                        const expPatterns = [
-                            /Explanation:\s*(.*?)(?=\n\n|\nQuestion|\n\*Question|\n---|$)/is,
-                            /\*\*Explanation:\*\*\s*(.*?)(?=\n\n|\nQuestion|$)/is
-                        ];
-                        for (const pattern of expPatterns) {
-                            const match = block.match(pattern);
-                            if (match && match[1] && match[1].length > 5) {
-                                explanation = cleanText(match[1]);
-                                break;
-                            }
+                        const expMatch = block.match(/\*\*Explanation:\*\*\s*(.*?)(?=\n---|\n###|\n$)/is);
+                        if (expMatch) {
+                            explanation = cleanText(expMatch[1]);
+                        } else {
+                            const expMatch2 = block.match(/Explanation:\s*(.*?)(?=\n---|\n###|$)/is);
+                            if (expMatch2) explanation = cleanText(expMatch2[1]);
                         }
-                        
-                        // If no explanation found, try to get text after answer
-                        if (!explanation && answer) {
-                            const afterAnswer = block.split(new RegExp(`Answer:\\s*${answer}`, 'i'))[1];
-                            if (afterAnswer && afterAnswer.length > 10) {
-                                explanation = cleanText(afterAnswer.replace(/Explanation:\s*/i, ''));
-                            }
-                        }
-                        
                         q.explanation = explanation || `The correct answer is ${answer}.`;
                         
-                        // Only add if we have all required fields
+                        // Validate
                         if (q.question && q.optionA && q.optionB && q.optionC && q.optionD && q.answer) {
                             questions.push(q);
                         }
                     }
                     
                     if (questions.length === 0) {
-                        alert('No questions found! Please check your format.\n\nMake sure each question has:\n- Question number\n- A., B., C., D. options\n- Answer: X');
+                        alert(`No questions found! Found ${questions.length} questions.\n\nMake sure your format looks like:\n\n### Question 501\nWhat is a cold wallet?\n\nA. Option A\nB. Option B\nC. Option C\nD. Option D\n\n**Answer:** A\n**Explanation:** Explanation text here.`);
                         document.getElementById('modeDisplay').textContent = 'Ready';
                         return;
                     }
@@ -295,17 +287,6 @@
                     document.getElementById('modeDisplay').textContent = 'Ready';
                 }
             }, 50);
-        }
-
-        function cleanText(text) {
-            if (!text) return '';
-            return text
-                .replace(/[▸►•]/g, '')
-                .replace(/\*\*/g, '')
-                .replace(/###/g, '')
-                .replace(/___/g, '')
-                .replace(/\s+/g, ' ')
-                .trim();
         }
 
         function updateOutput() {
@@ -387,7 +368,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `questions_${currentQuestions.length}.json`;
+            a.download = `digital_tech_questions_${currentQuestions.length}.json`;
             a.click();
             URL.revokeObjectURL(url);
             showToast(`💾 Downloaded ${currentQuestions.length} questions!`);

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Technology 500-Question Converter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            padding: 24px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 24px;
+            padding: 32px 40px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #34d399, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .stats-bar {
+            background: #1e293b;
+            border-radius: 16px;
+            padding: 20px 28px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            border: 1px solid #334155;
+        }
+        .stat-value { font-size: 1.8rem; font-weight: 800; color: #34d399; }
+        .mode-selector {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .mode-btn {
+            flex: 1;
+            padding: 18px 24px;
+            border: 2px solid #334155;
+            border-radius: 16px;
+            background: #1e293b;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .mode-btn.active {
+            border-color: #34d399;
+            background: linear-gradient(135deg, #1e293b, #064e3b);
+        }
+        .mode-btn.premium.active { border-color: #f59e0b; }
+        .mode-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 4px; }
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        @media (max-width: 900px) { .main-grid { grid-template-columns: 1fr; } }
+        .card {
+            background: #1e293b;
+            border-radius: 20px;
+            border: 1px solid #334155;
+            overflow: hidden;
+        }
+        .card-header {
+            padding: 20px 24px;
+            background: rgba(15, 23, 42, 0.5);
+            border-bottom: 1px solid #334155;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .card-content { padding: 24px; }
+        textarea {
+            width: 100%;
+            padding: 16px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            color: #e2e8f0;
+            font-family: 'Monaco', monospace;
+            font-size: 12px;
+            line-height: 1.5;
+            resize: vertical;
+        }
+        .btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border: none;
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-primary { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; }
+        .btn-success { background: #10b981; color: white; }
+        .btn-warning { background: #f59e0b; color: white; }
+        .btn-secondary { background: #334155; color: #e2e8f0; }
+        .preview-container { max-height: 500px; overflow-y: auto; }
+        .question-preview {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 3px solid #34d399;
+        }
+        .preview-question { font-weight: 600; color: #e2e8f0; margin-bottom: 10px; font-size: 0.85rem; }
+        .preview-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+        .preview-answer { font-size: 0.75rem; color: #34d399; margin-top: 8px; padding-top: 8px; border-top: 1px solid #334155; }
+        #jsonOutput {
+            font-family: 'Monaco', monospace;
+            font-size: 11px;
+            background: #0f172a;
+            color: #a5f3c3;
+            height: 500px;
+        }
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #1e293b;
+            border-left: 3px solid #10b981;
+            padding: 14px 20px;
+            border-radius: 12px;
+            color: #e2e8f0;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        .toast.show { transform: translateX(0); }
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #334155;
+            border-top-color: #34d399;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-right: 8px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💻 Digital Technology 500-Question Converter</h1>
+            <p class="subtitle" style="color:#94a3b8;">Handles both "Question X" and "**Question X**" formats • Detects all 500 questions</p>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-label">Questions</span>
+                <span class="stat-value" id="questionCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Status</span>
+                <span class="mode-badge" id="statusBadge" style="background:#334155; padding:8px 20px; border-radius:100px;">Ready</span>
+            </div>
+        </div>
+
+        <div class="mode-selector">
+            <div class="mode-btn free" onclick="setMode('free')">
+                <div class="mode-icon" style="font-size:1.8rem;">📝</div>
+                <div class="mode-title">Free Practice</div>
+                <div class="mode-desc" style="font-size:0.75rem; color:#64748b;">Unlimited time</div>
+            </div>
+            <div class="mode-btn premium active" onclick="setMode('premium')">
+                <div class="mode-icon" style="font-size:1.8rem;">🏆</div>
+                <div class="mode-title">Premium Competition</div>
+                <div class="mode-desc" style="font-size:0.75rem; color:#64748b;">8 seconds per question</div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">📋 Input Questions</div>
+                    <button class="btn btn-secondary" onclick="clearInput()" style="padding:6px 12px;">Clear</button>
+                </div>
+                <div class="card-content">
+                    <textarea id="inputText" rows="22" placeholder="Paste all 500 Digital Technology questions here..."></textarea>
+                    <div class="btn-group" style="display:flex; gap:12px; margin-top:16px; flex-wrap:wrap;">
+                        <button class="btn btn-primary" onclick="convert()">🔄 Convert to JSON</button>
+                        <button class="btn btn-success" onclick="copyJSON()">📋 Copy JSON</button>
+                        <button class="btn btn-warning" onclick="downloadJSON()">💾 Download JSON</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">📄 JSON Output</div>
+                    <button class="btn btn-secondary" onclick="copyJSON()" style="padding:6px 12px;">Copy</button>
+                </div>
+                <div class="card-content">
+                    <textarea id="jsonOutput" rows="22" readonly placeholder="JSON will appear here after conversion..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 24px;">
+            <div class="card-header">
+                <div class="card-title">👁️ Preview (First 10 Questions)</div>
+            </div>
+            <div class="card-content">
+                <div class="preview-container" id="previewContainer">
+                    <p style="color:#64748b; text-align:center; padding:40px;">Click "Convert to JSON" to preview questions...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">✅ Copied!</div>
+
+    <script>
+        let currentQuestions = [];
+        let currentMode = 'premium';
+
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.className = `toast ${isError ? 'error' : ''}`;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function setMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            if (mode === 'free') {
+                document.querySelector('.mode-btn.free').classList.add('active');
+                document.getElementById('statusBadge').textContent = 'Free Mode';
+                document.getElementById('statusBadge').style.background = '#10b981';
+            } else {
+                document.querySelector('.mode-btn.premium').classList.add('active');
+                document.getElementById('statusBadge').textContent = 'Premium Mode (8s timer)';
+                document.getElementById('statusBadge').style.background = '#f59e0b';
+            }
+            if (currentQuestions.length > 0) updateOutput();
+        }
+
+        function cleanText(text) {
+            if (!text) return '';
+            return text.replace(/[▸►•]/g, '').replace(/\*\*/g, '').replace(/\s+/g, ' ').trim();
+        }
+
+        function convert() {
+            const text = document.getElementById('inputText').value;
+            if (!text.trim()) { showToast('Paste your questions first!', true); return; }
+
+            document.getElementById('statusBadge').innerHTML = '<span class="loading"></span> Converting...';
+
+            setTimeout(() => {
+                try {
+                    const questions = [];
+                    
+                    // Pattern 1: "Question X" followed by text
+                    // Pattern 2: "**Question X**" (bold format in later questions)
+                    const patterns = [
+                        /Question\s+(\d+)[\s:]*\n?(.*?)(?=\nA\.|\n[ \t]*A\.)/gis,
+                        /\*\*Question\s+(\d+):\*\*\s*(.*?)(?=\nA\.|\n[ \t]*A\.)/gis
+                    ];
+                    
+                    // Split by any "Question" pattern (with or without bold)
+                    const blocks = text.split(/\n(?=(?:Question|\*\*Question)\s+\d+)/i);
+                    
+                    for (const block of blocks) {
+                        if (!block.trim()) continue;
+                        
+                        const q = {};
+                        
+                        // Try multiple patterns for question text
+                        let qMatch = block.match(/Question\s+\d+[\s:]*\n?(.*?)(?=\nA\.|\n[ \t]*A\.)/is);
+                        if (!qMatch) {
+                            qMatch = block.match(/\*\*Question\s+\d+:\*\*\s*(.*?)(?=\nA\.|\n[ \t]*A\.)/is);
+                        }
+                        if (qMatch) {
+                            q.question = cleanText(qMatch[1]);
+                        } else {
+                            continue;
+                        }
+                        
+                        // Extract options
+                        const optAMatch = block.match(/A\.\s*(.*?)(?=\nB\.|\n[ \t]*B\.|$)/is);
+                        const optBMatch = block.match(/B\.\s*(.*?)(?=\nC\.|\n[ \t]*C\.|$)/is);
+                        const optCMatch = block.match(/C\.\s*(.*?)(?=\nD\.|\n[ \t]*D\.|$)/is);
+                        const optDMatch = block.match(/D\.\s*(.*?)(?=\nAnswer:|\nCorrect Answer:|\n[ \t]*Answer:|\n[ \t]*Correct Answer:|$)/is);
+                        
+                        if (optAMatch) q.optionA = cleanText(optAMatch[1]);
+                        if (optBMatch) q.optionB = cleanText(optBMatch[1]);
+                        if (optCMatch) q.optionC = cleanText(optCMatch[1]);
+                        if (optDMatch) q.optionD = cleanText(optDMatch[1]);
+                        
+                        // Extract answer (supports both formats)
+                        let ansMatch = block.match(/Answer:\s*([A-D])/i);
+                        if (!ansMatch) ansMatch = block.match(/Correct Answer:\s*([A-D])/i);
+                        if (ansMatch) q.answer = ansMatch[1].toUpperCase();
+                        
+                        // Extract explanation
+                        let expMatch = block.match(/Explanation:\s*(.*?)(?=\n\n|\nQuestion|\n\*\*Question|\n---|$)/is);
+                        if (expMatch) {
+                            q.explanation = cleanText(expMatch[1]);
+                        } else {
+                            const afterAns = block.split(/Answer:\s*[A-D]/i);
+                            if (afterAns[1]) {
+                                let exp = afterAns[1].replace(/Explanation:\s*/i, '');
+                                if (exp && exp.length > 5) q.explanation = cleanText(exp);
+                            }
+                        }
+                        
+                        if (!q.explanation) q.explanation = `The correct answer is ${q.answer}.`;
+                        
+                        if (q.question && q.optionA && q.optionB && q.optionC && q.optionD && q.answer) {
+                            questions.push(q);
+                        }
+                    }
+                    
+                    if (questions.length === 0) {
+                        showToast('No questions found! Check format.', true);
+                        document.getElementById('statusBadge').textContent = 'Ready';
+                        return;
+                    }
+                    
+                    currentQuestions = questions;
+                    document.getElementById('questionCount').textContent = currentQuestions.length;
+                    document.getElementById('statusBadge').textContent = `${currentQuestions.length} questions converted`;
+                    document.getElementById('statusBadge').style.background = '#10b981';
+                    
+                    updateOutput();
+                    updatePreview();
+                    showToast(`✅ Success! Converted ${currentQuestions.length} Digital Technology questions!`);
+                    
+                } catch (error) {
+                    showToast('Error: ' + error.message, true);
+                    document.getElementById('statusBadge').textContent = 'Ready';
+                }
+            }, 50);
+        }
+
+        function updateOutput() {
+            const output = currentQuestions.map(q => ({
+                question: q.question,
+                optionA: q.optionA,
+                optionB: q.optionB,
+                optionC: q.optionC,
+                optionD: q.optionD,
+                answer: q.answer,
+                explanation: q.explanation,
+                ...(currentMode === 'premium' && { timeLimit: 8, competition: true })
+            }));
+            document.getElementById('jsonOutput').value = JSON.stringify(output, null, 2);
+        }
+
+        function updatePreview() {
+            const container = document.getElementById('previewContainer');
+            if (!currentQuestions.length) {
+                container.innerHTML = '<p style="color:#64748b; text-align:center; padding:40px;">Click "Convert to JSON" first.</p>';
+                return;
+            }
+            
+            let html = '';
+            for (let i = 0; i < Math.min(10, currentQuestions.length); i++) {
+                const q = currentQuestions[i];
+                html += `
+                    <div class="question-preview">
+                        <div class="preview-question"><strong>Q${i+1}:</strong> ${escapeHtml(q.question.substring(0,150))}${q.question.length>150?'...':''}</div>
+                        <div class="preview-options">
+                            <span>A. ${escapeHtml(q.optionA.substring(0,60))}</span>
+                            <span>B. ${escapeHtml(q.optionB.substring(0,60))}</span>
+                            <span>C. ${escapeHtml(q.optionC.substring(0,60))}</span>
+                            <span>D. ${escapeHtml(q.optionD.substring(0,60))}</span>
+                        </div>
+                        <div class="preview-answer">✅ Answer: ${q.answer} | 📖 ${escapeHtml(q.explanation.substring(0,100))}${q.explanation.length>100?'...':''}</div>
+                    </div>
+                `;
+            }
+            if (currentQuestions.length > 10) html += `<p style="color:#64748b; text-align:center; padding:16px;">... and ${currentQuestions.length-10} more questions</p>`;
+            container.innerHTML = html;
+        }
+
+        function copyJSON() {
+            const output = document.getElementById('jsonOutput');
+            if (!output.value) { showToast('Convert questions first!', true); return; }
+            output.select();
+            document.execCommand('copy');
+            showToast('📋 JSON copied!');
+        }
+
+        function downloadJSON() {
+            if (!currentQuestions.length) { showToast('Convert questions first!', true); return; }
+            const output = currentQuestions.map(q => ({
+                question: q.question,
+                optionA: q.optionA,
+                optionB: q.optionB,
+                optionC: q.optionC,
+                optionD: q.optionD,
+                answer: q.answer,
+                explanation: q.explanation,
+                ...(currentMode === 'premium' && { timeLimit: 8, competition: true })
+            }));
+            const blob = new Blob([JSON.stringify(output, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `digital_technology_${currentMode}_${currentQuestions.length}_questions.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast(`💾 Downloaded ${currentQuestions.length} questions!`);
+        }
+
+        function clearInput() {
+            document.getElementById('inputText').value = '';
+            currentQuestions = [];
+            document.getElementById('jsonOutput').value = '';
+            document.getElementById('questionCount').textContent = '0';
+            document.getElementById('previewContainer').innerHTML = '<p style="color:#64748b; text-align:center; padding:40px;">Click "Convert to JSON" to preview...</p>';
+            document.getElementById('statusBadge').textContent = 'Ready';
+            showToast('Cleared!');
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
+        }
+    </script>
+</body>
+</html>

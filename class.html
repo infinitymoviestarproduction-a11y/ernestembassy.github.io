@@ -6,7 +6,7 @@
     <title>Quiz Arena — Ernest Embassy LMS</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-database-compat.js"></script>
@@ -24,6 +24,7 @@
             --jade: #1a8c6e;
             --jade-light: #22b88f;
             --ruby: #d64045;
+            --ruby-light: #e88a87;
             --sky: #3d7eff;
             --muted: #6b6a74;
             --border: #e2ddd8;
@@ -457,16 +458,17 @@
         .option-btn.incorrect .option-letter { background: var(--ruby); color: white; }
         .option-btn:disabled { cursor: not-allowed; }
 
-        /* ── EXPLANATION ── */
+        /* ── ENHANCED EXPLANATION BOX ── */
         .explanation-box {
             margin-top: 20px;
-            padding: 16px 20px;
+            padding: 18px 22px;
             background: #f0faf5;
-            border-left: 3px solid var(--jade);
+            border-left: 4px solid var(--jade);
             border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-            font-size: 0.92rem;
+            font-size: 0.94rem;
             line-height: 1.6;
             display: none;
+            animation: slideDown 0.3s ease;
         }
         .explanation-box.wrong {
             background: #fef5f5;
@@ -475,6 +477,16 @@
         .explanation-box.timeout {
             background: #fffbf0;
             border-left-color: var(--gold);
+        }
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .next-btn-wrap { margin-top: 24px; text-align: right; display: none; }
@@ -938,10 +950,10 @@
 //  CONFIG
 // ══════════════════════════════════════════════
 const PAYSTACK_KEY = "pk_live_441686d15976154f119fe56e3f415638b7a649ac";
-const PREMIUM_PRICE = 100;         // ₦100
-const PREMIUM_DURATION_MS = 24 * 60 * 60 * 1000;  // 24 hours
-const TIME_PER_QUESTION_PREMIUM = 8; // seconds
-const TIME_PER_QUESTION_FREE = 0;    // unlimited
+const PREMIUM_PRICE = 100;
+const PREMIUM_DURATION_MS = 24 * 60 * 60 * 1000;
+const TIME_PER_QUESTION_PREMIUM = 8;
+const TIME_PER_QUESTION_FREE = 0;
 const FREE_Q_LIMIT = 30;
 const PREMIUM_Q_LIMIT = 50;
 
@@ -982,7 +994,7 @@ let isAnswered       = false;
 let timerInterval    = null;
 let timeLeft         = 0;
 let timerMax         = 0;
-const CIRC           = 2 * Math.PI * 23; // SVG circle circumference
+const CIRC           = 2 * Math.PI * 23;
 
 // ══════════════════════════════════════════════
 //  UTILS
@@ -1012,6 +1024,7 @@ function onSubjectChange() {
     resetToModeSelect();
 }
 function resetToModeSelect() {
+    if (timerInterval) clearInterval(timerInterval);
     currentMode = null;
     document.getElementById('modeGrid').style.display = 'grid';
     document.getElementById('quizPanel').innerHTML = `
@@ -1019,7 +1032,6 @@ function resetToModeSelect() {
             <div style="font-size: 3rem; margin-bottom: 12px;">🎮</div>
             <p>Choose a mode above to begin your quiz</p>
         </div>`;
-    stopTimer();
 }
 function handleNavUser() {
     if (currentUser) { auth.signOut(); } else { goTo('login.html'); }
@@ -1056,10 +1068,9 @@ function selectMode(mode) {
 
 async function checkPremiumThenStart() {
     if (!currentUser) {
-        showPaymentModal(true); // show login-required payment modal
+        showPaymentModal(true);
         return;
     }
-    // Check if user has valid (within 24h) paid access
     try {
         const snap = await firestore.collection('payments')
             .where('userId', '==', currentUser.uid)
@@ -1074,7 +1085,6 @@ async function checkPremiumThenStart() {
             const payTime = pay.paymentDate?.toDate?.() || new Date(pay.paymentDate);
             const age = Date.now() - payTime.getTime();
             if (age < PREMIUM_DURATION_MS) {
-                // Valid within 24 hours
                 const hoursLeft = Math.ceil((PREMIUM_DURATION_MS - age) / 3600000);
                 showToast(`✅ Access valid — ${hoursLeft}h remaining`, 'success');
                 loadQuestions('premium');
@@ -1086,7 +1096,7 @@ async function checkPremiumThenStart() {
 }
 
 // ══════════════════════════════════════════════
-//  QUESTION LOADING  (fixed RTDB paths)
+//  QUESTION LOADING
 // ══════════════════════════════════════════════
 async function loadQuestions(mode) {
     const panel = document.getElementById('quizPanel');
@@ -1142,7 +1152,7 @@ async function loadQuestions(mode) {
 //  QUIZ RENDERING
 // ══════════════════════════════════════════════
 function showQuestion() {
-    stopTimer();
+    if (timerInterval) clearInterval(timerInterval);
     isAnswered = false;
     const q = questions[questionIndex];
     const panel = document.getElementById('quizPanel');
@@ -1156,15 +1166,16 @@ function showQuestion() {
             <span class="timer-label">Time</span>
             <div class="timer-ring">
                 <svg width="54" height="54" viewBox="0 0 54 54">
-                    <circle class="timer-track timer-ring circle" cx="27" cy="27" r="23"/>
-                    <circle class="timer-arc timer-ring circle" id="timerArc"
-                        cx="27" cy="27" r="23"
+                    <circle class="timer-track" cx="27" cy="27" r="23" fill="none" stroke="var(--border)" stroke-width="4"/>
+                    <circle class="timer-arc" id="timerArc"
+                        cx="27" cy="27" r="23" fill="none"
+                        stroke="var(--gold)" stroke-width="4"
                         stroke-dasharray="${CIRC}"
                         stroke-dashoffset="0"/>
                 </svg>
                 <div class="timer-text" id="timerText">${timeLeft}</div>
             </div>
-        </div>` : `<div class="meta-pill meta-subject">⏰ Unlimited</div>`;
+        </div>` : `<div class="meta-pill meta-subject">⏰ Unlimited Time</div>`;
 
     panel.innerHTML = `
         <div class="quiz-meta">
@@ -1205,14 +1216,11 @@ function startTimer() {
             if (timeLeft <= 3) arc.classList.add('danger');
         }
         if (timeLeft <= 0) {
-            stopTimer();
-            handleTimeout();
+            clearInterval(timerInterval);
+            timerInterval = null;
+            if (!isAnswered) handleTimeout();
         }
     }, 1000);
-}
-
-function stopTimer() {
-    if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
 }
 
 function handleTimeout() {
@@ -1220,45 +1228,114 @@ function handleTimeout() {
     const q = questions[questionIndex];
     disableOptions();
     highlightCorrect(q.answer);
+    
+    let correctAnswerText = '';
+    if (q.answer === 'A') correctAnswerText = q.optionA;
+    else if (q.answer === 'B') correctAnswerText = q.optionB;
+    else if (q.answer === 'C') correctAnswerText = q.optionC;
+    else if (q.answer === 'D') correctAnswerText = q.optionD;
+    
     const expBox = document.getElementById('expBox');
     expBox.className = 'explanation-box timeout';
     expBox.style.display = 'block';
-    expBox.innerHTML = `⏰ <strong>Time's up!</strong> The correct answer was <strong>${q.answer}</strong>. ${esc(q.explanation || '')}`;
+    expBox.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+            <span style="font-size: 1.8rem;">⏰</span>
+            <span style="font-weight: 800; color: var(--gold-deep); font-family: 'Syne', sans-serif;">TIME'S UP!</span>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <strong>Correct answer:</strong> ${q.answer}. ${esc(correctAnswerText)}
+        </div>
+        <div style="padding: 10px; background: rgba(232,185,79,0.1); border-radius: 8px;">
+            ${esc(q.explanation || `The correct answer is ${q.answer}.`)}
+        </div>
+    `;
     document.getElementById('nextWrap').style.display = 'block';
 }
 
+// ══════════════════════════════════════════════
+//  ENHANCED CHECK ANSWER WITH EXPLANATION
+// ══════════════════════════════════════════════
 function checkAnswer(selected) {
     if (isAnswered) return;
     isAnswered = true;
-    stopTimer();
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = null;
 
     const q = questions[questionIndex];
+    const correct = q.answer;
     disableOptions();
-    highlightCorrect(q.answer);
+    highlightCorrect(correct);
 
     const selBtn = document.getElementById('opt' + selected);
-    const isCorrect = selected === q.answer;
+    const isCorrect = selected === correct;
 
     if (isCorrect) {
         score++;
     } else if (selBtn) {
         selBtn.classList.add('incorrect');
-        selBtn.querySelector('.option-letter').style.background = 'var(--ruby)';
-        selBtn.querySelector('.option-letter').style.color = 'white';
+        const letterSpan = selBtn.querySelector('.option-letter');
+        if (letterSpan) {
+            letterSpan.style.background = 'var(--ruby)';
+            letterSpan.style.color = 'white';
+        }
     }
 
+    let correctAnswerText = '';
+    if (correct === 'A') correctAnswerText = q.optionA;
+    else if (correct === 'B') correctAnswerText = q.optionB;
+    else if (correct === 'C') correctAnswerText = q.optionC;
+    else if (correct === 'D') correctAnswerText = q.optionD;
+
     const expBox = document.getElementById('expBox');
-    expBox.className = 'explanation-box' + (isCorrect ? '' : ' wrong');
+    let explanationHTML = '';
+
+    if (isCorrect) {
+        explanationHTML = `
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                <span style="font-size: 1.8rem;">✅</span>
+                <span style="font-weight: 800; color: var(--jade); font-family: 'Syne', sans-serif;">CORRECT!</span>
+            </div>
+            <div style="margin-bottom: 10px;">${esc(q.explanation || `The correct answer is ${correct}. ${correctAnswerText}`)}</div>
+            <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(26,140,110,0.2); font-size: 0.85rem; color: var(--jade);">
+                <span>✓ Answer: ${correct}. ${esc(correctAnswerText)}</span>
+            </div>
+        `;
+        expBox.className = 'explanation-box';
+    } else {
+        explanationHTML = `
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                <span style="font-size: 1.8rem;">❌</span>
+                <span style="font-weight: 800; color: var(--ruby); font-family: 'Syne', sans-serif;">INCORRECT</span>
+            </div>
+            <div style="margin-bottom: 10px;">
+                <strong>Correct answer:</strong> ${correct}. ${esc(correctAnswerText)}
+            </div>
+            <div style="margin-bottom: 10px; padding: 10px; background: rgba(214,64,69,0.08); border-radius: 8px;">
+                ${esc(q.explanation || `The correct answer is ${correct}.`)}
+            </div>
+            <div style="margin-top: 6px; font-size: 0.8rem; color: var(--muted);">
+                📚 You selected: ${selected}. ${esc(q['option' + selected] || '')}
+            </div>
+        `;
+        expBox.className = 'explanation-box wrong';
+    }
+
     expBox.style.display = 'block';
-    const resultWord = isCorrect ? '✅ Correct!' : '❌ Incorrect.';
-    expBox.innerHTML = `<strong>${resultWord}</strong> ${esc(q.explanation || `The correct answer is ${q.answer}.`)}`;
+    expBox.innerHTML = explanationHTML;
     document.getElementById('nextWrap').style.display = 'block';
 }
 
 function highlightCorrect(answer) {
     const btn = document.getElementById('opt' + answer);
-    if (!btn) return;
-    btn.classList.add('correct');
+    if (btn) {
+        btn.classList.add('correct');
+        const letterSpan = btn.querySelector('.option-letter');
+        if (letterSpan) {
+            letterSpan.style.background = 'var(--jade)';
+            letterSpan.style.color = 'white';
+        }
+    }
 }
 
 function disableOptions() {
@@ -1281,7 +1358,7 @@ function nextQuestion() {
 //  RESULTS
 // ══════════════════════════════════════════════
 function showResults() {
-    stopTimer();
+    if (timerInterval) clearInterval(timerInterval);
     const pct = Math.round((score / questions.length) * 100);
     let emoji, msg, color;
     if (pct >= 80)      { emoji = '🏆'; msg = 'Outstanding! You are a Star!'; color = 'var(--jade)'; }
@@ -1427,7 +1504,6 @@ function initiatePaystack() {
     const btn = document.getElementById('paystackPayBtn');
     if (btn) { btn.textContent = '⏳ Opening payment…'; btn.disabled = true; }
 
-    // Ensure Paystack is loaded
     if (typeof PaystackPop === 'undefined') {
         const s = document.createElement('script');
         s.src = 'https://js.paystack.co/v1/inline.js';
@@ -1483,8 +1559,7 @@ async function processPaymentSuccess(reference) {
             ? (studentSnap.data().fullName || currentUser.email.split('@')[0])
             : currentUser.email.split('@')[0];
 
-        const now = new Date();
-        const expiresAt = new Date(now.getTime() + PREMIUM_DURATION_MS);
+        const expiresAt = new Date(Date.now() + PREMIUM_DURATION_MS);
 
         await firestore.collection('payments').doc(`PAY_${reference}`).set({
             paymentId: `PAY_${reference}`,
@@ -1500,7 +1575,6 @@ async function processPaymentSuccess(reference) {
             durationHours: 24
         });
 
-        // Small delay so serverTimestamp resolves, then start quiz
         setTimeout(() => {
             showToast('🎉 Access granted! Starting quiz…', 'success');
             loadQuestions('premium');
@@ -1520,8 +1594,9 @@ let lbCurrentSubject = 'mathematics';
 
 function buildLbTabs() {
     const tabs = document.getElementById('lbTabs');
+    if (!tabs) return;
     tabs.innerHTML = SUBJECTS_LIST.map(s =>
-        `<button class="lb-tab${s === lbCurrentSubject ? ' active' : ''}" onclick="changeLbTab('${s}')">${(SUBJECT_NAMES[s]||s).split(' ')[0]} ${s.split('-').map(w=>w[0].toUpperCase()+w.slice(1)).join(' ')}</button>`
+        `<button class="lb-tab${s === lbCurrentSubject ? ' active' : ''}" onclick="changeLbTab('${s}')">${(SUBJECT_NAMES[s]||s).split(' ')[0]}</button>`
     ).join('');
 }
 
@@ -1574,7 +1649,7 @@ async function loadLeaderboard() {
             html += `
                 <div class="lb-row">
                     <div class="lb-rank ${rankClass}">${i < 3 ? rankIcons[i] : (i+1)}</div>
-                    <div class="lb-avatar">${initial}</div>
+                    <div class="lb-avatar">${esc(initial)}</div>
                     <div class="lb-info">
                         <div class="lb-name">${esc(name)}</div>
                         <div class="lb-sub">${subjectName(lbCurrentSubject)}</div>
@@ -1590,7 +1665,7 @@ async function loadLeaderboard() {
     }
 }
 
-// Init leaderboard month label
+// Initialize leaderboard
 document.getElementById('lbMonthLabel').textContent = new Date().toLocaleString('default', { month: 'long', year: 'numeric' }) + ' rankings';
 </script>
 </body>

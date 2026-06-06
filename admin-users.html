@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - Ernest Embassy LMS</title>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #1a1a2e; min-height: 100vh; }
+
+        nav {
+            background: rgba(255,255,255,0.97);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.4rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        .nav-links a { color: #4a5568; text-decoration: none; margin-left: 20px; }
+
+        .page-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .page-header h1 { font-size: 2rem; }
+        .page-header p { opacity: 0.85; margin-top: 8px; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 30px 20px; }
+
+        /* Stats row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .stat-mini {
+            background: white;
+            border-radius: 14px;
+            padding: 18px 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        .stat-mini .num { font-size: 1.8rem; font-weight: bold; color: #667eea; }
+        .stat-mini .lbl { color: #718096; font-size: 0.85rem; margin-top: 3px; }
+
+        /* Main card */
+        .main-card {
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .card-header h2 { font-size: 1.2rem; color: #2d3748; }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .search-bar input, .search-bar select {
+            padding: 9px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        .search-bar input:focus, .search-bar select:focus { border-color: #667eea; }
+        .search-bar input { width: 220px; }
+
+        /* Table */
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th {
+            background: #f7fafc;
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #4a5568;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 2px solid #e2e8f0;
+            white-space: nowrap;
+        }
+        td {
+            padding: 13px 15px;
+            border-bottom: 1px solid #f0f4f8;
+            font-size: 0.9rem;
+            color: #2d3748;
+        }
+        tr:hover td { background: #f7fafc; }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+        .user-cell { display: flex; align-items: center; gap: 10px; }
+        .user-name { font-weight: 600; }
+        .user-email { font-size: 0.78rem; color: #718096; }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .badge-premium { background: #fef3c7; color: #92400e; }
+        .badge-free { background: #e2e8f0; color: #4a5568; }
+        .badge-active { background: #d1fae5; color: #065f46; }
+        .badge-inactive { background: #fee2e2; color: #991b1b; }
+
+        .btn-sm {
+            padding: 6px 12px;
+            border-radius: 7px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.78rem;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+        .btn-sm:hover { opacity: 0.75; }
+        .btn-promote { background: #fef3c7; color: #92400e; }
+        .btn-demote  { background: #fee2e2; color: #991b1b; }
+        .btn-view-user { background: #ebf4ff; color: #1a56db; }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 5000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 520px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .modal h3 { font-size: 1.2rem; color: #2d3748; margin-bottom: 20px; }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f4f8;
+            font-size: 0.9rem;
+        }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-key { color: #718096; font-weight: 600; }
+        .detail-val { color: #2d3748; text-align: right; max-width: 60%; word-break: break-all; }
+        .modal-close {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: #f7fafc;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #4a5568;
+            margin-top: 20px;
+        }
+        .modal-close:hover { background: #e2e8f0; }
+
+        .empty-state { text-align: center; padding: 40px; color: #a0aec0; }
+
+        .toast {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: #276749;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            z-index: 9999;
+            display: none;
+        }
+        .toast.error { background: #c53030; }
+        .toast.show { display: block; }
+
+        .floating-home {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .nav-container { flex-direction: column; gap: 10px; }
+            .card-header { flex-direction: column; align-items: flex-start; }
+            .search-bar input { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+<a href="admin.html" class="floating-home">⚙️</a>
+
+<!-- User Detail Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal" id="modalBox">
+        <h3>👤 Student Details</h3>
+        <div id="modalContent"></div>
+        <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open')">Close</button>
+    </div>
+</div>
+
+<nav>
+    <div class="nav-container">
+        <a href="index.html" class="logo">⚡ Ernest Embassy LMS</a>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="admin.html">Admin</a>
+            <a href="logout.html">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="page-header">
+    <h1>👥 User Management</h1>
+    <p>View, manage and upgrade student accounts</p>
+</div>
+
+<div class="container">
+    <div class="stats-row">
+        <div class="stat-mini">
+            <div class="num" id="statTotal">—</div>
+            <div class="lbl">Total Students</div>
+        </div>
+        <div class="stat-mini">
+            <div class="num" id="statPremium">—</div>
+            <div class="lbl">Premium Users</div>
+        </div>
+        <div class="stat-mini">
+            <div class="num" id="statFree">—</div>
+            <div class="lbl">Free Users</div>
+        </div>
+        <div class="stat-mini">
+            <div class="num" id="statToday">—</div>
+            <div class="lbl">Joined Today</div>
+        </div>
+    </div>
+
+    <div class="main-card">
+        <div class="card-header">
+            <h2>📋 All Students</h2>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="🔍 Search name / email..." oninput="filterUsers()">
+                <select id="filterPlan" onchange="filterUsers()">
+                    <option value="">All Plans</option>
+                    <option value="premium">Premium</option>
+                    <option value="free">Free</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Plan</th>
+                        <th>Joined</th>
+                        <th>Last Login</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <tr><td colspan="5" style="text-align:center; padding:30px; color:#a0aec0;">⏳ Loading users...</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="paginationInfo" style="text-align:center; margin-top:15px; color:#718096; font-size:0.85rem;"></div>
+    </div>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+        authDomain: "ernest-embassy-lms.firebaseapp.com",
+        projectId: "ernest-embassy-lms",
+        storageBucket: "ernest-embassy-lms.firebasestorage.app",
+        messagingSenderId: "204896421221",
+        appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    const adminEmails = ['ernestembassydigitalsolutions@gmail.com', 'damian@ernestembassy.com', 'dev@ernestlms.com'];
+
+    let allUsers = [];
+
+    function showToast(msg, type = 'success') {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.className = 'toast show' + (type === 'error' ? ' error' : '');
+        setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    function getInitials(name, email) {
+        if (name && name.trim()) return name.trim().split(' ').map(w => w[0]).join('').substring(0,2).toUpperCase();
+        return email ? email[0].toUpperCase() : '?';
+    }
+
+    function formatDate(ts) {
+        if (!ts) return '—';
+        const d = ts.toDate ? ts.toDate() : new Date(ts);
+        return d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+    }
+
+    async function loadUsers() {
+        try {
+            // Try 'students' collection first, fall back to 'users'
+            let snap = await db.collection('students').orderBy('createdAt', 'desc').get();
+            if (snap.empty) snap = await db.collection('users').orderBy('createdAt', 'desc').get();
+
+            allUsers = [];
+            snap.forEach(doc => allUsers.push({ id: doc.id, ...doc.data() }));
+
+            // Stats
+            const today = new Date(); today.setHours(0,0,0,0);
+            let premium = 0, free = 0, joinedToday = 0;
+            allUsers.forEach(u => {
+                if ((u.plan || '').toLowerCase() === 'premium' || u.isPremium) premium++;
+                else free++;
+                if (u.createdAt) {
+                    const d = u.createdAt.toDate ? u.createdAt.toDate() : new Date(u.createdAt);
+                    if (d >= today) joinedToday++;
+                }
+            });
+            document.getElementById('statTotal').textContent = allUsers.length;
+            document.getElementById('statPremium').textContent = premium;
+            document.getElementById('statFree').textContent = free;
+            document.getElementById('statToday').textContent = joinedToday;
+
+            filterUsers();
+        } catch (err) {
+            document.getElementById('usersTableBody').innerHTML = `<tr><td colspan="5" style="text-align:center;padding:30px;color:#c53030;">⚠️ Error: ${err.message}</td></tr>`;
+        }
+    }
+
+    function filterUsers() {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const plan = document.getElementById('filterPlan').value;
+
+        let filtered = allUsers.filter(u => {
+            const matchSearch = !search ||
+                (u.name || '').toLowerCase().includes(search) ||
+                (u.email || '').toLowerCase().includes(search) ||
+                (u.fullName || '').toLowerCase().includes(search);
+            const isPremium = (u.plan || '').toLowerCase() === 'premium' || u.isPremium;
+            const matchPlan = !plan || (plan === 'premium' ? isPremium : !isPremium);
+            return matchSearch && matchPlan;
+        });
+
+        document.getElementById('paginationInfo').textContent = `Showing ${filtered.length} of ${allUsers.length} users`;
+        renderTable(filtered);
+    }
+
+    function renderTable(users) {
+        const tbody = document.getElementById('usersTableBody');
+        if (!users.length) {
+            tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state">No users found.</div></td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = users.map(u => {
+            const name = u.name || u.fullName || u.displayName || '—';
+            const email = u.email || '—';
+            const isPremium = (u.plan || '').toLowerCase() === 'premium' || u.isPremium;
+            const planBadge = isPremium
+                ? `<span class="badge badge-premium">⭐ Premium</span>`
+                : `<span class="badge badge-free">Free</span>`;
+            const joined = formatDate(u.createdAt);
+            const lastLogin = formatDate(u.lastLogin || u.lastSeen);
+
+            return `<tr>
+                <td>
+                    <div class="user-cell">
+                        <div class="avatar">${getInitials(name, email)}</div>
+                        <div>
+                            <div class="user-name">${name}</div>
+                            <div class="user-email">${email}</div>
+                        </div>
+                    </div>
+                </td>
+                <td>${planBadge}</td>
+                <td>${joined}</td>
+                <td>${lastLogin}</td>
+                <td>
+                    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                        <button class="btn-sm btn-view-user" onclick="viewUser('${u.id}')">👁 View</button>
+                        ${isPremium
+                            ? `<button class="btn-sm btn-demote" onclick="changePlan('${u.id}', 'free')">↓ Free</button>`
+                            : `<button class="btn-sm btn-promote" onclick="changePlan('${u.id}', 'premium')">⭐ Upgrade</button>`
+                        }
+                    </div>
+                </td>
+            </tr>`;
+        }).join('');
+    }
+
+    async function changePlan(userId, newPlan) {
+        const label = newPlan === 'premium' ? 'upgrade to Premium' : 'downgrade to Free';
+        if (!confirm(`Are you sure you want to ${label} this student?`)) return;
+        try {
+            // Try both collections
+            try { await db.collection('students').doc(userId).update({ plan: newPlan, isPremium: newPlan === 'premium' }); }
+            catch(e) { await db.collection('users').doc(userId).update({ plan: newPlan, isPremium: newPlan === 'premium' }); }
+            showToast(`Student ${newPlan === 'premium' ? 'upgraded to Premium ⭐' : 'moved to Free plan'}`);
+            loadUsers();
+        } catch (err) {
+            showToast('Failed to update plan: ' + err.message, 'error');
+        }
+    }
+
+    async function viewUser(userId) {
+        const user = allUsers.find(u => u.id === userId);
+        if (!user) return;
+
+        const name = user.name || user.fullName || user.displayName || '—';
+        const email = user.email || '—';
+        const isPremium = (user.plan || '').toLowerCase() === 'premium' || user.isPremium;
+
+        const rows = [
+            ['Name', name],
+            ['Email', email],
+            ['Plan', isPremium ? '⭐ Premium' : 'Free'],
+            ['Phone', user.phone || user.phoneNumber || '—'],
+            ['School', user.school || '—'],
+            ['Class / Level', user.level || user.class || '—'],
+            ['Joined', formatDate(user.createdAt)],
+            ['Last Login', formatDate(user.lastLogin || user.lastSeen)],
+            ['Total Quizzes', user.totalQuizzes || user.quizCount || '—'],
+            ['Avg Score', user.avgScore ? user.avgScore + '%' : '—'],
+        ];
+
+        document.getElementById('modalContent').innerHTML = rows.map(([k, v]) =>
+            `<div class="detail-row"><span class="detail-key">${k}</span><span class="detail-val">${v}</span></div>`
+        ).join('');
+        document.getElementById('modalOverlay').classList.add('open');
+    }
+
+    function closeModal(e) {
+        if (e.target.id === 'modalOverlay') document.getElementById('modalOverlay').classList.remove('open');
+    }
+
+    auth.onAuthStateChanged(user => {
+        if (user && adminEmails.includes(user.email)) {
+            loadUsers();
+        } else {
+            window.location.href = 'dashboard.html';
+        }
+    });
+</script>
+</body>
+</html>

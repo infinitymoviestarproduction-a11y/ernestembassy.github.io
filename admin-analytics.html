@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Ernest Embassy LMS</title>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #1a1a2e; min-height: 100vh; }
+
+        nav {
+            background: rgba(255,255,255,0.97);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.4rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        .nav-links a { color: #4a5568; text-decoration: none; margin-left: 20px; }
+
+        .page-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .page-header h1 { font-size: 2rem; }
+        .page-header p { opacity: 0.85; margin-top: 8px; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 30px 20px; }
+
+        /* Big Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 22px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.09);
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+        }
+        .stat-card.purple::before { background: linear-gradient(90deg, #667eea, #764ba2); }
+        .stat-card.green::before  { background: linear-gradient(90deg, #48bb78, #38a169); }
+        .stat-card.orange::before { background: linear-gradient(90deg, #f6ad55, #ed8936); }
+        .stat-card.blue::before   { background: linear-gradient(90deg, #4299e1, #3182ce); }
+        .stat-card.red::before    { background: linear-gradient(90deg, #fc8181, #e53e3e); }
+        .stat-card.teal::before   { background: linear-gradient(90deg, #4fd1c5, #38b2ac); }
+
+        .stat-icon { font-size: 2rem; margin-bottom: 8px; }
+        .stat-num { font-size: 2rem; font-weight: 800; color: #2d3748; }
+        .stat-lbl { color: #718096; font-size: 0.85rem; margin-top: 4px; }
+        .stat-sub { font-size: 0.75rem; color: #a0aec0; margin-top: 3px; }
+
+        /* Two column layout */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+            margin-bottom: 22px;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.09);
+        }
+        .panel h3 {
+            font-size: 1.05rem;
+            color: #2d3748;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Bar chart */
+        .bar-item { margin-bottom: 14px; }
+        .bar-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+        }
+        .bar-name { color: #4a5568; font-weight: 500; }
+        .bar-val { color: #667eea; font-weight: 700; }
+        .bar-bg { background: #e2e8f0; border-radius: 8px; height: 10px; overflow: hidden; }
+        .bar-fill { height: 100%; border-radius: 8px; background: linear-gradient(90deg, #667eea, #764ba2); transition: width 0.8s ease; }
+
+        /* Recent activity list */
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f4f8;
+        }
+        .activity-item:last-child { border-bottom: none; }
+        .activity-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .dot-green { background: #48bb78; }
+        .dot-blue  { background: #4299e1; }
+        .dot-orange{ background: #f6ad55; }
+        .dot-purple{ background: #9f7aea; }
+
+        .activity-text { flex: 1; font-size: 0.88rem; color: #4a5568; }
+        .activity-time { font-size: 0.78rem; color: #a0aec0; white-space: nowrap; }
+
+        /* Revenue panel */
+        .revenue-panel { margin-bottom: 22px; }
+        .revenue-table { width: 100%; border-collapse: collapse; }
+        .revenue-table th {
+            background: #f7fafc;
+            padding: 10px 12px;
+            text-align: left;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #4a5568;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .revenue-table td {
+            padding: 11px 12px;
+            border-bottom: 1px solid #f0f4f8;
+            font-size: 0.88rem;
+            color: #2d3748;
+        }
+        .revenue-table tr:hover td { background: #f7fafc; }
+
+        .badge-verified { background: #d1fae5; color: #065f46; padding: 3px 9px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .badge-pending  { background: #fef3c7; color: #92400e; padding: 3px 9px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+
+        /* Full width panel */
+        .full-panel { margin-bottom: 22px; }
+
+        /* Quick link buttons */
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+        .quick-btn {
+            background: white;
+            border-radius: 14px;
+            padding: 18px;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: #2d3748;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .quick-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+        .quick-btn .qicon { font-size: 1.8rem; }
+        .quick-btn span { font-size: 0.85rem; font-weight: 600; }
+
+        .floating-home {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .loading-row { text-align: center; padding: 20px; color: #a0aec0; }
+
+        @media (max-width: 768px) {
+            .two-col { grid-template-columns: 1fr; }
+            .nav-container { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<a href="admin.html" class="floating-home">⚙️</a>
+
+<nav>
+    <div class="nav-container">
+        <a href="index.html" class="logo">⚡ Ernest Embassy LMS</a>
+        <div class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="admin.html">Admin</a>
+            <a href="logout.html">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="page-header">
+    <h1>📊 Analytics Dashboard</h1>
+    <p>Platform statistics and performance overview</p>
+</div>
+
+<div class="container">
+
+    <!-- Quick Nav -->
+    <div class="quick-links">
+        <a href="admin-users.html" class="quick-btn"><div class="qicon">👥</div><span>Users</span></a>
+        <a href="admin-lessons.html" class="quick-btn"><div class="qicon">📚</div><span>Lessons</span></a>
+        <a href="admin-payments.html" class="quick-btn"><div class="qicon">💰</div><span>Payments</span></a>
+        <a href="bulk-upload-premium.html" class="quick-btn"><div class="qicon">📤</div><span>Upload Questions</span></a>
+        <a href="admin.html" class="quick-btn"><div class="qicon">🏠</div><span>Admin Home</span></a>
+    </div>
+
+    <!-- Big Numbers -->
+    <div class="stats-grid">
+        <div class="stat-card purple">
+            <div class="stat-icon">👥</div>
+            <div class="stat-num" id="statUsers">—</div>
+            <div class="stat-lbl">Total Students</div>
+            <div class="stat-sub" id="statUsersToday"></div>
+        </div>
+        <div class="stat-card green">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-num" id="statPremium">—</div>
+            <div class="stat-lbl">Premium Users</div>
+            <div class="stat-sub" id="statPremiumPct"></div>
+        </div>
+        <div class="stat-card orange">
+            <div class="stat-icon">❓</div>
+            <div class="stat-num" id="statQuestions">—</div>
+            <div class="stat-lbl">Total Questions</div>
+        </div>
+        <div class="stat-card blue">
+            <div class="stat-icon">📚</div>
+            <div class="stat-num" id="statLessons">—</div>
+            <div class="stat-lbl">Lesson Resources</div>
+        </div>
+        <div class="stat-card teal">
+            <div class="stat-icon">💰</div>
+            <div class="stat-num" id="statRevenue">—</div>
+            <div class="stat-lbl">Verified Revenue (₦)</div>
+        </div>
+        <div class="stat-card red">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-num" id="statPending">—</div>
+            <div class="stat-lbl">Pending Payments</div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="two-col">
+        <div class="panel">
+            <h3>📐 Questions by Subject</h3>
+            <div id="subjectChart"><div class="loading-row">⏳ Loading...</div></div>
+        </div>
+        <div class="panel">
+            <h3>🕒 Recent Activity</h3>
+            <div id="recentActivity"><div class="loading-row">⏳ Loading...</div></div>
+        </div>
+    </div>
+
+    <!-- Revenue Table -->
+    <div class="panel full-panel">
+        <h3>💳 Recent Payments</h3>
+        <div style="overflow-x:auto;">
+            <table class="revenue-table">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Amount</th>
+                        <th>Reference</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="paymentsTable">
+                    <tr><td colspan="5" class="loading-row">⏳ Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Lessons by Subject -->
+    <div class="panel">
+        <h3>📚 Resources by Subject</h3>
+        <div id="lessonsChart"><div class="loading-row">⏳ Loading...</div></div>
+    </div>
+
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+        authDomain: "ernest-embassy-lms.firebaseapp.com",
+        projectId: "ernest-embassy-lms",
+        storageBucket: "ernest-embassy-lms.firebasestorage.app",
+        messagingSenderId: "204896421221",
+        appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    const adminEmails = ['ernestembassydigitalsolutions@gmail.com', 'damian@ernestembassy.com', 'dev@ernestlms.com'];
+
+    function formatMoney(n) {
+        if (n >= 1000000) return '₦' + (n/1000000).toFixed(1) + 'M';
+        if (n >= 1000) return '₦' + (n/1000).toFixed(1) + 'K';
+        return '₦' + n;
+    }
+
+    function timeAgo(ts) {
+        if (!ts) return '';
+        const d = ts.toDate ? ts.toDate() : new Date(ts);
+        const diff = Math.floor((Date.now() - d) / 1000);
+        if (diff < 60) return diff + 's ago';
+        if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+        if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
+        return d.toLocaleDateString('en-GB', { day:'numeric', month:'short' });
+    }
+
+    function renderBarChart(container, data, maxVal) {
+        if (!data.length) { container.innerHTML = '<div class="loading-row">No data yet.</div>'; return; }
+        container.innerHTML = data.map(item => `
+            <div class="bar-item">
+                <div class="bar-label">
+                    <span class="bar-name">${item.label}</span>
+                    <span class="bar-val">${item.value}</span>
+                </div>
+                <div class="bar-bg">
+                    <div class="bar-fill" style="width:${Math.round((item.value/maxVal)*100)}%"></div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    async function loadAnalytics() {
+        try {
+            // Parallel fetches
+            const [usersSnap, questionsSnap, lessonsSnap, paymentsSnap] = await Promise.all([
+                db.collection('students').get().catch(() => db.collection('users').get()),
+                db.collection('questions').get(),
+                db.collection('lessons').get(),
+                db.collection('payments').orderBy('createdAt', 'desc').limit(20).get()
+            ]);
+
+            // Users stats
+            const today = new Date(); today.setHours(0,0,0,0);
+            let premium = 0, joinedToday = 0;
+            usersSnap.forEach(doc => {
+                const u = doc.data();
+                if ((u.plan||'').toLowerCase() === 'premium' || u.isPremium) premium++;
+                if (u.createdAt) {
+                    const d = u.createdAt.toDate ? u.createdAt.toDate() : new Date(u.createdAt);
+                    if (d >= today) joinedToday++;
+                }
+            });
+            const totalUsers = usersSnap.size;
+            document.getElementById('statUsers').textContent = totalUsers;
+            document.getElementById('statPremium').textContent = premium;
+            document.getElementById('statUsersToday').textContent = joinedToday > 0 ? `+${joinedToday} today` : 'No new today';
+            document.getElementById('statPremiumPct').textContent = totalUsers > 0 ? Math.round((premium/totalUsers)*100) + '% of users' : '';
+            document.getElementById('statQuestions').textContent = questionsSnap.size;
+            document.getElementById('statLessons').textContent = lessonsSnap.size;
+
+            // Revenue
+            let totalRevenue = 0, pendingCount = 0;
+            const recentPayments = [];
+            paymentsSnap.forEach(doc => {
+                const p = { id: doc.id, ...doc.data() };
+                recentPayments.push(p);
+                if (p.status === 'verified') totalRevenue += (p.amount || 0);
+                if (p.status === 'pending') pendingCount++;
+            });
+            document.getElementById('statRevenue').textContent = formatMoney(totalRevenue);
+            document.getElementById('statPending').textContent = pendingCount;
+
+            // Questions by subject
+            const subjectCounts = {};
+            questionsSnap.forEach(doc => {
+                const s = doc.data().subject || 'Unknown';
+                subjectCounts[s] = (subjectCounts[s] || 0) + 1;
+            });
+            const subjectData = Object.entries(subjectCounts)
+                .sort((a,b) => b[1]-a[1])
+                .slice(0, 8)
+                .map(([label, value]) => ({ label, value }));
+            const maxQ = subjectData[0]?.value || 1;
+            renderBarChart(document.getElementById('subjectChart'), subjectData, maxQ);
+
+            // Lessons by subject
+            const lessonSubCounts = {};
+            lessonsSnap.forEach(doc => {
+                const s = doc.data().subject || 'Unknown';
+                lessonSubCounts[s] = (lessonSubCounts[s] || 0) + 1;
+            });
+            const lessonData = Object.entries(lessonSubCounts)
+                .sort((a,b) => b[1]-a[1])
+                .map(([label, value]) => ({ label, value }));
+            const maxL = lessonData[0]?.value || 1;
+            renderBarChart(document.getElementById('lessonsChart'), lessonData, maxL);
+
+            // Recent activity
+            const activities = [];
+            // Recent users
+            let recentUsers = [];
+            usersSnap.forEach(doc => {
+                const u = doc.data();
+                if (u.createdAt) recentUsers.push({ time: u.createdAt, name: u.name || u.email || 'A student', type: 'user' });
+            });
+            recentUsers.sort((a,b) => {
+                const ta = a.time.toDate ? a.time.toDate() : new Date(a.time);
+                const tb = b.time.toDate ? b.time.toDate() : new Date(b.time);
+                return tb - ta;
+            });
+            recentUsers.slice(0,3).forEach(u => activities.push({
+                dot: 'dot-green', text: `${u.name} registered`, time: u.time
+            }));
+
+            // Recent payments
+            recentPayments.slice(0,3).forEach(p => activities.push({
+                dot: p.status === 'verified' ? 'dot-blue' : 'dot-orange',
+                text: `Payment ${p.status === 'verified' ? 'verified' : 'pending'} — ${p.email || p.studentEmail || 'Student'}`,
+                time: p.createdAt
+            }));
+
+            // Recent lessons
+            let recentLessons = [];
+            lessonsSnap.forEach(doc => {
+                const l = doc.data();
+                if (l.createdAt) recentLessons.push({ time: l.createdAt, title: l.title || 'A lesson' });
+            });
+            recentLessons.sort((a,b) => {
+                const ta = a.time.toDate ? a.time.toDate() : new Date(a.time);
+                const tb = b.time.toDate ? b.time.toDate() : new Date(b.time);
+                return tb - ta;
+            });
+            recentLessons.slice(0,2).forEach(l => activities.push({
+                dot: 'dot-purple', text: `Lesson uploaded: "${l.title}"`, time: l.time
+            }));
+
+            activities.sort((a,b) => {
+                const ta = a.time?.toDate ? a.time.toDate() : new Date(a.time||0);
+                const tb = b.time?.toDate ? b.time.toDate() : new Date(b.time||0);
+                return tb - ta;
+            });
+
+            const actEl = document.getElementById('recentActivity');
+            if (!activities.length) {
+                actEl.innerHTML = '<div class="loading-row">No recent activity.</div>';
+            } else {
+                actEl.innerHTML = activities.slice(0,8).map(a => `
+                    <div class="activity-item">
+                        <div class="activity-dot ${a.dot}"></div>
+                        <span class="activity-text">${a.text}</span>
+                        <span class="activity-time">${timeAgo(a.time)}</span>
+                    </div>
+                `).join('');
+            }
+
+            // Payments table
+            const ptEl = document.getElementById('paymentsTable');
+            if (!recentPayments.length) {
+                ptEl.innerHTML = '<tr><td colspan="5" class="loading-row">No payments yet.</td></tr>';
+            } else {
+                ptEl.innerHTML = recentPayments.slice(0,10).map(p => {
+                    const date = p.createdAt ? timeAgo(p.createdAt) : '—';
+                    const status = p.status === 'verified'
+                        ? '<span class="badge-verified">✅ Verified</span>'
+                        : '<span class="badge-pending">⏳ Pending</span>';
+                    return `<tr>
+                        <td>${p.email || p.studentEmail || p.name || '—'}</td>
+                        <td>₦${(p.amount || 0).toLocaleString()}</td>
+                        <td style="font-size:0.78rem;color:#718096;">${p.reference || p.paymentRef || '—'}</td>
+                        <td>${date}</td>
+                        <td>${status}</td>
+                    </tr>`;
+                }).join('');
+            }
+
+        } catch (err) {
+            console.error(err);
+            document.getElementById('subjectChart').innerHTML = `<div style="color:#c53030;padding:20px;">⚠️ Error: ${err.message}</div>`;
+        }
+    }
+
+    auth.onAuthStateChanged(user => {
+        if (user && adminEmails.includes(user.email)) {
+            loadAnalytics();
+        } else {
+            window.location.href = 'dashboard.html';
+        }
+    });
+</script>
+</body>
+</html>

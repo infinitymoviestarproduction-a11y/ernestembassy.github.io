@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Language Converter - Ernest Embassy LMS</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header {
+            background: #1e293b;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid #334155;
+        }
+        h1 { color: #34d399; margin-bottom: 10px; }
+        .subtitle { color: #94a3b8; }
+        .stats-bar {
+            background: #1e293b;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            border: 1px solid #334155;
+        }
+        .stat-value { font-size: 2rem; font-weight: bold; color: #34d399; }
+        .mode-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .mode-btn {
+            flex: 1;
+            padding: 15px;
+            background: #1e293b;
+            border: 2px solid #334155;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .mode-btn.active { border-color: #34d399; background: #064e3b; }
+        .mode-btn.premium.active { border-color: #f59e0b; }
+        .mode-title { font-weight: bold; font-size: 1.1rem; }
+        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 900px) { .main-grid { grid-template-columns: 1fr; } }
+        .card {
+            background: #1e293b;
+            border-radius: 16px;
+            border: 1px solid #334155;
+            overflow: hidden;
+        }
+        .card-header {
+            padding: 15px 20px;
+            background: #0f172a;
+            border-bottom: 1px solid #334155;
+            font-weight: bold;
+        }
+        .card-content { padding: 20px; }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            color: #e2e8f0;
+            font-family: monospace;
+            font-size: 12px;
+            resize: vertical;
+        }
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+            margin-right: 10px;
+        }
+        .btn-primary { background: #3b82f6; color: white; }
+        .btn-success { background: #10b981; color: white; }
+        .btn-warning { background: #f59e0b; color: white; }
+        .preview {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .question-item {
+            background: #0f172a;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-left: 3px solid #34d399;
+        }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1e293b;
+            border-left: 3px solid #10b981;
+            padding: 12px 20px;
+            border-radius: 8px;
+            transform: translateX(120%);
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+        .toast.show { transform: translateX(0); }
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #334155;
+            border-top-color: #34d399;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-right: 8px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📖 English Language Converter</h1>
+            <div class="subtitle">For format: ### Question X + A. B. C. D. + **Answer:** X + **Explanation:** text</div>
+        </div>
+
+        <div class="stats-bar">
+            <div><span style="color:#64748b;">Questions Found:</span> <span class="stat-value" id="questionCount">0</span></div>
+            <div><span style="color:#64748b;">Mode:</span> <span id="modeDisplay">Premium (8s timer)</span></div>
+        </div>
+
+        <div class="mode-selector">
+            <div class="mode-btn" onclick="setMode('free')">
+                <div class="mode-title">📝 Free Practice</div>
+                <div style="font-size:0.75rem; color:#64748b;">Unlimited time</div>
+            </div>
+            <div class="mode-btn premium active" onclick="setMode('premium')">
+                <div class="mode-title">🏆 Premium Competition</div>
+                <div style="font-size:0.75rem; color:#64748b;">8 seconds per question</div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <div class="card">
+                <div class="card-header">📋 Paste Your English Questions</div>
+                <div class="card-content">
+                    <textarea id="inputText" rows="25" placeholder="Paste English questions here in format:
+
+### Question 1
+The chairman's remarks were considered **germane** to the discussion. This means they were:
+
+A. Irrelevant
+B. Offensive
+C. Relevant
+D. Confusing
+
+**Answer:** C
+**Explanation:** &quot;Germane&quot; means relevant and appropriate to the subject matter.
+
+### Question 2
+Which word contains the /iː/ sound?
+
+A. Sit
+B. Seat
+C. Set
+D. Sat
+
+**Answer:** B
+**Explanation:** &quot;Seat&quot; contains the long vowel sound /iː/."></textarea>
+                    <button class="btn btn-primary" onclick="convert()">🔄 Convert to JSON</button>
+                    <button class="btn btn-success" onclick="copyJSON()">📋 Copy JSON</button>
+                    <button class="btn btn-warning" onclick="downloadJSON()">💾 Download JSON</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">📄 JSON Output</div>
+                <div class="card-content">
+                    <textarea id="jsonOutput" rows="25" readonly placeholder="JSON will appear here..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 20px;">
+            <div class="card-header">👁️ Preview (First 10 Questions)</div>
+            <div class="card-content">
+                <div class="preview" id="previewContainer">
+                    <p style="color:#64748b; text-align:center; padding:40px;">Click "Convert to JSON" to preview...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">✅ Copied!</div>
+
+    <script>
+        let currentQuestions = [];
+        let currentMode = 'premium';
+
+        function setMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            if (mode === 'free') {
+                document.querySelector('.mode-btn').classList.add('active');
+                document.getElementById('modeDisplay').textContent = 'Free (unlimited time)';
+            } else {
+                document.querySelector('.mode-btn.premium').classList.add('active');
+                document.getElementById('modeDisplay').textContent = 'Premium (8s timer)';
+            }
+            if (currentQuestions.length > 0) updateOutput();
+        }
+
+        function cleanText(text) {
+            if (!text) return '';
+            return text.replace(/\*\*/g, '').replace(/###/g, '').replace(/\s+/g, ' ').trim();
+        }
+
+        function convert() {
+            const text = document.getElementById('inputText').value;
+            if (!text.trim()) {
+                alert('Please paste your questions first!');
+                return;
+            }
+
+            document.getElementById('modeDisplay').innerHTML = '<span class="loading"></span> Processing...';
+
+            setTimeout(() => {
+                try {
+                    const questions = [];
+                    
+                    // Split by "### Question" pattern
+                    const blocks = text.split(/\n(?=### Question\s+\d+)/i);
+                    
+                    for (const block of blocks) {
+                        if (!block.trim()) continue;
+                        
+                        const q = {};
+                        
+                        // Extract question text - everything between "### Question X" and "A."
+                        const qMatch = block.match(/### Question\s+\d+\s*\n(.*?)(?=\n[A-Z]\.)/is);
+                        if (qMatch) {
+                            q.question = cleanText(qMatch[1]);
+                        } else {
+                            continue;
+                        }
+                        
+                        // Extract A, B, C, D options
+                        const optA = block.match(/A\.\s*(.*?)(?=\nB\.)/i);
+                        const optB = block.match(/B\.\s*(.*?)(?=\nC\.)/i);
+                        const optC = block.match(/C\.\s*(.*?)(?=\nD\.)/i);
+                        const optD = block.match(/D\.\s*(.*?)(?=\n\*\*Answer|\nAnswer|$)/i);
+                        
+                        if (optA) q.optionA = cleanText(optA[1]);
+                        if (optB) q.optionB = cleanText(optB[1]);
+                        if (optC) q.optionC = cleanText(optC[1]);
+                        if (optD) q.optionD = cleanText(optD[1]);
+                        
+                        // Extract answer - **Answer:** X
+                        let answer = null;
+                        const ansMatch = block.match(/\*\*Answer:\*\*\s*([A-D])/i);
+                        if (ansMatch) {
+                            answer = ansMatch[1].toUpperCase();
+                        } else {
+                            const ansMatch2 = block.match(/Answer:\s*([A-D])/i);
+                            if (ansMatch2) answer = ansMatch2[1].toUpperCase();
+                        }
+                        q.answer = answer;
+                        
+                        // Extract explanation - **Explanation:** text
+                        let explanation = '';
+                        const expMatch = block.match(/\*\*Explanation:\*\*\s*(.*?)(?=\n---|\n###|\n$)/is);
+                        if (expMatch) {
+                            explanation = cleanText(expMatch[1]);
+                        } else {
+                            const expMatch2 = block.match(/Explanation:\s*(.*?)(?=\n---|\n###|$)/is);
+                            if (expMatch2) explanation = cleanText(expMatch2[1]);
+                        }
+                        q.explanation = explanation || `The correct answer is ${answer}.`;
+                        
+                        // Validate
+                        if (q.question && q.optionA && q.optionB && q.optionC && q.optionD && q.answer) {
+                            questions.push(q);
+                        }
+                    }
+                    
+                    if (questions.length === 0) {
+                        alert('No questions found!\n\nMake sure your format looks like:\n\n### Question 1\nQuestion text here\n\nA. Option A\nB. Option B\nC. Option C\nD. Option D\n\n**Answer:** A\n**Explanation:** Explanation text here.');
+                        document.getElementById('modeDisplay').textContent = 'Ready';
+                        return;
+                    }
+                    
+                    currentQuestions = questions;
+                    document.getElementById('questionCount').textContent = currentQuestions.length;
+                    document.getElementById('modeDisplay').textContent = `${currentQuestions.length} questions converted`;
+                    
+                    updateOutput();
+                    previewQuestions();
+                    alert(`✅ Successfully converted ${currentQuestions.length} English questions!`);
+                    
+                } catch (error) {
+                    alert('Error: ' + error.message);
+                    document.getElementById('modeDisplay').textContent = 'Ready';
+                }
+            }, 50);
+        }
+
+        function updateOutput() {
+            const output = currentQuestions.map(q => {
+                const obj = {
+                    question: q.question,
+                    optionA: q.optionA,
+                    optionB: q.optionB,
+                    optionC: q.optionC,
+                    optionD: q.optionD,
+                    answer: q.answer,
+                    explanation: q.explanation
+                };
+                if (currentMode === 'premium') {
+                    obj.timeLimit = 8;
+                    obj.competition = true;
+                }
+                return obj;
+            });
+            document.getElementById('jsonOutput').value = JSON.stringify(output, null, 2);
+        }
+
+        function previewQuestions() {
+            const container = document.getElementById('previewContainer');
+            if (!currentQuestions.length) return;
+            
+            let html = '';
+            for (let i = 0; i < Math.min(10, currentQuestions.length); i++) {
+                const q = currentQuestions[i];
+                html += `
+                    <div class="question-item">
+                        <div><strong>Q${i+1}:</strong> ${escapeHtml(q.question.substring(0, 150))}${q.question.length > 150 ? '...' : ''}</div>
+                        <div style="font-size: 12px; color: #94a3b8; margin-top: 8px;">
+                            A: ${escapeHtml(q.optionA.substring(0, 60))}<br>
+                            B: ${escapeHtml(q.optionB.substring(0, 60))}<br>
+                            C: ${escapeHtml(q.optionC.substring(0, 60))}<br>
+                            D: ${escapeHtml(q.optionD.substring(0, 60))}
+                        </div>
+                        <div style="font-size: 11px; color: #34d399; margin-top: 6px;">✅ Answer: ${q.answer}</div>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        function copyJSON() {
+            const output = document.getElementById('jsonOutput');
+            if (!output.value) {
+                alert('No JSON to copy. Click "Convert to JSON" first.');
+                return;
+            }
+            output.select();
+            document.execCommand('copy');
+            showToast('📋 JSON copied!');
+        }
+
+        function downloadJSON() {
+            if (!currentQuestions.length) {
+                alert('No questions to download. Click "Convert to JSON" first.');
+                return;
+            }
+            const output = currentQuestions.map(q => {
+                const obj = {
+                    question: q.question,
+                    optionA: q.optionA,
+                    optionB: q.optionB,
+                    optionC: q.optionC,
+                    optionD: q.optionD,
+                    answer: q.answer,
+                    explanation: q.explanation
+                };
+                if (currentMode === 'premium') {
+                    obj.timeLimit = 8;
+                    obj.competition = true;
+                }
+                return obj;
+            });
+            const blob = new Blob([JSON.stringify(output, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `english_questions_${currentQuestions.length}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast(`💾 Downloaded ${currentQuestions.length} questions!`);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+    </script>
+</body>
+</html>

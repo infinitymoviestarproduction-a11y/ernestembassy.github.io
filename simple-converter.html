@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Question Converter - Works for Any Format</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header {
+            background: #1e293b;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid #334155;
+        }
+        h1 { color: #34d399; margin-bottom: 10px; }
+        .subtitle { color: #94a3b8; }
+        .stats-bar {
+            background: #1e293b;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            border: 1px solid #334155;
+        }
+        .stat-value { font-size: 2rem; font-weight: bold; color: #34d399; }
+        .mode-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .mode-btn {
+            flex: 1;
+            padding: 15px;
+            background: #1e293b;
+            border: 2px solid #334155;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .mode-btn.active { border-color: #34d399; background: #064e3b; }
+        .mode-btn.premium.active { border-color: #f59e0b; }
+        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 900px) { .main-grid { grid-template-columns: 1fr; } }
+        .card {
+            background: #1e293b;
+            border-radius: 16px;
+            border: 1px solid #334155;
+            overflow: hidden;
+        }
+        .card-header {
+            padding: 15px 20px;
+            background: #0f172a;
+            border-bottom: 1px solid #334155;
+            font-weight: bold;
+        }
+        .card-content { padding: 20px; }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            color: #e2e8f0;
+            font-family: monospace;
+            font-size: 12px;
+            resize: vertical;
+        }
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+            margin-right: 10px;
+        }
+        .btn-primary { background: #3b82f6; color: white; }
+        .btn-success { background: #10b981; color: white; }
+        .btn-warning { background: #f59e0b; color: white; }
+        .preview {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .question-item {
+            background: #0f172a;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-left: 3px solid #34d399;
+        }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1e293b;
+            border-left: 3px solid #10b981;
+            padding: 12px 20px;
+            border-radius: 8px;
+            transform: translateX(120%);
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+        .toast.show { transform: translateX(0); }
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #334155;
+            border-top-color: #34d399;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-right: 8px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 Simple Question Converter</h1>
+            <div class="subtitle">Paste ANY formatted questions - I'll extract them automatically</div>
+        </div>
+
+        <div class="stats-bar">
+            <div><span style="color:#64748b;">Questions Found:</span> <span class="stat-value" id="questionCount">0</span></div>
+            <div><span style="color:#64748b;">Mode:</span> <span id="modeDisplay">Premium (8s timer)</span></div>
+        </div>
+
+        <div class="mode-selector">
+            <div class="mode-btn" onclick="setMode('free')">📝 Free Practice</div>
+            <div class="mode-btn premium active" onclick="setMode('premium')">🏆 Premium Competition</div>
+        </div>
+
+        <div class="main-grid">
+            <div class="card">
+                <div class="card-header">📋 Paste Questions Below</div>
+                <div class="card-content">
+                    <textarea id="inputText" rows="25" placeholder="Paste your questions here..."></textarea>
+                    <button class="btn btn-primary" onclick="convert()">🔄 Convert to JSON</button>
+                    <button class="btn btn-success" onclick="copyJSON()">📋 Copy JSON</button>
+                    <button class="btn btn-warning" onclick="downloadJSON()">💾 Download JSON</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">📄 JSON Output</div>
+                <div class="card-content">
+                    <textarea id="jsonOutput" rows="25" readonly placeholder="JSON will appear here..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 20px;">
+            <div class="card-header">👁️ Preview (First 10 Questions)</div>
+            <div class="card-content">
+                <div class="preview" id="previewContainer">
+                    <p style="color:#64748b; text-align:center; padding:40px;">Click "Convert to JSON" to preview...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">✅ Copied!</div>
+
+    <script>
+        let currentQuestions = [];
+        let currentMode = 'premium';
+
+        function setMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            if (mode === 'free') {
+                document.querySelector('.mode-btn').classList.add('active');
+                document.getElementById('modeDisplay').textContent = 'Free (unlimited time)';
+            } else {
+                document.querySelector('.mode-btn.premium').classList.add('active');
+                document.getElementById('modeDisplay').textContent = 'Premium (8s timer)';
+            }
+            if (currentQuestions.length > 0) updateOutput();
+        }
+
+        function convert() {
+            const text = document.getElementById('inputText').value;
+            if (!text.trim()) {
+                alert('Please paste your questions first!');
+                return;
+            }
+
+            document.getElementById('modeDisplay').innerHTML = '<span class="loading"></span> Processing...';
+
+            setTimeout(() => {
+                try {
+                    const questions = [];
+                    
+                    // Split by "Question" pattern (any format)
+                    const blocks = text.split(/\n(?=.*?Question\s+\d+)/i);
+                    
+                    for (const block of blocks) {
+                        if (!block.trim()) continue;
+                        
+                        const q = {};
+                        
+                        // Get the question text - everything after "Question X" until first option
+                        const afterQuestion = block.replace(/^.*?Question\s+\d+\s*/i, '');
+                        const qMatch = afterQuestion.match(/^(.*?)(?=\n[A-Z]\.|\n\d+\.|\n\*)/is);
+                        if (qMatch) {
+                            q.question = cleanText(qMatch[1]);
+                        } else {
+                            continue;
+                        }
+                        
+                        // Extract A, B, C, D options
+                        const optA = block.match(/A\.\s*(.*?)(?=\nB\.|\n[ \t]*B\.|$)/i);
+                        const optB = block.match(/B\.\s*(.*?)(?=\nC\.|\n[ \t]*C\.|$)/i);
+                        const optC = block.match(/C\.\s*(.*?)(?=\nD\.|\n[ \t]*D\.|$)/i);
+                        const optD = block.match(/D\.\s*(.*?)(?=\nAnswer:|\n\*\*Answer:|\nCorrect Answer:|\n---|$)/i);
+                        
+                        if (optA) q.optionA = cleanText(optA[1]);
+                        if (optB) q.optionB = cleanText(optB[1]);
+                        if (optC) q.optionC = cleanText(optC[1]);
+                        if (optD) q.optionD = cleanText(optD[1]);
+                        
+                        // Find answer
+                        let answer = null;
+                        const ansPatterns = [
+                            /Answer:\s*([A-D])/i,
+                            /\*\*Answer:\*\*\s*([A-D])/i,
+                            /Correct Answer:\s*([A-D])/i,
+                            /Answer\s*([A-D])/i
+                        ];
+                        for (const pattern of ansPatterns) {
+                            const match = block.match(pattern);
+                            if (match) {
+                                answer = match[1].toUpperCase();
+                                break;
+                            }
+                        }
+                        q.answer = answer;
+                        
+                        // Find explanation
+                        let explanation = '';
+                        const expPatterns = [
+                            /Explanation:\s*(.*?)(?=\n\n|\nQuestion|\n\*Question|\n---|$)/is,
+                            /\*\*Explanation:\*\*\s*(.*?)(?=\n\n|\nQuestion|$)/is
+                        ];
+                        for (const pattern of expPatterns) {
+                            const match = block.match(pattern);
+                            if (match && match[1] && match[1].length > 5) {
+                                explanation = cleanText(match[1]);
+                                break;
+                            }
+                        }
+                        
+                        // If no explanation found, try to get text after answer
+                        if (!explanation && answer) {
+                            const afterAnswer = block.split(new RegExp(`Answer:\\s*${answer}`, 'i'))[1];
+                            if (afterAnswer && afterAnswer.length > 10) {
+                                explanation = cleanText(afterAnswer.replace(/Explanation:\s*/i, ''));
+                            }
+                        }
+                        
+                        q.explanation = explanation || `The correct answer is ${answer}.`;
+                        
+                        // Only add if we have all required fields
+                        if (q.question && q.optionA && q.optionB && q.optionC && q.optionD && q.answer) {
+                            questions.push(q);
+                        }
+                    }
+                    
+                    if (questions.length === 0) {
+                        alert('No questions found! Please check your format.\n\nMake sure each question has:\n- Question number\n- A., B., C., D. options\n- Answer: X');
+                        document.getElementById('modeDisplay').textContent = 'Ready';
+                        return;
+                    }
+                    
+                    currentQuestions = questions;
+                    document.getElementById('questionCount').textContent = currentQuestions.length;
+                    document.getElementById('modeDisplay').textContent = `${currentQuestions.length} questions converted`;
+                    
+                    updateOutput();
+                    previewQuestions();
+                    alert(`✅ Successfully converted ${currentQuestions.length} questions!`);
+                    
+                } catch (error) {
+                    alert('Error: ' + error.message);
+                    document.getElementById('modeDisplay').textContent = 'Ready';
+                }
+            }, 50);
+        }
+
+        function cleanText(text) {
+            if (!text) return '';
+            return text
+                .replace(/[▸►•]/g, '')
+                .replace(/\*\*/g, '')
+                .replace(/###/g, '')
+                .replace(/___/g, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        function updateOutput() {
+            const output = currentQuestions.map(q => {
+                const obj = {
+                    question: q.question,
+                    optionA: q.optionA,
+                    optionB: q.optionB,
+                    optionC: q.optionC,
+                    optionD: q.optionD,
+                    answer: q.answer,
+                    explanation: q.explanation
+                };
+                if (currentMode === 'premium') {
+                    obj.timeLimit = 8;
+                    obj.competition = true;
+                }
+                return obj;
+            });
+            document.getElementById('jsonOutput').value = JSON.stringify(output, null, 2);
+        }
+
+        function previewQuestions() {
+            const container = document.getElementById('previewContainer');
+            if (!currentQuestions.length) return;
+            
+            let html = '';
+            for (let i = 0; i < Math.min(10, currentQuestions.length); i++) {
+                const q = currentQuestions[i];
+                html += `
+                    <div class="question-item">
+                        <div><strong>Q${i+1}:</strong> ${escapeHtml(q.question.substring(0, 150))}${q.question.length > 150 ? '...' : ''}</div>
+                        <div style="font-size: 12px; color: #94a3b8; margin-top: 8px;">
+                            A: ${escapeHtml(q.optionA.substring(0, 50))}<br>
+                            B: ${escapeHtml(q.optionB.substring(0, 50))}<br>
+                            C: ${escapeHtml(q.optionC.substring(0, 50))}<br>
+                            D: ${escapeHtml(q.optionD.substring(0, 50))}
+                        </div>
+                        <div style="font-size: 11px; color: #34d399; margin-top: 6px;">✅ Answer: ${q.answer}</div>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        function copyJSON() {
+            const output = document.getElementById('jsonOutput');
+            if (!output.value) {
+                alert('No JSON to copy. Click "Convert to JSON" first.');
+                return;
+            }
+            output.select();
+            document.execCommand('copy');
+            showToast('📋 JSON copied!');
+        }
+
+        function downloadJSON() {
+            if (!currentQuestions.length) {
+                alert('No questions to download. Click "Convert to JSON" first.');
+                return;
+            }
+            const output = currentQuestions.map(q => {
+                const obj = {
+                    question: q.question,
+                    optionA: q.optionA,
+                    optionB: q.optionB,
+                    optionC: q.optionC,
+                    optionD: q.optionD,
+                    answer: q.answer,
+                    explanation: q.explanation
+                };
+                if (currentMode === 'premium') {
+                    obj.timeLimit = 8;
+                    obj.competition = true;
+                }
+                return obj;
+            });
+            const blob = new Blob([JSON.stringify(output, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `questions_${currentQuestions.length}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast(`💾 Downloaded ${currentQuestions.length} questions!`);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+    </script>
+</body>
+</html>

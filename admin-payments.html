@@ -20,6 +20,41 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
         h1 { color: #667eea; margin-bottom: 10px; }
+        
+        /* Back Navigation Bar */
+        .back-nav {
+            background: #f7fafc;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            border-radius: 15px 15px 0 0;
+            margin-bottom: 20px;
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .back-btn:hover {
+            background: #667eea;
+            border-color: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+        .back-btn.admin:hover { background: #eb3349; border-color: #eb3349; }
+        
         .stats {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
@@ -33,6 +68,7 @@
         }
         .stat-item h3 { font-size: 2rem; margin-bottom: 5px; }
         .stat-item p { opacity: 0.9; }
+        
         table {
             width: 100%;
             border-collapse: collapse;
@@ -50,6 +86,7 @@
             top: 0;
         }
         tr:hover { background-color: #f7fafc; }
+        
         .status-pending {
             background: #f39c12;
             color: white;
@@ -81,6 +118,7 @@
             background: #ccc;
             cursor: not-allowed;
         }
+        
         .nav-links {
             margin-bottom: 20px;
             padding-bottom: 20px;
@@ -100,6 +138,7 @@
         .nav-links a:hover {
             background: #f7fafc;
         }
+        
         .btn-logout {
             background: #dc3545;
             color: white;
@@ -138,236 +177,279 @@
             color: #11998e;
             margin-top: 10px;
         }
+        
+        .floating-home {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+        .floating-home:hover { transform: scale(1.1); }
+        
         @media (max-width: 768px) {
             .container { padding: 20px; }
             th, td { padding: 8px; font-size: 12px; }
             .stats { grid-template-columns: 1fr; }
+            .back-nav { justify-content: center; }
+            .floating-home { bottom: 20px; right: 20px; width: 50px; height: 50px; font-size: 20px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-            <div>
-                <h1>💰 Payment Verification Dashboard</h1>
-                <p>Review and verify student payment requests <span class="admin-badge">Admin Only</span></p>
-            </div>
-            <div>
-                <button class="refresh-btn" onclick="loadPayments()">🔄 Refresh</button>
-                <button class="btn-logout" onclick="logout()">🚪 Logout</button>
-            </div>
+
+<!-- Floating Home Button -->
+<a href="index.html" class="floating-home" title="Go to Home">🏠</a>
+
+<div class="container">
+    <!-- Back Navigation Bar -->
+    <div class="back-nav">
+        <a href="admin.html" class="back-btn admin">🔙 Back to Admin Dashboard</a>
+        <a href="index.html" class="back-btn">🏠 Back to Home</a>
+        <a href="dashboard.html" class="back-btn">👤 My Dashboard</a>
+    </div>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+        <div>
+            <h1>💰 Payment Verification Dashboard</h1>
+            <p>Review and verify student payment requests <span class="admin-badge">Admin Only</span></p>
         </div>
-        
-        <div class="nav-links">
-            <a href="admin.html">🔒 Admin Panel</a>
-            <a href="dashboard.html">📊 Dashboard</a>
-            <a href="class.html">📝 Quiz</a>
-            <a href="index.html">🏠 Home</a>
-        </div>
-        
-        <div class="stats" id="stats">
-            <div class="stat-item">
-                <h3 id="pendingCount">0</h3>
-                <p>Pending Payments</p>
-            </div>
-            <div class="stat-item">
-                <h3 id="verifiedCount">0</h3>
-                <p>Verified Payments</p>
-            </div>
-            <div class="stat-item">
-                <h3 id="totalRevenue">₦0</h3>
-                <p>Total Revenue</p>
-            </div>
-        </div>
-        
-        <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0;">
-            <h2>📋 Payment Requests</h2>
-            <div class="auto-refresh" id="autoRefreshStatus">🔄 Auto-refreshing every 10 seconds</div>
-        </div>
-        
-        <div style="overflow-x: auto; max-height: 500px; overflow-y: auto;">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Payment ID</th>
-                        <th>Student</th>
-                        <th>Email</th>
-                        <th>Subject</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="paymentsList">
-                    <tr><td colspan="8" style="text-align: center; padding: 40px;">Loading payments...</td><tr>
-                </tbody>
-            </table>
+        <div>
+            <button class="refresh-btn" onclick="loadPayments()">🔄 Refresh</button>
+            <button class="btn-logout" onclick="logout()">🚪 Logout</button>
         </div>
     </div>
+    
+    <div class="nav-links">
+        <a href="admin.html">🔒 Admin Panel</a>
+        <a href="dashboard.html">📊 Dashboard</a>
+        <a href="class.html">📝 Quiz</a>
+        <a href="index.html">🏠 Home</a>
+    </div>
+    
+    <div class="stats" id="stats">
+        <div class="stat-item">
+            <h3 id="pendingCount">0</h3>
+            <p>Pending Payments</p>
+        </div>
+        <div class="stat-item">
+            <h3 id="verifiedCount">0</h3>
+            <p>Verified Payments</p>
+        </div>
+        <div class="stat-item">
+            <h3 id="totalRevenue">₦0</h3>
+            <p>Total Revenue</p>
+        </div>
+    </div>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0;">
+        <h2>📋 Payment Requests</h2>
+        <div class="auto-refresh" id="autoRefreshStatus">🔄 Auto-refreshing every 10 seconds</div>
+    </div>
+    
+    <div style="overflow-x: auto; max-height: 500px; overflow-y: auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Payment ID</th>
+                    <th>Student</th>
+                    <th>Email</th>
+                    <th>Subject</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="paymentsList">
+                <tr><td colspan="8" style="text-align: center; padding: 40px;">Loading payments...</td</tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
-            authDomain: "ernest-embassy-lms.firebaseapp.com",
-            projectId: "ernest-embassy-lms",
-            storageBucket: "ernest-embassy-lms.firebasestorage.app",
-            messagingSenderId: "204896421221",
-            appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
-        };
-        
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-        
-        const adminEmails = ['ernestembassydigitalsolutions@gmail.com', 'damian@ernestembassy.com', 'dev@ernestlms.com'];
-        let refreshInterval = null;
-        
-        async function checkAdmin() {
-            const user = auth.currentUser;
-            if (!user || !adminEmails.includes(user.email)) {
-                alert("Access Denied. Admin privileges required.");
-                window.location.href = "login.html";
-                return false;
-            }
-            return true;
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+        authDomain: "ernest-embassy-lms.firebaseapp.com",
+        projectId: "ernest-embassy-lms",
+        storageBucket: "ernest-embassy-lms.firebasestorage.app",
+        messagingSenderId: "204896421221",
+        appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
+    };
+    
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    
+    const adminEmails = ['ernestembassydigitalsolutions@gmail.com', 'damian@ernestembassy.com', 'dev@ernestlms.com'];
+    let refreshInterval = null;
+    
+    async function checkAdmin() {
+        const user = auth.currentUser;
+        if (!user || !adminEmails.includes(user.email)) {
+            alert("Access Denied. Admin privileges required.");
+            window.location.href = "login.html";
+            return false;
         }
+        return true;
+    }
+    
+    async function loadPayments() {
+        if (!await checkAdmin()) return;
         
-        async function loadPayments() {
-            if (!await checkAdmin()) return;
-            
-            const tbody = document.getElementById('paymentsList');
-            tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Loading payments...</td><tr';
-            
-            try {
-                const snapshot = await db.collection('payments')
-                    .orderBy('paymentDate', 'desc')
-                    .get();
-                
-                let pendingCount = 0;
-                let verifiedCount = 0;
-                let totalAmount = 0;
-                
-                if (snapshot.empty) {
-                    tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">No payment requests found</td><tr';
-                    document.getElementById('pendingCount').innerText = '0';
-                    document.getElementById('verifiedCount').innerText = '0';
-                    document.getElementById('totalRevenue').innerText = '₦0';
-                    return;
-                }
-                
-                let html = '';
-                snapshot.forEach(doc => {
-                    const payment = doc.data();
-                    const id = doc.id;
-                    const date = payment.paymentDate ? new Date(payment.paymentDate.toDate()).toLocaleString() : 'Unknown';
-                    const status = payment.status || 'pending';
-                    
-                    if (status === 'pending') pendingCount++;
-                    if (status === 'verified') verifiedCount++;
-                    if (status === 'verified') totalAmount += (payment.amount || 100);
-                    
-                    html += `
-                        <tr>
-                            <td>${date}</td>
-                            <td><span class="payment-id">${payment.paymentId || id.substring(0, 12)}...</span></td>
-                            <td><strong>${payment.userName || 'N/A'}</strong></td>
-                            <td>${payment.userEmail || 'N/A'}</td>
-                            <td>${payment.subject || 'N/A'}</td>
-                            <td>₦${payment.amount || 100}</td>
-                            <td><span class="${status === 'verified' ? 'status-verified' : 'status-pending'}">${status === 'verified' ? '✅ Verified' : '⏳ Pending'}</span></td>
-                            <td>
-                                ${status === 'pending' ? 
-                                    `<button class="btn-verify" onclick="verifyPayment('${id}', '${payment.userId}', '${payment.subject}')">✅ Verify & Unlock</button>` : 
-                                    '<span style="color: #11998e;">✓ Verified</span>'
-                                }
-                            </td>
-                        </tr>
-                    `;
-                });
-                
-                tbody.innerHTML = html;
-                document.getElementById('pendingCount').innerText = pendingCount;
-                document.getElementById('verifiedCount').innerText = verifiedCount;
-                document.getElementById('totalRevenue').innerText = `₦${totalAmount}`;
-                
-            } catch (error) {
-                console.error("Error loading payments:", error);
-                tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: red;">Error loading payments: ${error.message}</td></tr>`;
-            }
-        }
+        const tbody = document.getElementById('paymentsList');
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Loading payments...</td</tr';
         
-        async function verifyPayment(paymentId, userId, subject) {
-            if (!confirm(`Unlock ${subject} for this student?\n\nClick OK to confirm payment and grant access.`)) {
+        try {
+            const snapshot = await db.collection('payments')
+                .orderBy('paymentDate', 'desc')
+                .get();
+            
+            let pendingCount = 0;
+            let verifiedCount = 0;
+            let totalAmount = 0;
+            
+            if (snapshot.empty) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">No payment requests found</td</tr';
+                document.getElementById('pendingCount').innerText = '0';
+                document.getElementById('verifiedCount').innerText = '0';
+                document.getElementById('totalRevenue').innerText = '₦0';
                 return;
             }
             
-            try {
-                // Show loading on button
-                const btn = event.target;
-                const originalText = btn.innerText;
-                btn.innerText = "⏳ Processing...";
-                btn.disabled = true;
+            let html = '';
+            snapshot.forEach(doc => {
+                const payment = doc.data();
+                const id = doc.id;
+                const date = payment.paymentDate ? new Date(payment.paymentDate.toDate()).toLocaleString() : 'Unknown';
+                const status = payment.status || 'pending';
                 
-                // 1. Update the payment status to 'verified'
-                await db.collection('payments').doc(paymentId).update({
-                    status: 'verified',
-                    verifiedBy: auth.currentUser.email,
-                    verificationDate: firebase.firestore.FieldValue.serverTimestamp()
-                });
+                if (status === 'pending') pendingCount++;
+                if (status === 'verified') verifiedCount++;
+                if (status === 'verified') totalAmount += (payment.amount || 100);
                 
-                // 2. Add the subject to student's paidQuizzes array
-                const studentRef = db.collection('students').doc(userId);
-                const studentDoc = await studentRef.get();
-                
-                if (studentDoc.exists) {
-                    const paidQuizzes = studentDoc.data().paidQuizzes || [];
-                    if (!paidQuizzes.includes(subject)) {
-                        paidQuizzes.push(subject);
-                        await studentRef.update({ paidQuizzes: paidQuizzes });
-                        console.log(`Added ${subject} to student's paid quizzes`);
-                    }
-                } else {
-                    await studentRef.set({
-                        email: auth.currentUser.email,
-                        paidQuizzes: [subject],
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                }
-                
-                alert(`✅ Payment verified and ${subject} unlocked for the student!`);
-                await loadPayments();
-                
-            } catch (error) {
-                console.error("Verification error:", error);
-                alert("Error verifying payment: " + error.message);
-            }
+                html += `
+                    <tr>
+                        <td>${date}</td>
+                        <td><span class="payment-id">${payment.paymentId || id.substring(0, 12)}...</span></td>
+                        <td><strong>${escapeHtml(payment.userName || 'N/A')}</strong></td>
+                        <td>${escapeHtml(payment.userEmail || 'N/A')}</td>
+                        <td>${escapeHtml(payment.subject || 'N/A')}</td>
+                        <td>₦${payment.amount || 100}</td>
+                        <td><span class="${status === 'verified' ? 'status-verified' : 'status-pending'}">${status === 'verified' ? '✅ Verified' : '⏳ Pending'}</span></td>
+                        <td>
+                            ${status === 'pending' ? 
+                                `<button class="btn-verify" onclick="verifyPayment('${id}', '${payment.userId}', '${payment.subject}')">✅ Verify & Unlock</button>` : 
+                                '<span style="color: #11998e;">✓ Verified</span>'
+                            }
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            tbody.innerHTML = html;
+            document.getElementById('pendingCount').innerText = pendingCount;
+            document.getElementById('verifiedCount').innerText = verifiedCount;
+            document.getElementById('totalRevenue').innerText = `₦${totalAmount}`;
+            
+        } catch (error) {
+            console.error("Error loading payments:", error);
+            tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: red;">Error loading payments: ${error.message}</td></tr>`;
+        }
+    }
+    
+    async function verifyPayment(paymentId, userId, subject) {
+        if (!confirm(`Unlock ${subject} for this student?\n\nClick OK to confirm payment and grant access.`)) {
+            return;
         }
         
-        async function logout() {
-            if (refreshInterval) clearInterval(refreshInterval);
-            await auth.signOut();
+        try {
+            // Show loading on button
+            const btn = event.target;
+            const originalText = btn.innerText;
+            btn.innerText = "⏳ Processing...";
+            btn.disabled = true;
+            
+            // 1. Update the payment status to 'verified'
+            await db.collection('payments').doc(paymentId).update({
+                status: 'verified',
+                verifiedBy: auth.currentUser.email,
+                verificationDate: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            
+            // 2. Add the subject to student's paidQuizzes array
+            const studentRef = db.collection('students').doc(userId);
+            const studentDoc = await studentRef.get();
+            
+            if (studentDoc.exists) {
+                const paidQuizzes = studentDoc.data().paidQuizzes || [];
+                if (!paidQuizzes.includes(subject)) {
+                    paidQuizzes.push(subject);
+                    await studentRef.update({ paidQuizzes: paidQuizzes });
+                    console.log(`Added ${subject} to student's paid quizzes`);
+                }
+            } else {
+                await studentRef.set({
+                    email: auth.currentUser.email,
+                    paidQuizzes: [subject],
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            }
+            
+            alert(`✅ Payment verified and ${subject} unlocked for the student!`);
+            await loadPayments();
+            
+        } catch (error) {
+            console.error("Verification error:", error);
+            alert("Error verifying payment: " + error.message);
+        }
+    }
+    
+    async function logout() {
+        if (refreshInterval) clearInterval(refreshInterval);
+        await auth.signOut();
+        window.location.href = "login.html";
+    }
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    // Auto-refresh every 10 seconds
+    function startAutoRefresh() {
+        refreshInterval = setInterval(() => {
+            loadPayments();
+        }, 10000);
+    }
+    
+    auth.onAuthStateChanged(user => {
+        if (user && adminEmails.includes(user.email)) {
+            loadPayments();
+            startAutoRefresh();
+        } else if (user) {
+            alert("Access Denied. You are not an admin.");
+            window.location.href = "dashboard.html";
+        } else {
             window.location.href = "login.html";
         }
-        
-        // Auto-refresh every 10 seconds
-        function startAutoRefresh() {
-            refreshInterval = setInterval(() => {
-                loadPayments();
-            }, 10000);
-        }
-        
-        auth.onAuthStateChanged(user => {
-            if (user && adminEmails.includes(user.email)) {
-                loadPayments();
-                startAutoRefresh();
-            } else if (user) {
-                alert("Access Denied. You are not an admin.");
-                window.location.href = "dashboard.html";
-            } else {
-                window.location.href = "login.html";
-            }
-        });
-    </script>
+    });
+</script>
 </body>
 </html>

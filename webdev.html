@@ -110,6 +110,40 @@
             padding: 40px 20px;
         }
 
+        /* Featured Image Section */
+        .featured-image-container {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 40px auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
+            max-width: 600px;
+        }
+        .featured-image-container:hover {
+            transform: translateY(-5px);
+        }
+        .featured-image {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            object-position: center;
+        }
+        .featured-caption {
+            padding: 15px 25px;
+            background: white;
+            text-align: center;
+            font-weight: 500;
+            color: #667eea;
+            border-top: 1px solid #e2e8f0;
+        }
+        .featured-caption small {
+            display: block;
+            color: #718096;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+
         .section-title {
             text-align: center;
             font-size: 2rem;
@@ -297,6 +331,22 @@
             box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
         }
 
+        .contact-emails {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .contact-emails p {
+            margin: 8px 0;
+            color: #555;
+        }
+
+        .contact-emails strong {
+            color: #667eea;
+        }
+
         footer {
             background: #1a1a2e;
             color: white;
@@ -378,6 +428,9 @@
                 right: 15px;
                 font-size: 12px;
             }
+            .featured-image-container {
+                max-width: 95%;
+            }
         }
     </style>
 </head>
@@ -423,6 +476,15 @@
 </header>
 
 <main class="container">
+    <!-- Featured Image Section -->
+    <div class="featured-image-container">
+        <img class="featured-image" src="https://ernestembassydigitalsolutions.com/images/ezege%20Igbakigba.jpeg" alt="Ezege Igbakigba - Ernest Embassy Digital Solutions" onerror="this.src='https://placehold.co/600x400/667eea/white?text=Ezege+Igbakigba'">
+        <div class="featured-caption">
+            🌟 Ezege Igbakigba - Celebrating Our Heritage
+            <small>Honoring leadership and cultural legacy through digital innovation</small>
+        </div>
+    </div>
+
     <p style="text-align: center; font-size: 1.1rem; max-width: 900px; margin: 0 auto;">We develop websites using professional GitHub-based workflows and deploy them on Cloudflare Pages for fast, secure, and reliable performance. This approach enables us to build everything from business websites and online stores to custom web applications with enterprise-level hosting and security.</p>
 
     <section class="section-title"><span>☁️ Our Modern Development Stack</span></section>
@@ -750,10 +812,19 @@
         <h2>📞 Ready to Build Your Website?</h2>
         <p>Whether you need a business website, online store, school portal, or custom platform, we are ready to turn your vision into a powerful online presence that works for you 24/7.</p>
          
-        <a href="mailto:ernestembassytravels@gmail.com?subject=Website%20Development%20Inquiry&body=Hello%20Damian,%0A%0AI%20am%20interested%20in%20building%20a%20website.%0A%0AMy%20Name:%20__________%0AMy%20Phone:%20__________%0ABusiness%20Name:%20__________%0AType%20of%20Website:%20(Business/E-commerce/School/Other)%0A%0AMessage:%0A__________" 
+        <a href="mailto:ernestembassydigitalsolutions@gmail.com?subject=Website%20Development%20Inquiry&body=Hello%20Damian,%0A%0AI%20am%20interested%20in%20building%20a%20website.%0A%0AMy%20Name:%20__________%0AMy%20Phone:%20__________%0ABusiness%20Name:%20__________%0AType%20of%20Website:%20(Business/E-commerce/School/Other)%0A%0AMessage:%0A__________" 
            class="email-btn">
             📧 Request a Free Consultation
         </a>
+
+        <!-- Contact Information Section with New Email -->
+        <div class="contact-emails">
+            <p>📧 <strong>Email Us At:</strong></p>
+            <p>✉️ ernestembassydigitalsolutions@gmail.com <span style="color: #ffd700; font-weight: bold;">(Main)</span></p>
+            <p>✉️ ernestembassytravels@gmail.com</p>
+            <p>✉️ infinitymoviestarproduction@gmail.com</p>
+            <p>📞 <strong>Call/WhatsApp:</strong> +2348032607809 | +2349050205053</p>
+        </div>
          
         <p class="note-text" style="margin-top: 15px; font-size: 0.85rem; color: #888;">
             🔒 Your email client will open. Fill in your details and send.<br>
@@ -772,7 +843,7 @@
 <footer>
     <div class="container">
         <p><strong>Ernest Embassy Digital Solutions</strong> | Website Development & E-commerce Experts</p>
-        <p>📧 ernestembassytravels@gmail.com | infinitymoviestarproduction@gmail.com</p>
+        <p>📧 ernestembassydigitalsolutions@gmail.com | ernestembassytravels@gmail.com | infinitymoviestarproduction@gmail.com</p>
         <p>📞 +2348032607809 | +2349050205053</p>
         <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
         <p style="margin-top: 20px;">&copy; 2026 Damian Anielozie Okafor. All rights reserved.</p>

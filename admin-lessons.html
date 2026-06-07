@@ -45,6 +45,38 @@
         }
         .nav-links a:hover { color: #667eea; }
 
+        /* Back Navigation Bar */
+        .back-nav {
+            background: #f7fafc;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .back-btn:hover {
+            background: #667eea;
+            border-color: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+        .back-btn.admin:hover { background: #eb3349; border-color: #eb3349; }
+
         .page-header {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
@@ -301,19 +333,27 @@
             font-size: 24px;
             text-decoration: none;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 100;
         }
 
         @media (max-width: 768px) {
             .form-row { grid-template-columns: 1fr; }
             .lesson-actions { flex-direction: column; }
             .nav-container { flex-direction: column; gap: 10px; }
+            .back-nav { justify-content: center; }
         }
     </style>
 </head>
 <body>
 
 <div class="toast" id="toast"></div>
-<a href="admin.html" class="floating-home">⚙️</a>
+
+<!-- Back Navigation Bar -->
+<div class="back-nav">
+    <a href="admin.html" class="back-btn admin">🔙 Back to Admin Dashboard</a>
+    <a href="index.html" class="back-btn">🏠 Back to Home</a>
+    <a href="dashboard.html" class="back-btn">👤 My Dashboard</a>
+</div>
 
 <nav>
     <div class="nav-container">
@@ -450,6 +490,9 @@
     </div>
 </div>
 
+<!-- Floating Home Button -->
+<a href="index.html" class="floating-home" title="Go to Home">🏠</a>
+
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
@@ -532,7 +575,6 @@
         document.getElementById('progressWrap').style.display = 'block';
 
         try {
-            // Upload file to Firebase Storage
             const timestamp = Date.now();
             const safeName = selectedFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
             const filePath = `lessons/${subject}/${timestamp}_${safeName}`;
@@ -554,7 +596,6 @@
                 async () => {
                     const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
 
-                    // Save metadata to Firestore
                     await db.collection('lessons').add({
                         title,
                         subject,
@@ -576,7 +617,6 @@
                     document.getElementById('progressWrap').style.display = 'none';
                     document.getElementById('progressBar').style.width = '0%';
 
-                    // Reset form
                     document.getElementById('lessonTitle').value = '';
                     document.getElementById('lessonSubject').value = '';
                     document.getElementById('lessonTopic').value = '';
@@ -612,7 +652,6 @@
             allLessons = [];
             snap.forEach(doc => allLessons.push({ id: doc.id, ...doc.data() }));
 
-            // Client-side search filter
             const filtered = allLessons.filter(l =>
                 !search ||
                 l.title?.toLowerCase().includes(search) ||
@@ -642,10 +681,10 @@
             <div class="lesson-item">
                 <div class="lesson-type-icon ${cls}">${icon}</div>
                 <div class="lesson-info">
-                    <div class="lesson-title">${l.title}</div>
-                    <div class="lesson-meta">${l.topic ? l.topic + ' • ' : ''}${l.level ? l.level + ' • ' : ''}${date}${size ? ' • ' + size : ''}</div>
+                    <div class="lesson-title">${escapeHtml(l.title)}</div>
+                    <div class="lesson-meta">${l.topic ? escapeHtml(l.topic) + ' • ' : ''}${l.level ? l.level + ' • ' : ''}${date}${size ? ' • ' + size : ''}</div>
                 </div>
-                <span class="lesson-subject">${l.subject}</span>
+                <span class="lesson-subject">${escapeHtml(l.subject)}</span>
                 <div class="lesson-actions">
                     <button class="btn-action btn-view" onclick="window.open('${l.fileURL}', '_blank')">👁 View</button>
                     <button class="btn-action btn-delete" onclick="deleteLesson('${l.id}', '${l.filePath || ''}')">🗑 Delete</button>
@@ -659,13 +698,23 @@
         try {
             await db.collection('lessons').doc(id).delete();
             if (filePath) {
-                try { await storage.ref(filePath).delete(); } catch(e) { /* file may already be gone */ }
+                try { await storage.ref(filePath).delete(); } catch(e) { }
             }
             showToast('Resource deleted.');
             loadLessons();
         } catch (err) {
             showToast('Delete failed: ' + err.message, 'error');
         }
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
     }
 
     auth.onAuthStateChanged(user => {

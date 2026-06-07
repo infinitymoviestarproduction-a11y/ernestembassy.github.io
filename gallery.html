@@ -8,7 +8,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
             min-height: 100vh;
         }
 
@@ -66,45 +66,77 @@
         .dropdown-header { padding: 12px 18px; font-size: 11px; text-transform: uppercase; color: rgba(255, 215, 0, 0.7); background: #12192c; font-weight: bold; }
 
         .hero {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
             color: white;
             text-align: center;
-            padding: 80px 20px;
+            padding: 60px 20px;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
         }
         .hero h1 { font-size: 2.5rem; margin-bottom: 10px; }
         .hero h1 span { color: #ffd700; }
-        .hero p { font-size: 1.1rem; opacity: 0.9; }
+        .hero p { font-size: 1rem; opacity: 0.8; }
 
         .container { max-width: 1400px; margin: 0 auto; padding: 40px 20px; }
-        .section-title { text-align: center; font-size: 2rem; margin-bottom: 40px; color: #1a1a2e; }
-        .section-title span { border-bottom: 3px solid #ffd700; padding-bottom: 10px; }
-
+        
+        /* Gallery Categories */
+        .category {
+            margin-bottom: 50px;
+        }
+        .category-title {
+            font-size: 1.5rem;
+            color: #ffd700;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255,215,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Gallery Grid */
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
         }
         .gallery-item {
-            background: white;
+            background: rgba(255,255,255,0.95);
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
         }
-        .gallery-item:hover { transform: translateY(-5px); }
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
         .gallery-item img {
             width: 100%;
-            height: 250px;
+            height: 220px;
             object-fit: cover;
+            transition: transform 0.3s;
+        }
+        .gallery-item:hover img {
+            transform: scale(1.05);
         }
         .gallery-caption {
-            padding: 15px;
+            padding: 12px;
             text-align: center;
             font-weight: 500;
             color: #1a1a2e;
+            background: white;
+            font-size: 0.85rem;
+        }
+        .gallery-caption small {
+            display: block;
+            color: #667eea;
+            font-size: 0.7rem;
+            margin-top: 5px;
         }
 
+        /* Lightbox Modal */
         .lightbox {
             display: none;
             position: fixed;
@@ -114,19 +146,37 @@
             height: 100%;
             background: rgba(0,0,0,0.95);
             z-index: 2000;
-            justify-content: center;
-            align-items: center;
             cursor: pointer;
+            align-items: center;
+            justify-content: center;
         }
-        .lightbox img { max-width: 90%; max-height: 90%; border-radius: 10px; }
-        .lightbox.show { display: flex; }
-        .close-lightbox {
+        .lightbox img {
+            max-width: 90%;
+            max-height: 80%;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+        .lightbox-close {
             position: absolute;
             top: 20px;
             right: 40px;
-            font-size: 40px;
             color: white;
+            font-size: 40px;
+            font-weight: bold;
             cursor: pointer;
+        }
+        .lightbox-caption {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            font-size: 1rem;
+            background: rgba(0,0,0,0.7);
+            padding: 10px;
+            margin: 0 20px;
+            border-radius: 10px;
         }
 
         .whatsapp-float {
@@ -157,8 +207,7 @@
             .nav-container { flex-direction: column; }
             .nav-links { justify-content: center; }
             .hero h1 { font-size: 1.8rem; }
-            .gallery-grid { grid-template-columns: 1fr; }
-            .close-lightbox { top: 10px; right: 20px; font-size: 30px; }
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
         }
     </style>
 </head>
@@ -211,164 +260,210 @@
 </nav>
 
 <div class="hero">
-    <h1>📸 <span>Behind the Scenes Gallery</span></h1>
-    <p>Exclusive photos from Infinity Movie Star Productions</p>
+    <h1>📸 <span>Our Gallery</span></h1>
+    <p>Behind the scenes, productions, team moments, and creative journey</p>
 </div>
 
 <div class="container">
-    <div class="section-title"><span>🎬 Production Gallery</span></div>
-    <div class="gallery-grid">
-        
-        <!-- Existing Production Photos -->
-        <div class="gallery-item" onclick="openLightbox('images/young n up doing.jpg')">
-            <img src="images/young n up doing.jpg" alt="Young N Up Doing" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">🎬 Young N Up Doing</div>
+    
+    <!-- Company Branding -->
+    <div class="category">
+        <div class="category-title">
+            <span>🏢</span> Company Branding
         </div>
-        
-        <div class="gallery-item" onclick="openLightbox('images/2014 then.jpg')">
-            <img src="images/2014 then.jpg" alt="2014 Then" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">📸 2014 Then</div>
+        <div class="gallery-grid">
+            <div class="gallery-item" onclick="openLightbox('images/logo ernest embassy digital solutions.png', 'Ernest Embassy Digital Solutions Logo')">
+                <img src="images/logo%20ernest%20embassy%20digital%20solutions.png" alt="Ernest Embassy Logo" onerror="this.src='https://placehold.co/300x220/667eea/white?text=Logo'">
+                <div class="gallery-caption">Ernest Embassy Digital Solutions <small>Official Logo</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/logo.png', 'Ernest Embassy Logo Variation')">
+                <img src="images/logo.png" alt="Ernest Embassy Logo" onerror="this.src='https://placehold.co/300x220/667eea/white?text=Logo'">
+                <div class="gallery-caption">Ernest Embassy <small>Logo Variation</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/combination logo.jpg', 'Combination Logo Design')">
+                <img src="images/combination%20logo.jpg" alt="Combination Logo" onerror="this.src='https://placehold.co/300x220/667eea/white?text=Logo'">
+                <div class="gallery-caption">Combination Logo <small>Brand Identity</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/infinity logo.jpg', 'Infinity Movie Star Logo')">
+                <img src="images/infinity%20logo.jpg" alt="Infinity Logo" onerror="this.src='https://placehold.co/300x220/667eea/white?text=Infinity+Logo'">
+                <div class="gallery-caption">Infinity Movie Star <small>Production Logo</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/ashanti logo.jpg', 'Ashanti Media Logistics Logo')">
+                <img src="images/ashanti%20logo.jpg" alt="Ashanti Logo" onerror="this.src='https://placehold.co/300x220/667eea/white?text=Logo'">
+                <div class="gallery-caption">Ashanti Media Logistics <small>Partner Logo</small></div>
+            </div>
         </div>
-        
-        <div class="gallery-item" onclick="openLightbox('images/abuba forest.jpg')">
-            <img src="images/abuba forest.jpg" alt="Abuba Forest" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">🌳 Abuba Forest Shoot</div>
-        </div>
-        
-        <div class="gallery-item" onclick="openLightbox('images/infinity team.jpg')">
-            <img src="images/infinity team.jpg" alt="Infinity Team" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">👥 Infinity Movie Star Team</div>
-        </div>
-        
-        <div class="gallery-item" onclick="openLightbox('images/me and zubby.jpg')">
-            <img src="images/me and zubby.jpg" alt="Me and Zubby" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">⭐ Damian with Zubby</div>
-        </div>
-        
-        <div class="gallery-item" onclick="openLightbox('images/scout reloaded training.jpg')">
-            <img src="images/scout reloaded training.jpg" alt="Scout Reloaded Training" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">📚 Scout Reloaded Training</div>
-        </div>
-        
-        <div class="gallery-item" onclick="openLightbox('images/training malawi.jpg')">
-            <img src="images/training malawi.jpg" alt="Training Malawi" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">🌍 Training in Malawi</div>
-        </div>
-        
-        <div class="gallery-item" onclick="openLightbox('images/drama nta.jpg')">
-            <img src="images/drama nta.jpg" alt="Drama NTA" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">📺 Drama NTA Production</div>
-        </div>
-        
-        <div class="gallery-item" onclick="openLightbox('images/escet drama.jpg')">
-            <img src="images/escet drama.jpg" alt="ESCET Drama" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">🎭 ESCET Drama</div>
-        </div>
-        
-        <div class="gallery-item" onclick="openLightbox('images/escet.jpg')">
-            <img src="images/escet.jpg" alt="ESCET" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">🎓 ESCET Training</div>
-        </div>
-        
-        <div class="gallery-item" onclick="openLightbox('images/zomba.jpg')">
-            <img src="images/zomba.jpg" alt="Zomba" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">📍 Zomba Production</div>
-        </div>
-        
-        <div class="gallery-item" onclick="openLightbox('images/eating on suit.jpg')">
-            <img src="images/eating on suit.jpg" alt="Eating on Suit" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">🍽️ Behind the Scenes</div>
-        </div>
-        
-        <!-- NEW: Emeka Up Scene -->
-        <div class="gallery-item" onclick="openLightbox('images/emeka up.jpeg')">
-            <img src="images/emeka up.jpeg" alt="Emeka Up Scene" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">🎬 Emeka Up - Action Scene</div>
-        </div>
-        
-        <!-- NEW: Ezege Igbakigba -->
-        <div class="gallery-item" onclick="openLightbox('images/ezege Igbakigba.jpeg')">
-            <img src="images/ezege Igbakigba.jpeg" alt="Ezege Igbakigba" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">🎤 Ezege - Igbakigba Session</div>
-        </div>
-        
-        <!-- NEW: Innocent Scene -->
-        <div class="gallery-item" onclick="openLightbox('images/innocent.jpeg')">
-            <img src="images/innocent.jpeg" alt="Innocent Scene" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">🎭 Innocent - Dramatic Scene</div>
-        </div>
-        
-        <!-- NEW: Negotiation Scene -->
-        <div class="gallery-item" onclick="openLightbox('images/negotiation.jpeg')">
-            <img src="images/negotiation.jpeg" alt="Negotiation Scene" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">🤝 Negotiation - Official Card Scene</div>
-        </div>
-        
-        <!-- Team Member Photos -->
-        <div class="gallery-item" onclick="openLightbox('images/director infinity.jpeg')">
-            <img src="images/director infinity.jpeg" alt="Director Infinity" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">🎬 Director Infinity</div>
-        </div>
-        
-        <div class="gallery-item" onclick="openLightbox('images/orji assistant dir.jpg')">
-            <img src="images/orji assistant dir.jpg" alt="Orji Assistant Director" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">🎭 Assistant Director Orji</div>
-        </div>
-        
-        <div class="gallery-item" onclick="openLightbox('images/stsix.jpeg')">
-            <img src="images/stsix.jpeg" alt="StSix" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">⭐ Uchenna Sixtus (StSix)</div>
-        </div>
-        
-        <div class="gallery-item" onclick="openLightbox('images/never matewere.jpg')">
-            <img src="images/never matewere.jpg" alt="Never Matewere" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">🤝 Never Matewere - Zomba Films</div>
-        </div>
-        
-        <div class="gallery-item" onclick="openLightbox('images/never.jpg')">
-            <img src="images/never.jpg" alt="Never" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">🌍 Never Matewere</div>
-        </div>
-        
-        <!-- Logos & Branding -->
-        <div class="gallery-item" onclick="openLightbox('images/ashanti logo.jpg')">
-            <img src="images/ashanti logo.jpg" alt="Ashanti Logo" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">🏢 Ashanti Media Logo</div>
-        </div>
-        
-        <div class="gallery-item" onclick="openLightbox('images/infinity logo.jpg')">
-            <img src="images/infinity logo.jpg" alt="Infinity Logo" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">🎬 Infinity Movie Star Logo</div>
-        </div>
-        
-        <div class="gallery-item" onclick="openLightbox('images/combination logo.jpg')">
-            <img src="images/combination logo.jpg" alt="Combination Logo" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">✨ Ernest Embassy Logo</div>
-        </div>
-        
-        <!-- Covers -->
-        <div class="gallery-item" onclick="openLightbox('images/cover.jpg')">
-            <img src="images/cover.jpg" alt="Cover" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">📸 Cover Photo</div>
-        </div>
-        
-        <div class="gallery-item" onclick="openLightbox('images/cover 2.jpg')">
-            <img src="images/cover 2.jpg" alt="Cover 2" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">📸 Cover Photo 2</div>
-        </div>
-        
-        <!-- Official Card Poster -->
-        <div class="gallery-item" onclick="openLightbox('images/official card poster')">
-            <img src="images/official card poster" alt="Official Card Poster" onerror="this.parentElement.style.display='none'">
-            <div class="gallery-caption">🎬 Official Card Poster</div>
-        </div>
-        
     </div>
+
+    <!-- Team Members -->
+    <div class="category">
+        <div class="category-title">
+            <span>👥</span> Team Members
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item" onclick="openLightbox('images/nnabuike.jpeg', 'Nnabuike - Team Member')">
+                <img src="images/nnabuike.jpeg" alt="Nnabuike" onerror="this.src='https://placehold.co/300x220/764ba2/white?text=Nnabuike'">
+                <div class="gallery-caption">Nnabuike <small>Team Member</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/innocent.jpeg', 'Innocent - Team Member')">
+                <img src="images/innocent.jpeg" alt="Innocent" onerror="this.src='https://placehold.co/300x220/764ba2/white?text=Innocent'">
+                <div class="gallery-caption">Innocent <small>Team Member</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/emeka up.jpeg', 'Emeka - Team Member')">
+                <img src="images/emeka%20up.jpeg" alt="Emeka" onerror="this.src='https://placehold.co/300x220/764ba2/white?text=Emeka'">
+                <div class="gallery-caption">Emeka <small>Team Member</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/orji assistant dir.jpg', 'Orji - Assistant Director')">
+                <img src="images/orji%20assistant%20dir.jpg" alt="Orji" onerror="this.src='https://placehold.co/300x220/764ba2/white?text=Orji'">
+                <div class="gallery-caption">Orji <small>Assistant Director</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/stsix.jpeg', 'Uchenna Sixtus Uchenna (StSix)')">
+                <img src="images/stsix.jpeg" alt="StSix" onerror="this.src='https://placehold.co/300x220/764ba2/white?text=StSix'">
+                <div class="gallery-caption">Uchenna Sixtus Uchenna <small>StSix</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/director infinity.jpeg', 'Director - Infinity Production')">
+                <img src="images/director%20infinity.jpeg" alt="Director" onerror="this.src='https://placehold.co/300x220/764ba2/white?text=Director'">
+                <div class="gallery-caption">Director <small>Infinity Production</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/2014 then.jpg', '2014 - Early Days')">
+                <img src="images/2014%20then.jpg" alt="2014 Then" onerror="this.src='https://placehold.co/300x220/764ba2/white?text=2014'">
+                <div class="gallery-caption">2014 Then <small>Early Days</small></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Movie Productions & Behind the Scenes -->
+    <div class="category">
+        <div class="category-title">
+            <span>🎬</span> Movie Productions & Behind the Scenes
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item" onclick="openLightbox('images/official card poster', 'Official Card Movie Poster')">
+                <img src="images/official%20card%20poster" alt="Official Card" onerror="this.src='https://placehold.co/300x220/667eea/white?text=Official+Card'">
+                <div class="gallery-caption">Official Card <small>Movie Poster</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/cover.jpg', 'Production Cover')">
+                <img src="images/cover.jpg" alt="Cover" onerror="this.src='https://placehold.co/300x220/667eea/white?text=Cover'">
+                <div class="gallery-caption">Production Cover <small>Film Project</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/cover 2.jpg', 'Production Cover 2')">
+                <img src="images/cover%202.jpg" alt="Cover 2" onerror="this.src='https://placehold.co/300x220/667eea/white?text=Cover'">
+                <div class="gallery-caption">Production Cover <small>Film Project</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/drama nta.jpg', 'Drama NTA Production')">
+                <img src="images/drama%20nta.jpg" alt="Drama NTA" onerror="this.src='https://placehold.co/300x220/667eea/white?text=NTA+Drama'">
+                <div class="gallery-caption">Drama NTA <small>Television Production</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/escet drama.jpg', 'ESCET Drama Production')">
+                <img src="images/escet%20drama.jpg" alt="ESCET Drama" onerror="this.src='https://placehold.co/300x220/667eea/white?text=ESCET+Drama'">
+                <div class="gallery-caption">ESCET Drama <small>Theatre Production</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/escet.jpg', 'ESCET Production')">
+                <img src="images/escet.jpg" alt="ESCET" onerror="this.src='https://placehold.co/300x220/667eea/white?text=ESCET'">
+                <div class="gallery-caption">ESCET <small>Production</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/me and zubby.jpg', 'Damian with Zubby')">
+                <img src="images/me%20and%20zubby.jpg" alt="Me and Zubby" onerror="this.src='https://placehold.co/300x220/667eea/white?text=Me+and+Zubby'">
+                <div class="gallery-caption">Damian with Zubby <small>Behind the Scenes</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/infinity team.jpg', 'Infinity Movie Star Team')">
+                <img src="images/infinity%20team.jpg" alt="Infinity Team" onerror="this.src='https://placehold.co/300x220/667eea/white?text=Team'">
+                <div class="gallery-caption">Infinity Team <small>Production Crew</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/infi door.jpg', 'Infinity Door - Production Office')">
+                <img src="images/infi%20door.jpg" alt="Infinity Door" onerror="this.src='https://placehold.co/300x220/667eea/white?text=Infinity+Door'">
+                <div class="gallery-caption">Infinity Door <small>Production Office</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/eating on suit.jpg', 'Behind the Scenes - On Set')">
+                <img src="images/eating%20on%20suit.jpg" alt="Eating on Suit" onerror="this.src='https://placehold.co/300x220/667eea/white?text=Eating+on+Suit'">
+                <div class="gallery-caption">Behind the Scenes <small>On Set</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/tea time infi.jpg', 'Tea Time - Infinity Set')">
+                <img src="images/tea%20time%20infi.jpg" alt="Tea Time" onerror="this.src='https://placehold.co/300x220/667eea/white?text=Tea+Time'">
+                <div class="gallery-caption">Tea Time <small>On Set</small></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- International Collaborations -->
+    <div class="category">
+        <div class="category-title">
+            <span>🌍</span> International Collaborations
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item" onclick="openLightbox('images/zomba.jpg', 'Zomba Film Production - Malawi')">
+                <img src="images/zomba.jpg" alt="Zomba" onerror="this.src='https://placehold.co/300x220/667eea/white?text=Zomba'">
+                <div class="gallery-caption">Zomba Film Production <small>Malawi</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/never matewere.jpg', 'Never Matewere - Malawi Partner')">
+                <img src="images/never%20matewere.jpg" alt="Never Matewere" onerror="this.src='https://placehold.co/300x220/667eea/white?text=Never+Matewere'">
+                <div class="gallery-caption">Never Matewere <small>Malawi Partner</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/never.jpg', 'Never - Collaboration')">
+                <img src="images/never.jpg" alt="Never" onerror="this.src='https://placehold.co/300x220/667eea/white?text=Never'">
+                <div class="gallery-caption">Never <small>International Collaboration</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/training malawi.jpg', 'Film Training - Malawi')">
+                <img src="images/training%20malawi.jpg" alt="Training Malawi" onerror="this.src='https://placehold.co/300x220/667eea/white?text=Malawi+Training'">
+                <div class="gallery-caption">Film Training <small>Malawi</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/negotiation.jpeg', 'Negotiation Meeting')">
+                <img src="images/negotiation.jpeg" alt="Negotiation" onerror="this.src='https://placehold.co/300x220/667eea/white?text=Negotiation'">
+                <div class="gallery-caption">Negotiation <small>International Meeting</small></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Locations & Scenery -->
+    <div class="category">
+        <div class="category-title">
+            <span>📍</span> Locations & Scenery
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item" onclick="openLightbox('images/abuba forest.jpg', 'Abuba Forest Location')">
+                <img src="images/abuba%20forest.jpg" alt="Abuba Forest" onerror="this.src='https://placehold.co/300x220/667eea/white?text=Abuba+Forest'">
+                <div class="gallery-caption">Abuba Forest <small>Filming Location</small></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Training & Workshops -->
+    <div class="category">
+        <div class="category-title">
+            <span>📚</span> Training & Workshops
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item" onclick="openLightbox('images/scout reloaded training.jpg', 'Scout Reloaded Training')">
+                <img src="images/scout%20reloaded%20training.jpg" alt="Scout Reloaded" onerror="this.src='https://placehold.co/300x220/667eea/white?text=Training'">
+                <div class="gallery-caption">Scout Reloaded <small>Training Session</small></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox('images/young n up doing.jpg', 'Young and Up - Training')">
+                <img src="images/young%20n%20up%20doing.jpg" alt="Young and Up" onerror="this.src='https://placehold.co/300x220/667eea/white?text=Young+and+Up'">
+                <div class="gallery-caption">Young and Up <small>Workshop</small></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cultural Heritage -->
+    <div class="category">
+        <div class="category-title">
+            <span>👑</span> Cultural Heritage
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item" onclick="openLightbox('images/ezege Igbakigba.jpeg', 'Ezege Igbakigba - Cultural Leader')">
+                <img src="images/ezege%20Igbakigba.jpeg" alt="Ezege Igbakigba" onerror="this.src='https://placehold.co/300x220/667eea/white?text=Ezege+Igbakigba'">
+                <div class="gallery-caption">Ezege Igbakigba <small>Cultural Heritage</small></div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
+<!-- Lightbox Modal -->
 <div id="lightbox" class="lightbox" onclick="closeLightbox()">
-    <span class="close-lightbox">&times;</span>
-    <img id="lightboxImg" src="">
+    <span class="lightbox-close">&times;</span>
+    <img id="lightboxImg" src="" alt="">
+    <div id="lightboxCaption" class="lightbox-caption"></div>
 </div>
 
 <a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
@@ -379,21 +474,34 @@
 <footer>
     <p>© 2026 Infinity Movie Star Production | Ernest Embassy Digital Solutions</p>
     <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
+    <p>🎬 "Creating stories that live beyond the screen"</p>
 </footer>
 
 <script>
-    function openLightbox(imgSrc) {
-        document.getElementById('lightboxImg').src = imgSrc;
-        document.getElementById('lightbox').classList.add('show');
+    function openLightbox(imgSrc, caption) {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxCaption = document.getElementById('lightboxCaption');
+        
+        lightbox.style.display = 'flex';
+        lightboxImg.src = imgSrc;
+        lightboxCaption.textContent = caption || 'Gallery Image';
+        
         document.body.style.overflow = 'hidden';
     }
+    
     function closeLightbox() {
-        document.getElementById('lightbox').classList.remove('show');
+        const lightbox = document.getElementById('lightbox');
+        lightbox.style.display = 'none';
         document.body.style.overflow = 'auto';
     }
+    
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'Escape') {
+            closeLightbox();
+        }
     });
 </script>
+
 </body>
 </html>

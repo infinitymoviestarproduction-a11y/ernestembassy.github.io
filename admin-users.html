@@ -71,6 +71,7 @@
             border-radius: 20px;
             padding: 28px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            margin-bottom: 30px;
         }
         .card-header {
             display: flex;
@@ -161,6 +162,7 @@
         .btn-promote { background: #fef3c7; color: #92400e; }
         .btn-demote  { background: #fee2e2; color: #991b1b; }
         .btn-view-user { background: #ebf4ff; color: #1a56db; }
+        .btn-activity { background: #d1fae5; color: #065f46; }
 
         /* Modal */
         .modal-overlay {
@@ -178,9 +180,9 @@
             background: white;
             border-radius: 20px;
             padding: 30px;
-            max-width: 520px;
+            max-width: 700px;
             width: 100%;
-            max-height: 80vh;
+            max-height: 85vh;
             overflow-y: auto;
         }
         .modal h3 { font-size: 1.2rem; color: #2d3748; margin-bottom: 20px; }
@@ -194,6 +196,42 @@
         .detail-row:last-child { border-bottom: none; }
         .detail-key { color: #718096; font-weight: 600; }
         .detail-val { color: #2d3748; text-align: right; max-width: 60%; word-break: break-all; }
+
+        .activity-section {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #e2e8f0;
+        }
+        .activity-section h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+        .attempt-item, .login-item {
+            background: #f7fafc;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+        }
+        .attempt-date, .login-date {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .attempt-score {
+            display: inline-block;
+            background: #11998e;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+        }
+        .login-ip {
+            color: #718096;
+            font-size: 0.75rem;
+        }
+
         .modal-close {
             display: block;
             width: 100%;
@@ -210,6 +248,7 @@
         .modal-close:hover { background: #e2e8f0; }
 
         .empty-state { text-align: center; padding: 40px; color: #a0aec0; }
+        .loading-spinner { text-align: center; padding: 20px; color: #667eea; }
 
         .toast {
             position: fixed;
@@ -258,7 +297,7 @@
 <!-- User Detail Modal -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
     <div class="modal" id="modalBox">
-        <h3>👤 Student Details</h3>
+        <h3>👤 Student Details & Activity</h3>
         <div id="modalContent"></div>
         <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open')">Close</button>
     </div>
@@ -277,7 +316,7 @@
 
 <div class="page-header">
     <h1>👥 User Management</h1>
-    <p>View, manage and upgrade student accounts</p>
+    <p>View, manage, upgrade student accounts and monitor activity</p>
 </div>
 
 <div class="container">
@@ -369,9 +408,14 @@
         return d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
     }
 
+    function formatDateTime(ts) {
+        if (!ts) return '—';
+        const d = ts.toDate ? ts.toDate() : new Date(ts);
+        return d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    }
+
     async function loadUsers() {
         try {
-            // Try 'students' collection first, fall back to 'users'
             let snap = await db.collection('students').orderBy('createdAt', 'desc').get();
             if (snap.empty) snap = await db.collection('users').orderBy('createdAt', 'desc').get();
 
@@ -440,8 +484,8 @@
                     <div class="user-cell">
                         <div class="avatar">${getInitials(name, email)}</div>
                         <div>
-                            <div class="user-name">${name}</div>
-                            <div class="user-email">${email}</div>
+                            <div class="user-name">${escapeHtml(name)}</div>
+                            <div class="user-email">${escapeHtml(email)}</div>
                         </div>
                     </div>
                 </td>
@@ -451,6 +495,7 @@
                 <td>
                     <div style="display:flex;gap:6px;flex-wrap:wrap;">
                         <button class="btn-sm btn-view-user" onclick="viewUser('${u.id}')">👁 View</button>
+                        <button class="btn-sm btn-activity" onclick="viewStudentActivity('${u.id}')">📊 Activity</button>
                         ${isPremium
                             ? `<button class="btn-sm btn-demote" onclick="changePlan('${u.id}', 'free')">↓ Free</button>`
                             : `<button class="btn-sm btn-promote" onclick="changePlan('${u.id}', 'premium')">⭐ Upgrade</button>`
@@ -465,13 +510,102 @@
         const label = newPlan === 'premium' ? 'upgrade to Premium' : 'downgrade to Free';
         if (!confirm(`Are you sure you want to ${label} this student?`)) return;
         try {
-            // Try both collections
             try { await db.collection('students').doc(userId).update({ plan: newPlan, isPremium: newPlan === 'premium' }); }
             catch(e) { await db.collection('users').doc(userId).update({ plan: newPlan, isPremium: newPlan === 'premium' }); }
             showToast(`Student ${newPlan === 'premium' ? 'upgraded to Premium ⭐' : 'moved to Free plan'}`);
             loadUsers();
         } catch (err) {
             showToast('Failed to update plan: ' + err.message, 'error');
+        }
+    }
+
+    async function viewStudentActivity(userId) {
+        const user = allUsers.find(u => u.id === userId);
+        if (!user) return;
+
+        const name = user.name || user.fullName || user.displayName || '—';
+        const email = user.email || '—';
+        const isPremium = (user.plan || '').toLowerCase() === 'premium' || user.isPremium;
+
+        document.getElementById('modalContent').innerHTML = `<div class="loading-spinner">📊 Loading activity data...</div>`;
+        document.getElementById('modalOverlay').classList.add('open');
+
+        try {
+            // Fetch quiz attempts for this user
+            const attemptsSnap = await db.collection('quiz_attempts')
+                .where('userId', '==', userId)
+                .orderBy('attemptDate', 'desc')
+                .limit(20)
+                .get();
+
+            // Fetch login logs for this user
+            const loginsSnap = await db.collection('login_logs')
+                .where('userId', '==', userId)
+                .orderBy('loginTime', 'desc')
+                .limit(20)
+                .get();
+
+            // Basic info rows
+            let infoHtml = `
+                <div class="detail-row"><span class="detail-key">Name</span><span class="detail-val">${escapeHtml(name)}</span></div>
+                <div class="detail-row"><span class="detail-key">Email</span><span class="detail-val">${escapeHtml(email)}</span></div>
+                <div class="detail-row"><span class="detail-key">Plan</span><span class="detail-val">${isPremium ? '⭐ Premium' : 'Free'}</span></div>
+                <div class="detail-row"><span class="detail-key">Phone</span><span class="detail-val">${escapeHtml(user.phone || user.phoneNumber || '—')}</span></div>
+                <div class="detail-row"><span class="detail-key">School</span><span class="detail-val">${escapeHtml(user.school || '—')}</span></div>
+                <div class="detail-row"><span class="detail-key">Joined</span><span class="detail-val">${formatDateTime(user.createdAt)}</span></div>
+                <div class="detail-row"><span class="detail-key">Last Login</span><span class="detail-val">${formatDateTime(user.lastLogin || user.lastSeen)}</span></div>
+            `;
+
+            // Quiz Attempts Section
+            let attemptsHtml = '<div class="activity-section"><h4>📝 Quiz Attempts (Last 20)</h4>';
+            if (attemptsSnap.empty) {
+                attemptsHtml += '<p class="empty-state" style="padding:20px;">No quiz attempts recorded yet.</p>';
+            } else {
+                attemptsHtml += '<div>';
+                attemptsSnap.forEach(doc => {
+                    const attempt = doc.data();
+                    const date = formatDateTime(attempt.attemptDate);
+                    const score = attempt.score || 0;
+                    const subject = attempt.subject || 'General';
+                    const percentage = Math.round((score / (attempt.totalQuestions || 1)) * 100);
+                    attemptsHtml += `
+                        <div class="attempt-item">
+                            <div class="attempt-date">📅 ${date}</div>
+                            <div><strong>${escapeHtml(subject)}</strong> - Score: ${score}/${attempt.totalQuestions || '?'} (${percentage}%)</div>
+                            <div class="login-ip">Correct: ${attempt.correctAnswers || 0} | Total: ${attempt.totalQuestions || 0}</div>
+                        </div>
+                    `;
+                });
+                attemptsHtml += '</div>';
+            }
+            attemptsHtml += '</div>';
+
+            // Login History Section
+            let loginsHtml = '<div class="activity-section"><h4>🔐 Login History (Last 20)</h4>';
+            if (loginsSnap.empty) {
+                loginsHtml += '<p class="empty-state" style="padding:20px;">No login records found.</p>';
+            } else {
+                loginsHtml += '<div>';
+                loginsSnap.forEach(doc => {
+                    const log = doc.data();
+                    const date = formatDateTime(log.loginTime);
+                    const ip = log.ipAddress || 'IP not recorded';
+                    const device = log.deviceInfo || 'Device info not available';
+                    loginsHtml += `
+                        <div class="login-item">
+                            <div class="login-date">🕐 ${date}</div>
+                            <div>📍 IP: ${escapeHtml(ip)}</div>
+                            <div class="login-ip">📱 ${escapeHtml(device.substring(0, 100))}</div>
+                        </div>
+                    `;
+                });
+                loginsHtml += '</div>';
+            }
+            loginsHtml += '</div>';
+
+            document.getElementById('modalContent').innerHTML = infoHtml + attemptsHtml + loginsHtml;
+        } catch (err) {
+            document.getElementById('modalContent').innerHTML = `<div class="empty-state" style="color:#c53030;">❌ Error loading activity: ${err.message}</div>`;
         }
     }
 
@@ -490,20 +624,31 @@
             ['Phone', user.phone || user.phoneNumber || '—'],
             ['School', user.school || '—'],
             ['Class / Level', user.level || user.class || '—'],
-            ['Joined', formatDate(user.createdAt)],
-            ['Last Login', formatDate(user.lastLogin || user.lastSeen)],
+            ['Joined', formatDateTime(user.createdAt)],
+            ['Last Login', formatDateTime(user.lastLogin || user.lastSeen)],
             ['Total Quizzes', user.totalQuizzes || user.quizCount || '—'],
             ['Avg Score', user.avgScore ? user.avgScore + '%' : '—'],
         ];
 
         document.getElementById('modalContent').innerHTML = rows.map(([k, v]) =>
-            `<div class="detail-row"><span class="detail-key">${k}</span><span class="detail-val">${v}</span></div>`
-        ).join('');
+            `<div class="detail-row"><span class="detail-key">${k}</span><span class="detail-val">${escapeHtml(String(v))}</span></div>`
+        ).join('') + `<div class="activity-section"><p style="text-align:center; margin-top:10px;"><button class="btn-sm btn-activity" onclick="viewStudentActivity('${userId}')">📊 View Full Activity Log</button></p></div>`;
+        
         document.getElementById('modalOverlay').classList.add('open');
     }
 
     function closeModal(e) {
         if (e.target.id === 'modalOverlay') document.getElementById('modalOverlay').classList.remove('open');
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
     }
 
     auth.onAuthStateChanged(user => {

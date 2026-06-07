@@ -1,3 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Teaching Services - Ernest Embassy Digital Solutions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+        }
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .logo-sub {
+            font-size: 0.65rem;
+            color: rgba(255, 215, 0, 0.8);
+            display: block;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.8rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* Dropdown */
+        .dropdown {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .dropbtn {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dropbtn:hover {
+            color: #ffd700;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .dropdown-content {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            min-width: 240px;
+            background: #16213e;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.25s ease;
+            z-index: 9999;
+        }
+
+        .dropdown:hover .dropdown-content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-content a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 18px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-content a:hover {
+            background: rgba(255,215,0,0.12);
+            color: #ffd700;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero-section p {
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Section Title */
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title h2 {
+            font-size: 2rem;
+            color: #1a1a2e;
+            display: inline-block;
+            border-bottom: 3px solid #ffd700;
+            padding-bottom: 10px;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .service-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .service-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Lists */
+        .feature-list {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            margin-top: 20px;
+        }
+
+        .feature-list ul {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            list-style: none;
+        }
+
+        .feature-list li {
+            padding: 8px 0;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-list li::before {
+            content: "✅";
+            color: #11998e;
+        }
+
+        /* CTA Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+            border-radius: 30px;
+            margin: 40px 20px;
+        }
+
+        .cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .cta-section .btn {
+            background: white;
+            color: #667eea;
+        }
+
+        .cta-section .btn:hover {
+            background: #ffd700;
+            color: #1a1a2e;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: #a0aec0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #ffd700;
+        }
+
+        /* WhatsApp Float */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.05);
+            background-color: #20b859;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            .nav-links {
+                justify-content: center;
+            }
+            .hero-section h1 {
+                font-size: 1.8rem;
+            }
+            .section-title h2 {
+                font-size: 1.5rem;
+            }
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            .feature-list ul {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-container">
+        <div class="logo">
+            <span class="logo-icon">🎓</span>
+            <div>
+                <span class="logo-text">Ernest Embassy</span>
+                <span class="logo-sub">Digital Solutions</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            <a href="about.html">📖 About</a>
+            <a href="services.html">⚙️ Services</a>
+            <a href="webdev.html">💻 Web Dev</a>
+            <a href="visa.html">✈️ Visa</a>
+            
+            <div class="dropdown">
+                <button class="dropbtn">🎬 Movie Studio ▾</button>
+                <div class="dropdown-content">
+                    <a href="movie.html">🏠 Studio Home</a>
+                    <a href="portfolio.html">🎨 Portfolio</a>
+                    <a href="gallery.html">📸 Gallery</a>
+                    <a href="team.html">👥 Our Team</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="dropbtn">🎓 Education ▾</button>
+                <div class="dropdown-content">
+                    <a href="teaching.html">📚 Teaching</a>
+                    <a href="tutoring.html">💻 Tutoring</a>
+                    <a href="education.html">📜 Education</a>
+                    <a href="class.html">🏫 Class</a>
+                </div>
+            </div>
+
+            <a href="booking.html">📅 Book</a>
+            <a href="contact.html">📞 Contact</a>
+            <a href="login.html">🔐 Login</a>
+            <a href="dashboard.html">👤 Dashboard</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
 <section class="hero-section">
     <div class="container">
         <h1>📚 Professional Teaching Services</h1>
@@ -11,43 +452,47 @@
     </div>
 </section>
 
+<!-- Meet Your Instructor -->
 <section class="container">
     <div class="section-title">
         <h2>👨‍🏫 Meet Your Instructor</h2>
     </div>
 
-    <p>
-        My name is <strong>Damian Anielozie Okafor</strong>, a professional
-        educator, digital trainer, curriculum developer, and founder of
-        Ernest Embassy Digital Solutions.
-    </p>
+    <div class="service-card" style="text-align: left;">
+        <p style="margin-bottom: 15px;">
+            My name is <strong>Damian Anielozie Okafor</strong>, a professional
+            educator, digital trainer, curriculum developer, and founder of
+            Ernest Embassy Digital Solutions.
+        </p>
 
-    <p>
-        I hold a National Certificate in Education (NCE) from
-        Enugu State College of Education Technical and I am registered with the
-        Teachers Registration Council of Nigeria (TRCN).
-    </p>
+        <p style="margin-bottom: 15px;">
+            I hold a National Certificate in Education (NCE) from
+            Enugu State College of Education Technical and I am registered with the
+            Teachers Registration Council of Nigeria (TRCN).
+        </p>
 
-    <p>
-        Since beginning my teaching career in 2007 and becoming fully engaged
-        in professional education in 2014, I have taught in various schools,
-        trained students from different backgrounds, and mentored learners in
-        both physical and virtual classrooms.
-    </p>
+        <p style="margin-bottom: 15px;">
+            Since beginning my teaching career in 2007 and becoming fully engaged
+            in professional education in 2014, I have taught in various schools,
+            trained students from different backgrounds, and mentored learners in
+            both physical and virtual classrooms.
+        </p>
 
-    <p>
-        My passion is helping students develop confidence, academic excellence,
-        critical thinking skills, and practical knowledge that prepares them
-        for future success.
-    </p>
+        <p>
+            My passion is helping students develop confidence, academic excellence,
+            critical thinking skills, and practical knowledge that prepares them
+            for future success.
+        </p>
+    </div>
 </section>
 
+<!-- Our Teaching Mission -->
 <section class="container">
     <div class="section-title">
         <h2>🎯 Our Teaching Mission</h2>
     </div>
 
-    <p>
+    <p style="text-align: center; margin-bottom: 30px;">
         Our mission is to make quality education accessible, engaging,
         practical, and technology-driven. We combine traditional teaching
         excellence with modern digital tools to help learners achieve their
@@ -57,212 +502,175 @@
     <div class="services-grid">
         <div class="service-card">
             <h3>📖 Academic Excellence</h3>
-            <p>
-                Building strong foundations in core academic subjects.
-            </p>
+            <p>Building strong foundations in core academic subjects.</p>
         </div>
-
         <div class="service-card">
             <h3>💡 Critical Thinking</h3>
-            <p>
-                Encouraging creativity, reasoning, and problem-solving skills.
-            </p>
+            <p>Encouraging creativity, reasoning, and problem-solving skills.</p>
         </div>
-
         <div class="service-card">
             <h3>🌍 Global Learning</h3>
-            <p>
-                Preparing students for international educational opportunities.
-            </p>
+            <p>Preparing students for international educational opportunities.</p>
         </div>
-
         <div class="service-card">
             <h3>💻 Digital Skills</h3>
-            <p>
-                Equipping learners with modern technology competencies.
-            </p>
+            <p>Equipping learners with modern technology competencies.</p>
         </div>
     </div>
 </section>
 
+<!-- Subjects & Training Areas -->
 <section class="container">
     <div class="section-title">
         <h2>📚 Subjects & Training Areas</h2>
     </div>
 
     <div class="services-grid">
-
         <div class="service-card">
             <h3>📝 English Language</h3>
-            <p>
-                Grammar, comprehension, essay writing, oral English,
-                communication skills, and examination preparation.
-            </p>
+            <p>Grammar, comprehension, essay writing, oral English, communication skills, and examination preparation.</p>
         </div>
-
         <div class="service-card">
             <h3>💻 Computer Studies</h3>
-            <p>
-                Computer fundamentals, Microsoft Office, internet skills,
-                coding basics, digital literacy, and ICT training.
-            </p>
+            <p>Computer fundamentals, Microsoft Office, internet skills, coding basics, digital literacy, and ICT training.</p>
         </div>
-
         <div class="service-card">
             <h3>🔬 Basic Science</h3>
-            <p>
-                Science concepts, laboratory principles, and examination
-                preparation for junior and senior secondary students.
-            </p>
+            <p>Science concepts, laboratory principles, and examination preparation for junior and senior secondary students.</p>
         </div>
-
         <div class="service-card">
             <h3>📊 Mathematics Support</h3>
-            <p>
-                Practical mathematics coaching for primary, secondary,
-                and examination candidates.
-            </p>
+            <p>Practical mathematics coaching for primary, secondary, and examination candidates.</p>
         </div>
-
         <div class="service-card">
             <h3>🌍 Civic & Social Studies</h3>
-            <p>
-                Citizenship education, social development, leadership,
-                and moral instruction.
-            </p>
+            <p>Citizenship education, social development, leadership, and moral instruction.</p>
         </div>
-
         <div class="service-card">
             <h3>🗣️ Igbo Language</h3>
-            <p>
-                Igbo language learning for children, adults,
-                and members of the diaspora community.
-            </p>
+            <p>Igbo language learning for children, adults, and members of the diaspora community.</p>
         </div>
-
     </div>
 </section>
 
+<!-- Examination Preparation Programs -->
 <section class="container">
     <div class="section-title">
         <h2>🎓 Examination Preparation Programs</h2>
     </div>
 
-    <p>
-        We provide structured coaching programs for students preparing for:
-    </p>
-
-    <ul>
-        <li>✅ WAEC</li>
-        <li>✅ NECO</li>
-        <li>✅ NABTEB</li>
-        <li>✅ JAMB UTME</li>
-        <li>✅ Common Entrance Examinations</li>
-        <li>✅ Junior WAEC (BECE)</li>
-        <li>✅ Scholarship Examinations</li>
-        <li>✅ International Placement Tests</li>
-    </ul>
-
-    <p>
-        Lessons include revision exercises, practice questions,
-        mock examinations, and performance assessments.
-    </p>
+    <div class="feature-list">
+        <p style="margin-bottom: 20px; text-align: center;">We provide structured coaching programs for students preparing for:</p>
+        <ul>
+            <li>WAEC (West African Examinations Council)</li>
+            <li>NECO (National Examinations Council)</li>
+            <li>NABTEB (National Business and Technical Examinations Board)</li>
+            <li>JAMB UTME (Unified Tertiary Matriculation Examination)</li>
+            <li>Common Entrance Examinations</li>
+            <li>Junior WAEC (BECE)</li>
+            <li>Scholarship Examinations</li>
+            <li>International Placement Tests</li>
+        </ul>
+        <p style="margin-top: 20px; text-align: center;">Lessons include revision exercises, practice questions, mock examinations, and performance assessments.</p>
+    </div>
 </section>
 
+<!-- Online Learning & Virtual Classes -->
 <section class="container">
     <div class="section-title">
         <h2>🌐 Online Learning & Virtual Classes</h2>
     </div>
 
-    <p>
-        Through our digital learning platform, students can learn from
-        anywhere in the world.
-    </p>
-
-    <ul>
-        <li>📱 Mobile-Friendly Learning</li>
-        <li>💻 Live Interactive Classes</li>
-        <li>🎥 Recorded Lessons</li>
-        <li>📚 Downloadable Notes</li>
-        <li>📝 Online Quizzes & Assessments</li>
-        <li>📊 Progress Tracking</li>
-        <li>🏆 Certificates of Completion</li>
-    </ul>
+    <div class="feature-list">
+        <p style="margin-bottom: 20px; text-align: center;">Through our digital learning platform, students can learn from anywhere in the world.</p>
+        <ul>
+            <li>📱 Mobile-Friendly Learning</li>
+            <li>💻 Live Interactive Classes</li>
+            <li>🎥 Recorded Lessons</li>
+            <li>📚 Downloadable Notes</li>
+            <li>📝 Online Quizzes & Assessments</li>
+            <li>📊 Progress Tracking</li>
+            <li>🏆 Certificates of Completion</li>
+        </ul>
+    </div>
 </section>
 
+<!-- Parent Support & Academic Monitoring -->
 <section class="container">
     <div class="section-title">
         <h2>👨‍👩‍👧 Parent Support & Academic Monitoring</h2>
     </div>
 
-    <p>
-        We work closely with parents to ensure students remain focused
-        and academically successful.
-    </p>
-
-    <ul>
-        <li>📈 Student Progress Reports</li>
-        <li>📅 Study Planning</li>
-        <li>📞 Parent Consultations</li>
-        <li>🎯 Goal Setting & Monitoring</li>
-        <li>🏅 Performance Evaluation</li>
-    </ul>
+    <div class="feature-list">
+        <p style="margin-bottom: 20px; text-align: center;">We work closely with parents to ensure students remain focused and academically successful.</p>
+        <ul>
+            <li>📈 Student Progress Reports</li>
+            <li>📅 Study Planning</li>
+            <li>📞 Parent Consultations</li>
+            <li>🎯 Goal Setting & Monitoring</li>
+            <li>🏅 Performance Evaluation</li>
+        </ul>
+    </div>
 </section>
 
+<!-- Why Learn With Us -->
 <section class="container">
     <div class="section-title">
         <h2>🏆 Why Learn With Us?</h2>
     </div>
 
     <div class="services-grid">
-
         <div class="service-card">
             <h3>🎓 Experienced Educator</h3>
-            <p>
-                More than a decade of teaching and mentoring experience.
-            </p>
+            <p>More than a decade of teaching and mentoring experience.</p>
         </div>
-
         <div class="service-card">
             <h3>📚 Structured Curriculum</h3>
-            <p>
-                Lessons aligned with approved educational standards.
-            </p>
+            <p>Lessons aligned with approved educational standards.</p>
         </div>
-
         <div class="service-card">
             <h3>💻 Technology Driven</h3>
-            <p>
-                Modern learning tools and online classroom systems.
-            </p>
+            <p>Modern learning tools and online classroom systems.</p>
         </div>
-
         <div class="service-card">
             <h3>🌍 Global Reach</h3>
-            <p>
-                Supporting students locally and internationally.
-            </p>
+            <p>Supporting students locally and internationally.</p>
         </div>
-
     </div>
 </section>
 
-<section class="container" style="text-align:center; padding:60px 20px;">
-    <h2>🚀 Start Learning Today</h2>
-
-    <p>
-        Whether you are preparing for examinations, improving academic
-        performance, developing digital skills, or seeking personalized
-        educational guidance, we are here to help.
-    </p>
-
-    <br>
-
-    <a href="booking.html" class="btn">
-        📅 Book a Teaching Session
-    </a>
-
-    <a href="contact.html" class="btn">
-        📞 Contact Us
-    </a>
+<!-- Call to Action -->
+<section class="cta-section">
+    <div class="container">
+        <h2>🚀 Start Learning Today</h2>
+        <p>
+            Whether you are preparing for examinations, improving academic
+            performance, developing digital skills, or seeking personalized
+            educational guidance, we are here to help.
+        </p>
+        <a href="booking.html" class="btn">📅 Book a Teaching Session</a>
+        <a href="contact.html" class="btn btn-outline" style="background: white; color: #667eea;">📞 Contact Us</a>
+    </div>
 </section>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="teaching.html">Teaching</a>
+        <a href="contact.html">Contact</a>
+    </div>
+    <p>© 2026 Damian Anielozie Okafor | Ernest Embassy Digital Solutions</p>
+    <p style="margin-top: 10px; font-size: 12px;">🎓 Education | 💻 Technology | 🎬 Film Production | ✈️ Travel</p>
+</footer>
+
+<!-- WhatsApp Float Button -->
+<a href="https://wa.me/2348032607809" class="whatsapp-float" target="_blank">
+    <span>💬</span>
+    <span>Chat on WhatsApp</span>
+</a>
+
+</body>
+</html>

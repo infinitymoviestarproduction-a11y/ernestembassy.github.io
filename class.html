@@ -458,7 +458,7 @@
         .option-btn.incorrect .option-letter { background: var(--ruby); color: white; }
         .option-btn:disabled { cursor: not-allowed; }
 
-        /* ── ENHANCED EXPLANATION BOX ── */
+        /* ── EXPLANATION BOX ── */
         .explanation-box {
             margin-top: 20px;
             padding: 18px 22px;
@@ -479,14 +479,8 @@
             border-left-color: var(--gold);
         }
         @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-12px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-12px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         .next-btn-wrap { margin-top: 24px; text-align: right; display: none; }
@@ -590,10 +584,7 @@
 
         .modal-body { padding: 24px 28px; }
 
-        .price-display {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+        .price-display { text-align: center; margin-bottom: 20px; }
         .price-display .amount {
             font-family: 'Syne', sans-serif;
             font-size: 3rem;
@@ -731,11 +722,7 @@
             color: var(--muted);
             transition: all 0.2s;
         }
-        .lb-tab.active {
-            background: var(--ink);
-            color: white;
-            border-color: var(--ink);
-        }
+        .lb-tab.active { background: var(--ink); color: white; border-color: var(--ink); }
         .lb-row {
             display: flex;
             align-items: center;
@@ -752,7 +739,7 @@
             text-align: center;
             flex-shrink: 0;
         }
-        .lb-rank.gold { color: #c8960f; }
+        .lb-rank.gold   { color: #c8960f; }
         .lb-rank.silver { color: #8a8a9a; }
         .lb-rank.bronze { color: #a0522d; }
         .lb-avatar {
@@ -770,14 +757,10 @@
         }
         .lb-info { flex: 1; }
         .lb-name { font-weight: 600; font-size: 0.93rem; }
-        .lb-sub { font-size: 0.78rem; color: var(--muted); margin-top: 1px; }
-        .lb-score {
-            font-family: 'Syne', sans-serif;
-            font-weight: 700;
-            font-size: 1.05rem;
-        }
+        .lb-sub  { font-size: 0.78rem; color: var(--muted); margin-top: 1px; }
+        .lb-score { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem; }
         .lb-score.high { color: var(--jade); }
-        .lb-score.mid { color: var(--gold-deep); }
+        .lb-score.mid  { color: var(--gold-deep); }
         .lb-empty {
             text-align: center;
             padding: 40px 20px;
@@ -823,7 +806,7 @@
         }
         .toast.show { transform: translateX(0); }
         .toast.success { border-left: 3px solid var(--jade); }
-        .toast.error { border-left: 3px solid var(--ruby); }
+        .toast.error   { border-left: 3px solid var(--ruby); }
         .toast.warning { border-left: 3px solid var(--gold); }
 
         @media (max-width: 600px) {
@@ -949,61 +932,72 @@
 // ══════════════════════════════════════════════
 //  CONFIG
 // ══════════════════════════════════════════════
-const PAYSTACK_KEY = "pk_live_441686d15976154f119fe56e3f415638b7a649ac";
-const PREMIUM_PRICE = 100;
-const PREMIUM_DURATION_MS = 24 * 60 * 60 * 1000;
+const PAYSTACK_KEY          = "pk_live_441686d15976154f119fe56e3f415638b7a649ac";
+const PREMIUM_PRICE         = 100;
+const PREMIUM_DURATION_MS   = 24 * 60 * 60 * 1000;
 const TIME_PER_QUESTION_PREMIUM = 8;
-const TIME_PER_QUESTION_FREE = 0;
-const FREE_Q_LIMIT = 30;
-const PREMIUM_Q_LIMIT = 50;
+const TIME_PER_QUESTION_FREE    = 0;
+const FREE_Q_LIMIT          = 30;
+const PREMIUM_Q_LIMIT       = 50;
 
 const SUBJECT_NAMES = {
-    mathematics: '📐 Mathematics',
-    physics: '⚛️ Physics',
-    chemistry: '🧪 Chemistry',
-    english: '📖 English',
+    mathematics:        '📐 Mathematics',
+    physics:            '⚛️ Physics',
+    chemistry:          '🧪 Chemistry',
+    english:            '📖 English',
     'digital-technology': '💻 Digital Technology',
-    igbo: '🗣️ Igbo Language'
+    igbo:               '🗣️ Igbo Language'
 };
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
-    authDomain: "ernest-embassy-lms.firebaseapp.com",
-    projectId: "ernest-embassy-lms",
-    storageBucket: "ernest-embassy-lms.firebasestorage.app",
+    apiKey:            "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+    authDomain:        "ernest-embassy-lms.firebaseapp.com",
+    projectId:         "ernest-embassy-lms",
+    storageBucket:     "ernest-embassy-lms.firebasestorage.app",
     messagingSenderId: "204896421221",
-    appId: "1:204896421221:web:9407b523da68c3e5b88d8c",
-    databaseURL: "https://ernest-embassy-lms-default-rtdb.firebaseio.com"
+    appId:             "1:204896421221:web:9407b523da68c3e5b88d8c",
+    databaseURL:       "https://ernest-embassy-lms-default-rtdb.firebaseio.com"
 };
 
 firebase.initializeApp(firebaseConfig);
-const auth     = firebase.auth();
-const rtdb     = firebase.database();
+const auth      = firebase.auth();
+const rtdb      = firebase.database();
 const firestore = firebase.firestore();
 
 // ══════════════════════════════════════════════
 //  STATE
 // ══════════════════════════════════════════════
-let currentUser      = null;
-let currentMode      = null;
-let currentSubject   = 'mathematics';
-let questions        = [];
-let questionIndex    = 0;
-let score            = 0;
-let isAnswered       = false;
-let timerInterval    = null;
-let timeLeft         = 0;
-let timerMax         = 0;
-const CIRC           = 2 * Math.PI * 23;
+let currentUser    = null;
+let currentMode    = null;
+let currentSubject = 'mathematics';
+let questions      = [];
+let questionIndex  = 0;
+let score          = 0;
+let isAnswered     = false;
+let timerInterval  = null;
+let timeLeft       = 0;
+let timerMax       = 0;
+const CIRC         = 2 * Math.PI * 23;
+
+// ── TRACKING STATE ──────────────────────────
+// Timestamps used to measure time spent per quiz session
+let _quizStartTime     = null;   // set when questions begin loading
+let _questionStartTime = null;   // set when each question renders
+let _timeoutCount      = 0;      // how many questions timed out this session
 
 // ══════════════════════════════════════════════
 //  UTILS
 // ══════════════════════════════════════════════
 function goTo(p) { window.location.href = p; }
+
 function esc(s) {
     if (!s) return '';
-    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    return String(s)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;');
 }
+
 function shuffle(arr) {
     const a = [...arr];
     for (let i = a.length - 1; i > 0; i--) {
@@ -1012,17 +1006,23 @@ function shuffle(arr) {
     }
     return a;
 }
+
 function showToast(msg, type = 'success') {
     const t = document.getElementById('toast');
     t.textContent = msg;
     t.className = `toast ${type} show`;
     setTimeout(() => t.classList.remove('show'), 3500);
 }
-function subjectName(s) { return (SUBJECT_NAMES[s] || s).replace(/^[\S]+\s/, ''); }
+
+function subjectName(s) {
+    return (SUBJECT_NAMES[s] || s).replace(/^[\S]+\s/, '');
+}
+
 function onSubjectChange() {
     currentSubject = document.getElementById('subjectSelect').value;
     resetToModeSelect();
 }
+
 function resetToModeSelect() {
     if (timerInterval) clearInterval(timerInterval);
     currentMode = null;
@@ -1033,24 +1033,162 @@ function resetToModeSelect() {
             <p>Choose a mode above to begin your quiz</p>
         </div>`;
 }
+
 function handleNavUser() {
     if (currentUser) { auth.signOut(); } else { goTo('login.html'); }
 }
+
 function scrollToLeaderboard() {
     document.getElementById('leaderboard').scrollIntoView({ behavior: 'smooth' });
 }
 
 // ══════════════════════════════════════════════
+//  HELPER — get device / browser info
+// ══════════════════════════════════════════════
+function getDeviceInfo() {
+    const ua = navigator.userAgent;
+    let browser = 'Unknown';
+    if      (ua.includes('Chrome') && !ua.includes('Edg'))  browser = 'Chrome';
+    else if (ua.includes('Firefox'))  browser = 'Firefox';
+    else if (ua.includes('Safari') && !ua.includes('Chrome')) browser = 'Safari';
+    else if (ua.includes('Edg'))      browser = 'Edge';
+    else if (ua.includes('Opera') || ua.includes('OPR')) browser = 'Opera';
+
+    let device = 'Desktop';
+    if (/Mobi|Android|iPhone|iPad/i.test(ua)) {
+        device = /iPad|Tablet/i.test(ua) ? 'Tablet' : 'Mobile';
+    }
+
+    return {
+        browser,
+        device,
+        platform:   navigator.platform  || 'Unknown',
+        language:   navigator.language  || 'Unknown',
+        screenRes:  `${screen.width}x${screen.height}`,
+        userAgent:  ua.slice(0, 200)        // cap length
+    };
+}
+
+// ══════════════════════════════════════════════
+//  TRACKING — log login activity
+//  Called once per auth state change when user is signed in.
+// ══════════════════════════════════════════════
+async function logLoginActivity(user) {
+    try {
+        const deviceInfo = getDeviceInfo();
+
+        // 1. Write a new login_logs document for this session
+        await firestore.collection('login_logs').add({
+            userId:    user.uid,
+            email:     user.email,
+            loginTime: firebase.firestore.FieldValue.serverTimestamp(),
+            ...deviceInfo
+        });
+
+        // 2. Update the student's summary doc (last login + running login count)
+        await firestore.collection('students').doc(user.uid).set({
+            lastLogin:     firebase.firestore.FieldValue.serverTimestamp(),
+            loginCount:    firebase.firestore.FieldValue.increment(1),
+            accountStatus: 'active',
+            email:         user.email,
+            // Preserve displayName if Firebase Auth has it
+            ...(user.displayName ? { fullName: user.displayName } : {})
+        }, { merge: true });
+
+    } catch (e) {
+        // Non-blocking — tracking failures should never break the quiz
+        console.warn('Login tracking error:', e);
+    }
+}
+
+// ══════════════════════════════════════════════
+//  TRACKING — save a completed quiz attempt
+//  Called from showResults() for every mode (free + premium).
+// ══════════════════════════════════════════════
+async function saveQuizAttempt(pct) {
+    if (!currentUser) return;   // anonymous free users are skipped
+
+    try {
+        const durationSeconds = _quizStartTime
+            ? Math.round((Date.now() - _quizStartTime) / 1000)
+            : null;
+
+        const name = currentUser.displayName || currentUser.email.split('@')[0];
+
+        // 1. Write the attempt record
+        await firestore.collection('quiz_attempts').add({
+            userId:          currentUser.uid,
+            userEmail:       currentUser.email,
+            userName:        name,
+            subject:         currentSubject,
+            mode:            currentMode,           // 'free' | 'premium'
+            score:           pct,                   // percentage 0–100
+            correctAnswers:  score,
+            totalQuestions:  questions.length,
+            timeoutCount:    _timeoutCount,         // questions where timer ran out
+            durationSeconds: durationSeconds,
+            attemptDate:     firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        // 2. Update the student summary doc
+        //    — best score per subject, total attempts, last activity
+        const studentRef = firestore.collection('students').doc(currentUser.uid);
+        const updateData = {
+            [`quizScores.${currentSubject}`]: pct,   // overwrites with latest; see note below
+            totalAttempts:  firebase.firestore.FieldValue.increment(1),
+            lastActivity:   firebase.firestore.FieldValue.serverTimestamp(),
+            accountStatus:  'active'
+        };
+
+        // Keep a separate best score per subject alongside the latest
+        const snap = await studentRef.get();
+        if (snap.exists) {
+            const existing = snap.data();
+            const prevBest = existing?.bestScores?.[currentSubject] || 0;
+            if (pct > prevBest) {
+                updateData[`bestScores.${currentSubject}`] = pct;
+            }
+        } else {
+            updateData[`bestScores.${currentSubject}`] = pct;
+        }
+
+        if (currentMode === 'premium') {
+            updateData.premiumAttempts = firebase.firestore.FieldValue.increment(1);
+            updateData.totalPaid       = firebase.firestore.FieldValue.increment(PREMIUM_PRICE);
+        } else {
+            updateData.freeAttempts = firebase.firestore.FieldValue.increment(1);
+        }
+
+        await studentRef.set(updateData, { merge: true });
+
+    } catch (e) {
+        console.warn('Quiz attempt tracking error:', e);
+    }
+}
+
+// ══════════════════════════════════════════════
 //  AUTH
 // ══════════════════════════════════════════════
+// Guard so we only log the login once per page load, not on every re-render
+let _loginLogged = false;
+
 auth.onAuthStateChanged(user => {
     currentUser = user;
     const btn = document.getElementById('navUserBtn');
+
     if (user) {
         btn.textContent = user.email.split('@')[0];
+
+        // Log login activity exactly once per page load
+        if (!_loginLogged) {
+            _loginLogged = true;
+            logLoginActivity(user);
+        }
     } else {
-        btn.textContent = 'Sign In';
+        btn.textContent  = 'Sign In';
+        _loginLogged     = false;
     }
+
     loadLeaderboard();
 });
 
@@ -1073,17 +1211,17 @@ async function checkPremiumThenStart() {
     }
     try {
         const snap = await firestore.collection('payments')
-            .where('userId', '==', currentUser.uid)
+            .where('userId',  '==', currentUser.uid)
             .where('subject', '==', currentSubject)
-            .where('status', '==', 'verified')
+            .where('status',  '==', 'verified')
             .orderBy('paymentDate', 'desc')
             .limit(1)
             .get();
 
         if (!snap.empty) {
-            const pay = snap.docs[0].data();
+            const pay     = snap.docs[0].data();
             const payTime = pay.paymentDate?.toDate?.() || new Date(pay.paymentDate);
-            const age = Date.now() - payTime.getTime();
+            const age     = Date.now() - payTime.getTime();
             if (age < PREMIUM_DURATION_MS) {
                 const hoursLeft = Math.ceil((PREMIUM_DURATION_MS - age) / 3600000);
                 showToast(`✅ Access valid — ${hoursLeft}h remaining`, 'success');
@@ -1114,7 +1252,7 @@ async function loadQuestions(mode) {
 
     try {
         const snap = await rtdb.ref(path).once('value');
-        const raw = snap.val();
+        const raw  = snap.val();
 
         if (!raw) {
             panel.innerHTML = `
@@ -1127,12 +1265,15 @@ async function loadQuestions(mode) {
             return;
         }
 
-        let all = Array.isArray(raw) ? raw.filter(Boolean) : Object.values(raw).filter(Boolean);
+        let all   = Array.isArray(raw) ? raw.filter(Boolean) : Object.values(raw).filter(Boolean);
         const limit = mode === 'free' ? FREE_Q_LIMIT : PREMIUM_Q_LIMIT;
         questions = shuffle(all).slice(0, Math.min(limit, all.length));
 
-        questionIndex = 0;
-        score = 0;
+        questionIndex  = 0;
+        score          = 0;
+        _timeoutCount  = 0;              // ← reset timeout counter
+        _quizStartTime = Date.now();     // ← start the quiz clock
+
         showQuestion();
 
     } catch (err) {
@@ -1153,13 +1294,15 @@ async function loadQuestions(mode) {
 // ══════════════════════════════════════════════
 function showQuestion() {
     if (timerInterval) clearInterval(timerInterval);
-    isAnswered = false;
-    const q = questions[questionIndex];
-    const panel = document.getElementById('quizPanel');
+    isAnswered         = false;
+    _questionStartTime = Date.now();    // ← per-question clock (available for future per-Q tracking)
+
+    const q         = questions[questionIndex];
+    const panel     = document.getElementById('quizPanel');
     const isPremium = currentMode === 'premium';
     const timeLimit = isPremium ? TIME_PER_QUESTION_PREMIUM : TIME_PER_QUESTION_FREE;
-    timeLeft = timeLimit;
-    timerMax = timeLimit;
+    timeLeft        = timeLimit;
+    timerMax        = timeLimit;
 
     const timerHtml = isPremium ? `
         <div class="timer-wrap">
@@ -1225,36 +1368,33 @@ function startTimer() {
 
 function handleTimeout() {
     isAnswered = true;
+    _timeoutCount++;           // ← count timed-out questions for this session
+
     const q = questions[questionIndex];
     disableOptions();
     highlightCorrect(q.answer);
-    
-    let correctAnswerText = '';
-    if (q.answer === 'A') correctAnswerText = q.optionA;
-    else if (q.answer === 'B') correctAnswerText = q.optionB;
-    else if (q.answer === 'C') correctAnswerText = q.optionC;
-    else if (q.answer === 'D') correctAnswerText = q.optionD;
-    
+
+    let correctAnswerText = q['option' + q.answer] || '';
+
     const expBox = document.getElementById('expBox');
-    expBox.className = 'explanation-box timeout';
-    expBox.style.display = 'block';
+    expBox.className      = 'explanation-box timeout';
+    expBox.style.display  = 'block';
     expBox.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-            <span style="font-size: 1.8rem;">⏰</span>
-            <span style="font-weight: 800; color: var(--gold-deep); font-family: 'Syne', sans-serif;">TIME'S UP!</span>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+            <span style="font-size:1.8rem;">⏰</span>
+            <span style="font-weight:800;color:var(--gold-deep);font-family:'Syne',sans-serif;">TIME'S UP!</span>
         </div>
-        <div style="margin-bottom: 10px;">
+        <div style="margin-bottom:10px;">
             <strong>Correct answer:</strong> ${q.answer}. ${esc(correctAnswerText)}
         </div>
-        <div style="padding: 10px; background: rgba(232,185,79,0.1); border-radius: 8px;">
+        <div style="padding:10px;background:rgba(232,185,79,0.1);border-radius:8px;">
             ${esc(q.explanation || `The correct answer is ${q.answer}.`)}
-        </div>
-    `;
+        </div>`;
     document.getElementById('nextWrap').style.display = 'block';
 }
 
 // ══════════════════════════════════════════════
-//  ENHANCED CHECK ANSWER WITH EXPLANATION
+//  CHECK ANSWER
 // ══════════════════════════════════════════════
 function checkAnswer(selected) {
     if (isAnswered) return;
@@ -1262,14 +1402,14 @@ function checkAnswer(selected) {
     if (timerInterval) clearInterval(timerInterval);
     timerInterval = null;
 
-    const q = questions[questionIndex];
-    const correct = q.answer;
+    const q         = questions[questionIndex];
+    const correct   = q.answer;
+    const isCorrect = selected === correct;
+
     disableOptions();
     highlightCorrect(correct);
 
     const selBtn = document.getElementById('opt' + selected);
-    const isCorrect = selected === correct;
-
     if (isCorrect) {
         score++;
     } else if (selBtn) {
@@ -1277,52 +1417,45 @@ function checkAnswer(selected) {
         const letterSpan = selBtn.querySelector('.option-letter');
         if (letterSpan) {
             letterSpan.style.background = 'var(--ruby)';
-            letterSpan.style.color = 'white';
+            letterSpan.style.color      = 'white';
         }
     }
 
-    let correctAnswerText = '';
-    if (correct === 'A') correctAnswerText = q.optionA;
-    else if (correct === 'B') correctAnswerText = q.optionB;
-    else if (correct === 'C') correctAnswerText = q.optionC;
-    else if (correct === 'D') correctAnswerText = q.optionD;
-
-    const expBox = document.getElementById('expBox');
-    let explanationHTML = '';
+    const correctAnswerText = q['option' + correct] || '';
+    const expBox            = document.getElementById('expBox');
+    let explanationHTML     = '';
 
     if (isCorrect) {
         explanationHTML = `
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-                <span style="font-size: 1.8rem;">✅</span>
-                <span style="font-weight: 800; color: var(--jade); font-family: 'Syne', sans-serif;">CORRECT!</span>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+                <span style="font-size:1.8rem;">✅</span>
+                <span style="font-weight:800;color:var(--jade);font-family:'Syne',sans-serif;">CORRECT!</span>
             </div>
-            <div style="margin-bottom: 10px;">${esc(q.explanation || `The correct answer is ${correct}. ${correctAnswerText}`)}</div>
-            <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(26,140,110,0.2); font-size: 0.85rem; color: var(--jade);">
+            <div style="margin-bottom:10px;">${esc(q.explanation || `The correct answer is ${correct}. ${correctAnswerText}`)}</div>
+            <div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(26,140,110,0.2);font-size:0.85rem;color:var(--jade);">
                 <span>✓ Answer: ${correct}. ${esc(correctAnswerText)}</span>
-            </div>
-        `;
+            </div>`;
         expBox.className = 'explanation-box';
     } else {
         explanationHTML = `
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-                <span style="font-size: 1.8rem;">❌</span>
-                <span style="font-weight: 800; color: var(--ruby); font-family: 'Syne', sans-serif;">INCORRECT</span>
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+                <span style="font-size:1.8rem;">❌</span>
+                <span style="font-weight:800;color:var(--ruby);font-family:'Syne',sans-serif;">INCORRECT</span>
             </div>
-            <div style="margin-bottom: 10px;">
+            <div style="margin-bottom:10px;">
                 <strong>Correct answer:</strong> ${correct}. ${esc(correctAnswerText)}
             </div>
-            <div style="margin-bottom: 10px; padding: 10px; background: rgba(214,64,69,0.08); border-radius: 8px;">
+            <div style="margin-bottom:10px;padding:10px;background:rgba(214,64,69,0.08);border-radius:8px;">
                 ${esc(q.explanation || `The correct answer is ${correct}.`)}
             </div>
-            <div style="margin-top: 6px; font-size: 0.8rem; color: var(--muted);">
+            <div style="margin-top:6px;font-size:0.8rem;color:var(--muted);">
                 📚 You selected: ${selected}. ${esc(q['option' + selected] || '')}
-            </div>
-        `;
+            </div>`;
         expBox.className = 'explanation-box wrong';
     }
 
     expBox.style.display = 'block';
-    expBox.innerHTML = explanationHTML;
+    expBox.innerHTML     = explanationHTML;
     document.getElementById('nextWrap').style.display = 'block';
 }
 
@@ -1333,7 +1466,7 @@ function highlightCorrect(answer) {
         const letterSpan = btn.querySelector('.option-letter');
         if (letterSpan) {
             letterSpan.style.background = 'var(--jade)';
-            letterSpan.style.color = 'white';
+            letterSpan.style.color      = 'white';
         }
     }
 }
@@ -1359,13 +1492,18 @@ function nextQuestion() {
 // ══════════════════════════════════════════════
 function showResults() {
     if (timerInterval) clearInterval(timerInterval);
+
     const pct = Math.round((score / questions.length) * 100);
     let emoji, msg, color;
-    if (pct >= 80)      { emoji = '🏆'; msg = 'Outstanding! You are a Star!'; color = 'var(--jade)'; }
-    else if (pct >= 60) { emoji = '🎉'; msg = 'Great work! Keep shining!'; color = 'var(--gold-deep)'; }
-    else if (pct >= 40) { emoji = '📚'; msg = 'Good effort! Practice makes perfect.'; color = 'var(--sky)'; }
-    else                { emoji = '💪'; msg = "Keep learning — you'll crush it next time!"; color = 'var(--ruby)'; }
+    if (pct >= 80)      { emoji = '🏆'; msg = 'Outstanding! You are a Star!';              color = 'var(--jade)';      }
+    else if (pct >= 60) { emoji = '🎉'; msg = 'Great work! Keep shining!';                 color = 'var(--gold-deep)'; }
+    else if (pct >= 40) { emoji = '📚'; msg = 'Good effort! Practice makes perfect.';      color = 'var(--sky)';       }
+    else                { emoji = '💪'; msg = "Keep learning — you'll crush it next time!"; color = 'var(--ruby)';      }
 
+    // ── TRACKING: save the attempt (both free & premium for signed-in users) ──
+    if (currentUser) saveQuizAttempt(pct);
+
+    // ── Save to monthly leaderboard (premium only) ──
     if (currentUser && currentMode === 'premium') savePremiumScore(pct);
 
     document.getElementById('quizPanel').innerHTML = `
@@ -1382,9 +1520,10 @@ function showResults() {
             </div>` : ''}
             <div class="result-actions">
                 <button class="btn-restart" onclick="resetAndReload()">🔄 Play Again</button>
-                <button class="btn-hub" onclick="goTo('education.html')">🎓 Education Hub</button>
+                <button class="btn-hub"     onclick="goTo('education.html')">🎓 Education Hub</button>
             </div>
         </div>`;
+
     document.getElementById('modeGrid').style.display = 'grid';
     loadLeaderboard();
 }
@@ -1400,25 +1539,25 @@ function resetAndReload() {
 }
 
 // ══════════════════════════════════════════════
-//  SAVE SCORE
+//  SAVE PREMIUM LEADERBOARD SCORE
 // ══════════════════════════════════════════════
 async function savePremiumScore(pct) {
     if (!currentUser) return;
     try {
         const month = new Date().toISOString().slice(0, 7);
-        const name = currentUser.displayName || currentUser.email.split('@')[0];
+        const name  = currentUser.displayName || currentUser.email.split('@')[0];
         await firestore
             .collection('monthly_leaderboard')
             .doc(month)
             .collection(currentSubject)
             .doc(currentUser.uid)
             .set({
-                userId: currentUser.uid,
+                userId:   currentUser.uid,
                 userName: name,
-                email: currentUser.email,
-                score: pct,
-                subject: currentSubject,
-                date: firebase.firestore.FieldValue.serverTimestamp()
+                email:    currentUser.email,
+                score:    pct,
+                subject:  currentSubject,
+                date:     firebase.firestore.FieldValue.serverTimestamp()
             }, { merge: true });
     } catch (e) { console.warn('Score save error:', e); }
 }
@@ -1500,15 +1639,14 @@ function closeModal() {
 // ══════════════════════════════════════════════
 function initiatePaystack() {
     if (!currentUser) { goTo('login.html'); return; }
-
     const btn = document.getElementById('paystackPayBtn');
     if (btn) { btn.textContent = '⏳ Opening payment…'; btn.disabled = true; }
 
     if (typeof PaystackPop === 'undefined') {
-        const s = document.createElement('script');
-        s.src = 'https://js.paystack.co/v1/inline.js';
-        s.onload = () => openPaystackIframe();
-        s.onerror = () => {
+        const s    = document.createElement('script');
+        s.src      = 'https://js.paystack.co/v1/inline.js';
+        s.onload   = () => openPaystackIframe();
+        s.onerror  = () => {
             showToast('Payment system unavailable. Check your internet.', 'error');
             if (btn) { btn.textContent = '💳 Pay ₦100 — Secure Checkout'; btn.disabled = false; }
         };
@@ -1519,24 +1657,18 @@ function initiatePaystack() {
 }
 
 function openPaystackIframe() {
-    const ref = `EE_${currentSubject}_${Date.now()}_${currentUser.uid.slice(0,8)}`;
-
+    const ref     = `EE_${currentSubject}_${Date.now()}_${currentUser.uid.slice(0,8)}`;
     const handler = PaystackPop.setup({
-        key: PAYSTACK_KEY,
-        email: currentUser.email,
-        amount: PREMIUM_PRICE * 100,
+        key:      PAYSTACK_KEY,
+        email:    currentUser.email,
+        amount:   PREMIUM_PRICE * 100,
         currency: 'NGN',
-        ref: ref,
+        ref:      ref,
         metadata: {
-            custom_fields: [{
-                display_name: "Subject",
-                variable_name: "subject",
-                value: currentSubject
-            },{
-                display_name: "User ID",
-                variable_name: "user_id",
-                value: currentUser.uid
-            }]
+            custom_fields: [
+                { display_name: 'Subject', variable_name: 'subject', value: currentSubject },
+                { display_name: 'User ID', variable_name: 'user_id', value: currentUser.uid }
+            ]
         },
         callback: (response) => {
             closeModal();
@@ -1552,7 +1684,6 @@ function openPaystackIframe() {
 
 async function processPaymentSuccess(reference) {
     showToast('✅ Payment received! Unlocking your quiz…', 'success');
-
     try {
         const studentSnap = await firestore.collection('students').doc(currentUser.uid).get();
         const studentName = studentSnap.exists
@@ -1561,19 +1692,28 @@ async function processPaymentSuccess(reference) {
 
         const expiresAt = new Date(Date.now() + PREMIUM_DURATION_MS);
 
+        // Save payment record
         await firestore.collection('payments').doc(`PAY_${reference}`).set({
-            paymentId: `PAY_${reference}`,
+            paymentId:    `PAY_${reference}`,
             reference,
-            userId: currentUser.uid,
-            userEmail: currentUser.email,
-            userName: studentName,
-            subject: currentSubject,
-            amount: PREMIUM_PRICE,
-            status: 'verified',
-            paymentDate: firebase.firestore.FieldValue.serverTimestamp(),
-            expiresAt: expiresAt,
+            userId:       currentUser.uid,
+            userEmail:    currentUser.email,
+            userName:     studentName,
+            subject:      currentSubject,
+            amount:       PREMIUM_PRICE,
+            status:       'verified',
+            paymentDate:  firebase.firestore.FieldValue.serverTimestamp(),
+            expiresAt:    expiresAt,
             durationHours: 24
         });
+
+        // Update student payment summary
+        await firestore.collection('students').doc(currentUser.uid).set({
+            totalPaid:         firebase.firestore.FieldValue.increment(PREMIUM_PRICE),
+            lastPaymentDate:   firebase.firestore.FieldValue.serverTimestamp(),
+            lastPaidSubject:   currentSubject,
+            accountStatus:     'active'
+        }, { merge: true });
 
         setTimeout(() => {
             showToast('🎉 Access granted! Starting quiz…', 'success');
@@ -1589,7 +1729,7 @@ async function processPaymentSuccess(reference) {
 // ══════════════════════════════════════════════
 //  LEADERBOARD
 // ══════════════════════════════════════════════
-const SUBJECTS_LIST = Object.keys(SUBJECT_NAMES);
+const SUBJECTS_LIST  = Object.keys(SUBJECT_NAMES);
 let lbCurrentSubject = 'mathematics';
 
 function buildLbTabs() {
@@ -1607,12 +1747,12 @@ function changeLbTab(s) {
 }
 
 async function loadLeaderboard() {
-    const content = document.getElementById('lbContent');
+    const content    = document.getElementById('lbContent');
     const monthLabel = document.getElementById('lbMonthLabel');
     if (!content) return;
 
-    const now = new Date();
-    const month = now.toISOString().slice(0,7);
+    const now       = new Date();
+    const month     = now.toISOString().slice(0,7);
     const monthName = now.toLocaleString('default', { month: 'long', year: 'numeric' });
     if (monthLabel) monthLabel.textContent = `${monthName} rankings`;
 
@@ -1641,10 +1781,10 @@ async function loadLeaderboard() {
         const rankIcons = ['🥇','🥈','🥉'];
         let html = '';
         snap.docs.forEach((doc, i) => {
-            const d = doc.data();
-            const name = (d.userName || 'Anonymous').slice(0, 20);
-            const initial = name[0].toUpperCase();
-            const rankClass = i < 3 ? ['gold','silver','bronze'][i] : '';
+            const d          = doc.data();
+            const name       = (d.userName || 'Anonymous').slice(0, 20);
+            const initial    = name[0].toUpperCase();
+            const rankClass  = i < 3 ? ['gold','silver','bronze'][i] : '';
             const scoreClass = d.score >= 80 ? 'high' : d.score >= 50 ? 'mid' : '';
             html += `
                 <div class="lb-row">
@@ -1665,8 +1805,9 @@ async function loadLeaderboard() {
     }
 }
 
-// Initialize leaderboard
-document.getElementById('lbMonthLabel').textContent = new Date().toLocaleString('default', { month: 'long', year: 'numeric' }) + ' rankings';
+// Initialise leaderboard month label
+document.getElementById('lbMonthLabel').textContent =
+    new Date().toLocaleString('default', { month: 'long', year: 'numeric' }) + ' rankings';
 </script>
 </body>
 </html>

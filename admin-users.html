@@ -37,6 +37,38 @@
         }
         .nav-links a { color: #4a5568; text-decoration: none; margin-left: 20px; }
 
+        /* Back Navigation Bar */
+        .back-nav {
+            background: #f7fafc;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .back-btn:hover {
+            background: #667eea;
+            border-color: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+        .back-btn.admin:hover { background: #eb3349; border-color: #eb3349; }
+
         .page-header {
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
@@ -280,19 +312,25 @@
             font-size: 24px;
             text-decoration: none;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 100;
         }
+        .floating-home:hover { transform: scale(1.1); }
 
         @media (max-width: 768px) {
             .nav-container { flex-direction: column; gap: 10px; }
             .card-header { flex-direction: column; align-items: flex-start; }
             .search-bar input { width: 100%; }
+            .back-nav { justify-content: center; }
+            .floating-home { bottom: 20px; right: 20px; width: 50px; height: 50px; font-size: 20px; }
         }
     </style>
 </head>
 <body>
 
 <div class="toast" id="toast"></div>
-<a href="admin.html" class="floating-home">⚙️</a>
+
+<!-- Floating Home Button -->
+<a href="index.html" class="floating-home" title="Go to Home">🏠</a>
 
 <!-- User Detail Modal -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
@@ -313,6 +351,13 @@
         </div>
     </div>
 </nav>
+
+<!-- Back Navigation Bar -->
+<div class="back-nav">
+    <a href="admin.html" class="back-btn admin">🔙 Back to Admin Dashboard</a>
+    <a href="index.html" class="back-btn">🏠 Back to Home</a>
+    <a href="dashboard.html" class="back-btn">👤 My Dashboard</a>
+</div>
 
 <div class="page-header">
     <h1>👥 User Management</h1>
@@ -364,7 +409,7 @@
                     </tr>
                 </thead>
                 <tbody id="usersTableBody">
-                    <tr><td colspan="5" style="text-align:center; padding:30px; color:#a0aec0;">⏳ Loading users...</td></tr>
+                    <tr><td colspan="5" style="text-align:center; padding:30px; color:#a0aec0;">⏳ Loading users...</td</tr
                 </tbody>
             </table>
         </div>
@@ -440,7 +485,7 @@
 
             filterUsers();
         } catch (err) {
-            document.getElementById('usersTableBody').innerHTML = `<tr><td colspan="5" style="text-align:center;padding:30px;color:#c53030;">⚠️ Error: ${err.message}</td></tr>`;
+            document.getElementById('usersTableBody').innerHTML = `<tr><td colspan="5" style="text-align:center;padding:30px;color:#c53030;">⚠️ Error: ${err.message}</td</tr`;
         }
     }
 
@@ -465,7 +510,7 @@
     function renderTable(users) {
         const tbody = document.getElementById('usersTableBody');
         if (!users.length) {
-            tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state">No users found.</div></td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state">No users found.</div></td</tr`;
             return;
         }
 
@@ -501,8 +546,8 @@
                             : `<button class="btn-sm btn-promote" onclick="changePlan('${u.id}', 'premium')">⭐ Upgrade</button>`
                         }
                     </div>
-                </td>
-            </tr>`;
+                 </td>
+            </td>`;
         }).join('');
     }
 

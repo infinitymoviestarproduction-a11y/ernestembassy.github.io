@@ -8,8 +8,40 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
             min-height: 100vh;
+            position: relative;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+        }
+        
+        /* FULL PAGE BACKGROUND GRADIENT WITH OVERLAY PATTERN */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.15"><text x="10" y="30" font-size="20">🎬</text><text x="50" y="60" font-size="25">🎭</text><text x="20" y="80" font-size="18">📽️</text><text x="70" y="40" font-size="22">🎞️</text><text x="40" y="20" font-size="16">🎨</text><text x="80" y="80" font-size="20">🎵</text><text x="5" y="50" font-size="15">📸</text><text x="60" y="90" font-size="18">🎤</text></svg>');
+            background-repeat: repeat;
+            opacity: 0.2;
+            z-index: 0;
+        }
+        
+        /* Dark overlay for text readability */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 0;
+        }
+        
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
         }
 
         /* Navigation */
@@ -66,17 +98,19 @@
         .dropdown-header { padding: 12px 18px; font-size: 11px; text-transform: uppercase; color: rgba(255, 215, 0, 0.7); background: #12192c; font-weight: bold; }
 
         .hero {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
             color: white;
             text-align: center;
-            padding: 80px 20px;
+            padding: 60px 20px;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
         }
         .hero h1 { font-size: 2.5rem; margin-bottom: 10px; }
         .hero h1 span { color: #ffd700; }
         .hero p { font-size: 1.1rem; opacity: 0.9; }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
-        .section-title { text-align: center; font-size: 2rem; margin-bottom: 40px; color: #1a1a2e; }
+        .section-title { text-align: center; font-size: 2rem; margin-bottom: 40px; color: #ffd700; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
         .section-title span { border-bottom: 3px solid #ffd700; padding-bottom: 10px; }
 
         /* Projects Grid */
@@ -87,10 +121,10 @@
             margin-bottom: 60px;
         }
         .project-card {
-            background: white;
+            background: rgba(255,255,255,0.95);
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             transition: transform 0.3s;
         }
         .project-card:hover { transform: translateY(-5px); }
@@ -115,11 +149,11 @@
         }
         .status-completed { background: #11998e; color: white; }
         .status-development { background: #f39c12; color: white; }
-        .project-description { color: #666; line-height: 1.6; }
+        .project-description { color: #555; line-height: 1.6; }
 
         /* Video Section */
         .video-section {
-            background: white;
+            background: rgba(255,255,255,0.95);
             border-radius: 20px;
             padding: 40px;
             margin-bottom: 40px;
@@ -141,7 +175,7 @@
         .video-wrapper {
             position: relative;
             width: 100%;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            padding-bottom: 56.25%;
             background: #000;
         }
         .video-wrapper video {
@@ -152,23 +186,13 @@
             height: 100%;
             object-fit: cover;
         }
-        .video-info {
-            padding: 15px;
-            color: white;
-        }
-        .video-title {
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #ffd700;
-        }
-        .video-description {
-            font-size: 0.8rem;
-            color: #ccc;
-        }
+        .video-info { padding: 15px; color: white; }
+        .video-title { font-weight: bold; margin-bottom: 5px; color: #ffd700; }
+        .video-description { font-size: 0.8rem; color: #ccc; }
 
         /* Music Section */
         .music-section {
-            background: white;
+            background: rgba(255,255,255,0.95);
             border-radius: 20px;
             padding: 40px;
             margin-bottom: 40px;
@@ -193,7 +217,7 @@
 
         /* Documents Section */
         .documents-section {
-            background: white;
+            background: rgba(255,255,255,0.95);
             border-radius: 20px;
             padding: 40px;
             margin-bottom: 40px;
@@ -223,9 +247,9 @@
         .document-title { font-weight: bold; color: #1a1a2e; margin-bottom: 8px; }
         .document-type { font-size: 0.7rem; color: #667eea; font-weight: bold; margin-top: 10px; }
 
-        /* Screenplays Grid */
+        /* Screenplays Section */
         .screenplays-section {
-            background: white;
+            background: rgba(255,255,255,0.95);
             border-radius: 20px;
             padding: 40px;
             margin-top: 40px;
@@ -278,6 +302,8 @@
     </style>
 </head>
 <body>
+
+<div class="content-wrapper">
 
 <nav>
     <div class="nav-container">
@@ -339,7 +365,7 @@
             <div class="project-content">
                 <div class="project-status status-completed">Completed</div>
                 <h3 class="project-title">Drama NTA Production</h3>
-                <p class="project-description">A professionally produced television drama project developed for Nigerian Television Authority (NTA), showcasing local storytelling, cultural values, and emerging talents.</p>
+                <p class="project-description">A professionally produced television drama project developed for Nigerian Television Authority (NTA).</p>
             </div>
         </div>
         
@@ -348,7 +374,7 @@
             <div class="project-content">
                 <div class="project-status status-completed">Completed</div>
                 <h3 class="project-title">ESCET Drama Production</h3>
-                <p class="project-description">A theatrical and performance project conducted at Enugu State College of Education Technical (ESCET), designed to train young actors, writers, and directors in practical storytelling.</p>
+                <p class="project-description">A theatrical performance project at Enugu State College of Education Technical (ESCET).</p>
             </div>
         </div>
         
@@ -357,7 +383,7 @@
             <div class="project-content">
                 <div class="project-status status-completed">Completed</div>
                 <h3 class="project-title">International Film Training – Malawi</h3>
-                <p class="project-description">A hands-on filmmaking and actor development initiative conducted in Malawi in collaboration with Zomba Film Production.</p>
+                <p class="project-description">Film making and actor development initiative in Malawi with Zomba Film Production.</p>
             </div>
         </div>
         
@@ -366,7 +392,7 @@
             <div class="project-content">
                 <div class="project-status status-development">Proof of Concept</div>
                 <h3 class="project-title">Official Card Proof of Concept</h3>
-                <p class="project-description">A proof-of-concept production developed to demonstrate the cinematic potential of the feature film Official Card.</p>
+                <p class="project-description">Proof-of-concept production demonstrating the cinematic potential of the feature film Official Card.</p>
             </div>
         </div>
     </div>
@@ -377,31 +403,29 @@
         <p style="text-align: center; color: #666; margin-bottom: 20px;">Film trailers, behind-the-scenes, and production showcases</p>
         
         <div class="video-grid">
-            <!-- Movie 1 -->
             <div class="video-card">
                 <div class="video-wrapper">
-                    <video controls preload="metadata" poster="images/movie1-poster.jpg">
+                    <video controls preload="metadata">
                         <source src="movie1.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                 </div>
                 <div class="video-info">
                     <div class="video-title">🎬 Official Card - Teaser</div>
-                    <div class="video-description">Political conspiracy thriller - Official Card proof of concept</div>
+                    <div class="video-description">Political conspiracy thriller - Official Card</div>
                 </div>
             </div>
             
-            <!-- Video 1 -->
             <div class="video-card">
                 <div class="video-wrapper">
-                    <video controls preload="metadata" poster="images/video1-poster.jpg">
+                    <video controls preload="metadata">
                         <source src="video1.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                 </div>
                 <div class="video-info">
                     <div class="video-title">🎬 Production Showreel</div>
-                    <div class="video-description">Behind the scenes and production highlights from Infinity Movie Star</div>
+                    <div class="video-description">Behind the scenes highlights from Infinity Movie Star</div>
                 </div>
             </div>
         </div>
@@ -457,102 +481,28 @@
         <p style="text-align: center; color: #666; margin-bottom: 20px;">Original tracks from Infinity Movie Star Productions</p>
         
         <div class="music-grid">
-            <div class="music-card">
-                <div class="music-icon">🎤</div>
-                <div class="music-title">I Gotta Make It</div>
-                <audio controls preload="none"><source src="music/I Gotta Make It.mp3" type="audio/mpeg"></audio>
-            </div>
-            
-            <div class="music-card">
-                <div class="music-icon">🎤</div>
-                <div class="music-title">Who Am I 2</div>
-                <audio controls preload="none"><source src="music/Who Am I 2 (1).mp3" type="audio/mpeg"></audio>
-            </div>
-            
-            <div class="music-card">
-                <div class="music-icon">🎤</div>
-                <div class="music-title">House Boy</div>
-                <audio controls preload="none"><source src="music/House boy (1).mp3" type="audio/mpeg"></audio>
-            </div>
-            
-            <div class="music-card">
-                <div class="music-icon">🎤</div>
-                <div class="music-title">Stressed 3</div>
-                <audio controls preload="none"><source src="music/stressed 3 (1).mp3" type="audio/mpeg"></audio>
-            </div>
-            
-            <div class="music-card">
-                <div class="music-icon">🎤</div>
-                <div class="music-title">Ogini</div>
-                <audio controls preload="none"><source src="music/Ogini.mp3" type="audio/mpeg"></audio>
-            </div>
-            
-            <div class="music-card">
-                <div class="music-icon">🎤</div>
-                <div class="music-title">Judge Me</div>
-                <audio controls preload="none"><source src="music/Judge me (1).mp3" type="audio/mpeg"></audio>
-            </div>
-            
-            <div class="music-card">
-                <div class="music-icon">🎤</div>
-                <div class="music-title">Whatcha Gon Do</div>
-                <audio controls preload="none"><source src="music/whatcha gon do.mp3" type="audio/mpeg"></audio>
-            </div>
-            
-            <div class="music-card">
-                <div class="music-icon">🎤</div>
-                <div class="music-title">Igbakigba</div>
-                <audio controls preload="none"><source src="music/Igbakigba (1).mp3" type="audio/mpeg"></audio>
-            </div>
-            
-            <div class="music-card">
-                <div class="music-icon">🎤</div>
-                <div class="music-title">Peace 3</div>
-                <audio controls preload="none"><source src="music/Peace 3 (1).mp3" type="audio/mpeg"></audio>
-            </div>
-            
-            <div class="music-card">
-                <div class="music-icon">🎤</div>
-                <div class="music-title">Making Luv 2</div>
-                <audio controls preload="none"><source src="music/Making Luv 2 (1).mp3" type="audio/mpeg"></audio>
-            </div>
-            
-            <div class="music-card">
-                <div class="music-icon">🎤</div>
-                <div class="music-title">Champ</div>
-                <audio controls preload="none"><source src="music/champ.mp3" type="audio/mpeg"></audio>
-            </div>
-            
-            <div class="music-card">
-                <div class="music-icon">🎤</div>
-                <div class="music-title">2026</div>
-                <audio controls preload="none"><source src="music/2026.mp3" type="audio/mpeg"></audio>
-            </div>
-            
-            <div class="music-card">
-                <div class="music-icon">🎤</div>
-                <div class="music-title">Stacked Lies 22</div>
-                <audio controls preload="none"><source src="music/Stacked Lies22.mp3" type="audio/mpeg"></audio>
-            </div>
-            
-            <div class="music-card">
-                <div class="music-icon">🎤</div>
-                <div class="music-title">UKP</div>
-                <audio controls preload="none"><source src="music/UKP.mp3" type="audio/mpeg"></audio>
-            </div>
-            
-            <div class="music-card">
-                <div class="music-icon">🎤</div>
-                <div class="music-title">Vote for me 2</div>
-                <audio controls preload="none"><source src="music/Vote for me 2.mp3" type="audio/mpeg"></audio>
-            </div>
+            <div class="music-card"><div class="music-icon">🎤</div><div class="music-title">I Gotta Make It</div><audio controls preload="none"><source src="music/I Gotta Make It.mp3" type="audio/mpeg"></audio></div>
+            <div class="music-card"><div class="music-icon">🎤</div><div class="music-title">Who Am I 2</div><audio controls preload="none"><source src="music/Who Am I 2 (1).mp3" type="audio/mpeg"></audio></div>
+            <div class="music-card"><div class="music-icon">🎤</div><div class="music-title">House Boy</div><audio controls preload="none"><source src="music/House boy (1).mp3" type="audio/mpeg"></audio></div>
+            <div class="music-card"><div class="music-icon">🎤</div><div class="music-title">Stressed 3</div><audio controls preload="none"><source src="music/stressed 3 (1).mp3" type="audio/mpeg"></audio></div>
+            <div class="music-card"><div class="music-icon">🎤</div><div class="music-title">Ogini</div><audio controls preload="none"><source src="music/Ogini.mp3" type="audio/mpeg"></audio></div>
+            <div class="music-card"><div class="music-icon">🎤</div><div class="music-title">Judge Me</div><audio controls preload="none"><source src="music/Judge me (1).mp3" type="audio/mpeg"></audio></div>
+            <div class="music-card"><div class="music-icon">🎤</div><div class="music-title">Whatcha Gon Do</div><audio controls preload="none"><source src="music/whatcha gon do.mp3" type="audio/mpeg"></audio></div>
+            <div class="music-card"><div class="music-icon">🎤</div><div class="music-title">Igbakigba</div><audio controls preload="none"><source src="music/Igbakigba (1).mp3" type="audio/mpeg"></audio></div>
+            <div class="music-card"><div class="music-icon">🎤</div><div class="music-title">Peace 3</div><audio controls preload="none"><source src="music/Peace 3 (1).mp3" type="audio/mpeg"></audio></div>
+            <div class="music-card"><div class="music-icon">🎤</div><div class="music-title">Making Luv 2</div><audio controls preload="none"><source src="music/Making Luv 2 (1).mp3" type="audio/mpeg"></audio></div>
+            <div class="music-card"><div class="music-icon">🎤</div><div class="music-title">Champ</div><audio controls preload="none"><source src="music/champ.mp3" type="audio/mpeg"></audio></div>
+            <div class="music-card"><div class="music-icon">🎤</div><div class="music-title">2026</div><audio controls preload="none"><source src="music/2026.mp3" type="audio/mpeg"></audio></div>
+            <div class="music-card"><div class="music-icon">🎤</div><div class="music-title">Stacked Lies 22</div><audio controls preload="none"><source src="music/Stacked Lies22.mp3" type="audio/mpeg"></audio></div>
+            <div class="music-card"><div class="music-icon">🎤</div><div class="music-title">UKP</div><audio controls preload="none"><source src="music/UKP.mp3" type="audio/mpeg"></audio></div>
+            <div class="music-card"><div class="music-icon">🎤</div><div class="music-title">Vote for me 2</div><audio controls preload="none"><source src="music/Vote for me 2.mp3" type="audio/mpeg"></audio></div>
         </div>
     </div>
 
     <!-- Original Screenplays -->
     <div class="screenplays-section">
         <div class="section-title"><span>📖 Original Feature Screenplays</span></div>
-        <p style="text-align: center; color: #666; margin-bottom: 20px;">A growing collection of production-ready feature screenplays available for development, co-production, and international collaboration</p>
+        <p style="text-align: center; color: #666; margin-bottom: 20px;">Production-ready feature screenplays available for development and co-production</p>
         
         <div class="screenplays-grid">
             <div class="script-card"><div class="script-title">Official Card</div><div class="script-genre">Political Conspiracy Thriller</div></div>
@@ -581,5 +531,8 @@
     <p>📍 6 Ezinifite Close, New Haven, Enugu, Nigeria</p>
     <p>🎬 "Creating stories that live beyond the screen"</p>
 </footer>
+
+</div>
+
 </body>
 </html>

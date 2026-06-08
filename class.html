@@ -830,75 +830,64 @@ const PREMIUM_PRICE           = 100;
 const PREMIUM_DURATION_MS     = 24 * 60 * 60 * 1000;
 const TIME_PER_QUESTION_PREM  = 8;
 const FREE_Q_LIMIT            = 30;
-const STAGE_SIZE              = 5;   // 5 questions per stage
+const STAGE_SIZE              = 5;
 const POINTS_PER_STAGE        = 10;
 const CIRC                    = 2 * Math.PI * 23;
 
-// ── Stage rules: how many failures are allowed before reset ──
-// Stage group index 0 = Qs 1-5, 1 = Qs 6-10, 2 = Qs 11-15 …
-// Rule: group 0 → 0 failures (any fail = reset to Q1)
-//       group 1 → 1 failure  (2nd fail = reset to Q1)
-//       group 2+ → 0 failures (any fail = cannot progress to next group, restart group)
-// "once you pass stage 10, you can't go down to stage 1-5"
 function maxFailsForGroup(groupIdx) {
-    if (groupIdx === 0) return 0;   // Qs 1-5: zero tolerance
-    if (groupIdx === 1) return 1;   // Qs 6-10: one grace
-    return 0;                       // Qs 11+:  zero tolerance (restarts that stage only)
+    if (groupIdx === 0) return 0;
+    if (groupIdx === 1) return 1;
+    return 0;
 }
-// Groups that can reset all the way to Q1 (group index 0):
+
 function resetsToBeginning(groupIdx) {
-    return groupIdx <= 1;  // groups 0 and 1 → fail = back to Q1
+    return groupIdx <= 1;
 }
 
 const SUBJECT_NAMES = {
-    mathematics:          '📐 Mathematics',
-    physics:              '⚛️ Physics',
-    chemistry:            '🧪 Chemistry',
-    english:              '📖 English',
+    mathematics: '📐 Mathematics',
+    physics: '⚛️ Physics',
+    chemistry: '🧪 Chemistry',
+    english: '📖 English',
     'digital-technology': '💻 Digital Technology',
-    igbo:                 '🗣️ Igbo Language'
+    igbo: '🗣️ Igbo Language'
 };
 
 const firebaseConfig = {
-    apiKey:            "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
-    authDomain:        "ernest-embassy-lms.firebaseapp.com",
-    projectId:         "ernest-embassy-lms",
-    storageBucket:     "ernest-embassy-lms.firebasestorage.app",
+    apiKey: "AIzaSyBXuzYLUALnYVfjdg_JDIUE1zySCAbpkpg",
+    authDomain: "ernest-embassy-lms.firebaseapp.com",
+    projectId: "ernest-embassy-lms",
+    storageBucket: "ernest-embassy-lms.firebasestorage.app",
     messagingSenderId: "204896421221",
-    appId:             "1:204896421221:web:9407b523da68c3e5b88d8c",
-    databaseURL:       "https://ernest-embassy-lms-default-rtdb.firebaseio.com"
+    appId: "1:204896421221:web:9407b523da68c3e5b88d8c",
+    databaseURL: "https://ernest-embassy-lms-default-rtdb.firebaseio.com"
 };
 
 firebase.initializeApp(firebaseConfig);
-const auth      = firebase.auth();
-const rtdb      = firebase.database();
+const auth = firebase.auth();
+const rtdb = firebase.database();
 const firestore = firebase.firestore();
 
 // ══════════════════════════════════════════════════════════════════
 //  STATE
 // ══════════════════════════════════════════════════════════════════
-let currentUser      = null;
-let currentMode      = null;
-let currentSubject   = 'mathematics';
-
-// ── Quiz session ──
-let allQuestions     = [];       // full shuffled pool (de-duped)
-let questionIndex    = 0;        // global index into allQuestions
-let score            = 0;        // total points earned
-let isAnswered       = false;
-let timerInterval    = null;
-let timeLeft         = 0;
-let timerMax         = 0;
-
-// ── Stage state ──
-let currentGroupIdx       = 0;   // which group of 5 (0=Qs1-5, 1=Qs6-10…)
-let failsInCurrentGroup   = 0;   // failures within this group
-let groupStartQIndex      = 0;   // allQuestions index where this group starts
-let usedQuestionIds       = new Set(); // prevent repeats within session
-
-// ── Session save/resume ──
-let _sessionDocId    = null;
-let _quizStartTime   = null;
+let currentUser = null;
+let currentMode = null;
+let currentSubject = 'mathematics';
+let allQuestions = [];
+let questionIndex = 0;
+let score = 0;
+let isAnswered = false;
+let timerInterval = null;
+let timeLeft = 0;
+let timerMax = 0;
+let currentGroupIdx = 0;
+let failsInCurrentGroup = 0;
+let groupStartQIndex = 0;
+let usedQuestionIds = new Set();
+let _sessionDocId = null;
+let _loginLogged = false;
+let freeCorrectCount = 0;
 
 // ══════════════════════════════════════════════════════════════════
 //  UTILS
@@ -907,31 +896,18 @@ function goTo(p) { window.location.href = p; }
 
 function esc(s) {
     if (!s) return '';
-    return String(s)
-        .replace(/&/g,'&amp;')
-        .replace(/</g,'&lt;')
-        .replace(/>/g,'&gt;');
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-// Safe text for question display — preserves math symbols instead of escaping them
 function safeText(s) {
     if (!s) return '';
     return String(s)
-        // Normalise common problematic characters
-        .replace(/\u2212/g, '−')   // unicode minus → proper minus
-        .replace(/\u00D7/g, '×')   // unicode multiply
-        .replace(/\u00F7/g, '÷')   // unicode divide
-        .replace(/\u00B2/g, '²')   // superscript 2
-        .replace(/\u00B3/g, '³')   // superscript 3
-        .replace(/\u221A/g, '√')   // square root
-        .replace(/\u03C0/g, 'π')   // pi
-        .replace(/\u03B1/g, 'α')   // alpha
-        .replace(/\u03B2/g, 'β')   // beta
-        .replace(/\u03B3/g, 'γ');  // gamma
+        .replace(/\u2212/g,'−').replace(/\u00D7/g,'×').replace(/\u00F7/g,'÷')
+        .replace(/\u00B2/g,'²').replace(/\u00B3/g,'³').replace(/\u221A/g,'√')
+        .replace(/\u03C0/g,'π').replace(/\u03B1/g,'α').replace(/\u03B2/g,'β');
 }
 
 function renderText(s) {
-    // Returns text that MathJax can process (do not HTML-escape $ signs or backslashes)
     return safeText(s);
 }
 
@@ -947,7 +923,7 @@ function shuffle(arr) {
 function showToast(msg, type = 'success') {
     const t = document.getElementById('toast');
     t.textContent = msg;
-    t.className   = `toast ${type} show`;
+    t.className = `toast ${type} show`;
     setTimeout(() => t.classList.remove('show'), 4000);
 }
 
@@ -979,25 +955,20 @@ function scrollToLeaderboard() {
     document.getElementById('leaderboard').scrollIntoView({ behavior: 'smooth' });
 }
 
-// ══════════════════════════════════════════════════════════════════
-//  DEVICE INFO
-// ══════════════════════════════════════════════════════════════════
 function getDeviceInfo() {
     const ua = navigator.userAgent;
     let browser = 'Unknown';
-    if      (ua.includes('Chrome') && !ua.includes('Edg')) browser = 'Chrome';
-    else if (ua.includes('Firefox'))  browser = 'Firefox';
+    if (ua.includes('Chrome') && !ua.includes('Edg')) browser = 'Chrome';
+    else if (ua.includes('Firefox')) browser = 'Firefox';
     else if (ua.includes('Safari') && !ua.includes('Chrome')) browser = 'Safari';
-    else if (ua.includes('Edg'))      browser = 'Edge';
+    else if (ua.includes('Edg')) browser = 'Edge';
     return { browser, device: /Mobi|Android|iPhone|iPad/i.test(ua) ? 'Mobile' : 'Desktop',
              screenRes: `${screen.width}x${screen.height}`, userAgent: ua.slice(0, 200) };
 }
 
 // ══════════════════════════════════════════════════════════════════
-//  LOGIN TRACKING
+//  AUTH & LOGIN TRACKING
 // ══════════════════════════════════════════════════════════════════
-let _loginLogged = false;
-
 async function logLoginActivity(user) {
     try {
         const d = getDeviceInfo();
@@ -1006,71 +977,61 @@ async function logLoginActivity(user) {
             loginTime: firebase.firestore.FieldValue.serverTimestamp(), ...d
         });
         await firestore.collection('students').doc(user.uid).set({
-            lastLogin:     firebase.firestore.FieldValue.serverTimestamp(),
-            loginCount:    firebase.firestore.FieldValue.increment(1),
+            lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+            loginCount: firebase.firestore.FieldValue.increment(1),
             accountStatus: 'active',
-            email:         user.email,
+            email: user.email,
             ...(user.displayName ? { fullName: user.displayName } : {})
         }, { merge: true });
     } catch (e) { console.warn('Login track:', e); }
 }
 
-// ══════════════════════════════════════════════════════════════════
-//  AUTH
-// ══════════════════════════════════════════════════════════════════
 auth.onAuthStateChanged(user => {
     currentUser = user;
-    const btn   = document.getElementById('navUserBtn');
+    const btn = document.getElementById('navUserBtn');
     if (user) {
         btn.textContent = user.email.split('@')[0];
         if (!_loginLogged) { _loginLogged = true; logLoginActivity(user); }
         checkForResumableSession();
     } else {
-        btn.textContent  = 'Sign In';
-        _loginLogged     = false;
+        btn.textContent = 'Sign In';
+        _loginLogged = false;
     }
     loadLeaderboard();
 });
 
 // ══════════════════════════════════════════════════════════════════
-//  SESSION RESUME — check if user has an active premium session
+//  SESSION RESUME
 // ══════════════════════════════════════════════════════════════════
 async function checkForResumableSession() {
     if (!currentUser) return;
     try {
         const snap = await firestore.collection('quiz_sessions')
-            .where('userId',    '==', currentUser.uid)
-            .where('status',    '==', 'active')
-            .where('expiresAt', '>',  new Date())
+            .where('userId', '==', currentUser.uid)
+            .where('status', '==', 'active')
+            .where('expiresAt', '>', new Date())
             .orderBy('expiresAt', 'desc')
-            .limit(1)
-            .get();
+            .limit(1).get();
 
         if (snap.empty) return;
-        const doc     = snap.docs[0];
+        const doc = snap.docs[0];
         const session = doc.data();
-        const subj    = session.subject;
-        const stage   = session.currentGroupIdx || 0;
-        const pts     = session.score || 0;
         const hoursLeft = Math.ceil((session.expiresAt.toDate() - new Date()) / 3600000);
 
-        // Show resume banner above mode grid
         const existing = document.getElementById('resumeBanner');
         if (existing) existing.remove();
 
         const banner = document.createElement('div');
-        banner.id        = 'resumeBanner';
+        banner.id = 'resumeBanner';
         banner.className = 'resume-banner';
         banner.innerHTML = `
             <div>
-                <div class="rb-text">🔁 Resume your session — ${SUBJECT_NAMES[subj]||subj}</div>
-                <div class="rb-sub">Stage ${stage + 1} · ${pts} points · ${hoursLeft}h access remaining</div>
+                <div class="rb-text">🔁 Resume your session — ${SUBJECT_NAMES[session.subject] || session.subject}</div>
+                <div class="rb-sub">Stage ${(session.currentGroupIdx || 0) + 1} · ${session.score || 0} pts · ${hoursLeft}h remaining</div>
             </div>
             <button class="btn-resume" onclick="resumeSession('${doc.id}')">Resume Now →</button>`;
-
         const container = document.querySelector('.container');
         container.insertBefore(banner, container.firstChild);
-
     } catch (e) { console.warn('Resume check:', e); }
 }
 
@@ -1078,20 +1039,17 @@ async function resumeSession(docId) {
     const banner = document.getElementById('resumeBanner');
     if (banner) banner.remove();
     try {
-        const snap    = await firestore.collection('quiz_sessions').doc(docId).get();
+        const snap = await firestore.collection('quiz_sessions').doc(docId).get();
         const session = snap.data();
-
         currentSubject = session.subject;
         document.getElementById('subjectSelect').value = currentSubject;
-        _sessionDocId  = docId;
-        score          = session.score || 0;
-        currentGroupIdx     = session.currentGroupIdx || 0;
+        _sessionDocId = docId;
+        score = session.score || 0;
+        currentGroupIdx = session.currentGroupIdx || 0;
         failsInCurrentGroup = 0;
-        usedQuestionIds     = new Set(session.usedQuestionIds || []);
+        usedQuestionIds = new Set(session.usedQuestionIds || []);
         currentMode = 'premium';
-
-        // Re-load questions, skip already-used ones
-        await loadQuestions('premium', true /* resume */);
+        await loadQuestions('premium', true);
     } catch (e) {
         showToast('Could not resume session. Starting fresh.', 'warning');
         selectMode('premium');
@@ -1111,7 +1069,6 @@ function selectMode(mode) {
 }
 
 async function checkPremiumThenStart() {
-    // Must be signed in
     if (!currentUser) {
         document.getElementById('authStatusBar').style.display = 'flex';
         showToast('Please sign in before paying for premium access.', 'warning');
@@ -1120,18 +1077,18 @@ async function checkPremiumThenStart() {
     document.getElementById('authStatusBar').style.display = 'none';
 
     try {
-        const now  = new Date();
+        const now = new Date();
         const snap = await firestore.collection('payments')
-            .where('userId',  '==', currentUser.uid)
+            .where('userId', '==', currentUser.uid)
             .where('subject', '==', currentSubject)
-            .where('status',  '==', 'verified')
+            .where('status', '==', 'verified')
             .where('expiresAt', '>', now)
             .orderBy('expiresAt', 'desc')
             .limit(1)
             .get();
 
         if (!snap.empty) {
-            const pay       = snap.docs[0].data();
+            const pay = snap.docs[0].data();
             const expiresAt = pay.expiresAt?.toDate?.() || new Date(pay.expiresAt);
             const hoursLeft = Math.ceil((expiresAt - now) / 3600000);
             showToast(`✅ Access valid — ${hoursLeft}h remaining`, 'success');
@@ -1150,108 +1107,81 @@ async function loadQuestions(mode, isResume = false) {
     const panel = document.getElementById('quizPanel');
     document.getElementById('modeGrid').style.display = 'none';
 
-    panel.innerHTML = `
-        <div class="status-box">
-            <div class="spinner"></div>
-            <p>Loading ${mode === 'free' ? 'practice' : 'competition'} questions…</p>
-        </div>`;
+    panel.innerHTML = `<div class="status-box"><div class="spinner"></div><p>Loading ${mode === 'free' ? 'practice' : 'competition'} questions…</p></div>`;
 
-    const path = mode === 'free'
-        ? `${currentSubject}/questions`
-        : `premium/${currentSubject}/questions`;
+    const path = mode === 'free' ? `${currentSubject}/questions` : `premium/${currentSubject}/questions`;
 
     try {
         const snap = await rtdb.ref(path).once('value');
-        const raw  = snap.val();
+        const raw = snap.val();
 
         if (!raw) {
-            panel.innerHTML = `
-                <div class="status-box">
-                    <div style="font-size:3rem;margin-bottom:12px;">📚</div>
-                    <p style="font-weight:600;font-size:1.05rem;margin-bottom:8px;">No questions yet for ${subjectName(currentSubject)}</p>
-                    <p style="font-size:0.85rem;color:var(--muted);">Questions are being added. Please check back soon!</p>
-                    <button onclick="resetToModeSelect()" style="margin-top:20px;padding:10px 24px;background:var(--ink);color:white;border:none;border-radius:100px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;">← Back</button>
-                </div>`;
+            panel.innerHTML = `<div class="status-box"><div style="font-size:3rem;margin-bottom:12px;">📚</div><p style="font-weight:600;font-size:1.05rem;margin-bottom:8px;">No questions yet for ${subjectName(currentSubject)}</p><p style="font-size:0.85rem;color:var(--muted);">Questions are being added. Please check back soon!</p><button onclick="resetToModeSelect()" style="margin-top:20px;padding:10px 24px;background:var(--ink);color:white;border:none;border-radius:100px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;">← Back</button></div>`;
             return;
         }
 
-        let all = Array.isArray(raw)
-            ? raw.filter(q => q && q.question && q.answer)
-            : Object.values(raw).filter(q => q && q.question && q.answer);
+        let all = Array.isArray(raw) ? raw.filter(q => q && q.question && q.answer) : Object.values(raw).filter(q => q && q.question && q.answer);
 
-        // ── De-duplicate questions (by question text) ──
-        const seen    = new Set();
-        all           = all.filter(q => {
+        const seen = new Set();
+        all = all.filter(q => {
             const key = q.question.trim().toLowerCase();
             if (seen.has(key)) return false;
             seen.add(key);
             return true;
         });
 
-        // Shuffle freshly
         all = shuffle(all);
 
         if (mode === 'free') {
-            allQuestions    = all.slice(0, FREE_Q_LIMIT);
-            questionIndex   = 0;
-            score           = 0;
+            allQuestions = all.slice(0, FREE_Q_LIMIT);
+            questionIndex = 0;
+            score = 0;
+            freeCorrectCount = 0;
             usedQuestionIds = new Set();
-            _quizStartTime  = Date.now();
             showQuestion();
             return;
         }
 
-        // ── Premium: init or resume ──
-        allQuestions = all; // keep the full pool
+        allQuestions = all;
 
         if (!isResume) {
-            questionIndex       = 0;
-            score               = 0;
-            currentGroupIdx     = 0;
+            questionIndex = 0;
+            score = 0;
+            currentGroupIdx = 0;
             failsInCurrentGroup = 0;
-            usedQuestionIds     = new Set();
-            groupStartQIndex    = 0;
-            _quizStartTime      = Date.now();
+            usedQuestionIds = new Set();
+            groupStartQIndex = 0;
             await createSessionDoc();
         } else {
-            // Resume: advance questionIndex to match the current group
-            questionIndex    = currentGroupIdx * STAGE_SIZE;
+            questionIndex = currentGroupIdx * STAGE_SIZE;
             groupStartQIndex = questionIndex;
-            _quizStartTime   = _quizStartTime || Date.now();
         }
 
         showQuestion();
 
     } catch (err) {
         console.error('Load error:', err);
-        panel.innerHTML = `
-            <div class="status-box">
-                <div style="font-size:3rem;margin-bottom:12px;">⚠️</div>
-                <p style="color:var(--ruby);font-weight:600;">Failed to load questions</p>
-                <p style="font-size:0.85rem;color:var(--muted);margin-top:8px;">${esc(err.message)}</p>
-                <button onclick="loadQuestions('${mode}')" style="margin-top:20px;padding:10px 24px;background:var(--jade);color:white;border:none;border-radius:100px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;">🔄 Retry</button>
-                <button onclick="resetToModeSelect()" style="margin-top:10px;margin-left:10px;padding:10px 24px;background:var(--ink);color:white;border:none;border-radius:100px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;">← Back</button>
-            </div>`;
+        panel.innerHTML = `<div class="status-box"><div style="font-size:3rem;margin-bottom:12px;">⚠️</div><p style="color:var(--ruby);font-weight:600;">Failed to load questions</p><p style="font-size:0.85rem;color:var(--muted);margin-top:8px;">${esc(err.message)}</p><button onclick="loadQuestions('${mode}')" style="margin-top:20px;padding:10px 24px;background:var(--jade);color:white;border:none;border-radius:100px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;">🔄 Retry</button><button onclick="resetToModeSelect()" style="margin-top:10px;margin-left:10px;padding:10px 24px;background:var(--ink);color:white;border:none;border-radius:100px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;">← Back</button></div>`;
     }
 }
 
 // ══════════════════════════════════════════════════════════════════
-//  SESSION DOCUMENT (Firestore) — saves progress for resume
+//  SESSION DOCUMENT
 // ══════════════════════════════════════════════════════════════════
 async function createSessionDoc() {
     if (!currentUser) return;
     try {
         const expiresAt = new Date(Date.now() + PREMIUM_DURATION_MS);
-        const ref       = await firestore.collection('quiz_sessions').add({
-            userId:          currentUser.uid,
-            userEmail:       currentUser.email,
-            subject:         currentSubject,
-            score:           0,
+        const ref = await firestore.collection('quiz_sessions').add({
+            userId: currentUser.uid,
+            userEmail: currentUser.email,
+            subject: currentSubject,
+            score: 0,
             currentGroupIdx: 0,
             usedQuestionIds: [],
-            status:          'active',
-            expiresAt:       expiresAt,
-            startedAt:       firebase.firestore.FieldValue.serverTimestamp()
+            status: 'active',
+            expiresAt: expiresAt,
+            startedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
         _sessionDocId = ref.id;
     } catch (e) { console.warn('Session create:', e); }
@@ -1261,7 +1191,7 @@ async function updateSessionDoc() {
     if (!currentUser || !_sessionDocId) return;
     try {
         await firestore.collection('quiz_sessions').doc(_sessionDocId).update({
-            score:           score,
+            score: score,
             currentGroupIdx: currentGroupIdx,
             usedQuestionIds: [...usedQuestionIds]
         });
@@ -1283,21 +1213,20 @@ async function closeSessionDoc() {
 //  STAGE PROGRESS UI
 // ══════════════════════════════════════════════════════════════════
 function buildStageProgressHTML() {
-    const totalGroups = Math.ceil(allQuestions.length / STAGE_SIZE);
+    const totalGroups = Math.ceil(Math.min(allQuestions.length, 50) / STAGE_SIZE);
     let dots = '';
     for (let i = 0; i < totalGroups; i++) {
         let cls = 'locked';
-        if (i < currentGroupIdx)  cls = 'completed';
+        if (i < currentGroupIdx) cls = 'completed';
         if (i === currentGroupIdx) cls = 'current';
-        const stageNum = i + 1;
-        dots += `<div class="stage-dot ${cls}" title="Stage ${stageNum}">${cls === 'completed' ? '✓' : stageNum}</div>`;
+        dots += `<div class="stage-dot ${cls}" title="Stage ${i+1}">${cls === 'completed' ? '✓' : i+1}</div>`;
     }
 
-    const maxFails    = maxFailsForGroup(currentGroupIdx);
-    const failsLeft   = maxFails - failsInCurrentGroup;
-    const failsChip   = currentMode === 'premium' ? `
+    const maxFails = maxFailsForGroup(currentGroupIdx);
+    const failsLeft = maxFails - failsInCurrentGroup;
+    const failsChip = currentMode === 'premium' ? `
         <span class="meta-pill ${failsInCurrentGroup > 0 ? 'meta-fails' : 'meta-fails-ok'}">
-            ❤️ ${maxFails === 0 ? 'No fails allowed' : `${failsLeft} fail${failsLeft !== 1 ? 's' : ''} left`}
+            ${maxFails === 0 ? 'No fails allowed' : `❤️ ${failsLeft} fail${failsLeft !== 1 ? 's' : ''} left`}
         </span>` : '';
 
     return `
@@ -1314,26 +1243,25 @@ function buildStageProgressHTML() {
 }
 
 // ══════════════════════════════════════════════════════════════════
-//  QUIZ RENDERING
+//  SHOW QUESTION
 // ══════════════════════════════════════════════════════════════════
 function showQuestion() {
     if (timerInterval) clearInterval(timerInterval);
     isAnswered = false;
 
-    // Make sure we have a valid question
     if (questionIndex >= allQuestions.length) {
         showResults();
         return;
     }
 
-    const q         = allQuestions[questionIndex];
-    const panel     = document.getElementById('quizPanel');
+    const q = allQuestions[questionIndex];
+    const panel = document.getElementById('quizPanel');
     const isPremium = currentMode === 'premium';
     const timeLimit = isPremium ? TIME_PER_QUESTION_PREM : 0;
-    timeLeft        = timeLimit;
-    timerMax        = timeLimit;
+    timeLeft = timeLimit;
+    timerMax = timeLimit;
 
-    const posInGroup = (questionIndex - currentGroupIdx * STAGE_SIZE) + 1; // 1-5
+    const posInGroup = (questionIndex - currentGroupIdx * STAGE_SIZE) + 1;
 
     const timerHtml = isPremium ? `
         <div class="timer-wrap">
@@ -1366,7 +1294,6 @@ function showQuestion() {
         <div class="explanation-box" id="expBox"></div>
         <div class="next-btn-wrap" id="nextWrap"></div>`;
 
-    // Trigger MathJax render
     if (window.MathJax && MathJax.typesetPromise) {
         MathJax.typesetPromise([panel]).catch(e => console.warn('MathJax:', e));
     }
@@ -1375,7 +1302,7 @@ function showQuestion() {
 }
 
 function startTimer() {
-    const arc  = document.getElementById('timerArc');
+    const arc = document.getElementById('timerArc');
     const text = document.getElementById('timerText');
     if (!arc || !text) return;
 
@@ -1401,13 +1328,16 @@ function handleTimeout() {
     disableOptions();
     highlightCorrect(q.answer);
     showExplanation(q, null, 'timeout');
-    showNextButton(false /* timeout counts as fail */);
-    // Timeout counts as a wrong answer
-    handleFailLogic();
+    showNextButton(false);
+    if (currentMode === 'premium') {
+        failsInCurrentGroup++;
+        const progressWrap = document.querySelector('.stage-progress-wrap');
+        if (progressWrap) progressWrap.outerHTML = buildStageProgressHTML();
+    }
 }
 
 // ══════════════════════════════════════════════════════════════════
-//  ANSWER CHECKING
+//  CHECK ANSWER
 // ══════════════════════════════════════════════════════════════════
 function checkAnswer(selected) {
     if (isAnswered) return;
@@ -1415,102 +1345,47 @@ function checkAnswer(selected) {
     if (timerInterval) clearInterval(timerInterval);
     timerInterval = null;
 
-    const q         = allQuestions[questionIndex];
-    const correct   = q.answer;
+    const q = allQuestions[questionIndex];
+    const correct = q.answer;
     const isCorrect = selected === correct;
+
+    if (currentMode === 'free' && isCorrect) freeCorrectCount++;
 
     disableOptions();
     highlightCorrect(correct);
 
-    if (isCorrect) {
-        // No points yet — points awarded at end of full stage pass
-    } else {
+    if (!isCorrect) {
         const selBtn = document.getElementById('opt' + selected);
         if (selBtn) selBtn.classList.add('incorrect');
+        if (currentMode === 'premium') {
+            failsInCurrentGroup++;
+            const progressWrap = document.querySelector('.stage-progress-wrap');
+            if (progressWrap) progressWrap.outerHTML = buildStageProgressHTML();
+        }
     }
 
     showExplanation(q, selected, isCorrect ? 'correct' : 'wrong');
     showNextButton(isCorrect);
-
-    if (!isCorrect) handleFailLogic();
 }
 
-function handleFailLogic() {
-    if (currentMode !== 'premium') return;
-    failsInCurrentGroup++;
-    // Update stage progress display if present
-    const progressWrap = document.querySelector('.stage-progress-wrap');
-    if (progressWrap) {
-        progressWrap.outerHTML = buildStageProgressHTML();
-    }
-}
-
-// ══════════════════════════════════════════════════════════════════
-//  EXPLANATION (always shown, correct or wrong)
-// ══════════════════════════════════════════════════════════════════
-function showExplanation(q, selected, state) {
-    const expBox = document.getElementById('expBox');
-    const correct = q.answer;
-    const correctText = renderText(q['option' + correct] || '');
-    const selectedText = selected ? renderText(q['option' + selected] || '') : '';
-
-    let icon, title, cls;
-    if      (state === 'correct') { icon = '✅'; title = '<span style="color:var(--jade)">CORRECT!</span>';           cls = ''; }
-    else if (state === 'wrong')   { icon = '❌'; title = '<span style="color:var(--ruby)">INCORRECT</span>';          cls = 'wrong'; }
-    else                          { icon = '⏰'; title = '<span style="color:var(--gold-deep)">TIME\'S UP!</span>';   cls = 'timeout'; }
-
-    expBox.className = `explanation-box ${cls}`;
-    expBox.style.display = 'block';
-    expBox.innerHTML = `
-        <div class="explanation-header">
-            <span class="ex-icon">${icon}</span>
-            <span class="ex-title">${title}</span>
-        </div>
-        <div class="explanation-correct-answer">
-            ✓ Correct answer: <strong>${correct}</strong>. ${correctText}
-        </div>
-        ${state !== 'correct' && selected ? `
-        <div style="margin-bottom:10px;font-size:0.86rem;color:var(--muted);">
-            Your answer: <strong>${selected}</strong>. ${selectedText}
-        </div>` : ''}
-        <div class="explanation-text">
-            📖 ${renderText(q.explanation || `The correct answer is ${correct}. ${q['option' + correct] || ''}`)}
-        </div>`;
-
-    // Re-render math in explanation
-    if (window.MathJax && MathJax.typesetPromise) {
-        MathJax.typesetPromise([expBox]).catch(() => {});
-    }
-}
-
-// ══════════════════════════════════════════════════════════════════
-//  NEXT BUTTON — decides what happens after explanation is read
-// ══════════════════════════════════════════════════════════════════
 function showNextButton(wasCorrect) {
     const nextWrap = document.getElementById('nextWrap');
     if (!nextWrap) return;
     nextWrap.style.display = 'block';
 
     if (currentMode !== 'premium') {
-        // Free mode — simple next
         const isLast = questionIndex + 1 >= allQuestions.length;
-        nextWrap.innerHTML = `
-            <button class="btn-next" onclick="freeNextQuestion()">
-                ${isLast ? 'See Results →' : 'Next Question →'}
-            </button>`;
+        nextWrap.innerHTML = `<button class="btn-next" onclick="freeNextQuestion()">${isLast ? 'See Results →' : 'Next Question →'}</button>`;
         return;
     }
 
-    // Premium — determine what the stage outcome will be
-    const posInGroup    = (questionIndex - currentGroupIdx * STAGE_SIZE) + 1;
+    const posInGroup = (questionIndex - currentGroupIdx * STAGE_SIZE) + 1;
     const isLastInGroup = posInGroup >= STAGE_SIZE;
-    const maxFails      = maxFailsForGroup(currentGroupIdx);
+    const maxFails = maxFailsForGroup(currentGroupIdx);
     const exceededFails = failsInCurrentGroup > maxFails;
 
     if (!isLastInGroup) {
-        // Mid-stage: either continue or show fail-and-continue info
         if (exceededFails) {
-            // Show fail notice — next click will reset
             nextWrap.innerHTML = `
                 <div style="background:rgba(214,64,69,0.08);border-radius:10px;padding:14px 18px;margin-bottom:12px;font-size:0.88rem;color:var(--ruby);font-weight:600;">
                     ⚠️ Too many failures in this stage. Continue to see stage result.
@@ -1520,14 +1395,10 @@ function showNextButton(wasCorrect) {
             nextWrap.innerHTML = `<button class="btn-next" onclick="premiumNextQuestion()">Next Question →</button>`;
         }
     } else {
-        // Last question in the group — next click will trigger stage evaluation
         nextWrap.innerHTML = `<button class="btn-next" onclick="evaluateStage()">See Stage Result →</button>`;
     }
 }
 
-// ══════════════════════════════════════════════════════════════════
-//  NAVIGATION
-// ══════════════════════════════════════════════════════════════════
 function freeNextQuestion() {
     questionIndex++;
     if (questionIndex >= allQuestions.length) showResults();
@@ -1540,23 +1411,20 @@ function premiumNextQuestion() {
 }
 
 // ══════════════════════════════════════════════════════════════════
-//  STAGE EVALUATION — called after last question in group
+//  STAGE EVALUATION
 // ══════════════════════════════════════════════════════════════════
 async function evaluateStage() {
-    const maxFails    = maxFailsForGroup(currentGroupIdx);
-    const passed      = failsInCurrentGroup <= maxFails;
-    const panel       = document.getElementById('quizPanel');
-    const stageNum    = currentGroupIdx + 1;
+    const maxFails = maxFailsForGroup(currentGroupIdx);
+    const passed = failsInCurrentGroup <= maxFails;
+    const panel = document.getElementById('quizPanel');
+    const stageNum = currentGroupIdx + 1;
     const isLastGroup = (currentGroupIdx + 1) * STAGE_SIZE >= allQuestions.length;
 
     if (passed) {
-        // ── PASS ──
         const ptsEarned = POINTS_PER_STAGE;
         score += ptsEarned;
-
         await updateSessionDoc();
 
-        // Check if entire quiz complete
         if (isLastGroup) {
             showResults();
             return;
@@ -1568,26 +1436,17 @@ async function evaluateStage() {
                 <div style="font-size:3rem;">🎉</div>
                 <h2>Stage ${stageNum} Complete!</h2>
                 <div class="points-awarded">+${ptsEarned} pts</div>
-                <p>
-                    You passed with <strong>${STAGE_SIZE - failsInCurrentGroup}/${STAGE_SIZE}</strong> correct answers.<br>
-                    Total score so far: <strong>${score} points</strong>
-                </p>
-                <button class="btn-continue-stage" onclick="advanceToNextStage()">
-                    Advance to Stage ${stageNum + 1} →
-                </button>
+                <p>Total score so far: <strong>${score} points</strong></p>
+                <button class="btn-continue-stage" onclick="advanceToNextStage()">Advance to Stage ${stageNum + 1} →</button>
             </div>`;
 
-        // Re-render math in stage result
         if (window.MathJax && MathJax.typesetPromise) {
             MathJax.typesetPromise([panel]).catch(() => {});
         }
 
     } else {
-        // ── FAIL ──
         const resetToStart = resetsToBeginning(currentGroupIdx);
-        const resetNote    = resetToStart
-            ? `You'll return to <strong>Stage 1</strong> (Question 1). Points from this stage are not awarded.`
-            : `You'll restart <strong>Stage ${stageNum}</strong>. Points are not awarded for failed stages.`;
+        const resetNote = resetToStart ? `You'll return to <strong>Stage 1</strong> (Question 1). Points from this stage are not awarded.` : `You'll restart <strong>Stage ${stageNum}</strong>. Points are not awarded for failed stages.`;
 
         panel.innerHTML = `
             ${buildStageProgressHTML()}
@@ -1595,14 +1454,9 @@ async function evaluateStage() {
                 <div style="font-size:3rem;">😤</div>
                 <h2>Stage ${stageNum} Failed</h2>
                 <div class="points-awarded">+0 pts</div>
-                <p>
-                    You made <strong>${failsInCurrentGroup}</strong> mistake${failsInCurrentGroup !== 1 ? 's' : ''} 
-                    (maximum allowed: ${maxFails}).<br>${resetNote}
-                </p>
+                <p>You made <strong>${failsInCurrentGroup}</strong> mistake${failsInCurrentGroup !== 1 ? 's' : ''} (maximum allowed: ${maxFails}).<br>${resetNote}</p>
                 <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-                    <button class="btn-stage-retry" onclick="retryFromFail(${resetToStart})">
-                        🔄 ${resetToStart ? 'Restart from Stage 1' : `Retry Stage ${stageNum}`}
-                    </button>
+                    <button class="btn-stage-retry" onclick="retryFromFail(${resetToStart})">🔄 ${resetToStart ? 'Restart from Stage 1' : `Retry Stage ${stageNum}`}</button>
                     <button class="btn-hub" onclick="resetToModeSelect()">← Back to Menu</button>
                 </div>
             </div>`;
@@ -1616,26 +1470,23 @@ async function evaluateStage() {
 async function advanceToNextStage() {
     currentGroupIdx++;
     failsInCurrentGroup = 0;
-    groupStartQIndex    = currentGroupIdx * STAGE_SIZE;
-    questionIndex       = groupStartQIndex;
+    groupStartQIndex = currentGroupIdx * STAGE_SIZE;
+    questionIndex = groupStartQIndex;
     await updateSessionDoc();
     showQuestion();
 }
 
 function retryFromFail(resetToBeginning) {
     if (resetToBeginning) {
-        // Reset all the way to stage 1
-        currentGroupIdx     = 0;
-        score               = 0; // no points stored from failed groups
+        currentGroupIdx = 0;
+        score = 0;
     }
-    // Either way restart this group fresh
     failsInCurrentGroup = 0;
-    groupStartQIndex    = currentGroupIdx * STAGE_SIZE;
-    questionIndex       = groupStartQIndex;
-    // Reshuffle from this point to avoid repeated questions in group
+    groupStartQIndex = currentGroupIdx * STAGE_SIZE;
+    questionIndex = groupStartQIndex;
     const before = allQuestions.slice(0, groupStartQIndex);
-    const after  = shuffle(allQuestions.slice(groupStartQIndex));
-    allQuestions  = [...before, ...after];
+    const after = shuffle(allQuestions.slice(groupStartQIndex));
+    allQuestions = [...before, ...after];
     updateSessionDoc();
     showQuestion();
 }
@@ -1655,17 +1506,37 @@ function disableOptions() {
     });
 }
 
-// ══════════════════════════════════════════════════════════════════
-//  FREE MODE SCORE CALCULATION
-// ══════════════════════════════════════════════════════════════════
-// For free mode, track correct count in a simple variable
-let freeCorrectCount = 0;
+function showExplanation(q, selected, state) {
+    const expBox = document.getElementById('expBox');
+    const correct = q.answer;
+    const correctText = renderText(q['option' + correct] || '');
+    const selectedText = selected ? renderText(q['option' + selected] || '') : '';
 
-// Override checkAnswer to count free-mode corrects
-const _origCheckAnswer = checkAnswer;
+    let icon, title, cls;
+    if (state === 'correct') { icon = '✅'; title = '<span style="color:var(--jade)">CORRECT!</span>'; cls = ''; }
+    else if (state === 'wrong') { icon = '❌'; title = '<span style="color:var(--ruby)">INCORRECT</span>'; cls = 'wrong'; }
+    else { icon = '⏰'; title = '<span style="color:var(--gold-deep)">TIME\'S UP!</span>'; cls = 'timeout'; }
+
+    expBox.className = `explanation-box ${cls}`;
+    expBox.style.display = 'block';
+    expBox.innerHTML = `
+        <div class="explanation-header">
+            <span class="ex-icon">${icon}</span>
+            <span class="ex-title">${title}</span>
+        </div>
+        <div class="explanation-correct-answer">
+            ✓ Correct answer: <strong>${correct}</strong>. ${correctText}
+        </div>
+        ${state !== 'correct' && selected ? `<div style="margin-bottom:10px;font-size:0.86rem;color:var(--muted);">Your answer: <strong>${selected}</strong>. ${selectedText}</div>` : ''}
+        <div class="explanation-text">📖 ${renderText(q.explanation || `The correct answer is ${correct}. ${q['option' + correct] || ''}`)}</div>`;
+
+    if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise([expBox]).catch(() => {});
+    }
+}
 
 // ══════════════════════════════════════════════════════════════════
-//  RESULTS SCREEN
+//  RESULTS
 // ══════════════════════════════════════════════════════════════════
 async function showResults() {
     if (timerInterval) clearInterval(timerInterval);
@@ -1673,24 +1544,21 @@ async function showResults() {
     let pct, correctCount, total;
 
     if (currentMode === 'premium') {
-        // Calculate from stages completed
-        const stagesCompleted = currentGroupIdx;
-        total        = allQuestions.length;
-        correctCount = Math.round((score / (stagesCompleted * POINTS_PER_STAGE || 1)) * stagesCompleted * STAGE_SIZE);
-        pct          = Math.round((score / (Math.ceil(total / STAGE_SIZE) * POINTS_PER_STAGE)) * 100);
+        total = allQuestions.length;
+        const maxPoints = Math.ceil(total / STAGE_SIZE) * POINTS_PER_STAGE;
+        pct = Math.round((score / maxPoints) * 100);
+        correctCount = Math.round((score / (currentGroupIdx * POINTS_PER_STAGE || 1)) * currentGroupIdx * STAGE_SIZE);
     } else {
-        // Free — count from results
-        correctCount = allQuestions.reduce((cnt, q, i) => cnt, 0); // placeholder, updated in checkAnswer
-        total        = allQuestions.length;
-        pct          = Math.round((freeCorrectCount / total) * 100);
+        total = allQuestions.length;
         correctCount = freeCorrectCount;
+        pct = Math.round((freeCorrectCount / total) * 100);
     }
 
     let emoji, msg, color;
-    if (pct >= 80)      { emoji = '🏆'; msg = 'Outstanding! You are a Star!';              color = 'var(--jade)'; }
-    else if (pct >= 60) { emoji = '🎉'; msg = 'Great work! Keep shining!';                 color = 'var(--gold-deep)'; }
-    else if (pct >= 40) { emoji = '📚'; msg = 'Good effort! Practice makes perfect.';      color = 'var(--sky)'; }
-    else                { emoji = '💪'; msg = "Keep learning — you'll crush it next time!"; color = 'var(--ruby)'; }
+    if (pct >= 80) { emoji = '🏆'; msg = 'Outstanding! You are a Star!'; color = 'var(--jade)'; }
+    else if (pct >= 60) { emoji = '🎉'; msg = 'Great work! Keep shining!'; color = 'var(--gold-deep)'; }
+    else if (pct >= 40) { emoji = '📚'; msg = 'Good effort! Practice makes perfect.'; color = 'var(--sky)'; }
+    else { emoji = '💪'; msg = "Keep learning — you'll crush it next time!"; color = 'var(--ruby)'; }
 
     if (currentUser) saveQuizAttempt(pct);
     if (currentUser && currentMode === 'premium') {
@@ -1705,14 +1573,10 @@ async function showResults() {
             <div class="result-score" style="color:${color}">${pct}%</div>
             <div class="result-label">${currentMode === 'premium' ? score + ' points earned' : correctCount + ' correct out of ' + total}</div>
             <div class="result-message">${msg}</div>
-            ${currentMode === 'premium' ? `
-            <div style="background:rgba(232,185,79,0.1);border:1px solid var(--gold);border-radius:12px;padding:14px 20px;margin-bottom:24px;font-size:0.88rem;color:var(--ink);">
-                🏆 You've been entered into this month's ₦10,000 prize draw!<br>
-                📜 Your result has been saved to the leaderboard.
-            </div>` : ''}
+            ${currentMode === 'premium' ? `<div style="background:rgba(232,185,79,0.1);border:1px solid var(--gold);border-radius:12px;padding:14px 20px;margin-bottom:24px;font-size:0.88rem;color:var(--ink);">🏆 You've been entered into this month's ₦10,000 prize draw!<br>📜 Your result has been saved to the leaderboard.</div>` : ''}
             <div class="result-actions">
                 <button class="btn-restart" onclick="resetAndReload()">🔄 Play Again</button>
-                <button class="btn-hub"     onclick="goTo('education.html')">🎓 Education Hub</button>
+                <button class="btn-hub" onclick="goTo('education.html')">🎓 Education Hub</button>
             </div>
         </div>`;
 
@@ -1721,15 +1585,15 @@ async function showResults() {
 }
 
 function resetAndReload() {
-    currentMode         = null;
-    freeCorrectCount    = 0;
-    allQuestions        = [];
-    questionIndex       = 0;
-    score               = 0;
-    currentGroupIdx     = 0;
+    currentMode = null;
+    freeCorrectCount = 0;
+    allQuestions = [];
+    questionIndex = 0;
+    score = 0;
+    currentGroupIdx = 0;
     failsInCurrentGroup = 0;
-    usedQuestionIds     = new Set();
-    _sessionDocId       = null;
+    usedQuestionIds = new Set();
+    _sessionDocId = null;
     document.getElementById('modeGrid').style.display = 'grid';
     document.getElementById('quizPanel').innerHTML = `
         <div class="status-box">
@@ -1746,30 +1610,30 @@ async function saveQuizAttempt(pct) {
     try {
         const name = currentUser.displayName || currentUser.email.split('@')[0];
         await firestore.collection('quiz_attempts').add({
-            userId:         currentUser.uid,
-            userEmail:      currentUser.email,
-            userName:       name,
-            subject:        currentSubject,
-            mode:           currentMode,
-            score:          pct,
-            premiumPoints:  currentMode === 'premium' ? score : null,
+            userId: currentUser.uid,
+            userEmail: currentUser.email,
+            userName: name,
+            subject: currentSubject,
+            mode: currentMode,
+            score: pct,
+            premiumPoints: currentMode === 'premium' ? score : null,
             stagesCompleted: currentMode === 'premium' ? currentGroupIdx : null,
             totalQuestions: allQuestions.length,
-            attemptDate:    firebase.firestore.FieldValue.serverTimestamp()
+            attemptDate: firebase.firestore.FieldValue.serverTimestamp()
         });
-        const studentRef  = firestore.collection('students').doc(currentUser.uid);
-        const updateData  = {
+        const studentRef = firestore.collection('students').doc(currentUser.uid);
+        const updateData = {
             [`quizScores.${currentSubject}`]: pct,
-            totalAttempts:  firebase.firestore.FieldValue.increment(1),
-            lastActivity:   firebase.firestore.FieldValue.serverTimestamp(),
-            accountStatus:  'active'
+            totalAttempts: firebase.firestore.FieldValue.increment(1),
+            lastActivity: firebase.firestore.FieldValue.serverTimestamp(),
+            accountStatus: 'active'
         };
         const snap = await studentRef.get();
         const prevBest = snap.exists ? (snap.data()?.bestScores?.[currentSubject] || 0) : 0;
         if (pct > prevBest) updateData[`bestScores.${currentSubject}`] = pct;
         if (currentMode === 'premium') {
             updateData.premiumAttempts = firebase.firestore.FieldValue.increment(1);
-            updateData.totalPaid       = firebase.firestore.FieldValue.increment(PREMIUM_PRICE);
+            updateData.totalPaid = firebase.firestore.FieldValue.increment(PREMIUM_PRICE);
         } else {
             updateData.freeAttempts = firebase.firestore.FieldValue.increment(1);
         }
@@ -1781,17 +1645,17 @@ async function savePremiumScore(pct) {
     if (!currentUser) return;
     try {
         const month = new Date().toISOString().slice(0, 7);
-        const name  = currentUser.displayName || currentUser.email.split('@')[0];
+        const name = currentUser.displayName || currentUser.email.split('@')[0];
         await firestore.collection('monthly_leaderboard').doc(month)
             .collection(currentSubject).doc(currentUser.uid)
             .set({
-                userId:   currentUser.uid,
+                userId: currentUser.uid,
                 userName: name,
-                email:    currentUser.email,
-                score:    pct,
-                points:   score,
-                subject:  currentSubject,
-                date:     firebase.firestore.FieldValue.serverTimestamp()
+                email: currentUser.email,
+                score: pct,
+                points: score,
+                subject: currentSubject,
+                date: firebase.firestore.FieldValue.serverTimestamp()
             }, { merge: true });
     } catch (e) { console.warn('Score save:', e); }
 }
@@ -1845,8 +1709,7 @@ function showPaymentModal() {
 function closeModal() {
     const m = document.getElementById('payModal');
     if (m) m.remove();
-    if (!currentMode) resetToModeSelect();
-    else resetToModeSelect();
+    resetToModeSelect();
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -1862,9 +1725,9 @@ function initiatePaystack() {
     if (btn) { btn.textContent = '⏳ Opening payment…'; btn.disabled = true; }
 
     if (typeof PaystackPop === 'undefined') {
-        const s   = document.createElement('script');
-        s.src     = 'https://js.paystack.co/v1/inline.js';
-        s.onload  = () => openPaystackIframe();
+        const s = document.createElement('script');
+        s.src = 'https://js.paystack.co/v1/inline.js';
+        s.onload = () => openPaystackIframe();
         s.onerror = () => {
             showToast('Payment system unavailable. Check your internet.', 'error');
             if (btn) { btn.textContent = '💳 Pay ₦100 — Secure Checkout'; btn.disabled = false; }
@@ -1876,17 +1739,17 @@ function initiatePaystack() {
 }
 
 function openPaystackIframe() {
-    const ref     = `EE_${currentSubject}_${Date.now()}_${currentUser.uid.slice(0,8)}`;
+    const ref = `EE_${currentSubject}_${Date.now()}_${currentUser.uid.slice(0,8)}`;
     const handler = PaystackPop.setup({
-        key:      PAYSTACK_KEY,
-        email:    currentUser.email,
-        amount:   PREMIUM_PRICE * 100,
+        key: PAYSTACK_KEY,
+        email: currentUser.email,
+        amount: PREMIUM_PRICE * 100,
         currency: 'NGN',
-        ref:      ref,
+        ref: ref,
         metadata: {
             custom_fields: [
-                { display_name: 'Subject',  variable_name: 'subject',  value: currentSubject },
-                { display_name: 'User ID',  variable_name: 'user_id',  value: currentUser.uid }
+                { display_name: 'Subject', variable_name: 'subject', value: currentSubject },
+                { display_name: 'User ID', variable_name: 'user_id', value: currentUser.uid }
             ]
         },
         callback: response => {
@@ -1905,43 +1768,38 @@ async function processPaymentSuccess(reference) {
     showToast('✅ Payment received! Unlocking your quiz…', 'success');
     try {
         const studentSnap = await firestore.collection('students').doc(currentUser.uid).get();
-        const studentName = studentSnap.exists
-            ? (studentSnap.data().fullName || currentUser.email.split('@')[0])
-            : currentUser.email.split('@')[0];
-
+        const studentName = studentSnap.exists ? (studentSnap.data().fullName || currentUser.email.split('@')[0]) : currentUser.email.split('@')[0];
         const expiresAt = new Date(Date.now() + PREMIUM_DURATION_MS);
 
-        // Save payment record with expiresAt for query-based auth check
         await firestore.collection('payments').doc(`PAY_${reference}`).set({
-            paymentId:    `PAY_${reference}`,
+            paymentId: `PAY_${reference}`,
             reference,
-            userId:       currentUser.uid,
-            userEmail:    currentUser.email,
-            userName:     studentName,
-            subject:      currentSubject,
-            amount:       PREMIUM_PRICE,
-            status:       'verified',
-            paymentDate:  firebase.firestore.FieldValue.serverTimestamp(),
-            expiresAt:    expiresAt,
+            userId: currentUser.uid,
+            userEmail: currentUser.email,
+            userName: studentName,
+            subject: currentSubject,
+            amount: PREMIUM_PRICE,
+            status: 'verified',
+            paymentDate: firebase.firestore.FieldValue.serverTimestamp(),
+            expiresAt: expiresAt,
             durationHours: 24
         });
 
         await firestore.collection('students').doc(currentUser.uid).set({
-            totalPaid:       firebase.firestore.FieldValue.increment(PREMIUM_PRICE),
+            totalPaid: firebase.firestore.FieldValue.increment(PREMIUM_PRICE),
             lastPaymentDate: firebase.firestore.FieldValue.serverTimestamp(),
             lastPaidSubject: currentSubject,
-            accountStatus:   'active'
+            accountStatus: 'active'
         }, { merge: true });
 
-        setTimeout(() => {
+        setTimeout(async () => {
             showToast('🎉 Access granted! Starting your quiz…', 'success');
-            // Reset state for fresh session
-            score               = 0;
-            currentGroupIdx     = 0;
+            score = 0;
+            currentGroupIdx = 0;
             failsInCurrentGroup = 0;
-            usedQuestionIds     = new Set();
-            _sessionDocId       = null;
-            loadQuestions('premium');
+            usedQuestionIds = new Set();
+            _sessionDocId = null;
+            await loadQuestions('premium');
         }, 1200);
 
     } catch (err) {
@@ -1953,14 +1811,14 @@ async function processPaymentSuccess(reference) {
 // ══════════════════════════════════════════════════════════════════
 //  LEADERBOARD
 // ══════════════════════════════════════════════════════════════════
-const SUBJECTS_LIST  = Object.keys(SUBJECT_NAMES);
+const SUBJECTS_LIST = Object.keys(SUBJECT_NAMES);
 let lbCurrentSubject = 'mathematics';
 
 function buildLbTabs() {
     const tabs = document.getElementById('lbTabs');
     if (!tabs) return;
     tabs.innerHTML = SUBJECTS_LIST.map(s =>
-        `<button class="lb-tab${s === lbCurrentSubject ? ' active' : ''}" onclick="changeLbTab('${s}')">${(SUBJECT_NAMES[s]||s).split(' ')[0]}</button>`
+        `<button class="lb-tab${s === lbCurrentSubject ? ' active' : ''}" onclick="changeLbTab('${s}')">${(SUBJECT_NAMES[s] || s).split(' ')[0]}</button>`
     ).join('');
 }
 
@@ -1971,12 +1829,12 @@ function changeLbTab(s) {
 }
 
 async function loadLeaderboard() {
-    const content    = document.getElementById('lbContent');
+    const content = document.getElementById('lbContent');
     const monthLabel = document.getElementById('lbMonthLabel');
     if (!content) return;
 
-    const now       = new Date();
-    const month     = now.toISOString().slice(0,7);
+    const now = new Date();
+    const month = now.toISOString().slice(0, 7);
     const monthName = now.toLocaleString('default', { month: 'long', year: 'numeric' });
     if (monthLabel) monthLabel.textContent = `${monthName} rankings`;
 
@@ -1984,34 +1842,25 @@ async function loadLeaderboard() {
     content.innerHTML = `<div class="lb-loading"><div class="spinner"></div></div>`;
 
     try {
-        const snap = await firestore.collection('monthly_leaderboard')
-            .doc(month)
-            .collection(lbCurrentSubject)
-            .orderBy('score', 'desc')
-            .limit(10)
-            .get();
+        const snap = await firestore.collection('monthly_leaderboard').doc(month)
+            .collection(lbCurrentSubject).orderBy('score', 'desc').limit(10).get();
 
         if (snap.empty) {
-            content.innerHTML = `
-                <div class="lb-empty">
-                    <div style="font-size:2.5rem;margin-bottom:10px;">📊</div>
-                    <p>No entries yet this month for ${subjectName(lbCurrentSubject)}.</p>
-                    <p style="margin-top:6px;font-size:0.83rem;color:var(--muted);">Be the first to compete!</p>
-                </div>`;
+            content.innerHTML = `<div class="lb-empty"><div style="font-size:2.5rem;margin-bottom:10px;">📊</div><p>No entries yet this month for ${subjectName(lbCurrentSubject)}.</p><p style="margin-top:6px;font-size:0.83rem;color:var(--muted);">Be the first to compete!</p></div>`;
             return;
         }
 
-        const rankIcons = ['🥇','🥈','🥉'];
+        const rankIcons = ['🥇', '🥈', '🥉'];
         let html = '';
         snap.docs.forEach((doc, i) => {
-            const d          = doc.data();
-            const name       = (d.userName || 'Anonymous').slice(0, 20);
-            const initial    = name[0].toUpperCase();
-            const rankClass  = i < 3 ? ['gold','silver','bronze'][i] : '';
+            const d = doc.data();
+            const name = (d.userName || 'Anonymous').slice(0, 20);
+            const initial = name[0].toUpperCase();
+            const rankClass = i < 3 ? ['gold', 'silver', 'bronze'][i] : '';
             const scoreClass = d.score >= 80 ? 'high' : d.score >= 50 ? 'mid' : '';
             html += `
                 <div class="lb-row">
-                    <div class="lb-rank ${rankClass}">${i < 3 ? rankIcons[i] : (i+1)}</div>
+                    <div class="lb-rank ${rankClass}">${i < 3 ? rankIcons[i] : (i + 1)}</div>
                     <div class="lb-avatar">${esc(initial)}</div>
                     <div class="lb-info">
                         <div class="lb-name">${esc(name)}</div>
@@ -2027,56 +1876,7 @@ async function loadLeaderboard() {
     }
 }
 
-// Init leaderboard month label
-document.getElementById('lbMonthLabel').textContent =
-    new Date().toLocaleString('default', { month: 'long', year: 'numeric' }) + ' rankings';
-
-// ══════════════════════════════════════════════════════════════════
-//  FREE MODE — intercept correct answers for score count
-//  (We re-count via a simple wrapper around the checkAnswer logic)
-// ══════════════════════════════════════════════════════════════════
-// We inject a hook into checkAnswer to count free-mode corrects
-const _checkAnswer_real = checkAnswer;
-window._freeAnswerCallback = function(isCorrect) {
-    if (currentMode === 'free' && isCorrect) freeCorrectCount++;
-};
-// Patch option buttons to call the callback
-const _patchCheckAnswer = function(selected) {
-    if (isAnswered) return;
-    const q = allQuestions[questionIndex];
-    const isCorrect = selected === q.answer;
-    window._freeAnswerCallback(isCorrect);
-    checkAnswer(selected);
-};
-// Replace inline onclick after each question render
-// This is handled by the global checkAnswer call from buttons which
-// already increments freeCorrectCount via the patched flow below:
-// (Simply reassign checkAnswer)
-window.checkAnswer = function(selected) {
-    if (isAnswered) return;
-    isAnswered = true;
-    if (timerInterval) clearInterval(timerInterval);
-    timerInterval = null;
-
-    const q         = allQuestions[questionIndex];
-    const correct   = q.answer;
-    const isCorrect = selected === correct;
-
-    if (currentMode === 'free' && isCorrect) freeCorrectCount++;
-
-    disableOptions();
-    highlightCorrect(correct);
-
-    if (!isCorrect) {
-        const selBtn = document.getElementById('opt' + selected);
-        if (selBtn) selBtn.classList.add('incorrect');
-    }
-
-    showExplanation(q, selected, isCorrect ? 'correct' : 'wrong');
-    showNextButton(isCorrect);
-
-    if (!isCorrect && currentMode === 'premium') handleFailLogic();
-};
+document.getElementById('lbMonthLabel').textContent = new Date().toLocaleString('default', { month: 'long', year: 'numeric' }) + ' rankings';
 </script>
 </body>
 </html>

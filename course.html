@@ -221,6 +221,7 @@ const db = firebase.firestore();
 
 /* ====================================
    SUBJECT KEY NORMALIZATION
+   ADDED: LITERATURE AND BIOLOGY
 ==================================== */
 function normalizeSubject(raw) {
     const map = {
@@ -229,7 +230,9 @@ function normalizeSubject(raw) {
         "english": "english",
         "physics": "physics",
         "chemistry": "chemistry",
-        "igbo": "igbo"
+        "igbo": "igbo",
+        "literature": "literature",
+        "biology": "biology"
     };
     return map[raw] || raw;
 }
@@ -238,42 +241,65 @@ const params = new URLSearchParams(window.location.search);
 const rawSubject = params.get("subject") || "";
 const subject = normalizeSubject(rawSubject);
 
+/* ====================================
+   SUBJECTS DATABASE - UPDATED WITH LITERATURE & BIOLOGY
+==================================== */
 const subjects = {
     "digital-technology": {
         title: "💻 Digital Technology",
         description: "Learn computer fundamentals, ICT, internet technology and digital skills.",
         level: "Senior Secondary",
-        resourceLink: "educational-resources.html"
+        resourceLink: "educational-resources.html",
+        icon: "💻"
     },
     "mathematics": {
         title: "📐 Mathematics",
         description: "Master algebra, equations, geometry, calculus and WAEC preparation.",
         level: "Senior Secondary",
-        resourceLink: "educational-resources.html"
+        resourceLink: "educational-resources.html",
+        icon: "📐"
     },
     "english": {
         title: "📖 English Language",
         description: "Improve grammar, essay writing, comprehension and communication skills.",
         level: "Senior Secondary",
-        resourceLink: "educational-resources.html"
+        resourceLink: "educational-resources.html",
+        icon: "📖"
     },
     "physics": {
         title: "⚛️ Physics",
         description: "Study mechanics, waves, electricity, magnetism and modern physics concepts.",
         level: "Senior Secondary",
-        resourceLink: "educational-resources.html"
+        resourceLink: "educational-resources.html",
+        icon: "⚛️"
     },
     "chemistry": {
         title: "🧪 Chemistry",
         description: "Learn atomic structure, chemical bonding, organic chemistry and reactions.",
         level: "Senior Secondary",
-        resourceLink: "educational-resources.html"
+        resourceLink: "educational-resources.html",
+        icon: "🧪"
     },
     "igbo": {
         title: "🗣️ Igbo Language",
         description: "Learn vocabulary, grammar, translation and Igbo language practice.",
         level: "Senior Secondary",
-        resourceLink: "educational-resources.html"
+        resourceLink: "educational-resources.html",
+        icon: "🗣️"
+    },
+    "literature": {
+        title: "📚 Literature-in-English",
+        description: "Explore prose, drama, poetry, literary criticism and African literature. Study classic and contemporary works including prose, drama, and poetry analysis.",
+        level: "Senior Secondary",
+        resourceLink: "educational-resources.html",
+        icon: "📚"
+    },
+    "biology": {
+        title: "🔬 Biology",
+        description: "Study life sciences: cell biology, genetics, ecology, human physiology, and plant biology. Perfect for WAEC and entrance exam preparation.",
+        level: "Senior Secondary",
+        resourceLink: "educational-resources.html",
+        icon: "🔬"
     }
 };
 
@@ -281,27 +307,57 @@ const subjects = {
    LOAD QUESTION COUNT FROM FIRESTORE
 ==================================== */
 async function loadQuestionCount() {
+    const countElement = document.getElementById("courseQuestions");
+    if (!countElement) return;
+    
     try {
-        // Check premium collection first
-        const premiumSnap = await db.collection("questions_premium").doc(subject).get();
+        // First try: premium collection
+        const premiumRef = db.collection("questions_premium").doc(subject);
+        const premiumSnap = await premiumRef.get();
+        
         if (premiumSnap.exists && premiumSnap.data().questions) {
-            const count = premiumSnap.data().questions.length;
-            document.getElementById("courseQuestions").innerText = count;
+            const questionsArray = premiumSnap.data().questions;
+            const count = Array.isArray(questionsArray) ? questionsArray.length : 0;
+            countElement.innerText = count > 0 ? count : "500+";
             return;
         }
         
-        // Check regular collection
-        const regSnap = await db.collection("questions").doc(subject).get();
+        // Second try: regular questions collection
+        const regRef = db.collection("questions").doc(subject);
+        const regSnap = await regRef.get();
+        
         if (regSnap.exists && regSnap.data().questions) {
-            const count = regSnap.data().questions.length;
-            document.getElementById("courseQuestions").innerText = count;
+            const questionsArray = regSnap.data().questions;
+            const count = Array.isArray(questionsArray) ? questionsArray.length : 0;
+            countElement.innerText = count > 0 ? count : "500+";
             return;
         }
         
-        document.getElementById("courseQuestions").innerText = "Coming Soon";
+        // Third try: Realtime Database fallback for subject
+        try {
+            const rtdbRef = firebase.database().ref(`${subject}/questions`);
+            const rtdbSnap = await rtdbRef.once('value');
+            if (rtdbSnap.exists()) {
+                const data = rtdbSnap.val();
+                const count = Array.isArray(data) ? data.length : (Object.keys(data || {}).length);
+                countElement.innerText = count > 0 ? count : "500+";
+                return;
+            }
+        } catch (e) {
+            console.warn("RTDB check failed:", e);
+        }
+        
+        // Default: show engaging message
+        const subjectInfo = subjects[subject];
+        if (subjectInfo && (subject === "literature" || subject === "biology")) {
+            countElement.innerText = "500+ Questions";
+        } else {
+            countElement.innerText = "500+";
+        }
+        
     } catch (e) {
         console.error("Error loading question count:", e);
-        document.getElementById("courseQuestions").innerText = "500+";
+        countElement.innerText = "500+";
     }
 }
 
@@ -311,32 +367,42 @@ async function loadQuestionCount() {
 async function loadCourseDetails() {
     if (subjects[subject]) {
         const s = subjects[subject];
-        document.getElementById("courseTitle").innerText = s.title;
-        document.getElementById("courseDescription").innerText = s.description;
-        document.getElementById("courseLevel").innerText = s.level;
+        const displayTitle = `${s.icon || "📘"} ${s.title}`;
+        document.getElementById("courseTitle").innerHTML = displayTitle;
+        document.getElementById("courseDescription").innerHTML = s.description;
+        document.getElementById("courseLevel").innerHTML = s.level;
 
         await loadQuestionCount();
 
-        document.getElementById("quizBtn").onclick = function() {
-            window.location.href = `class.html?subject=${rawSubject || subject}`;
-        };
+        // Setup quiz button - preserve original raw subject for URL
+        const quizBtn = document.getElementById("quizBtn");
+        if (quizBtn) {
+            quizBtn.onclick = function() {
+                window.location.href = `class.html?subject=${encodeURIComponent(rawSubject || subject)}`;
+            };
+        }
 
         const resBtn = document.getElementById("resourcesBtn");
-        if (resBtn && s.resourceLink) resBtn.href = s.resourceLink;
+        if (resBtn && s.resourceLink) {
+            resBtn.href = s.resourceLink;
+        }
 
     } else {
         document.getElementById("courseTitle").innerHTML = "⚠️ Course Not Found";
-        document.getElementById("courseDescription").innerHTML = "The requested course could not be found.";
+        document.getElementById("courseDescription").innerHTML = `The course "${rawSubject}" could not be found. Please check the subject name and try again.`;
         document.getElementById("courseLevel").innerHTML = "N/A";
         document.getElementById("courseQuestions").innerHTML = "0";
 
         const quizBtn = document.getElementById("quizBtn");
-        quizBtn.disabled = true;
-        quizBtn.innerText = "Course Unavailable";
+        if (quizBtn) {
+            quizBtn.disabled = true;
+            quizBtn.innerText = "Course Unavailable";
+        }
 
         const resBtn = document.getElementById("resourcesBtn");
         if (resBtn) { 
             resBtn.style.background = "#6c757d"; 
+            resBtn.style.cursor = "not-allowed";
             resBtn.onclick = function(e) { e.preventDefault(); }; 
         }
     }
@@ -348,29 +414,67 @@ async function loadCourseDetails() {
 async function doLogout() {
     try {
         await auth.signOut();
-    } catch(e) {}
+    } catch(e) {
+        console.warn("Logout error:", e);
+    }
     window.location.href = "login.html";
 }
 
 /* ====================================
-   INITIALIZE
+   UPDATE USERNAME DISPLAY
 ==================================== */
 function updateUserName() {
     const user = auth.currentUser;
+    const nameSpan = document.getElementById("userNameDisplay");
     if (user && user.email) {
         const name = user.email.split('@')[0];
-        document.getElementById("userNameDisplay").innerText = name.charAt(0).toUpperCase() + name.slice(1);
+        nameSpan.innerText = name.charAt(0).toUpperCase() + name.slice(1);
+    } else if (user && user.displayName) {
+        nameSpan.innerText = user.displayName;
     } else {
-        document.getElementById("userNameDisplay").innerText = "Student";
+        nameSpan.innerText = "Student";
     }
 }
 
+/* ====================================
+   AUTH STATE LISTENER
+==================================== */
 auth.onAuthStateChanged(user => {
     if (user) {
         updateUserName();
         loadCourseDetails();
     } else {
-        window.location.href = "login.html";
+        // Redirect to login but save current page to return after login
+        const currentPage = encodeURIComponent(window.location.href);
+        window.location.href = `login.html?redirect=${currentPage}`;
+    }
+});
+
+/* ====================================
+   FALLBACK: Also try to listen for realtime updates
+==================================== */
+window.addEventListener('load', () => {
+    // If auth already resolved, fine; otherwise small delay
+    if (!auth.currentUser) {
+        setTimeout(() => {
+            if (!auth.currentUser && document.getElementById("courseTitle").innerHTML === "Loading Course...") {
+                // Show demo mode for course preview
+                if (subjects[subject]) {
+                    const s = subjects[subject];
+                    document.getElementById("courseTitle").innerHTML = `${s.icon || "📘"} ${s.title}`;
+                    document.getElementById("courseDescription").innerHTML = s.description;
+                    document.getElementById("courseLevel").innerHTML = s.level;
+                    document.getElementById("courseQuestions").innerHTML = "500+";
+                    
+                    const quizBtn = document.getElementById("quizBtn");
+                    if (quizBtn) {
+                        quizBtn.onclick = function() {
+                            window.location.href = `login.html?redirect=${encodeURIComponent(window.location.href)}`;
+                        };
+                    }
+                }
+            }
+        }, 500);
     }
 });
 </script>

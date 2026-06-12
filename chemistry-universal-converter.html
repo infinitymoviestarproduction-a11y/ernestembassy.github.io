@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chemistry Universal Converter - Fixed for Your Format</title>
+    <title>Chemistry Universal Converter - Fixed for Your Exact Format</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -114,27 +114,41 @@
             color: white;
             margin-left: 8px;
         }
+        .debug-box {
+            background: #1a1a2e;
+            color: #ff6b6b;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🧪 Chemistry Universal Converter <span class="badge-new">FIXED PARSER</span></h1>
-        <p>Works with format: <strong>1. Question text</strong> then <strong>A) option</strong> then <strong>B) option</strong> then <strong>C) option</strong> then <strong>D) option</strong> then <strong>Answer: X</strong> then <strong>Explanation: text</strong></p>
+        <h1>🧪 Chemistry Universal Converter <span class="badge-new">FIXED FOR YOUR FORMAT</span></h1>
+        <p>Works with: <strong>1. Question text</strong> → <strong>A) option</strong> → <strong>B) option</strong> → <strong>C) option</strong> → <strong>D) option</strong> → <strong>Answer: X</strong> → <strong>Explanation: text</strong></p>
         
         <div class="mode-selector">
             <div class="mode-btn free" onclick="setMode('free')">📝 Free Test Mode</div>
             <div class="mode-btn premium active" onclick="setMode('premium')">🏆 Premium Quiz Mode (5 sec timer)</div>
         </div>
         
-        <textarea id="input" placeholder="Paste ALL your Chemistry questions here (questions 1 to 500+)..."></textarea>
+        <textarea id="input" placeholder="Paste ALL your Chemistry questions here..."></textarea>
         
         <div>
+            <button class="btn-info" onclick="debugShowFirst100Lines()">🔍 Debug - Show First 100 Lines</button>
             <button class="btn-primary" onclick="convertToJSON()">🔄 Convert All Questions</button>
             <button class="btn-success" onclick="copyJSON()" id="copyBtn" style="display:none;">📋 Copy JSON</button>
             <button class="btn-warning" onclick="downloadJSON()">💾 Download JSON File</button>
             <button class="btn-danger" onclick="clearAll()">🗑️ Clear</button>
-            <button class="btn-info" onclick="showSample()">📖 Show Sample Format</button>
         </div>
+        
+        <div id="debugBox" class="debug-box"></div>
         
         <div class="progress" id="progressContainer">
             <div class="progress-bar" id="progressBar"></div>
@@ -142,10 +156,10 @@
         
         <div id="statsBox" class="stats-box">
             <strong>📋 Instructions:</strong><br>
-            1. Paste your Chemistry questions in the format shown below<br>
-            2. Click "Convert All Questions"<br>
+            1. Click "Debug - Show First 100 Lines" to check your format<br>
+            2. Then click "Convert All Questions"<br>
             3. Download or copy the JSON<br>
-            4. Upload to your LMS using the bulk uploader (select Chemistry subject)
+            4. Upload to your LMS using the bulk uploader
         </div>
         
         <h2>📊 Conversion Results:</h2>
@@ -182,85 +196,24 @@
             setTimeout(() => { msgDiv.innerHTML = ''; }, 5000);
         }
         
-        function showSample() {
-            const sampleText = `1. Which of the following particles has a mass approximately equal to that of a proton?
-A) Electron
-B) Neutron
-C) Alpha particle
-D) Beta particle
-Answer: B
-Explanation: Both protons and neutrons reside in the nucleus and have a relative mass of approximately 1 atomic mass unit.
-
-2. An element with atomic number 17 belongs to which group and period?
-A) Group II, Period 3
-B) Group VII, Period 2
-C) Group VII, Period 3
-D) Group VI, Period 3
-Answer: C
-Explanation: Atomic number 17 is chlorine. Its electronic configuration is 2, 8, 7. The 3 shells indicate Period 3, and the 7 valence electrons place it in Group VII.`;
-            document.getElementById('input').value = sampleText;
-            showMessage('Sample text added! Click "Convert All Questions" to test.', 'success');
-        }
-        
-        function convertToJSON() {
+        function debugShowFirst100Lines() {
             const text = document.getElementById('input').value;
             if (!text.trim()) {
-                showMessage('Please paste your Chemistry questions first!', 'error');
+                showMessage('Please paste your questions first!', 'error');
                 return;
             }
             
-            // Show progress
-            const progressContainer = document.getElementById('progressContainer');
-            const progressBar = document.getElementById('progressBar');
-            progressContainer.style.display = 'block';
-            progressBar.style.width = '20%';
+            const lines = text.split('\n');
+            let debugHtml = '<strong>🔍 First 100 Lines of Your Document:</strong><br><br>';
             
-            setTimeout(() => {
-                try {
-                    const questions = parseChemistryQuestions(text);
-                    currentQuestions = questions;
-                    
-                    progressBar.style.width = '70%';
-                    
-                    // Add mode-specific fields
-                    const finalQuestions = questions.map(q => ({
-                        ...q,
-                        subject: 'chemistry',
-                        ...(currentMode === 'premium' && { timeLimit: 5, competition: true })
-                    }));
-                    
-                    progressBar.style.width = '100%';
-                    
-                    currentJSON = JSON.stringify(finalQuestions, null, 2);
-                    document.getElementById('output').innerHTML = `<pre style="white-space:pre-wrap; word-wrap:break-word;">${escapeHtml(currentJSON)}</pre>`;
-                    document.getElementById('copyBtn').style.display = 'inline-block';
-                    
-                    // Show stats
-                    const statsDiv = document.getElementById('statsDetail');
-                    statsDiv.style.display = 'block';
-                    statsDiv.innerHTML = `
-                        <strong>✅ Conversion Complete!</strong><br>
-                        📊 Total Questions: ${questions.length}<br>
-                        🎯 Mode: ${currentMode === 'premium' ? 'PREMIUM (5 sec timer)' : 'FREE (no timer)'}<br>
-                        📝 Subject: Chemistry
-                    `;
-                    
-                    // Show preview
-                    displayPreview(questions);
-                    
-                    showMessage(`✅ Successfully converted ${questions.length} Chemistry questions!`, 'success');
-                    
-                    setTimeout(() => {
-                        progressContainer.style.display = 'none';
-                        progressBar.style.width = '0%';
-                    }, 1500);
-                    
-                } catch (error) {
-                    progressContainer.style.display = 'none';
-                    showMessage('Error: ' + error.message, 'error');
-                    console.error(error);
-                }
-            }, 100);
+            for (let i = 0; i < Math.min(100, lines.length); i++) {
+                let displayLine = lines[i].replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                debugHtml += `<span style="color: #ffd700;">Line ${i+1}:</span> ${displayLine}<br>`;
+            }
+            
+            document.getElementById('debugBox').style.display = 'block';
+            document.getElementById('debugBox').innerHTML = debugHtml;
+            showMessage('Debug info displayed above. Check the format.', 'warning');
         }
         
         function parseChemistryQuestions(text) {
@@ -273,13 +226,15 @@ Explanation: Atomic number 17 is chlorine. Its electronic configuration is 2, 8,
             let currentExplanation = '';
             let inQuestion = false;
             let questionNumber = 0;
+            let collectingQuestion = false;
+            let questionLines = [];
             
             for (let i = 0; i < lines.length; i++) {
                 let line = lines[i].trim();
-                if (!line) continue;
+                if (!line && !collectingQuestion) continue;
                 
-                // Check for question number pattern: "1.", "1)", "1. ", "1) "
-                const questionMatch = line.match(/^(\d+)[\.\)]\s+(.+)/);
+                // Check for question number pattern: "1.", "1)", "1. ", "1) ", or "**1.**"
+                let questionMatch = line.match(/^(?:[*]*)?(\d+)[\.\)]\s*(.+)/);
                 if (questionMatch) {
                     // Save previous question if exists
                     if (currentQuestion && currentOptions.A && currentOptions.B && currentOptions.C && currentOptions.D) {
@@ -300,16 +255,17 @@ Explanation: Atomic number 17 is chlorine. Its electronic configuration is 2, 8,
                     currentAnswer = '';
                     currentExplanation = '';
                     inQuestion = true;
+                    collectingQuestion = true;
                     questionNumber++;
                     continue;
                 }
                 
                 if (inQuestion) {
-                    // Match options: A) Option, A. Option, A Option
-                    const optMatch = line.match(/^([A-D])[\.\)]?\s+(.+)/);
+                    // Check for options: A) Option, A. Option, A Option, or **A) Option**
+                    let optMatch = line.match(/^(?:[*]*)?([A-D])[\.\)]?\s+(.+)/);
                     if (optMatch) {
                         const letter = optMatch[1];
-                        const optText = optMatch[2];
+                        const optText = optMatch[2].replace(/[*]/g, '').trim();
                         if (letter === 'A') currentOptions.A = optText;
                         else if (letter === 'B') currentOptions.B = optText;
                         else if (letter === 'C') currentOptions.C = optText;
@@ -317,7 +273,7 @@ Explanation: Atomic number 17 is chlorine. Its electronic configuration is 2, 8,
                         continue;
                     }
                     
-                    // Match Answer: X or Answer: X (with possible **)
+                    // Check for Answer: X or **Answer: X** or Answer: X (with spaces)
                     let ansMatch = line.match(/Answer:\s*([A-D])/i);
                     if (!ansMatch) ansMatch = line.match(/\*\*Answer:\s*([A-D])\*\*/i);
                     if (ansMatch) {
@@ -325,11 +281,11 @@ Explanation: Atomic number 17 is chlorine. Its electronic configuration is 2, 8,
                         continue;
                     }
                     
-                    // Match Explanation: text
+                    // Check for Explanation: text or **Explanation:** text
                     let expMatch = line.match(/Explanation:\s*(.+)/i);
                     if (!expMatch) expMatch = line.match(/\*\*Explanation:\*\*\s*(.+)/i);
                     if (expMatch) {
-                        currentExplanation = expMatch[1];
+                        currentExplanation = expMatch[1].replace(/[*]/g, '').trim();
                         continue;
                     }
                 }
@@ -349,10 +305,72 @@ Explanation: Atomic number 17 is chlorine. Its electronic configuration is 2, 8,
             }
             
             if (questions.length === 0) {
-                throw new Error('No questions found. Make sure your format is:\n\n1. Question text\nA) option\nB) option\nC) option\nD) option\nAnswer: X\nExplanation: text');
+                throw new Error('No questions found. Click "Debug - Show First 100 Lines" to see your format.');
             }
             
             return questions;
+        }
+        
+        function convertToJSON() {
+            const text = document.getElementById('input').value;
+            if (!text.trim()) {
+                showMessage('Please paste your Chemistry questions first!', 'error');
+                return;
+            }
+            
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            progressContainer.style.display = 'block';
+            progressBar.style.width = '20%';
+            
+            setTimeout(() => {
+                try {
+                    const questions = parseChemistryQuestions(text);
+                    currentQuestions = questions;
+                    
+                    progressBar.style.width = '70%';
+                    
+                    const finalQuestions = questions.map(q => ({
+                        question: q.question,
+                        optionA: q.optionA,
+                        optionB: q.optionB,
+                        optionC: q.optionC,
+                        optionD: q.optionD,
+                        answer: q.answer,
+                        explanation: q.explanation,
+                        subject: 'chemistry',
+                        ...(currentMode === 'premium' && { timeLimit: 5, competition: true })
+                    }));
+                    
+                    progressBar.style.width = '100%';
+                    
+                    currentJSON = JSON.stringify(finalQuestions, null, 2);
+                    document.getElementById('output').innerHTML = `<pre style="white-space:pre-wrap; word-wrap:break-word;">${escapeHtml(currentJSON)}</pre>`;
+                    document.getElementById('copyBtn').style.display = 'inline-block';
+                    
+                    const statsDiv = document.getElementById('statsDetail');
+                    statsDiv.style.display = 'block';
+                    statsDiv.innerHTML = `
+                        <strong>✅ Conversion Complete!</strong><br>
+                        📊 Total Questions: ${questions.length}<br>
+                        🎯 Mode: ${currentMode === 'premium' ? 'PREMIUM (5 sec timer)' : 'FREE (no timer)'}<br>
+                        📝 Subject: Chemistry
+                    `;
+                    
+                    displayPreview(questions);
+                    showMessage(`✅ Successfully converted ${questions.length} Chemistry questions!`, 'success');
+                    
+                    setTimeout(() => {
+                        progressContainer.style.display = 'none';
+                        progressBar.style.width = '0%';
+                    }, 1500);
+                    
+                } catch (error) {
+                    progressContainer.style.display = 'none';
+                    showMessage('Error: ' + error.message, 'error');
+                    console.error(error);
+                }
+            }, 100);
         }
         
         function displayPreview(questions) {
@@ -390,7 +408,7 @@ Explanation: Atomic number 17 is chlorine. Its electronic configuration is 2, 8,
         function copyJSON() {
             if (currentJSON) {
                 navigator.clipboard.writeText(currentJSON);
-                showMessage(`✅ JSON copied! Go to bulk-upload-premium.html, select Chemistry, and upload.`);
+                showMessage(`✅ JSON copied! Go to bulk uploader, select Chemistry, and upload.`);
             } else {
                 showMessage('No JSON to copy. Convert your questions first.', 'error');
             }
@@ -415,6 +433,7 @@ Explanation: Atomic number 17 is chlorine. Its electronic configuration is 2, 8,
             document.getElementById('input').value = '';
             document.getElementById('output').innerHTML = '';
             document.getElementById('previewBox').innerHTML = '';
+            document.getElementById('debugBox').style.display = 'none';
             document.getElementById('copyBtn').style.display = 'none';
             document.getElementById('statsDetail').style.display = 'none';
             currentJSON = null;

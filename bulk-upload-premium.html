@@ -164,6 +164,17 @@
             border-radius: 5px;
             width: 250px;
         }
+        .badge-new {
+            display: inline-block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
@@ -206,7 +217,9 @@
             <option value="mathematics">📐 Mathematics</option>
             <option value="physics">⚛️ Physics</option>
             <option value="chemistry">🧪 Chemistry</option>
+            <option value="biology">🔬 Biology <span class="badge-new">NEW</span></option>
             <option value="english">📖 English Language</option>
+            <option value="literature">📚 Literature-in-English <span class="badge-new">NEW</span></option>
             <option value="digital-technology">💻 Digital Technology</option>
             <option value="igbo">🗣️ Igbo Language</option>
         </select>
@@ -223,6 +236,26 @@
     "answer": "B",
     "explanation": "2x = 15 - 5 = 10, so x = 5",
     "difficulty": "medium"
+  },
+  {
+    "question": "Who wrote 'Things Fall Apart'?",
+    "optionA": "Wole Soyinka",
+    "optionB": "Chinua Achebe",
+    "optionC": "Chimamanda Adichie",
+    "optionD": "Buchi Emecheta",
+    "answer": "B",
+    "explanation": "Chinua Achebe published Things Fall Apart in 1958.",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Which organelle is known as the powerhouse of the cell?",
+    "optionA": "Nucleus",
+    "optionB": "Mitochondria",
+    "optionC": "Ribosome",
+    "optionD": "Golgi apparatus",
+    "answer": "B",
+    "explanation": "Mitochondria produce ATP, the cell's energy currency.",
+    "difficulty": "easy"
   }
 ]</textarea>
         
@@ -382,7 +415,7 @@
                 document.getElementById('stats').innerHTML = '<strong>📝 FREE TEST MODE</strong><br>Practice questions - No time limit, easier difficulty<br>📁 Saves to: /{subject}/questions';
             } else {
                 document.querySelector('.mode-btn.premium').classList.add('active');
-                document.getElementById('stats').innerHTML = '<strong>🏆 PREMIUM QUIZ MODE</strong><br>Competition questions - 5 second time limit, harder difficulty<br>💰 Monthly ₦10,000 prize draw for top performers<br>📁 Saves to: /premium/{subject}/questions';
+                document.getElementById('stats').innerHTML = '<strong>🏆 PREMIUM QUIZ MODE</strong><br>Competition questions - 8 second time limit, stage-based progression<br>💰 Monthly ₦10,000 prize draw for top performers<br>📁 Saves to: /premium/{subject}/questions';
             }
         }
         
@@ -422,7 +455,7 @@
                         <strong>📊 ${subject.toUpperCase()} - ${currentMode === 'free' ? 'FREE TEST' : 'PREMIUM QUIZ'}</strong><br>
                         Total Questions: ${questions.length}<br>
                         Database Path: ${dbPath}
-                        ${currentMode === 'premium' ? '<br>💰 Monthly Prize Pool: ₦10,000<br>⏱️ Time Limit: 5 seconds per question' : ''}
+                        ${currentMode === 'premium' ? '<br>💰 Monthly Prize Pool: ₦10,000<br>⏱️ Time Limit: 8 seconds per question<br>🏆 Stage-based competition' : ''}
                     `;
                     
                     let html = '';
@@ -463,9 +496,9 @@
                 questions.slice(0, 10).forEach((q, i) => {
                     html += `
                         <div class="question-item">
-                            <strong>Q${i + 1}:</strong> ${q.question.substring(0, 100)}<br>
-                            A: ${q.optionA} | B: ${q.optionB} | C: ${q.optionC} | D: ${q.optionD}<br>
-                            <strong>Answer: ${q.answer}</strong>
+                            <strong>Q${i + 1}:</strong> ${(q.question || '').substring(0, 100)}${(q.question || '').length > 100 ? '...' : ''}<br>
+                            A: ${q.optionA || 'N/A'} | B: ${q.optionB || 'N/A'} | C: ${q.optionC || 'N/A'} | D: ${q.optionD || 'N/A'}<br>
+                            <strong>Answer: ${q.answer || 'N/A'}</strong>
                             ${q.difficulty ? `<span style="margin-left: 10px; color: #f39c12;">Difficulty: ${q.difficulty}</span>` : ''}
                         </div>
                     `;
@@ -533,7 +566,7 @@
                     id: Date.now() + index,
                     ...q,
                     createdAt: new Date().toISOString(),
-                    ...(currentMode === 'premium' && { timeLimit: 5, competition: true })
+                    ...(currentMode === 'premium' && { timeLimit: 8, competition: true })
                 }));
                 
                 // Merge questions

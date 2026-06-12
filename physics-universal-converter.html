@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Physics JSON Converter | Bulk Upload Tool</title>
+    <title>Physics JSON Converter - Fixed for Your Format</title>
     <style>
         * {
             margin: 0;
@@ -25,8 +25,6 @@
             border-radius: 2rem;
             box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
             overflow: hidden;
-            backdrop-filter: blur(2px);
-            transition: all 0.2s;
         }
 
         .header {
@@ -38,41 +36,6 @@
         .header h1 {
             font-size: 1.9rem;
             font-weight: 700;
-            letter-spacing: -0.3px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header p {
-            opacity: 0.85;
-            margin-top: 8px;
-            font-size: 0.95rem;
-        }
-
-        .nav-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 16px;
-            border-top: 1px solid rgba(255,255,255,0.2);
-            padding-top: 18px;
-        }
-
-        .nav-links a {
-            color: #f0f9ff;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: 0.2s;
-            background: rgba(255,255,255,0.1);
-            padding: 6px 14px;
-            border-radius: 40px;
-        }
-
-        .nav-links a:hover {
-            background: #ffd966;
-            color: #1e2f3e;
         }
 
         .mode-bar {
@@ -99,14 +62,11 @@
             color: #2c3e66;
             cursor: pointer;
             transition: 0.2s;
-            font-size: 0.9rem;
-            border: 1px solid transparent;
         }
 
         .mode-btn.active {
             background: linear-gradient(105deg, #1e5f7a, #2c3e66);
             color: white;
-            box-shadow: 0 6px 12px -6px rgba(0,0,0,0.2);
         }
 
         .mode-btn.free.active {
@@ -120,9 +80,8 @@
         .stats-card {
             background: #eef3fc;
             border-radius: 20px;
-            padding: 14px 24px;
+            padding: 8px 20px;
             font-weight: 500;
-            color: #1f3a4b;
         }
 
         .main-content {
@@ -135,17 +94,15 @@
             border: 2px solid #dce5f2;
             border-radius: 20px;
             font-family: 'SF Mono', 'Courier New', monospace;
-            font-size: 13.5px;
+            font-size: 13px;
             line-height: 1.5;
             background: #fefefe;
-            transition: 0.2s;
             resize: vertical;
         }
 
         textarea:focus {
             border-color: #3b82f6;
             outline: none;
-            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
         }
 
         .btn-group {
@@ -160,7 +117,6 @@
             border: none;
             border-radius: 60px;
             font-weight: 600;
-            font-size: 0.85rem;
             cursor: pointer;
             transition: all 0.2s ease;
             background: #edf2f7;
@@ -170,7 +126,6 @@
         .btn-primary {
             background: linear-gradient(95deg, #2563eb, #1e40af);
             color: white;
-            box-shadow: 0 4px 8px -2px rgba(37,99,235,0.3);
         }
 
         .btn-success {
@@ -190,7 +145,6 @@
 
         .btn:hover {
             transform: translateY(-2px);
-            filter: brightness(1.02);
         }
 
         .progress-container {
@@ -225,7 +179,6 @@
             border-radius: 24px;
             border: 1px solid #e9f0f5;
             overflow: hidden;
-            box-shadow: 0 8px 20px -8px rgba(0,0,0,0.05);
         }
 
         .panel-header {
@@ -233,7 +186,6 @@
             padding: 12px 20px;
             font-weight: 700;
             border-bottom: 1px solid #e9edf2;
-            font-size: 0.9rem;
         }
 
         .preview-scroll {
@@ -248,18 +200,6 @@
             border-radius: 20px;
             padding: 14px 18px;
             margin-bottom: 16px;
-            transition: 0.1s;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
-        }
-
-        .badge-mode {
-            display: inline-block;
-            font-size: 10px;
-            background: #f0f2f5;
-            padding: 4px 10px;
-            border-radius: 30px;
-            margin-left: 12px;
-            font-weight: normal;
         }
 
         .json-output {
@@ -271,13 +211,18 @@
             height: 500px;
             overflow: auto;
             padding: 20px;
-            border: none;
             width: 100%;
             resize: none;
+            border: none;
         }
 
-        hr {
-            margin: 18px 0;
+        .badge-mode {
+            display: inline-block;
+            font-size: 10px;
+            background: #f0f2f5;
+            padding: 4px 10px;
+            border-radius: 30px;
+            margin-left: 12px;
         }
 
         @media (max-width: 950px) {
@@ -294,51 +239,50 @@
 <div class="container">
     <div class="header">
         <h1>⚛️ Physics Universal Converter</h1>
-        <p>Seamlessly convert your Physics question bank (text, DOCX extraction) → structured JSON for Ernest Embassy LMS • Supports Free & Premium modes</p>
-        <div class="nav-links">
-            <a href="#">📝 Take Quiz</a>
-            <a href="#">📤 Free Uploader</a>
-            <a href="#">🏆 Premium Uploader</a>
-            <a href="#">🎓 Education Hub</a>
-            <a href="#">🏠 Home</a>
-        </div>
+        <p>Supports formats: "1. Question text" OR "1) Question text" OR "Question 1: Question text"</p>
     </div>
 
     <div class="mode-bar">
         <div class="mode-selector">
-            <div class="mode-btn free" onclick="setTargetMode('free')">📘 FREE QUIZ (no timer)</div>
-            <div class="mode-btn premium active" onclick="setTargetMode('premium')">🏆 PREMIUM QUIZ (5s timer)</div>
+            <div class="mode-btn free" onclick="setTargetMode('free')">📘 FREE QUIZ</div>
+            <div class="mode-btn premium active" onclick="setTargetMode('premium')">🏆 PREMIUM (5s timer)</div>
         </div>
-        <div class="stats-card" id="statsHeader">
-            ✅ Ready: paste questions → convert
-        </div>
+        <div class="stats-card" id="statsHeader">✅ Ready to convert</div>
     </div>
 
     <div class="main-content">
-        <label style="font-weight: 700; font-size: 1rem;">📌 Paste Physics Questions (from docx / text)</label>
-        <textarea id="inputText" rows="10" placeholder="Paste your physics questions exactly as shown below (supports standard numbered format):
+        <label style="font-weight: 700;">📌 Paste Your Physics Questions:</label>
+        <textarea id="inputText" rows="12" placeholder="Paste questions in any of these formats:
 
-Question 1: A body moving with a uniform acceleration covers 20 m in the 4th second and 30 m in the 6th second of its motion. Calculate the initial velocity.
+1. A body moving with a uniform acceleration covers 20 m in the 4th second and 30 m in the 6th second of its motion. Calculate the initial velocity.
 A) 2.5 m/s
 B) 5 m/s
 C) 7.5 m/s
 D) 10 m/s
 Correct Answer: A
-Explanation: Distance in nth second = u + (a/2)(2n−1). Solving gives u = 2.5 m/s.
+Explanation: Distance in nth second = u + (a/2)(2n−1). For n=4: u + (a/2)(7)=20; n=6: u + (a/2)(11)=30. Subtract: (a/2)(4)=10 → a=5 m/s². Then u=2.5 m/s.
 
-Question 2: Which of the following statements about vectors and scalars is correct?
+2. Which of the following statements about vectors and scalars is correct?
 A) Vector quantities have both magnitude and direction; scalar quantities have only magnitude.
 B) Scalar quantities have both magnitude and direction; vector quantities have only magnitude.
 C) Both vectors and scalars have magnitude and direction.
 D) Vectors and scalars are the same.
 Correct Answer: A
-Explanation: Vectors require magnitude and direction; scalars only magnitude."></textarea>
+Explanation: Vectors require both magnitude and direction for complete description.
+
+3. A car accelerates from rest at a constant rate of 2 m/s² for 10 seconds. What is its final velocity?
+A) 5 m/s
+B) 10 m/s
+C) 15 m/s
+D) 20 m/s
+Correct Answer: D
+Explanation: Using v = u + at, where u = 0, a = 2 m/s², t = 10 s: v = 20 m/s."></textarea>
 
         <div class="btn-group">
             <button class="btn btn-primary" onclick="convertToJSON()">🔄 Convert to JSON</button>
             <button class="btn btn-success" onclick="copyJSON()">📋 Copy JSON</button>
-            <button class="btn btn-info" onclick="downloadJSON()">💾 Download .json</button>
-            <button class="btn btn-warning" onclick="clearAll()">🗑️ Clear all</button>
+            <button class="btn btn-info" onclick="downloadJSON()">💾 Download JSON</button>
+            <button class="btn btn-warning" onclick="clearAll()">🗑️ Clear</button>
         </div>
 
         <div class="progress-container" id="progressContainer">
@@ -346,241 +290,190 @@ Explanation: Vectors require magnitude and direction; scalars only magnitude."><
         </div>
 
         <div class="split-layout">
-            <!-- JSON OUTPUT PANEL -->
             <div class="json-panel">
                 <div class="panel-header">
-                    📄 JSON Output <span style="font-weight:normal; margin-left:8px;" id="questionCountBadge">(0 questions)</span>
+                    📄 JSON Output <span id="questionCountBadge">(0 questions)</span>
                 </div>
                 <textarea id="jsonOutput" class="json-output" readonly></textarea>
             </div>
 
-            <!-- PREVIEW PANEL -->
             <div class="preview-panel">
                 <div class="panel-header">
-                    👁️ Preview (First 12 questions)
+                    👁️ Preview
                 </div>
                 <div class="preview-scroll" id="previewBox">
-                    <p style="color:#6c7a89;">No questions converted yet. Click 'Convert to JSON'.</p>
+                    <p style="color:#6c7a89;">Click "Convert to JSON" to see preview...</p>
                 </div>
             </div>
         </div>
+        
         <div style="margin-top: 20px; font-size: 13px; background: #f1f5f9; border-radius: 16px; padding: 12px 20px;">
-            💡 <strong>Parser instructions:</strong> Recognizes "Question X:" , options A) / B) / C) / D) , "Correct Answer: A/B/C/D" , and optional "Explanation:". Works with extracted text from .docx, PDF copy, or plain text. Supports multi-line questions.
+            💡 <strong>Supported formats:</strong><br>
+            • Question numbers: "1.", "1)", "Question 1:", "Question 1."<br>
+            • Options: "A)", "A.", "A) text" or "A. text"<br>
+            • Answer: "Correct Answer: A" or "Answer: A"<br>
+            • Explanation: "Explanation: text" (optional)
         </div>
     </div>
 </div>
 
 <script>
-    // Global state
     let currentQuestions = [];
-    let targetMode = 'premium';   // 'free' or 'premium'
+    let targetMode = 'premium';
 
-    // ---------- MODE TOGGLING ----------
     function setTargetMode(mode) {
         targetMode = mode;
         document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
         if (mode === 'free') {
             document.querySelector('.mode-btn.free').classList.add('active');
-            document.getElementById('statsHeader').innerHTML = '📘 FREE MODE ACTIVE • No time limit • Standard practice questions';
+            document.getElementById('statsHeader').innerHTML = '📘 FREE MODE • No time limit';
         } else {
             document.querySelector('.mode-btn.premium').classList.add('active');
-            document.getElementById('statsHeader').innerHTML = '🏆 PREMIUM MODE ACTIVE • 5‑second timer • Competition ready';
+            document.getElementById('statsHeader').innerHTML = '🏆 PREMIUM MODE • 5-second timer';
         }
-        // re-render preview & JSON if we already have questions
         if (currentQuestions.length > 0) {
             displayPreview();
             updateJSONOutput();
         }
     }
 
-    // ---------- MAIN PARSER ----------
-    function parsePhysicsQuestions(rawText) {
-        // Normalize line breaks and trim excessive spaces
-        let text = rawText.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    function parsePhysicsQuestions(text) {
         const questions = [];
+        const lines = text.split(/\r?\n/);
         
-        // Split by "Question " pattern (case-insensitive, possibly with number)
-        // We'll use a robust regex that captures blocks starting with "Question X:"
-        const questionBlocks = text.split(/\n(?=Question\s+\d+\s*:)/i);
-        
-        for (const block of questionBlocks) {
-            if (!block.trim()) continue;
+        // Method: Find question starters (number followed by . or ) or "Question" keyword)
+        let i = 0;
+        while (i < lines.length) {
+            let line = lines[i].trim();
+            if (!line) { i++; continue; }
             
-            // Extract question text (after "Question X: " up to before options)
-            const questionMatch = block.match(/Question\s+\d+\s*:\s*(.*?)(?=\n[A-D]\)|\n[A-D]\.|\n[A-D]\s+[A-Z]|\nCorrect\s+Answer:)/is);
-            if (!questionMatch) continue;
-            let questionText = cleanText(questionMatch[1]);
-            if (!questionText) continue;
-            
-            // Extract options: A) ... , B) ... , C) ... , D) ...
-            // Flexible: supports "A)", "A." , "A " 
-            const optPattern = /([A-D])[\)\.\s]+\s*(.*?)(?=\n[A-D][\)\.\s]|\nCorrect\s+Answer:|\nExplanation:|\n$)/gis;
-            let options = { A: '', B: '', C: '', D: '' };
-            let match;
-            const blockForOptions = block;
-            while ((match = optPattern.exec(blockForOptions)) !== null) {
-                const letter = match[1].toUpperCase();
-                let optText = cleanText(match[2]);
-                if (letter === 'A') options.A = optText;
-                else if (letter === 'B') options.B = optText;
-                else if (letter === 'C') options.C = optText;
-                else if (letter === 'D') options.D = optText;
-            }
-            
-            // If options still missing, try alternative regex: lines that start with A) or A.
-            if (!options.A || !options.B || !options.C || !options.D) {
-                const lines = block.split('\n');
-                for (let line of lines) {
-                    line = line.trim();
-                    const aMatch = line.match(/^A[\.\)]\s*(.*)/i);
-                    if (aMatch && !options.A) options.A = cleanText(aMatch[1]);
-                    const bMatch = line.match(/^B[\.\)]\s*(.*)/i);
-                    if (bMatch && !options.B) options.B = cleanText(bMatch[1]);
-                    const cMatch = line.match(/^C[\.\)]\s*(.*)/i);
-                    if (cMatch && !options.C) options.C = cleanText(cMatch[1]);
-                    const dMatch = line.match(/^D[\.\)]\s*(.*)/i);
-                    if (dMatch && !options.D) options.D = cleanText(dMatch[1]);
+            // Check if line starts with a question number pattern
+            const qMatch = line.match(/^(?:Question\s*)?(\d+)[\.\)]\s*(.*)/i);
+            if (qMatch) {
+                const qNum = parseInt(qMatch[1]);
+                let questionText = qMatch[2];
+                
+                // Collect multi-line question text until we hit an option line
+                i++;
+                while (i < lines.length) {
+                    const nextLine = lines[i].trim();
+                    // Stop if we hit an option (A), B), etc.) or another question number or blank with option pattern
+                    if (nextLine.match(/^[A-D][\.\)]\s/) || nextLine.match(/^[A-D]\s+[A-Z]/i)) {
+                        break;
+                    }
+                    if (nextLine.match(/^(?:Correct|Answer|Explanation)/i)) {
+                        break;
+                    }
+                    if (nextLine && !nextLine.match(/^\d+[\.\)]/)) {
+                        questionText += " " + nextLine;
+                    }
+                    i++;
                 }
-            }
-            
-            // If any option missing, skip this question (incomplete)
-            if (!options.A || !options.B || !options.C || !options.D) continue;
-            
-            // Extract correct answer (A, B, C, D)
-            let answer = '';
-            const answerRegex = /Correct\s+Answer:\s*([A-D])/i;
-            const ansMatch = block.match(answerRegex);
-            if (ansMatch) {
-                answer = ansMatch[1].toUpperCase();
+                
+                // Now extract options A, B, C, D
+                let options = { A: '', B: '', C: '', D: '' };
+                let answer = '';
+                let explanation = '';
+                
+                // Scan from current position for options
+                let scanPos = i;
+                while (scanPos < lines.length) {
+                    const optLine = lines[scanPos].trim();
+                    if (!optLine) { scanPos++; continue; }
+                    
+                    // Check for option pattern
+                    const optAMatch = optLine.match(/^A[\.\)]\s*(.*)/i);
+                    const optBMatch = optLine.match(/^B[\.\)]\s*(.*)/i);
+                    const optCMatch = optLine.match(/^C[\.\)]\s*(.*)/i);
+                    const optDMatch = optLine.match(/^D[\.\)]\s*(.*)/i);
+                    
+                    if (optAMatch && !options.A) options.A = cleanText(optAMatch[1]);
+                    else if (optBMatch && !options.B) options.B = cleanText(optBMatch[1]);
+                    else if (optCMatch && !options.C) options.C = cleanText(optCMatch[1]);
+                    else if (optDMatch && !options.D) options.D = cleanText(optDMatch[1]);
+                    
+                    // Check for answer line
+                    const ansMatch = optLine.match(/(?:Correct\s+)?Answer:\s*([A-D])/i);
+                    if (ansMatch && !answer) answer = ansMatch[1].toUpperCase();
+                    
+                    // Check for explanation line
+                    const explMatch = optLine.match(/Explanation:\s*(.*)/i);
+                    if (explMatch && !explanation) explanation = cleanText(explMatch[1]);
+                    
+                    // If we found all options and answer, and next line is a new question or end, break
+                    if (options.A && options.B && options.C && options.D && answer) {
+                        // Check if next line starts new question
+                        if (scanPos + 1 < lines.length) {
+                            const nextCheck = lines[scanPos + 1].trim();
+                            if (nextCheck.match(/^\d+[\.\)]/) || nextCheck.match(/^Question\s+\d+/i)) {
+                                i = scanPos + 1;
+                                break;
+                            }
+                        }
+                    }
+                    scanPos++;
+                }
+                
+                // If we didn't find answer in the scan, check remaining lines
+                if (!answer) {
+                    for (let j = i; j < Math.min(i + 15, lines.length); j++) {
+                        const ansLine = lines[j].match(/(?:Correct\s+)?Answer:\s*([A-D])/i);
+                        if (ansLine) {
+                            answer = ansLine[1].toUpperCase();
+                            break;
+                        }
+                    }
+                }
+                
+                // Validate required fields
+                if (questionText && options.A && options.B && options.C && options.D && answer) {
+                    questions.push({
+                        question: cleanText(questionText),
+                        optionA: options.A,
+                        optionB: options.B,
+                        optionC: options.C,
+                        optionD: options.D,
+                        answer: answer,
+                        explanation: explanation || ""
+                    });
+                }
+                i = scanPos;
             } else {
-                // sometimes answer line like "Answer: B" or "Ans: C"
-                const altAns = block.match(/Answer:\s*([A-D])/i);
-                if (altAns) answer = altAns[1].toUpperCase();
-                else continue;   // mandatory field
+                i++;
             }
-            
-            // Extract explanation (optional)
-            let explanation = '';
-            const explMatch = block.match(/Explanation:\s*(.*?)(?=\nQuestion\s+\d+|\n---|\n\n|$)/is);
-            if (explMatch) {
-                explanation = cleanText(explMatch[1]);
-            }
-            
-            // Final question object
-            const qObj = {
-                question: questionText,
-                optionA: options.A,
-                optionB: options.B,
-                optionC: options.C,
-                optionD: options.D,
-                answer: answer,
-                explanation: explanation || ""
-            };
-            
-            // Add mode-specific field (for premium: timeLimit; free: no extra)
-            if (targetMode === 'premium') {
-                qObj.timeLimit = 5;
-                qObj.competition = true;
-            } else {
-                // free mode: no time limit flag
-                // keep clean for free quizzes
-            }
-            questions.push(qObj);
         }
         
         if (questions.length === 0) {
-            throw new Error('No questions detected. Verify format: "Question 1: ...", options A) B) C) D), and "Correct Answer: X".');
+            throw new Error('No questions found. Make sure your format is like:\n1. Question text\nA) option\nB) option\nC) option\nD) option\nCorrect Answer: A');
         }
+        
         return questions;
     }
     
     function cleanText(text) {
         if (!text) return '';
-        return text
-            .replace(/[▸►•*_~]/g, '')
-            .replace(/\s+/g, ' ')
-            .trim();
+        return text.replace(/\s+/g, ' ').trim();
     }
     
-    // ---------- UPDATE UI & JSON ----------
-    function updateJSONOutput() {
-        const jsonTextarea = document.getElementById('jsonOutput');
-        // make a fresh copy depending on mode
-        let exportQuestions = currentQuestions.map(q => {
-            if (targetMode === 'premium') {
-                return {
-                    ...q,
-                    timeLimit: 5,
-                    competition: true
-                };
-            } else {
-                // free mode: remove competition/timer fields if present
-                const { timeLimit, competition, ...rest } = q;
-                return rest;
-            }
-        });
-        jsonTextarea.value = JSON.stringify(exportQuestions, null, 2);
-        document.getElementById('questionCountBadge').innerHTML = `(${exportQuestions.length} questions)`;
-    }
-    
-    function displayPreview() {
-        const previewContainer = document.getElementById('previewBox');
-        if (!currentQuestions.length) {
-            previewContainer.innerHTML = '<p style="color:#6c7a89;">No questions to preview. Click "Convert to JSON" first.</p>';
-            return;
-        }
-        let html = '';
-        const maxPreview = Math.min(12, currentQuestions.length);
-        for (let i = 0; i < maxPreview; i++) {
-            const q = currentQuestions[i];
-            const modeBadge = (targetMode === 'premium') ? '<span class="badge-mode" style="background:#fef3c7; color:#b45309;">🏆 5s timer</span>' : '<span class="badge-mode" style="background:#d1fae5; color:#065f46;">📘 Free mode</span>';
-            html += `
-                <div class="question-card">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <strong style="font-size:0.85rem;">Q${i+1}</strong>
-                        ${modeBadge}
-                    </div>
-                    <div style="margin: 8px 0 6px; font-weight:500;">${escapeHtml(q.question.substring(0, 120))}${q.question.length > 120 ? '…' : ''}</div>
-                    <div style="font-size:0.75rem; display:flex; flex-wrap:wrap; gap:8px; margin-top:6px;">
-                        <span><strong>A:</strong> ${escapeHtml(q.optionA.substring(0, 55))}${q.optionA.length > 55 ? '…' : ''}</span>
-                        <span><strong>B:</strong> ${escapeHtml(q.optionB.substring(0, 55))}${q.optionB.length > 55 ? '…' : ''}</span>
-                        <span><strong>C:</strong> ${escapeHtml(q.optionC.substring(0, 55))}${q.optionC.length > 55 ? '…' : ''}</span>
-                        <span><strong>D:</strong> ${escapeHtml(q.optionD.substring(0, 55))}${q.optionD.length > 55 ? '…' : ''}</span>
-                    </div>
-                    <div style="margin-top: 6px;"><strong>✅ Answer:</strong> ${q.answer} ${q.explanation ? `&nbsp;| 📖 ${escapeHtml(q.explanation.substring(0, 80))}${q.explanation.length > 80 ? '…' : ''}` : ''}</div>
-                </div>
-            `;
-        }
-        if (currentQuestions.length > maxPreview) {
-            html += `<div style="text-align:center; padding:12px; background:#f1f5f9; border-radius:40px;">➕ + ${currentQuestions.length - maxPreview} more questions loaded</div>`;
-        }
-        previewContainer.innerHTML = html;
-    }
-    
-    // ---------- MAIN CONVERSION ENTRY ----------
     function convertToJSON() {
-        const rawInput = document.getElementById('inputText').value;
-        if (!rawInput.trim()) {
-            alert('❌ Please paste your physics questions first.');
+        const inputText = document.getElementById('inputText').value;
+        if (!inputText.trim()) {
+            alert('Please paste your questions first!');
             return;
         }
         
         const progressContainer = document.getElementById('progressContainer');
         const progressFill = document.getElementById('progressFill');
         progressContainer.style.display = 'block';
-        progressFill.style.width = '20%';
-        progressFill.textContent = 'Parsing...';
+        progressFill.style.width = '30%';
+        progressFill.textContent = 'Processing...';
         
         setTimeout(() => {
             try {
-                progressFill.style.width = '50%';
-                progressFill.textContent = 'Analyzing...';
-                const parsed = parsePhysicsQuestions(rawInput);
+                const parsed = parsePhysicsQuestions(inputText);
                 currentQuestions = parsed;
-                progressFill.style.width = '85%';
-                progressFill.textContent = 'Building JSON...';
                 
-                // Re-attach mode specific fields after parse (makes sure timeLimit consistent)
+                // Add mode-specific fields
                 if (targetMode === 'premium') {
                     currentQuestions = currentQuestions.map(q => ({
                         ...q,
@@ -595,73 +488,127 @@ Explanation: Vectors require magnitude and direction; scalars only magnitude."><
                 }
                 
                 progressFill.style.width = '100%';
-                progressFill.textContent = 'Complete!';
+                progressFill.textContent = `✓ ${currentQuestions.length} questions`;
                 
-                // update stats and UI
-                document.getElementById('statsHeader').innerHTML = `✅ Success: ${currentQuestions.length} questions converted (${targetMode === 'premium' ? 'Premium 5s mode' : 'Free mode'})`;
+                document.getElementById('statsHeader').innerHTML = `✅ Converted ${currentQuestions.length} questions (${targetMode === 'premium' ? 'Premium' : 'Free'} mode)`;
+                document.getElementById('questionCountBadge').innerHTML = `(${currentQuestions.length} questions)`;
+                
                 updateJSONOutput();
                 displayPreview();
                 
                 setTimeout(() => {
                     progressContainer.style.display = 'none';
                     progressFill.style.width = '0%';
-                }, 1500);
+                }, 2000);
                 
-            } catch (err) {
+            } catch (error) {
                 progressContainer.style.display = 'none';
-                alert('⚠️ Conversion error: ' + err.message + '\n\nPlease ensure format: "Question X: ..." , options A) B) C) D) , "Correct Answer: X"');
-                console.error(err);
+                alert('Error: ' + error.message);
+                console.error(error);
             }
         }, 50);
     }
     
-    // copy & download & clear
-    function copyJSON() {
-        const jsonArea = document.getElementById('jsonOutput');
-        if (!jsonArea.value.trim()) {
-            alert('No JSON generated. Convert questions first.');
+    function updateJSONOutput() {
+        const exportQuestions = currentQuestions.map(q => {
+            if (targetMode === 'premium') {
+                return { ...q, timeLimit: 5, competition: true };
+            }
+            const { timeLimit, competition, ...rest } = q;
+            return rest;
+        });
+        document.getElementById('jsonOutput').value = JSON.stringify(exportQuestions, null, 2);
+    }
+    
+    function displayPreview() {
+        const previewBox = document.getElementById('previewBox');
+        if (!currentQuestions.length) {
+            previewBox.innerHTML = '<p style="color:#6c7a89;">No questions converted yet.</p>';
             return;
         }
-        jsonArea.select();
-        navigator.clipboard.writeText(jsonArea.value).then(() => {
-            alert('✅ JSON copied to clipboard!');
+        
+        let html = '';
+        const previewCount = Math.min(10, currentQuestions.length);
+        
+        for (let i = 0; i < previewCount; i++) {
+            const q = currentQuestions[i];
+            const modeBadge = targetMode === 'premium' 
+                ? '<span class="badge-mode" style="background:#fef3c7;">🏆 5s timer</span>' 
+                : '<span class="badge-mode" style="background:#d1fae5;">📘 Free</span>';
+            
+            html += `
+                <div class="question-card">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <strong>Q${i + 1}</strong>
+                        ${modeBadge}
+                    </div>
+                    <div style="margin: 8px 0; font-size:0.85rem;">${escapeHtml(q.question.substring(0, 150))}${q.question.length > 150 ? '...' : ''}</div>
+                    <div style="font-size:0.75rem; display:flex; flex-wrap:wrap; gap:8px;">
+                        <span><strong>A:</strong> ${escapeHtml(q.optionA.substring(0, 50))}</span>
+                        <span><strong>B:</strong> ${escapeHtml(q.optionB.substring(0, 50))}</span>
+                        <span><strong>C:</strong> ${escapeHtml(q.optionC.substring(0, 50))}</span>
+                        <span><strong>D:</strong> ${escapeHtml(q.optionD.substring(0, 50))}</span>
+                    </div>
+                    <div style="margin-top: 6px;"><strong>✓ Answer:</strong> ${q.answer}</div>
+                    ${q.explanation ? `<div style="font-size:0.7rem; color:#666; margin-top:4px;"><strong>📖 Explanation:</strong> ${escapeHtml(q.explanation.substring(0, 100))}${q.explanation.length > 100 ? '...' : ''}</div>` : ''}
+                </div>
+            `;
+        }
+        
+        if (currentQuestions.length > 10) {
+            html += `<p style="text-align:center; padding:10px;">... and ${currentQuestions.length - 10} more questions</p>`;
+        }
+        
+        previewBox.innerHTML = html;
+    }
+    
+    function copyJSON() {
+        const jsonOutput = document.getElementById('jsonOutput');
+        if (!jsonOutput.value) {
+            alert('No JSON to copy. Convert questions first.');
+            return;
+        }
+        jsonOutput.select();
+        navigator.clipboard.writeText(jsonOutput.value).then(() => {
+            alert('JSON copied to clipboard!');
         }).catch(() => {
             document.execCommand('copy');
-            alert('Copied');
+            alert('Copied!');
         });
     }
     
     function downloadJSON() {
         if (!currentQuestions.length) {
-            alert('No data to download. Please convert questions first.');
+            alert('No questions to download.');
             return;
         }
-        let exportData;
-        if (targetMode === 'premium') {
-            exportData = currentQuestions.map(q => ({ ...q, timeLimit: 5, competition: true }));
-        } else {
-            exportData = currentQuestions.map(({ timeLimit, competition, ...rest }) => rest);
-        }
+        
+        const exportData = currentQuestions.map(q => {
+            if (targetMode === 'premium') {
+                return { ...q, timeLimit: 5, competition: true };
+            }
+            const { timeLimit, competition, ...rest } = q;
+            return rest;
+        });
+        
         const jsonStr = JSON.stringify(exportData, null, 2);
         const blob = new Blob([jsonStr], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
         a.download = `physics_${targetMode}_${currentQuestions.length}q.json`;
-        document.body.appendChild(a);
         a.click();
-        document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        alert(`📁 Downloaded ${currentQuestions.length} questions as physics_${targetMode}_${currentQuestions.length}q.json`);
+        alert(`Downloaded ${currentQuestions.length} questions`);
     }
     
     function clearAll() {
         document.getElementById('inputText').value = '';
         document.getElementById('jsonOutput').value = '';
-        document.getElementById('previewBox').innerHTML = '<p style="color:#6c7a89;">No questions converted yet. Click \'Convert to JSON\'.</p>';
+        document.getElementById('previewBox').innerHTML = '<p style="color:#6c7a89;">Click "Convert to JSON" to see preview...</p>';
         currentQuestions = [];
         document.getElementById('questionCountBadge').innerHTML = '(0 questions)';
-        document.getElementById('statsHeader').innerHTML = targetMode === 'premium' ? '🏆 PREMIUM MODE ACTIVE • 5‑second timer' : '📘 FREE MODE ACTIVE';
+        document.getElementById('statsHeader').innerHTML = '✅ Ready to convert';
     }
     
     function escapeHtml(str) {
@@ -671,8 +618,6 @@ Explanation: Vectors require magnitude and direction; scalars only magnitude."><
             if (m === '<') return '&lt;';
             if (m === '>') return '&gt;';
             return m;
-        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
-            return c;
         });
     }
 </script>

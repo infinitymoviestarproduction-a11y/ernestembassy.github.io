@@ -66,6 +66,10 @@
             font-size: 2.5rem;
             margin-bottom: 15px;
         }
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -104,6 +108,7 @@
             color: #718096;
             font-size: 0.9rem;
             margin-bottom: 15px;
+            line-height: 1.4;
         }
         .btn-start {
             background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
@@ -140,10 +145,22 @@
         .home-button:hover {
             transform: scale(1.1);
         }
+        .badge-new {
+            display: inline-block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 20px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
         @media (max-width: 768px) {
             .nav-container { flex-direction: column; gap: 15px; }
             .courses-grid { grid-template-columns: 1fr; }
             .home-button { width: 50px; height: 50px; font-size: 20px; }
+            .hero h1 { font-size: 1.8rem; }
         }
     </style>
 </head>
@@ -182,21 +199,84 @@
             window.location.href = `class.html?subject=${subject}`;
         }
         
+        // UPDATED COURSES ARRAY: ADDED BIOLOGY AND LITERATURE
         const courses = [
-            { id: 'physics', name: 'Physics', icon: '⚛️', description: 'Explore the laws of nature, motion, energy, and matter.' },
-            { id: 'chemistry', name: 'Chemistry', icon: '🧪', description: 'Study atomic structure, chemical bonding, reactions, and organic chemistry.' },
-            { id: 'mathematics', name: 'Mathematics', icon: '📐', description: 'Master algebra, geometry, calculus, and statistics.' },
-            { id: 'english', name: 'English Language', icon: '📖', description: 'Improve grammar, comprehension, and writing skills.' },
-            { id: 'digital-technology', name: 'Digital Technology', icon: '💻', description: 'Learn about computers, networks, and ICT concepts.' },
-            { id: 'igbo', name: 'Igbo Language', icon: '🗣️', description: 'Study Igbo language, literature, and culture.' }
+            { 
+                id: 'physics', 
+                name: 'Physics', 
+                icon: '⚛️', 
+                description: 'Explore the laws of nature, motion, energy, electricity, and modern physics concepts.',
+                featured: true
+            },
+            { 
+                id: 'chemistry', 
+                name: 'Chemistry', 
+                icon: '🧪', 
+                description: 'Study atomic structure, chemical bonding, organic chemistry, reactions, and periodic table.',
+                featured: true
+            },
+            { 
+                id: 'mathematics', 
+                name: 'Mathematics', 
+                icon: '📐', 
+                description: 'Master algebra, geometry, calculus, statistics, and trigonometry for exams.',
+                featured: true
+            },
+            { 
+                id: 'biology', 
+                name: 'Biology', 
+                icon: '🔬', 
+                description: 'Learn about cells, genetics, human anatomy, ecology, plants, and life processes.',
+                featured: true,
+                isNew: true
+            },
+            { 
+                id: 'english', 
+                name: 'English Language', 
+                icon: '📖', 
+                description: 'Improve grammar, comprehension, essay writing, and verbal reasoning skills.',
+                featured: true
+            },
+            { 
+                id: 'literature', 
+                name: 'Literature-in-English', 
+                icon: '📚', 
+                description: 'Explore prose, drama, poetry, literary criticism, and African literary works.',
+                featured: true,
+                isNew: true
+            },
+            { 
+                id: 'digital-technology', 
+                name: 'Digital Technology', 
+                icon: '💻', 
+                description: 'Learn about computers, networks, programming basics, and ICT concepts.',
+                featured: false
+            },
+            { 
+                id: 'igbo', 
+                name: 'Igbo Language', 
+                icon: '🗣️', 
+                description: 'Study Igbo language, grammar, oral literature, proverbs, and cultural heritage.',
+                featured: false
+            }
         ];
+        
+        // Sort courses: featured first, then alphabetically
+        const sortedCourses = [...courses].sort((a, b) => {
+            if (a.featured && !b.featured) return -1;
+            if (!a.featured && b.featured) return 1;
+            return a.name.localeCompare(b.name);
+        });
         
         function loadCourses() {
             const grid = document.getElementById('coursesGrid');
-            grid.innerHTML = courses.map(course => `
+            grid.innerHTML = sortedCourses.map(course => `
                 <div class="course-card" onclick="startQuiz('${course.id}')">
                     <div class="course-icon">${course.icon}</div>
-                    <div class="course-title">${course.name}</div>
+                    <div class="course-title">
+                        ${course.name}
+                        ${course.isNew ? '<span class="badge-new">NEW</span>' : ''}
+                    </div>
                     <div class="course-description">${course.description}</div>
                     <button class="btn-start">Start Quiz →</button>
                 </div>

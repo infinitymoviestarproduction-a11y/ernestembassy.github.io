@@ -107,6 +107,16 @@ nav {
 .subject-tab:hover  { border-color:#3b82f6; color:#3b82f6; }
 .subject-tab.active { background:#3b82f6; border-color:#3b82f6; color:white; }
 
+.badge-new {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-left: 6px;
+}
+
 /* CONTENT AREA */
 .content-area {
     max-width:1100px;
@@ -319,12 +329,14 @@ footer {
 <div class="subject-selector">
     <div class="selector-title">📘 Choose a Subject</div>
     <div class="subject-tabs" id="subjectTabs">
-        <button class="subject-tab" onclick="showSubject('physics')"       data-subject="physics">⚛️ Physics</button>
-        <button class="subject-tab" onclick="showSubject('chemistry')"     data-subject="chemistry">🧪 Chemistry</button>
-        <button class="subject-tab" onclick="showSubject('mathematics')"   data-subject="mathematics">📐 Mathematics</button>
-        <button class="subject-tab" onclick="showSubject('english')"       data-subject="english">📖 English Language</button>
+        <button class="subject-tab" onclick="showSubject('physics')" data-subject="physics">⚛️ Physics</button>
+        <button class="subject-tab" onclick="showSubject('chemistry')" data-subject="chemistry">🧪 Chemistry</button>
+        <button class="subject-tab" onclick="showSubject('biology')" data-subject="biology">🔬 Biology <span class="badge-new">NEW</span></button>
+        <button class="subject-tab" onclick="showSubject('mathematics')" data-subject="mathematics">📐 Mathematics</button>
+        <button class="subject-tab" onclick="showSubject('english')" data-subject="english">📖 English Language</button>
+        <button class="subject-tab" onclick="showSubject('literature')" data-subject="literature">📚 Literature <span class="badge-new">NEW</span></button>
         <button class="subject-tab" onclick="showSubject('digital-technology')" data-subject="digital-technology">💻 Digital Technology</button>
-        <button class="subject-tab" onclick="showSubject('igbo')"          data-subject="igbo">🌍 Igbo Language</button>
+        <button class="subject-tab" onclick="showSubject('igbo')" data-subject="igbo">🗣️ Igbo Language</button>
     </div>
 </div>
 
@@ -357,6 +369,19 @@ footer {
         <div class="notes-body" id="notes-chemistry"><div class="notes-loading">📖 Loading notes...</div></div>
     </div>
 
+    <!-- Biology Panel (NEW) -->
+    <div id="panel-biology" class="notes-panel">
+        <div class="notes-header">
+            <h2>🔬 Biology</h2>
+            <div class="action-btns">
+                <a href="class.html?subject=biology" class="btn-quiz-launch">✍️ Take Quiz</a>
+            </div>
+        </div>
+        <div class="reading-progress"><div class="reading-progress-fill" id="prog-biology"></div></div>
+        <div class="topic-nav" id="topics-biology"></div>
+        <div class="notes-body" id="notes-biology"><div class="notes-loading">📖 Loading notes...</div></div>
+    </div>
+
     <!-- Mathematics Panel -->
     <div id="panel-mathematics" class="notes-panel">
         <div class="notes-header">
@@ -383,6 +408,19 @@ footer {
         <div class="notes-body" id="notes-english"><div class="notes-loading">📖 Loading notes...</div></div>
     </div>
 
+    <!-- Literature Panel (NEW) -->
+    <div id="panel-literature" class="notes-panel">
+        <div class="notes-header">
+            <h2>📚 Literature-in-English</h2>
+            <div class="action-btns">
+                <a href="class.html?subject=literature" class="btn-quiz-launch">✍️ Take Quiz</a>
+            </div>
+        </div>
+        <div class="reading-progress"><div class="reading-progress-fill" id="prog-literature"></div></div>
+        <div class="topic-nav" id="topics-literature"></div>
+        <div class="notes-body" id="notes-literature"><div class="notes-loading">📖 Loading notes...</div></div>
+    </div>
+
     <!-- Digital Technology Panel -->
     <div id="panel-digital-technology" class="notes-panel">
         <div class="notes-header">
@@ -399,7 +437,7 @@ footer {
     <!-- Igbo Panel -->
     <div id="panel-igbo" class="notes-panel">
         <div class="notes-header">
-            <h2>🌍 Igbo Language</h2>
+            <h2>🗣️ Igbo Language</h2>
             <div class="action-btns">
                 <a href="class.html?subject=igbo" class="btn-quiz-launch">✍️ Take Quiz</a>
             </div>
@@ -415,7 +453,7 @@ footer {
 
 <script>
 /* ============================================================
-   NOTES CONTENT — Add your full notes here per subject.
+   NOTES CONTENT — UPDATED WITH BIOLOGY & LITERATURE
 ============================================================ */
 const NOTES = {
 
@@ -486,6 +524,68 @@ const NOTES = {
         }
     ],
 
+    "biology": [
+        {
+            title: "Cell Biology",
+            content: `
+                <h2>🔬 Cell Biology</h2>
+                <h3>Cell Structure and Function</h3>
+                <p>The cell is the basic unit of life. There are two main types of cells:</p>
+                <ul>
+                    <li><strong>Prokaryotic cells:</strong> No nucleus (e.g., bacteria)</li>
+                    <li><strong>Eukaryotic cells:</strong> Have nucleus (e.g., plant and animal cells)</li>
+                </ul>
+                <h3>Cell Organelles</h3>
+                <table>
+                    <tr><th>Organelle</th><th>Function</th></tr>
+                    <tr><td>Nucleus</td><td>Contains DNA, controls cell activities</td></tr>
+                    <tr><td>Mitochondria</td><td>Powerhouse of the cell, produces ATP</td></tr>
+                    <tr><td>Ribosomes</td><td>Protein synthesis</td></tr>
+                    <tr><td>Chloroplasts</td><td>Photosynthesis (plants only)</td></tr>
+                </table>
+                <div class="highlight-box">
+                    <strong>Differences between plant and animal cells:</strong><br>
+                    Plant cells have cell wall, chloroplasts, and large vacuole.<br>
+                    Animal cells have no cell wall, small vacuoles, and centrioles.
+                </div>
+            `
+        },
+        {
+            title: "Genetics",
+            content: `
+                <h2>🔬 Genetics</h2>
+                <h3>Mendelian Inheritance</h3>
+                <div class="highlight-box">
+                    <strong>Gregor Mendel</strong> discovered the principles of inheritance using pea plants.<br>
+                    <strong>Dominant trait:</strong> Expressed when present (represented by capital letter, e.g., T)<br>
+                    <strong>Recessive trait:</strong> Expressed only when two copies are present (e.g., t)
+                </div>
+                <h3>Punnett Square</h3>
+                <div class="example-box">
+                    Cross between Tt (tall) and Tt (tall):<br>
+                    TT (25%) - Tall<br>
+                    Tt (50%) - Tall<br>
+                    tt (25%) - Short<br>
+                    Phenotypic ratio: 3 Tall : 1 Short
+                </div>
+            `
+        },
+        {
+            title: "Human Body Systems",
+            content: `
+                <h2>🔬 Human Body Systems</h2>
+                <h3>Major Systems</h3>
+                <ul>
+                    <li><strong>Circulatory System:</strong> Heart, blood vessels, blood — transports oxygen and nutrients</li>
+                    <li><strong>Respiratory System:</strong> Lungs, trachea — gas exchange (O₂ and CO₂)</li>
+                    <li><strong>Digestive System:</strong> Stomach, intestines — breaks down food</li>
+                    <li><strong>Nervous System:</strong> Brain, spinal cord, nerves — controls body functions</li>
+                    <li><strong>Skeletal System:</strong> Bones — support and protection</li>
+                </ul>
+            `
+        }
+    ],
+
     "mathematics": [
         {
             title: "Number & Algebra",
@@ -545,6 +645,70 @@ const NOTES = {
         }
     ],
 
+    "literature": [
+        {
+            title: "Introduction to Literature",
+            content: `
+                <h2>📚 Introduction to Literature</h2>
+                <h3>What is Literature?</h3>
+                <p>Literature is written works, especially those considered of superior or lasting artistic merit. It includes prose, drama, and poetry.</p>
+                <h3>Major Genres</h3>
+                <ul>
+                    <li><strong>Prose:</strong> Novels, short stories, novellas</li>
+                    <li><strong>Drama:</strong> Plays written for performance (tragedy, comedy, tragicomedy)</li>
+                    <li><strong>Poetry:</strong> Verse with rhythm, imagery, and figurative language</li>
+                </ul>
+                <div class="highlight-box">
+                    <strong>Key Literary Terms:</strong><br>
+                    Theme - Central idea of a work<br>
+                    Plot - Sequence of events<br>
+                    Character - Person in a story<br>
+                    Setting - Time and place<br>
+                    Conflict - Struggle between opposing forces
+                </div>
+            `
+        },
+        {
+            title: "Figures of Speech",
+            content: `
+                <h2>📚 Figures of Speech</h2>
+                <table>
+                    <tr><th>Figure</th><th>Definition</th><th>Example</th></tr>
+                    <tr><td>Simile</td><td>Comparison using 'like' or 'as'</td><td>"He runs like the wind"</td></tr>
+                    <tr><td>Metaphor</td><td>Direct comparison</td><td>"Life is a broken-winged bird"</td></tr>
+                    <tr><td>Personification</td><td>Human qualities to objects</td><td>"The sun smiled down"</td></tr>
+                    <tr><td>Hyperbole</td><td>Exaggeration</td><td>"I've told you a million times"</td></tr>
+                    <tr><td>Irony</td><td>Opposite of what is expected</td><td>A fire station burns down</td></tr>
+                </table>
+                <div class="highlight-box">
+                    <strong>Poetic Devices:</strong><br>
+                    Alliteration - Repetition of initial sounds ("Peter picked peppers")<br>
+                    Assonance - Repetition of vowel sounds<br>
+                    Onomatopoeia - Words that imitate sounds (buzz, hiss)
+                </div>
+            `
+        },
+        {
+            title: "African Literature",
+            content: `
+                <h2>📚 African Literature</h2>
+                <h3>Major African Writers</h3>
+                <ul>
+                    <li><strong>Chinua Achebe</strong> - "Things Fall Apart" (1958)</li>
+                    <li><strong>Wole Soyinka</strong> - First African Nobel Laureate in Literature (1986)</li>
+                    <li><strong>Chimamanda Ngozi Adichie</strong> - "Half of a Yellow Sun"</li>
+                    <li><strong>Buchi Emecheta</strong> - "The Joys of Motherhood"</li>
+                    <li><strong>Ngũgĩ wa Thiong'o</strong> - "Weep Not, Child"</li>
+                </ul>
+                <div class="example-box">
+                    <strong>Things Fall Apart (Chinua Achebe)</strong><br>
+                    Themes: Colonialism, tradition vs change, masculinity, fate<br>
+                    Protagonist: Okonkwo — a respected warrior whose fear of weakness leads to his downfall
+                </div>
+            `
+        }
+    ],
+
     "digital-technology": [
         {
             title: "Computer Hardware",
@@ -577,7 +741,7 @@ const NOTES = {
         {
             title: "Mkpụrụ Edemede",
             content: `
-                <h2>🌍 Mkpụrụ Edemede Igbo</h2>
+                <h2>🗣️ Mkpụrụ Edemede Igbo</h2>
                 <p>The Igbo alphabet has 36 letters.</p>
                 <div class="highlight-box">
                     <strong>Ụdaume (Vowels):</strong> a, e, i, ị, o, ọ, u, ụ<br>
@@ -588,15 +752,13 @@ const NOTES = {
         {
             title: "Ụtọasụsụ (Grammar)",
             content: `
-                <h2>🌍 Ụtọasụsụ Igbo</h2>
+                <h2>🗣️ Ụtọasụsụ Igbo</h2>
                 <h3>Nnọchitaaha (Pronouns)</h3>
                 <table>
                     <tr><th>Igbo</th><th>English</th></tr>
                     <tr><td>m / mụ</td><td>I / me</td></tr>
                     <tr><td>gị</td><td>you</td></tr>
-                    <tr>.\]
-
-<td>ya</td><td>he / she / it</td></tr>
+                    <tr><td>ya</td><td>he / she / it</td></tr>
                 </table>
             `
         }

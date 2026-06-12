@@ -185,6 +185,7 @@
             transition: all 0.3s ease;
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
         }
         .subject-card:hover {
             transform: translateY(-3px);
@@ -193,6 +194,17 @@
         }
         .subject-icon { font-size: 2rem; margin-bottom: 10px; }
         .subject-name { font-size: 1.1rem; font-weight: bold; color: #2d3748; margin-bottom: 5px; }
+        .badge-new {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
         
         /* Profile Section */
         .profile-section {
@@ -396,9 +408,17 @@
             <div class="subject-icon">🧪</div>
             <div class="subject-name">Chemistry</div>
         </div>
+        <!-- NEW: Biology Card -->
         <div class="subject-card" onclick="window.location.href='class.html?subject=biology'">
             <div class="subject-icon">🔬</div>
             <div class="subject-name">Biology</div>
+            <span class="badge-new">NEW</span>
+        </div>
+        <!-- NEW: Literature-in-English Card -->
+        <div class="subject-card" onclick="window.location.href='class.html?subject=literature'">
+            <div class="subject-icon">📚</div>
+            <div class="subject-name">Literature-in-English</div>
+            <span class="badge-new">NEW</span>
         </div>
         <div class="subject-card" onclick="window.location.href='class.html?subject=igbo'">
             <div class="subject-icon">🗣️</div>

@@ -236,7 +236,7 @@
         }
         .subject-card:hover { transform: translateY(-5px); border: 1px solid #667eea; }
         .subject-card h3 { color: #2d3748; margin-bottom: 6px; font-size: 16px; }
-        .subject-card p  { color: #718096; font-size: 12px; }
+        .subject-card p  { color: #718096; font-size: 12px; margin: 8px 0; line-height: 1.4; }
         .course-link {
             color: #667eea; text-decoration: none; font-size: 13px;
             font-weight: bold; display: inline-block; margin-top: 12px;
@@ -245,6 +245,12 @@
         .subject-score {
             display: inline-block; margin-top: 8px; padding: 3px 12px;
             border-radius: 20px; font-size: 12px; font-weight: 700;
+        }
+        .badge-new {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white; font-size: 0.65rem; font-weight: bold;
+            padding: 2px 8px; border-radius: 20px; margin-left: 8px;
+            vertical-align: middle;
         }
 
         /* ── LOADING SKELETON ── */
@@ -456,15 +462,17 @@ const auth = firebase.auth();
 const db   = firebase.firestore();
 
 // ══════════════════════════════════════════════
-//  CONSTANTS
+//  CONSTANTS - UPDATED WITH LITERATURE & BIOLOGY
 // ══════════════════════════════════════════════
 const SUBJECT_META = {
     mathematics:          { label: '📐 Mathematics',       color: '#667eea' },
     physics:              { label: '⚛️ Physics',            color: '#e53e3e' },
     chemistry:            { label: '🧪 Chemistry',          color: '#38a169' },
+    biology:              { label: '🔬 Biology',            color: '#2b6cb0' },
     english:              { label: '📖 English',            color: '#d69e2e' },
+    literature:           { label: '📚 Literature',         color: '#805ad5' },
     'digital-technology': { label: '💻 Digital Technology', color: '#3182ce' },
-    igbo:                 { label: '🗣️ Igbo Language',      color: '#805ad5' }
+    igbo:                 { label: '🗣️ Igbo Language',      color: '#9b2c2c' }
 };
 
 // ══════════════════════════════════════════════
@@ -596,7 +604,7 @@ function renderScoreTable(data) {
                     <span style="font-size:11px;color:#a0aec0;min-width:28px;text-align:right">${displayPct !== null ? displayPct+'%' : '—'}</span>
                 </div>
             </td>
-        </tr>`;
+        </table>`;
     });
 
     tbody.innerHTML = rows.join('');
@@ -689,17 +697,19 @@ async function loadLoginHistory(uid) {
 }
 
 // ══════════════════════════════════════════════
-//  RENDER SUBJECT CARDS WITH BEST SCORES
+//  RENDER SUBJECT CARDS WITH BEST SCORES - UPDATED WITH LITERATURE & BIOLOGY
 // ══════════════════════════════════════════════
 function renderSubjectCards(bestScores) {
     const grid = document.getElementById('subjectGrid');
     const subjects = [
-        { key: 'digital-technology', icon: '💻', name: 'Digital Technology', desc: 'Computer fundamentals, networking, ICT concepts' },
-        { key: 'mathematics',        icon: '📐', name: 'Mathematics',         desc: 'Algebra, geometry, calculus, statistics' },
-        { key: 'english',            icon: '📖', name: 'English Language',    desc: 'Grammar, comprehension, essay writing' },
-        { key: 'physics',            icon: '⚛️', name: 'Physics',             desc: 'Mechanics, waves, electricity, magnetism' },
-        { key: 'chemistry',          icon: '🧪', name: 'Chemistry',           desc: 'Atomic structure, bonding, organic chemistry' },
-        { key: 'igbo',               icon: '🗣️', name: 'Igbo Language',       desc: 'Grammar, literature, cultural studies' }
+        { key: 'digital-technology', icon: '💻', name: 'Digital Technology', desc: 'Computer fundamentals, networking, ICT concepts', isNew: false },
+        { key: 'mathematics',        icon: '📐', name: 'Mathematics',         desc: 'Algebra, geometry, calculus, statistics', isNew: false },
+        { key: 'english',            icon: '📖', name: 'English Language',    desc: 'Grammar, comprehension, essay writing', isNew: false },
+        { key: 'physics',            icon: '⚛️', name: 'Physics',             desc: 'Mechanics, waves, electricity, magnetism', isNew: false },
+        { key: 'chemistry',          icon: '🧪', name: 'Chemistry',           desc: 'Atomic structure, bonding, organic chemistry', isNew: false },
+        { key: 'biology',            icon: '🔬', name: 'Biology',             desc: 'Cells, genetics, human anatomy, ecology, plants', isNew: true },
+        { key: 'literature',         icon: '📚', name: 'Literature-in-English', desc: 'Prose, drama, poetry, literary criticism, African literature', isNew: true },
+        { key: 'igbo',               icon: '🗣️', name: 'Igbo Language',       desc: 'Grammar, literature, cultural studies', isNew: false }
     ];
 
     grid.innerHTML = subjects.map(s => {
@@ -707,10 +717,11 @@ function renderSubjectCards(bestScores) {
         const badgeHtml = pct !== undefined
             ? `<div class="subject-score score-pill ${scorePillClass(Number(pct))}">Best: ${pct}%</div>`
             : `<div class="subject-score score-pill none">Not attempted</div>`;
+        const newBadge = s.isNew ? '<span class="badge-new">NEW</span>' : '';
         return `
             <div class="subject-card" onclick="location.href='class.html?subject=${s.key}'">
                 <div style="font-size:2rem;">${s.icon}</div>
-                <h3>${esc(s.name)}</h3>
+                <h3>${esc(s.name)} ${newBadge}</h3>
                 <p>${esc(s.desc)}</p>
                 ${badgeHtml}
                 <span class="course-link">Start Learning →</span>
@@ -745,7 +756,7 @@ async function loadDashboard(user) {
     // 5 — Subject performance table
     renderScoreTable(studentData);
 
-    // 6 — Subject cards with best scores
+    // 6 — Subject cards with best scores (includes Biology & Literature)
     renderSubjectCards(studentData.bestScores);
 
     // 7 — Recent quiz attempts (async, non-blocking)

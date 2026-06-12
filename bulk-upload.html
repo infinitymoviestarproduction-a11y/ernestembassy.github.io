@@ -162,6 +162,17 @@
             border-radius: 5px;
             width: 250px;
         }
+        .badge-new {
+            display: inline-block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
@@ -186,8 +197,8 @@
             <a href="index.html">🏠 Home</a>
         </div>
         
-        <h1>📤 Free Question Bank Uploader</h1>
-        <p>Upload up to 500+ questions per subject to FREE TEST (Realtime Database)</p>
+        <h1>📤 Bulk Question Uploader</h1>
+        <p>Upload up to 500+ questions per subject to FREE TEST or PREMIUM QUIZ (Realtime Database)</p>
         
         <div class="mode-selector">
             <div class="mode-btn free active" onclick="selectMode('free')">📝 Free Test Questions (Practice)</div>
@@ -203,7 +214,9 @@
             <option value="mathematics">📐 Mathematics</option>
             <option value="physics">⚛️ Physics</option>
             <option value="chemistry">🧪 Chemistry</option>
+            <option value="biology">🔬 Biology <span class="badge-new">NEW</span></option>
             <option value="english">📖 English Language</option>
+            <option value="literature">📚 Literature-in-English <span class="badge-new">NEW</span></option>
             <option value="digital-technology">💻 Digital Technology</option>
             <option value="igbo">🗣️ Igbo Language</option>
         </select>
@@ -220,6 +233,16 @@
     "answer": "B",
     "explanation": "2x = 15 - 5 = 10, so x = 5",
     "difficulty": "medium"
+  },
+  {
+    "question": "Who wrote 'Things Fall Apart'?",
+    "optionA": "Wole Soyinka",
+    "optionB": "Chinua Achebe",
+    "optionC": "Chimamanda Adichie",
+    "optionD": "Buchi Emecheta",
+    "answer": "B",
+    "explanation": "Chinua Achebe published Things Fall Apart in 1958.",
+    "difficulty": "easy"
   }
 ]</textarea>
         
@@ -376,7 +399,7 @@
                 document.getElementById('stats').innerHTML = '<strong>📝 FREE TEST MODE</strong><br>Practice questions - No time limit<br>📁 Saves to: /{subject}/questions';
             } else {
                 document.querySelector('.mode-btn.premium').classList.add('active');
-                document.getElementById('stats').innerHTML = '<strong>🏆 PREMIUM QUIZ MODE</strong><br>Competition questions - 5 second time limit<br>📁 Saves to: /premium/{subject}/questions';
+                document.getElementById('stats').innerHTML = '<strong>🏆 PREMIUM QUIZ MODE</strong><br>Competition questions - 8 second time limit per question<br>📁 Saves to: /premium/{subject}/questions';
             }
         }
         
@@ -455,9 +478,9 @@
                 questions.slice(0, 10).forEach((q, i) => {
                     html += `
                         <div class="question-item">
-                            <strong>Q${i + 1}:</strong> ${q.question.substring(0, 100)}<br>
-                            A: ${q.optionA} | B: ${q.optionB} | C: ${q.optionC} | D: ${q.optionD}<br>
-                            <strong>Answer: ${q.answer}</strong>
+                            <strong>Q${i + 1}:</strong> ${(q.question || '').substring(0, 100)}${(q.question || '').length > 100 ? '...' : ''}<br>
+                            A: ${q.optionA || 'N/A'} | B: ${q.optionB || 'N/A'} | C: ${q.optionC || 'N/A'} | D: ${q.optionD || 'N/A'}<br>
+                            <strong>Answer: ${q.answer || 'N/A'}</strong>
                             ${q.difficulty ? `<span style="margin-left: 10px; color: #f39c12;">Difficulty: ${q.difficulty}</span>` : ''}
                         </div>
                     `;

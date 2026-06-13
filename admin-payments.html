@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Payment Verification</title>
+    <title>Admin - Payment Verification | Ernest Embassy LMS</title>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: #1a1a2e; padding: 20px; }
+        body { background: #1a1a2e; padding: 20px; min-height: 100vh; }
         
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
@@ -21,7 +22,6 @@
         }
         h1 { color: #667eea; margin-bottom: 10px; }
         
-        /* Back Navigation Bar */
         .back-nav {
             background: #f7fafc;
             padding: 12px 20px;
@@ -53,7 +53,6 @@
             color: white;
             transform: translateY(-2px);
         }
-        .back-btn.admin:hover { background: #eb3349; border-color: #eb3349; }
         
         .stats {
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -68,6 +67,26 @@
         }
         .stat-item h3 { font-size: 2rem; margin-bottom: 5px; }
         .stat-item p { opacity: 0.9; }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            background: #e2e8f0;
+            transition: all 0.3s;
+        }
+        .tab-btn.active {
+            background: #667eea;
+            color: white;
+        }
         
         table {
             width: 100%;
@@ -114,9 +133,41 @@
             transition: transform 0.2s;
         }
         .btn-verify:hover { transform: scale(1.05); }
-        .btn-verify:disabled {
-            background: #ccc;
-            cursor: not-allowed;
+        .btn-view {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 5000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+        }
+        .modal input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
         }
         
         .nav-links {
@@ -133,10 +184,6 @@
             font-weight: 500;
             padding: 8px 16px;
             border-radius: 8px;
-            transition: background 0.2s;
-        }
-        .nav-links a:hover {
-            background: #f7fafc;
         }
         
         .btn-logout {
@@ -155,27 +202,16 @@
             padding: 8px 20px;
             border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
             margin-left: 10px;
         }
-        .admin-badge {
-            background: #667eea;
+        .manual-pay-btn {
+            background: #f39c12;
             color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            display: inline-block;
-            font-size: 12px;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
             margin-left: 10px;
-        }
-        .payment-id {
-            font-family: monospace;
-            font-size: 11px;
-            color: #888;
-        }
-        .auto-refresh {
-            font-size: 12px;
-            color: #11998e;
-            margin-top: 10px;
         }
         
         .floating-home {
@@ -195,26 +231,34 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             z-index: 100;
         }
-        .floating-home:hover { transform: scale(1.1); }
+        
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #276749;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            z-index: 9999;
+            display: none;
+        }
         
         @media (max-width: 768px) {
             .container { padding: 20px; }
             th, td { padding: 8px; font-size: 12px; }
             .stats { grid-template-columns: 1fr; }
-            .back-nav { justify-content: center; }
-            .floating-home { bottom: 20px; right: 20px; width: 50px; height: 50px; font-size: 20px; }
         }
     </style>
 </head>
 <body>
 
-<!-- Floating Home Button -->
+<div id="toast" class="toast"></div>
 <a href="index.html" class="floating-home" title="Go to Home">🏠</a>
 
 <div class="container">
-    <!-- Back Navigation Bar -->
     <div class="back-nav">
-        <a href="admin.html" class="back-btn admin">🔙 Back to Admin Dashboard</a>
+        <a href="admin.html" class="back-btn">🔙 Back to Admin Dashboard</a>
         <a href="index.html" class="back-btn">🏠 Back to Home</a>
         <a href="dashboard.html" class="back-btn">👤 My Dashboard</a>
     </div>
@@ -222,9 +266,10 @@
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
         <div>
             <h1>💰 Payment Verification Dashboard</h1>
-            <p>Review and verify student payment requests <span class="admin-badge">Admin Only</span></p>
+            <p>Review, verify, and manually record student payments</p>
         </div>
         <div>
+            <button class="manual-pay-btn" onclick="openManualPaymentModal()">📝 Manual Payment Record</button>
             <button class="refresh-btn" onclick="loadPayments()">🔄 Refresh</button>
             <button class="btn-logout" onclick="logout()">🚪 Logout</button>
         </div>
@@ -232,9 +277,9 @@
     
     <div class="nav-links">
         <a href="admin.html">🔒 Admin Panel</a>
+        <a href="admin-users.html">👥 User Management</a>
         <a href="dashboard.html">📊 Dashboard</a>
         <a href="class.html">📝 Quiz</a>
-        <a href="index.html">🏠 Home</a>
     </div>
     
     <div class="stats" id="stats">
@@ -250,31 +295,69 @@
             <h3 id="totalRevenue">₦0</h3>
             <p>Total Revenue</p>
         </div>
+        <div class="stat-item">
+            <h3 id="premiumStudents">0</h3>
+            <p>Premium Students</p>
+        </div>
+    </div>
+    
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('pending')">⏳ Pending Verification</button>
+        <button class="tab-btn" onclick="showTab('verified')">✅ Verified Payments</button>
+        <button class="tab-btn" onclick="showTab('all')">📋 All Payments</button>
     </div>
     
     <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0;">
-        <h2>📋 Payment Requests</h2>
-        <div class="auto-refresh" id="autoRefreshStatus">🔄 Auto-refreshing every 10 seconds</div>
+        <h2 id="tabTitle">📋 Pending Payment Requests</h2>
+        <div class="auto-refresh" style="font-size: 12px; color: #11998e;">🔄 Auto-refreshing every 15 seconds</div>
     </div>
     
-    <div style="overflow-x: auto; max-height: 500px; overflow-y: auto;">
-        <table>
+    <div style="overflow-x: auto; max-height: 550px; overflow-y: auto;">
+        <table id="paymentsTable">
             <thead>
                 <tr>
                     <th>Date</th>
-                    <th>Payment ID</th>
                     <th>Student</th>
                     <th>Email</th>
                     <th>Subject</th>
                     <th>Amount</th>
+                    <th>Payment Method</th>
+                    <th>Reference</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody id="paymentsList">
-                <tr><td colspan="8" style="text-align: center; padding: 40px;">Loading payments...</td</tr>
+                <tr><td colspan="9" style="text-align: center; padding: 40px;">Loading payments...</td</tr
             </tbody>
         </table>
+    </div>
+</div>
+
+<!-- Manual Payment Modal -->
+<div id="manualPaymentModal" class="modal-overlay" onclick="closeModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+        <h3>📝 Manual Payment Record</h3>
+        <p style="color: #666; margin-bottom: 15px;">Use this when a student pays via OPay, Bank Transfer, or Cash</p>
+        
+        <input type="text" id="manualStudentEmail" placeholder="Student Email" required>
+        <select id="manualSubject" style="width:100%; padding:12px; margin:10px 0; border:2px solid #e2e8f0; border-radius:8px;">
+            <option value="mathematics">📐 Mathematics</option>
+            <option value="physics">⚛️ Physics</option>
+            <option value="chemistry">🧪 Chemistry</option>
+            <option value="biology">🔬 Biology</option>
+            <option value="english">📖 English</option>
+            <option value="literature">📚 Literature</option>
+            <option value="digital-technology">💻 Digital Technology</option>
+            <option value="igbo">🗣️ Igbo</option>
+        </select>
+        <input type="text" id="manualReference" placeholder="Transaction Reference (OPay/Bank Ref)" required>
+        <input type="number" id="manualAmount" placeholder="Amount (₦)" value="100" required>
+        
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button class="btn-verify" style="flex:1;" onclick="recordManualPayment()">✅ Record & Verify</button>
+            <button class="refresh-btn" style="flex:1;" onclick="closeModal(null)">Cancel</button>
+        </div>
     </div>
 </div>
 
@@ -294,11 +377,21 @@
     
     const adminEmails = ['ernestembassydigitalsolutions@gmail.com', 'damian@ernestembassy.com', 'dev@ernestlms.com'];
     let refreshInterval = null;
+    let currentTab = 'pending';
+    let allPayments = [];
+    
+    function showToast(msg, type = 'success') {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.style.background = type === 'error' ? '#c53030' : '#276749';
+        toast.style.display = 'block';
+        setTimeout(() => toast.style.display = 'none', 3000);
+    }
     
     async function checkAdmin() {
         const user = auth.currentUser;
         if (!user || !adminEmails.includes(user.email)) {
-            alert("Access Denied. Admin privileges required.");
+            showToast("Access Denied. Admin privileges required.", 'error');
             window.location.href = "login.html";
             return false;
         }
@@ -308,111 +401,228 @@
     async function loadPayments() {
         if (!await checkAdmin()) return;
         
-        const tbody = document.getElementById('paymentsList');
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Loading payments...</td</tr';
-        
         try {
             const snapshot = await db.collection('payments')
                 .orderBy('paymentDate', 'desc')
                 .get();
             
+            allPayments = [];
             let pendingCount = 0;
             let verifiedCount = 0;
             let totalAmount = 0;
             
-            if (snapshot.empty) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">No payment requests found</td</tr';
-                document.getElementById('pendingCount').innerText = '0';
-                document.getElementById('verifiedCount').innerText = '0';
-                document.getElementById('totalRevenue').innerText = '₦0';
-                return;
-            }
-            
-            let html = '';
             snapshot.forEach(doc => {
                 const payment = doc.data();
-                const id = doc.id;
-                const date = payment.paymentDate ? new Date(payment.paymentDate.toDate()).toLocaleString() : 'Unknown';
+                payment.id = doc.id;
+                allPayments.push(payment);
+                
                 const status = payment.status || 'pending';
-                
                 if (status === 'pending') pendingCount++;
-                if (status === 'verified') verifiedCount++;
-                if (status === 'verified') totalAmount += (payment.amount || 100);
-                
-                html += `
-                    <tr>
-                        <td>${date}</td>
-                        <td><span class="payment-id">${payment.paymentId || id.substring(0, 12)}...</span></td>
-                        <td><strong>${escapeHtml(payment.userName || 'N/A')}</strong></td>
-                        <td>${escapeHtml(payment.userEmail || 'N/A')}</td>
-                        <td>${escapeHtml(payment.subject || 'N/A')}</td>
-                        <td>₦${payment.amount || 100}</td>
-                        <td><span class="${status === 'verified' ? 'status-verified' : 'status-pending'}">${status === 'verified' ? '✅ Verified' : '⏳ Pending'}</span></td>
-                        <td>
-                            ${status === 'pending' ? 
-                                `<button class="btn-verify" onclick="verifyPayment('${id}', '${payment.userId}', '${payment.subject}')">✅ Verify & Unlock</button>` : 
-                                '<span style="color: #11998e;">✓ Verified</span>'
-                            }
-                        </td>
-                    </tr>
-                `;
+                if (status === 'verified') {
+                    verifiedCount++;
+                    totalAmount += (payment.amount || 100);
+                }
             });
             
-            tbody.innerHTML = html;
+            // Count premium students (anyone with verified payment)
+            const studentsSnapshot = await db.collection('students').get();
+            let premiumCount = 0;
+            studentsSnapshot.forEach(doc => {
+                if (doc.data().totalPaid > 0) premiumCount++;
+            });
+            
             document.getElementById('pendingCount').innerText = pendingCount;
             document.getElementById('verifiedCount').innerText = verifiedCount;
-            document.getElementById('totalRevenue').innerText = `₦${totalAmount}`;
+            document.getElementById('totalRevenue').innerHTML = `₦${totalAmount.toLocaleString()}`;
+            document.getElementById('premiumStudents').innerText = premiumCount;
+            
+            renderTable();
             
         } catch (error) {
             console.error("Error loading payments:", error);
-            tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: red;">Error loading payments: ${error.message}</td></tr>`;
+            document.getElementById('paymentsList').innerHTML = `<tr><td colspan="9" style="text-align: center; color: red;">Error: ${error.message}</td></tr>`;
         }
     }
     
-    async function verifyPayment(paymentId, userId, subject) {
-        if (!confirm(`Unlock ${subject} for this student?\n\nClick OK to confirm payment and grant access.`)) {
+    function renderTable() {
+        let filtered = allPayments;
+        if (currentTab === 'pending') {
+            filtered = allPayments.filter(p => (p.status || 'pending') === 'pending');
+        } else if (currentTab === 'verified') {
+            filtered = allPayments.filter(p => p.status === 'verified');
+        }
+        
+        const tbody = document.getElementById('paymentsList');
+        const titleMap = { pending: '⏳ Pending Payment Requests', verified: '✅ Verified Payments', all: '📋 All Payments' };
+        document.getElementById('tabTitle').innerHTML = titleMap[currentTab];
+        
+        if (filtered.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 40px;">No ${currentTab === 'pending' ? 'pending' : currentTab === 'verified' ? 'verified' : ''} payments found</td></tr>`;
             return;
         }
         
+        tbody.innerHTML = filtered.map(payment => {
+            const date = payment.paymentDate?.toDate ? new Date(payment.paymentDate.toDate()).toLocaleString() : 'Unknown';
+            const status = payment.status || 'pending';
+            const method = payment.method || 'paystack';
+            const studentName = payment.userName || payment.userEmail?.split('@')[0] || 'Anonymous';
+            
+            return `
+                <tr>
+                    <td style="white-space: nowrap;">${date}</td>
+                    <td><strong>${escapeHtml(studentName)}</strong></td>
+                    <td>${escapeHtml(payment.userEmail || 'N/A')}</td>
+                    <td>${escapeHtml(payment.subject || 'N/A')}</td>
+                    <td>₦${payment.amount || 100}</td>
+                    <td>${method === 'opay' ? '💚 OPay' : method === 'manual' ? '📝 Manual' : '💳 Paystack'}</td>
+                    <td style="font-family: monospace; font-size: 11px;">${escapeHtml(payment.reference || payment.paymentId || payment.id?.substring(0, 12) || '—')}</td>
+                    <td><span class="${status === 'verified' ? 'status-verified' : 'status-pending'}">${status === 'verified' ? '✅ Verified' : '⏳ Pending'}</span></td>
+                    <td>
+                        ${status === 'pending' ? 
+                            `<button class="btn-verify" onclick="verifyPayment('${payment.id}', '${payment.userId}', '${payment.subject}')">✅ Verify</button>` : 
+                            '<span style="color:#11998e;">✓ Completed</span>'
+                        }
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+    
+    function showTab(tab) {
+        currentTab = tab;
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+        renderTable();
+    }
+    
+    async function verifyPayment(paymentId, userId, subject) {
+        if (!confirm(`Verify this payment and grant ${subject} access to the student?`)) return;
+        
         try {
-            // Show loading on button
             const btn = event.target;
-            const originalText = btn.innerText;
-            btn.innerText = "⏳ Processing...";
+            btn.innerText = "⏳...";
             btn.disabled = true;
             
-            // 1. Update the payment status to 'verified'
+            // Update payment status
             await db.collection('payments').doc(paymentId).update({
                 status: 'verified',
                 verifiedBy: auth.currentUser.email,
                 verificationDate: firebase.firestore.FieldValue.serverTimestamp()
             });
             
-            // 2. Add the subject to student's paidQuizzes array
+            // Update student record
             const studentRef = db.collection('students').doc(userId);
             const studentDoc = await studentRef.get();
             
             if (studentDoc.exists) {
-                const paidQuizzes = studentDoc.data().paidQuizzes || [];
-                if (!paidQuizzes.includes(subject)) {
-                    paidQuizzes.push(subject);
-                    await studentRef.update({ paidQuizzes: paidQuizzes });
-                    console.log(`Added ${subject} to student's paid quizzes`);
-                }
+                const currentPaid = studentDoc.data().totalPaid || 0;
+                await studentRef.update({
+                    totalPaid: currentPaid + (payment.amount || 100),
+                    accountStatus: 'active',
+                    lastPaymentDate: firebase.firestore.FieldValue.serverTimestamp()
+                });
             } else {
                 await studentRef.set({
-                    email: auth.currentUser.email,
-                    paidQuizzes: [subject],
+                    userId: userId,
+                    email: payment.userEmail,
+                    totalPaid: payment.amount || 100,
+                    accountStatus: 'active',
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
             }
             
-            alert(`✅ Payment verified and ${subject} unlocked for the student!`);
+            showToast(`✅ Payment verified! ${subject} unlocked.`, 'success');
             await loadPayments();
             
         } catch (error) {
             console.error("Verification error:", error);
-            alert("Error verifying payment: " + error.message);
+            showToast("Error: " + error.message, 'error');
+        }
+    }
+    
+    function openManualPaymentModal() {
+        document.getElementById('manualPaymentModal').classList.add('open');
+        document.getElementById('manualStudentEmail').value = '';
+        document.getElementById('manualReference').value = '';
+        document.getElementById('manualAmount').value = '100';
+    }
+    
+    async function recordManualPayment() {
+        const email = document.getElementById('manualStudentEmail').value.trim();
+        const subject = document.getElementById('manualSubject').value;
+        const reference = document.getElementById('manualReference').value.trim();
+        const amount = parseInt(document.getElementById('manualAmount').value) || 100;
+        
+        if (!email) {
+            showToast('Please enter student email', 'error');
+            return;
+        }
+        if (!reference) {
+            showToast('Please enter transaction reference', 'error');
+            return;
+        }
+        
+        try {
+            // Find user by email
+            const userQuery = await db.collection('students').where('email', '==', email).get();
+            let userId;
+            let userName = email.split('@')[0];
+            
+            if (userQuery.empty) {
+                // Create new student record
+                const newUserRef = await db.collection('students').add({
+                    email: email,
+                    fullName: userName,
+                    totalPaid: 0,
+                    accountStatus: 'active',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                userId = newUserRef.id;
+            } else {
+                userId = userQuery.docs[0].id;
+                userName = userQuery.docs[0].data().fullName || userName;
+            }
+            
+            // Create payment record
+            await db.collection('payments').add({
+                userId: userId,
+                userEmail: email,
+                userName: userName,
+                subject: subject,
+                amount: amount,
+                status: 'verified',
+                method: 'manual',
+                reference: reference,
+                verifiedBy: auth.currentUser.email,
+                paymentDate: firebase.firestore.FieldValue.serverTimestamp(),
+                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+                notes: 'Manual verification by admin'
+            });
+            
+            // Update student total paid
+            const studentRef = db.collection('students').doc(userId);
+            const studentDoc = await studentRef.get();
+            const currentPaid = studentDoc.exists ? (studentDoc.data().totalPaid || 0) : 0;
+            await studentRef.set({
+                email: email,
+                fullName: userName,
+                totalPaid: currentPaid + amount,
+                accountStatus: 'active',
+                lastPaymentDate: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
+            
+            showToast(`✅ Manual payment recorded for ${email}`, 'success');
+            closeModal(null);
+            await loadPayments();
+            
+        } catch (error) {
+            showToast('Error: ' + error.message, 'error');
+        }
+    }
+    
+    function closeModal(e) {
+        if (!e || e.target === document.getElementById('manualPaymentModal') || e === null) {
+            document.getElementById('manualPaymentModal').classList.remove('open');
         }
     }
     
@@ -432,19 +642,16 @@
         });
     }
     
-    // Auto-refresh every 10 seconds
     function startAutoRefresh() {
-        refreshInterval = setInterval(() => {
-            loadPayments();
-        }, 10000);
+        refreshInterval = setInterval(() => { loadPayments(); }, 15000);
     }
     
-    auth.onAuthStateChanged(user => {
+    auth.onAuthStateChanged(async user => {
         if (user && adminEmails.includes(user.email)) {
-            loadPayments();
+            await loadPayments();
             startAutoRefresh();
         } else if (user) {
-            alert("Access Denied. You are not an admin.");
+            showToast("Access Denied. Admin only.", 'error');
             window.location.href = "dashboard.html";
         } else {
             window.location.href = "login.html";

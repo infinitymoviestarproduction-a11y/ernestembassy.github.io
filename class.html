@@ -20,6 +20,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+    <!-- Paystack script - ensure it loads properly -->
     <script src="https://js.paystack.co/v1/inline.js"></script>
 
     <style>
@@ -373,7 +374,9 @@
             border-radius: var(--radius-pill);
             font-weight: 700;
             cursor: pointer;
+            font-size: 1rem;
         }
+        .pay-btn:hover { background: #c8960f; color: white; }
         .cancel-btn {
             width: 100%;
             padding: 10px;
@@ -646,9 +649,6 @@ function getCurrentQuestionIndex() {
     return (currentStage - 1) * QUESTIONS_PER_STAGE + currentStageIndex;
 }
 
-// ══════════════════════════════════════════════════════════════════
-//  CHECK FOR EXISTING VALID PAYMENT (24hr access)
-// ══════════════════════════════════════════════════════════════════
 async function hasValidPremiumAccess() {
     if (!currentUser) return false;
     try {
@@ -678,20 +678,12 @@ async function hasValidPremiumAccess() {
     }
 }
 
-// ══════════════════════════════════════════════════════════════════
-//  CHECK FOR RESUMABLE SESSION AND SHOW BANNER
-// ══════════════════════════════════════════════════════════════════
 async function checkForResumableSession() {
     if (!currentUser) return false;
     try {
-        // First check if there's a valid payment
         const hasAccess = await hasValidPremiumAccess();
-        if (!hasAccess) {
-            console.log('No valid payment found');
-            return false;
-        }
+        if (!hasAccess) return false;
         
-        // Check for active session
         const snap = await firestore.collection('quiz_sessions')
             .where('userId', '==', currentUser.uid)
             .where('subject', '==', currentSubject)
@@ -700,10 +692,7 @@ async function checkForResumableSession() {
             .limit(1)
             .get();
         
-        if (snap.empty) {
-            console.log('No active session found');
-            return false;
-        }
+        if (snap.empty) return false;
         
         const doc = snap.docs[0];
         const session = doc.data();
@@ -711,20 +700,16 @@ async function checkForResumableSession() {
         
         if (expiresAt && expiresAt > new Date()) {
             const hoursLeft = Math.ceil((expiresAt - new Date()) / 3600000);
-            console.log(`✅ Found resumable session! Stage ${session.currentStage || 1}, ${hoursLeft} hours left`);
             
-            // Store session data
             _sessionDocId = doc.id;
             score = session.score || 0;
             currentStage = session.currentStage || 1;
             currentStageIndex = session.currentStageIndex || 0;
             failsInCurrentStage = session.failsInCurrentStage || 0;
             
-            // Remove existing banner if any
             const existing = document.getElementById('resumeBanner');
             if (existing) existing.remove();
             
-            // Create resume banner
             const banner = document.createElement('div');
             banner.id = 'resumeBanner';
             banner.className = 'resume-banner';
@@ -736,7 +721,6 @@ async function checkForResumableSession() {
                 <button class="btn-resume" onclick="resumeQuiz()">Resume Now →</button>
             `;
             
-            // Insert banner at the top of container
             const container = document.querySelector('.container');
             const modeGrid = document.getElementById('modeGrid');
             container.insertBefore(banner, modeGrid);
@@ -750,9 +734,6 @@ async function checkForResumableSession() {
     }
 }
 
-// ══════════════════════════════════════════════════════════════════
-//  RESUME QUIZ FUNCTION
-// ══════════════════════════════════════════════════════════════════
 async function resumeQuiz() {
     const banner = document.getElementById('resumeBanner');
     if (banner) banner.remove();
@@ -792,18 +773,14 @@ async function selectMode(mode) {
         currentMode = 'free';
         await loadQuestions('free');
     } else {
-        // First check if there's a valid payment
         const hasAccess = await hasValidPremiumAccess();
         
         if (hasAccess) {
-            // Check for resumable session
             const hasSession = await checkForResumableSession();
             if (hasSession) {
-                // Banner is already displayed, don't auto-start
                 document.getElementById('modeGrid').style.display = 'grid';
                 return;
             } else {
-                // Has payment but no session - start fresh
                 currentMode = 'premium';
                 currentStage = 1;
                 currentStageIndex = 0;
@@ -822,7 +799,6 @@ async function loadQuestions(mode, isResume = false) {
     const panel = document.getElementById('quizPanel');
     document.getElementById('modeGrid').style.display = 'none';
     
-    // Remove resume banner if it exists and we're starting
     const banner = document.getElementById('resumeBanner');
     if (banner && !isResume) banner.remove();
     
@@ -841,7 +817,6 @@ async function loadQuestions(mode, isResume = false) {
         let all = Array.isArray(raw) ? raw : Object.values(raw);
         all = all.filter(q => q && q.question && q.answer);
         
-        // Randomize options for each question
         all = all.map(q => {
             const options = [
                 { letter: 'A', text: q.optionA },
@@ -888,9 +863,6 @@ async function loadQuestions(mode, isResume = false) {
     }
 }
 
-// ══════════════════════════════════════════════════════════════════
-//  CREATE NEW SESSION
-// ══════════════════════════════════════════════════════════════════
 async function createSessionDoc() {
     if (!currentUser) return;
     try {
@@ -935,9 +907,6 @@ async function closeSessionDoc() {
     } catch(e) { console.warn('Session close error:', e); }
 }
 
-// ══════════════════════════════════════════════════════════════════
-//  REMAINING FUNCTIONS (showQuestionFree, checkAnswerFree, etc.)
-// ══════════════════════════════════════════════════════════════════
 function showQuestionFree() {
     if (timerInterval) clearInterval(timerInterval);
     if (getCurrentQuestionIndex() >= allQuestions.length) {
@@ -1148,7 +1117,6 @@ async function evaluateStageCompletion() {
             showToast(`🎉 Stage ${currentStage - 1} Complete! +${ptsEarned} pts`, 'success');
         }
     } else {
-        // Reset to beginning of current stage
         currentStageIndex = 0;
         failsInCurrentStage = 0;
         showQuestionPremium();
@@ -1260,19 +1228,41 @@ async function savePremiumScore(pct) {
     } catch(e) {}
 }
 
+// ══════════════════════════════════════════════════════════════════
+//  PAYMENT FUNCTIONS - FIXED
+// ══════════════════════════════════════════════════════════════════
+let paystackHandler = null;
+
 function showPaymentModal() {
+    // Remove any existing modal
+    const existing = document.getElementById('payModal');
+    if (existing) existing.remove();
+    
     document.body.insertAdjacentHTML('beforeend', `
         <div class="modal-overlay" id="payModal">
             <div class="modal-card">
-                <div class="modal-header"><h2>🏆 Unlock Premium</h2></div>
+                <div class="modal-header">
+                    <h2>🏆 Unlock Premium Quiz</h2>
+                </div>
                 <div class="modal-body">
-                    <div style="text-align:center; margin-bottom:16px;"><span style="font-size:2rem; font-weight:800;">₦100</span><br><span style="font-size:0.75rem;">24 hours access</span></div>
-                    <button class="pay-btn" onclick="initiatePaystack()">Pay with Paystack</button>
+                    <div style="text-align:center; margin-bottom:16px;">
+                        <span style="font-size:2rem; font-weight:800;">₦100</span><br>
+                        <span style="font-size:0.75rem;">24 hours access · Stage-based competition</span>
+                    </div>
+                    <button class="pay-btn" id="paystackPayBtn">💳 Pay ₦100 with Paystack</button>
                     <button class="cancel-btn" onclick="closeModal()">Cancel</button>
                 </div>
             </div>
         </div>
     `);
+    
+    // Add event listener to the button
+    const payBtn = document.getElementById('paystackPayBtn');
+    if (payBtn) {
+        payBtn.onclick = function() {
+            initiatePaystack();
+        };
+    }
 }
 
 function closeModal() {
@@ -1284,38 +1274,114 @@ function closeModal() {
 function initiatePaystack() {
     if (!currentUser) {
         closeModal();
-        goTo('login.html');
+        goTo('login.html?redirect=class.html');
         return;
     }
-    const ref = `EE_${currentSubject}_${Date.now()}`;
-    const handler = PaystackPop.setup({
-        key: PAYSTACK_KEY,
-        email: currentUser.email,
-        amount: PREMIUM_PRICE * 100,
-        currency: 'NGN',
-        ref: ref,
-        callback: async (response) => {
-            closeModal();
-            const expiresAt = new Date(Date.now() + PREMIUM_DURATION_MS);
-            await firestore.collection('payments').doc(`PAY_${response.reference}`).set({
-                reference: response.reference,
-                userId: currentUser.uid,
-                userEmail: currentUser.email,
-                subject: currentSubject,
-                amount: PREMIUM_PRICE,
-                status: 'verified',
-                paymentDate: firebase.firestore.FieldValue.serverTimestamp(),
-                expiresAt: expiresAt
-            });
-            await firestore.collection('students').doc(currentUser.uid).set({
-                totalPaid: firebase.firestore.FieldValue.increment(PREMIUM_PRICE)
-            }, { merge: true });
-            showToast('Access granted! Starting quiz...', 'success');
+    
+    const payBtn = document.getElementById('paystackPayBtn');
+    if (payBtn) {
+        payBtn.textContent = '⏳ Processing...';
+        payBtn.disabled = true;
+    }
+    
+    // Check if Paystack is available
+    if (typeof PaystackPop === 'undefined') {
+        showToast('Payment system loading. Please try again.', 'error');
+        if (payBtn) {
+            payBtn.textContent = '💳 Pay ₦100 with Paystack';
+            payBtn.disabled = false;
+        }
+        return;
+    }
+    
+    const reference = `EE_${currentSubject}_${currentUser.uid.slice(0,8)}_${Date.now()}`;
+    const amount = PREMIUM_PRICE * 100; // Convert to kobo
+    
+    try {
+        const handler = PaystackPop.setup({
+            key: PAYSTACK_KEY,
+            email: currentUser.email,
+            amount: amount,
+            currency: 'NGN',
+            ref: reference,
+            metadata: {
+                custom_fields: [
+                    { display_name: "Subject", variable_name: "subject", value: currentSubject },
+                    { display_name: "User ID", variable_name: "user_id", value: currentUser.uid }
+                ]
+            },
+            callback: async function(response) {
+                console.log('Payment successful:', response);
+                await processPaymentSuccess(response.reference);
+            },
+            onClose: function() {
+                console.log('Payment window closed');
+                if (payBtn) {
+                    payBtn.textContent = '💳 Pay ₦100 with Paystack';
+                    payBtn.disabled = false;
+                }
+                showToast('Payment cancelled', 'warning');
+            }
+        });
+        handler.openIframe();
+    } catch (error) {
+        console.error('Paystack error:', error);
+        showToast('Payment error. Please try again.', 'error');
+        if (payBtn) {
+            payBtn.textContent = '💳 Pay ₦100 with Paystack';
+            payBtn.disabled = false;
+        }
+    }
+}
+
+async function processPaymentSuccess(reference) {
+    showToast('✅ Payment received! Unlocking your quiz...', 'success');
+    
+    try {
+        const studentName = currentUser.displayName || currentUser.email.split('@')[0];
+        const expiresAt = new Date(Date.now() + PREMIUM_DURATION_MS);
+        
+        // Save payment record
+        await firestore.collection('payments').doc(`PAY_${reference}`).set({
+            paymentId: `PAY_${reference}`,
+            reference: reference,
+            userId: currentUser.uid,
+            userEmail: currentUser.email,
+            userName: studentName,
+            subject: currentSubject,
+            amount: PREMIUM_PRICE,
+            status: 'verified',
+            paymentDate: firebase.firestore.FieldValue.serverTimestamp(),
+            expiresAt: expiresAt,
+            durationHours: 24
+        });
+        
+        // Update student record
+        await firestore.collection('students').doc(currentUser.uid).set({
+            totalPaid: firebase.firestore.FieldValue.increment(PREMIUM_PRICE),
+            lastPaymentDate: firebase.firestore.FieldValue.serverTimestamp(),
+            lastPaidSubject: currentSubject,
+            accountStatus: 'active'
+        }, { merge: true });
+        
+        // Close modal if open
+        closeModal();
+        
+        // Start the premium quiz
+        setTimeout(async () => {
+            showToast('🎉 Access granted! Starting your quiz...', 'success');
+            score = 0;
+            currentStage = 1;
+            currentStageIndex = 0;
+            failsInCurrentStage = 0;
+            _sessionDocId = null;
             await loadQuestions('premium');
-        },
-        onClose: () => {}
-    });
-    handler.openIframe();
+        }, 1500);
+        
+    } catch (err) {
+        console.error('Payment save error:', err);
+        showToast('Payment verified but access save failed. Please contact support.', 'error');
+    }
 }
 
 function resetToModeSelect() {
@@ -1328,7 +1394,6 @@ function resetToModeSelect() {
 function onSubjectChange() {
     currentSubject = document.getElementById('subjectSelect').value;
     resetToModeSelect();
-    // Re-check for resume banner after subject change
     setTimeout(() => checkForResumableSession(), 500);
 }
 
@@ -1401,7 +1466,6 @@ auth.onAuthStateChanged(async user => {
     if (user) {
         btn.textContent = user.email.split('@')[0];
         console.log('User logged in:', user.email);
-        // After login, check for resumable session
         setTimeout(() => {
             checkForResumableSession();
             loadLeaderboard();

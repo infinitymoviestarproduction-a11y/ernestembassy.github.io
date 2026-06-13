@@ -20,7 +20,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
-    <!-- Paystack script with explicit load handling -->
+    <!-- Paystack script -->
     <script src="https://js.paystack.co/v1/inline.js"></script>
 
     <style>
@@ -666,15 +666,10 @@ async function hasValidPremiumAccess() {
         if (!snap.empty) {
             const payment = snap.docs[0].data();
             const expiresAt = payment.expiresAt?.toDate();
-            if (expiresAt && expiresAt > now) {
-                const hoursLeft = Math.ceil((expiresAt - now) / 3600000);
-                console.log(`✅ Valid premium access found! Expires in ${hoursLeft} hours`);
-                return true;
-            }
+            if (expiresAt && expiresAt > now) return true;
         }
         return false;
     } catch (e) { 
-        console.warn('Payment check error:', e);
         return false; 
     }
 }
@@ -730,7 +725,6 @@ async function checkForResumableSession() {
         }
         return false;
     } catch (e) { 
-        console.warn('Resume check error:', e);
         return false; 
     }
 }
@@ -763,7 +757,6 @@ async function resumeQuiz() {
         showToast('✅ Resuming your quiz!', 'success');
         await loadQuestions('premium', true);
     } catch (e) {
-        console.error('Resume error:', e);
         showToast('Could not resume. Starting fresh.', 'error');
         selectMode('premium');
     }
@@ -881,7 +874,6 @@ async function createSessionDoc() {
             startedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
         _sessionDocId = ref.id;
-        console.log('✅ New session created:', _sessionDocId);
     } catch(e) { console.warn('Session create error:', e); }
 }
 
@@ -894,7 +886,7 @@ async function updateSessionDoc() {
             currentStageIndex: currentStageIndex,
             failsInCurrentStage: failsInCurrentStage
         });
-    } catch(e) { console.warn('Session update error:', e); }
+    } catch(e) {}
 }
 
 async function closeSessionDoc() {
@@ -905,7 +897,7 @@ async function closeSessionDoc() {
             finalScore: score,
             completedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
-    } catch(e) { console.warn('Session close error:', e); }
+    } catch(e) {}
 }
 
 function showQuestionFree() {
@@ -1230,7 +1222,7 @@ async function savePremiumScore(pct) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-//  PAYMENT FUNCTIONS - FIXED FOR PAYSTACK
+//  PAYMENT FUNCTIONS - FIXED PAYSTACK CALLBACK
 // ══════════════════════════════════════════════════════════════════
 function showPaymentModal() {
     const existing = document.getElementById('payModal');
@@ -1254,10 +1246,12 @@ function showPaymentModal() {
         </div>
     `);
     
-    // Add event listener to the button
     const payBtn = document.getElementById('paystackPayBtn');
     if (payBtn) {
-        payBtn.addEventListener('click', initiatePaystack);
+        payBtn.onclick = function(e) {
+            e.preventDefault();
+            initiatePaystack();
+        };
     }
 }
 
@@ -1266,6 +1260,22 @@ function closeModal() {
     if (m) m.remove();
     resetToModeSelect();
 }
+
+// Global Paystack callback handlers
+window.paystackCallback = function(response) {
+    console.log('Paystack callback received:', response);
+    processPaymentSuccess(response.reference);
+};
+
+window.paystackOnClose = function() {
+    console.log('Paystack window closed');
+    const payBtn = document.getElementById('paystackPayBtn');
+    if (payBtn) {
+        payBtn.textContent = '💳 Pay ₦100 with Paystack';
+        payBtn.disabled = false;
+    }
+    showToast('Payment cancelled', 'warning');
+};
 
 function initiatePaystack() {
     if (!currentUser) {
@@ -1282,31 +1292,16 @@ function initiatePaystack() {
     
     // Check if Paystack is available
     if (typeof PaystackPop === 'undefined') {
-        console.error('Paystack not loaded. Reloading script...');
         showToast('Payment system loading. Please wait...', 'warning');
-        // Reload Paystack script
-        const script = document.createElement('script');
-        script.src = 'https://js.paystack.co/v1/inline.js';
-        script.onload = function() {
-            showToast('Ready! Please click pay again.', 'success');
-            if (payBtn) {
-                payBtn.textContent = '💳 Pay ₦100 with Paystack';
-                payBtn.disabled = false;
-            }
-        };
-        script.onerror = function() {
-            showToast('Payment system unavailable. Please try again later.', 'error');
-            if (payBtn) {
-                payBtn.textContent = '💳 Pay ₦100 with Paystack';
-                payBtn.disabled = false;
-            }
-        };
-        document.head.appendChild(script);
+        if (payBtn) {
+            payBtn.textContent = '💳 Pay ₦100 with Paystack';
+            payBtn.disabled = false;
+        }
         return;
     }
     
     const reference = `EE_${currentSubject}_${currentUser.uid.slice(0,8)}_${Date.now()}`;
-    const amount = PREMIUM_PRICE * 100; // Convert to kobo
+    const amount = PREMIUM_PRICE * 100;
     
     try {
         const handler = PaystackPop.setup({
@@ -1321,12 +1316,12 @@ function initiatePaystack() {
                     { display_name: "User ID", variable_name: "user_id", value: currentUser.uid }
                 ]
             },
-            callback: async function(response) {
-                console.log('Payment successful:', response);
-                await processPaymentSuccess(response.reference);
+            callback: function(response) {
+                console.log('Payment success:', response);
+                processPaymentSuccess(response.reference);
             },
             onClose: function() {
-                console.log('Payment window closed');
+                console.log('Payment closed');
                 if (payBtn) {
                     payBtn.textContent = '💳 Pay ₦100 with Paystack';
                     payBtn.disabled = false;
@@ -1352,7 +1347,6 @@ async function processPaymentSuccess(reference) {
         const studentName = currentUser.displayName || currentUser.email.split('@')[0];
         const expiresAt = new Date(Date.now() + PREMIUM_DURATION_MS);
         
-        // Save payment record
         await firestore.collection('payments').doc(`PAY_${reference}`).set({
             paymentId: `PAY_${reference}`,
             reference: reference,
@@ -1367,7 +1361,6 @@ async function processPaymentSuccess(reference) {
             durationHours: 24
         });
         
-        // Update student record
         await firestore.collection('students').doc(currentUser.uid).set({
             totalPaid: firebase.firestore.FieldValue.increment(PREMIUM_PRICE),
             lastPaymentDate: firebase.firestore.FieldValue.serverTimestamp(),
@@ -1375,10 +1368,8 @@ async function processPaymentSuccess(reference) {
             accountStatus: 'active'
         }, { merge: true });
         
-        // Close modal if open
         closeModal();
         
-        // Start the premium quiz
         setTimeout(async () => {
             showToast('🎉 Access granted! Starting your quiz...', 'success');
             score = 0;
@@ -1476,7 +1467,6 @@ auth.onAuthStateChanged(async user => {
     const btn = document.getElementById('navUserBtn');
     if (user) {
         btn.textContent = user.email.split('@')[0];
-        console.log('User logged in:', user.email);
         setTimeout(() => {
             checkForResumableSession();
             loadLeaderboard();

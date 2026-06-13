@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- MathJax for math rendering -->
     <script>
         window.MathJax = {
             tex: { inlineMath: [['$','$'], ['\\(','\\)']] },
@@ -31,9 +30,7 @@
             --gold: #e8b94f;
             --gold-deep: #c8960f;
             --jade: #1a8c6e;
-            --jade-light: #22b88f;
             --ruby: #d64045;
-            --ruby-light: #e88a87;
             --sky: #3d7eff;
             --muted: #6b6a74;
             --border: #e2ddd8;
@@ -92,59 +89,13 @@
             font-size: 0.825rem;
             font-weight: 600;
             cursor: pointer;
-            font-family: 'DM Sans', sans-serif;
-            transition: opacity 0.2s;
         }
         .nav-user:hover { opacity: 0.85; }
-        #authStatusBar {
-            display: none;
-            background: #fffbf0;
-            border-bottom: 1px solid var(--gold);
-            padding: 10px 24px;
-            font-size: 0.85rem;
-            text-align: center;
-            gap: 12px;
-            align-items: center;
-            justify-content: center;
-        }
-        #authStatusBar a {
-            background: var(--gold);
-            color: var(--ink);
-            font-weight: 700;
-            padding: 5px 16px;
-            border-radius: var(--radius-pill);
-            text-decoration: none;
-            font-size: 0.82rem;
-        }
 
         .hero {
             background: var(--ink);
             padding: 56px 24px 48px;
             text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .hero::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse at 30% 50%, rgba(232,185,79,0.12) 0%, transparent 60%),
-                        radial-gradient(ellipse at 70% 50%, rgba(61,126,255,0.10) 0%, transparent 60%);
-        }
-        .hero-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(232,185,79,0.15);
-            border: 1px solid rgba(232,185,79,0.3);
-            color: var(--gold);
-            font-size: 0.78rem;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            padding: 5px 14px;
-            border-radius: var(--radius-pill);
-            margin-bottom: 20px;
         }
         .hero h1 {
             font-family: 'Syne', sans-serif;
@@ -152,13 +103,11 @@
             font-weight: 800;
             color: var(--paper);
             line-height: 1.1;
-            letter-spacing: -1px;
-            position: relative;
         }
-        .hero-sub { color: rgba(255,255,255,0.55); font-size: 1rem; margin-top: 12px; position: relative; }
+        .hero-sub { color: rgba(255,255,255,0.55); font-size: 1rem; margin-top: 12px; }
 
         .prize-strip {
-            background: linear-gradient(90deg, var(--gold-deep), var(--gold), var(--gold-deep));
+            background: linear-gradient(90deg, #c8960f, #e8b94f, #c8960f);
             padding: 14px 24px;
             display: flex;
             align-items: center;
@@ -167,17 +116,6 @@
             flex-wrap: wrap;
         }
         .prize-strip span { font-weight: 700; font-size: 0.95rem; color: var(--ink); }
-        .prize-strip a {
-            color: var(--ink);
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.85rem;
-            background: rgba(0,0,0,0.12);
-            padding: 4px 14px;
-            border-radius: var(--radius-pill);
-            transition: background 0.2s;
-        }
-        .prize-strip a:hover { background: rgba(0,0,0,0.22); }
 
         .container { max-width: 960px; margin: 0 auto; padding: 40px 20px 80px; }
 
@@ -190,7 +128,6 @@
             align-items: center;
             gap: 16px;
             margin-bottom: 28px;
-            box-shadow: var(--shadow);
             flex-wrap: wrap;
         }
         .subject-bar label {
@@ -198,8 +135,6 @@
             font-weight: 700;
             font-size: 0.9rem;
             color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
             white-space: nowrap;
         }
         .subject-bar select {
@@ -208,16 +143,10 @@
             padding: 10px 16px;
             border: 1.5px solid var(--border);
             border-radius: var(--radius-sm);
-            font-family: 'DM Sans', sans-serif;
             font-size: 0.95rem;
-            font-weight: 500;
-            color: var(--ink);
             background: var(--cream);
             cursor: pointer;
-            outline: none;
-            transition: border-color 0.2s;
         }
-        .subject-bar select:focus { border-color: var(--gold); }
 
         .mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px; }
         @media (max-width: 600px) { .mode-grid { grid-template-columns: 1fr; } }
@@ -231,19 +160,16 @@
             transition: all 0.25s;
             box-shadow: var(--shadow);
             position: relative;
-            overflow: hidden;
         }
         .mode-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
         .mode-card.free::after { background: var(--jade); }
-        .mode-card.premium::after { background: linear-gradient(90deg, var(--gold), var(--gold-deep)); }
-        .mode-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: transparent; }
-        .mode-card.free:hover { border-color: var(--jade); }
-        .mode-card.premium:hover { border-color: var(--gold); }
+        .mode-card.premium::after { background: linear-gradient(90deg, #e8b94f, #c8960f); }
+        .mode-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
         .mode-icon { font-size: 2.4rem; margin-bottom: 12px; }
         .mode-label { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.25rem; margin-bottom: 4px; }
-        .mode-price { font-size: 1.5rem; font-weight: 800; font-family: 'Syne', sans-serif; margin: 8px 0 16px; }
+        .mode-price { font-size: 1.5rem; font-weight: 800; margin: 8px 0 16px; }
         .mode-card.free .mode-price { color: var(--jade); }
-        .mode-card.premium .mode-price { color: var(--gold-deep); }
+        .mode-card.premium .mode-price { color: #c8960f; }
         .mode-features { list-style: none; margin-bottom: 20px; }
         .mode-features li {
             display: flex;
@@ -253,37 +179,20 @@
             font-size: 0.88rem;
             color: var(--muted);
         }
-        .mode-features li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+        .mode-features li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
         .mode-card.free .mode-features li::before { background: var(--jade); }
-        .mode-card.premium .mode-features li::before { background: var(--gold); }
+        .mode-card.premium .mode-features li::before { background: #e8b94f; }
         .mode-cta {
             width: 100%;
             padding: 12px 20px;
             border: none;
             border-radius: var(--radius-pill);
-            font-family: 'DM Sans', sans-serif;
             font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
         }
         .mode-card.free .mode-cta { background: var(--jade); color: white; }
-        .mode-card.free .mode-cta:hover { background: #147a5c; }
-        .mode-card.premium .mode-cta { background: var(--gold); color: var(--ink); }
-        .mode-card.premium .mode-cta:hover { background: var(--gold-deep); color: white; }
-        .badge-24h {
-            display: inline-block;
-            background: rgba(232,185,79,0.15);
-            color: var(--gold-deep);
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            padding: 2px 8px;
-            border-radius: var(--radius-pill);
-            border: 1px solid rgba(232,185,79,0.4);
-            margin-left: 6px;
-            vertical-align: middle;
-        }
+        .mode-card.premium .mode-cta { background: #e8b94f; color: var(--ink); }
 
         .quiz-panel {
             background: var(--paper);
@@ -298,7 +207,7 @@
         .spinner {
             width: 44px; height: 44px;
             border: 3px solid var(--border);
-            border-top-color: var(--gold);
+            border-top-color: #e8b94f;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
             margin: 0 auto 20px;
@@ -324,7 +233,6 @@
             font-family: 'Syne', sans-serif;
             font-weight: 700;
             font-size: 0.95rem;
-            color: var(--ink);
         }
         .stage-score-chip {
             background: var(--jade);
@@ -333,7 +241,6 @@
             border-radius: var(--radius-pill);
             font-size: 0.82rem;
             font-weight: 700;
-            font-family: 'Syne', sans-serif;
         }
         .stage-dots { display: flex; gap: 6px; flex-wrap: wrap; }
         .stage-dot {
@@ -346,12 +253,10 @@
             justify-content: center;
             font-size: 0.72rem;
             font-weight: 700;
-            font-family: 'Syne', sans-serif;
             color: var(--muted);
-            transition: all 0.3s;
         }
         .stage-dot.completed { background: var(--jade); border-color: var(--jade); color: white; }
-        .stage-dot.current   { background: var(--gold); border-color: var(--gold-deep); color: var(--ink); transform: scale(1.15); }
+        .stage-dot.current   { background: #e8b94f; border-color: #c8960f; color: var(--ink); transform: scale(1.15); }
         .stage-dot.locked    { background: var(--cream); border-color: var(--border); color: var(--border); }
 
         .quiz-meta {
@@ -381,7 +286,7 @@
         .timer-ring svg { transform: rotate(-90deg); }
         .timer-ring circle { fill: none; stroke-width: 4; }
         .timer-track { stroke: var(--border); }
-        .timer-arc { stroke: var(--gold); stroke-linecap: round; transition: stroke-dashoffset 1s linear, stroke 0.3s; }
+        .timer-arc { stroke: #e8b94f; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
         .timer-arc.danger { stroke: var(--ruby); }
         .timer-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; }
         .timer-label { font-size: 0.78rem; color: var(--muted); font-weight: 500; }
@@ -390,13 +295,11 @@
             font-family: 'Syne', sans-serif;
             font-size: 1.15rem;
             font-weight: 600;
-            color: var(--ink);
-            line-height: 1.6;
             margin-bottom: 24px;
             padding: 18px 22px;
             background: #fafaf8;
             border-radius: var(--radius-sm);
-            border-left: 4px solid var(--gold);
+            border-left: 4px solid #e8b94f;
         }
 
         .options-grid { display: flex; flex-direction: column; gap: 10px; }
@@ -410,14 +313,12 @@
             border: 1.5px solid var(--border);
             border-radius: var(--radius-sm);
             cursor: pointer;
-            font-family: 'DM Sans', sans-serif;
             font-size: 0.97rem;
             font-weight: 500;
-            color: var(--ink);
             text-align: left;
             transition: all 0.2s;
         }
-        .option-btn:hover:not([disabled]) { border-color: var(--gold); background: rgba(232,185,79,0.06); transform: translateX(4px); }
+        .option-btn:hover:not([disabled]) { border-color: #e8b94f; background: rgba(232,185,79,0.06); transform: translateX(4px); }
         .option-letter {
             width: 30px; height: 30px;
             border-radius: 50%;
@@ -430,9 +331,8 @@
             font-size: 0.78rem;
             font-weight: 700;
             flex-shrink: 0;
-            transition: all 0.2s;
         }
-        .option-btn:hover:not([disabled]) .option-letter { background: var(--gold); color: var(--ink); }
+        .option-btn:hover:not([disabled]) .option-letter { background: #e8b94f; color: var(--ink); }
         .option-btn.correct { border-color: var(--jade); background: rgba(26,140,110,0.07); color: var(--jade); }
         .option-btn.correct .option-letter { background: var(--jade); color: white; }
         .option-btn.incorrect { border-color: var(--ruby); background: rgba(214,64,69,0.07); color: var(--ruby); }
@@ -451,7 +351,7 @@
             background: #f0faf5;
         }
         .explanation-box.wrong { background: #fef5f5; border-left-color: var(--ruby); }
-        .explanation-box.timeout { background: #fffbf0; border-left-color: var(--gold); }
+        .explanation-box.timeout { background: #fffbf0; border-left-color: #e8b94f; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
 
         .explanation-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
@@ -465,7 +365,6 @@
             font-weight: 600;
             font-size: 0.9rem;
         }
-        .wrong .explanation-correct-answer { background: rgba(214,64,69,0.08); }
         .explanation-text { color: var(--ink); }
 
         .stage-result {
@@ -478,7 +377,6 @@
         .stage-result.pass { background: rgba(26,140,110,0.08); border: 2px solid var(--jade); }
         .stage-result.fail { background: rgba(214,64,69,0.07); border: 2px solid var(--ruby); }
         .stage-result h2 { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; margin: 12px 0 6px; }
-        .stage-result p  { color: var(--muted); font-size: 0.92rem; margin-bottom: 18px; }
         .stage-result .points-awarded { font-family: 'Syne', sans-serif; font-size: 2.4rem; font-weight: 800; margin: 8px 0; }
         .stage-result.pass .points-awarded { color: var(--jade); }
         .stage-result.fail .points-awarded { color: var(--ruby); }
@@ -490,60 +388,38 @@
             border: none;
             padding: 13px 30px;
             border-radius: var(--radius-pill);
-            font-family: 'DM Sans', sans-serif;
             font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
-            transition: opacity 0.2s;
         }
         .btn-next:hover { opacity: 0.8; }
         .btn-stage-retry {
-            background: var(--gold);
+            background: #e8b94f;
             color: var(--ink);
             border: none;
             padding: 13px 30px;
             border-radius: var(--radius-pill);
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.95rem;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
             margin-right: 10px;
         }
-        .btn-stage-retry:hover { background: var(--gold-deep); color: white; }
         .btn-continue-stage {
             background: var(--jade);
             color: white;
             border: none;
             padding: 13px 30px;
             border-radius: var(--radius-pill);
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.95rem;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
         }
-        .btn-continue-stage:hover { background: #147a5c; }
 
         .result-wrap { text-align: center; padding: 20px; }
         .result-score { font-family: 'Syne', sans-serif; font-size: clamp(3rem, 10vw, 5rem); font-weight: 800; line-height: 1; margin: 16px 0; }
         .result-label { font-size: 1rem; color: var(--muted); margin-bottom: 8px; }
         .result-message { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 600; margin: 12px 0 28px; }
         .result-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-        .btn-restart, .btn-hub {
-            padding: 12px 26px;
-            border-radius: var(--radius-pill);
-            font-family: 'DM Sans', sans-serif;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            border: none;
-            transition: all 0.2s;
-        }
-        .btn-restart { background: var(--jade); color: white; }
-        .btn-restart:hover { background: #147a5c; }
-        .btn-hub { background: var(--cream); border: 1.5px solid var(--border); color: var(--ink); }
-        .btn-hub:hover { background: var(--border); }
+        .btn-restart { background: var(--jade); color: white; border: none; padding: 12px 26px; border-radius: var(--radius-pill); font-weight: 600; cursor: pointer; }
+        .btn-hub { background: var(--cream); border: 1.5px solid var(--border); color: var(--ink); padding: 12px 26px; border-radius: var(--radius-pill); font-weight: 600; cursor: pointer; text-decoration: none; }
 
         .modal-overlay {
             position: fixed;
@@ -557,6 +433,7 @@
             padding: 20px;
             animation: fadeIn 0.2s ease;
         }
+        .modal-overlay.open { display: flex; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .modal-card {
             background: var(--paper);
@@ -579,27 +456,21 @@
         }
         .modal-body { padding: 24px 28px; }
         .price-display { text-align: center; margin-bottom: 20px; }
-        .price-display .amount { font-family: 'Syne', sans-serif; font-size: 3rem; font-weight: 800; color: var(--gold-deep); }
+        .price-display .amount { font-family: 'Syne', sans-serif; font-size: 3rem; font-weight: 800; color: #c8960f; }
         .price-display .currency { font-size: 1.5rem; vertical-align: super; }
-        .price-display .period { display: block; font-size: 0.82rem; color: var(--muted); margin-top: -4px; font-weight: 500; }
-        .perks-list { list-style: none; background: var(--cream); border-radius: var(--radius-sm); padding: 16px 20px; margin-bottom: 20px; }
-        .perks-list li { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 0.88rem; color: var(--ink); }
-        .methods-row { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
-        .method-chip { background: var(--cream); border: 1px solid var(--border); border-radius: var(--radius-pill); padding: 6px 12px; font-size: 0.78rem; font-weight: 600; color: var(--muted); }
         .pay-btn {
-            width: 100%; padding: 16px; background: var(--gold); color: var(--ink);
+            width: 100%; padding: 16px; background: #e8b94f; color: var(--ink);
             border: none; border-radius: var(--radius-pill); font-family: 'Syne', sans-serif;
-            font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
+            font-size: 1.05rem; font-weight: 700; cursor: pointer;
             margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px;
         }
-        .pay-btn:hover { background: var(--gold-deep); color: white; transform: scale(1.01); }
-        .pay-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .pay-btn:hover { background: #c8960f; color: white; }
+        .pay-btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .cancel-btn {
             width: 100%; padding: 12px; background: transparent; border: 1.5px solid var(--border);
             border-radius: var(--radius-pill); font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
-            font-weight: 500; color: var(--muted); cursor: pointer; transition: all 0.2s;
+            font-weight: 500; color: var(--muted); cursor: pointer;
         }
-        .cancel-btn:hover { background: var(--cream); }
         .security-note { text-align: center; font-size: 0.75rem; color: var(--muted); margin-top: 14px; }
 
         .resume-banner {
@@ -616,21 +487,18 @@
             box-shadow: var(--shadow);
         }
         .resume-banner .rb-text { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; }
-        .resume-banner .rb-sub  { font-size: 0.82rem; opacity: 0.85; margin-top: 2px; }
+        .resume-banner .rb-sub { font-size: 0.82rem; opacity: 0.85; margin-top: 2px; }
         .btn-resume {
             background: white;
             color: var(--jade);
             border: none;
             padding: 10px 22px;
             border-radius: var(--radius-pill);
-            font-family: 'DM Sans', sans-serif;
             font-weight: 700;
             font-size: 0.88rem;
             cursor: pointer;
-            transition: all 0.2s;
             white-space: nowrap;
         }
-        .btn-resume:hover { background: #f0faf5; }
 
         .leaderboard-section {
             background: var(--paper);
@@ -644,50 +512,65 @@
         .lb-title { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 800; }
         .lb-month { font-size: 0.82rem; color: var(--muted); background: var(--cream); padding: 5px 12px; border-radius: var(--radius-pill); }
         .lb-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
-        .lb-tab { padding: 7px 16px; border-radius: var(--radius-pill); border: 1.5px solid var(--border); background: transparent; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 600; cursor: pointer; color: var(--muted); transition: all 0.2s; }
+        .lb-tab {
+            padding: 7px 16px;
+            border-radius: var(--radius-pill);
+            border: 1.5px solid var(--border);
+            background: transparent;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--muted);
+        }
         .lb-tab.active { background: var(--ink); color: white; border-color: var(--ink); }
         .lb-row { display: flex; align-items: center; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--border); }
-        .lb-row:last-child { border-bottom: none; }
-        .lb-rank { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; width: 28px; text-align: center; flex-shrink: 0; }
+        .lb-rank { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; width: 28px; text-align: center; }
         .lb-rank.gold   { color: #c8960f; }
         .lb-rank.silver { color: #8a8a9a; }
         .lb-rank.bronze { color: #a0522d; }
-        .lb-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--ink); color: white; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
+        .lb-avatar {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            background: var(--ink);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
         .lb-info { flex: 1; }
         .lb-name { font-weight: 600; font-size: 0.93rem; }
-        .lb-sub  { font-size: 0.78rem; color: var(--muted); margin-top: 1px; }
+        .lb-sub { font-size: 0.78rem; color: var(--muted); margin-top: 1px; }
         .lb-score { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem; }
         .lb-score.high { color: var(--jade); }
-        .lb-score.mid  { color: var(--gold-deep); }
-        .lb-empty { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 0.95rem; }
-        .lb-loading { text-align: center; padding: 40px; }
+        .lb-empty { text-align: center; padding: 40px 20px; color: var(--muted); }
 
         .home-fab {
             position: fixed; bottom: 28px; right: 28px;
             width: 52px; height: 52px; background: var(--ink);
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
             cursor: pointer; box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-            border: none; color: white; font-size: 1.2rem; transition: all 0.25s; z-index: 800;
+            border: none; color: white; font-size: 1.2rem;
         }
-        .home-fab:hover { transform: scale(1.1); background: #2a2930; }
+        .home-fab:hover { transform: scale(1.1); }
 
         .toast {
             position: fixed; bottom: 90px; right: 28px;
             background: var(--ink); color: white;
             padding: 12px 20px; border-radius: var(--radius-sm);
             font-size: 0.88rem; font-weight: 500; z-index: 9998;
-            transform: translateX(120%); transition: transform 0.3s ease; max-width: 300px;
+            transform: translateX(120%); transition: transform 0.3s ease;
         }
         .toast.show { transform: translateX(0); }
         .toast.success { border-left: 3px solid var(--jade); }
         .toast.error   { border-left: 3px solid var(--ruby); }
-        .toast.warning { border-left: 3px solid var(--gold); }
 
         @media (max-width: 600px) {
             nav { flex-wrap: wrap; height: auto; padding: 12px 16px; gap: 10px; }
             .quiz-panel { padding: 20px; }
             .modal-body { padding: 20px; }
-            .home-fab { bottom: 20px; right: 20px; width: 46px; height: 46px; }
+            .home-fab { bottom: 20px; right: 20px; width: 46px; height: 46px; font-size: 20px; }
         }
     </style>
 </head>
@@ -705,11 +588,6 @@
     <button class="nav-user" id="navUserBtn" onclick="handleNavUser()">Sign In</button>
 </nav>
 
-<div id="authStatusBar">
-    <span>⚠️ You need to sign in before paying for premium access.</span>
-    <a href="login.html">Sign In / Register →</a>
-</div>
-
 <div class="hero">
     <div class="hero-tag">🎯 Quiz Challenge Arena</div>
     <h1>Test Your Knowledge<br>Win Real Prizes</h1>
@@ -720,7 +598,6 @@
     <span>🏆 ₦10,000 Monthly Prize Draw</span>
     <span>·</span>
     <span>Top performers qualify each month</span>
-    <a href="#leaderboard" onclick="scrollToLeaderboard()">View Leaderboard →</a>
 </div>
 
 <div class="container">
@@ -747,24 +624,22 @@
             <ul class="mode-features">
                 <li>Unlimited time per question</li>
                 <li>30 randomized questions</li>
-                <li>Instant explanations for every answer</li>
+                <li>Instant explanations</li>
                 <li>Practice at your own pace</li>
-                <li>Registration required</li>
             </ul>
             <button class="mode-cta">Start Free Practice →</button>
         </div>
 
         <div class="mode-card premium" onclick="selectMode('premium')">
             <div class="mode-icon">🏆</div>
-            <div class="mode-label">Premium Competition <span class="badge-24h">24 HRS</span></div>
-            <div class="mode-price">₦100</div>
+            <div class="mode-label">Premium Competition</div>
+            <div class="mode-price">₦100 (24hrs access)</div>
             <ul class="mode-features">
                 <li>8 seconds per question ⏱️</li>
-                <li>Stage-based quiz: 5 questions per stage</li>
-                <li>10 pts per stage — fail = restart stage</li>
+                <li>10 questions per stage</li>
+                <li>10 pts per stage completion</li>
                 <li>Compete for ₦10,000 monthly prize</li>
-                <li>Resume from your last stage anytime</li>
-                <li>Certificate of Recognition</li>
+                <li>Resume anytime within 24hrs</li>
             </ul>
             <button class="mode-cta">Enter Competition →</button>
         </div>
@@ -795,28 +670,15 @@
 
 <script>
 // ══════════════════════════════════════════════════════════════════
-//  CONFIG - UPDATED WITH LITERATURE AND BIOLOGY
+//  CONFIG
 // ══════════════════════════════════════════════════════════════════
-const PAYSTACK_KEY            = "pk_live_441686d15976154f119fe56e3f415638b7a649ac";
-const PREMIUM_PRICE           = 100;
-const PREMIUM_DURATION_MS     = 24 * 60 * 60 * 1000;
-const TIME_PER_QUESTION_PREM  = 8;
-const FREE_Q_LIMIT            = 30;
-const STAGE_SIZE              = 5;
-const POINTS_PER_STAGE        = 10;
-const CIRC                    = 2 * Math.PI * 23;
+const PAYSTACK_KEY = "pk_live_441686d15976154f119fe56e3f415638b7a649ac";
+const PREMIUM_PRICE = 100;
+const PREMIUM_DURATION_MS = 24 * 60 * 60 * 1000; // 24 hours
+const TIME_PER_QUESTION_PREM = 8;
+const QUESTIONS_PER_STAGE = 10; // 10 questions per stage
+const POINTS_PER_STAGE = 10;
 
-function maxFailsForGroup(groupIdx) {
-    if (groupIdx === 0) return 0;
-    if (groupIdx === 1) return 1;
-    return 0;
-}
-
-function resetsToBeginning(groupIdx) {
-    return groupIdx <= 1;
-}
-
-// UPDATED: Added literature and biology
 const SUBJECT_NAMES = {
     mathematics: '📐 Mathematics',
     physics: '⚛️ Physics',
@@ -850,239 +712,930 @@ let currentUser = null;
 let currentMode = null;
 let currentSubject = 'mathematics';
 let allQuestions = [];
-let questionIndex = 0;
+let currentStage = 1;
+let currentStageIndex = 0; // Which question within stage (0 to 9)
 let score = 0;
 let isAnswered = false;
 let timerInterval = null;
 let timeLeft = 0;
 let timerMax = 0;
-let currentGroupIdx = 0;
-let failsInCurrentGroup = 0;
-let groupStartQIndex = 0;
-let usedQuestionIds = new Set();
+let failsInCurrentStage = 0;
 let _sessionDocId = null;
 let _loginLogged = false;
 let freeCorrectCount = 0;
 
-// ══════════════════════════════════════════════════════════════════
-//  REGISTRATION CHECK
-// ══════════════════════════════════════════════════════════════════
-async function checkUserRegistration() {
-    const user = auth.currentUser;
-    if (!user) {
-        showToast('⚠️ You must register/login before taking any quiz!', 'warning');
-        setTimeout(() => {
-            window.location.href = 'login.html?redirect=class.html';
-        }, 2000);
-        return false;
-    }
-    
-    const studentRef = firestore.collection('students').doc(user.uid);
-    const studentDoc = await studentRef.get();
-    
-    if (!studentDoc.exists) {
-        try {
-            await studentRef.set({
-                userId: user.uid,
-                email: user.email,
-                fullName: user.displayName || user.email.split('@')[0],
-                totalAttempts: 0,
-                freeAttempts: 0,
-                premiumAttempts: 0,
-                totalPaid: 0,
-                accountStatus: 'active',
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
-                bestScores: {},
-                quizScores: {},
-                paidSubjects: []
-            });
-            console.log('✅ Student record created for:', user.email);
-        } catch (err) {
-            console.error('Failed to create student record:', err);
-            showToast('Error creating your account. Please try again.', 'error');
-            return false;
-        }
-    } else {
-        await studentRef.update({
-            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-        }).catch(e => console.warn('Login update failed:', e));
-    }
-    
-    return true;
+// Stage rules: Stage 1: 0 fails allowed (must pass all), Stage 2: 1 fail, Stage 3+: 2 fails allowed
+function getMaxFailsForStage(stage) {
+    if (stage === 1) return 0;
+    if (stage === 2) return 1;
+    return 2;
 }
 
 function goTo(p) { window.location.href = p; }
 function esc(s) { if (!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function safeText(s) { if (!s) return ''; return String(s).replace(/\u2212/g,'−').replace(/\u00D7/g,'×').replace(/\u00F7/g,'÷').replace(/\u00B2/g,'²').replace(/\u00B3/g,'³').replace(/\u221A/g,'√').replace(/\u03C0/g,'π').replace(/\u03B1/g,'α').replace(/\u03B2/g,'β'); }
+function safeText(s) { if (!s) return ''; return String(s); }
 function renderText(s) { return safeText(s); }
-function shuffle(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
-function showToast(msg, type = 'success') { const t = document.getElementById('toast'); t.textContent = msg; t.className = `toast ${type} show`; setTimeout(() => t.classList.remove('show'), 4000); }
-function subjectName(s) { return (SUBJECT_NAMES[s] || s).replace(/^[\S]+\s/, ''); }
+
+function shuffleArray(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+function showToast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast ${type} show`;
+    setTimeout(() => t.classList.remove('show'), 4000);
+}
+
+function subjectName(s) { return SUBJECT_NAMES[s] || s; }
 function onSubjectChange() { currentSubject = document.getElementById('subjectSelect').value; resetToModeSelect(); }
 function resetToModeSelect() { if (timerInterval) clearInterval(timerInterval); currentMode = null; document.getElementById('modeGrid').style.display = 'grid'; document.getElementById('quizPanel').innerHTML = `<div class="status-box"><div style="font-size: 3rem; margin-bottom: 12px;">🎮</div><p>Choose a mode above to begin your quiz</p></div>`; }
 function handleNavUser() { if (currentUser) { auth.signOut(); } else { goTo('login.html'); } }
-function scrollToLeaderboard() { document.getElementById('leaderboard').scrollIntoView({ behavior: 'smooth' }); }
-function getDeviceInfo() { const ua = navigator.userAgent; let browser = 'Unknown'; if (ua.includes('Chrome') && !ua.includes('Edg')) browser = 'Chrome'; else if (ua.includes('Firefox')) browser = 'Firefox'; else if (ua.includes('Safari') && !ua.includes('Chrome')) browser = 'Safari'; else if (ua.includes('Edg')) browser = 'Edge'; return { browser, device: /Mobi|Android|iPhone|iPad/i.test(ua) ? 'Mobile' : 'Desktop', screenRes: `${screen.width}x${screen.height}`, userAgent: ua.slice(0, 200) }; }
 
-async function logLoginActivity(user) { try { const d = getDeviceInfo(); await firestore.collection('login_logs').add({ userId: user.uid, email: user.email, loginTime: firebase.firestore.FieldValue.serverTimestamp(), ...d }); await firestore.collection('students').doc(user.uid).set({ lastLogin: firebase.firestore.FieldValue.serverTimestamp(), loginCount: firebase.firestore.FieldValue.increment(1), accountStatus: 'active', email: user.email, ...(user.displayName ? { fullName: user.displayName } : {}) }, { merge: true }); } catch (e) { console.warn('Login track:', e); } }
+function getDeviceInfo() {
+    const ua = navigator.userAgent;
+    let browser = 'Unknown';
+    if (ua.includes('Chrome')) browser = 'Chrome';
+    else if (ua.includes('Firefox')) browser = 'Firefox';
+    else if (ua.includes('Safari')) browser = 'Safari';
+    else if (ua.includes('Edg')) browser = 'Edge';
+    return { browser, device: /Mobi|Android|iPhone|iPad/i.test(ua) ? 'Mobile' : 'Desktop' };
+}
 
-auth.onAuthStateChanged(async user => { 
-    currentUser = user; 
-    const btn = document.getElementById('navUserBtn'); 
-    if (user) { 
-        btn.textContent = user.email.split('@')[0]; 
-        if (!_loginLogged) { 
-            _loginLogged = true; 
-            logLoginActivity(user); 
+async function logLoginActivity(user) {
+    try {
+        const d = getDeviceInfo();
+        await firestore.collection('login_logs').add({
+            userId: user.uid,
+            email: user.email,
+            loginTime: firebase.firestore.FieldValue.serverTimestamp(),
+            ...d
+        });
+        await firestore.collection('students').doc(user.uid).set({
+            lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+            loginCount: firebase.firestore.FieldValue.increment(1),
+            accountStatus: 'active',
+            email: user.email
+        }, { merge: true });
+    } catch (e) { console.warn('Login track:', e); }
+}
+
+auth.onAuthStateChanged(async user => {
+    currentUser = user;
+    const btn = document.getElementById('navUserBtn');
+    if (user) {
+        btn.textContent = user.email.split('@')[0];
+        if (!_loginLogged) {
+            _loginLogged = true;
+            logLoginActivity(user);
         }
-        const registered = await checkUserRegistration();
-        if (registered) {
-            checkForResumableSession();
-            loadLeaderboard();
-        }
-    } else { 
-        btn.textContent = 'Sign In'; 
-        _loginLogged = false; 
+        await checkForResumableSession();
+        await loadLeaderboard();
+    } else {
+        btn.textContent = 'Sign In';
+        _loginLogged = false;
         resetToModeSelect();
-    } 
+    }
 });
 
-async function checkForResumableSession() { if (!currentUser) return; try { const snap = await firestore.collection('quiz_sessions').where('userId', '==', currentUser.uid).where('status', '==', 'active').where('expiresAt', '>', new Date()).orderBy('expiresAt', 'desc').limit(1).get(); if (snap.empty) return; const doc = snap.docs[0]; const session = doc.data(); const hoursLeft = Math.ceil((session.expiresAt.toDate() - new Date()) / 3600000); const existing = document.getElementById('resumeBanner'); if (existing) existing.remove(); const banner = document.createElement('div'); banner.id = 'resumeBanner'; banner.className = 'resume-banner'; banner.innerHTML = `<div><div class="rb-text">🔁 Resume your session — ${SUBJECT_NAMES[session.subject] || session.subject}</div><div class="rb-sub">Stage ${(session.currentGroupIdx || 0) + 1} · ${session.score || 0} pts · ${hoursLeft}h remaining</div></div><button class="btn-resume" onclick="resumeSession('${doc.id}')">Resume Now →</button>`; const container = document.querySelector('.container'); container.insertBefore(banner, container.firstChild); } catch (e) { console.warn('Resume check:', e); } }
+// ══════════════════════════════════════════════════════════════════
+//  PREMIUM ACCESS CHECK (WITH 24-HOUR EXPIRY)
+// ══════════════════════════════════════════════════════════════════
+async function hasValidPremiumAccess() {
+    if (!currentUser) return false;
+    try {
+        const now = new Date();
+        const snap = await firestore.collection('payments')
+            .where('userId', '==', currentUser.uid)
+            .where('subject', '==', currentSubject)
+            .where('status', '==', 'verified')
+            .where('expiresAt', '>', now)
+            .orderBy('expiresAt', 'desc')
+            .limit(1)
+            .get();
+        return !snap.empty;
+    } catch (e) {
+        console.warn('Payment check:', e);
+        return false;
+    }
+}
 
-async function resumeSession(docId) { const banner = document.getElementById('resumeBanner'); if (banner) banner.remove(); try { const snap = await firestore.collection('quiz_sessions').doc(docId).get(); const session = snap.data(); currentSubject = session.subject; document.getElementById('subjectSelect').value = currentSubject; _sessionDocId = docId; score = session.score || 0; currentGroupIdx = session.currentGroupIdx || 0; failsInCurrentGroup = 0; usedQuestionIds = new Set(session.usedQuestionIds || []); currentMode = 'premium'; await loadQuestions('premium', true); } catch (e) { showToast('Could not resume session. Starting fresh.', 'warning'); selectMode('premium'); } }
+async function checkForResumableSession() {
+    if (!currentUser) return;
+    try {
+        const hasAccess = await hasValidPremiumAccess();
+        if (!hasAccess) return;
+        
+        const snap = await firestore.collection('quiz_sessions')
+            .where('userId', '==', currentUser.uid)
+            .where('subject', '==', currentSubject)
+            .where('status', '==', 'active')
+            .orderBy('startedAt', 'desc')
+            .limit(1)
+            .get();
+            
+        if (snap.empty) return;
+        
+        const doc = snap.docs[0];
+        const session = doc.data();
+        const expiresAt = session.expiresAt?.toDate();
+        if (expiresAt && expiresAt > new Date()) {
+            const hoursLeft = Math.ceil((expiresAt - new Date()) / 3600000);
+            const existing = document.getElementById('resumeBanner');
+            if (existing) existing.remove();
+            const banner = document.createElement('div');
+            banner.id = 'resumeBanner';
+            banner.className = 'resume-banner';
+            banner.innerHTML = `
+                <div>
+                    <div class="rb-text">🔁 Resume your session — ${SUBJECT_NAMES[session.subject] || session.subject}</div>
+                    <div class="rb-sub">Stage ${session.currentStage || 1} · ${session.score || 0} pts · ${hoursLeft}h remaining</div>
+                </div>
+                <button class="btn-resume" onclick="resumeSession('${doc.id}')">Resume Now →</button>
+            `;
+            const container = document.querySelector('.container');
+            container.insertBefore(banner, container.firstChild);
+        }
+    } catch (e) { console.warn('Resume check:', e); }
+}
 
-async function selectMode(mode) { 
-    const isRegistered = await checkUserRegistration();
-    if (!isRegistered) return;
+async function resumeSession(docId) {
+    const banner = document.getElementById('resumeBanner');
+    if (banner) banner.remove();
+    try {
+        const snap = await firestore.collection('quiz_sessions').doc(docId).get();
+        const session = snap.data();
+        currentSubject = session.subject;
+        document.getElementById('subjectSelect').value = currentSubject;
+        _sessionDocId = docId;
+        score = session.score || 0;
+        currentStage = session.currentStage || 1;
+        currentStageIndex = session.currentStageIndex || 0;
+        failsInCurrentStage = session.failsInCurrentStage || 0;
+        currentMode = 'premium';
+        await loadQuestions('premium', true);
+    } catch (e) {
+        showToast('Could not resume session. Starting fresh.', 'warning');
+        selectMode('premium');
+    }
+}
+
+async function selectMode(mode) {
+    if (mode === 'free') {
+        currentMode = 'free';
+        loadQuestions('free');
+    } else {
+        const hasAccess = await hasValidPremiumAccess();
+        if (hasAccess) {
+            currentMode = 'premium';
+            await loadQuestions('premium');
+        } else {
+            showPaymentModal();
+        }
+    }
+}
+
+async function loadQuestions(mode, isResume = false) {
+    const panel = document.getElementById('quizPanel');
+    document.getElementById('modeGrid').style.display = 'none';
+    panel.innerHTML = `<div class="status-box"><div class="spinner"></div><p>Loading ${mode === 'free' ? 'practice' : 'competition'} questions…</p></div>`;
     
-    currentMode = mode; 
-    if (mode === 'free') { 
-        loadQuestions('free'); 
-    } else { 
-        checkPremiumThenStart(); 
-    } 
+    const path = mode === 'free' ? `${currentSubject}/questions` : `premium/${currentSubject}/questions`;
+    
+    try {
+        const snap = await rtdb.ref(path).once('value');
+        const raw = snap.val();
+        if (!raw) {
+            panel.innerHTML = `<div class="status-box"><div style="font-size:3rem;margin-bottom:12px;">📚</div><p>No questions yet for ${subjectName(currentSubject)}</p><button onclick="resetToModeSelect()" style="margin-top:20px;padding:10px 24px;background:var(--ink);color:white;border:none;border-radius:100px;cursor:pointer;">← Back</button></div>`;
+            return;
+        }
+        
+        let all = Array.isArray(raw) ? raw : Object.values(raw);
+        all = all.filter(q => q && q.question && q.answer);
+        
+        // Randomize options order for each question to prevent answer pattern
+        all = all.map(q => {
+            const options = [
+                { letter: 'A', text: q.optionA },
+                { letter: 'B', text: q.optionB },
+                { letter: 'C', text: q.optionC },
+                { letter: 'D', text: q.optionD }
+            ];
+            const shuffledOptions = shuffleArray(options);
+            const newQ = {
+                question: q.question,
+                optionA: shuffledOptions[0].text,
+                optionB: shuffledOptions[1].text,
+                optionC: shuffledOptions[2].text,
+                optionD: shuffledOptions[3].text,
+                answer: shuffledOptions.find(opt => opt.letter === q.answer)?.letter || 'A',
+                explanation: q.explanation || "No explanation provided"
+            };
+            return newQ;
+        });
+        
+        all = shuffleArray(all);
+        
+        if (mode === 'free') {
+            allQuestions = all.slice(0, 30);
+            currentStage = 1;
+            currentStageIndex = 0;
+            score = 0;
+            freeCorrectCount = 0;
+            showQuestionFree();
+            return;
+        }
+        
+        allQuestions = all;
+        
+        if (!isResume) {
+            currentStage = 1;
+            currentStageIndex = 0;
+            score = 0;
+            failsInCurrentStage = 0;
+            await createSessionDoc();
+        }
+        
+        showQuestionPremium();
+        
+    } catch (err) {
+        console.error('Load error:', err);
+        panel.innerHTML = `<div class="status-box"><div style="font-size:3rem;">⚠️</div><p style="color:var(--ruby);">Failed to load questions</p><button onclick="resetToModeSelect()" style="margin-top:20px;padding:10px 24px;background:var(--ink);color:white;border:none;border-radius:100px;cursor:pointer;">← Back</button></div>`;
+    }
 }
 
-async function checkPremiumThenStart() { 
-    if (!currentUser) { 
-        document.getElementById('authStatusBar').style.display = 'flex'; 
-        showToast('Please sign in before paying for premium access.', 'warning'); 
-        return; 
-    } 
-    document.getElementById('authStatusBar').style.display = 'none'; 
-    try { 
-        const now = new Date(); 
-        const snap = await firestore.collection('payments').where('userId', '==', currentUser.uid).where('subject', '==', currentSubject).where('status', '==', 'verified').where('expiresAt', '>', now).orderBy('expiresAt', 'desc').limit(1).get(); 
-        if (!snap.empty) { 
-            const pay = snap.docs[0].data(); 
-            const expiresAt = pay.expiresAt?.toDate?.() || new Date(pay.expiresAt); 
-            const hoursLeft = Math.ceil((expiresAt - now) / 3600000); 
-            showToast(`✅ Access valid — ${hoursLeft}h remaining`, 'success'); 
-            await loadQuestions('premium'); 
-            return; 
-        } 
-    } catch (e) { console.warn('Payment check:', e); } 
-    showPaymentModal(); 
+function getCurrentQuestionIndex() {
+    return (currentStage - 1) * QUESTIONS_PER_STAGE + currentStageIndex;
 }
 
-async function loadQuestions(mode, isResume = false) { 
-    const panel = document.getElementById('quizPanel'); 
-    document.getElementById('modeGrid').style.display = 'none'; 
-    panel.innerHTML = `<div class="status-box"><div class="spinner"></div><p>Loading ${mode === 'free' ? 'practice' : 'competition'} questions…</p></div>`; 
-    const path = mode === 'free' ? `${currentSubject}/questions` : `premium/${currentSubject}/questions`; 
-    try { 
-        const snap = await rtdb.ref(path).once('value'); 
-        const raw = snap.val(); 
-        if (!raw) { 
-            panel.innerHTML = `<div class="status-box"><div style="font-size:3rem;margin-bottom:12px;">📚</div><p style="font-weight:600;font-size:1.05rem;margin-bottom:8px;">No questions yet for ${subjectName(currentSubject)}</p><p style="font-size:0.85rem;color:var(--muted);">Questions are being added. Please check back soon!</p><button onclick="resetToModeSelect()" style="margin-top:20px;padding:10px 24px;background:var(--ink);color:white;border:none;border-radius:100px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;">← Back</button></div>`; 
-            return; 
-        } 
-        let all = Array.isArray(raw) ? raw.filter(q => q && q.question && q.answer) : Object.values(raw).filter(q => q && q.question && q.answer); 
-        const seen = new Set(); 
-        all = all.filter(q => { const key = q.question.trim().toLowerCase(); if (seen.has(key)) return false; seen.add(key); return true; }); 
-        all = shuffle(all); 
-        if (mode === 'free') { 
-            allQuestions = all.slice(0, FREE_Q_LIMIT); 
-            questionIndex = 0; 
-            score = 0; 
-            freeCorrectCount = 0; 
-            usedQuestionIds = new Set(); 
-            showQuestion(); 
-            return; 
-        } 
-        allQuestions = all; 
-        if (!isResume) { 
-            questionIndex = 0; 
-            score = 0; 
-            currentGroupIdx = 0; 
-            failsInCurrentGroup = 0; 
-            usedQuestionIds = new Set(); 
-            groupStartQIndex = 0; 
-            await createSessionDoc(); 
-        } else { 
-            questionIndex = currentGroupIdx * STAGE_SIZE; 
-            groupStartQIndex = questionIndex; 
-        } 
-        showQuestion(); 
-    } catch (err) { 
-        console.error('Load error:', err); 
-        panel.innerHTML = `<div class="status-box"><div style="font-size:3rem;margin-bottom:12px;">⚠️</div><p style="color:var(--ruby);font-weight:600;">Failed to load questions</p><p style="font-size:0.85rem;color:var(--muted);margin-top:8px;">${esc(err.message)}</p><button onclick="loadQuestions('${mode}')" style="margin-top:20px;padding:10px 24px;background:var(--jade);color:white;border:none;border-radius:100px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;">🔄 Retry</button><button onclick="resetToModeSelect()" style="margin-top:10px;margin-left:10px;padding:10px 24px;background:var(--ink);color:white;border:none;border-radius:100px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;">← Back</button></div>`; 
-    } 
+function showQuestionFree() {
+    if (timerInterval) clearInterval(timerInterval);
+    if (getCurrentQuestionIndex() >= allQuestions.length) {
+        showResults();
+        return;
+    }
+    
+    const q = allQuestions[getCurrentQuestionIndex()];
+    const panel = document.getElementById('quizPanel');
+    
+    panel.innerHTML = `
+        <div class="quiz-meta">
+            <div class="meta-pill meta-subject">${SUBJECT_NAMES[currentSubject] || currentSubject}</div>
+            <div class="meta-pill meta-subject">⏰ Unlimited Time</div>
+            <div class="meta-pill meta-progress">Q${getCurrentQuestionIndex() + 1} of ${allQuestions.length}</div>
+        </div>
+        <div class="question-text">${renderText(q.question)}</div>
+        <div class="options-grid">
+            ${['A','B','C','D'].map(letter => `<button class="option-btn" onclick="checkAnswerFree('${letter}')" id="opt${letter}"><span class="option-letter">${letter}</span><span>${renderText(q['option' + letter] || '')}</span></button>`).join('')}
+        </div>
+        <div class="explanation-box" id="expBox"></div>
+        <div class="next-btn-wrap" id="nextWrap"></div>
+    `;
+    
+    if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise([panel]).catch(e => console.warn('MathJax:', e));
+    }
 }
 
-async function createSessionDoc() { if (!currentUser) return; try { const expiresAt = new Date(Date.now() + PREMIUM_DURATION_MS); const ref = await firestore.collection('quiz_sessions').add({ userId: currentUser.uid, userEmail: currentUser.email, subject: currentSubject, score: 0, currentGroupIdx: 0, usedQuestionIds: [], status: 'active', expiresAt: expiresAt, startedAt: firebase.firestore.FieldValue.serverTimestamp() }); _sessionDocId = ref.id; } catch (e) { console.warn('Session create:', e); } }
+function showQuestionPremium() {
+    if (timerInterval) clearInterval(timerInterval);
+    isAnswered = false;
+    
+    const qIndex = getCurrentQuestionIndex();
+    if (qIndex >= allQuestions.length) {
+        showResults();
+        return;
+    }
+    
+    const q = allQuestions[qIndex];
+    const panel = document.getElementById('quizPanel');
+    const timeLimit = TIME_PER_QUESTION_PREM;
+    timeLeft = timeLimit;
+    timerMax = timeLimit;
+    
+    const startQ = (currentStage - 1) * QUESTIONS_PER_STAGE + 1;
+    const endQ = currentStage * QUESTIONS_PER_STAGE;
+    
+    const totalStages = Math.ceil(allQuestions.length / QUESTIONS_PER_STAGE);
+    let stageDots = '';
+    for (let i = 1; i <= Math.min(totalStages, 10); i++) {
+        let cls = 'locked';
+        if (i < currentStage) cls = 'completed';
+        if (i === currentStage) cls = 'current';
+        stageDots += `<div class="stage-dot ${cls}">${i}</div>`;
+    }
+    
+    const maxFails = getMaxFailsForStage(currentStage);
+    const failsLeft = maxFails - failsInCurrentStage;
+    
+    panel.innerHTML = `
+        <div class="stage-progress-wrap">
+            <div class="stage-progress-header">
+                <span class="stage-label">📍 Stage ${currentStage} — Questions ${startQ}-${Math.min(endQ, allQuestions.length)}</span>
+                <div style="display:flex;gap:8px;align-items:center;">
+                    <span class="meta-pill ${failsInCurrentStage > 0 ? 'meta-fails' : 'meta-fails-ok'}">❤️ ${failsLeft} fail${failsLeft !== 1 ? 's' : ''} left</span>
+                    <span class="stage-score-chip">🏆 ${score} pts</span>
+                </div>
+            </div>
+            <div class="stage-dots">${stageDots}</div>
+        </div>
+        <div class="quiz-meta">
+            <div class="meta-pill meta-subject">${SUBJECT_NAMES[currentSubject] || currentSubject}</div>
+            <div class="timer-wrap">
+                <span class="timer-label">⏱️ Time</span>
+                <div class="timer-ring">
+                    <svg width="54" height="54" viewBox="0 0 54 54">
+                        <circle class="timer-track" cx="27" cy="27" r="23"/>
+                        <circle class="timer-arc" id="timerArc" cx="27" cy="27" r="23" stroke-dasharray="${2 * Math.PI * 23}" stroke-dashoffset="0"/>
+                    </svg>
+                    <div class="timer-text" id="timerText">${timeLeft}</div>
+                </div>
+            </div>
+            <div class="meta-pill meta-progress">Q${qIndex + 1} of ${allQuestions.length}</div>
+        </div>
+        <div class="question-text">${renderText(q.question)}</div>
+        <div class="options-grid">
+            ${['A','B','C','D'].map(letter => `<button class="option-btn" onclick="checkAnswerPremium('${letter}')" id="opt${letter}"><span class="option-letter">${letter}</span><span>${renderText(q['option' + letter] || '')}</span></button>`).join('')}
+        </div>
+        <div class="explanation-box" id="expBox"></div>
+        <div class="next-btn-wrap" id="nextWrap"></div>
+    `;
+    
+    if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise([panel]).catch(e => console.warn('MathJax:', e));
+    }
+    
+    startTimer();
+}
 
-async function updateSessionDoc() { if (!currentUser || !_sessionDocId) return; try { await firestore.collection('quiz_sessions').doc(_sessionDocId).update({ score: score, currentGroupIdx: currentGroupIdx, usedQuestionIds: [...usedQuestionIds] }); } catch (e) { console.warn('Session update:', e); } }
+function startTimer() {
+    const arc = document.getElementById('timerArc');
+    const text = document.getElementById('timerText');
+    if (!arc || !text) return;
+    
+    const circumference = 2 * Math.PI * 23;
+    timerInterval = setInterval(() => {
+        if (isAnswered) return;
+        timeLeft--;
+        text.textContent = timeLeft;
+        arc.style.strokeDashoffset = circumference * (1 - timeLeft / timerMax);
+        if (timeLeft <= 3) arc.classList.add('danger');
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            if (!isAnswered) handleTimeoutPremium();
+        }
+    }, 1000);
+}
 
-async function closeSessionDoc() { if (!currentUser || !_sessionDocId) return; try { await firestore.collection('quiz_sessions').doc(_sessionDocId).update({ status: 'completed', finalScore: score, completedAt: firebase.firestore.FieldValue.serverTimestamp() }); } catch (e) { console.warn('Session close:', e); } }
+function handleTimeoutPremium() {
+    isAnswered = true;
+    const q = allQuestions[getCurrentQuestionIndex()];
+    disableOptions();
+    highlightCorrect(q.answer);
+    showExplanation(q, null, 'timeout');
+    
+    failsInCurrentStage++;
+    const maxFails = getMaxFailsForStage(currentStage);
+    
+    if (failsInCurrentStage > maxFails) {
+        showStageFailed();
+    } else {
+        showNextButtonPremium(false);
+    }
+    updateStageProgressDisplay();
+}
 
-function buildStageProgressHTML() { const totalGroups = Math.ceil(Math.min(allQuestions.length, 50) / STAGE_SIZE); let dots = ''; for (let i = 0; i < totalGroups; i++) { let cls = 'locked'; if (i < currentGroupIdx) cls = 'completed'; if (i === currentGroupIdx) cls = 'current'; dots += `<div class="stage-dot ${cls}" title="Stage ${i+1}">${cls === 'completed' ? '✓' : i+1}</div>`; } const maxFails = maxFailsForGroup(currentGroupIdx); const failsLeft = maxFails - failsInCurrentGroup; const failsChip = currentMode === 'premium' ? `<span class="meta-pill ${failsInCurrentGroup > 0 ? 'meta-fails' : 'meta-fails-ok'}">${maxFails === 0 ? 'No fails allowed' : `❤️ ${failsLeft} fail${failsLeft !== 1 ? 's' : ''} left`}</span>` : ''; return `<div class="stage-progress-wrap"><div class="stage-progress-header"><span class="stage-label">📍 Stage ${currentGroupIdx + 1} — Questions ${currentGroupIdx * STAGE_SIZE + 1}–${(currentGroupIdx + 1) * STAGE_SIZE}</span><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">${failsChip}<span class="stage-score-chip">🏆 ${score} pts</span></div></div><div class="stage-dots">${dots}</div></div>`; }
+function checkAnswerFree(selected) {
+    if (isAnswered) return;
+    isAnswered = true;
+    
+    const q = allQuestions[getCurrentQuestionIndex()];
+    const correct = q.answer;
+    const isCorrect = selected === correct;
+    
+    if (isCorrect) freeCorrectCount++;
+    
+    disableOptions();
+    highlightCorrect(correct);
+    if (!isCorrect) {
+        const selBtn = document.getElementById('opt' + selected);
+        if (selBtn) selBtn.classList.add('incorrect');
+    }
+    showExplanation(q, selected, isCorrect ? 'correct' : 'wrong');
+    
+    const nextWrap = document.getElementById('nextWrap');
+    nextWrap.style.display = 'block';
+    const isLast = getCurrentQuestionIndex() + 1 >= allQuestions.length;
+    nextWrap.innerHTML = `<button class="btn-next" onclick="nextQuestionFree()">${isLast ? 'See Results →' : 'Next Question →'}</button>`;
+}
 
-function showQuestion() { if (timerInterval) clearInterval(timerInterval); isAnswered = false; if (questionIndex >= allQuestions.length) { showResults(); return; } const q = allQuestions[questionIndex]; const panel = document.getElementById('quizPanel'); const isPremium = currentMode === 'premium'; const timeLimit = isPremium ? TIME_PER_QUESTION_PREM : 0; timeLeft = timeLimit; timerMax = timeLimit; const posInGroup = (questionIndex - currentGroupIdx * STAGE_SIZE) + 1; const timerHtml = isPremium ? `<div class="timer-wrap"><span class="timer-label">Time</span><div class="timer-ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle class="timer-track" cx="27" cy="27" r="23"/><circle class="timer-arc" id="timerArc" cx="27" cy="27" r="23" stroke-dasharray="${CIRC}" stroke-dashoffset="0"/></svg><div class="timer-text" id="timerText">${timeLeft}</div></div></div>` : `<div class="meta-pill meta-subject">⏰ Unlimited Time</div>`; panel.innerHTML = `${isPremium ? buildStageProgressHTML() : ''}<div class="quiz-meta"><div class="meta-pill meta-subject">${SUBJECT_NAMES[currentSubject] || currentSubject}</div>${timerHtml}<div class="meta-pill meta-progress">Q${posInGroup} of ${STAGE_SIZE} in stage</div></div><div class="question-text" id="questionText">${renderText(q.question)}</div><div class="options-grid">${['A','B','C','D'].map(letter => `<button class="option-btn" onclick="checkAnswer('${letter}')" id="opt${letter}"><span class="option-letter">${letter}</span><span id="optText${letter}">${renderText(q['option' + letter] || '')}</span></button>`).join('')}</div><div class="explanation-box" id="expBox"></div><div class="next-btn-wrap" id="nextWrap"></div>`; if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise([panel]).catch(e => console.warn('MathJax:', e)); } if (isPremium) startTimer(); }
+function nextQuestionFree() {
+    currentStageIndex++;
+    isAnswered = false;
+    showQuestionFree();
+}
 
-function startTimer() { const arc = document.getElementById('timerArc'); const text = document.getElementById('timerText'); if (!arc || !text) return; timerInterval = setInterval(() => { if (isAnswered) return; timeLeft--; if (text) text.textContent = timeLeft; if (arc) { arc.style.strokeDashoffset = CIRC * (1 - timeLeft / timerMax); if (timeLeft <= 3) arc.classList.add('danger'); } if (timeLeft <= 0) { clearInterval(timerInterval); timerInterval = null; if (!isAnswered) handleTimeout(); } }, 1000); }
+function checkAnswerPremium(selected) {
+    if (isAnswered) return;
+    isAnswered = true;
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = null;
+    
+    const q = allQuestions[getCurrentQuestionIndex()];
+    const correct = q.answer;
+    const isCorrect = selected === correct;
+    
+    disableOptions();
+    highlightCorrect(correct);
+    
+    if (!isCorrect) {
+        const selBtn = document.getElementById('opt' + selected);
+        if (selBtn) selBtn.classList.add('incorrect');
+        failsInCurrentStage++;
+        showExplanation(q, selected, 'wrong');
+        
+        const maxFails = getMaxFailsForStage(currentStage);
+        if (failsInCurrentStage > maxFails) {
+            showStageFailed();
+            return;
+        }
+    } else {
+        showExplanation(q, selected, 'correct');
+    }
+    
+    showNextButtonPremium(isCorrect);
+    updateStageProgressDisplay();
+}
 
-function handleTimeout() { isAnswered = true; const q = allQuestions[questionIndex]; disableOptions(); highlightCorrect(q.answer); showExplanation(q, null, 'timeout'); showNextButton(false); if (currentMode === 'premium') { failsInCurrentGroup++; const progressWrap = document.querySelector('.stage-progress-wrap'); if (progressWrap) progressWrap.outerHTML = buildStageProgressHTML(); } }
+function showNextButtonPremium(wasCorrect) {
+    const nextWrap = document.getElementById('nextWrap');
+    nextWrap.style.display = 'block';
+    
+    const isLastInStage = currentStageIndex + 1 >= QUESTIONS_PER_STAGE;
+    
+    if (isLastInStage) {
+        nextWrap.innerHTML = `<button class="btn-next" onclick="evaluateStageCompletion()">Complete Stage →</button>`;
+    } else {
+        nextWrap.innerHTML = `<button class="btn-next" onclick="nextQuestionPremium()">Next Question →</button>`;
+    }
+}
 
-function checkAnswer(selected) { if (isAnswered) return; isAnswered = true; if (timerInterval) clearInterval(timerInterval); timerInterval = null; const q = allQuestions[questionIndex]; const correct = q.answer; const isCorrect = selected === correct; if (currentMode === 'free' && isCorrect) freeCorrectCount++; disableOptions(); highlightCorrect(correct); if (!isCorrect) { const selBtn = document.getElementById('opt' + selected); if (selBtn) selBtn.classList.add('incorrect'); if (currentMode === 'premium') { failsInCurrentGroup++; const progressWrap = document.querySelector('.stage-progress-wrap'); if (progressWrap) progressWrap.outerHTML = buildStageProgressHTML(); } } showExplanation(q, selected, isCorrect ? 'correct' : 'wrong'); showNextButton(isCorrect); }
+function nextQuestionPremium() {
+    currentStageIndex++;
+    isAnswered = false;
+    showQuestionPremium();
+}
 
-function showNextButton(wasCorrect) { const nextWrap = document.getElementById('nextWrap'); if (!nextWrap) return; nextWrap.style.display = 'block'; if (currentMode !== 'premium') { const isLast = questionIndex + 1 >= allQuestions.length; nextWrap.innerHTML = `<button class="btn-next" onclick="freeNextQuestion()">${isLast ? 'See Results →' : 'Next Question →'}</button>`; return; } const posInGroup = (questionIndex - currentGroupIdx * STAGE_SIZE) + 1; const isLastInGroup = posInGroup >= STAGE_SIZE; const maxFails = maxFailsForGroup(currentGroupIdx); const exceededFails = failsInCurrentGroup > maxFails; if (!isLastInGroup) { if (exceededFails) { nextWrap.innerHTML = `<div style="background:rgba(214,64,69,0.08);border-radius:10px;padding:14px 18px;margin-bottom:12px;font-size:0.88rem;color:var(--ruby);font-weight:600;">⚠️ Too many failures in this stage. Continue to see stage result.</div><button class="btn-next" onclick="premiumNextQuestion()">Continue →</button>`; } else { nextWrap.innerHTML = `<button class="btn-next" onclick="premiumNextQuestion()">Next Question →</button>`; } } else { nextWrap.innerHTML = `<button class="btn-next" onclick="evaluateStage()">See Stage Result →</button>`; } }
+async function evaluateStageCompletion() {
+    const maxFails = getMaxFailsForStage(currentStage);
+    const passed = failsInCurrentStage <= maxFails;
+    
+    if (passed) {
+        const ptsEarned = POINTS_PER_STAGE;
+        score += ptsEarned;
+        await updateSessionDoc();
+        
+        currentStage++;
+        currentStageIndex = 0;
+        failsInCurrentStage = 0;
+        
+        if (getCurrentQuestionIndex() >= allQuestions.length) {
+            showResults();
+        } else {
+            showQuestionPremium();
+            showToast(`🎉 Stage ${currentStage - 1} Complete! +${ptsEarned} points`, 'success');
+        }
+    } else {
+        if (currentStage === 1 || currentStage === 2) {
+            // Reset to Stage 1
+            currentStage = 1;
+            currentStageIndex = 0;
+            failsInCurrentStage = 0;
+            score = 0;
+            showToast(`❌ Failed Stage ${currentStageOld}. Restarting from Stage 1.`, 'error');
+            showQuestionPremium();
+        } else {
+            // Reset to Stage 3
+            currentStage = 3;
+            currentStageIndex = 0;
+            failsInCurrentStage = 0;
+            showToast(`❌ Failed Stage ${currentStageOld}. Restarting from Stage 3.`, 'error');
+            showQuestionPremium();
+        }
+    }
+    await updateSessionDoc();
+}
 
-function freeNextQuestion() { questionIndex++; if (questionIndex >= allQuestions.length) showResults(); else showQuestion(); }
-function premiumNextQuestion() { questionIndex++; showQuestion(); }
+function showStageFailed() {
+    const currentStageOld = currentStage;
+    const panel = document.getElementById('quizPanel');
+    
+    panel.innerHTML = `
+        <div class="stage-result fail">
+            <div style="font-size:3rem;">😤</div>
+            <h2>Stage ${currentStageOld} Failed!</h2>
+            <div class="points-awarded">+0 pts</div>
+            <p>You made too many mistakes in this stage.</p>
+            <div style="display:flex;gap:10px;justify-content:center;margin-top:20px;">
+                <button class="btn-stage-retry" onclick="retryStage()">🔄 Retry Stage ${currentStageOld}</button>
+                <button class="btn-hub" onclick="resetToModeSelect()">← Back to Menu</button>
+            </div>
+        </div>
+    `;
+}
 
-async function evaluateStage() { const maxFails = maxFailsForGroup(currentGroupIdx); const passed = failsInCurrentGroup <= maxFails; const panel = document.getElementById('quizPanel'); const stageNum = currentGroupIdx + 1; const isLastGroup = (currentGroupIdx + 1) * STAGE_SIZE >= allQuestions.length; if (passed) { const ptsEarned = POINTS_PER_STAGE; score += ptsEarned; await updateSessionDoc(); if (isLastGroup) { showResults(); return; } panel.innerHTML = `${buildStageProgressHTML()}<div class="stage-result pass"><div style="font-size:3rem;">🎉</div><h2>Stage ${stageNum} Complete!</h2><div class="points-awarded">+${ptsEarned} pts</div><p>Total score so far: <strong>${score} points</strong></p><button class="btn-continue-stage" onclick="advanceToNextStage()">Advance to Stage ${stageNum + 1} →</button></div>`; if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise([panel]).catch(() => {}); } } else { const resetToStart = resetsToBeginning(currentGroupIdx); const resetNote = resetToStart ? `You'll return to <strong>Stage 1</strong> (Question 1). Points from this stage are not awarded.` : `You'll restart <strong>Stage ${stageNum}</strong>. Points are not awarded for failed stages.`; panel.innerHTML = `${buildStageProgressHTML()}<div class="stage-result fail"><div style="font-size:3rem;">😤</div><h2>Stage ${stageNum} Failed</h2><div class="points-awarded">+0 pts</div><p>You made <strong>${failsInCurrentGroup}</strong> mistake${failsInCurrentGroup !== 1 ? 's' : ''} (maximum allowed: ${maxFails}).<br>${resetNote}</p><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;"><button class="btn-stage-retry" onclick="retryFromFail(${resetToStart})">🔄 ${resetToStart ? 'Restart from Stage 1' : `Retry Stage ${stageNum}`}</button><button class="btn-hub" onclick="resetToModeSelect()">← Back to Menu</button></div></div>`; if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise([panel]).catch(() => {}); } } }
+function retryStage() {
+    currentStageIndex = 0;
+    failsInCurrentStage = 0;
+    showQuestionPremium();
+}
 
-async function advanceToNextStage() { currentGroupIdx++; failsInCurrentGroup = 0; groupStartQIndex = currentGroupIdx * STAGE_SIZE; questionIndex = groupStartQIndex; await updateSessionDoc(); showQuestion(); }
-function retryFromFail(resetToBeginning) { if (resetToBeginning) { currentGroupIdx = 0; score = 0; } failsInCurrentGroup = 0; groupStartQIndex = currentGroupIdx * STAGE_SIZE; questionIndex = groupStartQIndex; const before = allQuestions.slice(0, groupStartQIndex); const after = shuffle(allQuestions.slice(groupStartQIndex)); allQuestions = [...before, ...after]; updateSessionDoc(); showQuestion(); }
-function highlightCorrect(answer) { const btn = document.getElementById('opt' + answer); if (btn) btn.classList.add('correct'); }
-function disableOptions() { ['A','B','C','D'].forEach(l => { const b = document.getElementById('opt' + l); if (b) b.disabled = true; }); }
-function showExplanation(q, selected, state) { const expBox = document.getElementById('expBox'); const correct = q.answer; const correctText = renderText(q['option' + correct] || ''); const selectedText = selected ? renderText(q['option' + selected] || '') : ''; let icon, title, cls; if (state === 'correct') { icon = '✅'; title = '<span style="color:var(--jade)">CORRECT!</span>'; cls = ''; } else if (state === 'wrong') { icon = '❌'; title = '<span style="color:var(--ruby)">INCORRECT</span>'; cls = 'wrong'; } else { icon = '⏰'; title = '<span style="color:var(--gold-deep)">TIME\'S UP!</span>'; cls = 'timeout'; } expBox.className = `explanation-box ${cls}`; expBox.style.display = 'block'; expBox.innerHTML = `<div class="explanation-header"><span class="ex-icon">${icon}</span><span class="ex-title">${title}</span></div><div class="explanation-correct-answer">✓ Correct answer: <strong>${correct}</strong>. ${correctText}</div>${state !== 'correct' && selected ? `<div style="margin-bottom:10px;font-size:0.86rem;color:var(--muted);">Your answer: <strong>${selected}</strong>. ${selectedText}</div>` : ''}<div class="explanation-text">📖 ${renderText(q.explanation || `The correct answer is ${correct}. ${q['option' + correct] || ''}`)}</div>`; if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetPromise([expBox]).catch(() => {}); } }
+function updateStageProgressDisplay() {
+    const progressWrap = document.querySelector('.stage-progress-wrap');
+    if (progressWrap) {
+        const maxFails = getMaxFailsForStage(currentStage);
+        const failsLeft = maxFails - failsInCurrentStage;
+        const failsSpan = progressWrap.querySelector('.meta-pill');
+        if (failsSpan) {
+            failsSpan.className = `meta-pill ${failsInCurrentStage > 0 ? 'meta-fails' : 'meta-fails-ok'}`;
+            failsSpan.innerHTML = `❤️ ${failsLeft} fail${failsLeft !== 1 ? 's' : ''} left`;
+        }
+    }
+}
 
-async function showResults() { if (timerInterval) clearInterval(timerInterval); let pct, correctCount, total; if (currentMode === 'premium') { total = allQuestions.length; const maxPoints = Math.ceil(total / STAGE_SIZE) * POINTS_PER_STAGE; pct = Math.round((score / maxPoints) * 100); correctCount = Math.round((score / (currentGroupIdx * POINTS_PER_STAGE || 1)) * currentGroupIdx * STAGE_SIZE); } else { total = allQuestions.length; correctCount = freeCorrectCount; pct = Math.round((freeCorrectCount / total) * 100); } let emoji, msg, color; if (pct >= 80) { emoji = '🏆'; msg = 'Outstanding! You are a Star!'; color = 'var(--jade)'; } else if (pct >= 60) { emoji = '🎉'; msg = 'Great work! Keep shining!'; color = 'var(--gold-deep)'; } else if (pct >= 40) { emoji = '📚'; msg = 'Good effort! Practice makes perfect.'; color = 'var(--sky)'; } else { emoji = '💪'; msg = "Keep learning — you'll crush it next time!"; color = 'var(--ruby)'; } if (currentUser) saveQuizAttempt(pct); if (currentUser && currentMode === 'premium') { await closeSessionDoc(); savePremiumScore(pct); } document.getElementById('quizPanel').innerHTML = `<div class="result-wrap"><div style="font-size:4rem;">${emoji}</div><div class="result-label">Your Score</div><div class="result-score" style="color:${color}">${pct}%</div><div class="result-label">${currentMode === 'premium' ? score + ' points earned' : correctCount + ' correct out of ' + total}</div><div class="result-message">${msg}</div>${currentMode === 'premium' ? `<div style="background:rgba(232,185,79,0.1);border:1px solid var(--gold);border-radius:12px;padding:14px 20px;margin-bottom:24px;font-size:0.88rem;color:var(--ink);">🏆 You've been entered into this month's ₦10,000 prize draw!<br>📜 Your result has been saved to the leaderboard.</div>` : ''}<div class="result-actions"><button class="btn-restart" onclick="resetAndReload()">🔄 Play Again</button><button class="btn-hub" onclick="goTo('education.html')">🎓 Education Hub</button></div></div>`; document.getElementById('modeGrid').style.display = 'grid'; loadLeaderboard(); }
+function highlightCorrect(answer) {
+    const btn = document.getElementById('opt' + answer);
+    if (btn) btn.classList.add('correct');
+}
 
-function resetAndReload() { currentMode = null; freeCorrectCount = 0; allQuestions = []; questionIndex = 0; score = 0; currentGroupIdx = 0; failsInCurrentGroup = 0; usedQuestionIds = new Set(); _sessionDocId = null; document.getElementById('modeGrid').style.display = 'grid'; document.getElementById('quizPanel').innerHTML = `<div class="status-box"><div style="font-size:3rem;margin-bottom:12px;">🎮</div><p>Choose a mode above to begin your quiz</p></div>`; }
+function disableOptions() {
+    ['A','B','C','D'].forEach(l => {
+        const b = document.getElementById('opt' + l);
+        if (b) b.disabled = true;
+    });
+}
 
-async function saveQuizAttempt(pct) { if (!currentUser) return; try { const name = currentUser.displayName || currentUser.email.split('@')[0]; await firestore.collection('quiz_attempts').add({ userId: currentUser.uid, userEmail: currentUser.email, userName: name, subject: currentSubject, mode: currentMode, score: pct, premiumPoints: currentMode === 'premium' ? score : null, stagesCompleted: currentMode === 'premium' ? currentGroupIdx : null, totalQuestions: allQuestions.length, attemptDate: firebase.firestore.FieldValue.serverTimestamp() }); const studentRef = firestore.collection('students').doc(currentUser.uid); const updateData = { [`quizScores.${currentSubject}`]: pct, totalAttempts: firebase.firestore.FieldValue.increment(1), lastActivity: firebase.firestore.FieldValue.serverTimestamp(), accountStatus: 'active' }; const snap = await studentRef.get(); const prevBest = snap.exists ? (snap.data()?.bestScores?.[currentSubject] || 0) : 0; if (pct > prevBest) updateData[`bestScores.${currentSubject}`] = pct; if (currentMode === 'premium') { updateData.premiumAttempts = firebase.firestore.FieldValue.increment(1); updateData.totalPaid = firebase.firestore.FieldValue.increment(PREMIUM_PRICE); } else { updateData.freeAttempts = firebase.firestore.FieldValue.increment(1); } await studentRef.set(updateData, { merge: true }); } catch (e) { console.warn('Attempt save:', e); } }
+function showExplanation(q, selected, state) {
+    const expBox = document.getElementById('expBox');
+    const correct = q.answer;
+    const correctText = renderText(q['option' + correct] || '');
+    const selectedText = selected ? renderText(q['option' + selected] || '') : '';
+    
+    let icon, title, cls;
+    if (state === 'correct') { icon = '✅'; title = '<span style="color:var(--jade)">CORRECT!</span>'; cls = ''; }
+    else if (state === 'wrong') { icon = '❌'; title = '<span style="color:var(--ruby)">INCORRECT</span>'; cls = 'wrong'; }
+    else { icon = '⏰'; title = '<span style="color:#c8960f">TIME\'S UP!</span>'; cls = 'timeout'; }
+    
+    expBox.className = `explanation-box ${cls}`;
+    expBox.style.display = 'block';
+    expBox.innerHTML = `
+        <div class="explanation-header"><span class="ex-icon">${icon}</span><span class="ex-title">${title}</span></div>
+        <div class="explanation-correct-answer">✓ Correct answer: <strong>${correct}</strong>. ${correctText}</div>
+        ${state !== 'correct' && selected ? `<div style="margin-bottom:10px;font-size:0.86rem;color:var(--muted);">Your answer: <strong>${selected}</strong>. ${selectedText}</div>` : ''}
+        <div class="explanation-text">📖 ${renderText(q.explanation || `The correct answer is ${correct}.`)}</div>
+    `;
+    
+    if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise([expBox]).catch(() => {});
+    }
+}
 
-async function savePremiumScore(pct) { if (!currentUser) return; try { const month = new Date().toISOString().slice(0, 7); const name = currentUser.displayName || currentUser.email.split('@')[0]; await firestore.collection('monthly_leaderboard').doc(month).collection(currentSubject).doc(currentUser.uid).set({ userId: currentUser.uid, userName: name, email: currentUser.email, score: pct, points: score, subject: currentSubject, date: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }); } catch (e) { console.warn('Score save:', e); } }
+async function showResults() {
+    if (timerInterval) clearInterval(timerInterval);
+    
+    let pct, correctCount, total;
+    if (currentMode === 'premium') {
+        total = allQuestions.length;
+        const maxPoints = Math.ceil(total / QUESTIONS_PER_STAGE) * POINTS_PER_STAGE;
+        pct = maxPoints > 0 ? Math.round((score / maxPoints) * 100) : 0;
+        correctCount = Math.round((score / POINTS_PER_STAGE) * QUESTIONS_PER_STAGE);
+    } else {
+        total = allQuestions.length;
+        correctCount = freeCorrectCount;
+        pct = total > 0 ? Math.round((freeCorrectCount / total) * 100) : 0;
+    }
+    
+    let emoji, msg, color;
+    if (pct >= 80) { emoji = '🏆'; msg = 'Outstanding! You are a Star!'; color = 'var(--jade)'; }
+    else if (pct >= 60) { emoji = '🎉'; msg = 'Great work! Keep shining!'; color = '#c8960f'; }
+    else if (pct >= 40) { emoji = '📚'; msg = 'Good effort! Practice makes perfect.'; color = 'var(--sky)'; }
+    else { emoji = '💪'; msg = "Keep learning — you'll crush it next time!"; color = 'var(--ruby)'; }
+    
+    if (currentUser) await saveQuizAttempt(pct);
+    if (currentUser && currentMode === 'premium') {
+        await closeSessionDoc();
+        await savePremiumScore(pct);
+    }
+    
+    document.getElementById('quizPanel').innerHTML = `
+        <div class="result-wrap">
+            <div style="font-size:4rem;">${emoji}</div>
+            <div class="result-label">Your Score</div>
+            <div class="result-score" style="color:${color}">${pct}%</div>
+            <div class="result-label">${currentMode === 'premium' ? score + ' points earned' : correctCount + ' correct out of ' + total}</div>
+            <div class="result-message">${msg}</div>
+            ${currentMode === 'premium' ? `<div style="background:rgba(232,185,79,0.1);border:1px solid #e8b94f;border-radius:12px;padding:14px 20px;margin-bottom:24px;">🏆 You've been entered into this month's ₦10,000 prize draw!</div>` : ''}
+            <div class="result-actions">
+                <button class="btn-restart" onclick="resetAndReload()">🔄 Play Again</button>
+                <button class="btn-hub" onclick="goTo('education.html')">🎓 Education Hub</button>
+            </div>
+        </div>
+    `;
+    document.getElementById('modeGrid').style.display = 'grid';
+    await loadLeaderboard();
+}
 
-function showPaymentModal() { const existing = document.getElementById('payModal'); if (existing) existing.remove(); document.body.insertAdjacentHTML('beforeend', `<div class="modal-overlay" id="payModal"><div class="modal-card"><div class="modal-header"><button class="modal-close-x" onclick="closeModal()">✕</button><div style="font-size:2.4rem;">🏆</div><h2>Unlock Premium Quiz</h2><p>${subjectName(currentSubject)} · 24-hour access</p></div><div class="modal-body"><div class="price-display"><span class="amount"><span class="currency">₦</span>100</span><span class="period">One-time · 24 hours access · Stage progress saved</span></div><ul class="perks-list"><li><span>🏆</span> Compete for ₦10,000 monthly prize</li><li><span>⏱️</span> 8-second timed challenge per question</li><li><span>📈</span> Stage-based progression (5 questions per stage)</li><li><span>🔁</span> Resume from your last stage within 24 hrs</li><li><span>📜</span> Certificate of Recognition</li><li><span>📊</span> Live leaderboard ranking</li></ul><div class="methods-row"><div class="method-chip">💳 Card</div><div class="method-chip">🏦 Bank</div><div class="method-chip">📱 USSD</div><div class="method-chip">💚 Opay</div><div class="method-chip">🧡 Palmpay</div></div><button class="pay-btn" onclick="initiatePaystack()" id="paystackPayBtn">💳 Pay ₦100 — Secure Checkout</button><button class="cancel-btn" onclick="closeModal()">Maybe later</button><div class="security-note">🔒 Secured by Paystack · Your card details are never stored</div></div></div></div>`); }
+function resetAndReload() {
+    currentMode = null;
+    freeCorrectCount = 0;
+    allQuestions = [];
+    currentStage = 1;
+    currentStageIndex = 0;
+    score = 0;
+    failsInCurrentStage = 0;
+    _sessionDocId = null;
+    document.getElementById('modeGrid').style.display = 'grid';
+    document.getElementById('quizPanel').innerHTML = `<div class="status-box"><div style="font-size:3rem;margin-bottom:12px;">🎮</div><p>Choose a mode above to begin your quiz</p></div>`;
+}
 
-function closeModal() { const m = document.getElementById('payModal'); if (m) m.remove(); resetToModeSelect(); }
+async function createSessionDoc() {
+    if (!currentUser) return;
+    try {
+        const expiresAt = new Date(Date.now() + PREMIUM_DURATION_MS);
+        const ref = await firestore.collection('quiz_sessions').add({
+            userId: currentUser.uid,
+            userEmail: currentUser.email,
+            subject: currentSubject,
+            score: 0,
+            currentStage: 1,
+            currentStageIndex: 0,
+            failsInCurrentStage: 0,
+            status: 'active',
+            expiresAt: expiresAt,
+            startedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        _sessionDocId = ref.id;
+    } catch (e) { console.warn('Session create:', e); }
+}
 
-function initiatePaystack() { if (!currentUser) { closeModal(); goTo('login.html?redirect=quiz.html'); return; } const btn = document.getElementById('paystackPayBtn'); if (btn) { btn.textContent = '⏳ Opening payment…'; btn.disabled = true; } if (typeof PaystackPop === 'undefined') { const s = document.createElement('script'); s.src = 'https://js.paystack.co/v1/inline.js'; s.onload = () => openPaystackIframe(); s.onerror = () => { showToast('Payment system unavailable. Check your internet.', 'error'); if (btn) { btn.textContent = '💳 Pay ₦100 — Secure Checkout'; btn.disabled = false; } }; document.head.appendChild(s); return; } openPaystackIframe(); }
+async function updateSessionDoc() {
+    if (!currentUser || !_sessionDocId) return;
+    try {
+        await firestore.collection('quiz_sessions').doc(_sessionDocId).update({
+            score: score,
+            currentStage: currentStage,
+            currentStageIndex: currentStageIndex,
+            failsInCurrentStage: failsInCurrentStage
+        });
+    } catch (e) { console.warn('Session update:', e); }
+}
 
-function openPaystackIframe() { const ref = `EE_${currentSubject}_${Date.now()}_${currentUser.uid.slice(0,8)}`; const handler = PaystackPop.setup({ key: PAYSTACK_KEY, email: currentUser.email, amount: PREMIUM_PRICE * 100, currency: 'NGN', ref: ref, metadata: { custom_fields: [ { display_name: 'Subject', variable_name: 'subject', value: currentSubject }, { display_name: 'User ID', variable_name: 'user_id', value: currentUser.uid } ] }, callback: response => { closeModal(); processPaymentSuccess(response.reference); }, onClose: () => { const btn = document.getElementById('paystackPayBtn'); if (btn) { btn.textContent = '💳 Pay ₦100 — Secure Checkout'; btn.disabled = false; } } }); handler.openIframe(); }
+async function closeSessionDoc() {
+    if (!currentUser || !_sessionDocId) return;
+    try {
+        await firestore.collection('quiz_sessions').doc(_sessionDocId).update({
+            status: 'completed',
+            finalScore: score,
+            completedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+    } catch (e) { console.warn('Session close:', e); }
+}
 
-async function processPaymentSuccess(reference) { showToast('✅ Payment received! Unlocking your quiz…', 'success'); try { const studentSnap = await firestore.collection('students').doc(currentUser.uid).get(); const studentName = studentSnap.exists ? (studentSnap.data().fullName || currentUser.email.split('@')[0]) : currentUser.email.split('@')[0]; const expiresAt = new Date(Date.now() + PREMIUM_DURATION_MS); await firestore.collection('payments').doc(`PAY_${reference}`).set({ paymentId: `PAY_${reference}`, reference, userId: currentUser.uid, userEmail: currentUser.email, userName: studentName, subject: currentSubject, amount: PREMIUM_PRICE, status: 'verified', paymentDate: firebase.firestore.FieldValue.serverTimestamp(), expiresAt: expiresAt, durationHours: 24 }); await firestore.collection('students').doc(currentUser.uid).set({ totalPaid: firebase.firestore.FieldValue.increment(PREMIUM_PRICE), lastPaymentDate: firebase.firestore.FieldValue.serverTimestamp(), lastPaidSubject: currentSubject, accountStatus: 'active' }, { merge: true }); setTimeout(async () => { showToast('🎉 Access granted! Starting your quiz…', 'success'); score = 0; currentGroupIdx = 0; failsInCurrentGroup = 0; usedQuestionIds = new Set(); _sessionDocId = null; await loadQuestions('premium'); }, 1200); } catch (err) { console.error('Payment save error:', err); showToast('Payment verified but access save failed. Please contact support.', 'error'); } }
+async function saveQuizAttempt(pct) {
+    if (!currentUser) return;
+    try {
+        const name = currentUser.displayName || currentUser.email.split('@')[0];
+        await firestore.collection('quiz_attempts').add({
+            userId: currentUser.uid,
+            userEmail: currentUser.email,
+            userName: name,
+            subject: currentSubject,
+            mode: currentMode,
+            score: pct,
+            premiumPoints: currentMode === 'premium' ? score : null,
+            stagesCompleted: currentMode === 'premium' ? currentStage - 1 : null,
+            totalQuestions: allQuestions.length,
+            attemptDate: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        const studentRef = firestore.collection('students').doc(currentUser.uid);
+        const updateData = {
+            [`quizScores.${currentSubject}`]: pct,
+            totalAttempts: firebase.firestore.FieldValue.increment(1),
+            lastActivity: firebase.firestore.FieldValue.serverTimestamp()
+        };
+        const snap = await studentRef.get();
+        const prevBest = snap.exists ? (snap.data()?.bestScores?.[currentSubject] || 0) : 0;
+        if (pct > prevBest) updateData[`bestScores.${currentSubject}`] = pct;
+        if (currentMode === 'premium') {
+            updateData.premiumAttempts = firebase.firestore.FieldValue.increment(1);
+            updateData.totalPaid = firebase.firestore.FieldValue.increment(PREMIUM_PRICE);
+        } else {
+            updateData.freeAttempts = firebase.firestore.FieldValue.increment(1);
+        }
+        await studentRef.set(updateData, { merge: true });
+    } catch (e) { console.warn('Attempt save:', e); }
+}
 
+async function savePremiumScore(pct) {
+    if (!currentUser) return;
+    try {
+        const month = new Date().toISOString().slice(0, 7);
+        const name = currentUser.displayName || currentUser.email.split('@')[0];
+        await firestore.collection('monthly_leaderboard').doc(month).collection(currentSubject).doc(currentUser.uid).set({
+            userId: currentUser.uid,
+            userName: name,
+            email: currentUser.email,
+            score: pct,
+            points: score,
+            stage: currentStage - 1,
+            subject: currentSubject,
+            date: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+    } catch (e) { console.warn('Score save:', e); }
+}
+
+function showPaymentModal() {
+    const existing = document.getElementById('payModal');
+    if (existing) existing.remove();
+    document.body.insertAdjacentHTML('beforeend', `
+        <div class="modal-overlay open" id="payModal">
+            <div class="modal-card">
+                <div class="modal-header">
+                    <button class="modal-close-x" onclick="closeModal()">✕</button>
+                    <div style="font-size:2.4rem;">🏆</div>
+                    <h2>Unlock Premium Quiz</h2>
+                    <p>${subjectName(currentSubject)} · 24-hour access</p>
+                </div>
+                <div class="modal-body">
+                    <div class="price-display"><span class="amount"><span class="currency">₦</span>100</span></div>
+                    <ul class="perks-list">
+                        <li><span>🏆</span> Compete for ₦10,000 monthly prize</li>
+                        <li><span>⏱️</span> 8-second timed challenge</li>
+                        <li><span>📈</span> 10 questions per stage</li>
+                        <li><span>🔁</span> Resume within 24 hours</li>
+                    </ul>
+                    <button class="pay-btn" onclick="initiatePaystack()" id="paystackPayBtn">💳 Pay ₦100 — Secure Checkout</button>
+                    <button class="cancel-btn" onclick="closeModal()">Maybe later</button>
+                </div>
+            </div>
+        </div>
+    `);
+}
+
+function closeModal() {
+    const m = document.getElementById('payModal');
+    if (m) m.remove();
+    resetToModeSelect();
+}
+
+function initiatePaystack() {
+    if (!currentUser) {
+        closeModal();
+        goTo('login.html?redirect=class.html');
+        return;
+    }
+    const btn = document.getElementById('paystackPayBtn');
+    if (btn) { btn.textContent = '⏳ Opening payment…'; btn.disabled = true; }
+    
+    if (typeof PaystackPop === 'undefined') {
+        const s = document.createElement('script');
+        s.src = 'https://js.paystack.co/v1/inline.js';
+        s.onload = () => openPaystackIframe();
+        s.onerror = () => {
+            showToast('Payment system unavailable.', 'error');
+            if (btn) { btn.textContent = '💳 Pay ₦100 — Secure Checkout'; btn.disabled = false; }
+        };
+        document.head.appendChild(s);
+        return;
+    }
+    openPaystackIframe();
+}
+
+function openPaystackIframe() {
+    const ref = `EE_${currentSubject}_${Date.now()}_${currentUser.uid.slice(0,8)}`;
+    const handler = PaystackPop.setup({
+        key: PAYSTACK_KEY,
+        email: currentUser.email,
+        amount: PREMIUM_PRICE * 100,
+        currency: 'NGN',
+        ref: ref,
+        metadata: {
+            custom_fields: [
+                { display_name: 'Subject', variable_name: 'subject', value: currentSubject },
+                { display_name: 'User ID', variable_name: 'user_id', value: currentUser.uid }
+            ]
+        },
+        callback: response => {
+            closeModal();
+            processPaymentSuccess(response.reference);
+        },
+        onClose: () => {
+            const btn = document.getElementById('paystackPayBtn');
+            if (btn) { btn.textContent = '💳 Pay ₦100 — Secure Checkout'; btn.disabled = false; }
+        }
+    });
+    handler.openIframe();
+}
+
+async function processPaymentSuccess(reference) {
+    showToast('✅ Payment received! Unlocking your quiz…', 'success');
+    try {
+        const studentName = currentUser.displayName || currentUser.email.split('@')[0];
+        const expiresAt = new Date(Date.now() + PREMIUM_DURATION_MS);
+        
+        await firestore.collection('payments').doc(`PAY_${reference}`).set({
+            paymentId: `PAY_${reference}`,
+            reference,
+            userId: currentUser.uid,
+            userEmail: currentUser.email,
+            userName: studentName,
+            subject: currentSubject,
+            amount: PREMIUM_PRICE,
+            status: 'verified',
+            paymentDate: firebase.firestore.FieldValue.serverTimestamp(),
+            expiresAt: expiresAt,
+            durationHours: 24
+        });
+        
+        await firestore.collection('students').doc(currentUser.uid).set({
+            totalPaid: firebase.firestore.FieldValue.increment(PREMIUM_PRICE),
+            lastPaymentDate: firebase.firestore.FieldValue.serverTimestamp(),
+            lastPaidSubject: currentSubject,
+            accountStatus: 'active'
+        }, { merge: true });
+        
+        setTimeout(async () => {
+            showToast('🎉 Access granted! Starting your quiz…', 'success');
+            score = 0;
+            currentStage = 1;
+            currentStageIndex = 0;
+            failsInCurrentStage = 0;
+            _sessionDocId = null;
+            await loadQuestions('premium');
+        }, 1200);
+        
+    } catch (err) {
+        console.error('Payment save error:', err);
+        showToast('Payment verified but access save failed. Contact support.', 'error');
+    }
+}
+
+// Leaderboard functions
 const SUBJECTS_LIST = Object.keys(SUBJECT_NAMES);
 let lbCurrentSubject = 'mathematics';
-function buildLbTabs() { const tabs = document.getElementById('lbTabs'); if (!tabs) return; tabs.innerHTML = SUBJECTS_LIST.map(s => `<button class="lb-tab${s === lbCurrentSubject ? ' active' : ''}" onclick="changeLbTab('${s}')">${(SUBJECT_NAMES[s] || s).split(' ')[0]}</button>`).join(''); }
-function changeLbTab(s) { lbCurrentSubject = s; buildLbTabs(); loadLeaderboard(); }
-async function loadLeaderboard() { const content = document.getElementById('lbContent'); const monthLabel = document.getElementById('lbMonthLabel'); if (!content) return; const now = new Date(); const month = now.toISOString().slice(0, 7); const monthName = now.toLocaleString('default', { month: 'long', year: 'numeric' }); if (monthLabel) monthLabel.textContent = `${monthName} rankings`; buildLbTabs(); content.innerHTML = `<div class="lb-loading"><div class="spinner"></div></div>`; try { const snap = await firestore.collection('monthly_leaderboard').doc(month).collection(lbCurrentSubject).orderBy('score', 'desc').limit(10).get(); if (snap.empty) { content.innerHTML = `<div class="lb-empty"><div style="font-size:2.5rem;margin-bottom:10px;">📊</div><p>No entries yet this month for ${subjectName(lbCurrentSubject)}.</p><p style="margin-top:6px;font-size:0.83rem;color:var(--muted);">Be the first to compete!</p></div>`; return; } const rankIcons = ['🥇', '🥈', '🥉']; let html = ''; snap.docs.forEach((doc, i) => { const d = doc.data(); const name = (d.userName || 'Anonymous').slice(0, 20); const initial = name[0].toUpperCase(); const rankClass = i < 3 ? ['gold', 'silver', 'bronze'][i] : ''; const scoreClass = d.score >= 80 ? 'high' : d.score >= 50 ? 'mid' : ''; html += `<div class="lb-row"><div class="lb-rank ${rankClass}">${i < 3 ? rankIcons[i] : (i + 1)}</div><div class="lb-avatar">${esc(initial)}</div><div class="lb-info"><div class="lb-name">${esc(name)}</div><div class="lb-sub">${subjectName(lbCurrentSubject)}</div></div><div class="lb-score ${scoreClass}">${d.score}%</div></div>`; }); content.innerHTML = html; } catch (e) { console.warn('Leaderboard error:', e); content.innerHTML = `<div class="lb-empty">⚠️ Leaderboard unavailable right now.</div>`; } }
+
+function buildLbTabs() {
+    const tabs = document.getElementById('lbTabs');
+    if (!tabs) return;
+    tabs.innerHTML = SUBJECTS_LIST.map(s => `<button class="lb-tab${s === lbCurrentSubject ? ' active' : ''}" onclick="changeLbTab('${s}')">${(SUBJECT_NAMES[s] || s).split(' ')[0]}</button>`).join('');
+}
+
+function changeLbTab(s) {
+    lbCurrentSubject = s;
+    buildLbTabs();
+    loadLeaderboard();
+}
+
+async function loadLeaderboard() {
+    const content = document.getElementById('lbContent');
+    const monthLabel = document.getElementById('lbMonthLabel');
+    if (!content) return;
+    const now = new Date();
+    const month = now.toISOString().slice(0, 7);
+    const monthName = now.toLocaleString('default', { month: 'long', year: 'numeric' });
+    if (monthLabel) monthLabel.textContent = `${monthName} rankings`;
+    buildLbTabs();
+    content.innerHTML = `<div class="lb-loading"><div class="spinner"></div></div>`;
+    
+    try {
+        const snap = await firestore.collection('monthly_leaderboard').doc(month).collection(lbCurrentSubject).orderBy('score', 'desc').limit(50).get();
+        if (snap.empty) {
+            content.innerHTML = `<div class="lb-empty"><div style="font-size:2.5rem;">📊</div><p>No entries yet this month for ${subjectName(lbCurrentSubject)}.</p><p style="margin-top:6px;">Be the first to compete!</p></div>`;
+            return;
+        }
+        const rankIcons = ['🥇', '🥈', '🥉'];
+        let html = '';
+        snap.docs.forEach((doc, i) => {
+            const d = doc.data();
+            const name = (d.userName || 'Anonymous').slice(0, 20);
+            const initial = name[0].toUpperCase();
+            const rankClass = i < 3 ? ['gold', 'silver', 'bronze'][i] : '';
+            const scoreClass = d.score >= 80 ? 'high' : d.score >= 50 ? 'mid' : '';
+            html += `<div class="lb-row"><div class="lb-rank ${rankClass}">${i < 3 ? rankIcons[i] : (i + 1)}</div><div class="lb-avatar">${esc(initial)}</div><div class="lb-info"><div class="lb-name">${esc(name)}</div><div class="lb-sub">Stage: ${d.stage || 0}</div></div><div class="lb-score ${scoreClass}">${d.score}%</div></div>`;
+        });
+        content.innerHTML = html;
+    } catch (e) {
+        console.warn('Leaderboard error:', e);
+        content.innerHTML = `<div class="lb-empty">⚠️ Leaderboard unavailable right now.</div>`;
+    }
+}
 
 document.getElementById('lbMonthLabel').textContent = new Date().toLocaleString('default', { month: 'long', year: 'numeric' }) + ' rankings';
 </script>

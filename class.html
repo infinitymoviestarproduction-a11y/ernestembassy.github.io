@@ -650,6 +650,7 @@ function getCurrentQuestionIndex() {
     return (currentStage - 1) * QUESTIONS_PER_STAGE + currentStageIndex;
 }
 
+// FIXED: Changed orderBy from 'desc' to 'asc' to work with existing index
 async function hasValidPremiumAccess() {
     if (!currentUser) return false;
     try {
@@ -659,7 +660,7 @@ async function hasValidPremiumAccess() {
             .where('subject', '==', currentSubject)
             .where('status', '==', 'verified')
             .where('expiresAt', '>', now)
-            .orderBy('expiresAt', 'desc')
+            .orderBy('expiresAt', 'asc')  // ← CHANGED FROM 'desc' TO 'asc'
             .limit(1)
             .get();
         
@@ -670,6 +671,7 @@ async function hasValidPremiumAccess() {
         }
         return false;
     } catch (e) { 
+        console.warn('Payment check error:', e.message);
         return false; 
     }
 }
@@ -725,6 +727,7 @@ async function checkForResumableSession() {
         }
         return false;
     } catch (e) { 
+        console.warn('Resume check error:', e);
         return false; 
     }
 }
@@ -1222,7 +1225,7 @@ async function savePremiumScore(pct) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-//  PAYMENT FUNCTIONS - FIXED PAYSTACK CALLBACK
+//  PAYMENT FUNCTIONS
 // ══════════════════════════════════════════════════════════════════
 function showPaymentModal() {
     const existing = document.getElementById('payModal');
@@ -1261,22 +1264,6 @@ function closeModal() {
     resetToModeSelect();
 }
 
-// Global Paystack callback handlers
-window.paystackCallback = function(response) {
-    console.log('Paystack callback received:', response);
-    processPaymentSuccess(response.reference);
-};
-
-window.paystackOnClose = function() {
-    console.log('Paystack window closed');
-    const payBtn = document.getElementById('paystackPayBtn');
-    if (payBtn) {
-        payBtn.textContent = '💳 Pay ₦100 with Paystack';
-        payBtn.disabled = false;
-    }
-    showToast('Payment cancelled', 'warning');
-};
-
 function initiatePaystack() {
     if (!currentUser) {
         closeModal();
@@ -1290,7 +1277,6 @@ function initiatePaystack() {
         payBtn.disabled = true;
     }
     
-    // Check if Paystack is available
     if (typeof PaystackPop === 'undefined') {
         showToast('Payment system loading. Please wait...', 'warning');
         if (payBtn) {

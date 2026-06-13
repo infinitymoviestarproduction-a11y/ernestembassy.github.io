@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Lessons - Ernest Embassy LMS</title>
+    <title>Manage Lessons & Resources - Ernest Embassy LMS</title>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
@@ -22,12 +22,13 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         .nav-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
         }
         .logo {
             font-size: 1.4rem;
@@ -45,7 +46,6 @@
         }
         .nav-links a:hover { color: #667eea; }
 
-        /* Back Navigation Bar */
         .back-nav {
             background: #f7fafc;
             padding: 12px 20px;
@@ -54,6 +54,8 @@
             gap: 15px;
             flex-wrap: wrap;
             align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
         }
         .back-btn {
             display: inline-flex;
@@ -75,7 +77,6 @@
             color: white;
             transform: translateY(-2px);
         }
-        .back-btn.admin:hover { background: #eb3349; border-color: #eb3349; }
 
         .page-header {
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -86,9 +87,8 @@
         .page-header h1 { font-size: 2rem; }
         .page-header p { opacity: 0.85; margin-top: 8px; }
 
-        .container { max-width: 1100px; margin: 0 auto; padding: 30px 20px; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 30px 20px; }
 
-        /* Upload Card */
         .upload-card {
             background: white;
             border-radius: 20px;
@@ -107,7 +107,7 @@
 
         .form-row {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
             margin-bottom: 20px;
         }
@@ -136,7 +136,6 @@
 
         .full-width { grid-column: 1 / -1; }
 
-        /* File Drop Zone */
         .drop-zone {
             border: 3px dashed #cbd5e0;
             border-radius: 15px;
@@ -160,16 +159,9 @@
             height: 100%;
         }
         .drop-icon { font-size: 3rem; margin-bottom: 10px; }
-        .drop-zone h3 { color: #4a5568; margin-bottom: 5px; }
-        .drop-zone p { color: #718096; font-size: 0.85rem; }
-        .file-selected {
-            background: #f0fff4;
-            border-color: #48bb78;
-            border-style: solid;
-        }
+        .file-selected { background: #f0fff4; border-color: #48bb78; }
         .file-selected h3 { color: #276749; }
 
-        /* Progress */
         .progress-wrap { display: none; margin-top: 15px; }
         .progress-bar-bg {
             background: #e2e8f0;
@@ -184,7 +176,6 @@
             width: 0%;
             transition: width 0.3s;
         }
-        .progress-label { text-align: center; font-size: 0.85rem; color: #667eea; margin-top: 6px; font-weight: 600; }
 
         .btn-upload {
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -195,14 +186,13 @@
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s, opacity 0.2s;
+            transition: transform 0.2s;
             margin-top: 20px;
             width: 100%;
         }
         .btn-upload:hover { transform: translateY(-2px); }
-        .btn-upload:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .btn-upload:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        /* Toast */
         .toast {
             position: fixed;
             top: 80px;
@@ -212,29 +202,18 @@
             padding: 14px 20px;
             border-radius: 10px;
             font-weight: 600;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
             z-index: 9999;
             display: none;
             max-width: 320px;
         }
         .toast.error { background: #c53030; }
-        .toast.show { display: block; animation: slideIn 0.3s ease; }
-        @keyframes slideIn { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .toast.show { display: block; }
 
-        /* Lessons List */
         .lessons-card {
             background: white;
             border-radius: 20px;
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-        }
-        .lessons-card h2 {
-            color: #2d3748;
-            margin-bottom: 20px;
-            font-size: 1.3rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
         .filter-row {
@@ -250,7 +229,6 @@
             font-size: 0.9rem;
             outline: none;
         }
-        .filter-row select:focus, .filter-row input:focus { border-color: #667eea; }
 
         .lesson-item {
             display: flex;
@@ -261,6 +239,7 @@
             border-radius: 12px;
             margin-bottom: 12px;
             transition: box-shadow 0.2s;
+            flex-wrap: wrap;
         }
         .lesson-item:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
         .lesson-type-icon {
@@ -278,8 +257,8 @@
         .type-video { background: #f0fff4; }
         .type-text { background: #faf5ff; }
 
-        .lesson-info { flex: 1; min-width: 0; }
-        .lesson-title { font-weight: 600; color: #2d3748; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .lesson-info { flex: 1; min-width: 200px; }
+        .lesson-title { font-weight: 600; color: #2d3748; margin-bottom: 3px; }
         .lesson-meta { font-size: 0.8rem; color: #718096; }
         .lesson-subject {
             background: #ebf4ff;
@@ -288,7 +267,6 @@
             border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 600;
-            white-space: nowrap;
         }
 
         .lesson-actions { display: flex; gap: 8px; }
@@ -305,17 +283,13 @@
         .btn-delete { background: #fff5f5; color: #c53030; }
         .btn-action:hover { opacity: 0.75; }
 
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #a0aec0;
-        }
-        .empty-state p { font-size: 1rem; margin-top: 10px; }
-
-        .loading-spinner {
-            text-align: center;
-            padding: 30px;
-            color: #a0aec0;
+        .badge-new {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-left: 8px;
         }
 
         .floating-home {
@@ -338,9 +312,8 @@
 
         @media (max-width: 768px) {
             .form-row { grid-template-columns: 1fr; }
-            .lesson-actions { flex-direction: column; }
-            .nav-container { flex-direction: column; gap: 10px; }
-            .back-nav { justify-content: center; }
+            .lesson-actions { margin-top: 10px; }
+            .nav-container { flex-direction: column; gap: 10px; text-align: center; }
         }
     </style>
 </head>
@@ -348,9 +321,8 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- Back Navigation Bar -->
 <div class="back-nav">
-    <a href="admin.html" class="back-btn admin">🔙 Back to Admin Dashboard</a>
+    <a href="admin.html" class="back-btn">🔙 Back to Admin Dashboard</a>
     <a href="index.html" class="back-btn">🏠 Back to Home</a>
     <a href="dashboard.html" class="back-btn">👤 My Dashboard</a>
 </div>
@@ -359,50 +331,53 @@
     <div class="nav-container">
         <a href="index.html" class="logo">⚡ Ernest Embassy LMS</a>
         <div class="nav-links">
-            <a href="dashboard.html">Dashboard</a>
-            <a href="admin.html">Admin</a>
-            <a href="logout.html">Logout</a>
+            <a href="dashboard.html">📊 Dashboard</a>
+            <a href="admin.html">👑 Admin</a>
+            <a href="admin-users.html">👥 Users</a>
+            <a href="admin-payments.html">💰 Payments</a>
+            <a href="logout.html">🚪 Logout</a>
         </div>
     </div>
 </nav>
 
 <div class="page-header">
     <h1>📚 Manage Lessons & Resources</h1>
-    <p>Upload PDF, Word documents, and other study materials for students</p>
+    <p>Upload PDF, Word documents, videos, and other study materials for students</p>
 </div>
 
 <div class="container">
 
-    <!-- Upload Form -->
     <div class="upload-card">
-        <h2>📤 Upload New Resource</h2>
+        <h2>📤 Upload New Resource <span class="badge-new">Supports All Subjects</span></h2>
 
         <div class="form-row">
             <div class="form-group">
                 <label>Lesson Title *</label>
-                <input type="text" id="lessonTitle" placeholder="e.g. Introduction to Algebra">
+                <input type="text" id="lessonTitle" placeholder="e.g. Introduction to Cell Biology">
             </div>
             <div class="form-group">
                 <label>Subject *</label>
                 <select id="lessonSubject">
                     <option value="">-- Select Subject --</option>
-                    <option>Mathematics</option>
-                    <option>English Language</option>
-                    <option>Physics</option>
-                    <option>Chemistry</option>
-                    <option>Biology</option>
-                    <option>Economics</option>
-                    <option>Government</option>
-                    <option>Geography</option>
-                    <option>Literature</option>
-                    <option>Commerce</option>
-                    <option>Accounting</option>
-                    <option>Agricultural Science</option>
-                    <option>Further Mathematics</option>
-                    <option>Computer Science</option>
-                    <option>Civic Education</option>
-                    <option>CRS/IRS</option>
-                    <option>General</option>
+                    <option>📐 Mathematics</option>
+                    <option>⚛️ Physics</option>
+                    <option>🧪 Chemistry</option>
+                    <option>🔬 Biology <span class="badge-new">NEW</span></option>
+                    <option>📖 English Language</option>
+                    <option>📚 Literature-in-English <span class="badge-new">NEW</span></option>
+                    <option>💻 Digital Technology</option>
+                    <option>🗣️ Igbo Language</option>
+                    <option>📊 Economics</option>
+                    <option>🏛️ Government</option>
+                    <option>🌍 Geography</option>
+                    <option>💼 Commerce</option>
+                    <option>📈 Accounting</option>
+                    <option>📐 Further Mathematics</option>
+                    <option>💻 Computer Science</option>
+                    <option>⚖️ Civic Education</option>
+                    <option>⛪ CRS/IRS</option>
+                    <option>🌾 Agricultural Science</option>
+                    <option>📚 General Studies</option>
                 </select>
             </div>
         </div>
@@ -410,7 +385,7 @@
         <div class="form-row">
             <div class="form-group">
                 <label>Topic / Chapter</label>
-                <input type="text" id="lessonTopic" placeholder="e.g. Chapter 3 - Quadratic Equations">
+                <input type="text" id="lessonTopic" placeholder="e.g. Chapter 3 - Cell Structure">
             </div>
             <div class="form-group">
                 <label>Class / Level</label>
@@ -423,6 +398,7 @@
                     <option>JSS1</option>
                     <option>JSS2</option>
                     <option>JSS3</option>
+                    <option>Primary</option>
                     <option>All Students</option>
                 </select>
             </div>
@@ -435,23 +411,21 @@
             </div>
         </div>
 
-        <!-- File Drop Zone -->
         <div class="form-group">
-            <label>Upload File (PDF or Word Document) *</label>
+            <label>Upload File *</label>
             <div class="drop-zone" id="dropZone">
-                <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt" onchange="handleFileSelect(event)">
+                <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.mp4,.mov" onchange="handleFileSelect(event)">
                 <div class="drop-icon">📂</div>
                 <h3>Click to browse or drag & drop</h3>
-                <p>Supported: PDF, Word (.doc/.docx), PowerPoint, Text files • Max size: 20MB</p>
+                <p>Supported: PDF, Word (.doc/.docx), PowerPoint, Text, Video • Max size: 50MB</p>
             </div>
         </div>
 
-        <!-- Progress Bar -->
         <div class="progress-wrap" id="progressWrap">
             <div class="progress-bar-bg">
                 <div class="progress-bar" id="progressBar"></div>
             </div>
-            <div class="progress-label" id="progressLabel">Uploading... 0%</div>
+            <div class="progress-label" id="progressLabel" style="text-align:center; font-size:0.85rem; margin-top:5px;">Uploading... 0%</div>
         </div>
 
         <button class="btn-upload" id="uploadBtn" onclick="uploadLesson()">
@@ -459,38 +433,53 @@
         </button>
     </div>
 
-    <!-- Lessons List -->
     <div class="lessons-card">
         <h2>📋 All Resources <span style="font-size:0.9rem; color:#718096; font-weight:400;" id="lessonCount"></span></h2>
 
         <div class="filter-row">
             <select id="filterSubject" onchange="loadLessons()">
                 <option value="">All Subjects</option>
-                <option>Mathematics</option>
-                <option>English Language</option>
-                <option>Physics</option>
-                <option>Chemistry</option>
-                <option>Biology</option>
-                <option>Economics</option>
-                <option>Government</option>
-                <option>Geography</option>
-                <option>Literature</option>
-                <option>Commerce</option>
-                <option>Accounting</option>
-                <option>Further Mathematics</option>
-                <option>Computer Science</option>
-                <option>General</option>
+                <option>📐 Mathematics</option>
+                <option>⚛️ Physics</option>
+                <option>🧪 Chemistry</option>
+                <option>🔬 Biology</option>
+                <option>📖 English Language</option>
+                <option>📚 Literature-in-English</option>
+                <option>💻 Digital Technology</option>
+                <option>🗣️ Igbo Language</option>
+                <option>📊 Economics</option>
+                <option>🏛️ Government</option>
+                <option>🌍 Geography</option>
+                <option>💼 Commerce</option>
+                <option>📈 Accounting</option>
+                <option>📐 Further Mathematics</option>
+                <option>💻 Computer Science</option>
+                <option>⚖️ Civic Education</option>
+                <option>⛪ CRS/IRS</option>
+                <option>🌾 Agricultural Science</option>
+                <option>📚 General Studies</option>
+            </select>
+            <select id="filterLevel" onchange="loadLessons()">
+                <option value="">All Levels</option>
+                <option>SS1</option>
+                <option>SS2</option>
+                <option>SS3 / WAEC</option>
+                <option>SS3 / JAMB</option>
+                <option>JSS1</option>
+                <option>JSS2</option>
+                <option>JSS3</option>
+                <option>Primary</option>
+                <option>All Students</option>
             </select>
             <input type="text" id="searchInput" placeholder="🔍 Search lessons..." oninput="loadLessons()" style="flex:1; min-width:180px;">
         </div>
 
         <div id="lessonsList">
-            <div class="loading-spinner">⏳ Loading lessons...</div>
+            <div class="loading-spinner" style="text-align:center; padding:40px;">⏳ Loading lessons...</div>
         </div>
     </div>
 </div>
 
-<!-- Floating Home Button -->
 <a href="index.html" class="floating-home" title="Go to Home">🏠</a>
 
 <script>
@@ -523,18 +512,17 @@
     function handleFileSelect(e) {
         const file = e.target.files[0];
         if (!file) return;
-        if (file.size > 20 * 1024 * 1024) {
-            showToast('File too large. Maximum size is 20MB.', 'error');
+        if (file.size > 50 * 1024 * 1024) {
+            showToast('File too large. Maximum size is 50MB.', 'error');
             return;
         }
         selectedFile = file;
         const dz = document.getElementById('dropZone');
         dz.classList.add('file-selected');
         dz.querySelector('h3').textContent = '✅ ' + file.name;
-        dz.querySelector('p').textContent = (file.size / 1024).toFixed(1) + ' KB • ' + file.type;
+        dz.querySelector('p').textContent = (file.size / 1024).toFixed(1) + ' KB • ' + (file.type || 'file');
     }
 
-    // Drag and drop support
     const dz = document.getElementById('dropZone');
     dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
     dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
@@ -553,7 +541,7 @@
         if (type.includes('pdf')) return { icon: '📕', cls: 'type-pdf' };
         if (type.includes('word') || type.includes('docx') || type.includes('doc')) return { icon: '📘', cls: 'type-docx' };
         if (type.includes('presentation') || type.includes('ppt')) return { icon: '📊', cls: 'type-video' };
-        if (type.includes('video')) return { icon: '🎬', cls: 'type-video' };
+        if (type.includes('video') || type.includes('mp4')) return { icon: '🎬', cls: 'type-video' };
         return { icon: '📄', cls: 'type-text' };
     }
 
@@ -577,7 +565,8 @@
         try {
             const timestamp = Date.now();
             const safeName = selectedFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-            const filePath = `lessons/${subject}/${timestamp}_${safeName}`;
+            const subjectClean = subject.replace(/[^a-zA-Z0-9]/g, '_');
+            const filePath = `lessons/${subjectClean}/${timestamp}_${safeName}`;
             const storageRef = storage.ref(filePath);
             const uploadTask = storageRef.put(selectedFile);
 
@@ -608,6 +597,7 @@
                         fileSize: selectedFile.size,
                         filePath,
                         uploadedBy: auth.currentUser?.email || 'admin',
+                        downloads: 0,
                         createdAt: firebase.firestore.FieldValue.serverTimestamp()
                     });
 
@@ -618,15 +608,13 @@
                     document.getElementById('progressBar').style.width = '0%';
 
                     document.getElementById('lessonTitle').value = '';
-                    document.getElementById('lessonSubject').value = '';
                     document.getElementById('lessonTopic').value = '';
-                    document.getElementById('lessonLevel').value = '';
                     document.getElementById('lessonDesc').value = '';
                     selectedFile = null;
                     const dz2 = document.getElementById('dropZone');
                     dz2.classList.remove('file-selected');
                     dz2.querySelector('h3').textContent = 'Click to browse or drag & drop';
-                    dz2.querySelector('p').textContent = 'Supported: PDF, Word (.doc/.docx), PowerPoint, Text files • Max size: 20MB';
+                    dz2.querySelector('p').textContent = 'Supported: PDF, Word (.doc/.docx), PowerPoint, Text, Video • Max size: 50MB';
                     document.getElementById('fileInput').value = '';
 
                     loadLessons();
@@ -642,34 +630,39 @@
 
     async function loadLessons() {
         const filterSubject = document.getElementById('filterSubject').value;
+        const filterLevel = document.getElementById('filterLevel').value;
         const search = document.getElementById('searchInput').value.toLowerCase();
 
         try {
             let query = db.collection('lessons').orderBy('createdAt', 'desc');
-            if (filterSubject) query = query.where('subject', '==', filterSubject);
+            if (filterSubject && filterSubject !== '') {
+                query = query.where('subject', '==', filterSubject);
+            }
 
             const snap = await query.get();
             allLessons = [];
             snap.forEach(doc => allLessons.push({ id: doc.id, ...doc.data() }));
 
-            const filtered = allLessons.filter(l =>
-                !search ||
-                l.title?.toLowerCase().includes(search) ||
-                l.topic?.toLowerCase().includes(search) ||
-                l.subject?.toLowerCase().includes(search)
-            );
+            let filtered = allLessons.filter(l => {
+                let match = true;
+                if (filterLevel && filterLevel !== '' && l.level !== filterLevel) match = false;
+                if (search && !(l.title?.toLowerCase().includes(search) || 
+                    l.topic?.toLowerCase().includes(search) || 
+                    l.subject?.toLowerCase().includes(search))) match = false;
+                return match;
+            });
 
             document.getElementById('lessonCount').textContent = `(${filtered.length} resources)`;
             renderLessons(filtered);
         } catch (err) {
-            document.getElementById('lessonsList').innerHTML = `<div class="empty-state"><p>⚠️ Error loading lessons: ${err.message}</p></div>`;
+            document.getElementById('lessonsList').innerHTML = `<div class="empty-state" style="text-align:center; padding:40px;"><p>⚠️ Error loading lessons: ${err.message}</p></div>`;
         }
     }
 
     function renderLessons(lessons) {
         const container = document.getElementById('lessonsList');
         if (!lessons.length) {
-            container.innerHTML = `<div class="empty-state"><p style="font-size:2rem;">📂</p><p>No resources found. Upload your first lesson above!</p></div>`;
+            container.innerHTML = `<div class="empty-state" style="text-align:center; padding:40px;"><p style="font-size:2rem;">📂</p><p>No resources found. Upload your first lesson above!</p></div>`;
             return;
         }
 
@@ -698,7 +691,7 @@
         try {
             await db.collection('lessons').doc(id).delete();
             if (filePath) {
-                try { await storage.ref(filePath).delete(); } catch(e) { }
+                try { await storage.ref(filePath).delete(); } catch(e) { console.warn('Storage delete failed:', e); }
             }
             showToast('Resource deleted.');
             loadLessons();
@@ -720,8 +713,11 @@
     auth.onAuthStateChanged(user => {
         if (user && adminEmails.includes(user.email)) {
             loadLessons();
-        } else {
+        } else if (user) {
+            showToast("Access Denied. Admin only.", 'error');
             window.location.href = 'dashboard.html';
+        } else {
+            window.location.href = 'login.html';
         }
     });
 </script>

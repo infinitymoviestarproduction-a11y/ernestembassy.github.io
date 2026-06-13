@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analytics - Ernest Embassy LMS</title>
+    <title>Analytics Dashboard - Ernest Embassy LMS</title>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-database-compat.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background: #1a1a2e; min-height: 100vh; }
@@ -20,12 +21,13 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         .nav-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
         }
         .logo {
             font-size: 1.4rem;
@@ -36,6 +38,7 @@
             text-decoration: none;
         }
         .nav-links a { color: #4a5568; text-decoration: none; margin-left: 20px; }
+        .nav-links a:hover { color: #667eea; }
 
         .page-header {
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -46,7 +49,6 @@
         .page-header h1 { font-size: 2rem; }
         .page-header p { opacity: 0.85; margin-top: 8px; }
 
-        /* Back Navigation Bar */
         .back-nav {
             background: #f7fafc;
             padding: 12px 20px;
@@ -54,6 +56,9 @@
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
         }
         .back-btn {
             display: inline-flex;
@@ -75,14 +80,12 @@
             color: white;
             transform: translateY(-2px);
         }
-        .back-btn.admin:hover { background: #eb3349; border-color: #eb3349; }
 
-        .container { max-width: 1100px; margin: 0 auto; padding: 30px 20px; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 30px 20px; }
 
-        /* Big Stats */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 18px;
             margin-bottom: 28px;
         }
@@ -94,7 +97,9 @@
             box-shadow: 0 6px 20px rgba(0,0,0,0.09);
             position: relative;
             overflow: hidden;
+            transition: transform 0.2s;
         }
+        .stat-card:hover { transform: translateY(-3px); }
         .stat-card::before {
             content: '';
             position: absolute;
@@ -113,7 +118,6 @@
         .stat-lbl { color: #718096; font-size: 0.85rem; margin-top: 4px; }
         .stat-sub { font-size: 0.75rem; color: #a0aec0; margin-top: 3px; }
 
-        /* Two column layout */
         .two-col {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -134,9 +138,10 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            border-left: 3px solid #667eea;
+            padding-left: 12px;
         }
 
-        /* Bar chart */
         .bar-item { margin-bottom: 14px; }
         .bar-label {
             display: flex;
@@ -149,7 +154,6 @@
         .bar-bg { background: #e2e8f0; border-radius: 8px; height: 10px; overflow: hidden; }
         .bar-fill { height: 100%; border-radius: 8px; background: linear-gradient(90deg, #667eea, #764ba2); transition: width 0.8s ease; }
 
-        /* Recent activity list */
         .activity-item {
             display: flex;
             align-items: center;
@@ -157,7 +161,6 @@
             padding: 10px 0;
             border-bottom: 1px solid #f0f4f8;
         }
-        .activity-item:last-child { border-bottom: none; }
         .activity-dot {
             width: 10px;
             height: 10px;
@@ -172,8 +175,6 @@
         .activity-text { flex: 1; font-size: 0.88rem; color: #4a5568; }
         .activity-time { font-size: 0.78rem; color: #a0aec0; white-space: nowrap; }
 
-        /* Revenue panel */
-        .revenue-panel { margin-bottom: 22px; }
         .revenue-table { width: 100%; border-collapse: collapse; }
         .revenue-table th {
             background: #f7fafc;
@@ -183,7 +184,6 @@
             font-weight: 700;
             color: #4a5568;
             text-transform: uppercase;
-            letter-spacing: 0.04em;
             border-bottom: 2px solid #e2e8f0;
         }
         .revenue-table td {
@@ -197,13 +197,9 @@
         .badge-verified { background: #d1fae5; color: #065f46; padding: 3px 9px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
         .badge-pending  { background: #fef3c7; color: #92400e; padding: 3px 9px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
 
-        /* Full width panel */
-        .full-panel { margin-bottom: 22px; }
-
-        /* Quick link buttons */
         .quick-links {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 12px;
             margin-bottom: 28px;
         }
@@ -216,7 +212,7 @@
             text-decoration: none;
             color: #2d3748;
             box-shadow: 0 4px 12px rgba(0,0,0,0.07);
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -225,6 +221,15 @@
         .quick-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
         .quick-btn .qicon { font-size: 1.8rem; }
         .quick-btn span { font-size: 0.85rem; font-weight: 600; }
+
+        .badge-new {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-left: 8px;
+        }
 
         .floating-home {
             position: fixed;
@@ -248,16 +253,15 @@
 
         @media (max-width: 768px) {
             .two-col { grid-template-columns: 1fr; }
-            .nav-container { flex-direction: column; gap: 10px; }
+            .nav-container { flex-direction: column; gap: 10px; text-align: center; }
             .back-nav { justify-content: center; }
         }
     </style>
 </head>
 <body>
 
-<!-- Back Navigation Bar -->
 <div class="back-nav">
-    <a href="admin.html" class="back-btn admin">🔙 Back to Admin Dashboard</a>
+    <a href="admin.html" class="back-btn">🔙 Back to Admin Dashboard</a>
     <a href="index.html" class="back-btn">🏠 Back to Home</a>
     <a href="dashboard.html" class="back-btn">👤 My Dashboard</a>
 </div>
@@ -266,21 +270,21 @@
     <div class="nav-container">
         <a href="index.html" class="logo">⚡ Ernest Embassy LMS</a>
         <div class="nav-links">
-            <a href="dashboard.html">Dashboard</a>
-            <a href="admin.html">Admin</a>
-            <a href="logout.html">Logout</a>
+            <a href="dashboard.html">📊 Dashboard</a>
+            <a href="admin.html">👑 Admin</a>
+            <a href="admin-users.html">👥 Users</a>
+            <a href="logout.html">🚪 Logout</a>
         </div>
     </div>
 </nav>
 
 <div class="page-header">
     <h1>📊 Analytics Dashboard</h1>
-    <p>Platform statistics and performance overview</p>
+    <p>Platform statistics, student performance, and revenue overview</p>
 </div>
 
 <div class="container">
 
-    <!-- Quick Nav -->
     <div class="quick-links">
         <a href="admin-users.html" class="quick-btn"><div class="qicon">👥</div><span>Users</span></a>
         <a href="admin-lessons.html" class="quick-btn"><div class="qicon">📚</div><span>Lessons</span></a>
@@ -289,7 +293,6 @@
         <a href="admin.html" class="quick-btn"><div class="qicon">🏠</div><span>Admin Home</span></a>
     </div>
 
-    <!-- Big Numbers -->
     <div class="stats-grid">
         <div class="stat-card purple">
             <div class="stat-icon">👥</div>
@@ -307,6 +310,7 @@
             <div class="stat-icon">❓</div>
             <div class="stat-num" id="statQuestions">—</div>
             <div class="stat-lbl">Total Questions</div>
+            <div class="stat-sub" id="statPremiumQuestions"></div>
         </div>
         <div class="stat-card blue">
             <div class="stat-icon">📚</div>
@@ -325,40 +329,40 @@
         </div>
     </div>
 
-    <!-- Charts Row -->
     <div class="two-col">
         <div class="panel">
-            <h3>📐 Questions by Subject</h3>
+            <h3>📐 Questions by Subject <span class="badge-new">Includes Literature & Biology</span></h3>
             <div id="subjectChart"><div class="loading-row">⏳ Loading...</div></div>
         </div>
+        <div class="panel">
+            <h3>📈 Student Performance by Subject</h3>
+            <div id="performanceChart"><div class="loading-row">⏳ Loading...</div></div>
+        </div>
+    </div>
+
+    <div class="two-col">
         <div class="panel">
             <h3>🕒 Recent Activity</h3>
             <div id="recentActivity"><div class="loading-row">⏳ Loading...</div></div>
         </div>
+        <div class="panel">
+            <h3>🏆 Draw Qualification Status</h3>
+            <div id="drawStatus"><div class="loading-row">⏳ Loading...</div></div>
+        </div>
     </div>
 
-    <!-- Revenue Table -->
-    <div class="panel full-panel">
+    <div class="panel">
         <h3>💳 Recent Payments</h3>
         <div style="overflow-x:auto;">
             <table class="revenue-table">
                 <thead>
-                    <tr>
-                        <th>Student</th>
-                        <th>Amount</th>
-                        <th>Reference</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                    </tr>
+                    <tr><th>Student</th><th>Amount</th><th>Subject</th><th>Date</th><th>Status</th></tr>
                 </thead>
-                <tbody id="paymentsTable">
-                    <tr><td colspan="5" class="loading-row">⏳ Loading...</td</tr>
-                </tbody>
+                <tbody id="paymentsTable"><tr><td colspan="5" class="loading-row">⏳ Loading...</td></tr</tbody>
             </table>
         </div>
     </div>
 
-    <!-- Lessons by Subject -->
     <div class="panel">
         <h3>📚 Resources by Subject</h3>
         <div id="lessonsChart"><div class="loading-row">⏳ Loading...</div></div>
@@ -366,7 +370,6 @@
 
 </div>
 
-<!-- Floating Home Button -->
 <a href="index.html" class="floating-home" title="Go to Home">🏠</a>
 
 <script>
@@ -382,13 +385,20 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
+    const rtdb = firebase.database();
 
     const adminEmails = ['ernestembassydigitalsolutions@gmail.com', 'damian@ernestembassy.com', 'dev@ernestlms.com'];
 
+    const ALL_SUBJECTS = [
+        'Mathematics', 'Physics', 'Chemistry', 'Biology', 'English Language', 
+        'Literature-in-English', 'Digital Technology', 'Igbo Language'
+    ];
+
     function formatMoney(n) {
+        if (!n) return '₦0';
         if (n >= 1000000) return '₦' + (n/1000000).toFixed(1) + 'M';
         if (n >= 1000) return '₦' + (n/1000).toFixed(1) + 'K';
-        return '₦' + n;
+        return '₦' + n.toLocaleString();
     }
 
     function timeAgo(ts) {
@@ -401,29 +411,31 @@
         return d.toLocaleDateString('en-GB', { day:'numeric', month:'short' });
     }
 
-    function renderBarChart(container, data, maxVal) {
+    function renderBarChart(container, data, maxVal, showIcons = false) {
         if (!data.length) { container.innerHTML = '<div class="loading-row">No data yet.</div>'; return; }
-        container.innerHTML = data.map(item => `
+        container.innerHTML = data.map(item => {
+            const percent = maxVal > 0 ? Math.round((item.value/maxVal)*100) : 0;
+            return `
             <div class="bar-item">
                 <div class="bar-label">
                     <span class="bar-name">${item.label}</span>
                     <span class="bar-val">${item.value}</span>
                 </div>
                 <div class="bar-bg">
-                    <div class="bar-fill" style="width:${Math.round((item.value/maxVal)*100)}%"></div>
+                    <div class="bar-fill" style="width:${percent}%"></div>
                 </div>
-            </div>
-        `).join('');
+            </div>`;
+        }).join('');
     }
 
     async function loadAnalytics() {
         try {
-            // Parallel fetches
-            const [usersSnap, questionsSnap, lessonsSnap, paymentsSnap] = await Promise.all([
-                db.collection('students').get().catch(() => db.collection('users').get()),
-                db.collection('questions').get(),
+            // Fetch all required data
+            const [usersSnap, lessonsSnap, paymentsSnap, studentsSnap] = await Promise.all([
+                db.collection('students').get(),
                 db.collection('lessons').get(),
-                db.collection('payments').orderBy('createdAt', 'desc').limit(20).get()
+                db.collection('payments').orderBy('paymentDate', 'desc').limit(15).get(),
+                db.collection('students').get()
             ]);
 
             // Users stats
@@ -431,7 +443,7 @@
             let premium = 0, joinedToday = 0;
             usersSnap.forEach(doc => {
                 const u = doc.data();
-                if ((u.plan||'').toLowerCase() === 'premium' || u.isPremium) premium++;
+                if (u.totalPaid > 0) premium++;
                 if (u.createdAt) {
                     const d = u.createdAt.toDate ? u.createdAt.toDate() : new Date(u.createdAt);
                     if (d >= today) joinedToday++;
@@ -442,53 +454,133 @@
             document.getElementById('statPremium').textContent = premium;
             document.getElementById('statUsersToday').textContent = joinedToday > 0 ? `+${joinedToday} today` : 'No new today';
             document.getElementById('statPremiumPct').textContent = totalUsers > 0 ? Math.round((premium/totalUsers)*100) + '% of users' : '';
-            document.getElementById('statQuestions').textContent = questionsSnap.size;
             document.getElementById('statLessons').textContent = lessonsSnap.size;
 
-            // Revenue
+            // Get questions from Realtime DB for all subjects
+            let totalQuestions = 0;
+            let premiumQuestions = 0;
+            const questionCounts = {};
+            const subjectPerformance = {};
+
+            for (const subject of ALL_SUBJECTS) {
+                const subjectKey = subject.toLowerCase().replace(/[^a-z]/g, '');
+                try {
+                    // Check free questions
+                    const freeSnap = await rtdb.ref(`${subjectKey}/questions`).once('value');
+                    let freeCount = 0;
+                    const freeData = freeSnap.val();
+                    if (freeData) freeCount = Array.isArray(freeData) ? freeData.length : Object.keys(freeData).length;
+                    
+                    // Check premium questions
+                    const premiumSnap = await rtdb.ref(`premium/${subjectKey}/questions`).once('value');
+                    let premCount = 0;
+                    const premData = premiumSnap.val();
+                    if (premData) premCount = Array.isArray(premData) ? premData.length : Object.keys(premData).length;
+                    
+                    const total = freeCount + premCount;
+                    questionCounts[subject] = total;
+                    totalQuestions += total;
+                    premiumQuestions += premCount;
+                } catch(e) { questionCounts[subject] = 0; }
+            }
+
+            document.getElementById('statQuestions').textContent = totalQuestions;
+            document.getElementById('statPremiumQuestions').textContent = `📌 ${premiumQuestions} Premium`;
+
+            // Revenue stats
             let totalRevenue = 0, pendingCount = 0;
             const recentPayments = [];
             paymentsSnap.forEach(doc => {
                 const p = { id: doc.id, ...doc.data() };
                 recentPayments.push(p);
-                if (p.status === 'verified') totalRevenue += (p.amount || 0);
+                if (p.status === 'verified') totalRevenue += (p.amount || 100);
                 if (p.status === 'pending') pendingCount++;
             });
             document.getElementById('statRevenue').textContent = formatMoney(totalRevenue);
             document.getElementById('statPending').textContent = pendingCount;
 
-            // Questions by subject
-            const subjectCounts = {};
-            questionsSnap.forEach(doc => {
-                const s = doc.data().subject || 'Unknown';
-                subjectCounts[s] = (subjectCounts[s] || 0) + 1;
-            });
-            const subjectData = Object.entries(subjectCounts)
+            // Questions by subject chart
+            const subjectData = Object.entries(questionCounts)
                 .sort((a,b) => b[1]-a[1])
-                .slice(0, 8)
                 .map(([label, value]) => ({ label, value }));
             const maxQ = subjectData[0]?.value || 1;
             renderBarChart(document.getElementById('subjectChart'), subjectData, maxQ);
 
+            // Student performance by subject (average best scores)
+            const performanceData = [];
+            for (const subject of ALL_SUBJECTS) {
+                let totalScore = 0;
+                let studentCount = 0;
+                studentsSnap.forEach(doc => {
+                    const data = doc.data();
+                    const bestScores = data.bestScores || {};
+                    const subjectKey = subject.toLowerCase().replace(/[^a-z]/g, '');
+                    if (bestScores[subjectKey]) {
+                        totalScore += bestScores[subjectKey];
+                        studentCount++;
+                    }
+                });
+                const avgScore = studentCount > 0 ? Math.round(totalScore / studentCount) : 0;
+                performanceData.push({ label: subject, value: avgScore });
+            }
+            performanceData.sort((a,b) => b.value - a.value);
+            const maxPerf = Math.max(...performanceData.map(d => d.value), 1);
+            renderBarChart(document.getElementById('performanceChart'), performanceData, maxPerf);
+
             // Lessons by subject
-            const lessonSubCounts = {};
+            const lessonCounts = {};
             lessonsSnap.forEach(doc => {
                 const s = doc.data().subject || 'Unknown';
-                lessonSubCounts[s] = (lessonSubCounts[s] || 0) + 1;
+                lessonCounts[s] = (lessonCounts[s] || 0) + 1;
             });
-            const lessonData = Object.entries(lessonSubCounts)
+            const lessonData = Object.entries(lessonCounts)
                 .sort((a,b) => b[1]-a[1])
                 .map(([label, value]) => ({ label, value }));
             const maxL = lessonData[0]?.value || 1;
             renderBarChart(document.getElementById('lessonsChart'), lessonData, maxL);
 
+            // Draw Qualification Status
+            let qualifiedStudents = 0;
+            let drawReadySubjects = [];
+            for (const doc of studentsSnap.docs) {
+                const data = doc.data();
+                if (data.totalPaid > 0) {
+                    const sessions = await db.collection('quiz_sessions')
+                        .where('userId', '==', doc.id)
+                        .where('status', '==', 'completed')
+                        .get();
+                    for (const session of sessions.docs) {
+                        const sessionData = session.data();
+                        if ((sessionData.currentGroupIdx || 0) >= 8) {
+                            qualifiedStudents++;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            const drawHtml = `
+                <div style="margin-bottom: 15px;">
+                    <div style="font-size: 1.8rem; font-weight: bold; color: #667eea;">${qualifiedStudents}</div>
+                    <div style="color: #718096;">students qualified for draw (Stage 8+)</div>
+                </div>
+                <div style="background: #fef3c7; padding: 12px; border-radius: 10px;">
+                    <strong>📢 Draw Requirements:</strong><br>
+                    • Minimum 10 students per subject<br>
+                    • Must reach Stage 8 or higher<br>
+                    ${qualifiedStudents >= 10 ? '<span style="color: #10b981;">✅ Draw can proceed!</span>' : '<span style="color: #f39c12;">⚠️ Need ' + (10 - qualifiedStudents) + ' more students</span>'}
+                </div>
+            `;
+            document.getElementById('drawStatus').innerHTML = drawHtml;
+
             // Recent activity
             const activities = [];
+            
             // Recent users
             let recentUsers = [];
             usersSnap.forEach(doc => {
                 const u = doc.data();
-                if (u.createdAt) recentUsers.push({ time: u.createdAt, name: u.name || u.fullName || u.email || 'A student', type: 'user' });
+                if (u.createdAt) recentUsers.push({ time: u.createdAt, name: u.fullName || u.email?.split('@')[0] || 'Student', type: 'user' });
             });
             recentUsers.sort((a,b) => {
                 const ta = a.time.toDate ? a.time.toDate() : new Date(a.time);
@@ -502,15 +594,15 @@
             // Recent payments
             recentPayments.slice(0,3).forEach(p => activities.push({
                 dot: p.status === 'verified' ? 'dot-blue' : 'dot-orange',
-                text: `Payment ${p.status === 'verified' ? 'verified' : 'pending'} — ${p.email || p.studentEmail || 'Student'}`,
-                time: p.createdAt
+                text: `Payment ${p.status === 'verified' ? 'verified' : 'pending'} — ${p.userName || p.userEmail || 'Student'}`,
+                time: p.paymentDate || p.createdAt
             }));
 
             // Recent lessons
             let recentLessons = [];
             lessonsSnap.forEach(doc => {
                 const l = doc.data();
-                if (l.createdAt) recentLessons.push({ time: l.createdAt, title: l.title || 'A lesson' });
+                if (l.createdAt) recentLessons.push({ time: l.createdAt, title: l.title || 'Lesson' });
             });
             recentLessons.sort((a,b) => {
                 const ta = a.time.toDate ? a.time.toDate() : new Date(a.time);
@@ -518,7 +610,7 @@
                 return tb - ta;
             });
             recentLessons.slice(0,2).forEach(l => activities.push({
-                dot: 'dot-purple', text: `Lesson uploaded: "${l.title}"`, time: l.time
+                dot: 'dot-purple', text: `Lesson uploaded: "${l.title.substring(0, 40)}"`, time: l.time
             }));
 
             activities.sort((a,b) => {
@@ -534,7 +626,7 @@
                 actEl.innerHTML = activities.slice(0,8).map(a => `
                     <div class="activity-item">
                         <div class="activity-dot ${a.dot}"></div>
-                        <span class="activity-text">${a.text}</span>
+                        <span class="activity-text">${escapeHtml(a.text)}</span>
                         <span class="activity-time">${timeAgo(a.time)}</span>
                     </div>
                 `).join('');
@@ -543,17 +635,17 @@
             // Payments table
             const ptEl = document.getElementById('paymentsTable');
             if (!recentPayments.length) {
-                ptEl.innerHTML = '<tr><td colspan="5" class="loading-row">No payments yet.</td></tr>';
+                ptEl.innerHTML = '<tr><td colspan="5" class="loading-row">No payments yet.</td</tr';
             } else {
                 ptEl.innerHTML = recentPayments.slice(0,10).map(p => {
-                    const date = p.createdAt ? timeAgo(p.createdAt) : '—';
+                    const date = p.paymentDate ? timeAgo(p.paymentDate) : '—';
                     const status = p.status === 'verified'
                         ? '<span class="badge-verified">✅ Verified</span>'
                         : '<span class="badge-pending">⏳ Pending</span>';
                     return `<tr>
-                        <td>${p.email || p.studentEmail || p.name || '—'}</td>
-                        <td>₦${(p.amount || 0).toLocaleString()}</td>
-                        <td style="font-size:0.78rem;color:#718096;">${p.reference || p.paymentRef || '—'}</td>
+                        <td>${escapeHtml(p.userName || p.userEmail?.split('@')[0] || '—')}</td>
+                        <td>₦${(p.amount || 100).toLocaleString()}</td>
+                        <td>${escapeHtml(p.subject || '—')}</td>
                         <td>${date}</td>
                         <td>${status}</td>
                     </tr>`;
@@ -564,6 +656,16 @@
             console.error(err);
             document.getElementById('subjectChart').innerHTML = `<div style="color:#c53030;padding:20px;">⚠️ Error: ${err.message}</div>`;
         }
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
     }
 
     auth.onAuthStateChanged(user => {

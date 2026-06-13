@@ -20,7 +20,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
-    <!-- Paystack script -->
     <script src="https://js.paystack.co/v1/inline.js"></script>
 
     <style>
@@ -650,24 +649,22 @@ function getCurrentQuestionIndex() {
     return (currentStage - 1) * QUESTIONS_PER_STAGE + currentStageIndex;
 }
 
-// FIXED: Changed orderBy from 'desc' to 'asc' to work with existing index
+// FIXED: Check for ANY valid payment for this subject (not just most recent)
 async function hasValidPremiumAccess() {
     if (!currentUser) return false;
     try {
         const now = new Date();
+        // Get ALL valid payments for this subject that haven't expired
         const snap = await firestore.collection('payments')
             .where('userId', '==', currentUser.uid)
             .where('subject', '==', currentSubject)
             .where('status', '==', 'verified')
             .where('expiresAt', '>', now)
-            .orderBy('expiresAt', 'asc')  // ← CHANGED FROM 'desc' TO 'asc'
-            .limit(1)
             .get();
         
         if (!snap.empty) {
-            const payment = snap.docs[0].data();
-            const expiresAt = payment.expiresAt?.toDate();
-            if (expiresAt && expiresAt > now) return true;
+            console.log(`✅ Found ${snap.size} valid premium payments for ${currentSubject}`);
+            return true;
         }
         return false;
     } catch (e) { 
@@ -676,12 +673,11 @@ async function hasValidPremiumAccess() {
     }
 }
 
+// FIXED: Check for existing active session FIRST
 async function checkForResumableSession() {
     if (!currentUser) return false;
     try {
-        const hasAccess = await hasValidPremiumAccess();
-        if (!hasAccess) return false;
-        
+        // First check if there's an active session
         const snap = await firestore.collection('quiz_sessions')
             .where('userId', '==', currentUser.uid)
             .where('subject', '==', currentSubject)
@@ -690,14 +686,19 @@ async function checkForResumableSession() {
             .limit(1)
             .get();
         
-        if (snap.empty) return false;
+        if (snap.empty) {
+            console.log('No active session found');
+            return false;
+        }
         
         const doc = snap.docs[0];
         const session = doc.data();
         const expiresAt = session.expiresAt?.toDate();
         
+        // Check if session is still valid (not expired)
         if (expiresAt && expiresAt > new Date()) {
             const hoursLeft = Math.ceil((expiresAt - new Date()) / 3600000);
+            console.log(`✅ Found active session! Stage ${session.currentStage || 1}, ${hoursLeft}h left`);
             
             _sessionDocId = doc.id;
             score = session.score || 0;
@@ -705,9 +706,11 @@ async function checkForResumableSession() {
             currentStageIndex = session.currentStageIndex || 0;
             failsInCurrentStage = session.failsInCurrentStage || 0;
             
+            // Remove existing banner if any
             const existing = document.getElementById('resumeBanner');
             if (existing) existing.remove();
             
+            // Create resume banner
             const banner = document.createElement('div');
             banner.id = 'resumeBanner';
             banner.className = 'resume-banner';
@@ -724,8 +727,14 @@ async function checkForResumableSession() {
             container.insertBefore(banner, modeGrid);
             resumeBannerDisplayed = true;
             return true;
+        } else {
+            // Session expired, close it
+            await firestore.collection('quiz_sessions').doc(doc.id).update({
+                status: 'expired'
+            });
+            console.log('Session expired, marked as expired');
+            return false;
         }
-        return false;
     } catch (e) { 
         console.warn('Resume check error:', e);
         return false; 
@@ -751,6 +760,16 @@ async function resumeQuiz() {
         }
         
         const session = snap.data();
+        // Verify payment still valid
+        const now = new Date();
+        const paymentValid = await hasValidPremiumAccess();
+        
+        if (!paymentValid) {
+            showToast('Your premium access has expired. Please make a new payment.', 'warning');
+            selectMode('premium');
+            return;
+        }
+        
         currentStage = session.currentStage || 1;
         currentStageIndex = session.currentStageIndex || 0;
         score = session.score || 0;
@@ -760,6 +779,7 @@ async function resumeQuiz() {
         showToast('✅ Resuming your quiz!', 'success');
         await loadQuestions('premium', true);
     } catch (e) {
+        console.error('Resume error:', e);
         showToast('Could not resume. Starting fresh.', 'error');
         selectMode('premium');
     }
@@ -770,22 +790,25 @@ async function selectMode(mode) {
         currentMode = 'free';
         await loadQuestions('free');
     } else {
+        // Check if there's an active session FIRST
+        const hasSession = await checkForResumableSession();
+        if (hasSession) {
+            document.getElementById('modeGrid').style.display = 'grid';
+            return;
+        }
+        
+        // No active session, check if user has valid payment
         const hasAccess = await hasValidPremiumAccess();
         
         if (hasAccess) {
-            const hasSession = await checkForResumableSession();
-            if (hasSession) {
-                document.getElementById('modeGrid').style.display = 'grid';
-                return;
-            } else {
-                currentMode = 'premium';
-                currentStage = 1;
-                currentStageIndex = 0;
-                score = 0;
-                failsInCurrentStage = 0;
-                await createSessionDoc();
-                await loadQuestions('premium');
-            }
+            // Has payment but no active session - create new session
+            currentMode = 'premium';
+            currentStage = 1;
+            currentStageIndex = 0;
+            score = 0;
+            failsInCurrentStage = 0;
+            await createSessionDoc();
+            await loadQuestions('premium');
         } else {
             showPaymentModal();
         }
@@ -877,6 +900,7 @@ async function createSessionDoc() {
             startedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
         _sessionDocId = ref.id;
+        console.log('✅ New session created:', _sessionDocId);
     } catch(e) { console.warn('Session create error:', e); }
 }
 
@@ -1224,9 +1248,6 @@ async function savePremiumScore(pct) {
     } catch(e) {}
 }
 
-// ══════════════════════════════════════════════════════════════════
-//  PAYMENT FUNCTIONS
-// ══════════════════════════════════════════════════════════════════
 function showPaymentModal() {
     const existing = document.getElementById('payModal');
     if (existing) existing.remove();
@@ -1453,10 +1474,32 @@ auth.onAuthStateChanged(async user => {
     const btn = document.getElementById('navUserBtn');
     if (user) {
         btn.textContent = user.email.split('@')[0];
+        console.log('User logged in:', user.email);
+        
+        // Create student document if needed
+        const studentRef = firestore.collection('students').doc(user.uid);
+        const studentDoc = await studentRef.get();
+        if (!studentDoc.exists) {
+            await studentRef.set({
+                userId: user.uid,
+                email: user.email,
+                fullName: user.email.split('@')[0],
+                totalAttempts: 0,
+                freeAttempts: 0,
+                premiumAttempts: 0,
+                totalPaid: 0,
+                accountStatus: 'active',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                bestScores: {},
+                quizScores: {}
+            });
+            console.log('✅ Student record created');
+        }
+        
         setTimeout(() => {
             checkForResumableSession();
             loadLeaderboard();
-        }, 1000);
+        }, 1500);
     } else {
         btn.textContent = 'Sign In';
         const banner = document.getElementById('resumeBanner');

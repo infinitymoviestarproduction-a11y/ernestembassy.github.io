@@ -20,7 +20,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
-    <!-- Paystack script - ensure it loads properly -->
+    <!-- Paystack script with explicit load handling -->
     <script src="https://js.paystack.co/v1/inline.js"></script>
 
     <style>
@@ -377,6 +377,7 @@
             font-size: 1rem;
         }
         .pay-btn:hover { background: #c8960f; color: white; }
+        .pay-btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .cancel-btn {
             width: 100%;
             padding: 10px;
@@ -1229,12 +1230,9 @@ async function savePremiumScore(pct) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-//  PAYMENT FUNCTIONS - FIXED
+//  PAYMENT FUNCTIONS - FIXED FOR PAYSTACK
 // ══════════════════════════════════════════════════════════════════
-let paystackHandler = null;
-
 function showPaymentModal() {
-    // Remove any existing modal
     const existing = document.getElementById('payModal');
     if (existing) existing.remove();
     
@@ -1259,9 +1257,7 @@ function showPaymentModal() {
     // Add event listener to the button
     const payBtn = document.getElementById('paystackPayBtn');
     if (payBtn) {
-        payBtn.onclick = function() {
-            initiatePaystack();
-        };
+        payBtn.addEventListener('click', initiatePaystack);
     }
 }
 
@@ -1286,11 +1282,26 @@ function initiatePaystack() {
     
     // Check if Paystack is available
     if (typeof PaystackPop === 'undefined') {
-        showToast('Payment system loading. Please try again.', 'error');
-        if (payBtn) {
-            payBtn.textContent = '💳 Pay ₦100 with Paystack';
-            payBtn.disabled = false;
-        }
+        console.error('Paystack not loaded. Reloading script...');
+        showToast('Payment system loading. Please wait...', 'warning');
+        // Reload Paystack script
+        const script = document.createElement('script');
+        script.src = 'https://js.paystack.co/v1/inline.js';
+        script.onload = function() {
+            showToast('Ready! Please click pay again.', 'success');
+            if (payBtn) {
+                payBtn.textContent = '💳 Pay ₦100 with Paystack';
+                payBtn.disabled = false;
+            }
+        };
+        script.onerror = function() {
+            showToast('Payment system unavailable. Please try again later.', 'error');
+            if (payBtn) {
+                payBtn.textContent = '💳 Pay ₦100 with Paystack';
+                payBtn.disabled = false;
+            }
+        };
+        document.head.appendChild(script);
         return;
     }
     
@@ -1326,7 +1337,7 @@ function initiatePaystack() {
         handler.openIframe();
     } catch (error) {
         console.error('Paystack error:', error);
-        showToast('Payment error. Please try again.', 'error');
+        showToast('Payment error: ' + (error.message || 'Please try again'), 'error');
         if (payBtn) {
             payBtn.textContent = '💳 Pay ₦100 with Paystack';
             payBtn.disabled = false;

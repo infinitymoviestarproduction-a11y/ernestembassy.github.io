@@ -273,7 +273,7 @@
             <a href="dashboard.html">📊 Dashboard</a>
             <a href="admin.html">👑 Admin</a>
             <a href="admin-users.html">👥 Users</a>
-            <a href="logout.html">🚪 Logout</a>
+            <a href="#" onclick="logout()">🚪 Logout</a>
         </div>
     </div>
 </nav>
@@ -331,7 +331,7 @@
 
     <div class="two-col">
         <div class="panel">
-            <h3>📐 Questions by Subject <span class="badge-new">Includes Literature & Biology</span></h3>
+            <h3>📐 Questions by Subject <span class="badge-new">Updated Keys</span></h3>
             <div id="subjectChart"><div class="loading-row">⏳ Loading...</div></div>
         </div>
         <div class="panel">
@@ -358,7 +358,9 @@
                 <thead>
                     <tr><th>Student</th><th>Amount</th><th>Subject</th><th>Date</th><th>Status</th></tr>
                 </thead>
-                <tbody id="paymentsTable"><tr><td colspan="5" class="loading-row">⏳ Loading...</td></tr</tbody>
+                <tbody id="paymentsTable">
+                    <tr><td colspan="5" class="loading-row">⏳ Loading...</td></tr>
+                </tbody>
             </table>
         </div>
     </div>
@@ -389,16 +391,22 @@
 
     const adminEmails = ['ernestembassydigitalsolutions@gmail.com', 'damian@ernestembassy.com', 'dev@ernestlms.com'];
 
-    const ALL_SUBJECTS = [
-        'Mathematics', 'Physics', 'Chemistry', 'Biology', 'English Language', 
-        'Literature-in-English', 'Digital Technology', 'Igbo Language'
+    const SUBJECT_CONFIG = [
+        { key: 'mathematics', label: 'Mathematics' },
+        { key: 'physics', label: 'Physics' },
+        { key: 'chemistry', label: 'Chemistry' },
+        { key: 'biology', label: 'Biology' },
+        { key: 'english', label: 'English' },
+        { key: 'literature', label: 'Literature' },
+        { key: 'digital-technology', label: 'Digital Technology' },
+        { key: 'igbo', label: 'Igbo' }
     ];
 
     function formatMoney(n) {
         if (!n) return '₦0';
-        if (n >= 1000000) return '₦' + (n/1000000).toFixed(1) + 'M';
-        if (n >= 1000) return '₦' + (n/1000).toFixed(1) + 'K';
-        return '₦' + n.toLocaleString();
+        if (n >= 1000000) return '₦' + (n / 1000000).toFixed(1) + 'M';
+        if (n >= 1000) return '₦' + (n / 1000).toFixed(1) + 'K';
+        return '₦' + Number(n).toLocaleString();
     }
 
     function timeAgo(ts) {
@@ -406,256 +414,9 @@
         const d = ts.toDate ? ts.toDate() : new Date(ts);
         const diff = Math.floor((Date.now() - d) / 1000);
         if (diff < 60) return diff + 's ago';
-        if (diff < 3600) return Math.floor(diff/60) + 'm ago';
-        if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
-        return d.toLocaleDateString('en-GB', { day:'numeric', month:'short' });
-    }
-
-    function renderBarChart(container, data, maxVal, showIcons = false) {
-        if (!data.length) { container.innerHTML = '<div class="loading-row">No data yet.</div>'; return; }
-        container.innerHTML = data.map(item => {
-            const percent = maxVal > 0 ? Math.round((item.value/maxVal)*100) : 0;
-            return `
-            <div class="bar-item">
-                <div class="bar-label">
-                    <span class="bar-name">${item.label}</span>
-                    <span class="bar-val">${item.value}</span>
-                </div>
-                <div class="bar-bg">
-                    <div class="bar-fill" style="width:${percent}%"></div>
-                </div>
-            </div>`;
-        }).join('');
-    }
-
-    async function loadAnalytics() {
-        try {
-            // Fetch all required data
-            const [usersSnap, lessonsSnap, paymentsSnap, studentsSnap] = await Promise.all([
-                db.collection('students').get(),
-                db.collection('lessons').get(),
-                db.collection('payments').orderBy('paymentDate', 'desc').limit(15).get(),
-                db.collection('students').get()
-            ]);
-
-            // Users stats
-            const today = new Date(); today.setHours(0,0,0,0);
-            let premium = 0, joinedToday = 0;
-            usersSnap.forEach(doc => {
-                const u = doc.data();
-                if (u.totalPaid > 0) premium++;
-                if (u.createdAt) {
-                    const d = u.createdAt.toDate ? u.createdAt.toDate() : new Date(u.createdAt);
-                    if (d >= today) joinedToday++;
-                }
-            });
-            const totalUsers = usersSnap.size;
-            document.getElementById('statUsers').textContent = totalUsers;
-            document.getElementById('statPremium').textContent = premium;
-            document.getElementById('statUsersToday').textContent = joinedToday > 0 ? `+${joinedToday} today` : 'No new today';
-            document.getElementById('statPremiumPct').textContent = totalUsers > 0 ? Math.round((premium/totalUsers)*100) + '% of users' : '';
-            document.getElementById('statLessons').textContent = lessonsSnap.size;
-
-            // Get questions from Realtime DB for all subjects
-            let totalQuestions = 0;
-            let premiumQuestions = 0;
-            const questionCounts = {};
-            const subjectPerformance = {};
-
-            for (const subject of ALL_SUBJECTS) {
-                const subjectKey = subject.toLowerCase().replace(/[^a-z]/g, '');
-                try {
-                    // Check free questions
-                    const freeSnap = await rtdb.ref(`${subjectKey}/questions`).once('value');
-                    let freeCount = 0;
-                    const freeData = freeSnap.val();
-                    if (freeData) freeCount = Array.isArray(freeData) ? freeData.length : Object.keys(freeData).length;
-                    
-                    // Check premium questions
-                    const premiumSnap = await rtdb.ref(`premium/${subjectKey}/questions`).once('value');
-                    let premCount = 0;
-                    const premData = premiumSnap.val();
-                    if (premData) premCount = Array.isArray(premData) ? premData.length : Object.keys(premData).length;
-                    
-                    const total = freeCount + premCount;
-                    questionCounts[subject] = total;
-                    totalQuestions += total;
-                    premiumQuestions += premCount;
-                } catch(e) { questionCounts[subject] = 0; }
-            }
-
-            document.getElementById('statQuestions').textContent = totalQuestions;
-            document.getElementById('statPremiumQuestions').textContent = `📌 ${premiumQuestions} Premium`;
-
-            // Revenue stats
-            let totalRevenue = 0, pendingCount = 0;
-            const recentPayments = [];
-            paymentsSnap.forEach(doc => {
-                const p = { id: doc.id, ...doc.data() };
-                recentPayments.push(p);
-                if (p.status === 'verified') totalRevenue += (p.amount || 100);
-                if (p.status === 'pending') pendingCount++;
-            });
-            document.getElementById('statRevenue').textContent = formatMoney(totalRevenue);
-            document.getElementById('statPending').textContent = pendingCount;
-
-            // Questions by subject chart
-            const subjectData = Object.entries(questionCounts)
-                .sort((a,b) => b[1]-a[1])
-                .map(([label, value]) => ({ label, value }));
-            const maxQ = subjectData[0]?.value || 1;
-            renderBarChart(document.getElementById('subjectChart'), subjectData, maxQ);
-
-            // Student performance by subject (average best scores)
-            const performanceData = [];
-            for (const subject of ALL_SUBJECTS) {
-                let totalScore = 0;
-                let studentCount = 0;
-                studentsSnap.forEach(doc => {
-                    const data = doc.data();
-                    const bestScores = data.bestScores || {};
-                    const subjectKey = subject.toLowerCase().replace(/[^a-z]/g, '');
-                    if (bestScores[subjectKey]) {
-                        totalScore += bestScores[subjectKey];
-                        studentCount++;
-                    }
-                });
-                const avgScore = studentCount > 0 ? Math.round(totalScore / studentCount) : 0;
-                performanceData.push({ label: subject, value: avgScore });
-            }
-            performanceData.sort((a,b) => b.value - a.value);
-            const maxPerf = Math.max(...performanceData.map(d => d.value), 1);
-            renderBarChart(document.getElementById('performanceChart'), performanceData, maxPerf);
-
-            // Lessons by subject
-            const lessonCounts = {};
-            lessonsSnap.forEach(doc => {
-                const s = doc.data().subject || 'Unknown';
-                lessonCounts[s] = (lessonCounts[s] || 0) + 1;
-            });
-            const lessonData = Object.entries(lessonCounts)
-                .sort((a,b) => b[1]-a[1])
-                .map(([label, value]) => ({ label, value }));
-            const maxL = lessonData[0]?.value || 1;
-            renderBarChart(document.getElementById('lessonsChart'), lessonData, maxL);
-
-            // Draw Qualification Status
-            let qualifiedStudents = 0;
-            let drawReadySubjects = [];
-            for (const doc of studentsSnap.docs) {
-                const data = doc.data();
-                if (data.totalPaid > 0) {
-                    const sessions = await db.collection('quiz_sessions')
-                        .where('userId', '==', doc.id)
-                        .where('status', '==', 'completed')
-                        .get();
-                    for (const session of sessions.docs) {
-                        const sessionData = session.data();
-                        if ((sessionData.currentGroupIdx || 0) >= 8) {
-                            qualifiedStudents++;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            const drawHtml = `
-                <div style="margin-bottom: 15px;">
-                    <div style="font-size: 1.8rem; font-weight: bold; color: #667eea;">${qualifiedStudents}</div>
-                    <div style="color: #718096;">students qualified for draw (Stage 8+)</div>
-                </div>
-                <div style="background: #fef3c7; padding: 12px; border-radius: 10px;">
-                    <strong>📢 Draw Requirements:</strong><br>
-                    • Minimum 10 students per subject<br>
-                    • Must reach Stage 8 or higher<br>
-                    ${qualifiedStudents >= 10 ? '<span style="color: #10b981;">✅ Draw can proceed!</span>' : '<span style="color: #f39c12;">⚠️ Need ' + (10 - qualifiedStudents) + ' more students</span>'}
-                </div>
-            `;
-            document.getElementById('drawStatus').innerHTML = drawHtml;
-
-            // Recent activity
-            const activities = [];
-            
-            // Recent users
-            let recentUsers = [];
-            usersSnap.forEach(doc => {
-                const u = doc.data();
-                if (u.createdAt) recentUsers.push({ time: u.createdAt, name: u.fullName || u.email?.split('@')[0] || 'Student', type: 'user' });
-            });
-            recentUsers.sort((a,b) => {
-                const ta = a.time.toDate ? a.time.toDate() : new Date(a.time);
-                const tb = b.time.toDate ? b.time.toDate() : new Date(b.time);
-                return tb - ta;
-            });
-            recentUsers.slice(0,3).forEach(u => activities.push({
-                dot: 'dot-green', text: `${u.name} registered`, time: u.time
-            }));
-
-            // Recent payments
-            recentPayments.slice(0,3).forEach(p => activities.push({
-                dot: p.status === 'verified' ? 'dot-blue' : 'dot-orange',
-                text: `Payment ${p.status === 'verified' ? 'verified' : 'pending'} — ${p.userName || p.userEmail || 'Student'}`,
-                time: p.paymentDate || p.createdAt
-            }));
-
-            // Recent lessons
-            let recentLessons = [];
-            lessonsSnap.forEach(doc => {
-                const l = doc.data();
-                if (l.createdAt) recentLessons.push({ time: l.createdAt, title: l.title || 'Lesson' });
-            });
-            recentLessons.sort((a,b) => {
-                const ta = a.time.toDate ? a.time.toDate() : new Date(a.time);
-                const tb = b.time.toDate ? b.time.toDate() : new Date(b.time);
-                return tb - ta;
-            });
-            recentLessons.slice(0,2).forEach(l => activities.push({
-                dot: 'dot-purple', text: `Lesson uploaded: "${l.title.substring(0, 40)}"`, time: l.time
-            }));
-
-            activities.sort((a,b) => {
-                const ta = a.time?.toDate ? a.time.toDate() : new Date(a.time||0);
-                const tb = b.time?.toDate ? b.time.toDate() : new Date(b.time||0);
-                return tb - ta;
-            });
-
-            const actEl = document.getElementById('recentActivity');
-            if (!activities.length) {
-                actEl.innerHTML = '<div class="loading-row">No recent activity.</div>';
-            } else {
-                actEl.innerHTML = activities.slice(0,8).map(a => `
-                    <div class="activity-item">
-                        <div class="activity-dot ${a.dot}"></div>
-                        <span class="activity-text">${escapeHtml(a.text)}</span>
-                        <span class="activity-time">${timeAgo(a.time)}</span>
-                    </div>
-                `).join('');
-            }
-
-            // Payments table
-            const ptEl = document.getElementById('paymentsTable');
-            if (!recentPayments.length) {
-                ptEl.innerHTML = '<tr><td colspan="5" class="loading-row">No payments yet.</td</tr';
-            } else {
-                ptEl.innerHTML = recentPayments.slice(0,10).map(p => {
-                    const date = p.paymentDate ? timeAgo(p.paymentDate) : '—';
-                    const status = p.status === 'verified'
-                        ? '<span class="badge-verified">✅ Verified</span>'
-                        : '<span class="badge-pending">⏳ Pending</span>';
-                    return `<tr>
-                        <td>${escapeHtml(p.userName || p.userEmail?.split('@')[0] || '—')}</td>
-                        <td>₦${(p.amount || 100).toLocaleString()}</td>
-                        <td>${escapeHtml(p.subject || '—')}</td>
-                        <td>${date}</td>
-                        <td>${status}</td>
-                    </tr>`;
-                }).join('');
-            }
-
-        } catch (err) {
-            console.error(err);
-            document.getElementById('subjectChart').innerHTML = `<div style="color:#c53030;padding:20px;">⚠️ Error: ${err.message}</div>`;
-        }
+        if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+        if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+        return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
     }
 
     function escapeHtml(str) {
@@ -666,6 +427,331 @@
             if (m === '>') return '&gt;';
             return m;
         });
+    }
+
+    function renderBarChart(container, data, maxVal) {
+        if (!data.length) {
+            container.innerHTML = '<div class="loading-row">No data yet.</div>';
+            return;
+        }
+        container.innerHTML = data.map(item => {
+            const percent = maxVal > 0 ? Math.round((item.value / maxVal) * 100) : 0;
+            return `
+            <div class="bar-item">
+                <div class="bar-label">
+                    <span class="bar-name">${escapeHtml(item.label)}</span>
+                    <span class="bar-val">${item.value}</span>
+                </div>
+                <div class="bar-bg">
+                    <div class="bar-fill" style="width:${percent}%"></div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    async function logout() {
+        await auth.signOut();
+        window.location.href = 'login.html';
+    }
+
+    async function loadAnalytics() {
+        try {
+            const [usersSnap, lessonsSnap, paymentsSnap, attemptsSnap] = await Promise.all([
+                db.collection('students').get(),
+                db.collection('lessons').get(),
+                db.collection('payments').orderBy('paymentDate', 'desc').limit(15).get(),
+                db.collection('quiz_attempts').get()
+            ]);
+
+            const students = usersSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            const attempts = attemptsSnap.docs.map(doc => doc.data());
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            let premium = 0;
+            let joinedToday = 0;
+
+            students.forEach(u => {
+                if ((u.totalPaid || 0) > 0) premium++;
+                if (u.createdAt) {
+                    const d = u.createdAt.toDate ? u.createdAt.toDate() : new Date(u.createdAt);
+                    if (d >= today) joinedToday++;
+                }
+            });
+
+            const totalUsers = students.length;
+            document.getElementById('statUsers').textContent = totalUsers;
+            document.getElementById('statPremium').textContent = premium;
+            document.getElementById('statUsersToday').textContent = joinedToday > 0 ? `+${joinedToday} today` : 'No new today';
+            document.getElementById('statPremiumPct').textContent = totalUsers > 0 ? Math.round((premium / totalUsers) * 100) + '% of users' : '';
+            document.getElementById('statLessons').textContent = lessonsSnap.size;
+
+            let totalQuestions = 0;
+            let premiumQuestions = 0;
+            const questionCounts = {};
+
+            for (const subject of SUBJECT_CONFIG) {
+                try {
+                    const freeSnap = await rtdb.ref(`${subject.key}/questions`).once('value');
+                    const premiumSnap = await rtdb.ref(`premium/${subject.key}/questions`).once('value');
+
+                    const freeData = freeSnap.val();
+                    const premData = premiumSnap.val();
+
+                    const freeCount = freeData ? (Array.isArray(freeData) ? freeData.length : Object.keys(freeData).length) : 0;
+                    const premCount = premData ? (Array.isArray(premData) ? premData.length : Object.keys(premData).length) : 0;
+
+                    questionCounts[subject.key] = {
+                        label: subject.label,
+                        total: freeCount + premCount,
+                        premium: premCount
+                    };
+
+                    totalQuestions += freeCount + premCount;
+                    premiumQuestions += premCount;
+                } catch (e) {
+                    questionCounts[subject.key] = {
+                        label: subject.label,
+                        total: 0,
+                        premium: 0
+                    };
+                }
+            }
+
+            document.getElementById('statQuestions').textContent = totalQuestions;
+            document.getElementById('statPremiumQuestions').textContent = `📌 ${premiumQuestions} Premium`;
+
+            let totalRevenue = 0;
+            let pendingCount = 0;
+            const recentPayments = [];
+
+            paymentsSnap.forEach(doc => {
+                const p = { id: doc.id, ...doc.data() };
+                recentPayments.push(p);
+                if (p.status === 'verified') totalRevenue += Number(p.amount || 100);
+                if (p.status === 'pending') pendingCount++;
+            });
+
+            document.getElementById('statRevenue').textContent = formatMoney(totalRevenue);
+            document.getElementById('statPending').textContent = pendingCount;
+
+            const subjectData = Object.values(questionCounts)
+                .sort((a, b) => b.total - a.total)
+                .map(item => ({ label: item.label, value: item.total }));
+
+            renderBarChart(
+                document.getElementById('subjectChart'),
+                subjectData,
+                subjectData[0]?.value || 1
+            );
+
+            const performanceData = SUBJECT_CONFIG.map(subject => {
+                let totalScore = 0;
+                let studentCount = 0;
+
+                students.forEach(student => {
+                    const bestScores = student.bestScores || {};
+                    const val = Number(bestScores[subject.key] || 0);
+                    if (val > 0) {
+                        totalScore += val;
+                        studentCount++;
+                    }
+                });
+
+                return {
+                    label: subject.label,
+                    value: studentCount > 0 ? Math.round(totalScore / studentCount) : 0
+                };
+            }).sort((a, b) => b.value - a.value);
+
+            renderBarChart(
+                document.getElementById('performanceChart'),
+                performanceData,
+                Math.max(...performanceData.map(d => d.value), 1)
+            );
+
+            const lessonCounts = {};
+            lessonsSnap.forEach(doc => {
+                const s = doc.data().subject || 'Unknown';
+                lessonCounts[s] = (lessonCounts[s] || 0) + 1;
+            });
+
+            const lessonData = Object.entries(lessonCounts)
+                .sort((a, b) => b[1] - a[1])
+                .map(([label, value]) => ({ label, value }));
+
+            renderBarChart(
+                document.getElementById('lessonsChart'),
+                lessonData,
+                lessonData[0]?.value || 1
+            );
+
+            const drawQualifiedBySubject = {};
+            SUBJECT_CONFIG.forEach(s => drawQualifiedBySubject[s.key] = 0);
+
+            for (const student of students) {
+                if ((student.totalPaid || 0) <= 0) continue;
+
+                const sessions = await db.collection('quiz_sessions')
+                    .where('userId', '==', student.id)
+                    .where('status', '==', 'completed')
+                    .get();
+
+                const qualifiedSubjectsForStudent = new Set();
+
+                sessions.forEach(sessionDoc => {
+                    const sessionData = sessionDoc.data();
+                    const stage = Number(sessionData.currentStage || 0);
+                    const subject = sessionData.subject;
+
+                    if (stage >= 8 && subject && !qualifiedSubjectsForStudent.has(subject)) {
+                        qualifiedSubjectsForStudent.add(subject);
+                    }
+                });
+
+                qualifiedSubjectsForStudent.forEach(subject => {
+                    if (drawQualifiedBySubject[subject] !== undefined) {
+                        drawQualifiedBySubject[subject]++;
+                    }
+                });
+            }
+
+            let totalQualifiedStudents = Object.values(drawQualifiedBySubject).reduce((a, b) => a + b, 0);
+            let readySubjects = SUBJECT_CONFIG.filter(s => (drawQualifiedBySubject[s.key] || 0) >= 10);
+
+            const drawHtml = `
+                <div style="margin-bottom: 15px;">
+                    <div style="font-size: 1.8rem; font-weight: bold; color: #667eea;">${totalQualifiedStudents}</div>
+                    <div style="color: #718096;">total subject qualifications for draw (Stage 8+)</div>
+                </div>
+                <div style="background: #fef3c7; padding: 12px; border-radius: 10px; margin-bottom: 12px;">
+                    <strong>📢 Draw Requirements:</strong><br>
+                    • Minimum 10 students per subject<br>
+                    • Must reach Stage 8 or higher
+                </div>
+                <div>
+                    ${SUBJECT_CONFIG.map(s => {
+                        const count = drawQualifiedBySubject[s.key] || 0;
+                        const ready = count >= 10;
+                        return `
+                            <div style="display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid #edf2f7;">
+                                <span>${escapeHtml(s.label)}</span>
+                                <span style="font-weight:700; color:${ready ? '#10b981' : '#f39c12'};">
+                                    ${count} ${ready ? '✅ Ready' : `⚠️ Need ${10 - count} more`}
+                                </span>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+                <div style="margin-top: 12px; font-weight: 600; color: ${readySubjects.length ? '#10b981' : '#f39c12'};">
+                    ${readySubjects.length ? `✅ Draw can proceed in ${readySubjects.length} subject(s)` : '⚠️ No subject has reached draw threshold yet'}
+                </div>
+            `;
+            document.getElementById('drawStatus').innerHTML = drawHtml;
+
+            const activities = [];
+
+            let recentUsers = students
+                .filter(u => u.createdAt)
+                .map(u => ({
+                    time: u.createdAt,
+                    name: u.fullName || u.email?.split('@')[0] || 'Student',
+                    type: 'user'
+                }))
+                .sort((a, b) => {
+                    const ta = a.time.toDate ? a.time.toDate() : new Date(a.time);
+                    const tb = b.time.toDate ? b.time.toDate() : new Date(b.time);
+                    return tb - ta;
+                });
+
+            recentUsers.slice(0, 3).forEach(u => activities.push({
+                dot: 'dot-green',
+                text: `${u.name} registered`,
+                time: u.time
+            }));
+
+            recentPayments.slice(0, 3).forEach(p => activities.push({
+                dot: p.status === 'verified' ? 'dot-blue' : 'dot-orange',
+                text: `Payment ${p.status === 'verified' ? 'verified' : 'pending'} — ${p.userName || p.userEmail || 'Student'}`,
+                time: p.paymentDate || p.createdAt
+            }));
+
+            let recentLessons = [];
+            lessonsSnap.forEach(doc => {
+                const l = doc.data();
+                if (l.createdAt) recentLessons.push({ time: l.createdAt, title: l.title || 'Lesson' });
+            });
+
+            recentLessons.sort((a, b) => {
+                const ta = a.time.toDate ? a.time.toDate() : new Date(a.time);
+                const tb = b.time.toDate ? b.time.toDate() : new Date(b.time);
+                return tb - ta;
+            });
+
+            recentLessons.slice(0, 2).forEach(l => activities.push({
+                dot: 'dot-purple',
+                text: `Lesson uploaded: "${(l.title || '').substring(0, 40)}"`,
+                time: l.time
+            }));
+
+            let recentAttempts = attempts
+                .filter(a => a.attemptDate)
+                .sort((a, b) => {
+                    const ta = a.attemptDate.toDate ? a.attemptDate.toDate() : new Date(a.attemptDate);
+                    const tb = b.attemptDate.toDate ? b.attemptDate.toDate() : new Date(b.attemptDate);
+                    return tb - ta;
+                });
+
+            recentAttempts.slice(0, 3).forEach(a => activities.push({
+                dot: 'dot-blue',
+                text: `${a.userName || 'Student'} attempted ${a.subject || 'quiz'} (${a.score || 0}%)`,
+                time: a.attemptDate
+            }));
+
+            activities.sort((a, b) => {
+                const ta = a.time?.toDate ? a.time.toDate() : new Date(a.time || 0);
+                const tb = b.time?.toDate ? b.time.toDate() : new Date(b.time || 0);
+                return tb - ta;
+            });
+
+            const actEl = document.getElementById('recentActivity');
+            if (!activities.length) {
+                actEl.innerHTML = '<div class="loading-row">No recent activity.</div>';
+            } else {
+                actEl.innerHTML = activities.slice(0, 8).map(a => `
+                    <div class="activity-item">
+                        <div class="activity-dot ${a.dot}"></div>
+                        <span class="activity-text">${escapeHtml(a.text)}</span>
+                        <span class="activity-time">${timeAgo(a.time)}</span>
+                    </div>
+                `).join('');
+            }
+
+            const ptEl = document.getElementById('paymentsTable');
+            if (!recentPayments.length) {
+                ptEl.innerHTML = '<tr><td colspan="5" class="loading-row">No payments yet.</td></tr>';
+            } else {
+                ptEl.innerHTML = recentPayments.slice(0, 10).map(p => {
+                    const date = p.paymentDate ? timeAgo(p.paymentDate) : '—';
+                    const status = p.status === 'verified'
+                        ? '<span class="badge-verified">✅ Verified</span>'
+                        : '<span class="badge-pending">⏳ Pending</span>';
+
+                    return `<tr>
+                        <td>${escapeHtml(p.userName || p.userEmail?.split('@')[0] || '—')}</td>
+                        <td>₦${Number(p.amount || 100).toLocaleString()}</td>
+                        <td>${escapeHtml(p.subject || '—')}</td>
+                        <td>${date}</td>
+                        <td>${status}</td>
+                    </tr>`;
+                }).join('');
+            }
+
+        } catch (err) {
+            console.error(err);
+            document.getElementById('subjectChart').innerHTML = `<div style="color:#c53030;padding:20px;">⚠️ Error: ${escapeHtml(err.message || 'Unknown error')}</div>`;
+        }
     }
 
     auth.onAuthStateChanged(user => {

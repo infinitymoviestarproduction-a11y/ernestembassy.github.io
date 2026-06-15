@@ -329,16 +329,6 @@
             cursor: pointer;
         }
 
-        .stage-result {
-            padding: 20px;
-            border-radius: var(--radius);
-            text-align: center;
-            margin-top: 16px;
-        }
-        .stage-result.pass { background: rgba(26,140,110,0.08); border: 2px solid var(--jade); }
-        .stage-result.fail { background: rgba(214,64,69,0.07); border: 2px solid var(--ruby); }
-        .stage-result h2 { font-size: 1.2rem; margin: 8px 0; }
-
         .result-wrap { text-align: center; padding: 16px; }
         .result-score { font-size: 2rem; font-weight: 800; margin: 12px 0; }
         .result-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
@@ -575,9 +565,6 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ══════════════════════════════════════════════════════════════════
-//  CONFIG
-// ══════════════════════════════════════════════════════════════════
 const PAYSTACK_KEY = "pk_live_441686d15976154f119fe56e3f415638b7a649ac";
 const PREMIUM_PRICE = 100;
 const PREMIUM_DURATION_MS = 24 * 60 * 60 * 1000;
@@ -649,8 +636,6 @@ function getCurrentQuestionIndex() {
     return (currentStage - 1) * QUESTIONS_PER_STAGE + currentStageIndex;
 }
 
-// Returns the latest verified, non-expired premium payment for the current user+subject.
-// If none found, returns null.
 async function getValidPremiumPayment() {
     if (!currentUser) return null;
 
@@ -708,11 +693,8 @@ async function checkForResumableSession() {
         const expiresAt = latestSession.expiresAt?.toDate ? latestSession.expiresAt.toDate() : latestSession.expiresAt;
         const now = new Date();
         
-        console.log(`Found session: Stage ${latestSession.currentStage || 1}, Expires: ${expiresAt}`);
-        
         if (expiresAt && expiresAt > now) {
             const hoursLeft = Math.ceil((expiresAt - now) / 3600000);
-            console.log(`✅ Session is still valid! ${hoursLeft}h remaining`);
             
             _sessionDocId = latestSession.id;
             score = latestSession.score || 0;
@@ -743,7 +725,6 @@ async function checkForResumableSession() {
             await firestore.collection('quiz_sessions').doc(latestSession.id).update({
                 status: 'expired'
             });
-            console.log('Session expired, marked as expired');
             return false;
         }
     } catch (e) { 
@@ -794,8 +775,6 @@ async function resumeQuiz() {
     }
 }
 
-// Creates a quiz_sessions doc using the expiresAt from an existing valid payment.
-// This ensures quiz access never extends past the payment expiry.
 async function createSessionDocFromPayment(paymentData) {
     if (!currentUser) return null;
 
@@ -818,8 +797,6 @@ async function createSessionDocFromPayment(paymentData) {
 
         const docRef = await firestore.collection('quiz_sessions').add(sessionData);
         _sessionDocId = docRef.id;
-
-        console.log('✅ Session doc created from payment:', _sessionDocId);
         return docRef;
     } catch (e) {
         console.error('Session create error (from payment):', e);
@@ -832,11 +809,8 @@ async function selectMode(mode) {
         currentMode = 'free';
         await loadQuestions('free');
     } else {
-        console.log('🎯 Premium mode selected - checking for existing session...');
-        
         const hasSession = await checkForResumableSession();
         if (hasSession) {
-            console.log('Session found, showing resume banner');
             document.getElementById('modeGrid').style.display = 'grid';
             return;
         }
@@ -844,7 +818,6 @@ async function selectMode(mode) {
         const validPayment = await getValidPremiumPayment();
         
         if (validPayment) {
-            console.log('✅ Has valid payment but no active session - creating new session');
             currentMode = 'premium';
             currentStage = 1;
             currentStageIndex = 0;
@@ -853,7 +826,6 @@ async function selectMode(mode) {
             await createSessionDocFromPayment(validPayment);
             await loadQuestions('premium');
         } else {
-            console.log('❌ No valid payment - showing payment modal');
             showPaymentModal();
         }
     }
@@ -912,15 +884,12 @@ async function loadQuestions(mode, isResume = false) {
             return;
         }
         
-        // Only create a new session if not resuming and one was not already created.
-        if (!isResume) {
-            if (!_sessionDocId) {
-                currentStage = 1;
-                currentStageIndex = 0;
-                score = 0;
-                failsInCurrentStage = 0;
-                await createSessionDoc();
-            }
+        if (!isResume && !_sessionDocId) {
+            currentStage = 1;
+            currentStageIndex = 0;
+            score = 0;
+            failsInCurrentStage = 0;
+            await createSessionDoc();
         }
         showQuestionPremium();
         
@@ -930,7 +899,6 @@ async function loadQuestions(mode, isResume = false) {
     }
 }
 
-// Default session creator (used only if needed)
 async function createSessionDoc() {
     if (!currentUser) return null;
     try {
@@ -950,7 +918,6 @@ async function createSessionDoc() {
         
         const docRef = await firestore.collection('quiz_sessions').add(sessionData);
         _sessionDocId = docRef.id;
-        console.log('✅ Session document created:', _sessionDocId, sessionData);
         return docRef;
     } catch(e) { 
         console.error('Session create error:', e);
@@ -1002,7 +969,6 @@ async function processPaymentSuccess(reference) {
         
         const sessionRef = await firestore.collection('quiz_sessions').add(sessionData);
         _sessionDocId = sessionRef.id;
-        console.log('✅ Session created after payment:', _sessionDocId);
         
         closeModal();
         
@@ -1030,6 +996,8 @@ async function updateSessionDoc() {
             currentStageIndex: currentStageIndex,
             failsInCurrentStage: failsInCurrentStage
         });
+
+        await updateStudentLiveProgress();
     } catch(e) { console.warn('Session update error:', e); }
 }
 
@@ -1041,7 +1009,82 @@ async function closeSessionDoc() {
             finalScore: score,
             completedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
+
+        await firestore.collection('students').doc(currentUser.uid).set({
+            latestStage: currentStage,
+            latestPoints: score,
+            lastSessionStatus: 'completed',
+            lastPlayedSubject: currentSubject,
+            lastMode: currentMode,
+            lastAttemptDate: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
     } catch(e) { console.warn('Session close error:', e); }
+}
+
+async function updateStudentLiveProgress() {
+    if (!currentUser) return;
+    try {
+        await firestore.collection('students').doc(currentUser.uid).set({
+            latestStage: currentStage,
+            latestPoints: score,
+            lastSessionStatus: 'active',
+            lastPlayedSubject: currentSubject,
+            lastMode: currentMode || 'premium',
+            lastAttemptDate: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+    } catch (e) {
+        console.warn('Live progress update error:', e);
+    }
+}
+
+async function updateStudentProgressAfterResult(pct) {
+    if (!currentUser) return;
+
+    try {
+        const studentRef = firestore.collection('students').doc(currentUser.uid);
+        const studentSnap = await studentRef.get();
+        const existingData = studentSnap.exists ? studentSnap.data() : {};
+
+        const bestScores = existingData.bestScores || {};
+        const quizScores = existingData.quizScores || {};
+        const existingBest = Number(bestScores[currentSubject] || 0);
+        const attemptsForSubject = Array.isArray(quizScores[currentSubject]) ? quizScores[currentSubject] : [];
+
+        const newAttemptEntry = {
+            score: pct,
+            mode: currentMode,
+            subject: currentSubject,
+            stage: currentMode === 'premium' ? currentStage - 1 : 0,
+            points: currentMode === 'premium' ? score : freeCorrectCount,
+            date: new Date().toISOString()
+        };
+
+        // Keep only the latest 20 attempts for each subject
+        const updatedAttemptsForSubject = [...attemptsForSubject, newAttemptEntry].slice(-20);
+
+        const updateData = {
+            totalAttempts: firebase.firestore.FieldValue.increment(1),
+            lastAttemptDate: firebase.firestore.FieldValue.serverTimestamp(),
+            lastPlayedSubject: currentSubject,
+            lastMode: currentMode,
+            latestStage: currentMode === 'premium' ? (currentStage - 1) : 0,
+            latestPoints: currentMode === 'premium' ? score : freeCorrectCount,
+            [`quizScores.${currentSubject}`]: updatedAttemptsForSubject,
+            [`bestScores.${currentSubject}`]: Math.max(existingBest, pct)
+        };
+
+        if (currentMode === 'free') {
+            updateData.freeAttempts = firebase.firestore.FieldValue.increment(1);
+            updateData.lastSessionStatus = 'completed';
+        } else {
+            updateData.premiumAttempts = firebase.firestore.FieldValue.increment(1);
+            updateData.lastSessionStatus = 'completed';
+        }
+
+        await studentRef.set(updateData, { merge: true });
+    } catch (e) {
+        console.warn('Student progress save error:', e);
+    }
 }
 
 function showQuestionFree() {
@@ -1311,7 +1354,11 @@ async function showResults() {
         pct = total > 0 ? Math.round((freeCorrectCount / total) * 100) : 0;
     }
     
-    if (currentUser) await saveQuizAttempt(pct);
+    if (currentUser) {
+        await saveQuizAttempt(pct);
+        await updateStudentProgressAfterResult(pct);
+    }
+
     if (currentUser && currentMode === 'premium') {
         await closeSessionDoc();
         await savePremiumScore(pct);
@@ -1343,6 +1390,8 @@ async function saveQuizAttempt(pct) {
             subject: currentSubject,
             mode: currentMode,
             score: pct,
+            points: currentMode === 'premium' ? score : freeCorrectCount,
+            stage: currentMode === 'premium' ? (currentStage - 1) : 0,
             attemptDate: firebase.firestore.FieldValue.serverTimestamp()
         });
     } catch(e) {}
@@ -1441,11 +1490,9 @@ function initiatePaystack() {
                 ]
             },
             callback: function(response) {
-                console.log('Payment success:', response);
                 processPaymentSuccess(response.reference);
             },
             onClose: function() {
-                console.log('Payment closed');
                 if (payBtn) {
                     payBtn.textContent = '💳 Pay ₦100 with Paystack';
                     payBtn.disabled = false;
@@ -1502,7 +1549,6 @@ function resetAndReload() {
     if (banner) banner.remove();
 }
 
-// Leaderboard
 const SUBJECTS_LIST = Object.keys(SUBJECT_NAMES);
 let lbCurrentSubject = 'mathematics';
 
@@ -1544,13 +1590,11 @@ async function loadLeaderboard() {
     } catch(e) { console.warn('Leaderboard error:', e); }
 }
 
-// Initialize
 auth.onAuthStateChanged(async user => {
     currentUser = user;
     const btn = document.getElementById('navUserBtn');
     if (user) {
         btn.textContent = user.email.split('@')[0];
-        console.log('✅ User logged in:', user.email);
         
         const studentRef = firestore.collection('students').doc(user.uid);
         const studentDoc = await studentRef.get();
@@ -1567,9 +1611,13 @@ auth.onAuthStateChanged(async user => {
                 accountStatus: 'active',
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 bestScores: {},
-                quizScores: {}
+                quizScores: {},
+                latestStage: 0,
+                latestPoints: 0,
+                lastPlayedSubject: '',
+                lastMode: '',
+                lastSessionStatus: ''
             });
-            console.log('✅ Student record created');
         } else {
             const studentData = studentDoc.data();
             if (studentData?.lastPaidSubject && SUBJECT_NAMES[studentData.lastPaidSubject]) {

@@ -12,7 +12,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background: #f0f2f5; min-height: 100vh; }
         
-        /* Navigation */
         nav {
             background: #1a1a2e;
             padding: 1rem 0;
@@ -63,7 +62,6 @@
         
         .container { max-width: 1400px; margin: 0 auto; padding: 30px 20px; }
         
-        /* Stats Cards */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -82,7 +80,6 @@
         .stat-number { font-size: 2rem; font-weight: bold; color: #667eea; }
         .stat-label { color: #718096; margin-top: 5px; font-size: 0.85rem; }
         
-        /* Tabs */
         .tabs {
             display: flex;
             gap: 10px;
@@ -100,7 +97,6 @@
         }
         .tab-btn.active { background: #667eea; color: white; }
         
-        /* Tables */
         .table-container {
             background: white;
             border-radius: 15px;
@@ -126,6 +122,9 @@
         .badge-free { background: #d1fae5; color: #059669; }
         .badge-paid { background: #10b981; color: white; }
         .badge-pending { background: #f39c12; color: white; }
+        .badge-active { background: #dbeafe; color: #2563eb; }
+        .badge-completed { background: #dcfce7; color: #16a34a; }
+        .badge-expired { background: #fee2e2; color: #dc2626; }
         
         .draw-eligible { background: #10b981; color: white; padding: 2px 8px; border-radius: 20px; font-size: 11px; }
         .draw-not-eligible { background: #ef4444; color: white; padding: 2px 8px; border-radius: 20px; font-size: 11px; }
@@ -140,6 +139,12 @@
             font-size: 12px;
         }
         .action-btn:hover { background: #5a67d8; }
+
+        .small-note {
+            font-size: 12px;
+            color: #666;
+            margin-top: 6px;
+        }
         
         .floating-home {
             position: fixed;
@@ -191,7 +196,6 @@
 </div>
 
 <div class="container">
-    <!-- Stats Grid -->
     <div class="stats-grid" id="statsGrid">
         <div class="stat-card">
             <div class="stat-number" id="totalStudents">0</div>
@@ -215,64 +219,98 @@
         </div>
     </div>
     
-    <!-- Tabs -->
     <div class="tabs">
-        <button class="tab-btn active" onclick="showTab('students')">👥 All Students</button>
-        <button class="tab-btn" onclick="showTab('payments')">💰 Payments</button>
-        <button class="tab-btn" onclick="showTab('leaderboard')">🏆 Leaderboard</button>
-        <button class="tab-btn" onclick="showTab('draw')">🎲 Monthly Draw</button>
-        <button class="tab-btn" onclick="showTab('analytics')">📊 Analytics</button>
+        <button class="tab-btn active" onclick="showTab('students', this)">👥 All Students</button>
+        <button class="tab-btn" onclick="showTab('payments', this)">💰 Payments</button>
+        <button class="tab-btn" onclick="showTab('leaderboard', this)">🏆 Leaderboard</button>
+        <button class="tab-btn" onclick="showTab('draw', this)">🎲 Monthly Draw</button>
+        <button class="tab-btn" onclick="showTab('analytics', this)">📊 Analytics</button>
     </div>
     
-    <!-- Students Table -->
     <div id="tab-students" class="table-container">
         <h3>👥 Registered Students</h3>
+        <div class="small-note">Shows student registration, last known premium session progress, attempts, and payment status.</div>
         <div style="overflow-x: auto;">
             <table>
                 <thead>
-                    <tr><th>Name</th><th>Email</th><th>Status</th><th>Best Score</th><th>Stage</th><th>Points</th><th>Draw Eligible</th><th>Registered</th><th>Action</th></tr>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Best Score</th>
+                        <th>Stage</th>
+                        <th>Points</th>
+                        <th>Draw Eligible</th>
+                        <th>Registered</th>
+                        <th>Action</th>
+                    </tr>
                 </thead>
                 <tbody id="studentsTable"></tbody>
             </table>
         </div>
     </div>
     
-    <!-- Payments Table -->
     <div id="tab-payments" class="table-container" style="display:none;">
         <h3>💰 Payment History</h3>
         <div style="overflow-x: auto;">
             <table>
-                <thead><tr><th>Student</th><th>Email</th><th>Subject</th><th>Amount</th><th>Status</th><th>Payment Date</th><th>Expires</th><th>Action</th></tr></thead>
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Email</th>
+                        <th>Subject</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Payment Date</th>
+                        <th>Expires</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
                 <tbody id="paymentsTable"></tbody>
             </table>
         </div>
     </div>
     
-    <!-- Leaderboard Table -->
     <div id="tab-leaderboard" class="table-container" style="display:none;">
         <h3>🏆 Competition Leaderboard</h3>
-        <p style="margin-bottom: 10px; color: #666;">Showing ALL Premium Students (including those who haven't started)</p>
+        <p style="margin-bottom: 10px; color: #666;">Showing premium students from monthly leaderboard and payment history.</p>
         <div style="overflow-x: auto;">
             <table>
-                <thead><tr><th>Rank</th><th>Name</th><th>Email</th><th>Best Score</th><th>Points</th><th>Stage</th><th>Status</th></tr></thead>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Best Score</th>
+                        <th>Points</th>
+                        <th>Stage</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
                 <tbody id="leaderboardTable"></tbody>
             </table>
         </div>
     </div>
     
-    <!-- Draw Status Table -->
     <div id="tab-draw" class="table-container" style="display:none;">
         <h3>🎲 Monthly Draw Eligibility</h3>
         <div id="drawInfo" style="margin-bottom: 20px; padding: 15px; border-radius: 10px; background: #fef3c7;"></div>
         <div style="overflow-x: auto;">
             <table>
-                <thead><tr><th>Student</th><th>Subject</th><th>Stage Reached</th><th>Score %</th><th>Status</th></tr></thead>
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Subject</th>
+                        <th>Stage Reached</th>
+                        <th>Score %</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
                 <tbody id="drawTable"></tbody>
             </table>
         </div>
     </div>
     
-    <!-- Analytics Tab -->
     <div id="tab-analytics" class="table-container" style="display:none;">
         <h3>📊 Subject Performance Analytics</h3>
         <div id="analyticsContent"></div>
@@ -295,14 +333,64 @@
     
     const adminEmails = ['ernestembassydigitalsolutions@gmail.com', 'damian@ernestembassy.com', 'dev@ernestlms.com'];
     let currentUser = null;
+
+    const SUBJECTS = ['mathematics', 'physics', 'chemistry', 'biology', 'english', 'literature', 'digital-technology', 'igbo'];
     
-    function showTab(tabName) {
+    function showTab(tabName, btn) {
         document.querySelectorAll('.table-container').forEach(el => el.style.display = 'none');
         document.getElementById(`tab-${tabName}`).style.display = 'block';
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
+        document.querySelectorAll('.tab-btn').forEach(button => button.classList.remove('active'));
+        if (btn) btn.classList.add('active');
     }
-    
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function formatDate(ts) {
+        if (!ts) return '-';
+        const date = ts.toDate ? ts.toDate() : ts;
+        return date instanceof Date && !isNaN(date) ? date.toLocaleDateString() : '-';
+    }
+
+    async function getLatestSessionForUser(userId) {
+        try {
+            const snap = await db.collection('quiz_sessions')
+                .where('userId', '==', userId)
+                .orderBy('startedAt', 'desc')
+                .limit(1)
+                .get();
+
+            if (snap.empty) return null;
+            return { id: snap.docs[0].id, ...snap.docs[0].data() };
+        } catch (e) {
+            console.warn('Latest session fetch error for user:', userId, e);
+            return null;
+        }
+    }
+
+    async function getBestAttemptForUser(userId) {
+        try {
+            const snap = await db.collection('quiz_attempts')
+                .where('userId', '==', userId)
+                .orderBy('score', 'desc')
+                .limit(1)
+                .get();
+
+            if (snap.empty) return 0;
+            return snap.docs[0].data().score || 0;
+        } catch (e) {
+            console.warn('Best attempt fetch error for user:', userId, e);
+            return 0;
+        }
+    }
+
     async function loadAllData() {
         await loadStudents();
         await loadPayments();
@@ -317,25 +405,15 @@
         
         for (const doc of studentsSnapshot.docs) {
             const data = doc.data();
+            const latestSession = await getLatestSessionForUser(doc.id);
+            const bestScoreFromAttempts = await getBestAttemptForUser(doc.id);
             const bestScores = data.bestScores || {};
-            const bestScore = Math.max(...Object.values(bestScores), 0);
-            
-            // Get latest stage from quiz_sessions
-            let latestStage = 0;
-            let latestPoints = 0;
-            const sessions = await db.collection('quiz_sessions')
-                .where('userId', '==', doc.id)
-                .orderBy('startedAt', 'desc')
-                .limit(1)
-                .get();
-            
-            if (!sessions.empty) {
-                const session = sessions.docs[0].data();
-                latestStage = session.currentGroupIdx || 0;
-                latestPoints = session.score || 0;
-            }
-            
-            const isPremium = data.totalPaid > 0;
+            const bestScoreFromStudentDoc = Math.max(0, ...Object.values(bestScores).filter(v => typeof v === 'number'));
+            const bestScore = Math.max(bestScoreFromStudentDoc, bestScoreFromAttempts);
+
+            const latestStage = latestSession?.currentStage || 0;
+            const latestPoints = latestSession?.score || 0;
+            const isPremium = (data.totalPaid || 0) > 0;
             
             students.push({
                 id: doc.id,
@@ -346,7 +424,8 @@
                 stage: latestStage,
                 points: latestPoints,
                 drawEligible: latestStage >= 8 && isPremium,
-                registeredAt: data.createdAt?.toDate() || data.lastLogin?.toDate() || new Date()
+                registeredAt: data.createdAt?.toDate?.() || data.lastLogin?.toDate?.() || new Date(),
+                sessionStatus: latestSession?.status || '-'
             });
         }
         
@@ -380,18 +459,21 @@
         for (const doc of paymentsSnapshot.docs) {
             const data = doc.data();
             const userSnapshot = await db.collection('students').doc(data.userId).get();
-            const userName = userSnapshot.exists ? (userSnapshot.data().fullName || data.userEmail?.split('@')[0]) : 'Unknown';
+            const userName = userSnapshot.exists
+                ? (userSnapshot.data().fullName || userSnapshot.data().email?.split('@')[0] || data.userEmail?.split('@')[0])
+                : (data.userName || data.userEmail?.split('@')[0] || 'Unknown');
             
             payments.push({
                 id: doc.id,
+                userId: data.userId,
                 name: userName,
-                email: data.userEmail,
-                subject: data.subject,
-                amount: data.amount,
-                status: data.status,
-                date: data.paymentDate?.toDate() || new Date(),
-                expires: data.expiresAt?.toDate() || new Date(),
-                reference: data.reference
+                email: data.userEmail || '',
+                subject: data.subject || '-',
+                amount: data.amount || 100,
+                status: data.status || 'pending',
+                date: data.paymentDate?.toDate?.() || new Date(),
+                expires: data.expiresAt?.toDate?.() || new Date(),
+                reference: data.reference || '-'
             });
         }
         
@@ -401,89 +483,120 @@
                 <td>${escapeHtml(p.name)}</td>
                 <td>${escapeHtml(p.email)}</td>
                 <td>${escapeHtml(p.subject)}</td>
-                <td>₦${p.amount}</td>
+                <td>₦${Number(p.amount).toLocaleString()}</td>
                 <td>${p.status === 'verified' ? '<span class="badge-paid">✓ Verified</span>' : '<span class="badge-pending">⏳ Pending</span>'}</td>
                 <td>${p.date.toLocaleDateString()}</td>
                 <td>${p.expires.toLocaleDateString()}</td>
-                <td>${p.status !== 'verified' ? `<button class="action-btn" onclick="verifyPayment('${p.id}', '${p.userId}')">Verify</button>` : '✅ Verified'}</td>
+                <td>${p.status !== 'verified' ? `<button class="action-btn" onclick="verifyPayment('${p.id}', '${p.userId}', '${p.subject}')">Verify</button>` : '✅ Verified'}</td>
             </tr>
         `).join('');
         
-        // Calculate total revenue
         const verifiedPayments = payments.filter(p => p.status === 'verified');
-        const totalRevenue = verifiedPayments.reduce((sum, p) => sum + (p.amount || 100), 0);
+        const totalRevenue = verifiedPayments.reduce((sum, p) => sum + (Number(p.amount) || 100), 0);
         document.getElementById('totalRevenue').innerHTML = `₦${totalRevenue.toLocaleString()}`;
     }
     
-    async function verifyPayment(paymentId, userId) {
-        if (confirm('Verify this payment and grant premium access?')) {
-            await db.collection('payments').doc(paymentId).update({
+    async function verifyPayment(paymentId, userId, subject) {
+        if (!confirm('Verify this payment and grant premium access?')) return;
+
+        try {
+            const paymentRef = db.collection('payments').doc(paymentId);
+            const paymentDoc = await paymentRef.get();
+            if (!paymentDoc.exists) {
+                alert('Payment record not found.');
+                return;
+            }
+
+            const paymentData = paymentDoc.data();
+            await paymentRef.update({
                 status: 'verified',
                 verifiedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
             
-            // Update student record
-            await db.collection('students').doc(userId).update({
-                totalPaid: firebase.firestore.FieldValue.increment(100),
-                accountStatus: 'active'
-            });
+            await db.collection('students').doc(userId).set({
+                totalPaid: firebase.firestore.FieldValue.increment(Number(paymentData.amount || 100)),
+                accountStatus: 'active',
+                lastPaidSubject: subject || paymentData.subject || '',
+                lastPaymentDate: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
             
             alert('Payment verified! Student now has premium access.');
-            await loadPayments();
-            await loadStudents();
-            await loadLeaderboard();
+            await loadAllData();
+        } catch (e) {
+            console.error('Verify payment error:', e);
+            alert('Could not verify payment.');
         }
     }
     
     async function loadLeaderboard() {
-        // Get ALL students who have made payments
+        const month = new Date().toISOString().slice(0, 7);
+        const leaderboardMap = new Map();
+
+        // 1) Load from monthly leaderboard subcollections
+        for (const subject of SUBJECTS) {
+            try {
+                const snap = await db.collection('monthly_leaderboard')
+                    .doc(month)
+                    .collection(subject)
+                    .orderBy('score', 'desc')
+                    .get();
+
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    const existing = leaderboardMap.get(doc.id);
+
+                    if (!existing || (data.score || 0) > (existing.score || 0)) {
+                        leaderboardMap.set(doc.id, {
+                            userId: doc.id,
+                            name: data.userName || data.email?.split('@')[0] || 'Anonymous',
+                            email: data.email || '',
+                            score: data.score || 0,
+                            points: data.points || 0,
+                            stage: data.stage || 0
+                        });
+                    }
+                });
+            } catch (e) {
+                console.warn(`Leaderboard read issue for ${subject}:`, e);
+            }
+        }
+
+        // 2) Also include paid users who may not yet appear on leaderboard
         const paymentsSnapshot = await db.collection('payments')
             .where('status', '==', 'verified')
             .get();
         
         const paidUserIds = new Set();
         paymentsSnapshot.forEach(doc => {
-            paidUserIds.add(doc.data().userId);
+            const d = doc.data();
+            if (d.userId) paidUserIds.add(d.userId);
         });
         
-        const leaderboardEntries = [];
         for (const userId of paidUserIds) {
-            const studentDoc = await db.collection('students').doc(userId).get();
-            const studentData = studentDoc.data();
-            if (studentData) {
-                const userName = studentData.fullName || studentData.email?.split('@')[0] || 'Anonymous';
-                const email = studentData.email || '';
-                const bestScores = studentData.bestScores || {};
-                const bestScore = Math.max(...Object.values(bestScores), 0);
-                
-                // Get latest stage and points
-                let latestStage = 0;
-                let latestPoints = 0;
-                const sessions = await db.collection('quiz_sessions')
-                    .where('userId', '==', userId)
-                    .orderBy('startedAt', 'desc')
-                    .limit(1)
-                    .get();
-                
-                if (!sessions.empty) {
-                    const session = sessions.docs[0].data();
-                    latestStage = session.currentGroupIdx || 0;
-                    latestPoints = session.score || 0;
+            if (!leaderboardMap.has(userId)) {
+                const studentDoc = await db.collection('students').doc(userId).get();
+                const latestSession = await getLatestSessionForUser(userId);
+                const bestScore = await getBestAttemptForUser(userId);
+
+                if (studentDoc.exists) {
+                    const sd = studentDoc.data();
+                    leaderboardMap.set(userId, {
+                        userId,
+                        name: sd.fullName || sd.email?.split('@')[0] || 'Anonymous',
+                        email: sd.email || '',
+                        score: bestScore || 0,
+                        points: latestSession?.score || 0,
+                        stage: latestSession?.currentStage || 0
+                    });
                 }
-                
-                leaderboardEntries.push({
-                    name: userName,
-                    email: email,
-                    userId: userId,
-                    score: bestScore,
-                    points: latestPoints,
-                    stage: latestStage
-                });
             }
         }
         
-        // Sort by score descending
-        leaderboardEntries.sort((a, b) => b.score - a.score);
+        const leaderboardEntries = Array.from(leaderboardMap.values()).sort((a, b) => {
+            if ((b.score || 0) !== (a.score || 0)) return (b.score || 0) - (a.score || 0);
+            if ((b.points || 0) !== (a.points || 0)) return (b.points || 0) - (a.points || 0);
+            return (b.stage || 0) - (a.stage || 0);
+        });
         
         const tbody = document.getElementById('leaderboardTable');
         if (leaderboardEntries.length === 0) {
@@ -512,7 +625,7 @@
         
         for (const doc of studentsSnapshot.docs) {
             const data = doc.data();
-            if (data.totalPaid > 0) {
+            if ((data.totalPaid || 0) > 0) {
                 const sessions = await db.collection('quiz_sessions')
                     .where('userId', '==', doc.id)
                     .where('status', '==', 'completed')
@@ -520,9 +633,9 @@
                 
                 for (const session of sessions.docs) {
                     const sessionData = session.data();
-                    const stage = sessionData.currentGroupIdx || 0;
-                    const score = sessionData.finalScore || 0;
-                    const subject = sessionData.subject;
+                    const stage = sessionData.currentStage || 0;
+                    const score = sessionData.finalScore || sessionData.score || 0;
+                    const subject = sessionData.subject || '-';
                     
                     if (stage >= DRAW_MIN_STAGE) {
                         eligibleStudents.push({
@@ -537,7 +650,6 @@
             }
         }
         
-        // Group by subject
         const subjectsWithCount = {};
         eligibleStudents.forEach(s => {
             if (!subjectsWithCount[s.subject]) subjectsWithCount[s.subject] = [];
@@ -557,7 +669,7 @@
             const canHoldDraw = students.length >= DRAW_MIN_PARTICIPANTS;
             const needed = DRAW_MIN_PARTICIPANTS - students.length;
             totalQualifiedForDraw += students.length;
-            drawHtml += `<p style="margin-top: 8px;"><strong>${subject.toUpperCase()}:</strong> ${students.length} qualified students - `;
+            drawHtml += `<p style="margin-top: 8px;"><strong>${escapeHtml(subject).toUpperCase()}:</strong> ${students.length} qualified students - `;
             drawHtml += canHoldDraw ? '<span style="color: #10b981;">✅ DRAW READY</span>' : `<span style="color: #f39c12;">⚠️ Need ${needed} more students</span>`;
             drawHtml += ` (Minimum Stage ${DRAW_MIN_STAGE}+ required)</p>`;
         }
@@ -590,48 +702,55 @@
     }
     
     async function loadAnalytics() {
-        const subjects = ['mathematics', 'physics', 'chemistry', 'biology', 'english', 'literature', 'digital-technology', 'igbo'];
         const analytics = [];
-        let totalAttempts = 0;
-        
-        for (const subject of subjects) {
-            let totalScore = 0;
-            let totalStudents = 0;
-            let premiumCount = 0;
-            
-            const studentsSnapshot = await db.collection('students').get();
-            for (const doc of studentsSnapshot.docs) {
-                const data = doc.data();
-                const bestScores = data.bestScores || {};
-                if (bestScores[subject]) {
-                    totalScore += bestScores[subject];
-                    totalStudents++;
-                }
-                if (data.totalPaid > 0) premiumCount++;
-            }
+        const attemptsSnapshot = await db.collection('quiz_attempts').get();
+        const attempts = attemptsSnapshot.docs.map(doc => doc.data());
+
+        for (const subject of SUBJECTS) {
+            const subjectAttempts = attempts.filter(a => a.subject === subject);
+            const totalStudents = new Set(subjectAttempts.map(a => a.userId).filter(Boolean)).size;
+            const avgScore = subjectAttempts.length
+                ? (subjectAttempts.reduce((sum, a) => sum + (Number(a.score) || 0), 0) / subjectAttempts.length).toFixed(1)
+                : 0;
+
+            const premiumUsersForSubject = new Set();
+            const paymentsSnap = await db.collection('payments')
+                .where('subject', '==', subject)
+                .where('status', '==', 'verified')
+                .get();
+
+            paymentsSnap.forEach(doc => {
+                const d = doc.data();
+                if (d.userId) premiumUsersForSubject.add(d.userId);
+            });
             
             analytics.push({
-                subject: subject,
-                avgScore: totalStudents > 0 ? (totalScore / totalStudents).toFixed(1) : 0,
+                subject,
+                avgScore,
                 students: totalStudents,
-                premiumCount: premiumCount
+                premiumCount: premiumUsersForSubject.size
             });
         }
         
-        // Count total attempts
-        const attemptsSnapshot = await db.collection('quiz_attempts').get();
-        totalAttempts = attemptsSnapshot.size;
+        const totalAttempts = attempts.length;
         
         const content = document.getElementById('analyticsContent');
         content.innerHTML = `
             <div style="margin-bottom: 20px; padding: 15px; background: #e8f5e9; border-radius: 10px;">
                 <strong>📈 Platform Summary:</strong><br>
                 Total Quiz Attempts: ${totalAttempts}<br>
-                Active Subjects: ${subjects.length}<br>
+                Active Subjects: ${SUBJECTS.length}<br>
                 Draw Requirement: Stage 8+ with 10+ participants
             </div>
             <table style="width:100%">
-                <thead><tr><th>Subject</th><th>Average Score</th><th>Students Attempted</th><th>Premium Students</th></tr></thead>
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Average Score</th>
+                        <th>Students Attempted</th>
+                        <th>Premium Students</th>
+                    </tr>
+                </thead>
                 <tbody>
                     ${analytics.map(a => `
                         <tr>
@@ -653,8 +772,34 @@
         `;
     }
     
-    function viewStudent(studentId) {
-        alert(`Student ID: ${studentId}\nFeature coming soon - detailed student profile.`);
+    async function viewStudent(studentId) {
+        try {
+            const studentDoc = await db.collection('students').doc(studentId).get();
+            const latestSession = await getLatestSessionForUser(studentId);
+
+            if (!studentDoc.exists) {
+                alert('Student record not found.');
+                return;
+            }
+
+            const data = studentDoc.data();
+            const msg = [
+                `Name: ${data.fullName || data.email?.split('@')[0] || 'Anonymous'}`,
+                `Email: ${data.email || '-'}`,
+                `Total Paid: ₦${Number(data.totalPaid || 0).toLocaleString()}`,
+                `Account Status: ${data.accountStatus || '-'}`,
+                `Last Paid Subject: ${data.lastPaidSubject || '-'}`,
+                `Latest Stage: ${latestSession?.currentStage || 0}`,
+                `Latest Points: ${latestSession?.score || 0}`,
+                `Session Status: ${latestSession?.status || '-'}`,
+                `Registered: ${formatDate(data.createdAt)}`
+            ].join('\n');
+
+            alert(msg);
+        } catch (e) {
+            console.error('View student error:', e);
+            alert('Could not load student details.');
+        }
     }
     
     async function logout() {
@@ -662,17 +807,6 @@
         window.location.href = 'login.html';
     }
     
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
-    
-    // Auth check
     auth.onAuthStateChanged(async (user) => {
         if (!user) {
             window.location.href = 'login.html?redirect=admin.html';

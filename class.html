@@ -23,7 +23,6 @@
     <script src="https://js.paystack.co/v1/inline.js"></script>
 
     <style>
-        /* Your existing styles (keep as is) */
         :root {
             --ink: #0f0e17;
             --paper: #fffffe;
@@ -650,25 +649,30 @@ function getCurrentQuestionIndex() {
     return (currentStage - 1) * QUESTIONS_PER_STAGE + currentStageIndex;
 }
 
-async function hasValidPremiumAccess() {
-    if (!currentUser) return false;
+// Returns the latest verified, non-expired premium payment for the current user+subject.
+// If none found, returns null.
+async function getValidPremiumPayment() {
+    if (!currentUser) return null;
+
     try {
         const now = new Date();
+
         const snap = await firestore.collection('payments')
             .where('userId', '==', currentUser.uid)
             .where('subject', '==', currentSubject)
             .where('status', '==', 'verified')
             .where('expiresAt', '>', now)
+            .orderBy('expiresAt', 'desc')
+            .limit(1)
             .get();
-        
-        if (!snap.empty) {
-            console.log(`✅ Found ${snap.size} valid premium payments for ${currentSubject}`);
-            return true;
-        }
-        return false;
-    } catch (e) { 
-        console.warn('Payment check error:', e.message);
-        return false; 
+
+        if (snap.empty) return null;
+
+        const doc = snap.docs[0];
+        return { id: doc.id, ...doc.data() };
+    } catch (e) {
+        console.warn('Payment check error:', e?.message || e);
+        return null;
     }
 }
 
@@ -701,7 +705,7 @@ async function checkForResumableSession() {
         
         if (!latestSession) return false;
         
-        const expiresAt = latestSession.expiresAt?.toDate();
+        const expiresAt = latestSession.expiresAt?.toDate ? latestSession.expiresAt.toDate() : latestSession.expiresAt;
         const now = new Date();
         
         console.log(`Found session: Stage ${latestSession.currentStage || 1}, Expires: ${expiresAt}`);
@@ -767,9 +771,9 @@ async function resumeQuiz() {
         }
         
         const session = snap.data();
-        const paymentValid = await hasValidPremiumAccess();
+        const validPayment = await getValidPremiumPayment();
         
-        if (!paymentValid) {
+        if (!validPayment) {
             showToast('Your premium access has expired. Please make a new payment.', 'warning');
             selectMode('premium');
             return;
@@ -790,6 +794,39 @@ async function resumeQuiz() {
     }
 }
 
+// Creates a quiz_sessions doc using the expiresAt from an existing valid payment.
+// This ensures quiz access never extends past the payment expiry.
+async function createSessionDocFromPayment(paymentData) {
+    if (!currentUser) return null;
+
+    try {
+        let paymentExpiresAt = paymentData?.expiresAt;
+        if (paymentExpiresAt?.toDate) paymentExpiresAt = paymentExpiresAt.toDate();
+
+        const sessionData = {
+            userId: currentUser.uid,
+            userEmail: currentUser.email,
+            subject: currentSubject,
+            score: 0,
+            currentStage: 1,
+            currentStageIndex: 0,
+            failsInCurrentStage: 0,
+            status: 'active',
+            expiresAt: firebase.firestore.Timestamp.fromDate(paymentExpiresAt || new Date(Date.now() + PREMIUM_DURATION_MS)),
+            startedAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
+
+        const docRef = await firestore.collection('quiz_sessions').add(sessionData);
+        _sessionDocId = docRef.id;
+
+        console.log('✅ Session doc created from payment:', _sessionDocId);
+        return docRef;
+    } catch (e) {
+        console.error('Session create error (from payment):', e);
+        return null;
+    }
+}
+
 async function selectMode(mode) {
     if (mode === 'free') {
         currentMode = 'free';
@@ -804,19 +841,19 @@ async function selectMode(mode) {
             return;
         }
         
-        const hasAccess = await hasValidPremiumAccess();
+        const validPayment = await getValidPremiumPayment();
         
-        if (hasAccess) {
-            console.log('Has valid payment but no active session - creating new session');
+        if (validPayment) {
+            console.log('✅ Has valid payment but no active session - creating new session');
             currentMode = 'premium';
             currentStage = 1;
             currentStageIndex = 0;
             score = 0;
             failsInCurrentStage = 0;
-            await createSessionDoc();
+            await createSessionDocFromPayment(validPayment);
             await loadQuestions('premium');
         } else {
-            console.log('No payment found - showing payment modal');
+            console.log('❌ No valid payment - showing payment modal');
             showPaymentModal();
         }
     }
@@ -875,12 +912,15 @@ async function loadQuestions(mode, isResume = false) {
             return;
         }
         
+        // Only create a new session if not resuming and one was not already created.
         if (!isResume) {
-            currentStage = 1;
-            currentStageIndex = 0;
-            score = 0;
-            failsInCurrentStage = 0;
-            await createSessionDoc();
+            if (!_sessionDocId) {
+                currentStage = 1;
+                currentStageIndex = 0;
+                score = 0;
+                failsInCurrentStage = 0;
+                await createSessionDoc();
+            }
         }
         showQuestionPremium();
         
@@ -890,11 +930,11 @@ async function loadQuestions(mode, isResume = false) {
     }
 }
 
-// ============ CRITICAL FIX: CREATE SESSION DOCUMENT ============
+// Default session creator (used only if needed)
 async function createSessionDoc() {
     if (!currentUser) return null;
     try {
-        const expiresAt = new Date(Date.now() + PREMIUM_DURATION_MS);
+        const expiresAt = firebase.firestore.Timestamp.fromDate(new Date(Date.now() + PREMIUM_DURATION_MS));
         const sessionData = {
             userId: currentUser.uid,
             userEmail: currentUser.email,
@@ -918,15 +958,14 @@ async function createSessionDoc() {
     }
 }
 
-// ============ CRITICAL FIX: PROCESS PAYMENT SUCCESS ============
 async function processPaymentSuccess(reference) {
     showToast('✅ Payment received! Unlocking your quiz...', 'success');
     
     try {
         const studentName = currentUser.displayName || currentUser.email.split('@')[0];
-        const expiresAt = new Date(Date.now() + PREMIUM_DURATION_MS);
+        const expiresAtDate = new Date(Date.now() + PREMIUM_DURATION_MS);
+        const expiresAtTs = firebase.firestore.Timestamp.fromDate(expiresAtDate);
         
-        // Save payment record
         await firestore.collection('payments').doc(`PAY_${reference}`).set({
             paymentId: `PAY_${reference}`,
             reference: reference,
@@ -937,11 +976,10 @@ async function processPaymentSuccess(reference) {
             amount: PREMIUM_PRICE,
             status: 'verified',
             paymentDate: firebase.firestore.FieldValue.serverTimestamp(),
-            expiresAt: expiresAt,
+            expiresAt: expiresAtTs,
             durationHours: 24
         });
         
-        // Update student record
         await firestore.collection('students').doc(currentUser.uid).set({
             totalPaid: firebase.firestore.FieldValue.increment(PREMIUM_PRICE),
             lastPaymentDate: firebase.firestore.FieldValue.serverTimestamp(),
@@ -949,7 +987,6 @@ async function processPaymentSuccess(reference) {
             accountStatus: 'active'
         }, { merge: true });
         
-        // !!! CRITICAL FIX: Create session document immediately !!!
         const sessionData = {
             userId: currentUser.uid,
             userEmail: currentUser.email,
@@ -959,7 +996,7 @@ async function processPaymentSuccess(reference) {
             currentStageIndex: 0,
             failsInCurrentStage: 0,
             status: 'active',
-            expiresAt: expiresAt,
+            expiresAt: expiresAtTs,
             startedAt: firebase.firestore.FieldValue.serverTimestamp()
         };
         
@@ -1430,6 +1467,7 @@ function initiatePaystack() {
 function resetToModeSelect() {
     if (timerInterval) clearInterval(timerInterval);
     currentMode = null;
+    _sessionDocId = null;
     document.getElementById('modeGrid').style.display = 'grid';
     document.getElementById('quizPanel').innerHTML = `<div class="status-box"><div style="font-size:2rem;">🎮</div><p>Choose a mode above</p></div>`;
 }
@@ -1516,6 +1554,7 @@ auth.onAuthStateChanged(async user => {
         
         const studentRef = firestore.collection('students').doc(user.uid);
         const studentDoc = await studentRef.get();
+
         if (!studentDoc.exists) {
             await studentRef.set({
                 userId: user.uid,
@@ -1531,6 +1570,13 @@ auth.onAuthStateChanged(async user => {
                 quizScores: {}
             });
             console.log('✅ Student record created');
+        } else {
+            const studentData = studentDoc.data();
+            if (studentData?.lastPaidSubject && SUBJECT_NAMES[studentData.lastPaidSubject]) {
+                currentSubject = studentData.lastPaidSubject;
+                const subjectSelect = document.getElementById('subjectSelect');
+                if (subjectSelect) subjectSelect.value = currentSubject;
+            }
         }
         
         setTimeout(() => {
@@ -1542,6 +1588,7 @@ auth.onAuthStateChanged(async user => {
         const banner = document.getElementById('resumeBanner');
         if (banner) banner.remove();
         resumeBannerDisplayed = false;
+        _sessionDocId = null;
     }
 });
 </script>

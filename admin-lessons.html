@@ -335,7 +335,7 @@
             <a href="admin.html">👑 Admin</a>
             <a href="admin-users.html">👥 Users</a>
             <a href="admin-payments.html">💰 Payments</a>
-            <a href="logout.html">🚪 Logout</a>
+            <a href="#" onclick="logout()">🚪 Logout</a>
         </div>
     </div>
 </nav>
@@ -359,25 +359,25 @@
                 <label>Subject *</label>
                 <select id="lessonSubject">
                     <option value="">-- Select Subject --</option>
-                    <option>📐 Mathematics</option>
-                    <option>⚛️ Physics</option>
-                    <option>🧪 Chemistry</option>
-                    <option>🔬 Biology <span class="badge-new">NEW</span></option>
-                    <option>📖 English Language</option>
-                    <option>📚 Literature-in-English <span class="badge-new">NEW</span></option>
-                    <option>💻 Digital Technology</option>
-                    <option>🗣️ Igbo Language</option>
-                    <option>📊 Economics</option>
-                    <option>🏛️ Government</option>
-                    <option>🌍 Geography</option>
-                    <option>💼 Commerce</option>
-                    <option>📈 Accounting</option>
-                    <option>📐 Further Mathematics</option>
-                    <option>💻 Computer Science</option>
-                    <option>⚖️ Civic Education</option>
-                    <option>⛪ CRS/IRS</option>
-                    <option>🌾 Agricultural Science</option>
-                    <option>📚 General Studies</option>
+                    <option value="mathematics">📐 Mathematics</option>
+                    <option value="physics">⚛️ Physics</option>
+                    <option value="chemistry">🧪 Chemistry</option>
+                    <option value="biology">🔬 Biology</option>
+                    <option value="english">📖 English Language</option>
+                    <option value="literature">📚 Literature-in-English</option>
+                    <option value="digital-technology">💻 Digital Technology</option>
+                    <option value="igbo">🗣️ Igbo Language</option>
+                    <option value="economics">📊 Economics</option>
+                    <option value="government">🏛️ Government</option>
+                    <option value="geography">🌍 Geography</option>
+                    <option value="commerce">💼 Commerce</option>
+                    <option value="accounting">📈 Accounting</option>
+                    <option value="further-mathematics">📐 Further Mathematics</option>
+                    <option value="computer-science">💻 Computer Science</option>
+                    <option value="civic-education">⚖️ Civic Education</option>
+                    <option value="crs-irs">⛪ CRS/IRS</option>
+                    <option value="agricultural-science">🌾 Agricultural Science</option>
+                    <option value="general-studies">📚 General Studies</option>
                 </select>
             </div>
         </div>
@@ -439,25 +439,25 @@
         <div class="filter-row">
             <select id="filterSubject" onchange="loadLessons()">
                 <option value="">All Subjects</option>
-                <option>📐 Mathematics</option>
-                <option>⚛️ Physics</option>
-                <option>🧪 Chemistry</option>
-                <option>🔬 Biology</option>
-                <option>📖 English Language</option>
-                <option>📚 Literature-in-English</option>
-                <option>💻 Digital Technology</option>
-                <option>🗣️ Igbo Language</option>
-                <option>📊 Economics</option>
-                <option>🏛️ Government</option>
-                <option>🌍 Geography</option>
-                <option>💼 Commerce</option>
-                <option>📈 Accounting</option>
-                <option>📐 Further Mathematics</option>
-                <option>💻 Computer Science</option>
-                <option>⚖️ Civic Education</option>
-                <option>⛪ CRS/IRS</option>
-                <option>🌾 Agricultural Science</option>
-                <option>📚 General Studies</option>
+                <option value="mathematics">📐 Mathematics</option>
+                <option value="physics">⚛️ Physics</option>
+                <option value="chemistry">🧪 Chemistry</option>
+                <option value="biology">🔬 Biology</option>
+                <option value="english">📖 English Language</option>
+                <option value="literature">📚 Literature-in-English</option>
+                <option value="digital-technology">💻 Digital Technology</option>
+                <option value="igbo">🗣️ Igbo Language</option>
+                <option value="economics">📊 Economics</option>
+                <option value="government">🏛️ Government</option>
+                <option value="geography">🌍 Geography</option>
+                <option value="commerce">💼 Commerce</option>
+                <option value="accounting">📈 Accounting</option>
+                <option value="further-mathematics">📐 Further Mathematics</option>
+                <option value="computer-science">💻 Computer Science</option>
+                <option value="civic-education">⚖️ Civic Education</option>
+                <option value="crs-irs">⛪ CRS/IRS</option>
+                <option value="agricultural-science">🌾 Agricultural Science</option>
+                <option value="general-studies">📚 General Studies</option>
             </select>
             <select id="filterLevel" onchange="loadLessons()">
                 <option value="">All Levels</option>
@@ -499,6 +499,28 @@
 
     const adminEmails = ['ernestembassydigitalsolutions@gmail.com', 'damian@ernestembassy.com', 'dev@ernestlms.com'];
 
+    const SUBJECT_LABELS = {
+        'mathematics': '📐 Mathematics',
+        'physics': '⚛️ Physics',
+        'chemistry': '🧪 Chemistry',
+        'biology': '🔬 Biology',
+        'english': '📖 English Language',
+        'literature': '📚 Literature-in-English',
+        'digital-technology': '💻 Digital Technology',
+        'igbo': '🗣️ Igbo Language',
+        'economics': '📊 Economics',
+        'government': '🏛️ Government',
+        'geography': '🌍 Geography',
+        'commerce': '💼 Commerce',
+        'accounting': '📈 Accounting',
+        'further-mathematics': '📐 Further Mathematics',
+        'computer-science': '💻 Computer Science',
+        'civic-education': '⚖️ Civic Education',
+        'crs-irs': '⛪ CRS/IRS',
+        'agricultural-science': '🌾 Agricultural Science',
+        'general-studies': '📚 General Studies'
+    };
+
     let selectedFile = null;
     let allLessons = [];
 
@@ -529,8 +551,7 @@
     dz.addEventListener('drop', e => {
         e.preventDefault();
         dz.classList.remove('dragover');
-        const file = e.dataTransfer.files[0];
-        if (file) {
+        if (e.dataTransfer.files[0]) {
             document.getElementById('fileInput').files = e.dataTransfer.files;
             handleFileSelect({ target: { files: e.dataTransfer.files } });
         }
@@ -538,22 +559,24 @@
 
     function getFileIcon(type) {
         if (!type) return { icon: '📄', cls: 'type-text' };
-        if (type.includes('pdf')) return { icon: '📕', cls: 'type-pdf' };
-        if (type.includes('word') || type.includes('docx') || type.includes('doc')) return { icon: '📘', cls: 'type-docx' };
-        if (type.includes('presentation') || type.includes('ppt')) return { icon: '📊', cls: 'type-video' };
-        if (type.includes('video') || type.includes('mp4')) return { icon: '🎬', cls: 'type-video' };
+        const t = type.toLowerCase();
+        if (t.includes('pdf')) return { icon: '📕', cls: 'type-pdf' };
+        if (t.includes('word') || t.includes('docx') || t.includes('doc')) return { icon: '📘', cls: 'type-docx' };
+        if (t.includes('presentation') || t.includes('ppt')) return { icon: '📊', cls: 'type-video' };
+        if (t.includes('video') || t.includes('mp4') || t.includes('mov')) return { icon: '🎬', cls: 'type-video' };
         return { icon: '📄', cls: 'type-text' };
     }
 
     async function uploadLesson() {
         const title = document.getElementById('lessonTitle').value.trim();
-        const subject = document.getElementById('lessonSubject').value;
+        const subjectKey = document.getElementById('lessonSubject').value;
+        const subjectLabel = SUBJECT_LABELS[subjectKey] || subjectKey;
         const topic = document.getElementById('lessonTopic').value.trim();
         const level = document.getElementById('lessonLevel').value;
         const desc = document.getElementById('lessonDesc').value.trim();
 
         if (!title) { showToast('Please enter a lesson title.', 'error'); return; }
-        if (!subject) { showToast('Please select a subject.', 'error'); return; }
+        if (!subjectKey) { showToast('Please select a subject.', 'error'); return; }
         if (!selectedFile) { showToast('Please select a file to upload.', 'error'); return; }
 
         const btn = document.getElementById('uploadBtn');
@@ -565,7 +588,7 @@
         try {
             const timestamp = Date.now();
             const safeName = selectedFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-            const subjectClean = subject.replace(/[^a-zA-Z0-9]/g, '_');
+            const subjectClean = subjectKey.replace(/[^a-zA-Z0-9_-]/g, '_');
             const filePath = `lessons/${subjectClean}/${timestamp}_${safeName}`;
             const storageRef = storage.ref(filePath);
             const uploadTask = storageRef.put(selectedFile);
@@ -587,7 +610,9 @@
 
                     await db.collection('lessons').add({
                         title,
-                        subject,
+                        subject: subjectLabel,
+                        subjectKey: subjectKey,
+                        subjectLabel: subjectLabel,
                         topic,
                         level,
                         description: desc,
@@ -610,7 +635,10 @@
                     document.getElementById('lessonTitle').value = '';
                     document.getElementById('lessonTopic').value = '';
                     document.getElementById('lessonDesc').value = '';
+                    document.getElementById('lessonSubject').value = '';
+                    document.getElementById('lessonLevel').value = '';
                     selectedFile = null;
+
                     const dz2 = document.getElementById('dropZone');
                     dz2.classList.remove('file-selected');
                     dz2.querySelector('h3').textContent = 'Click to browse or drag & drop';
@@ -635,8 +663,9 @@
 
         try {
             let query = db.collection('lessons').orderBy('createdAt', 'desc');
-            if (filterSubject && filterSubject !== '') {
-                query = query.where('subject', '==', filterSubject);
+
+            if (filterSubject) {
+                query = query.where('subjectKey', '==', filterSubject);
             }
 
             const snap = await query.get();
@@ -645,17 +674,28 @@
 
             let filtered = allLessons.filter(l => {
                 let match = true;
-                if (filterLevel && filterLevel !== '' && l.level !== filterLevel) match = false;
-                if (search && !(l.title?.toLowerCase().includes(search) || 
-                    l.topic?.toLowerCase().includes(search) || 
-                    l.subject?.toLowerCase().includes(search))) match = false;
+
+                if (filterLevel && l.level !== filterLevel) match = false;
+
+                if (search) {
+                    const haystack = [
+                        l.title || '',
+                        l.topic || '',
+                        l.subject || '',
+                        l.subjectKey || '',
+                        l.description || ''
+                    ].join(' ').toLowerCase();
+
+                    if (!haystack.includes(search)) match = false;
+                }
+
                 return match;
             });
 
             document.getElementById('lessonCount').textContent = `(${filtered.length} resources)`;
             renderLessons(filtered);
         } catch (err) {
-            document.getElementById('lessonsList').innerHTML = `<div class="empty-state" style="text-align:center; padding:40px;"><p>⚠️ Error loading lessons: ${err.message}</p></div>`;
+            document.getElementById('lessonsList').innerHTML = `<div class="empty-state" style="text-align:center; padding:40px;"><p>⚠️ Error loading lessons: ${escapeHtml(err.message)}</p></div>`;
         }
     }
 
@@ -670,14 +710,16 @@
             const { icon, cls } = getFileIcon(l.fileType);
             const date = l.createdAt?.toDate ? l.createdAt.toDate().toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }) : 'Unknown date';
             const size = l.fileSize ? (l.fileSize / 1024).toFixed(0) + ' KB' : '';
+            const subjectText = l.subjectLabel || l.subject || l.subjectKey || 'Unknown Subject';
+
             return `
             <div class="lesson-item">
                 <div class="lesson-type-icon ${cls}">${icon}</div>
                 <div class="lesson-info">
                     <div class="lesson-title">${escapeHtml(l.title)}</div>
-                    <div class="lesson-meta">${l.topic ? escapeHtml(l.topic) + ' • ' : ''}${l.level ? l.level + ' • ' : ''}${date}${size ? ' • ' + size : ''}</div>
+                    <div class="lesson-meta">${l.topic ? escapeHtml(l.topic) + ' • ' : ''}${l.level ? escapeHtml(l.level) + ' • ' : ''}${date}${size ? ' • ' + size : ''}</div>
                 </div>
-                <span class="lesson-subject">${escapeHtml(l.subject)}</span>
+                <span class="lesson-subject">${escapeHtml(subjectText)}</span>
                 <div class="lesson-actions">
                     <button class="btn-action btn-view" onclick="window.open('${l.fileURL}', '_blank')">👁 View</button>
                     <button class="btn-action btn-delete" onclick="deleteLesson('${l.id}', '${l.filePath || ''}')">🗑 Delete</button>
@@ -691,12 +733,25 @@
         try {
             await db.collection('lessons').doc(id).delete();
             if (filePath) {
-                try { await storage.ref(filePath).delete(); } catch(e) { console.warn('Storage delete failed:', e); }
+                try {
+                    await storage.ref(filePath).delete();
+                } catch(e) {
+                    console.warn('Storage delete failed:', e);
+                }
             }
             showToast('Resource deleted.');
             loadLessons();
         } catch (err) {
             showToast('Delete failed: ' + err.message, 'error');
+        }
+    }
+
+    async function logout() {
+        try {
+            await auth.signOut();
+            window.location.href = 'login.html';
+        } catch (e) {
+            showToast('Logout failed.', 'error');
         }
     }
 
@@ -715,7 +770,9 @@
             loadLessons();
         } else if (user) {
             showToast("Access Denied. Admin only.", 'error');
-            window.location.href = 'dashboard.html';
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1000);
         } else {
             window.location.href = 'login.html';
         }

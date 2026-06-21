@@ -5,22 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Ernest Embassy LMS</title>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
         }
+        
         .floating-home {
             position: fixed;
             bottom: 30px;
             right: 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: white;
+            color: #667eea;
             width: 60px;
             height: 60px;
             border-radius: 50%;
@@ -29,36 +38,67 @@
             justify-content: center;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-            z-index: 1000;
             font-size: 24px;
             border: none;
             text-decoration: none;
+            z-index: 1000;
+            transition: transform 0.3s;
         }
-        .floating-home:hover { transform: scale(1.1); }
+        
+        .floating-home:hover {
+            transform: scale(1.1);
+        }
+        
         .container {
-            max-width: 500px;
-            margin: 50px auto;
+            width: 100%;
+            max-width: 450px;
             background: white;
             border-radius: 20px;
             padding: 40px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
-        .logo { text-align: center; font-size: 3rem; margin-bottom: 10px; }
-        h1 { color: #667eea; text-align: center; margin-bottom: 10px; font-size: 1.8rem; }
-        .subtitle { text-align: center; color: #718096; margin-bottom: 30px; }
+        
+        .logo { 
+            text-align: center; 
+            font-size: 3rem; 
+            margin-bottom: 15px; 
+        }
+        
+        h1 { 
+            color: #667eea; 
+            text-align: center; 
+            margin-bottom: 8px; 
+            font-size: 1.8rem; 
+        }
+        
+        .subtitle { 
+            text-align: center; 
+            color: #718096; 
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
         input {
             width: 100%;
-            padding: 15px;
-            margin: 10px 0;
+            padding: 14px 15px;
             border: 2px solid #e2e8f0;
             border-radius: 10px;
             font-size: 1rem;
+            transition: border-color 0.3s;
         }
-        input:focus { outline: none; border-color: #667eea; }
+        
+        input:focus { 
+            outline: none; 
+            border-color: #667eea; 
+        }
+        
         .btn {
             width: 100%;
-            padding: 15px;
+            padding: 14px 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
@@ -66,27 +106,112 @@
             font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 20px;
+            margin-top: 10px;
+            transition: transform 0.2s;
         }
-        .btn-google { background: #db4437; margin-top: 10px; }
-        .message { margin-top: 20px; padding: 12px; border-radius: 8px; text-align: center; display: none; }
-        .error { background: #fee; color: #eb3349; display: block; }
-        .success { background: #e8f5e9; color: #11998e; display: block; }
-        .nav-links { text-align: center; margin-top: 20px; }
-        .nav-links a { color: #667eea; text-decoration: none; margin: 0 10px; }
-        .divider { text-align: center; margin: 20px 0; color: #718096; position: relative; }
-        .divider::before, .divider::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            width: 40%;
-            height: 1px;
-            background: #e2e8f0;
+        
+        .btn:hover {
+            transform: translateY(-2px);
         }
-        .divider::before { left: 0; }
-        .divider::after { right: 0; }
-        @media (max-width: 768px) {
-            .floating-home { width: 50px; height: 50px; font-size: 20px; bottom: 20px; right: 20px; }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-google { 
+            background: #db4437;
+            margin-top: 15px;
+        }
+        
+        .message { 
+            margin-top: 20px; 
+            padding: 12px 15px; 
+            border-radius: 8px; 
+            text-align: center; 
+            display: none; 
+            font-size: 0.95rem;
+        }
+        
+        .message.error { 
+            background: #fee; 
+            color: #c33; 
+            border: 1px solid #fcc;
+            display: block; 
+        }
+        
+        .message.success { 
+            background: #e8f5e9; 
+            color: #2e7d32; 
+            border: 1px solid #c8e6c9;
+            display: block; 
+        }
+        
+        .nav-links { 
+            text-align: center; 
+            margin-top: 20px; 
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-links a { 
+            color: #667eea; 
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #5a67d8;
+            text-decoration: underline;
+        }
+        
+        .divider { 
+            text-align: center; 
+            margin: 25px 0; 
+            color: #718096; 
+            font-size: 0.9rem;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            color: #667eea;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .spinner-small {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            .floating-home { 
+                width: 50px; 
+                height: 50px; 
+                font-size: 20px; 
+                bottom: 20px; 
+                right: 20px; 
+            }
         }
     </style>
 </head>
@@ -99,19 +224,34 @@
     <h1>Ernest Embassy LMS</h1>
     <p class="subtitle">Sign in to continue learning</p>
     
-    <input type="email" id="email" placeholder="Email Address">
-    <input type="password" id="password" placeholder="Password">
-    
-    <button class="btn" onclick="loginStudent()">🔐 Login</button>
+    <form onsubmit="loginStudent(event)">
+        <div class="form-group">
+            <input type="email" id="email" placeholder="Email Address" required autocomplete="email">
+        </div>
+        <div class="form-group">
+            <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
+        </div>
+        
+        <button type="submit" class="btn">
+            <span>🔐 Login</span>
+        </button>
+        
+        <div class="loading" id="loadingText">
+            <span class="spinner-small"></span>
+            <span>Logging in...</span>
+        </div>
+    </form>
     
     <div class="nav-links">
-        <a href="#" onclick="goToRegister()">📝 Create New Account</a>
+        <a href="register.html">📝 Create Account</a>
         <a href="index.html">🏠 Home</a>
     </div>
     
     <div class="divider">or</div>
     
-    <button class="btn btn-google" onclick="loginWithGoogle()">G Continue with Google</button>
+    <button class="btn btn-google" onclick="loginWithGoogle()">
+        G Continue with Google
+    </button>
     
     <div id="message"></div>
 </div>
@@ -126,21 +266,44 @@
         appId: "1:204896421221:web:9407b523da68c3e5b88d8c"
     };
     
-    firebase.initializeApp(firebaseConfig);
+    try {
+        firebase.initializeApp(firebaseConfig);
+    } catch (e) {
+        console.error('Firebase init error:', e);
+    }
+    
     const auth = firebase.auth();
     const db = firebase.firestore();
+    
+    const adminEmails = ['ernestembassydigitalsolutions@gmail.com', 'damian@ernestembassy.com', 'dev@ernestlms.com'];
+    let isLoggingIn = false;
     
     function showMessage(msg, type) {
         const msgDiv = document.getElementById('message');
         msgDiv.innerHTML = msg;
         msgDiv.className = `message ${type}`;
-        setTimeout(() => {
-            msgDiv.style.display = 'none';
-            msgDiv.className = 'message';
-        }, 4000);
+        msgDiv.style.display = 'block';
+        
+        if (type === 'success') {
+            setTimeout(() => {
+                msgDiv.style.display = 'none';
+            }, 2000);
+        }
     }
     
-    async function loginStudent() {
+    function setLoading(loading) {
+        isLoggingIn = loading;
+        document.getElementById('loadingText').style.display = loading ? 'block' : 'none';
+        const btn = document.querySelector('.btn[type="submit"]');
+        btn.disabled = loading;
+        btn.style.opacity = loading ? '0.7' : '1';
+    }
+    
+    async function loginStudent(event) {
+        event.preventDefault();
+        
+        if (isLoggingIn) return;
+        
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
         
@@ -149,70 +312,109 @@
             return;
         }
         
+        setLoading(true);
+        
         try {
             const userCredential = await auth.signInWithEmailAndPassword(email, password);
             const user = userCredential.user;
             
+            // Check if user document exists
             const studentDoc = await db.collection('students').doc(user.uid).get();
             if (!studentDoc.exists) {
                 await db.collection('students').doc(user.uid).set({
                     email: email,
                     fullName: email.split('@')[0],
-                    registeredAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    paidQuizzes: [],
-                    quizScores: {}
+                    createdAt: new Date(),
+                    totalPaid: 0,
+                    accountStatus: 'active'
                 });
             }
             
-            // Check if user is admin or teacher
-            const adminDoc = await db.collection('admins').doc(user.uid).get();
-            if (adminDoc.exists && adminDoc.data().isAdmin === true) {
-                window.location.href = 'admin.html';
+            showMessage('Login successful! Redirecting...', 'success');
+            
+            // Check if admin
+            if (adminEmails.includes(user.email)) {
+                setTimeout(() => {
+                    window.location.href = 'admin.html';
+                }, 1000);
             } else {
-                window.location.href = 'dashboard.html';
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
             }
             
         } catch (error) {
+            let msg = 'An error occurred. Please try again.';
+            
             if (error.code === 'auth/user-not-found') {
-                showMessage('No account found. Please register.', 'error');
+                msg = 'No account found with this email. Please register first.';
             } else if (error.code === 'auth/wrong-password') {
-                showMessage('Incorrect password.', 'error');
+                msg = 'Incorrect password. Please try again.';
+            } else if (error.code === 'auth/invalid-email') {
+                msg = 'Invalid email address.';
+            } else if (error.code === 'auth/too-many-requests') {
+                msg = 'Too many login attempts. Please try again later.';
             } else {
-                showMessage(error.message, 'error');
+                msg = error.message || msg;
             }
+            
+            showMessage(msg, 'error');
+        } finally {
+            setLoading(false);
         }
     }
     
     async function loginWithGoogle() {
-        const provider = new firebase.auth.GoogleAuthProvider();
+        if (isLoggingIn) return;
+        
+        setLoading(true);
+        
         try {
+            const provider = new firebase.auth.GoogleAuthProvider();
             const result = await auth.signInWithPopup(provider);
             const user = result.user;
             
+            // Create student document if not exists
             const studentDoc = await db.collection('students').doc(user.uid).get();
             if (!studentDoc.exists) {
                 await db.collection('students').doc(user.uid).set({
                     email: user.email,
                     fullName: user.displayName || user.email.split('@')[0],
-                    registeredAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    paidQuizzes: [],
-                    quizScores: {}
+                    createdAt: new Date(),
+                    totalPaid: 0,
+                    accountStatus: 'active'
                 });
             }
             
-            window.location.href = 'dashboard.html';
+            showMessage('Google login successful! Redirecting...', 'success');
+            
+            // Check if admin
+            if (adminEmails.includes(user.email)) {
+                setTimeout(() => {
+                    window.location.href = 'admin.html';
+                }, 1000);
+            } else {
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+            }
+            
         } catch (error) {
-            showMessage(error.message, 'error');
+            console.error('Google login error:', error);
+            showMessage('Google login failed. Please try again.', 'error');
+        } finally {
+            setLoading(false);
         }
     }
     
-    function goToRegister() {
-        window.location.href = 'register.html';
-    }
-    
+    // Check if already logged in
     auth.onAuthStateChanged(user => {
         if (user) {
-            window.location.href = 'dashboard.html';
+            if (adminEmails.includes(user.email)) {
+                window.location.href = 'admin.html';
+            } else {
+                window.location.href = 'dashboard.html';
+            }
         }
     });
 </script>

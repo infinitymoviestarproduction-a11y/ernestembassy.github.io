@@ -90,6 +90,24 @@
             color: white;
             text-align: center;
             padding: 60px 20px;
+            position: relative;
+        }
+
+        .hero-logo {
+            margin-bottom: 30px;
+        }
+
+        .hero-logo img {
+            max-width: 180px;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            border: 4px solid rgba(255, 215, 0, 0.6);
+            transition: transform 0.3s;
+        }
+
+        .hero-logo img:hover {
+            transform: scale(1.05);
         }
 
         .hero h1 {
@@ -349,6 +367,17 @@
             margin-top: 60px;
         }
 
+        .footer-logo {
+            margin-bottom: 20px;
+        }
+
+        .footer-logo img {
+            max-width: 120px;
+            height: auto;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 215, 0, 0.4);
+        }
+
         .cac-badge {
             background: #ffd700;
             color: #1a1a2e;
@@ -399,6 +428,9 @@
             .hero h1 {
                 font-size: 1.8rem;
             }
+            .hero-logo img {
+                max-width: 130px;
+            }
             .team-grid {
                 grid-template-columns: 1fr;
             }
@@ -411,6 +443,9 @@
                 bottom: 15px;
                 right: 15px;
                 font-size: 12px;
+            }
+            .footer-logo img {
+                max-width: 90px;
             }
         }
     </style>
@@ -453,6 +488,10 @@
 </nav>
 
 <div class="hero">
+    <!-- INFINITY LOGO ADDED HERE -->
+    <div class="hero-logo">
+        <img src="images/infinity%20logo.jpg" alt="Infinity Movie Star Production Official Logo" onerror="this.style.display='none'">
+    </div>
     <h1>⭐ Our Team</h1>
     <p>The pioneers and visionaries behind Infinity Movie Star Production</p>
 </div>
@@ -766,9 +805,13 @@
     </div>
 </div>
 
-<!-- FOOTER -->
+<!-- FOOTER WITH INFINITY LOGO -->
 <footer>
     <div class="container">
+        <!-- INFINITY LOGO IN FOOTER -->
+        <div class="footer-logo">
+            <img src="images/infinity%20logo.jpg" alt="Infinity Movie Star Production Official Logo" onerror="this.style.display='none'">
+        </div>
         <p><strong>Infinity Movie Star Production & Ernest Embassy Digital Solutions</strong></p>
         <p>📧 infinitymoviestarproduction@gmail.com | ernestembassytravels@gmail.com | Danoka33@gmail.com</p>
         <p>📞 +2348032607809 | +2349050205053</p>
